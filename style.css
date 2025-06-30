@@ -1,0 +1,407 @@
+/* ========================================================
+   blackbox.codes — style.css (komplet opdateret)
+   ======================================================== */
+
+/* —————————————————————————————————————————————————————
+   1. CSS-variabler for farver
+   ————————————————————————————————————————————————————— */
+:root {
+  /* Baggrund og tekst */
+  --bg-dark:    #041004;    /* Mørk “terminal”-grøn */
+  --text-light: #cde;       /* Lys grå/grøn tekst */
+
+  /* Accent-farver */
+  --green:      #0a5;       /* Skarp grøn kant */
+
+  /* Guld-tone, matcher logo */
+  --gold:       #d4af37;
+  --gold-dark:  #bfa650;
+
+  /* Fejl-boks */
+  --alert-bg:   #800;
+  --alert-text: #fee;
+}
+
+/* —————————————————————————————————————————————————————
+   2. Globale regler
+   ————————————————————————————————————————————————————— */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: var(--bg-dark);
+  color: var(--text-light);
+  font-family: sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* —————————————————————————————————————————————————————
+   3. GENERISK “panel” wrapper (bruges til dashboard)
+   ————————————————————————————————————————————————————— */
+.panel {
+  max-width: 400px;
+  width: 90%;
+  margin: 0 auto;
+  padding: 24px;
+  background: rgba(0,20,10,0.8);
+  border: 1px solid var(--green);
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* —————————————————————————————————————————————————————
+   4. LOGIN-PANEL
+   ————————————————————————————————————————————————————— */
+.login-panel {
+  max-width: 400px;
+  width: 90%;
+  margin: 0 auto;
+  padding: 24px;
+  background: rgba(0,20,10,0.8);
+  border: 1px solid var(--green);
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* Logo */
+.login-panel .logo {
+  display: block;
+  max-width: 200px;
+  margin: 0 auto 24px;
+}
+
+/* —— Stealth-overskrift på login —— */
+.login-panel h1 {
+  font-family: Consolas, 'Source Code Pro', monospace;
+  font-size: clamp(1.3rem, 4vw, 1.6rem);
+  max-width: calc(100% - 48px);
+  margin: 0 auto 32px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--text-light);
+  text-shadow:
+    0 0 2px rgba(0,255,0,0.4),
+    0 0 6px rgba(0,255,0,0.2);
+  animation: flicker 3s infinite alternate;
+}
+
+/* Formularfelter */
+.login-panel form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.login-panel input {
+  width: 100%;
+  height: 3rem;
+  padding: 0 12px;
+  background: rgba(0,20,10,0.6);
+  border: 1px solid var(--green);
+  border-radius: 4px;
+  color: var(--text-light);
+  font-size: 1rem;
+}
+
+.login-panel input::placeholder {
+  color: #567;
+}
+
+/* Hint under formular */
+.login-panel .hint {
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: #567;
+}
+
+/* Login-knap */
+.login-panel button {
+  width: 100%;
+  height: 3rem;
+  padding: 0;
+  background: var(--gold);
+  border: none;
+  border-radius: 4px;
+  color: #01140f;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.login-panel button:hover {
+  background: var(--gold-dark);
+}
+
+/* Fejl-boks */
+.login-panel .alert {
+  background: var(--alert-bg);
+  color: var(--alert-text);
+  padding: 8px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+/* —————————————————————————————————————————————————————
+   5. DASHBOARD-STYLING
+   ————————————————————————————————————————————————————— */
+.dashboard-header {
+  margin-bottom: 32px;
+}
+
+.dashboard-header h2 {
+  margin: 0;
+  color: var(--gold);
+  font-size: 2rem;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background: var(--gold);
+  color: #01140f;
+  text-decoration: none;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: var(--gold-dark);
+}
+
+/* —————————————————————————————————————————————————————
+   6. ADMIN-PANEL & INDSTILLINGER
+   ————————————————————————————————————————————————————— */
+.admin-panel {
+  max-width: 700px;
+  width: 95%;
+  margin: 0 auto;
+  padding: 24px;
+  background: rgba(0,20,10,0.8);
+  border: 1px solid var(--green);
+  border-radius: 8px;
+  text-align: left;
+}
+
+.admin-panel h1,
+.admin-panel h2 {
+  color: var(--gold);
+  margin-top: 0;
+}
+
+.admin-panel h1 {
+  font-size: 1.8rem;
+  margin-bottom: 16px;
+}
+
+.admin-panel h2 {
+  font-size: 1.4rem;
+  margin-bottom: 12px;
+}
+
+.admin-panel p {
+  margin: 0 0 24px;
+}
+
+.admin-panel form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.admin-panel input {
+  width: 100%;
+  height: 3rem;
+  padding: 0 12px;
+  background: rgba(0,20,10,0.6);
+  border: 1px solid var(--green);
+  border-radius: 4px;
+  color: var(--text-light);
+  font-size: 1rem;
+}
+
+.admin-panel input::placeholder {
+  color: #567;
+}
+
+.admin-panel button {
+  height: 3rem;
+  padding: 0 12px;
+  background: var(--gold);
+  border: none;
+  border-radius: 4px;
+  color: #01140f;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.admin-panel button:hover {
+  background: var(--gold-dark);
+}
+
+/* Admin-tabel */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+  border: 1px solid var(--green);
+  padding: 8px;
+  text-align: left;
+  color: var(--text-light);
+}
+
+.admin-table th {
+  background: rgba(10,50,10,0.8);
+}
+
+/* —————————————————————————————————————————————————————
+   7. Puls-effekter & små knapper i admin-tabellen
+   ————————————————————————————————————————————————————— */
+/* Keyframes til pulsende status */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.6; }
+}
+
+.status.pulse-active {
+  color: var(--green);
+  animation: pulse 2s infinite;
+}
+
+.status.pulse-deactivated {
+  color: #c00;
+  animation: pulse 2s infinite;
+}
+
+/* Små inline-knapper i tabellen */
+.btn-sm {
+  padding: 4px 8px;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  border: 1px solid var(--green);
+  background: var(--gold);
+  color: #01140f;
+  text-transform: uppercase;
+  cursor: pointer;
+  height: auto;
+}
+
+.btn-sm:hover {
+  background: var(--gold-dark);
+}
+
+/* Slet-knappen skal være rød */
+.btn-danger {
+  background: #c00;
+  color: #fee;
+  border: 1px solid #a00;
+}
+
+.btn-danger:hover {
+  background: #a00;
+}
+
+/* —————————————————————————————————————————————————————
+   8. MOBIL-TWEAKS
+   ————————————————————————————————————————————————————— */
+@media (max-width: 480px) {
+  .login-panel,
+  .panel,
+  .admin-panel {
+    width: 95%;
+    padding: 16px;
+  }
+
+  .login-panel h1 {
+    font-size: 1.4rem;
+    margin-bottom: 24px;
+  }
+
+  .login-panel input,
+  .login-panel button,
+  .admin-panel input,
+  .admin-panel button,
+  .btn,
+  .btn-sm {
+    width: 100%;
+    font-size: 0.9rem;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn {
+    padding: 10px;
+  }
+}
+
+/* —————————————————————————————————————————————————————
+   9. Flicker-animation for login-overskrift
+   ————————————————————————————————————————————————————— */
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  40%       { opacity: 0.9; }
+  50%       { opacity: 0.7; }
+  60%       { opacity: 0.85; }
+}
+
+/* —————————————————————————————————————————————————————
+   10. Dine tilføjelser: bredere paneler, fjern grønne kanter og 80% skalering
+   ————————————————————————————————————————————————————— */
+
+/* 1) Gør de forskellige “panel”-containere bredere og centrerede */
+.panel,
+.login-panel,
+.admin-panel,
+.settings-panel {
+  max-width: 700px;    /* juster efter smag */
+  width: 90%;          /* responsiv bredde */
+  margin: 2rem auto;   /* centrerer og giver lidt luft */
+}
+
+/* 2) Fjern de grønne kanter og baggrunde */
+.panel,
+.login-panel,
+.admin-panel,
+.settings-panel,
+.admin-table,
+table.admin-table {
+  border: none !important;
+  box-shadow: none !important;
+  background: none !important;
+}
+
+/* 3) Skaler hele siden til 80% */
+html {
+  font-size: 80%;  /* alt defineret i rem skalerer ned */
+}
+
+/* —————————————————————————————————————————————————————
+   Slut på style.css
+   ————————————————————————————————————————————————————— */

@@ -3,23 +3,18 @@ name: CI & Deploy
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:    # ← gør det muligt at køre “Run workflow” i UI
+  workflow_dispatch:
 
 jobs:
   build:
     name: ✅ Lint README
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
       - name: Lint README
         run: |
           if [ -f README.md ]; then
@@ -35,15 +30,13 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_HOST }}            # fx server702.web-hosting.com
-          username: ${{ secrets.FTP_USERNAME }}      # cPanel-brugernavn (blackowu)
-          password: ${{ secrets.FTP_PASSWORD }}      # cPanel-adgangskode
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
-          local-dir: ./                              # rod i dit GitHub-repo
-          server-dir: /public_html/                  # rodmappen på serveren (skal slutte med slash)
+          local-dir: ./          # Hele repo-roden
+          server-dir: ${{ secrets.FTP_REMOTE_PATH }}

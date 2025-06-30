@@ -11,11 +11,14 @@ jobs:
     name: ✅ Lint README
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python (kun for lint‑eksempel)
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python (kun for lint-eksempel)
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
       - name: Lint README
         run: |
           if [ -f README.md ]; then
@@ -31,13 +34,15 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out code
+        uses: actions/checkout@v4
 
       - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: './'           # **SKAL ende med slash**
-          server-dir: '${{ secrets.FTP_REMOTE_PATH }}/'  # **SKAL også slutte med slash**
+          protocol: ftp
+          local-dir: ./  # Bemærk skråstreg til slut
+          server-dir: ${{ secrets.FTP_REMOTE_PATH }}  # (fx "public_html/"), skal slutte med "/"

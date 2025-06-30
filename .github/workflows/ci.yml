@@ -44,5 +44,5 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
-          local-dir: ./  # Bemærk skråstreg til slut
-          server-dir: ${{ secrets.FTP_REMOTE_PATH }}  # (fx "public_html/"), skal slutte med "/"
+          local-dir: ./        # upload ALT fra repo-roden
+          server-dir: /${{ secrets.FTP_REMOTE_PATH }}  # fx: /public_html/

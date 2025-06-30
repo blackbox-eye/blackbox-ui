@@ -98,6 +98,17 @@ Dette repo leverer frontend og tilhørende webkomponenter til enterprise cyber o
 
 ---
 
+## Versionspolitik for rapporter og leverancer
+
+Alle rapporter, statusrapporter, sprintplaner, onboarding-guides, audit-logs og øvrige leverancer SKAL gemmes i `/docs/reports/` med versionering og dato:
+
+Format: `/docs/reports/v{X.Y}_YYYYMMDD_statusrapport.md`
+Eksempel: `/docs/reports/v1.2_20250630_statusrapport.md`
+
+Hver fil indeholder changelog, ansvarlig og versionsnummer – til audit og revision.
+
+---
+
 ## 📄 Licens
 
 Dette projekt er frigivet under **MIT License** (se [LICENSE](LICENSE)).

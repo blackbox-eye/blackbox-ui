@@ -1,4 +1,3 @@
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -69,8 +68,9 @@ build/
 dist/
 
 # --- GitHub/CI artefakter ---
-.github/
+.github/*
 !.github/workflows/
+!.github/workflows/ci.yml
 
 # Django stuff:
 *.log

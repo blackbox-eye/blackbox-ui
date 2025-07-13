@@ -3,7 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blackbox EYE // Kontrolpanel</title>
+    <!-- Chosen Palette: Aura Gold & Deep Space -->
+    <!-- Application Structure Plan: Applikationen benytter en avanceret CSS Grid-struktur låst til 100% af skærmhøjden for at eliminere vertikal scrolling. Layoutet er defineret via 'grid-template-areas', som intelligent omstrukturerer modulernes placering ved forskellige skærmstørrelser (breakpoints) for optimal pladsudnyttelse. Dette skaber en fast, men fuldt responsiv oplevelse. Kerneinteraktionen er centreret omkring 'progressive disclosure' (faneblade, modaler) for at håndtere høj informations-tæthed inden for den faste ramme. -->
+    <!-- Visualization & Content Choices: 
+        - Rapport Info: Global trusselsvisualisering -> Mål: Skabe et "wow-faktor" kommandocenter -> Metode: Animeret HTML Canvas -> Interaktion: Passiv realtidsfølelse -> Begrundelse: Central, visuelt engagerende komponent.
+        - Rapport Info: Serverbelastning over tid -> Mål: Vise trends -> Metode: Chart.js linjegraf -> Interaktion: Hover for tooltips -> Begrundelse: Standard, klar visualisering af tidsseriedata.
+        - Rapport Info: Aktive alarmer -> Mål: Præsentere handlingsorienterede events -> Metode: Dynamisk genereret liste af "glas"-kort -> Interaktion: Klik på 'Undersøg' åbner en modal -> Begrundelse: Isolerer detaljer og holder brugeren i kontekst.
+        - Rapport Info: Systemstatus/Netværk -> Mål: Give hurtigt overblik -> Metode: Statiske informationsmoduler med ikoner og farvekodning -> Begrundelse: Hurtig aflæsning af status.
+        - Bibliotek: Chart.js til grafer, ren JS/CSS til alt andet.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <title>Blackbox EYE // Aura Kontrolpanel</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,261 +22,306 @@
     <style>
         :root {
             --brand-gold: #D4AF35;
+            --brand-gold-transparent-heavy: rgba(212, 175, 55, 0.2);
+            --brand-gold-transparent-light: rgba(212, 175, 55, 0.1);
             --background-dark: #0D1117;
-            --module-bg: #161B22;
-            --border-color: #30363d;
+            --glass-bg: rgba(30, 35, 42, 0.5);
+            --glass-blur: 12px;
+            --border-color: rgba(212, 175, 55, 0.2);
             --text-primary: #E6EDF3;
             --text-secondary: #8B949E;
             --critical: #F85149;
-            --warning: #FDBA74;
-            --operational: #3FB950;
         }
-
-        html {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
-        html::-webkit-scrollbar {
-            display: none; /* Chrome, Safari, Opera */
-        }
-
+        
         body {
             background-color: var(--background-dark);
             font-family: 'Roboto Condensed', sans-serif;
             color: var(--text-primary);
-            overflow: hidden; /* Forhindrer scroll på body */
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
         }
-        
-      .font-brand {
+
+        .font-brand {
             font-family: 'Orbitron', sans-serif;
-            letter-spacing: 0.05em; /* Tilføjet for bedre læsbarhed */
-        }
-
-      .solid-module {
-            background-color: var(--module-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            letter-spacing: 0.05em;
         }
         
-      .nav-link {
-            font-size: 1rem; /* Øget skriftstørrelse */
+        .background-container {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -2;
         }
 
-      .nav-link.active {
-            background-color: rgba(212, 175, 55, 0.1);
-            color: var(--brand-gold);
-            border-left: 3px solid var(--brand-gold);
-            font-weight: 700;
+        .watermark-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vh;
+            height: 80vh;
+            background: url('https://i.imgur.com/uF6X2xH.png') no-repeat center center; /* Placeholder for logo emblem */
+            background-size: contain;
+            opacity: 0.02;
         }
 
-      .nav-link:hover {
-            background-color: rgba(212, 175, 55, 0.05);
+        .noise-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1000 1000' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+            pointer-events: none;
         }
         
-        #threatMapCanvas {
-             background: url('https://placehold.co/1000x500/161B22/30363d?text=Global+Topologi') no-repeat center center;
-             background-size: cover;
-             width: 100%;
-             height: 100%;
-             display: block;
-        }
-
-      .alert-critical { border-left: 3px solid var(--critical); }
-      .alert-warning { border-left: 3px solid var(--warning); }
-        
-      .ai-input:focus {
-            outline: none;
-            border-color: var(--brand-gold);
-            box-shadow: 0 0 0 1px var(--brand-gold);
+        .glass-module {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+            border: 1px solid transparent;
+            background-clip: padding-box;
+            border-image: linear-gradient(135deg, var(--brand-gold-transparent-heavy), var(--brand-gold-transparent-light)) 1;
         }
         
-      .btn-investigate:hover {
-            background-color: var(--brand-gold);
-            color: var(--background-dark);
+        @keyframes pulse-critical {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(248, 81, 73, 0.4); }
+            70% { box-shadow: 0 0 10px 15px rgba(248, 81, 73, 0); }
         }
 
-      .tab-button {
-            transition: all 0.2s;
-            border-bottom: 2px solid transparent;
+        .pulse-critical {
+            animation: pulse-critical 2s infinite;
         }
-      .tab-button.active {
-            color: var(--brand-gold);
-            border-bottom-color: var(--brand-gold);
+
+        /* --- Grid Layout Definitions --- */
+        #main-grid {
+            display: grid;
+            height: 100%;
+            padding: 1rem;
+            gap: 1rem;
+            grid-template-columns: 280px repeat(10, 1fr);
+            grid-template-rows: repeat(12, 1fr);
+            grid-template-areas:
+                "nav map map map map map map map alerts alerts alerts"
+                "nav map map map map map map map alerts alerts alerts"
+                "nav map map map map map map map alerts alerts alerts"
+                "nav map map map map map map map alerts alerts alerts"
+                "nav map map map map map map map alerts alerts alerts"
+                "nav map map map map map map map ai ai ai"
+                "nav map map map map map map map ai ai ai"
+                "nav map map map map map map map ai ai ai"
+                "nav status status status net net net net ai ai ai"
+                "nav status status status net net net net ai ai ai"
+                "nav status status status net net net net ai ai ai"
+                "nav status status status net net net net ai ai ai";
         }
-      .tab-content {
-            display: none;
+
+        #nav-menu { grid-area: nav; }
+        #threat-module { grid-area: map; }
+        #alerts-module { grid-area: alerts; }
+        #status-module { grid-area: status; }
+        #net-module { grid-area: net; }
+        #ai-module { grid-area: ai; }
+        
+        @media (max-width: 1440px) {
+            #main-grid {
+                grid-template-columns: 250px repeat(10, 1fr);
+                grid-template-areas:
+                    "nav map map map map map alerts alerts alerts alerts alerts"
+                    "nav map map map map map alerts alerts alerts alerts alerts"
+                    "nav map map map map map alerts alerts alerts alerts alerts"
+                    "nav map map map map map alerts alerts alerts alerts alerts"
+                    "nav map map map map map ai ai ai ai ai"
+                    "nav map map map map map ai ai ai ai ai"
+                    "nav status status status status status ai ai ai ai ai"
+                    "nav status status status status status ai ai ai ai ai"
+                    "nav status status status status status net net net net net"
+                    "nav status status status status status net net net net net"
+                    "nav net-spare net-spare net-spare net-spare net-spare net net net net net"
+                    "nav net-spare net-spare net-spare net-spare net-spare net net net net net";
+            }
+            /* Adjust module visibility or content for this breakpoint if needed */
         }
-      .tab-content.active {
-            display: flex;
+        
+        @media (max-width: 1024px) {
+             #main-grid {
+                grid-template-columns: repeat(12, 1fr);
+                grid-template-rows: auto;
+                 grid-template-areas:
+                    "nav nav nav nav nav nav nav nav nav nav nav nav"
+                    "map map map map map map map map map map map map"
+                    "map map map map map map map map map map map map"
+                    "alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts"
+                    "alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts"
+                    "status status status status status status net net net net net net"
+                    "ai ai ai ai ai ai ai ai ai ai ai ai";
+                 overflow-y: auto; /* Allow scroll only on smallest screens */
+            }
+             #nav-menu { flex-direction: row; justify-content: space-around; }
         }
 
     </style>
 </head>
-<body class="text-base">
-    <div class="flex h-screen">
-        <nav class="w-72 bg-black/30 p-4 flex-shrink-0 flex-col hidden md:flex">
-            <div class="font-brand text-2xl mb-12 text-center"> <span class="text-white">BLACKBOX</span><span class="text-[var(--brand-gold)]">EYE™</span>
-                <p class="text-xs text-gray-400 font-sans tracking-widest mt-1">CONTROL PANEL</p>
-            </div>
-            
-            <ul class="space-y-2 flex-grow">
-                <li><a href="#" class="nav-link active flex items-center p-3 rounded-r-lg transition-colors duration-200"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-4"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>Dashboard</a></li>
-                <li><a href="#" class="nav-link flex items-center p-3 rounded-r-lg transition-colors duration-200"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-4"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>Brugerstyring</a></li>
-                <li><a href="#" class="nav-link flex items-center p-3 rounded-r-lg transition-colors duration-200"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-4"><path d="M12 15H12.01"></path><path d="M12 12H12.01"></path><path d="M12 9H12.01"></path><path d="M20 2H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"></path></svg>Systemlogs</a></li>
-                <li><a href="#" class="nav-link flex items-center p-3 rounded-r-lg transition-colors duration-200"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-4"><path d="M12.22 2h-4.44a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.38"></path><path d="M16 2l6 6"></path><path d="M14 8h-4"></path><path d="M14 12h-4"></path><path d="M10 16h-4"></path></svg>API Nøgler</a></li>
-                <li class="pt-4"><a href="#" class="nav-link flex items-center p-3 rounded-r-lg transition-colors duration-200"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-4"><path d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0 0 17 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06z"></path><path d="M10 2c1.5 2 2 2 5"></path></svg>Indstillinger</a></li>
-                <li><a href="#" class="nav-link flex items-center p-3 rounded-r-lg transition-colors duration-200"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-4"><path d="M15 12L12 9 9 12"></path><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z"></path></svg>Admin Indstillinger</a></li>
-                 <li><a href="#" class="nav-link flex items-center p-3 rounded-r-lg transition-colors duration-200"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-4"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0.33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0.33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Stealth Mode</a></li>
-            </ul>
+<body>
+    <div class="background-container">
+        <div class="watermark-logo"></div>
+        <div class="noise-overlay"></div>
+    </div>
 
-            <div class="mt-auto text-center text-[var(--text-secondary)] text-xs">
-                <p>Blackbox EYE v2.2 "Compact"</p>
-                <p>&copy; 2025 Alle rettigheder forbeholdes</p>
+    <div id="main-grid">
+        <nav id="nav-menu" class="glass-module flex flex-col p-4">
+            <div class="font-brand text-2xl mb-12 text-center">
+                <span class="text-white">BLACKBOX</span><span class="text-[var(--brand-gold)]">EYE™</span>
+                <p class="text-xs text-gray-400 font-sans tracking-widest mt-1">AURA C-PANEL</p>
             </div>
+            <ul class="space-y-2 flex-grow">
+                <li><a href="#" class="flex items-center p-3 text-lg rounded-lg text-[var(--brand-gold)] bg-white/5"><svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>Dashboard</a></li>
+                <li><a href="#" class="flex items-center p-3 text-lg rounded-lg hover:bg-white/5"><svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>Brugerstyring</a></li>
+                <li><a href="#" class="flex items-center p-3 text-lg rounded-lg hover:bg-white/5"><svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>Systemlogs</a></li>
+                <li><a href="#" class="flex items-center p-3 text-lg rounded-lg hover:bg-white/5"><svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7h2a2 2 0 012 2v10a2 2 0 01-2 2H7a2 2 0 01-2-2V9a2 2 0 012-2h2m4 0h-4m4 0v-2a2 2 0 00-2-2h-2a2 2 0 00-2 2v2m4 0h-4"></path></svg>API Nøgler</a></li>
+            </ul>
         </nav>
 
-        <main class="flex-1 p-6 overflow-y-auto">
-            <div class="grid grid-cols-12 gap-6 h-full">
-                
-                <div class="lg:col-span-8 xl:col-span-9 solid-module flex flex-col h-full">
-                    <div class="flex border-b border-[var(--border-color)] px-4">
-                        <button data-target="map-content" class="tab-button font-brand p-4 active">GLOBAL TRUSSELSOVERSIGT</button>
-                        <button data-target="load-content" class="tab-button font-brand p-4">SERVERBELASTNING</button>
-                    </div>
-                    <div class="flex-grow relative">
-                        <div id="map-content" class="tab-content active absolute inset-0 flex flex-col">
-                            <p class="p-4 text-sm text-[var(--text-secondary)]">
-                                Interaktivt kort med realtids trusselsdata. Pulserende knudepunkter indikerer aktive hændelser.
-                            </p>
-                            <div class="flex-grow">
-                                <canvas id="threatMapCanvas" role="img" aria-label="Globalt trusselskort der viser live trusselshændelser"></canvas>
-                            </div>
-                        </div>
-                        <div id="load-content" class="tab-content absolute inset-0 flex flex-col p-4">
-                             <p class="text-sm text-[var(--text-secondary)] mb-4">
-                                Dette diagram viser nøgle-metrics for serverens ydeevne. Hold musen over for præcise værdier.
-                            </p>
-                            <div class="flex-grow min-h-[300px]">
-                                <canvas id="serverLoadChart" role="img" aria-label="Graf der viser serverbelastning"></canvas>
-                            </div>
-                        </div>
-                    </div>
+        <div id="threat-module" class="glass-module flex flex-col">
+             <div class="flex border-b border-[var(--border-color)] px-4">
+                <button data-target="map-content" class="tab-button font-brand p-4 text-[var(--brand-gold)] border-b-2 border-[var(--brand-gold)]">GLOBAL TRUSSELSOVERSIGT</button>
+                <button data-target="load-content" class="tab-button font-brand p-4 text-gray-400 border-b-2 border-transparent hover:text-white">SERVERBELASTNING</button>
+            </div>
+            <div class="flex-grow relative overflow-hidden rounded-b-lg">
+                <div id="map-content" class="tab-content active absolute inset-0">
+                    <canvas id="threatMapCanvas" role="img" aria-label="Globalt trusselskort"></canvas>
                 </div>
-
-                <div class="lg:col-span-4 xl:col-span-3 solid-module flex flex-col h-full">
-                    <div class="p-4 border-b border-[var(--border-color)]">
-                        <h2 class="font-brand text-lg text-white">AKTIVE ALARMER</h2>
-                    </div>
-                    <div id="active-alerts-container" class="space-y-3 overflow-y-auto flex-grow p-4">
-                        </div>
-                </div>
-
-                <div class="lg:col-span-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="solid-module p-4 flex flex-col">
-                         <h2 class="font-brand text-lg text-white mb-4">SYSTEMSTATUS</h2>
-                         <ul class="space-y-3 text-sm flex-grow">
-                             <li class="flex justify-between items-center"><span>Firewall Service</span><span class="text-xs font-bold py-1 px-2 rounded-full bg-[var(--operational)]/20 text-[var(--operational)]">OPERATIONEL</span></li>
-                             <li class="flex justify-between items-center"><span>Threat Intel DB</span><span class="text-xs font-bold py-1 px-2 rounded-full bg-[var(--operational)]/20 text-[var(--operational)]">STABIL</span></li>
-                             <li class="flex justify-between items-center"><span>AI Core "GREY-E"</span><span class="text-xs font-bold py-1 px-2 rounded-full bg-[var(--operational)]/20 text-[var(--operational)]">AKTIV</span></li>
-                             <li class="flex justify-between items-center"><span>API Gateway</span><span class="text-xs font-bold py-1 px-2 rounded-full bg-[var(--warning)]/20 text-[var(--warning)]">HØJ LATENS</span></li>
-                         </ul>
-                    </div>
-                    
-                    <div class="solid-module p-4 flex flex-col">
-                        <h2 class="font-brand text-lg text-white mb-4">NETVÆRKSOVERVÅGNING</h2>
-                        <ul class="space-y-3 text-sm flex-grow">
-                            <li class="flex items-center"><span class="w-24">Port 22 (SSH)</span><div class="flex-grow bg-gray-700 h-2.5"><div class="bg-blue-400 h-2.5" style="width: 45%"></div></div></li>
-                            <li class="flex items-center"><span class="w-24">Port 443 (HTTPS)</span><div class="flex-grow bg-gray-700 h-2.5"><div class="bg-yellow-400 h-2.5" style="width: 88%"></div></div></li>
-                            <li class="flex items-center"><span class="w-24">Port 3306 (DB)</span><div class="flex-grow bg-gray-700 h-2.5"><div class="bg-red-500 h-2.5" style="width: 95%"></div></div></li>
-                            <li class="flex items-center"><span class="w-24">Port 9200 (ES)</span><div class="flex-grow bg-gray-700 h-2.5"><div class="bg-blue-400 h-2.5" style="width: 20%"></div></div></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="solid-module p-4 flex flex-col justify-between">
-                        <div>
-                            <h2 class="font-brand text-lg text-white mb-2">AI KOMMANDO</h2>
-                            <p class="text-sm text-[var(--text-secondary)] mb-4">Stil et spørgsmål til GREY-E.</p>
-                            <input type="text" placeholder="> Forespørgsel..." class="ai-input w-full bg-black/30 border-2 border-gray-600 rounded-md py-2 px-4 text-white placeholder-gray-500">
-                        </div>
-                        <div class="grid grid-cols-3 divide-x divide-gray-700 text-center mt-4 pt-4 border-t border-gray-700">
-                            <div><h3 class="font-brand text-xs text-white">AGENTER</h3><p class="text-2xl font-brand text-[var(--brand-gold)]">1,337</p></div>
-                            <div><h3 class="font-brand text-xs text-white">OPPETID</h3><p class="text-2xl font-brand text-white">99.98%</p></div>
-                            <div><h3 class="font-brand text-xs text-white">EVENTS</h3><p class="text-2xl font-brand text-white">2.1M</p></div>
-                        </div>
-                    </div>
+                <div id="load-content" class="tab-content absolute inset-0 p-4" style="display: none;">
+                    <canvas id="serverLoadChart" role="img" aria-label="Graf over serverbelastning"></canvas>
                 </div>
             </div>
-        </main>
+        </div>
+
+        <div id="alerts-module" class="glass-module flex flex-col p-4">
+            <h2 class="font-brand text-lg text-white mb-4">AKTIVE ALARMER</h2>
+            <div id="active-alerts-container" class="space-y-3 overflow-y-auto flex-grow pr-2"></div>
+        </div>
+
+        <div id="status-module" class="glass-module p-4 flex flex-col">
+            <h2 class="font-brand text-lg text-white mb-4">SYSTEMSTATUS</h2>
+            <ul class="space-y-4 text-sm flex-grow">
+                 <li class="flex justify-between items-center"><span>Firewall Service</span><span class="text-xs font-bold py-1 px-3 rounded-full bg-green-500/20 text-green-400">OPERATIONEL</span></li>
+                 <li class="flex justify-between items-center"><span>Threat Intel DB</span><span class="text-xs font-bold py-1 px-3 rounded-full bg-green-500/20 text-green-400">STABIL</span></li>
+                 <li class="flex justify-between items-center"><span>AI Core "GREY-E"</span><span class="text-xs font-bold py-1 px-3 rounded-full bg-green-500/20 text-green-400">AKTIV</span></li>
+                 <li class="flex justify-between items-center"><span>API Gateway</span><span class="text-xs font-bold py-1 px-3 rounded-full bg-yellow-500/20 text-yellow-400">HØJ LATENS</span></li>
+             </ul>
+        </div>
+
+        <div id="net-module" class="glass-module p-4 flex flex-col">
+            <h2 class="font-brand text-lg text-white mb-4">NETVÆRKSOVERVÅGNING</h2>
+            <ul class="space-y-4 text-sm flex-grow">
+                <li class="flex items-center"><span class="w-24">Port 22 (SSH)</span><div class="flex-grow bg-black/30 rounded-full h-2"><div class="bg-blue-400 h-2 rounded-full" style="width: 45%"></div></div></li>
+                <li class="flex items-center"><span class="w-24">Port 443 (HTTPS)</span><div class="flex-grow bg-black/30 rounded-full h-2"><div class="bg-yellow-400 h-2 rounded-full" style="width: 88%"></div></div></li>
+                <li class="flex items-center"><span class="w-24">Port 3306 (DB)</span><div class="flex-grow bg-black/30 rounded-full h-2"><div class="bg-red-500 h-2 rounded-full" style="width: 95%"></div></div></li>
+                <li class="flex items-center"><span class="w-24">Port 9200 (ES)</span><div class="flex-grow bg-black/30 rounded-full h-2"><div class="bg-blue-400 h-2 rounded-full" style="width: 20%"></div></div></li>
+            </ul>
+        </div>
+
+        <div id="ai-module" class="glass-module p-4 flex flex-col justify-between">
+            <h2 class="font-brand text-lg text-white mb-2">AI KOMMANDO INTERFACE</h2>
+            <p class="text-sm text-[var(--text-secondary)] mb-4">Stil et spørgsmål eller giv en kommando til GREY-E.</p>
+            <textarea placeholder="> Analysér trafik fra IP 192.168.1.100..." class="flex-grow w-full bg-black/30 border-2 border-gray-600 rounded-md py-2 px-4 text-white placeholder-gray-500 focus:outline-none focus:border-[var(--brand-gold)] focus:ring-1 focus:ring-[var(--brand-gold)] resize-none"></textarea>
+        </div>
+
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="alertModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+        <div class="glass-module w-full max-w-2xl p-6 relative">
+            <button id="closeModal" class="absolute top-4 right-4 text-gray-400 hover:text-white">&times;</button>
+            <h2 id="modalTitle" class="font-brand text-2xl text-[var(--brand-gold)] mb-4">Alarm Detaljer</h2>
+            <div id="modalBody" class="text-lg">
+                <p>Detaljeret information om alarmen vil blive vist her.</p>
+            </div>
+        </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', () => {
+            const mockAlerts = [
+                { id: 'a1', severity: 'critical', title: 'Brute Force Angreb Opdaget', target: 'SSH på SRV-01', time: '2 min siden' },
+                { id: 'a2', severity: 'critical', title: 'Anormal Udgående Trafik', target: 'DB-CLUSTER-03', time: '5 min siden' },
+                { id: 'a3', severity: 'warning', title: 'Flere Fejlede Logins', target: 'Admin Portal', time: '12 min siden' },
+            ];
             
-            // --- Tab Functionality ---
-            const tabButtons = document.querySelectorAll('.tab-button');
-            const tabContents = document.querySelectorAll('.tab-content');
-
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const targetId = button.getAttribute('data-target');
-                    
-                    tabButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    
-                    tabContents.forEach(content => {
-                        if (content.id === targetId) {
-                            content.classList.add('active');
-                        } else {
-                            content.classList.remove('active');
-                        }
-                    });
-                });
-            });
-
-            // --- Mock Data ---
-            const mockAlerts =;
-
             const alertsContainer = document.getElementById('active-alerts-container');
-            if(alertsContainer) {
+            if (alertsContainer) {
                 mockAlerts.forEach(alert => {
                     const alertEl = document.createElement('div');
-                    alertEl.className = `relative p-3 rounded-md bg-[var(--background-dark)] alert-${alert.severity}`;
+                    alertEl.className = `p-3 rounded-md bg-black/30 border-l-4 ${alert.severity === 'critical' ? 'border-red-500' : 'border-yellow-500'} ${alert.severity === 'critical' ? 'pulse-critical' : ''}`;
                     alertEl.innerHTML = `
                         <h3 class="font-bold text-white">${alert.title}</h3>
-                        <p class="text-xs text-[var(--text-secondary)]">${alert.target}</p>
                         <div class="flex justify-between items-center mt-2">
                             <span class="text-xs text-[var(--text-secondary)]">${alert.time}</span>
-                            <a href="#" class="btn-investigate text-xs text-[var(--brand-gold)] font-bold border border-current rounded-full px-3 py-1" aria-label="Undersøg alarm: ${alert.title}">Undersøg &rarr;</a>
+                            <button data-alert-id="${alert.id}" class="open-modal-btn text-xs text-[var(--brand-gold)] font-bold">Undersøg &rarr;</button>
                         </div>
                     `;
                     alertsContainer.appendChild(alertEl);
                 });
             }
 
-            // --- Server Load Chart ---
+            const alertModal = document.getElementById('alertModal');
+            const closeModal = document.getElementById('closeModal');
+            
+            document.querySelectorAll('.open-modal-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    alertModal.classList.remove('hidden');
+                });
+            });
+
+            closeModal.addEventListener('click', () => alertModal.classList.add('hidden'));
+            alertModal.addEventListener('click', (e) => {
+                if (e.target === alertModal) {
+                    alertModal.classList.add('hidden');
+                }
+            });
+
+
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.dataset.target;
+                    
+                    document.querySelectorAll('.tab-button').forEach(btn => {
+                        btn.classList.remove('text-[var(--brand-gold)]', 'border-[var(--brand-gold)]');
+                        btn.classList.add('text-gray-400', 'border-transparent');
+                    });
+                    button.classList.add('text-[var(--brand-gold)]', 'border-[var(--brand-gold)]');
+                    button.classList.remove('text-gray-400', 'border-transparent');
+
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.style.display = content.id === targetId ? 'block' : 'none';
+                    });
+                    window.dispatchEvent(new Event('resize'));
+                });
+            });
+
+            // Server Load Chart
             const serverLoadCtx = document.getElementById('serverLoadChart');
             if (serverLoadCtx) {
                 new Chart(serverLoadCtx, {
                     type: 'line',
                     data: {
-                        labels: Array.from({length: 12}, (_, i) => `${60 - i*5}`),
-                        datasets:.reverse(), borderColor: 'rgba(212, 175, 55, 1)', backgroundColor: 'rgba(212, 175, 55, 0.2)', borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0 },
-                            { label: 'Hukommelsesbrug', data: .reverse(), borderColor: 'rgba(59, 130, 246, 1)', backgroundColor: 'rgba(59, 130, 246, 0.2)', borderWidth: 2, fill: false, tension: 0.4, pointRadius: 0 }
+                        labels: Array.from({length: 12}, (_, i) => `${60 - i*5}m`),
+                        datasets: [
+                            { label: 'CPU Belastning', data: [22, 25, 30, 45, 50, 55, 60, 58, 52, 40, 35, 28].reverse(), borderColor: 'rgba(212, 175, 55, 1)', backgroundColor: 'rgba(212, 175, 55, 0.2)', borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0 },
+                            { label: 'Hukommelsesbrug', data: [15, 18, 22, 20, 28, 35, 33, 40, 38, 30, 25, 20].reverse(), borderColor: 'rgba(59, 130, 246, 1)', backgroundColor: 'rgba(59, 130, 246, 0.1)', borderWidth: 2, fill: false, tension: 0.4, pointRadius: 0 }
                         ]
                     },
                     options: {
                         responsive: true, maintainAspectRatio: false,
-                        scales: {
-                            y: { beginAtZero: true, max: 100, ticks: { color: 'rgba(255,255,255,0.5)', callback: (v) => v + '%' }, grid: { color: 'rgba(255,255,255,0.1)' } },
-                            x: { title: { display: true, text: 'Minutter siden', color: 'rgba(255,255,255,0.5)'}, ticks: { color: 'rgba(255,255,255,0.5)' }, grid: { display: false } }
-                        },
-                        plugins: { legend: { position: 'top', align: 'end', labels: { color: 'rgba(255,255,255,0.8)', boxWidth: 12, padding: 20 } } }
+                        scales: { y: { beginAtZero: true, max: 100, ticks: { color: 'rgba(255,255,255,0.5)', callback: (v) => v + '%' }, grid: { color: 'rgba(255,255,255,0.1)' } }, x: { ticks: { color: 'rgba(255,255,255,0.5)' }, grid: { display: false } } },
+                        plugins: { legend: { position: 'top', align: 'end', labels: { color: 'rgba(255,255,255,0.8)'} } }
                     }
                 });
             }
 
-            // --- Threat Map Canvas ---
+            // Threat Map Canvas
             const threatMapCanvas = document.getElementById('threatMapCanvas');
             if(threatMapCanvas){
                 const ctx = threatMapCanvas.getContext('2d');
@@ -284,46 +339,20 @@
                 };
 
                 function draw() {
-                    if(!ctx ||!width ||!height) return;
+                    if(!ctx || !width || !height) return;
                     ctx.clearRect(0, 0, width, height);
                     points.forEach(p => {
-                        ctx.beginPath();
-                        ctx.arc(p.x * width, p.y * height, p.radius, 0, Math.PI * 2);
-                        ctx.fillStyle = `rgba(248, 81, 73, ${p.alpha})`;
-                        ctx.fill();
-                        p.alpha += p.alphaChange;
-                        if(p.alpha > 1 |
-
-| p.alpha < 0) p.alphaChange *= -1;
+                        ctx.beginPath(); ctx.arc(p.x * width, p.y * height, p.radius, 0, Math.PI * 2); ctx.fillStyle = `rgba(248, 81, 73, ${p.alpha})`; ctx.fill(); p.alpha += p.alphaChange; if(p.alpha > 1 || p.alpha < 0) p.alphaChange *= -1;
                     });
                     arcs.forEach(a => {
-                        ctx.beginPath();
-                        const cpX = (a.startX + a.endX) / 2 + (a.startY - a.endY) * 0.4;
-                        const cpY = (a.startY + a.endY) / 2 + (a.endX - a.startX) * 0.4;
-                        ctx.moveTo(a.startX * width, a.startY * height);
-                        ctx.quadraticCurveTo(cpX * width, cpY * height, a.endX * width, a.endY * height);
-                        ctx.strokeStyle = `rgba(212, 175, 55, 0.4)`;
-                        ctx.lineWidth = 1;
-                        ctx.stroke();
-                        a.progress += a.speed;
-                        if(a.progress >= 1){
-                            a.progress = 0;
-                            a.startX = Math.random(); a.startY = Math.random();
-                            a.endX = Math.random(); a.endY = Math.random();
-                        }
+                        ctx.beginPath(); const cpX = (a.startX + a.endX) / 2 + (a.startY - a.endY) * 0.4; const cpY = (a.startY + a.endY) / 2 + (a.endX - a.startX) * 0.4; ctx.moveTo(a.startX * width, a.startY * height); ctx.quadraticCurveTo(cpX * width, cpY * height, a.endX * width, a.endY * height); ctx.strokeStyle = `rgba(212, 175, 55, 0.4)`; ctx.lineWidth = 1; ctx.stroke(); a.progress += a.speed; if(a.progress >= 1){ a.progress = 0; a.startX = Math.random(); a.startY = Math.random(); a.endX = Math.random(); a.endY = Math.random(); }
                     });
                     animationFrameId = requestAnimationFrame(draw);
                 }
                 
                 new IntersectionObserver((entries) => {
-                    const entry = entries;
-                    if (entry.isIntersecting) {
-                        resizeCanvas();
-                        if (!animationFrameId) draw();
-                    } else {
-                        cancelAnimationFrame(animationFrameId);
-                        animationFrameId = null;
-                    }
+                    const entry = entries[0];
+                    if (entry.isIntersecting) { resizeCanvas(); if (!animationFrameId) draw(); } else { cancelAnimationFrame(animationFrameId); animationFrameId = null; }
                 }).observe(threatMapCanvas);
 
                 window.addEventListener('resize', resizeCanvas);

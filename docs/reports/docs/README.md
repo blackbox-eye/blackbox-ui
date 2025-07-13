@@ -16,6 +16,13 @@ Her finder du alle autoritative manualer, rapporter og projektstandarder for ALP
 
 ---
 
+## 📁 docs / Oversigt
+
+| Dokumenttype          | Filnavn                                                                                   | Version   | Dato       | Ansvarlig    |
+|--------------------   |------------------------------------------------------------------------------------------ |---------  |------------|--------------|
+| **System-blueprint**  | [SYSTEM_BLUEPRINT_AIG_v1.0.pdf](../SYSTEM_BLUEPRINT_AIG_v1.0.pdf)                         |   v1.0    | 2025-07-01 |    AIG       |
+| **System-blueprint**  | [aig_blueprint_v1.md](../aig_blueprint_v1.md)                                             |   v1.0    | 2025-07-01 |    AIG       |
+
 ## 🗂️ Historik og Revision
 
 - Ældre versioner opbevares her for revision og audit.

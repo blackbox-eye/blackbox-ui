@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="da" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackbox EYE&trade; - Intelligent Sikkerhed. Klar til Handling.</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Chakra+Petch:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #101419;
+            --primary-accent: #FFC700;
+            --glitch-dark-green: #003d00; /* Deeper Green */
+            --glitch-fire: #ffac00; /* Yellowish/Reddish Fire */
+            --text-high-emphasis: #EAEAEA;
+            --text-medium-emphasis: #9CA3AF;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(22, 28, 39, 0.6);
+            --digital-rain-color: #008000; /* Matrix Green */
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-high-emphasis);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .glass-effect {
+            background-color: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+        }
+        .hero-gradient-text {
+            background: linear-gradient(90deg, var(--primary-accent), #FFFFFF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .section-fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .section-fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-left-color: var(--primary-accent);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        :focus-visible {
+            outline: 2px solid var(--primary-accent);
+            outline-offset: 2px;
+            border-radius: 2px;
+        }
+
+        /* Glitch Logo Style - Updated Colors & Size */
+        .glitch-logo {
+            font-family: 'Chakra Petch', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            position: relative;
+            font-size: 1.65rem; /* Increased by 10% from 1.5rem */
+            line-height: 1.65rem;
+            color: var(--text-high-emphasis);
+            text-shadow: 0.05em 0 0 var(--glitch-dark-green), -0.025em -0.05em 0 var(--glitch-fire), 0.025em 0.05em 0 var(--glitch-dark-green);
+            animation: glitch 500ms infinite;
+        }
+
+        .glitch-logo span {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .glitch-logo span:first-child {
+            animation: glitch 650ms infinite;
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+            transform: translate(-0.025em, -0.0125em);
+            opacity: 0.8;
+        }
+
+        .glitch-logo span:last-child {
+            animation: glitch 375ms infinite;
+            clip-path: polygon(0 80%, 100% 20%, 100% 100%, 0 100%);
+            transform: translate(0.0125em, 0.025em);
+            opacity: 0.8;
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: 0.05em 0 0 var(--glitch-dark-green), -0.025em -0.05em 0 var(--glitch-fire), 0.025em 0.05em 0 var(--glitch-dark-green); }
+            14% { text-shadow: 0.05em 0 0 var(--glitch-dark-green), -0.025em -0.05em 0 var(--glitch-fire), 0.025em 0.05em 0 var(--glitch-dark-green); }
+            15% { text-shadow: -0.05em -0.025em 0 var(--glitch-dark-green), 0.025em 0.025em 0 var(--glitch-fire), -0.05em -0.05em 0 var(--glitch-dark-green); }
+            49% { text-shadow: -0.05em -0.025em 0 var(--glitch-dark-green), 0.025em 0.025em 0 var(--glitch-fire), -0.05em -0.05em 0 var(--glitch-dark-green); }
+            50% { text-shadow: 0.025em 0.05em 0 var(--glitch-dark-green), 0.05em 0 0 var(--glitch-fire), 0 -0.05em 0 var(--glitch-dark-green); }
+            99% { text-shadow: 0.025em 0.05em 0 var(--glitch-dark-green), 0.05em 0 0 var(--glitch-fire), 0 -0.05em 0 var(--glitch-dark-green); }
+            100% { text-shadow: -0.025em 0 0 var(--glitch-dark-green), -0.025em -0.025em 0 var(--glitch-fire), -0.025em -0.05em 0 var(--glitch-dark-green); }
+        }
+
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header Section -->
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="glitch-logo flex-shrink-0" aria-label="Blackbox EYE">
+                    Blackbox EYE&trade;
+                    <span aria-hidden="true">Blackbox EYE&trade;</span>
+                    <span aria-hidden="true">Blackbox EYE&trade;</span>
+                </div>
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-4 lg:space-x-8">
+                    <nav class="flex items-center space-x-4 lg:space-x-8">
+                        <a href="#about" class="nav-link text-gray-400 hover:text-white transition-colors">Om Os</a>
+                        <a href="#products" class="nav-link text-gray-400 hover:text-white transition-colors">Produkter</a>
+                        <a href="#cases" class="nav-link text-gray-400 hover:text-white transition-colors">Kundecases</a>
+                        <a href="#pricing" class="nav-link text-gray-400 hover:text-white transition-colors">Priser</a>
+                        <a href="#contact" class="nav-link text-gray-400 hover:text-white transition-colors">Kontakt</a>
+                    </nav>
+                    <!-- Agent Login Button (Desktop) - UPDATED LINK -->
+                    <a href="agent-login.php" class="hidden lg:inline-block border border-amber-400 text-amber-400 py-2 px-6 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold">
+                        Agent Login
+                    </a>
+                </div>
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="md:hidden text-white p-2 -mr-2">
+                    <span class="sr-only">Åbn menu</span>
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden fixed top-20 left-0 right-0 bottom-0 glass-effect z-40 p-8">
+        <nav class="flex flex-col space-y-8 text-center mt-8">
+            <a href="#about" class="nav-link-mobile text-2xl text-gray-300">Om Os</a>
+            <a href="#products" class="nav-link-mobile text-2xl text-gray-300">Produkter</a>
+            <a href="#cases" class="nav-link-mobile text-2xl text-gray-300">Kundecases</a>
+            <a href="#pricing" class="nav-link-mobile text-2xl text-gray-300">Priser</a>
+            <a href="#contact" class="nav-link-mobile text-2xl text-gray-300">Kontakt</a>
+            <!-- Agent Login Button (Mobile) - UPDATED LINK -->
+            <a href="agent-login.php" class="mt-8 inline-block border border-amber-400 text-amber-400 py-3 px-8 rounded-lg text-xl font-semibold">
+                Agent Login
+            </a>
+        </nav>
+    </div>
+
+    <main>
+        
+        <!-- Hero Section -->
+        <section id="home" class="relative h-screen w-full flex items-center justify-center text-center overflow-hidden">
+            <canvas id="hero-canvas" class="absolute top-0 left-0 w-full h-full z-0"></canvas>
+            <div class="relative z-10 px-4">
+                <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold hero-gradient-text leading-tight mb-4">
+                    Gør usynlige trusler synlige.
+                </h1>
+                <p class="text-base sm:text-lg md:text-xl max-w-3xl mx-auto text-gray-300 mb-8">
+                    Den komplette AI-drevne sikkerhedsplatform, der proaktivt beskytter din virksomhed 24/7 – og omdanner medarbejdere til jeres stærkeste forsvarslinje.
+                </p>
+                <a href="#contact" class="bg-amber-400 text-black font-bold py-3 px-8 sm:py-4 sm:px-10 rounded-lg text-base sm:text-lg hover:scale-105 transition-transform inline-block">
+                    Book en Uforpligtende Demo
+                </a>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-20 sm:py-24 section-fade-in">
+            <div class="container mx-auto px-4">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Om Blackbox EYE&trade;</h2>
+                    <p class="text-lg text-gray-400 mb-12 sm:mb-16">
+                        Blackbox EYE&trade; er en internationalt anerkendt specialist i avancerede efterretnings- og sikkerhedsløsninger. Vi kombinerer banebrydende teknologi, kompromisløs diskretion og maksimal pålidelighed for at levere skræddersyede sikkerhedspakker til verdens mest krævende kunder – fra privatpersoner til organisationer med kritiske behov.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 mb-16">
+                    <div class="glass-effect rounded-xl p-8">
+                        <h3 class="text-2xl font-bold text-amber-400 mb-4">Vision</h3>
+                        <p class="text-gray-300">At sætte den globale standard for diskret sikkerhed, analyse og operativ beskyttelse – altid med kompromisløs perfektion.</p>
+                    </div>
+                    <div class="glass-effect rounded-xl p-8">
+                        <h3 class="text-2xl font-bold text-amber-400 mb-4">Mission</h3>
+                        <p class="text-gray-300">At beskytte, forberede og styrke vores kunder gennem uovertrufne sikkerhedsløsninger, der altid er et skridt foran nutidens og morgendagens trusler.</p>
+                    </div>
+                </div>
+
+                <div class="text-center mb-16">
+                     <h3 class="text-3xl font-bold mb-10">Vores Værdier</h3>
+                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                         <div class="text-center">
+                             <h4 class="text-xl font-bold text-amber-400 mb-2">Diskretion</h4>
+                             <p class="text-gray-400">Vi opererer usynligt og kompromisløst i baggrunden – altid et skridt foran.</p>
+                         </div>
+                         <div class="text-center">
+                             <h4 class="text-xl font-bold text-amber-400 mb-2">Innovation</h4>
+                             <p class="text-gray-400">Konstant udvikling og integration af next-gen teknologier.</p>
+                         </div>
+                         <div class="text-center">
+                             <h4 class="text-xl font-bold text-amber-400 mb-2">Integritet</h4>
+                             <p class="text-gray-400">Ubetinget fortrolighed, ansvarlighed og ægte pålidelighed.</p>
+                         </div>
+                         <div class="text-center">
+                             <h4 class="text-xl font-bold text-amber-400 mb-2">Perfektion</h4>
+                             <p class="text-gray-400">Nul fejlmargin – hver detalje tæller.</p>
+                         </div>
+                    </div>
+                </div>
+                
+                <div class="max-w-4xl mx-auto glass-effect rounded-xl p-8 mt-16 sm:mt-20">
+                    <h3 class="text-2xl sm:text-3xl font-bold text-center mb-6">Eksklusive Specialteams</h3>
+                    <p class="text-center text-gray-400 mb-10">For de mest krævende opgaver kan du – under fuld fortrolighed – hyre vores specialiserede teams:</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+                        <div><strong class="text-amber-400">Recon Team:</strong> Dybdegående efterretning, analyse og informationsindhentning.</div>
+                        <div><strong class="text-amber-400">Red Team:</strong> Realistiske penetrationstests og angrebssimulationer – både fysisk og digitalt.</div>
+                        <div><strong class="text-amber-400">Stealth Team:</strong> Undercover-operationer og diskret indsamling af kritisk information.</div>
+                        <div><strong class="text-amber-400">Blue Team:</strong> Proaktive eksperter i forsvar, sikkerhedsarkitektur og trusselsrespons.</div>
+                        <div class="md:col-span-2"><strong class="text-amber-400">Custom Operations:</strong> Skræddersyede opgaver designet efter jeres specifikke behov – altid med maksimal diskretion og effekt.</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        
+        <!-- Products Section -->
+        <section id="products" class="py-20 sm:py-24 section-fade-in bg-gray-900/20">
+            <div class="container mx-auto px-4">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">En Holistisk Sikkerhedsstrategi</h2>
+                    <p class="text-lg text-gray-400 mb-12 sm:mb-16">
+                        Dyk ned i kernen af Blackbox EYE&trade;. Hvert modul er en specialiseret forsvarslinje. Brug vores AI-assistent til at generere et konkret trusselsscenarie for hvert modul.
+                    </p>
+                </div>
+                <div class="space-y-16 sm:space-y-20">
+                    <article class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center section-fade-in">
+                        <div>
+                            <h3 class="text-2xl sm:text-3xl font-bold text-amber-400 mb-4">🛡️ Penetration & Vulnerability Engine (PVE)</h3>
+                            <p class="text-gray-300 mb-6">PVE er jeres proaktive, offensive skjold. Ved konstant at simulere avancerede cyberangreb, identificerer vores AI sårbarheder i jeres systemer, netværk og applikationer – før ondsindede aktører gør det.</p>
+                            <button class="gemini-trigger-btn bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors" data-module="PVE">✨ Generer Trusselsscenarie</button>
+                        </div>
+                        <div class="glass-effect rounded-xl p-6 sm:p-8 h-full">
+                            <h4 class="font-semibold text-lg mb-4">Nøglefunktioner:</h4>
+                            <ul class="list-disc list-inside text-gray-400 space-y-2">
+                                <li>Automatiseret, kontinuerlig penetrationstest</li>
+                                <li>AI-baseret risikovurdering og prioritering</li>
+                                <li>Detaljerede, handlingsanvisende rapporter</li>
+                                <li>Adaptiv trusselssimulering mod nyeste angreb</li>
+                            </ul>
+                        </div>
+                    </article>
+                    <article class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center section-fade-in">
+                        <div class="lg:order-last">
+                            <h3 class="text-2xl sm:text-3xl font-bold text-amber-400 mb-4">👁️ GreyEYE</h3>
+                            <p class="text-gray-300 mb-6">Tænk på GreyEYE som jeres digitale vagtpost, der aldrig sover. Dette modul overvåger al aktivitet i jeres netværk og systemer i realtid og opdager mistænkelig adfærd, der afviger fra normalen.</p>
+                            <button class="gemini-trigger-btn bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors" data-module="GreyEYE">✨ Generer Trusselsscenarie</button>
+                        </div>
+                        <div class="glass-effect rounded-xl p-6 sm:p-8 h-full lg:order-first">
+                            <h4 class="font-semibold text-lg mb-4">Nøglefunktioner:</h4>
+                            <ul class="list-disc list-inside text-gray-400 space-y-2">
+                                <li>24/7 realtidsovervågning af logs og events</li>
+                                <li>AI-baseret anomali- og trusselsdetektion</li>
+                                <li>Autonom respons på detekterede trusler</li>
+                                <li>Global trusselsintelligens og korrelation</li>
+                            </ul>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cases Section -->
+        <section id="cases" class="py-20 sm:py-24 section-fade-in">
+            <div class="container mx-auto px-4">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Bevist Værdi i Den Virkelige Verden</h2>
+                    <p class="text-lg text-gray-400 mb-12 sm:mb-16">
+                        Se hvordan vi har hjulpet andre, og lad vores AI analysere, hvordan vi kan hjælpe dig.
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="glass-effect rounded-xl p-8 flex flex-col">
+                        <h3 class="text-xl font-bold mb-2">Kommune med Kritisk Infrastruktur</h3>
+                        <p class="text-gray-400 mb-4"><strong>Udfordring:</strong> Uautoriseret adgang til tekniske installationer.</p>
+                        <p class="text-gray-300 mb-6"><strong>Løsning:</strong> ID-Matrix og GreyEYE implementeret til at logge al adgang og levere ugentlige rapporter.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-700">
+                            <p class="text-amber-400 font-bold text-lg">Resultat: 80% reduktion i adgangsbrud.</p>
+                        </div>
+                    </div>
+                    <div class="glass-effect rounded-xl p-8 flex flex-col">
+                        <h3 class="text-xl font-bold mb-2">Ejendomsselskab</h3>
+                        <p class="text-gray-400 mb-4"><strong>Udfordring:</strong> Manglende overblik over 12 bygninger og tyveri.</p>
+                        <p class="text-gray-300 mb-6"><strong>Løsning:</strong> Platformen integreret med eksisterende kameraer, med mobil adgang for viceværter.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-700">
+                            <p class="text-amber-400 font-bold text-lg">Resultat: 65% færre tyverier på 3 måneder.</p>
+                        </div>
+                    </div>
+                    <div class="glass-effect rounded-xl p-8 flex flex-col">
+                        <h3 class="text-xl font-bold mb-2">Vagtselskab</h3>
+                        <p class="text-gray-400 mb-4"><strong>Udfordring:</strong> Manuelle logbøger og langsom reaktionstid.</p>
+                        <p class="text-gray-300 mb-6"><strong>Løsning:</strong> GreyEYE assisterer nu vagter med automatisk dokumentation og live-opdateringer.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-700">
+                            <p class="text-amber-400 font-bold text-lg">Resultat: Ny differentieringsfaktor.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="max-w-3xl mx-auto glass-effect rounded-xl p-6 sm:p-8 mt-16 sm:mt-20">
+                    <h3 class="text-2xl font-bold text-center mb-6">✨ Analysér Din Egen Situation</h3>
+                    <div>
+                        <label for="case-input" class="block text-sm font-medium text-gray-300 mb-2">Beskriv kort en sikkerhedsudfordring i din organisation:</label>
+                        <textarea id="case-input" rows="4" placeholder="F.eks. 'Vi er bekymrede for phishing-mails til vores bogholderi...'" class="w-full bg-gray-800/50 border-gray-600 rounded-md shadow-sm py-3 px-4 text-white focus:outline-none focus:ring-amber-400 focus:border-amber-400"></textarea>
+                        <button id="analyze-case-btn" class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">Få AI-Analyse</button>
+                    </div>
+                    <div id="case-analysis-container" class="mt-6 hidden" style="min-height: 150px;">
+                        <div class="border-t border-gray-700 pt-6">
+                            <div id="case-analysis-loader" class="flex flex-col items-center justify-center text-center">
+                                <div class="spinner"></div>
+                                <p class="mt-4 text-gray-300">Analyserer din situation...</p>
+                            </div>
+                            <div id="case-analysis-result" class="hidden prose prose-invert max-w-none text-gray-300" aria-live="polite"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="py-20 sm:py-24 bg-gray-900/20 section-fade-in">
+            <div class="container mx-auto px-4">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Løsninger & Pakker</h2>
+                    <p class="text-lg text-gray-400 mb-12 sm:mb-16">
+                        Blackbox EYE&trade; tilbyder et komplet univers af licens- og abonnementsløsninger, skræddersyet til både privatpersoner, teams og enterprise-niveau. Lad vores AI-rådgiver finde den rette pakke for dig.
+                    </p>
+                </div>
+
+                <div class="max-w-3xl mx-auto glass-effect rounded-xl p-6 sm:p-8 mb-16 sm:mb-20">
+                    <h3 class="text-2xl font-bold text-center mb-6">AI Sikkerhedsrådgiver</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <div>
+                            <label for="industry-select" class="block text-sm font-medium text-gray-300 mb-1">Branche</label>
+                            <select id="industry-select" class="w-full bg-gray-800/50 border-gray-600 rounded-md shadow-sm py-3 px-4 text-white focus:outline-none focus:ring-amber-400 focus:border-amber-400">
+                                <option>Produktionsvirksomhed</option>
+                                <option>Offentlig institution</option>
+                                <option>Advokatfirma</option>
+                                <option>Ejendomsselskab</option>
+                                <option>Detailhandel</option>
+                                <option>IT & Teknologi</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="employee-count" class="block text-sm font-medium text-gray-300 mb-1">Antal medarbejdere</label>
+                            <input type="number" id="employee-count" value="50" class="w-full bg-gray-800/50 border-gray-600 rounded-md shadow-sm py-3 px-4 text-white focus:outline-none focus:ring-amber-400 focus:border-amber-400">
+                        </div>
+                        <div class="md:self-end">
+                            <button id="get-recommendation-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors h-full">✨ Få AI-Anbefaling</button>
+                        </div>
+                    </div>
+                    <div id="recommendation-result-container" class="mt-6 hidden" style="min-height: 150px;">
+                        <div class="border-t border-gray-700 pt-6">
+                            <div id="recommendation-loader" class="flex flex-col items-center justify-center text-center">
+                                <div class="spinner"></div>
+                                <p class="mt-4 text-gray-300">Analyserer jeres profil...</p>
+                            </div>
+                            <div id="recommendation-result" class="hidden prose prose-invert max-w-none text-gray-300" aria-live="polite"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+                    <div class="glass-effect rounded-xl p-8 text-center h-full flex flex-col">
+                        <h3 class="text-2xl font-bold mb-2">Standard</h3>
+                        <p class="text-gray-400 mb-6">Effektiv sikkerhedsbeskyttelse og digitale løsninger til daglig brug.</p>
+                        <ul class="text-left space-y-3 text-gray-300 my-8 flex-grow">
+                            <li>✓ GreyEYE AI-assistent</li>
+                            <li>✓ ID-Matrix Adgangskontrol</li>
+                            <li>✓ Email Support</li>
+                        </ul>
+                        <a href="#contact" class="mt-auto w-full inline-block border border-amber-400 text-amber-400 py-3 px-6 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold">Kontakt os</a>
+                    </div>
+                    <div class="relative glass-effect rounded-xl p-8 text-center border-2 border-amber-400 h-full flex flex-col">
+                        <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-amber-400 text-black px-4 py-1 rounded-full text-sm font-bold">Mest Populære</div>
+                        <h3 class="text-2xl font-bold mb-2">Premium</h3>
+                        <p class="text-gray-400 mb-6">Udvidet adgang til avancerede analyseværktøjer og specialmoduler.</p>
+                        <ul class="text-left space-y-3 text-gray-300 my-8 flex-grow">
+                            <li>✓ Alt i Standard +</li>
+                            <li>✓ PVE Modul</li>
+                            <li>✓ AUT Træningsmodul</li>
+                            <li>✓ Prioriteret Support</li>
+                        </ul>
+                        <a href="#contact" class="mt-auto w-full inline-block bg-amber-400 text-black py-3 px-6 rounded-lg hover:bg-amber-500 transition-all font-semibold">Kontakt os</a>
+                    </div>
+                    <div class="glass-effect rounded-xl p-8 text-center h-full flex flex-col">
+                        <h3 class="text-2xl font-bold mb-2">Enterprise</h3>
+                        <p class="text-gray-400 mb-6">Helhedsorienteret, skræddersyet beskyttelse for større organisationer.</p>
+                        <ul class="text-left space-y-3 text-gray-300 my-8 flex-grow">
+                            <li>✓ Alt i Premium +</li>
+                            <li>✓ Adgang til Specialteams</li>
+                            <li>✓ 24/7 Operationel Beredskab</li>
+                            <li>✓ VIP Support</li>
+                        </ul>
+                        <a href="#contact" class="mt-auto w-full inline-block border border-amber-400 text-amber-400 py-3 px-6 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold">Kontakt os</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 sm:py-24 section-fade-in">
+            <div class="container mx-auto px-4">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Kontakt os – når kun det ypperste er acceptabelt.</h2>
+                    <p class="text-lg text-gray-400 mb-12">
+                        Hos Blackbox EYE&trade; er kompromisløs fortrolighed og uigennemtrængelig beskyttelse fundamentet. Intet overlades til tilfældighederne.
+                    </p>
+                </div>
+                <div class="max-w-xl mx-auto">
+                    <form id="contact-form" class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-300">Navn</label>
+                            <input type="text" id="name" name="name" required class="mt-1 block w-full bg-gray-800/50 border-gray-600 rounded-md shadow-sm py-3 px-4 text-white focus:outline-none focus:ring-amber-400 focus:border-amber-400">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-300">Email</label>
+                            <input type="email" id="email" name="email" required class="mt-1 block w-full bg-gray-800/50 border-gray-600 rounded-md shadow-sm py-3 px-4 text-white focus:outline-none focus:ring-amber-400 focus:border-amber-400">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-300">Besked</label>
+                            <textarea id="message" name="message" rows="4" required class="mt-1 block w-full bg-gray-800/50 border-gray-600 rounded-md shadow-sm py-3 px-4 text-white focus:outline-none focus:ring-amber-400 focus:border-amber-400"></textarea>
+                        </div>
+                        <div>
+                            <button type="submit" class="w-full bg-amber-400 text-black font-bold py-4 px-10 rounded-lg text-lg hover:bg-amber-500 transition-colors">Send Forespørgsel</button>
+                        </div>
+                    </form>
+                    <div id="contact-form-success" class="hidden mt-6 text-center text-green-400 border border-green-400 rounded-md p-4">
+                        Tak for din henvendelse! Vi vender tilbage hurtigst muligt.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Gemini AI Modal -->
+    <div id="gemini-modal" role="dialog" aria-modal="true" aria-labelledby="gemini-modal-title" class="hidden fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4">
+        <div class="glass-effect rounded-2xl w-full max-w-2xl max-h-[80vh] flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b border-gray-700">
+                <h3 id="gemini-modal-title" class="text-xl font-bold text-amber-400">AI-genereret Trusselsscenarie</h3>
+                <button id="close-modal-btn" class="text-gray-400 hover:text-white text-3xl leading-none">&times;</button>
+            </div>
+            <div id="modal-content" class="p-6 overflow-y-auto">
+                <div id="modal-loader" class="flex flex-col items-center justify-center text-center">
+                    <div class="spinner"></div>
+                    <p class="mt-4 text-gray-300">Kontakter Gemini... Genererer relevant scenarie...</p>
+                </div>
+                <div id="modal-result" class="hidden prose prose-invert max-w-none text-gray-300" aria-live="polite"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="border-t border-gray-800 mt-20 section-fade-in">
+        <div class="container mx-auto px-4 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-sm">
+                <div class="lg:col-span-1">
+                    <h4 class="font-semibold text-gray-200 mb-4">Blackbox EYE&trade;</h4>
+                    <p class="text-gray-400">Intelligent Sikkerhed. Klar til Handling.</p>
+                </div>
+                <div class="lg:col-span-1">
+                     <h4 class="font-semibold text-gray-200 mb-4">Globale Kontorer</h4>
+                    <div class="space-y-4 text-gray-400">
+                        <div>
+                            <p class="font-bold text-gray-300">Schweiz – Genève Branch</p>
+                            <p>Rue du Rhône 80<br>1204 Genève, Schweiz</p>
+                        </div>
+                        <div>
+                            <p class="font-bold text-gray-300">UAE – Dubai HQ</p>
+                            <p>Emirates Financial Towers, South Tower<br>Level 27, DIFC, Dubai, UAE</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-1">
+                    <h4 class="font-semibold text-gray-200 mb-4">Kontakt</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Email: ops@blackbox.codes</li>
+                        <li>Telefon: +45 31 33 00 33</li>
+                    </ul>
+                </div>
+                <div class="lg:col-span-1">
+                    <h4 class="font-semibold text-gray-200 mb-4">Følg Os</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">LinkedIn</a>
+                        <a href="#" class="text-gray-400 hover:text-white">Twitter</a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-800 text-center text-gray-500 text-xs">
+                <p>&copy; 2025 Blackbox EYE&trade;. Alle rettigheder forbeholdes.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Observer for fade-in animations on scroll ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.section-fade-in').forEach(section => {
+                observer.observe(section);
+            });
+
+            // --- Mobile Menu Toggle ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileNavLinks = document.querySelectorAll('.nav-link-mobile');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                document.body.style.overflow = mobileMenu.classList.contains('hidden') ? '' : 'hidden';
+            });
+
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    document.body.style.overflow = '';
+                });
+            });
+
+            // --- Header Scroll Effect ---
+            const header = document.getElementById('main-header');
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('glass-effect', window.scrollY > 50);
+            });
+            
+            // --- Contact Form ---
+            const contactForm = document.getElementById('contact-form');
+            const formSuccessMessage = document.getElementById('contact-form-success');
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                formSuccessMessage.classList.remove('hidden');
+                contactForm.reset();
+                setTimeout(() => {
+                    formSuccessMessage.classList.add('hidden');
+                }, 5000);
+            });
+
+            // --- Gemini Modal & Accessibility ---
+            const modal = document.getElementById('gemini-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const modalFocusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+            let firstFocusableElement;
+            let lastFocusableElement;
+
+            function showModal() {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+
+                const focusableContent = Array.from(modal.querySelectorAll(modalFocusableElements));
+                firstFocusableElement = focusableContent[0];
+                lastFocusableElement = focusableContent[focusableContent.length - 1];
+                
+                modal.addEventListener('keydown', trapFocus);
+                closeModalBtn.focus();
+            }
+
+            function hideModal() {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+                modal.removeEventListener('keydown', trapFocus);
+            }
+
+            function trapFocus(e) {
+                let isTabPressed = e.key === 'Tab' || e.keyCode === 9;
+                if (!isTabPressed) return;
+
+                if (e.shiftKey) { 
+                    if (document.activeElement === firstFocusableElement) {
+                        lastFocusableElement.focus();
+                        e.preventDefault();
+                    }
+                } else { 
+                    if (document.activeElement === lastFocusableElement) {
+                        firstFocusableElement.focus();
+                        e.preventDefault();
+                    }
+                }
+            }
+            
+            closeModalBtn.addEventListener('click', hideModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) hideModal();
+            });
+
+            // --- Gemini API Integration for Threat Scenarios ---
+            const geminiTriggerBtns = document.querySelectorAll('.gemini-trigger-btn');
+            const modalLoader = document.getElementById('modal-loader');
+            const modalResult = document.getElementById('modal-result');
+
+            geminiTriggerBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const module = btn.dataset.module;
+                    generateThreatScenario(module);
+                });
+            });
+
+            async function generateThreatScenario(moduleName) {
+                showModal();
+                modalLoader.classList.remove('hidden');
+                modalResult.classList.add('hidden');
+                modalResult.innerHTML = '';
+
+                const prompts = {
+                    'PVE': "Beskriv et realistisk cybersecurity-trusselsscenarie for en mellemstor dansk virksomhed, som Blackbox EYE's 'Penetration & Vulnerability Engine' ville opdage og forhindre. Forklar kort, hvordan en uopdaget sårbarhed i deres webshop-software kunne udnyttes af en hacker til at stjæle kundedata. Hold sproget letforståeligt for en ikke-teknisk direktør. Start med en fængende overskrift i markdown.",
+                    'GreyEYE': "Beskriv et realistisk insider-trusselsscenarie i en dansk kommune, som Blackbox EYE's 'GreyEYE' modul ville opdage. Scenariet skal involvere en medarbejder, der forsøger at eksfiltrere følsomme borgerdata over en længere periode ved at tilgå filservere uden for normal arbejdstid. Forklar hvordan GreyEYE's anomali-detektion ville reagere. Hold sproget letforståeligt. Start med en fængende overskrift i markdown.",
+                };
+                const prompt = prompts[moduleName] || "Beskriv et generelt cybersecurity-trusselsscenarie.";
+                await callGemini(prompt, modalResult, modalLoader);
+            }
+
+            // --- Gemini API for AI Security Advisor ---
+            const getRecommendationBtn = document.getElementById('get-recommendation-btn');
+            const recommendationResultContainer = document.getElementById('recommendation-result-container');
+            const recommendationLoader = document.getElementById('recommendation-loader');
+            const recommendationResult = document.getElementById('recommendation-result');
+
+            getRecommendationBtn.addEventListener('click', async () => {
+                const industry = document.getElementById('industry-select').value;
+                const employees = document.getElementById('employee-count').value;
+
+                recommendationResultContainer.classList.remove('hidden');
+                recommendationLoader.classList.remove('hidden');
+                recommendationResult.classList.add('hidden');
+                recommendationResult.innerHTML = '';
+
+                const prompt = `Du er en AI-sikkerhedsrådgiver for Blackbox EYE™. En potentiel kunde fra '${industry}'-branchen med ${employees} ansatte har bedt om en analyse. Baseret på dette, gør følgende: 
+1.  **Top Trusler:** Oplist de 3 største og mest relevante cybertrusler for denne specifikke organisation.
+2.  **Økonomisk Risiko:** Giv et illustrativt, men realistisk, estimat for den potentielle årlige økonomiske risiko ved et seriøst sikkerhedsbrud.
+3.  **Anbefaling:** Anbefal den bedst passende Blackbox EYE™ pakke (Standard, Premium, eller Enterprise) og giv en kort, klar begrundelse for hvorfor netop den pakke er det rigtige match.
+Formater dit svar i letlæselig markdown med klare overskrifter for hvert punkt.`;
+                await callGemini(prompt, recommendationResult, recommendationLoader);
+            });
+            
+            // --- Gemini API for AI Case Analyst ---
+            const analyzeCaseBtn = document.getElementById('analyze-case-btn');
+            const caseAnalysisContainer = document.getElementById('case-analysis-container');
+            const caseAnalysisLoader = document.getElementById('case-analysis-loader');
+            const caseAnalysisResult = document.getElementById('case-analysis-result');
+            
+            analyzeCaseBtn.addEventListener('click', async () => {
+                const userCase = document.getElementById('case-input').value;
+                if (!userCase.trim()) {
+                    // Using a custom modal/alert in a real app would be better
+                    // For now, a simple browser alert will suffice for this example.
+                    // alert('Beskriv venligst din situation.'); 
+                    // As per instructions, avoiding alert(). We can show an inline message instead.
+                    const caseInput = document.getElementById('case-input');
+                    caseInput.placeholder = "Udfyld venligst dette felt.";
+                    caseInput.classList.add('border-red-500');
+                    setTimeout(() => {
+                        caseInput.placeholder = "F.eks. 'Vi er bekymrede for phishing-mails til vores bogholderi...'";
+                        caseInput.classList.remove('border-red-500');
+                    }, 3000);
+                    return;
+                }
+                
+                caseAnalysisContainer.classList.remove('hidden');
+                caseAnalysisLoader.classList.remove('hidden');
+                caseAnalysisResult.classList.add('hidden');
+                caseAnalysisResult.innerHTML = '';
+                
+                const prompt = `Du er en ekspert AI-sikkerhedskonsulent for Blackbox EYE™. En potentiel kunde beskriver deres situation således: "${userCase}".
+                Baseret på dette og din viden om vores eksisterende cases (Kommune, Ejendomsselskab, Vagtselskab), skal du gøre følgende:
+                1.  **Sammenligning med Cases:** Sammenlign kort kundens situation med den mest relevante af vores eksisterende cases. Forklar hvorfor de minder om hinanden.
+                2.  **Anbefalede Moduler:** Anbefal 1-2 af vores moduler (PVE, GreyEYE, ID-Matrix, AUT), som er mest relevante for at løse kundens problem. Begrund kort dit valg for hvert modul.
+                3.  **Anbefalet Næste Skridt:** Foreslå et konkret næste skridt for kunden, f.eks. at booke en demo med fokus på et specifikt emne.
+                Hold tonen professionel, hjælpsom og letforståelig. Formater dit svar i markdown med klare overskrifter.`;
+
+                await callGemini(prompt, caseAnalysisResult, caseAnalysisLoader);
+            });
+
+
+            // --- Generic Gemini API Caller Function ---
+            async function callGemini(prompt, resultElement, loaderElement) {
+                try {
+                    let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                    const payload = { contents: chatHistory };
+                    const apiKey = ""; // Provided by the environment
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                    
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) throw new Error(`API call failed with status: ${response.status}`);
+
+                    const result = await response.json();
+                    
+                    let text = "Kunne ikke generere et svar. Prøv venligst igen.";
+                    if (result.candidates && result.candidates.length > 0 && result.candidates[0].content && result.candidates[0].content.parts && result.candidates[0].content.parts.length > 0) {
+                        text = result.candidates[0].content.parts[0].text;
+                    }
+                    
+                    // Basic Markdown to HTML conversion
+                    let htmlContent = text
+                        .replace(/### (.*$)/gim, '<h3 class="text-xl font-bold mb-2">$1</h3>')
+                        .replace(/## (.*$)/gim, '<h2 class="text-2xl font-bold mb-3">$1</h2>')
+                        .replace(/# (.*$)/gim, '<h1 class="text-3xl font-bold mb-4">$1</h1>')
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                        .replace(/\* (.*$)/gim, '<li class="list-disc ml-5 mb-2">$1</li>')
+                        .replace(/\n/g, '<br>');
+                    
+                    // Wrap list items in <ul>
+                    if (htmlContent.includes('<li')) {
+                        htmlContent = htmlContent.replace(/<li/g, '<ul><li').replace(/<\/li>(?!<li)/g, '</li></ul>');
+                        // Clean up potential empty <br> tags around lists
+                        htmlContent = htmlContent.replace(/<br><ul>/g, '<ul>').replace(/<\/ul><br>/g, '</ul>');
+                    }
+
+                    resultElement.innerHTML = htmlContent;
+                
+                } catch (error) {
+                    console.error("Gemini API Error:", error);
+                    resultElement.innerHTML = `<p class="text-red-400">Der opstod en fejl under kommunikation med AI-assistenten. Tjek venligst konsollen for detaljer og prøv igen senere.</p>`;
+                } finally {
+                    loaderElement.classList.add('hidden');
+                    resultElement.classList.remove('hidden');
+                }
+            }
+
+            // --- Digital Rain Hero Animation ---
+            const canvas = document.getElementById('hero-canvas');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                
+                const setupCanvas = () => {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                };
+                setupCanvas();
+
+                let columns = Math.floor(canvas.width / 20);
+                const drops = [];
+                for (let i = 0; i < columns; i++) {
+                    drops[i] = 1;
+                }
+
+                const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@#$%^&*()_+-=[]{}|;':,./<>?".split('');
+
+                function drawDigitalRain() {
+                    ctx.fillStyle = "rgba(16, 20, 25, 0.05)";
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--digital-rain-color').trim() || "#008000";
+                    ctx.font = "15px monospace";
+
+                    for (let i = 0; i < drops.length; i++) {
+                        const text = chars[Math.floor(Math.random() * chars.length)];
+                        ctx.fillText(text, i * 20, drops[i] * 20);
+
+                        if (drops[i] * 20 > canvas.height && Math.random() > 0.975) {
+                            drops[i] = 0;
+                        }
+                        drops[i]++;
+                    }
+                }
+                
+                let intervalId = setInterval(drawDigitalRain, 33);
+
+                window.addEventListener('resize', () => {
+                    setupCanvas();
+                    columns = Math.floor(canvas.width / 20);
+                    for (let i = 0; i < columns; i++) {
+                        // Reset drops to avoid weird artifacts after resize
+                        drops[i] = Math.floor(Math.random() * (canvas.height / 20));
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

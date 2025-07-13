@@ -1,3 +1,4 @@
+# ────────────────────────────────────────────────────────────────────────────────
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -53,9 +54,11 @@ cover/
 *.mo
 *.pot
 
+# ────────────────────────────────────────────────────────────────────────────────
 # --- ALPHA Interface GUI / Web / PHP-specific ---
 error_log
-.htaccess
+# .htaccess                  # tidligere ignore-regel (deaktiveret)
+!.htaccess                   # UNDTagelse: spor .htaccess i repo (ny politik)
 db.php
 logs/
 assets/cache/
@@ -67,6 +70,7 @@ node_modules/
 build/
 dist/
 
+# ────────────────────────────────────────────────────────────────────────────────
 # --- GitHub/CI artefakter ---
 .github/*
 !.github/workflows/
@@ -103,23 +107,23 @@ ipython_config.py
 # .python-version
 
 # pipenv
-#Pipfile.lock
+# Pipfile.lock
 
 # UV
-#uv.lock
+# uv.lock
 
 # poetry
-#poetry.lock
-#poetry.toml
+# poetry.lock
+# poetry.toml
 
 # pdm
-#pdm.lock
-#pdm.toml
+# pdm.lock
+# pdm.toml
 .pdm-python
 .pdm-build/
 
 # pixi
-#pixi.lock
+# pixi.lock
 .pixi
 
 # PEP 582

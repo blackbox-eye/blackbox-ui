@@ -1,0 +1,9 @@
+# Fortæl serveren, at den skal lede efter index.html FØRST.
+# Hvis den ikke findes, skal den lede efter index.php.
+DirectoryIndex index.html index.php
+
+# Bevarer de eksisterende regler for "clean URLs".
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^.*$ index.php [L,QSA]

@@ -2,7 +2,9 @@ name: CI & Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
   workflow_dispatch:
 
 jobs:
@@ -12,13 +14,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Sæt Python op (hvis du har Python‑scripts)
+      # Sæt Python op (fjern hvis du ikke bruger Python)
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      # Eksempel: kør npm install, hvis du bygger med Node
+      # Eksempel på Node‑dependencies (udkommenteret – aktiver hvis nødvendigt)
       # - name: Install dependencies
       #   run: npm ci
 
@@ -34,8 +36,8 @@ jobs:
   ftp-deploy:
     name: "🚀 FTP Deploy to public_html/"
     needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
       - name: Deploy via FTP
@@ -45,5 +47,5 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
-          local-dir: ./            # Hele repoet
+          local-dir: ./
           server-dir: ${{ secrets.FTP_REMOTE_PATH }}

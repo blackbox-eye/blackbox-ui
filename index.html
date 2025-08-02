@@ -28,6 +28,21 @@
             font-family: 'Inter', sans-serif;
             overflow-x: hidden; /* Prevent horizontal scroll */
         }
+        
+        /* Hide scrollbar for webkit browsers */
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* Hide scrollbar for Firefox */
+        html {
+            scrollbar-width: none;
+        }
+        
+        /* Hide scrollbar for IE and Edge */
+        body {
+            -ms-overflow-style: none;
+        }
         .glass-effect {
             background-color: var(--glass-bg);
             backdrop-filter: blur(12px);

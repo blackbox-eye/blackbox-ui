@@ -7,14 +7,21 @@ on:
 
 jobs:
   build:
-    name: ✅ Lint README
+    name: "✅ Lint README"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      # Sæt Python op (hvis du har Python‑scripts)
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
+      # Eksempel: kør npm install, hvis du bygger med Node
+      # - name: Install dependencies
+      #   run: npm ci
+
       - name: Lint README
         run: |
           if [ -f README.md ]; then
@@ -25,7 +32,7 @@ jobs:
           fi
 
   ftp-deploy:
-    name: 🚀 FTP Deploy to public_html/
+    name: "🚀 FTP Deploy to public_html/"
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
@@ -38,5 +45,5 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
-          local-dir: ./          # Hele repo-roden
+          local-dir: ./            # Hele repoet
           server-dir: ${{ secrets.FTP_REMOTE_PATH }}

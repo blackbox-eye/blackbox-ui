@@ -6,6 +6,7 @@
     <title>Blackbox EYE&trade; - Intelligent Sikkerhed. Klar til Handling.</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="config.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Chakra+Petch:wght@700&display=swap" rel="stylesheet">
@@ -535,6 +536,24 @@
                         <a href="#contact" class="mt-auto w-full inline-block border border-amber-400 text-amber-400 py-3 px-6 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold">Kontakt os</a>
                     </div>
                 </div>
+                            <li>✓ PVE Modul</li>
+                            <li>✓ AUT Træningsmodul</li>
+                            <li>✓ Prioriteret Support</li>
+                        </ul>
+                        <a href="#contact" class="mt-auto w-full inline-block bg-amber-400 text-black py-3 px-6 rounded-lg hover:bg-amber-500 transition-all font-semibold">Kontakt os</a>
+                    </div>
+                    <div class="glass-effect rounded-xl p-8 text-center h-full flex flex-col">
+                        <h3 class="text-2xl font-bold mb-2">Enterprise</h3>
+                        <p class="text-gray-400 mb-6">Helhedsorienteret, skræddersyet beskyttelse for større organisationer.</p>
+                        <ul class="text-left space-y-3 text-gray-300 my-8 flex-grow">
+                            <li>✓ Alt i Premium +</li>
+                            <li>✓ Adgang til Specialteams</li>
+                            <li>✓ 24/7 Operationel Beredskab</li>
+                            <li>✓ VIP Support</li>
+                        </ul>
+                        <a href="#contact" class="mt-auto w-full inline-block border border-amber-400 text-amber-400 py-3 px-6 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold">Kontakt os</a>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -580,11 +599,18 @@
             <button id="alphabot-close-btn" class="text-xl leading-none hover:text-amber-400" aria-label="Luk chat">&times;</button>
         </div>
         <div id="alphabot-messages" class="bg-gray-800" style="max-height: 18rem; overflow-y:auto;">
-            <!-- Chat messages will be appended here -->
+            <div class="chat-message bot">
+                <div class="message-text">
+                    Hej! Jeg er GreyEYE AlphaBot, din AI-sikkerhedsassistent. Hvordan kan jeg hjælpe dig i dag?
+                </div>
+            </div>
         </div>
         <div class="flex items-center p-2 bg-gray-900">
             <input id="alphabot-input" type="text" placeholder="Skriv din besked..." class="flex-grow bg-transparent text-white placeholder-gray-400 px-2 py-1" />
-            <button id="alphabot-send-btn" class="ml-2 bg-amber-400 text-black px-4 py-2 rounded-md font-semibold">Send</button>
+            <button id="alphabot-send-btn" class="ml-2 bg-amber-400 text-black px-4 py-2 rounded-md font-semibold" disabled>
+                <span id="send-text">Send</span>
+                <div id="send-loader" class="hidden inline-block w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+            </button>
         </div>
     </div>
     <button id="alphabot-toggle-btn" aria-label="Åbn chat" class="bg-amber-400 text-black p-3 rounded-full shadow-lg">
@@ -840,49 +866,97 @@ Formater dit svar i letlæselig markdown med klare overskrifter for hvert punkt.
 
             // --- Generic Gemini API Caller Function ---
             async function callGemini(prompt, resultElement, loaderElement) {
+                // Rate limiting check
+                const now = Date.now();
+                const requestKey = 'gemini_requests';
+                let requests = JSON.parse(localStorage.getItem(requestKey) || '[]');
+                requests = requests.filter(time => now - time < 60000); // Last minute
+                
+                if (requests.length >= AI_CONFIG.MAX_REQUESTS_PER_MINUTE) {
+                    resultElement.innerHTML = `<p class="text-yellow-400">For mange forespørgsler. Vent venligst et øjeblik før du prøver igen.</p>`;
+                    loaderElement.classList.add('hidden');
+                    resultElement.classList.remove('hidden');
+                    return;
+                }
+                
                 try {
+                    // Log request for audit
+                    if (AI_CONFIG.LOG_REQUESTS) {
+                        console.log('Gemini API request initiated:', { timestamp: now, type: 'threat_scenario' });
+                    }
+                    
                     let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
                     const payload = { contents: chatHistory };
-                    // Use the configured Gemini API key for all AI integrations
-                    const apiKey = "AIzaSyAmX6gTIN2tIiQ99HM8LopGsD-jmUENYLw";
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                    
+                    const apiUrl = `${AI_CONFIG.API_BASE_URL}/${AI_CONFIG.GEMINI_MODEL}:generateContent?key=${AI_CONFIG.GEMINI_API_KEY}`;
+                    
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), AI_CONFIG.REQUEST_TIMEOUT);
                     
                     const response = await fetch(apiUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
+                        body: JSON.stringify(payload),
+                        signal: controller.signal
                     });
-
-                    if (!response.ok) throw new Error(`API call failed with status: ${response.status}`);
+                    
+                    clearTimeout(timeoutId);
+                    
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`API call failed with status: ${response.status} - ${errorText}`);
+                    }
 
                     const result = await response.json();
                     
+                    // Update rate limiting
+                    requests.push(now);
+                    localStorage.setItem(requestKey, JSON.stringify(requests));
+                    
                     let text = "Kunne ikke generere et svar. Prøv venligst igen.";
-                    if (result.candidates && result.candidates.length > 0 && result.candidates[0].content && result.candidates[0].content.parts && result.candidates[0].content.parts.length > 0) {
+                    if (result.candidates && result.candidates.length > 0 && 
+                        result.candidates[0].content && result.candidates[0].content.parts && 
+                        result.candidates[0].content.parts.length > 0) {
                         text = result.candidates[0].content.parts[0].text;
                     }
                     
-                    // Basic Markdown to HTML conversion
+                    // Enhanced Markdown to HTML conversion with security
                     let htmlContent = text
-                        .replace(/### (.*$)/gim, '<h3 class="text-xl font-bold mb-2">$1</h3>')
-                        .replace(/## (.*$)/gim, '<h2 class="text-2xl font-bold mb-3">$1</h2>')
-                        .replace(/# (.*$)/gim, '<h1 class="text-3xl font-bold mb-4">$1</h1>')
-                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                        .replace(/\* (.*$)/gim, '<li class="list-disc ml-5 mb-2">$1</li>')
+                        .replace(/### (.*$)/gim, '<h3 class="text-xl font-bold mb-2 text-amber-400">$1</h3>')
+                        .replace(/## (.*$)/gim, '<h2 class="text-2xl font-bold mb-3 text-amber-400">$1</h2>')
+                        .replace(/# (.*$)/gim, '<h1 class="text-3xl font-bold mb-4 text-amber-400">$1</h1>')
+                        .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>')
+                        .replace(/\* (.*$)/gim, '<li class="list-disc ml-5 mb-2 text-gray-300">$1</li>')
                         .replace(/\n/g, '<br>');
                     
-                    // Wrap list items in <ul>
+                    // Wrap list items in <ul> with styling
                     if (htmlContent.includes('<li')) {
-                        htmlContent = htmlContent.replace(/<li/g, '<ul><li').replace(/<\/li>(?!<li)/g, '</li></ul>');
-                        // Clean up potential empty <br> tags around lists
+                        htmlContent = htmlContent.replace(/<li/g, '<ul class="mb-4"><li').replace(/<\/li>(?!<li)/g, '</li></ul>');
                         htmlContent = htmlContent.replace(/<br><ul>/g, '<ul>').replace(/<\/ul><br>/g, '</ul>');
                     }
 
                     resultElement.innerHTML = htmlContent;
+                    
+                    if (AI_CONFIG.LOG_REQUESTS) {
+                        console.log('Gemini API response received successfully');
+                    }
                 
                 } catch (error) {
                     console.error("Gemini API Error:", error);
-                    resultElement.innerHTML = `<p class="text-red-400">Der opstod en fejl under kommunikation med AI-assistenten. Tjek venligst konsollen for detaljer og prøv igen senere.</p>`;
+                    
+                    let errorMessage = `<p class="text-red-400">Der opstod en fejl under kommunikation med AI-assistenten.</p>`;
+                    
+                    if (error.name === 'AbortError') {
+                        errorMessage = `<p class="text-yellow-400">Forespørgslen tog for lang tid - prøv venligst igen.</p>`;
+                    } else if (error.message.includes('429')) {
+                        errorMessage = `<p class="text-yellow-400">For mange forespørgsler - vent venligst et øjeblik.</p>`;
+                    } else if (error.message.includes('403')) {
+                        errorMessage = `<p class="text-red-400">API-adgang afvist - kontakt administrator.</p>`;
+                    } else if (error.message.includes('network')) {
+                        errorMessage = `<p class="text-red-400">Netværksfejl - tjek din internetforbindelse.</p>`;
+                    }
+                    
+                    resultElement.innerHTML = errorMessage;
                 } finally {
                     loaderElement.classList.add('hidden');
                     resultElement.classList.remove('hidden');
@@ -948,8 +1022,22 @@ Formater dit svar i letlæselig markdown med klare overskrifter for hvert punkt.
             const messagesDiv = document.getElementById('alphabot-messages');
             const inputEl = document.getElementById('alphabot-input');
             const sendBtn = document.getElementById('alphabot-send-btn');
+            const sendText = document.getElementById('send-text');
+            const sendLoader = document.getElementById('send-loader');
+            
             // Maintain conversation history for multi‑turn context
             let conversation = [];
+            let isProcessing = false;
+
+            // Inicialiser AlphaBot med system prompt
+            conversation.push({
+                role: 'user',
+                parts: [{ text: AI_CONFIG.ALPHABOT_SYSTEM_PROMPT }]
+            });
+            conversation.push({
+                role: 'model',
+                parts: [{ text: 'Forstået. Jeg er klar til at assistere med sikkerhedsrelaterede spørgsmål og analyser.' }]
+            });
 
             function appendMessage(role, text) {
                 const wrapper = document.createElement('div');
@@ -964,53 +1052,119 @@ Formater dit svar i letlæselig markdown med klare overskrifter for hvert punkt.
 
             function toggleChat() {
                 container.classList.toggle('open');
+                if (container.classList.contains('open')) {
+                    inputEl.focus();
+                }
+            }
+
+            function setProcessing(processing) {
+                isProcessing = processing;
+                sendBtn.disabled = processing;
+                inputEl.disabled = processing;
+                
+                if (processing) {
+                    sendText.classList.add('hidden');
+                    sendLoader.classList.remove('hidden');
+                } else {
+                    sendText.classList.remove('hidden');
+                    sendLoader.classList.add('hidden');
+                }
             }
 
             async function sendMessage() {
                 const text = inputEl.value.trim();
-                if (!text) return;
+                if (!text || isProcessing) return;
+                
                 appendMessage('user', text);
                 conversation.push({ role: 'user', parts: [{ text }] });
                 inputEl.value = '';
+                
+                setProcessing(true);
                 await callAlphaBot(conversation);
+                setProcessing(false);
             }
 
             async function callAlphaBot(history) {
                 try {
-                    // Logging for audit/compliance
-                    console.log('AlphaBot request:', history);
-                    const apiKey = "AIzaSyAmX6gTIN2tIiQ99HM8LopGsD-jmUENYLw";
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-pro:generateContent?key=${apiKey}`;
+                    // Log for audit/compliance
+                    if (AI_CONFIG.LOG_REQUESTS) {
+                        console.log('AlphaBot request initiated');
+                    }
+                    
+                    const apiUrl = `${AI_CONFIG.API_BASE_URL}/${AI_CONFIG.GEMINI_MODEL}:generateContent?key=${AI_CONFIG.GEMINI_API_KEY}`;
+                    
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), AI_CONFIG.REQUEST_TIMEOUT);
+                    
                     const payload = { contents: history };
                     const response = await fetch(apiUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
+                        body: JSON.stringify(payload),
+                        signal: controller.signal
                     });
-                    if (!response.ok) throw new Error(`AlphaBot API error: ${response.status}`);
+                    
+                    clearTimeout(timeoutId);
+                    
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`AlphaBot API error: ${response.status} - ${response.statusText} - ${errorText}`);
+                    }
+                    
                     const result = await response.json();
-                    let reply = 'Systemet kunne ikke generere et svar. Prøv igen.';
-                    if (result.candidates && result.candidates.length > 0 && result.candidates[0].content && result.candidates[0].content.parts && result.candidates[0].content.parts.length > 0) {
+                    
+                    let reply = 'Undskyld, jeg kunne ikke generere et svar. Prøv venligst igen.';
+                    if (result.candidates && result.candidates.length > 0 && 
+                        result.candidates[0].content && result.candidates[0].content.parts && 
+                        result.candidates[0].content.parts.length > 0) {
                         reply = result.candidates[0].content.parts[0].text;
                     }
+                    
                     appendMessage('bot', reply.trim());
                     conversation.push({ role: 'model', parts: [{ text: reply.trim() }] });
-                    console.log('AlphaBot response:', reply);
+                    
+                    if (AI_CONFIG.LOG_REQUESTS) {
+                        console.log('AlphaBot response generated successfully');
+                    }
+                    
                 } catch (err) {
                     console.error('AlphaBot error:', err);
-                    appendMessage('bot', 'Der opstod en fejl under forbindelsen til AlphaBot. Prøv igen senere.');
+                    let errorMessage = 'Der opstod en fejl under forbindelsen til AlphaBot. ';
+                    
+                    if (err.name === 'AbortError') {
+                        errorMessage += 'Forespørgslen tog for lang tid - prøv igen.';
+                    } else if (err.message.includes('429')) {
+                        errorMessage += 'For mange forespørgsler - prøv igen om lidt.';
+                    } else if (err.message.includes('403')) {
+                        errorMessage += 'API-adgang afvist - kontakt administrator.';
+                    } else if (err.message.includes('network')) {
+                        errorMessage += 'Netværksfejl - tjek din internetforbindelse.';
+                    } else {
+                        errorMessage += 'Prøv igen senere.';
+                    }
+                    
+                    appendMessage('bot', errorMessage);
                 }
             }
+
+            // Enable send button when input has content
+            inputEl.addEventListener('input', () => {
+                if (!isProcessing) {
+                    sendBtn.disabled = !inputEl.value.trim();
+                }
+            });
 
             toggleBtn.addEventListener('click', toggleChat);
             closeBtn.addEventListener('click', toggleChat);
             sendBtn.addEventListener('click', sendMessage);
             inputEl.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
+                if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
                     sendMessage();
                 }
             });
+        });
+    </script>
         });
     </script>
 </body>

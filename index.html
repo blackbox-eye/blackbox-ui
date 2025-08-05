@@ -1283,6 +1283,8 @@ Formater dit svar i letlæselig markdown med klare overskrifter for hvert punkt.
             });
 
             function appendMessage(role, text) {
+                console.log('appendMessage called with role:', role, 'text:', text); // Debug log
+                
                 const wrapper = document.createElement('div');
                 wrapper.className = 'chat-message ' + role;
                 const message = document.createElement('div');
@@ -1290,6 +1292,7 @@ Formater dit svar i letlæselig markdown med klare overskrifter for hvert punkt.
                 
                 // Convert markdown to HTML for bot messages
                 if (role === 'bot') {
+                    console.log('Converting markdown for bot message'); // Debug log
                     const formattedText = formatMarkdownToHTML(text);
                     message.innerHTML = formattedText;
                 } else {
@@ -1302,6 +1305,8 @@ Formater dit svar i letlæselig markdown med klare overskrifter for hvert punkt.
             }
 
             function formatMarkdownToHTML(text) {
+                console.log('Original text:', text); // Debug log
+                
                 // Enhanced markdown to HTML conversion with Danish security focus
                 let html = text
                     // Headers
@@ -1331,6 +1336,7 @@ Formater dit svar i letlæselig markdown med klare overskrifter for hvert punkt.
                 // Clean up extra line breaks around lists
                 html = html.replace(/<br>\s*<ul>/g, '<ul>').replace(/<\/ul>\s*<br>/g, '</ul>');
                 
+                console.log('Formatted HTML:', html); // Debug log
                 return html;
             }
 

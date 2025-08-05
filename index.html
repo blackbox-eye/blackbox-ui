@@ -1287,10 +1287,51 @@ Formater dit svar i letlæselig markdown med klare overskrifter for hvert punkt.
                 wrapper.className = 'chat-message ' + role;
                 const message = document.createElement('div');
                 message.className = 'message-text';
-                message.textContent = text;
+                
+                // Convert markdown to HTML for bot messages
+                if (role === 'bot') {
+                    const formattedText = formatMarkdownToHTML(text);
+                    message.innerHTML = formattedText;
+                } else {
+                    message.textContent = text;
+                }
+                
                 wrapper.appendChild(message);
                 messagesDiv.appendChild(wrapper);
                 messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }
+
+            function formatMarkdownToHTML(text) {
+                // Enhanced markdown to HTML conversion with Danish security focus
+                let html = text
+                    // Headers
+                    .replace(/### (.*$)/gim, '<h3 class="text-base font-bold mb-2 text-amber-400">$1</h3>')
+                    .replace(/## (.*$)/gim, '<h2 class="text-lg font-bold mb-2 text-amber-400">$1</h2>')
+                    .replace(/# (.*$)/gim, '<h1 class="text-xl font-bold mb-3 text-amber-400">$1</h1>')
+                    
+                    // Bold text
+                    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-semibold">$1</strong>')
+                    
+                    // Italic text
+                    .replace(/\*(.*?)\*/g, '<em class="text-gray-200 italic">$1</em>')
+                    
+                    // Code blocks
+                    .replace(/`(.*?)`/g, '<code class="bg-gray-700 px-1 py-0.5 rounded text-amber-300 text-sm">$1</code>')
+                    
+                    // Bullet points
+                    .replace(/^\* (.*$)/gim, '<li class="ml-4 mb-1 text-gray-300">• $1</li>')
+                    .replace(/^- (.*$)/gim, '<li class="ml-4 mb-1 text-gray-300">• $1</li>')
+                    
+                    // Line breaks
+                    .replace(/\n/g, '<br>');
+                
+                // Wrap consecutive list items in ul tags
+                html = html.replace(/(<li[^>]*>.*?<\/li>(?:\s*<br>\s*<li[^>]*>.*?<\/li>)*)/gs, '<ul class="mb-2">$1</ul>');
+                
+                // Clean up extra line breaks around lists
+                html = html.replace(/<br>\s*<ul>/g, '<ul>').replace(/<\/ul>\s*<br>/g, '</ul>');
+                
+                return html;
             }
 
             function toggleChat() {

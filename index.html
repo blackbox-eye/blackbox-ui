@@ -300,6 +300,25 @@
             scrollbar-width: none;
             -ms-overflow-style: none;
         }
+        /* Pricing grid mobile tweaks */
+        @media (max-width: 600px) {
+            .pricing-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+        }
+        @media (max-width: 320px) {
+            .pricing-grid .glass-effect {
+                padding: 1rem;
+            }
+            .pricing-grid .glass-effect h3 {
+                font-size: 1rem;
+            }
+            .pricing-grid .glass-effect p {
+                font-size: 0.75rem;
+            }
+            .pricing-grid .glass-effect a {
+                padding: 0.5rem;
+                font-size: 0.8rem;
+            }
+        }
 
     </style>
 </head>
@@ -574,7 +593,7 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+                <div class="pricing-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
                     <!-- Standard Package -->
                     <div class="glass-effect rounded-xl p-6 lg:p-8 text-center h-full flex flex-col order-2 lg:order-1">
                         <h3 class="text-xl lg:text-2xl font-bold mb-3">Standard</h3>
@@ -864,18 +883,22 @@
             }
 
             function trapFocus(e) {
-                let isTabPressed = e.key === 'Tab' || e.keyCode === 9;
-                if (!isTabPressed) return;
-
-                if (e.shiftKey) { 
+                const isTabPressed = e.key === 'Tab' || e.keyCode === 9;
+                if (!isTabPressed && e.key !== 'Escape') return;
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    hideModal();
+                    return;
+                }
+                if (e.shiftKey) {
                     if (document.activeElement === firstFocusableElement) {
+                        e.preventDefault();
                         lastFocusableElement.focus();
-                        e.preventDefault();
                     }
-                } else { 
+                } else {
                     if (document.activeElement === lastFocusableElement) {
-                        firstFocusableElement.focus();
                         e.preventDefault();
+                        firstFocusableElement.focus();
                     }
                 }
             }
@@ -1272,8 +1295,6 @@ Formater dit svar i letlæselig markdown med klare overskrifter for hvert punkt.
                     sendMessage();
                 }
             });
-        });
-    </script>
         });
     </script>
 </body>

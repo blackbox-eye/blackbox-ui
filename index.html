@@ -55,6 +55,14 @@
             -ms-overflow-style: none;
         }
         
+        /* Enhanced responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        
         .glass-effect {
             background-color: var(--glass-bg);
             backdrop-filter: blur(12px);
@@ -138,10 +146,11 @@
         /* GreyEYE AlphaBot Chat Styles */
         #alphabot-container {
             position: fixed;
-            bottom: 1rem;
-            right: 1rem;
-            width: 22rem;
-            max-width: 90vw;
+            bottom: 0.75rem;
+            right: 0.75rem;
+            width: 20rem;
+            max-width: calc(100vw - 1.5rem);
+            max-height: calc(100vh - 8rem);
             background-color: var(--glass-bg);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
@@ -151,13 +160,34 @@
             z-index: 100;
             display: none;
         }
+        
+        @media (max-width: 640px) {
+            #alphabot-container {
+                bottom: 0.5rem;
+                right: 0.5rem;
+                left: 0.5rem;
+                width: auto;
+                max-width: none;
+                max-height: calc(100vh - 6rem);
+            }
+        }
+        
         #alphabot-container.open {
-            display: block;
+            display: flex;
+            flex-direction: column;
         }
         #alphabot-messages {
-            max-height: 18rem;
+            max-height: 16rem;
             overflow-y: auto;
-            padding: 1rem;
+            padding: 0.75rem;
+            flex: 1;
+        }
+        
+        @media (max-width: 640px) {
+            #alphabot-messages {
+                max-height: calc(100vh - 12rem);
+                padding: 0.5rem;
+            }
         }
         
         #alphabot-messages::-webkit-scrollbar {
@@ -170,7 +200,7 @@
         }
         .chat-message {
             display: flex;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
         .chat-message.user .message-text {
             margin-left: auto;
@@ -185,10 +215,20 @@
         .message-text {
             padding: 0.5rem 0.75rem;
             border-radius: 0.375rem;
-            max-width: 80%;
+            max-width: 85%;
             word-break: break-word;
             font-size: 0.875rem;
+            line-height: 1.4;
         }
+        
+        @media (max-width: 640px) {
+            .message-text {
+                max-width: 90%;
+                font-size: 0.8rem;
+                padding: 0.4rem 0.6rem;
+            }
+        }
+        
         #alphabot-input {
             flex: 1 1 auto;
             padding: 0.5rem;
@@ -196,6 +236,14 @@
             outline: none;
             background-color: transparent;
             color: var(--text-high-emphasis);
+            font-size: 0.875rem;
+        }
+        
+        @media (max-width: 640px) {
+            #alphabot-input {
+                font-size: 0.8rem;
+                padding: 0.4rem;
+            }
         }
         #alphabot-send-btn {
             padding: 0.5rem 0.75rem;
@@ -204,18 +252,43 @@
             border: none;
             cursor: pointer;
             border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 600;
         }
+        
+        @media (max-width: 640px) {
+            #alphabot-send-btn {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.8rem;
+            }
+        }
+        
         #alphabot-toggle-btn {
             position: fixed;
-            bottom: 1rem;
-            right: 1rem;
+            bottom: 0.75rem;
+            right: 0.75rem;
             background-color: var(--primary-accent);
             color: #000;
             padding: 0.75rem;
             border-radius: 9999px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             cursor: pointer;
             z-index: 99;
+            border: none;
+            transition: all 0.2s ease-in-out;
+        }
+        
+        #alphabot-toggle-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+        
+        @media (max-width: 640px) {
+            #alphabot-toggle-btn {
+                bottom: 0.5rem;
+                right: 0.5rem;
+                padding: 0.6rem;
+            }
         }
         
         /* Hide scrollbar for modal content */
@@ -438,20 +511,20 @@
                     </div>
                 </div>
 
-                <div class="max-w-3xl mx-auto glass-effect rounded-xl p-6 sm:p-8 mt-16 sm:mt-20">
-                    <h3 class="text-2xl font-bold text-center mb-6">✨ Analysér Din Egen Situation</h3>
-                    <div>
+                <div class="max-w-3xl mx-auto glass-effect rounded-xl p-4 sm:p-6 lg:p-8 mt-12 sm:mt-16 lg:mt-20">
+                    <h3 class="text-xl sm:text-2xl font-bold text-center mb-4 sm:mb-6">✨ Analysér Din Egen Situation</h3>
+                    <div class="space-y-4">
                         <label for="case-input" class="block text-sm font-medium text-gray-300 mb-2">Beskriv kort en sikkerhedsudfordring i din organisation:</label>
-                        <textarea id="case-input" rows="4" placeholder="F.eks. 'Vi er bekymrede for phishing-mails til vores bogholderi...'" class="w-full bg-gray-800/50 border-gray-600 rounded-md shadow-sm py-3 px-4 text-white focus:outline-none focus:ring-amber-400 focus:border-amber-400"></textarea>
-                        <button id="analyze-case-btn" class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">Få AI-Analyse</button>
+                        <textarea id="case-input" rows="4" placeholder="F.eks. 'Vi er bekymrede for phishing-mails til vores bogholderi...'" class="w-full bg-gray-800/50 border-gray-600 rounded-md shadow-sm py-2 sm:py-3 px-3 sm:px-4 text-white text-sm sm:text-base focus:outline-none focus:ring-amber-400 focus:border-amber-400"></textarea>
+                        <button id="analyze-case-btn" class="w-full mt-3 sm:mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 sm:py-3 px-4 sm:px-6 rounded-lg transition-colors text-sm sm:text-base">Få AI-Analyse</button>
                     </div>
-                    <div id="case-analysis-container" class="mt-6 hidden" style="min-height: 150px;">
-                        <div class="border-t border-gray-700 pt-6">
+                    <div id="case-analysis-container" class="mt-4 sm:mt-6 hidden" style="min-height: 150px;">
+                        <div class="border-t border-gray-700 pt-4 sm:pt-6">
                             <div id="case-analysis-loader" class="flex flex-col items-center justify-center text-center">
                                 <div class="spinner"></div>
-                                <p class="mt-4 text-gray-300">Analyserer din situation...</p>
+                                <p class="mt-4 text-gray-300 text-sm sm:text-base">Analyserer din situation...</p>
                             </div>
-                            <div id="case-analysis-result" class="hidden prose prose-invert max-w-none text-gray-300" aria-live="polite"></div>
+                            <div id="case-analysis-result" class="hidden prose prose-invert max-w-none text-gray-300 text-sm sm:text-base" aria-live="polite"></div>
                         </div>
                     </div>
                 </div>
@@ -468,12 +541,12 @@
                     </p>
                 </div>
 
-                <div class="max-w-3xl mx-auto glass-effect rounded-xl p-6 sm:p-8 mb-16 sm:mb-20">
-                    <h3 class="text-2xl font-bold text-center mb-6">AI Sikkerhedsrådgiver</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="max-w-4xl mx-auto glass-effect rounded-xl p-4 sm:p-6 lg:p-8 mb-12 sm:mb-16 lg:mb-20">
+                    <h3 class="text-xl sm:text-2xl font-bold text-center mb-4 sm:mb-6">AI Sikkerhedsrådgiver</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
                         <div>
-                            <label for="industry-select" class="block text-sm font-medium text-gray-300 mb-1">Branche</label>
-                            <select id="industry-select" class="w-full bg-gray-800/50 border-gray-600 rounded-md shadow-sm py-3 px-4 text-white focus:outline-none focus:ring-amber-400 focus:border-amber-400">
+                            <label for="industry-select" class="block text-sm font-medium text-gray-300 mb-2">Branche</label>
+                            <select id="industry-select" class="w-full bg-gray-800/50 border-gray-600 rounded-md shadow-sm py-2.5 sm:py-3 px-3 sm:px-4 text-white text-sm sm:text-base focus:outline-none focus:ring-amber-400 focus:border-amber-400">
                                 <option>Produktionsvirksomhed</option>
                                 <option>Offentlig institution</option>
                                 <option>Advokatfirma</option>
@@ -483,61 +556,97 @@
                             </select>
                         </div>
                         <div>
-                            <label for="employee-count" class="block text-sm font-medium text-gray-300 mb-1">Antal medarbejdere</label>
-                            <input type="number" id="employee-count" value="50" class="w-full bg-gray-800/50 border-gray-600 rounded-md shadow-sm py-3 px-4 text-white focus:outline-none focus:ring-amber-400 focus:border-amber-400">
+                            <label for="employee-count" class="block text-sm font-medium text-gray-300 mb-2">Antal medarbejdere</label>
+                            <input type="number" id="employee-count" value="50" class="w-full bg-gray-800/50 border-gray-600 rounded-md shadow-sm py-2.5 sm:py-3 px-3 sm:px-4 text-white text-sm sm:text-base focus:outline-none focus:ring-amber-400 focus:border-amber-400">
                         </div>
-                        <div class="md:self-end">
-                            <button id="get-recommendation-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors h-full">✨ Få AI-Anbefaling</button>
+                        <div class="lg:self-end">
+                            <button id="get-recommendation-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg transition-colors text-sm sm:text-base h-full min-h-[42px] sm:min-h-[48px]">✨ Få AI-Anbefaling</button>
                         </div>
                     </div>
                     <div id="recommendation-result-container" class="mt-6 hidden" style="min-height: 150px;">
                         <div class="border-t border-gray-700 pt-6">
                             <div id="recommendation-loader" class="flex flex-col items-center justify-center text-center">
                                 <div class="spinner"></div>
-                                <p class="mt-4 text-gray-300">Analyserer jeres profil...</p>
+                                <p class="mt-4 text-gray-300 text-sm sm:text-base">Analyserer jeres profil...</p>
                             </div>
-                            <div id="recommendation-result" class="hidden prose prose-invert max-w-none text-gray-300" aria-live="polite"></div>
+                            <div id="recommendation-result" class="hidden prose prose-invert max-w-none text-gray-300 text-sm sm:text-base" aria-live="polite"></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
-                    <div class="glass-effect rounded-xl p-8 text-center h-full flex flex-col">
-                        <h3 class="text-2xl font-bold mb-2">Standard</h3>
-                        <p class="text-gray-400 mb-6">Effektiv sikkerhedsbeskyttelse og digitale løsninger til daglig brug.</p>
-                        <ul class="text-left space-y-3 text-gray-300 my-8 flex-grow">
-                            <li>✓ GreyEYE AI-assistent</li>
-                            <li>✓ ID-Matrix Adgangskontrol</li>
-                            <li>✓ Email Support</li>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+                    <!-- Standard Package -->
+                    <div class="glass-effect rounded-xl p-6 lg:p-8 text-center h-full flex flex-col order-2 lg:order-1">
+                        <h3 class="text-xl lg:text-2xl font-bold mb-3">Standard</h3>
+                        <p class="text-gray-400 mb-6 text-sm lg:text-base">Effektiv sikkerhedsbeskyttelse og digitale løsninger til daglig brug.</p>
+                        <ul class="text-left space-y-2 lg:space-y-3 text-gray-300 my-6 lg:my-8 flex-grow text-sm lg:text-base">
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                                <span>GreyEYE AI-assistent</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                                <span>ID-Matrix Adgangskontrol</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                                <span>Email Support</span>
+                            </li>
                         </ul>
-                        <a href="#contact" class="mt-auto w-full inline-block border border-amber-400 text-amber-400 py-3 px-6 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold">Kontakt os</a>
+                        <a href="#contact" class="mt-auto w-full inline-block border border-amber-400 text-amber-400 py-3 px-4 lg:px-6 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold text-sm lg:text-base">Kontakt os</a>
                     </div>
-                    <div class="relative glass-effect rounded-xl p-8 text-center border-2 border-amber-400 h-full flex flex-col">
-                        <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-amber-400 text-black px-4 py-1 rounded-full text-sm font-bold">Mest Populære</div>
-                        <h3 class="text-2xl font-bold mb-2">Premium</h3>
-                        <p class="text-gray-400 mb-6">Udvidet adgang til avancerede analyseværktøjer og specialmoduler.</p>
-                        <ul class="text-left space-y-3 text-gray-300 my-8 flex-grow">
-                            <li>✓ Alt i Standard +</li>
-                            <li>✓ PVE Modul</li>
-                            <li>✓ AUT Træningsmodul</li>
-                            <li>✓ Prioriteret Support</li>
+                    
+                    <!-- Premium Package - Featured -->
+                    <div class="relative glass-effect rounded-xl p-6 lg:p-8 text-center border-2 border-amber-400 h-full flex flex-col order-1 lg:order-2 transform lg:scale-105 z-10">
+                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-400 text-black px-3 lg:px-4 py-1 rounded-full text-xs lg:text-sm font-bold whitespace-nowrap">Mest Populære</div>
+                        <h3 class="text-xl lg:text-2xl font-bold mb-3 mt-2">Premium</h3>
+                        <p class="text-gray-400 mb-6 text-sm lg:text-base">Udvidet adgang til avancerede analyseværktøjer og specialmoduler.</p>
+                        <ul class="text-left space-y-2 lg:space-y-3 text-gray-300 my-6 lg:my-8 flex-grow text-sm lg:text-base">
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                                <span>Alt i Standard +</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                                <span>PVE Modul</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                                <span>AUT Træningsmodul</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                                <span>Prioriteret Support</span>
+                            </li>
                         </ul>
-                        <a href="#contact" class="mt-auto w-full inline-block bg-amber-400 text-black py-3 px-6 rounded-lg hover:bg-amber-500 transition-all font-semibold">Kontakt os</a>
+                        <a href="#contact" class="mt-auto w-full inline-block bg-amber-400 text-black py-3 px-4 lg:px-6 rounded-lg hover:bg-amber-500 transition-all font-semibold text-sm lg:text-base">Kontakt os</a>
                     </div>
-                    <div class="glass-effect rounded-xl p-8 text-center h-full flex flex-col">
-                        <h3 class="text-2xl font-bold mb-2">Enterprise</h3>
-                        <p class="text-gray-400 mb-6">Helhedsorienteret, skræddersyet beskyttelse for større organisationer.</p>
-                        <ul class="text-left space-y-3 text-gray-300 my-8 flex-grow">
-                            <li>✓ Alt i Premium +</li>
-                            <li>✓ Adgang til Specialteams</li>
-                            <li>✓ 24/7 Operationel Beredskab</li>
-                            <li>✓ VIP Support</li>
+                    
+                    <!-- Enterprise Package -->
+                    <div class="glass-effect rounded-xl p-6 lg:p-8 text-center h-full flex flex-col order-3">
+                        <h3 class="text-xl lg:text-2xl font-bold mb-3">Enterprise</h3>
+                        <p class="text-gray-400 mb-6 text-sm lg:text-base">Helhedsorienteret, skræddersyet beskyttelse for større organisationer.</p>
+                        <ul class="text-left space-y-2 lg:space-y-3 text-gray-300 my-6 lg:my-8 flex-grow text-sm lg:text-base">
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                                <span>Alt i Premium +</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                                <span>Adgang til Specialteams</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                                <span>24/7 Operationel Beredskab</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                                <span>VIP Support</span>
+                            </li>
                         </ul>
-                        <a href="#contact" class="mt-auto w-full inline-block border border-amber-400 text-amber-400 py-3 px-6 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold">Kontakt os</a>
+                        <a href="#contact" class="mt-auto w-full inline-block border border-amber-400 text-amber-400 py-3 px-4 lg:px-6 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold text-sm lg:text-base">Kontakt os</a>
                     </div>
                 </div>
-                            <li>✓ PVE Modul</li>
-                            <li>✓ AUT Træningsmodul</li>
                             <li>✓ Prioriteret Support</li>
                         </ul>
                         <a href="#contact" class="mt-auto w-full inline-block bg-amber-400 text-black py-3 px-6 rounded-lg hover:bg-amber-500 transition-all font-semibold">Kontakt os</a>
@@ -638,38 +747,38 @@
     </div>
 
     <!-- Footer Section -->
-    <footer class="border-t border-gray-800 mt-20 section-fade-in">
-        <div class="container mx-auto px-4 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-sm">
-                <div class="lg:col-span-1">
-                    <h4 class="font-semibold text-gray-200 mb-4">Blackbox EYE&trade;</h4>
+    <footer class="border-t border-gray-800 mt-12 sm:mt-16 lg:mt-20 section-fade-in">
+        <div class="container mx-auto px-4 py-8 sm:py-10 lg:py-12">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 text-sm">
+                <div class="sm:col-span-2 lg:col-span-1 text-center sm:text-left">
+                    <h4 class="font-semibold text-gray-200 mb-3 sm:mb-4">Blackbox EYE&trade;</h4>
                     <p class="text-gray-400">Intelligent Sikkerhed. Klar til Handling.</p>
                 </div>
-                <div class="lg:col-span-1">
-                     <h4 class="font-semibold text-gray-200 mb-4">Globale Kontorer</h4>
-                    <div class="space-y-4 text-gray-400">
+                <div class="text-center sm:text-left">
+                     <h4 class="font-semibold text-gray-200 mb-3 sm:mb-4">Globale Kontorer</h4>
+                    <div class="space-y-3 sm:space-y-4 text-gray-400">
                         <div>
                             <p class="font-bold text-gray-300">Schweiz – Genève Branch</p>
-                            <p>Rue du Rhône 80<br>1204 Genève, Schweiz</p>
+                            <p class="text-xs sm:text-sm">Rue du Rhône 80<br>1204 Genève, Schweiz</p>
                         </div>
                         <div>
                             <p class="font-bold text-gray-300">UAE – Dubai HQ</p>
-                            <p>Emirates Financial Towers, South Tower<br>Level 27, DIFC, Dubai, UAE</p>
+                            <p class="text-xs sm:text-sm">Emirates Financial Towers, South Tower<br>Level 27, DIFC, Dubai, UAE</p>
                         </div>
                     </div>
                 </div>
-                <div class="lg:col-span-1">
-                    <h4 class="font-semibold text-gray-200 mb-4">Kontakt</h4>
+                <div class="text-center sm:text-left">
+                    <h4 class="font-semibold text-gray-200 mb-3 sm:mb-4">Kontakt</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li>Email: ops@blackbox.codes</li>
-                        <li>Telefon: +45 31 33 00 33</li>
+                        <li class="text-xs sm:text-sm">Email: ops@blackbox.codes</li>
+                        <li class="text-xs sm:text-sm">Telefon: +45 31 33 00 33</li>
                     </ul>
                 </div>
-                <div class="lg:col-span-1">
-                    <h4 class="font-semibold text-gray-200 mb-4">Følg Os</h4>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white">LinkedIn</a>
-                        <a href="#" class="text-gray-400 hover:text-white">Twitter</a>
+                <div class="text-center sm:text-left">
+                    <h4 class="font-semibold text-gray-200 mb-3 sm:mb-4">Følg Os</h4>
+                    <div class="flex justify-center sm:justify-start space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white text-xs sm:text-sm">LinkedIn</a>
+                        <a href="#" class="text-gray-400 hover:text-white text-xs sm:text-sm">Twitter</a>
                     </div>
                 </div>
             </div>

@@ -21,6 +21,8 @@ $new = $current ? 0 : 1;
 $pdo->prepare("UPDATE agents SET ghost = ? WHERE agent_id = ?")
     ->execute([$new, $agentId]);
 
+$_SESSION['settings_success'] = $new ? 'Ghost-mode er nu aktiveret.' : 'Ghost-mode er nu deaktiveret.';
+
 // 4) Tilbage til settings
 header('Location: settings.php');
 exit;

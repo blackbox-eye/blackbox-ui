@@ -4,12 +4,19 @@ require __DIR__ . '/db.php';
 
 // Hvis ikke logget ind, send til login
 if (!isset($_SESSION['agent_id'])) {
-  header('Location: agent-login.php');
+    header('Location: agent-login.php');
     exit;
 }
 
-$page_title = 'Indstillinger';
-include __DIR__ . '/includes/header.php';
+$agentId = $_SESSION['agent_id'];
+
+$fetchStmt = $pdo->prepare("SELECT agent_id, email, token, ghost FROM agents WHERE agent_id = ?");
+$fetchStmt->execute([$agentId]);
+$agentData = $fetchStmt->fetch();
+
+$agentEmail = $agentData['email'] ?? '';
+$agentToken = $agentData['token'] ?? '';
+$isGhost    = !empty($agentData['ghost']);
 
 $error   = '';
 $success = '';
@@ -25,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($currPass && $newPass && $newPin) {
             $stmt = $pdo->prepare("SELECT password FROM agents WHERE agent_id = ?");
-            $stmt->execute([$_SESSION['agent_id']]);
+            $stmt->execute([$agentId]);
             $row = $stmt->fetch();
 
             if ($row && password_verify($currPass, $row['password'])) {
@@ -35,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                        SET password = ?, pin = ?
                      WHERE agent_id = ?
                 ");
-                $upd->execute([$hash, $newPin, $_SESSION['agent_id']]);
+              $upd->execute([$hash, $newPin, $agentId]);
                 $success = 'Password og PIN er opdateret.';
             } else {
                 $error = 'Nuværende password er forkert.';
@@ -49,12 +56,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action']) && $_POST['action']==='regen_token') {
         $newToken = bin2hex(random_bytes(8));
         $upd = $pdo->prepare("
-            UPDATE agents
-               SET token = ?
-             WHERE agent_id = ?
+          UPDATE agents
+             SET token = ?
+           WHERE agent_id = ?
         ");
-        $upd->execute([$newToken, $_SESSION['agent_id']]);
-        $success = 'Nyt token genereret: ' . htmlspecialchars($newToken);
+        $upd->execute([$newToken, $agentId]);
+        $agentToken = $newToken;
+        $success = 'Nyt token genereret: ' . $newToken;
     }
 
     // 3) Deaktiver egen konto (soft delete)
@@ -64,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                SET status = 'deactivated'
              WHERE agent_id = ?
         ");
-        $upd->execute([$_SESSION['agent_id']]);
+        $upd->execute([$agentId]);
         session_destroy();
         header('Location: agent-login.php?msg=deactivated');
         exit;
@@ -74,17 +82,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // – download logs, 2FA, email, ghost-mode osv. kan håndteres her senere…
 }
 
+    // Genindlæs aktuelle data efter eventuelle ændringer
+    $fetchStmt->execute([$agentId]);
+    $agentData = $fetchStmt->fetch();
+    $agentEmail = $agentData['email'] ?? $agentEmail;
+    $agentToken = $agentData['token'] ?? $agentToken;
+    $isGhost    = !empty($agentData['ghost']);
+
+    if ($success === '' && isset($_SESSION['settings_success'])) {
+      $success = $_SESSION['settings_success'];
+      unset($_SESSION['settings_success']);
+    }
+
+    if ($error === '' && isset($_SESSION['settings_error'])) {
+      $error = $_SESSION['settings_error'];
+      unset($_SESSION['settings_error']);
+    }
+
+    $page_title = 'Indstillinger';
+    include __DIR__ . '/includes/header.php';
+
 ?>
 <div class="admin-panel">
   <h1>Indstillinger</h1>
   <p>Her kan du ændre dine personlige indstillinger.</p>
   <p><a href="dashboard.php" class="btn">← Tilbage til Dashboard</a></p>
 
+  <div class="settings-status">
+    <p><strong>Aktuelt Agent-ID:</strong> <?= htmlspecialchars($agentData['agent_id'] ?? $agentId) ?></p>
+    <p><strong>Ghost-mode:</strong> <?= $isGhost ? 'Aktiv' : 'Deaktiveret' ?></p>
+    <p><strong>Aktuelt token:</strong> <code><?= htmlspecialchars($agentToken ?: '—') ?></code></p>
+  </div>
+
   <?php if ($error): ?>
-    <div class="alert"><?= htmlspecialchars($error) ?></div>
+    <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
   <?php endif; ?>
   <?php if ($success): ?>
-    <div class="alert" style="background:var(--green); color:var(--bg-dark)">
+    <div class="alert alert-success">
       <?= htmlspecialchars($success) ?>
     </div>
   <?php endif; ?>
@@ -104,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <!-- 2) Ændr Token -->
   <section>
     <h2>Token</h2>
-    <p>Aktuelt token: <code><?= htmlspecialchars($agentToken ?? '—') ?></code></p>
+    <p>Aktuelt token: <code><?= htmlspecialchars($agentToken ?: '—') ?></code></p>
     <form method="post">
       <input type="hidden" name="action" value="regen_token">
       <button type="submit" class="btn">Generér nyt token</button>
@@ -121,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <section>
     <h2>Kontaktinformation</h2>
     <form method="post" action="update-contact.php">
-      <input name="email" type="email" placeholder="E-mail" value="<?= htmlspecialchars($userEmail ?? '') ?>" required>
+      <input name="email" type="email" placeholder="E-mail" value="<?= htmlspecialchars($agentEmail) ?>" required>
       <button type="submit" class="btn">Opdatér kontakt</button>
     </form>
   </section>

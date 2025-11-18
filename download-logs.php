@@ -11,17 +11,25 @@ $agent = preg_replace('/[^a-zA-Z0-9_-]/', '', $_SESSION['agent_id']);
 // Kun tillad alfanumeriske, underscore og bindestreg i filnavn
 
 $logDir  = __DIR__ . '/logs/';
-$logFile = $logDir . $agent . '.log';
+if (!is_dir($logDir)) {
+    if (!mkdir($logDir, 0750, true) && !is_dir($logDir)) {
+        http_response_code(500);
+        echo "Log-mappen kunne ikke oprettes.";
+        exit;
+    }
+}
 
-if (!is_dir($logDir) || !is_readable($logDir)) {
+if (!is_readable($logDir)) {
     http_response_code(500);
-    echo "Log-mappen mangler eller er ikke læsbar.";
+    echo "Log-mappen er ikke læsbar.";
     exit;
 }
 
+$logFile = $logDir . $agent . '.log';
+
 if (!file_exists($logFile)) {
-    http_response_code(404);
-    echo "Ingen log-fil fundet for agent “{$agent}”.";
+    header('Content-Type: text/plain; charset=utf-8');
+    echo "Ingen log-posteringer for agent \"{$agent}\" endnu.";
     exit;
 }
 

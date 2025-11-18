@@ -26,7 +26,7 @@ Systemblueprintet beskriver ALPHA Interface GUI (AIG) som modulær webfrontend t
 
 | Modul            | Beskrivelse                                                             |
 |------------------|-------------------------------------------------------------------------|
-| **Login**        | Autentificering med PIN/password, klar til 2FA                          |
+| **Login**        | Autentificering med PIN/password, klar til 2FA (nu midlertidigt plain-text for dev-test) |
 | **Dashboard**    | Oversigtsside med status, alarmer, widgets                              |
 | **Missions**     | Opret/søg/tildel missioner via REST API                                 |
 | **Intelligence** | OSINT-datafeeds, analyser, rapporter                                    |
@@ -46,7 +46,7 @@ Systemblueprintet beskriver ALPHA Interface GUI (AIG) som modulær webfrontend t
 
 ## 🔐 SIKKERHED & COMPLIANCE
 
-- **Autentificering:** OAuth2/JWT, 2FA, ghost-mode
+- **Autentificering:** OAuth2/JWT, 2FA, ghost-mode (dev-miljø bruger pt. simpel klartekst-match til hurtig test)
 - **Kryptering:** TLS og server-side DB-kryptering
 - **Audit-logs:** GDPR-compliant audit-trail
 - **Vault:** Integrering af Vault til credentials

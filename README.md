@@ -78,7 +78,7 @@ Dette repo leverer frontend- og webkomponenter til enterprise cyber operations, 
 
 ## 🔒 Sikkerhed & Compliance
 
-* **Password hashing:** `password_hash()` / `password_verify()`
+* **Password auth (midlertidigt dev-setup):** Agent-login matcher nu klartekst-passwords for hurtig test; revert til `password_hash()` / `password_verify()` før produktion
 * **Prepared statements:** MySQLi/PDO for SQL-injection-beskyttelse
 * **Session management:** Secure cookies, `session_start()`
 * **Role-based access control:** Admin vs. Agent

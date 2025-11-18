@@ -10,7 +10,49 @@ if (!isset($_SESSION['agent_id'])) {
 
 if (empty($_SESSION['is_admin'])) {
   header('Location: dashboard.php');
-    exit;
+  exit;
+}
+
+/**
+ * Finder seneste LOGIN_SUCCESS timestamp for angivet agent.
+ */
+function getLastLoginForAgent(string $agentId): string
+{
+  $logDir = __DIR__ . '/logs/';
+  $safeAgent = preg_replace('/[^a-zA-Z0-9_-]/', '_', $agentId);
+  if ($safeAgent === '' || !is_dir($logDir)) {
+    return '—';
+  }
+
+  $logPath = $logDir . $safeAgent . '.log';
+  if (!is_readable($logPath)) {
+    return '—';
+  }
+
+  $lines = @file($logPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+  if (!$lines) {
+    return '—';
+  }
+
+  for ($i = count($lines) - 1; $i >= 0; $i--) {
+    $line = $lines[$i];
+    if (strpos($line, 'event=LOGIN_SUCCESS') === false) {
+      continue;
+    }
+    $segments = explode(' | ', $line);
+    $timestamp = trim($segments[0] ?? '');
+    if ($timestamp === '') {
+      continue;
+    }
+    try {
+      $dt = new DateTimeImmutable($timestamp);
+      return $dt->format('Y-m-d H:i');
+    } catch (Throwable $e) {
+      return '—';
+    }
+  }
+
+  return '—';
 }
 
 $page_title = 'Adminpanel';
@@ -63,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_agent'])) {
 
 // 4) Hent alle agenter
 $agents = $pdo
-    ->query("SELECT id, agent_id, pin, token, status, is_admin FROM agents ORDER BY id")
+  ->query("SELECT id, agent_id, pin, token, status, is_admin, ghost FROM agents ORDER BY id")
     ->fetchAll();
 ?>
 
@@ -107,35 +149,39 @@ $agents = $pdo
           <th>PIN</th>
           <th>Status</th>
           <th>Admin</th>
+          <th>Ghost</th>
           <th>Token</th>
+          <th>Sidste login</th>
           <th>Handling</th>
         </tr>
       </thead>
       <tbody>
       <?php foreach ($agents as $a): ?>
         <tr>
-          <td><?= htmlentities($a['id']) ?></td>
-          <td><?= htmlentities($a['agent_id']) ?></td>
-          <td><?= htmlentities($a['pin']) ?></td>
+          <td><?= htmlspecialchars($a['id']) ?></td>
+          <td><?= htmlspecialchars($a['agent_id']) ?></td>
+          <td><?= htmlspecialchars($a['pin']) ?></td>
           <td>
             <span class="status <?= $a['status']==='active' ? 'pulse-active' : 'pulse-deactivated' ?>">
-              <?= ucfirst($a['status']) ?>
+              <?= htmlspecialchars(ucfirst($a['status'])) ?>
             </span>
           </td>
           <td>
             <?= $a['is_admin'] ? '✅' : '—' ?>
           </td>
-          <td><?= htmlentities($a['token']) ?></td>
+          <td><?= !empty($a['ghost']) ? '👻' : '—' ?></td>
+          <td><?= htmlspecialchars($a['token'] ?? '') ?></td>
+          <td><?= htmlspecialchars(getLastLoginForAgent($a['agent_id'])) ?></td>
           <td>
             <form method="post" style="display:inline">
-              <input type="hidden" name="id"     value="<?= $a['id'] ?>">
+              <input type="hidden" name="id"     value="<?= htmlspecialchars($a['id']) ?>">
               <input type="hidden" name="action" value="toggle">
               <button type="submit" class="btn-sm">
                 <?= $a['status']==='active' ? 'Deaktiver' : 'Genaktiver' ?>
               </button>
             </form>
             <form method="post" style="display:inline; margin-left:4px">
-              <input type="hidden" name="id"     value="<?= $a['id'] ?>">
+              <input type="hidden" name="id"     value="<?= htmlspecialchars($a['id']) ?>">
               <input type="hidden" name="action" value="delete">
               <button type="submit" class="btn-sm btn-danger">Slet</button>
             </form>

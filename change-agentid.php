@@ -48,9 +48,9 @@ include __DIR__ . '/includes/header.php';
   <p><a href="settings.php" class="btn">← Tilbage til Indstillinger</a></p>
 
   <?php if ($error): ?>
-    <div class="alert"><?=htmlspecialchars($error)?></div>
+    <div class="alert alert-error"><?=htmlspecialchars($error)?></div>
   <?php elseif ($success): ?>
-    <div class="alert" style="background:var(--green);color:#01140f;"><?=htmlspecialchars($success)?></div>
+    <div class="alert alert-success"><?=htmlspecialchars($success)?></div>
   <?php endif; ?>
 
   <form method="post">

@@ -69,6 +69,7 @@ npm-debug.log*
 node_modules/
 build/
 dist/
+generate_hash.php
 
 # ────────────────────────────────────────────────────────────────────────────────
 # --- GitHub/CI artefakter ---

@@ -3,9 +3,10 @@
 
 session_start();
 
-// Inkluderer databaseforbindelsen
+// Inkluderer databaseforbindelsen og logging-hjælper
 // VIGTIGT: Sørg for at stien til db.php er korrekt i forhold til din filstruktur.
-require_once __DIR__ . '/db.php'; 
+require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/includes/logging.php';
 
 $page_title = 'Agent Login';
 $error = $_SESSION['error'] ?? null;
@@ -26,14 +27,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Validerer login-oplysningerne (UDEN hash – ren tekst sammenligning)
         if ($agent && $password === $agent['password'] && $pin === $agent['pin']) {
+            session_regenerate_id(true);
             $_SESSION['agent_id'] = $agent['agent_id'];
             $_SESSION['is_admin'] = (bool)$agent['is_admin'];
+            log_agent_event($agent['agent_id'], 'LOGIN_SUCCESS');
             header("Location: dashboard.php");
             exit;
         } else {
+            $attemptId = $agent_id !== '' ? $agent_id : 'unknown';
+            log_agent_event($attemptId, 'LOGIN_FAILED', ['reason' => 'invalid_credentials']);
             $error = "Ugyldigt Agent ID, Password eller PIN.";
         }
     } else {
+        if ($agent_id !== '') {
+            log_agent_event($agent_id, 'LOGIN_FAILED', ['reason' => 'db_unavailable']);
+        }
         $error = "Databaseforbindelse kunne ikke etableres.";
     }
 }

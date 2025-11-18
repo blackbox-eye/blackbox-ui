@@ -1,6 +1,5 @@
-# Fortæl serveren, at den skal lede efter index.html FØRST.
-# Hvis den ikke findes, skal den lede efter index.php.
-DirectoryIndex index.html index.php
+# Prioriter PHP-indgangen og fald tilbage til HTML hvis nødvendigt.
+DirectoryIndex index.php index.html
 
 # Bevarer de eksisterende regler for "clean URLs".
 RewriteEngine On

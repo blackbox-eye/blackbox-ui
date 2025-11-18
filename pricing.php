@@ -1,0 +1,135 @@
+<?php
+$page_title = 'Priser | Blackbox EYE™';
+$current_page = 'pricing';
+include 'includes/site-header.php';
+?>
+
+<main class="pt-24">
+    <section class="py-20 sm:py-24 section-fade-in">
+        <div class="container mx-auto px-4">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <p class="text-amber-400 uppercase tracking-widest text-sm font-semibold mb-4">Licenser &amp; abonnementer</p>
+                <h1 class="text-3xl sm:text-5xl font-bold mb-6">Løsninger tilpasset jeres risikoprofil</h1>
+                <p class="text-gray-300 text-base sm:text-lg">
+                    Blackbox EYE™ tilbyder komplette licens- og abonnementsløsninger – fra udvalgte moduler til fuld operativ integration. Brug vores AI-sikkerhedsrådgiver til at finde det rigtige match.
+                </p>
+            </div>
+
+            <div class="max-w-4xl mx-auto glass-effect rounded-3xl p-6 sm:p-8 lg:p-10 mb-16">
+                <h2 class="text-xl sm:text-2xl font-bold text-center mb-6">AI Sikkerhedsrådgiver</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
+                    <div>
+                        <label for="industry-select" class="block text-sm font-medium text-gray-300 mb-2">Branche</label>
+                        <select id="industry-select" class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                            <option>Produktionsvirksomhed</option>
+                            <option>Offentlig institution</option>
+                            <option>Advokatfirma</option>
+                            <option>Ejendomsselskab</option>
+                            <option>Detailhandel</option>
+                            <option>IT &amp; Teknologi</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="employee-count" class="block text-sm font-medium text-gray-300 mb-2">Antal medarbejdere</label>
+                        <input type="number" id="employee-count" value="50" min="1" class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                    </div>
+                    <div class="lg:self-end">
+                        <button id="get-recommendation-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors">
+                            ✨ Få AI-anbefaling
+                        </button>
+                    </div>
+                </div>
+                <div id="recommendation-result-container" class="mt-6 hidden" style="min-height:150px;">
+                    <div class="border-t border-gray-700 pt-6">
+                        <div id="recommendation-loader" class="flex flex-col items-center justify-center text-center">
+                            <div class="spinner"></div>
+                            <p class="mt-4 text-gray-300">Analyserer jeres profil...</p>
+                        </div>
+                        <div id="recommendation-result" class="hidden prose prose-invert max-w-none text-gray-200 text-sm sm:text-base" aria-live="polite"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pricing-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+                <article class="glass-effect rounded-2xl p-6 lg:p-8 text-center h-full flex flex-col order-2 lg:order-1">
+                    <h2 class="text-xl lg:text-2xl font-bold mb-3">Standard</h2>
+                    <p class="text-gray-400 mb-6 text-sm lg:text-base">Effektiv sikkerhedsbeskyttelse og digitale løsninger til daglig brug.</p>
+                    <ul class="text-left space-y-2 lg:space-y-3 text-gray-300 my-6 lg:my-8 flex-grow text-sm lg:text-base">
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                            <span>GreyEYE AI-assistent</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                            <span>ID-Matrix adgangskontrol</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                            <span>Email support</span>
+                        </li>
+                    </ul>
+                    <a href="contact.php" class="mt-auto w-full inline-block border border-amber-400 text-amber-400 py-3 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold text-sm lg:text-base">Kontakt os</a>
+                </article>
+                <article class="relative glass-effect rounded-2xl p-6 lg:p-8 text-center border-2 border-amber-400 h-full flex flex-col order-1 lg:order-2 transform lg:scale-105 z-10">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-400 text-black px-4 py-1 rounded-full text-xs lg:text-sm font-bold whitespace-nowrap">Mest populære</div>
+                    <h2 class="text-xl lg:text-2xl font-bold mb-3 mt-2">Premium</h2>
+                    <p class="text-gray-400 mb-6 text-sm lg:text-base">Udvidet adgang til avancerede analyseværktøjer og specialmoduler.</p>
+                    <ul class="text-left space-y-2 lg:space-y-3 text-gray-300 my-6 lg:my-8 flex-grow text-sm lg:text-base">
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                            <span>Alt i Standard +</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                            <span>PVE modul</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                            <span>AUT træningsmodul</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                            <span>Prioriteret support</span>
+                        </li>
+                    </ul>
+                    <a href="contact.php" class="mt-auto w-full inline-block bg-amber-400 text-black py-3 rounded-lg hover:bg-amber-500 transition-all font-semibold text-sm lg:text-base">Kontakt os</a>
+                </article>
+                <article class="glass-effect rounded-2xl p-6 lg:p-8 text-center h-full flex flex-col order-3">
+                    <h2 class="text-xl lg:text-2xl font-bold mb-3">Enterprise</h2>
+                    <p class="text-gray-400 mb-6 text-sm lg:text-base">Helhedsorienteret, skræddersyet beskyttelse for større organisationer.</p>
+                    <ul class="text-left space-y-2 lg:space-y-3 text-gray-300 my-6 lg:my-8 flex-grow text-sm lg:text-base">
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                            <span>Alt i Premium +</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                            <span>Adgang til specialteams</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                            <span>24/7 operationel beredskab</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-0.5">✓</span>
+                            <span>VIP support</span>
+                        </li>
+                    </ul>
+                    <a href="contact.php" class="mt-auto w-full inline-block border border-amber-400 text-amber-400 py-3 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold text-sm lg:text-base">Kontakt os</a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 sm:py-20 bg-gray-900/40 section-fade-in">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4">Skal vi skræddersy en løsning til jer?</h2>
+            <p class="text-gray-400 max-w-2xl mx-auto mb-8">Vores eksperter kombinerer operative erfaringer med AI-drevet analyse for at levere præcis det sikkerhedsniveau, I har brug for.</p>
+            <a href="contact.php" class="inline-flex items-center justify-center bg-amber-400 text-black font-semibold py-3 px-8 rounded-lg hover:bg-amber-500 transition-colors">
+                Tal med vores rådgivere
+            </a>
+        </div>
+    </section>
+</main>
+
+<?php include 'includes/site-footer.php'; ?>

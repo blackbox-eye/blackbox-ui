@@ -1,0 +1,17 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "git commit",
+			"type": "shell",
+			"command": "git commit -m \"Switch agent login to plaintext password comparison\"",
+			"isBackground": false
+		},
+		{
+			"label": "git commit",
+			"type": "shell",
+			"command": "git commit -m 'Switch agent login to plaintext password comparison'",
+			"isBackground": false
+		}
+	]
+}

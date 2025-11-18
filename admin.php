@@ -3,8 +3,13 @@ session_start();
 require __DIR__ . '/db.php';
 
 // 1) Redirect hvis ikke logget ind eller ikke admin
-if (!isset($_SESSION['agent_id'], $_SESSION['is_admin']) || !$_SESSION['is_admin']) {
-    header('Location: dashboard.php');
+if (!isset($_SESSION['agent_id'])) {
+  header('Location: agent-login.php');
+  exit;
+}
+
+if (empty($_SESSION['is_admin'])) {
+  header('Location: dashboard.php');
     exit;
 }
 
@@ -65,7 +70,10 @@ $agents = $pdo
 <div class="admin-panel">
   <h1>Adminpanel</h1>
   <p>Her kan du oprette, deaktivere eller slette agenter.</p>
-  <p><a href="dashboard.php" class="btn">← Tilbage til Dashboard</a></p>
+  <p>
+    <a href="dashboard.php" class="btn">← Tilbage til Dashboard</a>
+    <a href="logout.php" class="btn" style="margin-left:8px;background:#dc2626;color:#fff;">Log ud</a>
+  </p>
 
   <?php if ($error): ?>
     <div class="alert"><?= htmlspecialchars($error) ?></div>

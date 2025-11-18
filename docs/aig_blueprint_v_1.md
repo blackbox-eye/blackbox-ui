@@ -36,6 +36,13 @@ Systemblueprintet beskriver ALPHA Interface GUI (AIG) som modulær webfrontend t
 
 ---
 
+### Login roadmap (midlertidig status)
+
+- Aktuel løsning: lokal `agents`-tabel bevarer `password_hash()`-værdier; UI accepterer midlertidigt klartekstinput for hurtig verificering.
+- TODO: migrér til GreyEYE central auth via `/api/auth/token` i tråd med MASTER BLUEPRINT, inkl. session-håndtering og token-refresh.
+
+---
+
 ## 🚀 CI/CD, TEST & DEVOPS
 
 - **Pipeline:** GitHub Actions (eller Jenkins) for build/test/deploy

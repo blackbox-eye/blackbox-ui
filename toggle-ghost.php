@@ -5,7 +5,7 @@ require __DIR__ . '/db.php';
 
 // 1) Tjek login
 if (!isset($_SESSION['agent_id'])) {
-    header('Location: index.php');
+    header('Location: agent-login.php');
     exit;
 }
 

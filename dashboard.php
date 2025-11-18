@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (empty($_SESSION['agent_id'])) {
+    header('Location: agent-login.php');
+    exit;
+}
+$currentScript = basename($_SERVER['PHP_SELF'] ?? '');
+?>
 <!DOCTYPE html>
 <html lang="da">
 <head>
@@ -174,12 +182,40 @@
                 <span class="text-white">BLACKBOX</span><span class="text-[var(--brand-gold)]">EYE™</span>
                 <p class="text-xs text-gray-400 font-sans tracking-widest mt-1">AURA C-PANEL</p>
             </div>
+            <div class="text-xs uppercase tracking-widest text-gray-400 mb-4 text-center">
+                Agent: <span class="text-white"><?php echo htmlspecialchars($_SESSION['agent_id']); ?></span>
+            </div>
             <ul class="space-y-2 flex-grow">
-                <li><a href="#" class="flex items-center p-3 text-lg rounded-lg text-[var(--brand-gold)] bg-white/5"><svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>Dashboard</a></li>
-                <li><a href="#" class="flex items-center p-3 text-lg rounded-lg hover:bg-white/5"><svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>Brugerstyring</a></li>
-                <li><a href="#" class="flex items-center p-3 text-lg rounded-lg hover:bg-white/5"><svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>Systemlogs</a></li>
-                <li><a href="#" class="flex items-center p-3 text-lg rounded-lg hover:bg-white/5"><svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7h2a2 2 0 012 2v10a2 2 0 01-2 2H7a2 2 0 01-2-2V9a2 2 0 012-2h2m4 0h-4m4 0v-2a2 2 0 00-2-2h-2a2 2 0 00-2 2v2m4 0h-4"></path></svg>API Nøgler</a></li>
+                <li>
+                    <a href="dashboard.php" class="flex items-center p-3 text-lg rounded-lg transition-colors <?php echo $currentScript === 'dashboard.php' ? 'text-[var(--brand-gold)] bg-white/5' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">
+                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="admin.php" class="flex items-center p-3 text-lg rounded-lg transition-colors <?php echo $currentScript === 'admin.php' ? 'text-[var(--brand-gold)] bg-white/5' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">
+                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        Brugerstyring
+                    </a>
+                </li>
+                <li>
+                    <a href="download-logs.php" class="flex items-center p-3 text-lg rounded-lg transition-colors <?php echo $currentScript === 'download-logs.php' ? 'text-[var(--brand-gold)] bg-white/5' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">
+                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        Systemlogs
+                    </a>
+                </li>
+                <li>
+                    <a href="settings.php" class="flex items-center p-3 text-lg rounded-lg transition-colors <?php echo $currentScript === 'settings.php' ? 'text-[var(--brand-gold)] bg-white/5' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">
+                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7h2a2 2 0 012 2v10a2 2 0 01-2 2H7a2 2 0 01-2-2V9a2 2 0 012-2h2m4 0h-4m4 0v-2a2 2 0 00-2-2h-2a2 2 0 00-2 2v2m4 0h-4"></path></svg>
+                        Indstillinger
+                    </a>
+                </li>
             </ul>
+            <div class="mt-6 pt-4 border-t border-white/10">
+                <a href="logout.php" class="block text-center px-4 py-2 text-sm font-semibold rounded-md bg-red-500/20 text-red-300 hover:bg-red-500/30">
+                    Log ud
+                </a>
+            </div>
         </nav>
 
         <div id="threat-module" class="glass-module flex flex-col">

@@ -4,7 +4,7 @@ require __DIR__ . '/db.php';
 
 // Hvis ikke logget ind, send til login
 if (!isset($_SESSION['agent_id'])) {
-    header('Location: index.php');
+  header('Location: agent-login.php');
     exit;
 }
 
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ");
         $upd->execute([$_SESSION['agent_id']]);
         session_destroy();
-        header('Location: index.php?msg=deactivated');
+        header('Location: agent-login.php?msg=deactivated');
         exit;
     }
 

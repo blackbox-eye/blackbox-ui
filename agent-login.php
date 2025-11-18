@@ -1,5 +1,5 @@
 <?php
-// --- PHP LOGIN LOGIK (FINAL VERSION) ---
+// --- PHP LOGIN LOGIK (FINAL VERSION – PLAIN PASSWORD VERSION) ---
 
 session_start();
 
@@ -14,8 +14,8 @@ unset($_SESSION['error']);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $agent_id = trim($_POST['agent_id'] ?? '');
     $password = trim($_POST['password'] ?? '');
-    $pin = trim($_POST['pin'] ?? '');
-    $token = trim($_POST['token'] ?? '');
+    $pin      = trim($_POST['pin'] ?? '');
+    $token    = trim($_POST['token'] ?? '');
 
     // Robusthedstjek: Sikrer at $pdo er tilgængelig før brug
     if (isset($pdo)) {
@@ -24,8 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$agent_id]);
         $agent = $stmt->fetch();
 
-        // Validerer login-oplysningerne
-        if ($agent && password_verify($password, $agent['password']) && $pin === $agent['pin']) {
+        // Validerer login-oplysningerne (UDEN hash – ren tekst sammenligning)
+        if ($agent && $password === $agent['password'] && $pin === $agent['pin']) {
             $_SESSION['agent_id'] = $agent['agent_id'];
             $_SESSION['is_admin'] = (bool)$agent['is_admin'];
             header("Location: dashboard.php");
@@ -230,8 +230,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 const drops = Array(columns).fill(1).map(() => Math.ceil(Math.random() * canvas.height));
                 const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@#$%^&*()_+-=[]{}|;':,./<>?".split('');
                 
-                const rainColor = getComputedStyle(document.documentElement).getPropertyValue('--digital-rain-color').trim();
-                const goldColor = getComputedStyle(document.documentElement).getPropertyValue('--digital-rain-gold').trim();
+                const rainColor  = getComputedStyle(document.documentElement).getPropertyValue('--digital-rain-color').trim();
+                const goldColor  = getComputedStyle(document.documentElement).getPropertyValue('--digital-rain-gold').trim();
                 const whiteColor = getComputedStyle(document.documentElement).getPropertyValue('--digital-rain-white').trim();
 
                 function drawDigitalRain() {
@@ -247,8 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             ctx.fillStyle = goldColor;
                         } else if (random > 0.96) {
                              ctx.fillStyle = whiteColor;
-                        }
-                        else {
+                        } else {
                             ctx.fillStyle = rainColor;
                         }
 

@@ -146,4 +146,31 @@ Dette projekt er frigivet under **MIT License** (se [LICENSE](LICENSE)).
 
 Dokumentation og deployment-guides opdateres løbende. For enterprise-integration eller revision, kontakt ALPHA Lead via ovenstående.
 
+---
+
+## 🔐 Secret rotation
+
+For at opdatere FTP-credentials og andre secrets i CI/CD-pipelinen:
+
+1. **Gå til GitHub repository Settings:**
+   - Naviger til din repo på GitHub
+   - Klik på "Settings" → "Secrets and variables" → "Actions"
+
+2. **Opdater secrets:**
+   - Find den secret du vil rotere (`FTP_HOST`, `FTP_USERNAME`, `FTP_PASSWORD`, `FTP_REMOTE_PATH`)
+   - Klik på navnet eller "Update" knappen
+   - Indtast den nye værdi og gem
+
+3. **Bekræft deployment:**
+   - Gå til "Actions"-fanen i din repo
+   - Kør workflowet manuelt via "Run workflow" knappen, eller
+   - Push en commit til main-branch for at trigge automatisk deployment
+
+4. **Tilbagekald gamle credentials:**
+   - Log ind på din hosting-provider (cPanel/FTP-server)
+   - Tilbagekald eller slet de gamle FTP-credentials
+   - Verificer at kun de nye credentials er aktive
+
+**Bemærk:** Efter rotation af `FTP_REMOTE_PATH`, verificer at stien peger korrekt til din live-site (fx `/public_html` eller `/`). Smoke tests vil fejle hvis stien er forkert.
+
 ````

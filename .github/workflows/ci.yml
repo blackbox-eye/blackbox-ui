@@ -1,49 +1,90 @@
-name: CI & Deploy
+# CI/CD workflow: deploy via FTP, ensure index.html removed before upload, and run smoke tests.
+# Secrets required (set in repo Settings > Secrets and variables > Actions):
+# - FTP_HOST
+# - FTP_USERNAME
+# - FTP_PASSWORD
+# - FTP_REMOTE_PATH  # path on the remote server where your site root (e.g. public_html) lives
+#
+# Kort guide til rotation af secrets:
+# 1) Gå til Settings -> Secrets and variables -> Actions.
+# 2) Opdater værdien af den relevante secret (eller tilføj ny) og gem.
+# 3) Kør workflowet igen fra Actions-fanen eller push en commit for at bekræfte deployment.
+# 4) Husk at tilbagekalde eller slette gamle credentials hos din FTP/cPanel-udbyder.
+#
+# Bemærk: FTP_REMOTE_PATH skal pege på den mappe som indeholder din live-site (fx /public_html eller /). Hvis du ændrer path ved rotation,
+#       opdater secret og verificér upload-stien.
+#
+name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
-  build:
-    name: "✅ Lint README"
+  build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      FTP_HOST: ${{ secrets.FTP_HOST }}
+      FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      FTP_REMOTE_PATH: ${{ secrets.FTP_REMOTE_PATH }}
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-      # Sæt Python op (hvis du har Python‑scripts)
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      # Eksempel: kør npm install, hvis du bygger med Node
-      # - name: Install dependencies
-      #   run: npm ci
-
-      - name: Lint README
+      - name: Install lftp
         run: |
-          if [ -f README.md ]; then
-            echo "✅ README.md found!"
-          else
-            echo "❌ README.md missing!" >&2
-            exit 1
-          fi
+          sudo apt-get update -y
+          sudo apt-get install -y lftp
 
-  ftp-deploy:
-    name: "🚀 FTP Deploy to public_html/"
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - uses: actions/checkout@v4
-      - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Remove index.html on remote public_html (lftp)
+        run: |
+          set -euo pipefail
+          echo "Attempting to remove index.html from remote host $FTP_HOST in $FTP_REMOTE_PATH or $FTP_REMOTE_PATH/public_html"
+          # Try to cd to FTP_REMOTE_PATH; if that fails, try FTP_REMOTE_PATH/public_html
+          lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_HOST" -e "
+            set ftp:ssl-allow no;
+            if (cd \"$FTP_REMOTE_PATH\") {
+              echo 'In $FTP_REMOTE_PATH';
+            } else {
+              if (cd \"$FTP_REMOTE_PATH/public_html\") {
+                echo 'In $FTP_REMOTE_PATH/public_html';
+              } else {
+                echo 'Could not find remote path: $FTP_REMOTE_PATH or $FTP_REMOTE_PATH/public_html' >&2;
+                bye;
+              }
+            }
+            rm -f index.html || true;
+            bye
+          "
+        shell: bash
+
+      - name: Upload via FTP (SamKirkland/FTP-Deploy-Action)
+        uses: SamKirkland/FTP-Deploy-Action@v4
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_REMOTE_PATH }}/public_html
+          local-dir: ./
           protocol: ftp
-          local-dir: ./            # Hele repoet
-          server-dir: ${{ secrets.FTP_REMOTE_PATH }}
+
+      - name: Wait a short moment for webserver to reload
+        run: |
+          sleep 5
+        shell: bash
+
+      - name: Smoke tests (curl)
+        run: |
+          set -euo pipefail
+          echo "Checking https://blackbox.codes/ for 200 OK and text 'Blackbox EYE'"
+          curl -sSfL --max-time 15 https://blackbox.codes/ | grep -q "Blackbox EYE"
+
+          echo "Checking https://blackbox.codes/about.php for 200 OK and text 'Om Os'"
+          curl -sSfL --max-time 15 https://blackbox.codes/about.php | grep -q "Om Os"
+
+          echo "Smoke tests passed."
+        shell: bash

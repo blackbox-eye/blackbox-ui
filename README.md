@@ -146,4 +146,20 @@ Dette projekt er frigivet under **MIT License** (se [LICENSE](LICENSE)).
 
 Dokumentation og deployment-guides opdateres løbende. For enterprise-integration eller revision, kontakt ALPHA Lead via ovenstående.
 
+---
+
+## Secret rotation
+
+This repository uses the following Actions secrets for FTP deployment: `FTP_HOST`, `FTP_USERNAME`, `FTP_PASSWORD`, `FTP_REMOTE_PATH`.
+
+To rotate a secret:
+
+1. Go to the repository Settings -> Secrets and variables -> Actions.
+2. Click `New repository secret` to add a new secret, or `Update` on an existing one.
+3. Replace the value with the new credential and save.
+4. If you rotated credentials that affect the remote path or account permissions, re-run the workflow and verify the deployment.
+5. Revoke old credentials on your FTP/cPanel host if applicable.
+
+After rotation, trigger the workflow from the Actions tab or push a commit to main to confirm deployments still succeed.
+
 ````

@@ -46,7 +46,6 @@ jobs:
           echo "Attempting to remove index.html from remote host $FTP_HOST in $FTP_REMOTE_PATH or $FTP_REMOTE_PATH/public_html"
           # Try to cd to FTP_REMOTE_PATH; if that fails, try FTP_REMOTE_PATH/public_html
           lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_HOST" -e "
-            set ftp:ssl-allow no;
             if cd "$FTP_REMOTE_PATH"; then
               echo 'In $FTP_REMOTE_PATH';
             elif cd "$FTP_REMOTE_PATH/public_html"; then

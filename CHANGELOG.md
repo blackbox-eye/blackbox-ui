@@ -2,6 +2,17 @@
 
 Alle større ændringer i ALPHA Interface GUI (AIG) dokumenteres her, så audit og drift altid kan følge release-tracking.
 
+## [v1.1] – 2025-11-19
+### Added
+- Tilføjet `WORKFLOW_VALIDATION_REPORT.md` i `/docs/` - komplet validering af CI/CD workflow konfiguration
+
+### Validated
+- PR #3 workflow konfiguration bekræftet komplet og merged via PR #5
+- Alle fire FTP secrets dokumenteret og korrekt anvendt: `FTP_HOST`, `FTP_USERNAME`, `FTP_PASSWORD`, `FTP_REMOTE_PATH`
+- Workflow triggers bekræftet: kun main branch push og manual dispatch (ingen pull_request triggers)
+- Deployment automation valideret: delete-index-html, ftp-deploy, og smoke tests funktionelle
+- Smoke tests bekræftet: index.php serves korrekt, index.html returnerer 404/403
+
 ## [v1.0] – 2025-07-01
 ### Added
 - Tilføjet `SYSTEM_BLUEPRINT_AIG_v1.0.pdf` i `/docs/`

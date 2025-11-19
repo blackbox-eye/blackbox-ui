@@ -1,49 +1,93 @@
-name: CI & Deploy
+name: CI/CD Deploy with Smoke Tests
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
-  build:
-    name: "✅ Lint README"
+  smoke-tests:
+    name: Smoke Tests (pre-deploy)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run curl smoke tests against production
+        env:
+          BASE_URL: https://blackbox.codes
+        run: |
+          set -euo pipefail
+          paths=("" "about.php" "products.php" "cases.php" "pricing.php" "contact.php")
+          for path in "${paths[@]}"; do
+            if [ -z "$path" ]; then
+              url="$BASE_URL/"
+            else
+              url="$BASE_URL/$path"
+            fi
+            echo "→ Curl $url"
+            curl --fail --show-error --location --max-time 15 --retry 3 --retry-delay 5 "$url" >/dev/null
+          done
+
+  deploy:
+    name: FTP Deploy
+    needs: smoke-tests
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      # Sæt Python op (hvis du har Python‑scripts)
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      # Eksempel: kør npm install, hvis du bygger med Node
-      # - name: Install dependencies
-      #   run: npm ci
-
-      - name: Lint README
+      - name: Install lftp
         run: |
-          if [ -f README.md ]; then
-            echo "✅ README.md found!"
-          else
-            echo "❌ README.md missing!" >&2
+          sudo apt-get update
+          sudo apt-get install -y lftp
+
+      - name: Remove legacy index.html from server
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_REMOTE_PATH: ${{ secrets.FTP_REMOTE_PATH }}
+        run: |
+          set -euo pipefail
+          if [ -z "$FTP_HOST" ] || [ -z "$FTP_USERNAME" ] || [ -z "$FTP_PASSWORD" ] || [ -z "$FTP_REMOTE_PATH" ]; then
+            echo "Missing FTP secrets. Ensure FTP_HOST, FTP_USERNAME, FTP_PASSWORD, FTP_REMOTE_PATH are configured." >&2
             exit 1
           fi
+          lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_HOST" -e "set ftp:ssl-allow true; set ssl:verify-certificate no; cd \"$FTP_REMOTE_PATH\"; rm -f index.html; bye"
 
-  ftp-deploy:
-    name: "🚀 FTP Deploy to public_html/"
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - uses: actions/checkout@v4
-      - name: Deploy via FTP
+      - name: Deploy via FTP (SamKirkland)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftp
-          local-dir: ./            # Hele repoet
           server-dir: ${{ secrets.FTP_REMOTE_PATH }}
+          local-dir: .
+          protocol: ftp
+
+  post-deploy-smoke:
+    name: Smoke Tests (post-deploy)
+    needs: deploy
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify site after deploy
+        env:
+          BASE_URL: https://blackbox.codes
+        run: |
+          set -euo pipefail
+          paths=("" "about.php" "products.php" "cases.php" "pricing.php" "contact.php")
+          for path in "${paths[@]}"; do
+            if [ -z "$path" ]; then
+              url="$BASE_URL/"
+            else
+              url="$BASE_URL/$path"
+            fi
+            echo "→ Curl $url"
+            curl --fail --show-error --location --max-time 15 --retry 3 --retry-delay 5 "$url" >/dev/null
+          done
+
+      - name: Report deployed commit
+        run: echo "Deployed commit $GITHUB_SHA"

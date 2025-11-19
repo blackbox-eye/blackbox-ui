@@ -146,4 +146,10 @@ Dette projekt er frigivet under **MIT License** (se [LICENSE](LICENSE)).
 
 Dokumentation og deployment-guides opdateres løbende. For enterprise-integration eller revision, kontakt ALPHA Lead via ovenstående.
 
+## Secret rotation
+
+Dette repository bruger Actions-secrets til FTP-deployment: `FTP_HOST`, `FTP_USERNAME`, `FTP_PASSWORD`, `FTP_REMOTE_PATH`.
+
+For at rotere en secret:
+
 ````

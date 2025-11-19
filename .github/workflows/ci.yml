@@ -63,7 +63,7 @@ jobs:
         run: |
           set -euo pipefail
           echo "Checking https://blackbox.codes/"
-          curl -sSfL --max-time 10 https://blackbox.codes/ | grep -q "Blackbox EYE"
+          curl -sSfL --max-time 10 https://blackbox.codes/ | grep -Eq "Blackbox EYE(™)?"
 
           echo "Checking https://blackbox.codes/about.php"
           curl -sSfL --max-time 10 https://blackbox.codes/about.php | grep -q "Om Os"

@@ -41,7 +41,7 @@ jobs:
           # If FTP_REMOTE_PATH points directly to public_html adjust accordingly. Here we assume FTP_REMOTE_PATH is the site root.
           REMOTE_PUBLIC_HTML="$FTP_REMOTE_PATH/public_html"
           echo "Removing index.html from $REMOTE_PUBLIC_HTML on $FTP_HOST"
-          lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_HOST" -e "set ftp:ssl-allow no; cd $REMOTE_PUBLIC_HTML || exit 1; rm -f index.html; bye"
+          lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_HOST" -e "cd $REMOTE_PUBLIC_HTML || exit 1; rm -f index.html; bye"
           LFTP_EXIT_CODE=$?
           if [ $LFTP_EXIT_CODE -ne 0 ]; then
             echo "lftp failed with exit code $LFTP_EXIT_CODE"

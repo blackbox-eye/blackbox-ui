@@ -29,6 +29,10 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+# Explicit permissions for GITHUB_TOKEN (security best practice)
+permissions:
+  contents: read
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # JOB 1: BUILD & VERIFICATION
 # Validates repository structure and required files before deployment
@@ -37,6 +41,8 @@ jobs:
   build:
     name: "✅ Build & Verify"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -94,6 +100,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    permissions: {}  # No GitHub token permissions needed
     steps:
       - name: Install lftp (secure FTP client)
         run: |
@@ -172,6 +179,8 @@ jobs:
     needs: delete-index-html
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -228,6 +237,7 @@ jobs:
     needs: ftp-deploy
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    permissions: {}  # No GitHub token permissions needed
     steps:
       - name: Wait for deployment propagation
         run: |

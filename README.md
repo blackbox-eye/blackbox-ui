@@ -148,7 +148,7 @@ Dokumentation og deployment-guides opdateres løbende. For enterprise-integratio
 
 ---
 
-## Secret rotation
+## 🔐 Secret rotation
 
 Dette repository bruger Actions-secrets til FTP-deployment: `FTP_HOST`, `FTP_USERNAME`, `FTP_PASSWORD`, `FTP_REMOTE_PATH`.
 

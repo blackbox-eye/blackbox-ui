@@ -161,5 +161,3 @@ To rotate a secret:
 5. Revoke old credentials on your FTP/cPanel host if applicable.
 
 After rotation, trigger the workflow from the Actions tab or push a commit to main to confirm deployments still succeed.
-
-````

@@ -106,6 +106,11 @@ Alle dokumenter ligger nu under `/docs/`:
 * [SYSTEM\_BLUEPRINT\_AIG\_v1.0.md](/docs/SYSTEM_BLUEPRINT_AIG_v1.0.md)
 * [aig\_blueprint\_v1.md](/docs/aig_blueprint_v1.md)
 
+### 🔧 CI/CD & Workflow Dokumentation
+
+* [CI\_CD\_SETUP\_GUIDE.md](/docs/CI_CD_SETUP_GUIDE.md) - Komplet opsætningsguide til CI/CD workflow
+* [WORKFLOW\_VALIDATION\_REPORT.md](/docs/WORKFLOW_VALIDATION_REPORT.md) - Validering af workflow konfiguration (PR #3/PR #5)
+
 ### 📄 Versionerede rapporter (i `/docs/reports/`)
 
 | Dokumenttype  | Filnavn                                                                                             | Version | Dato       | Ansvarlig |

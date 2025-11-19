@@ -163,5 +163,3 @@ Tips:
 - Sørg for at `FTP_REMOTE_PATH` peger på din site-root (fx `/public_html` eller `/`).
 - Overvej at bruge en separat FTP-bruger med begrænsede rettigheder til automatisk deploy for bedre sikkerhed.
 - Lad være med at indsætte secrets i PR-beskrivelser eller chat — brug GitHub Secrets.
-
-````

@@ -10,8 +10,6 @@ name: CI & Deploy
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -43,7 +41,7 @@ jobs:
     name: "🗑️ Delete index.html on remote"
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Install lftp
         run: sudo apt-get update && sudo apt-get install -y lftp
@@ -63,7 +61,7 @@ jobs:
     name: "🚀 FTP Deploy to remote"
     needs: delete-index-html
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
 
@@ -81,7 +79,7 @@ jobs:
     name: "🧪 Smoke Tests"
     needs: ftp-deploy
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Wait for deployment to settle
         run: sleep 10

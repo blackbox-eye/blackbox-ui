@@ -47,16 +47,14 @@ jobs:
           # Try to cd to FTP_REMOTE_PATH; if that fails, try FTP_REMOTE_PATH/public_html
           lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_HOST" -e "
             set ftp:ssl-allow no;
-            if (cd \"$FTP_REMOTE_PATH\") {
+            if cd "$FTP_REMOTE_PATH"; then
               echo 'In $FTP_REMOTE_PATH';
-            } else {
-              if (cd \"$FTP_REMOTE_PATH/public_html\") {
-                echo 'In $FTP_REMOTE_PATH/public_html';
-              } else {
-                echo 'Could not find remote path: $FTP_REMOTE_PATH or $FTP_REMOTE_PATH/public_html' >&2;
-                bye;
-              }
-            }
+            elif cd "$FTP_REMOTE_PATH/public_html"; then
+              echo 'In $FTP_REMOTE_PATH/public_html';
+            else
+              echo 'Could not find remote path: $FTP_REMOTE_PATH or $FTP_REMOTE_PATH/public_html' >&2;
+              bye;
+            fi
             rm -f index.html || true;
             bye
           "

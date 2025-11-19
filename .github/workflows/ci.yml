@@ -48,12 +48,12 @@ jobs:
           lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_HOST" -e "
             set ftp:ssl-allow no;
             if (cd \"$FTP_REMOTE_PATH\") {
-              echo 'In $FTP_REMOTE_PATH';
+              echo "In $FTP_REMOTE_PATH";
             } else {
               if (cd \"$FTP_REMOTE_PATH/public_html\") {
-                echo 'In $FTP_REMOTE_PATH/public_html';
+                echo "In $FTP_REMOTE_PATH/public_html";
               } else {
-                echo 'Could not find remote path: $FTP_REMOTE_PATH or $FTP_REMOTE_PATH/public_html' >&2;
+                echo "Could not find remote path: $FTP_REMOTE_PATH or $FTP_REMOTE_PATH/public_html" >&2;
                 bye;
               }
             }

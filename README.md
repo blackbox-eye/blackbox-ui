@@ -146,4 +146,22 @@ Dette projekt er frigivet under **MIT License** (se [LICENSE](LICENSE)).
 
 Dokumentation og deployment-guides opdateres løbende. For enterprise-integration eller revision, kontakt ALPHA Lead via ovenstående.
 
+---
+
+## Secret rotation
+
+Dette repository bruger Actions-secrets til FTP-deployment: `FTP_HOST`, `FTP_USERNAME`, `FTP_PASSWORD`, `FTP_REMOTE_PATH`.
+
+For at rotere en secret:
+1. Gå til repository Settings -> Secrets and variables -> Actions.
+2. Klik `New repository secret` for at oprette eller `Update` for at opdatere en eksisterende.
+3. Indsæt den nye værdi og gem.
+4. Hvis du også oprettede/tilbagekaldt credentials hos hosting-udbyderen (fx cPanel), sørg for at tilbagekalde de gamle credentials hos udbyderen.
+5. Efter rotation, kør workflowet igen fra Actions-fanen for at bekræfte at deployment + smoke tests lykkes.
+
+Tips:
+- Sørg for at `FTP_REMOTE_PATH` peger på din site-root (fx `/public_html` eller `/`).
+- Overvej at bruge en separat FTP-bruger med begrænsede rettigheder til automatisk deploy for bedre sikkerhed.
+- Lad være med at indsætte secrets i PR-beskrivelser eller chat — brug GitHub Secrets.
+
 ````

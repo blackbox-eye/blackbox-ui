@@ -133,6 +133,24 @@ Se [CHANGELOG.md](CHANGELOG.md) for detaljeret release-tracking.
 
 ---
 
+## 🔐 Secret rotation
+
+Dette repository bruger Actions-secrets til FTP-deployment: `FTP_HOST`, `FTP_USERNAME`, `FTP_PASSWORD`, `FTP_REMOTE_PATH`.
+
+For at rotere en secret:
+1. Gå til repositoryets Settings → Secrets and variables → Actions.
+2. Vælg den secret du vil opdatere (eller klik "New repository secret" for at tilføje).
+3. Sæt den nye værdi og gem.
+4. Hvis du har tilbagekaldt eller oprettet nye credentials hos din hosting-udbyder (fx cPanel), så husk at fjerne/fortryde de gamle credentials der også.
+5. Efter rotation, kør workflowet igen (fra Actions-fanen eller ved at pushe en commit) for at bekræfte at deployment og smoke tests stadig lykkes.
+
+Tips:
+- Sørg for at `FTP_REMOTE_PATH` peger på din site-root (fx `/public_html` eller bare `/`). Hvis du ændrer denne sti under rotation,
+  opdater secret og verificér upload-stien i workflowet.
+- Overvej at bruge en separat FTP-bruger med begrænsede rettigheder til automatiseret deploy for bedre sikkerhed.
+
+---
+
 ## 📄 Licens
 
 Dette projekt er frigivet under **MIT License** (se [LICENSE](LICENSE)).

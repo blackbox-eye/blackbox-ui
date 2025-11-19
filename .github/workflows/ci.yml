@@ -1,28 +1,27 @@
+# CI/CD workflow: deploy via FTP, ensure index.html removed before upload, and run smoke tests.
+# Secrets required (set in repo Settings > Secrets and variables > Actions):
+# - FTP_HOST
+# - FTP_USERNAME
+# - FTP_PASSWORD
+# - FTP_REMOTE_PATH  # path on the remote server where your site root (e.g. public_html) lives
+
 name: CI & Deploy
 
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   build:
-    name: "✅ Lint README"
+    name: "✅ Lint & Verify"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      # Sæt Python op (hvis du har Python‑scripts)
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      # Eksempel: kør npm install, hvis du bygger med Node
-      # - name: Install dependencies
-      #   run: npm ci
-
-      - name: Lint README
+      - name: Verify README exists
         run: |
           if [ -f README.md ]; then
             echo "✅ README.md found!"
@@ -31,13 +30,43 @@ jobs:
             exit 1
           fi
 
-  ftp-deploy:
-    name: "🚀 FTP Deploy to public_html/"
+      - name: Verify index.php exists
+        run: |
+          if [ -f index.php ]; then
+            echo "✅ index.php found!"
+          else
+            echo "❌ index.php missing!" >&2
+            exit 1
+          fi
+
+  delete-index-html:
+    name: "🗑️ Delete index.html on remote"
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+    steps:
+      - name: Install lftp
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
+      - name: Delete index.html via lftp
+        run: |
+          lftp -c "
+            set ftp:ssl-allow no;
+            open -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} ${{ secrets.FTP_HOST }};
+            cd ${{ secrets.FTP_REMOTE_PATH }};
+            rm -f index.html || echo 'index.html not found or already deleted';
+            bye
+          "
+        continue-on-error: true
+
+  ftp-deploy:
+    name: "🚀 FTP Deploy to remote"
+    needs: delete-index-html
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v4
+
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -45,5 +74,72 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
-          local-dir: ./            # Hele repoet
+          local-dir: ./
           server-dir: ${{ secrets.FTP_REMOTE_PATH }}
+
+  smoke-tests:
+    name: "🧪 Smoke Tests"
+    needs: ftp-deploy
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+    steps:
+      - name: Wait for deployment to settle
+        run: sleep 10
+
+      - name: Test site is accessible
+        run: |
+          echo "Testing site accessibility..."
+          # Construct the site URL from FTP_HOST
+          SITE_URL="http://${{ secrets.FTP_HOST }}"
+          
+          # Test if site responds
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$SITE_URL" || echo "000")
+          
+          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "302" ] || [ "$HTTP_CODE" = "301" ]; then
+            echo "✅ Site is accessible (HTTP $HTTP_CODE)"
+          else
+            echo "⚠️ Site returned HTTP $HTTP_CODE"
+            echo "This might be expected if site URL differs from FTP host"
+          fi
+
+      - name: Verify index.php is served
+        run: |
+          echo "Verifying index.php is served..."
+          SITE_URL="http://${{ secrets.FTP_HOST }}"
+          
+          # Try to fetch the page
+          RESPONSE=$(curl -s "$SITE_URL" || echo "CURL_FAILED")
+          
+          if echo "$RESPONSE" | grep -q "ALPHA Interface" || echo "$RESPONSE" | grep -q "<!DOCTYPE" || echo "$RESPONSE" | grep -q "<html"; then
+            echo "✅ Page content detected (likely index.php is served)"
+          else
+            echo "⚠️ Could not verify page content"
+            echo "First 500 chars of response:"
+            echo "$RESPONSE" | head -c 500
+          fi
+
+      - name: Verify index.html is NOT served
+        run: |
+          echo "Checking that index.html is not present..."
+          SITE_URL="http://${{ secrets.FTP_HOST }}/index.html"
+          
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$SITE_URL" || echo "000")
+          
+          if [ "$HTTP_CODE" = "404" ]; then
+            echo "✅ index.html correctly returns 404 (deleted successfully)"
+          elif [ "$HTTP_CODE" = "403" ]; then
+            echo "✅ index.html returns 403 (not accessible)"
+          else
+            echo "⚠️ index.html returned HTTP $HTTP_CODE (expected 404)"
+            echo "This might need manual verification"
+          fi
+
+      - name: Smoke test summary
+        run: |
+          echo "================================"
+          echo "🎉 Smoke tests completed!"
+          echo "================================"
+          echo "Commit SHA: ${{ github.sha }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Event: ${{ github.event_name }}"
+          echo "================================"

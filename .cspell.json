@@ -1,0 +1,17 @@
+{
+  "version": "0.2",
+  "language": "en,da",
+  "words": [
+    "Blackbox",
+    "Sikkerhed",
+    "sikkerhedsløsninger",
+    "efterretning",
+    "overvågning"
+  ],
+  "ignorePaths": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    ".git/**"
+  ]
+}

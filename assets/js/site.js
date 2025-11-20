@@ -144,6 +144,8 @@ document.addEventListener('DOMContentLoaded', () => {
             displayMessage('reset');
             setSubmittingState(true);
 
+            recaptchaLog('Contact form submit started');
+
             try {
                 const recaptchaToken = await fetchRecaptchaToken();
                 const formData = new FormData(contactForm);
@@ -151,13 +153,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     formData.set('recaptcha_token', recaptchaToken);
                 }
 
+                recaptchaLog('Sending POST to:', formEndpoint);
+                recaptchaLog('Form data keys:', Array.from(formData.keys()));
+
                 const response = await fetch(formEndpoint, {
                     method: 'POST',
                     body: formData,
                     headers: { 'Accept': 'application/json' }
                 });
 
+                recaptchaLog('Response status:', response.status, response.statusText);
+                recaptchaLog('Response headers:', Object.fromEntries(response.headers.entries()));
+
                 const result = await parseResponse(response);
+                recaptchaLog('Parsed response:', result);
 
                 if (response.ok && result.success === true) {
                     recaptchaLog('Submission succeeded');

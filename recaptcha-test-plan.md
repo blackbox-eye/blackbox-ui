@@ -81,3 +81,11 @@ Monitor `logs/contact-submissions.log` entries; each JSON line should include at
 ✅ **Debug mode provides detailed troubleshooting information**
 ✅ **Score threshold 0.5 blocks suspicious submissions**
 ✅ **Action validation ensures tokens are for "contact" form**
+
+## Kontaktformular – log & mail selftest
+
+1. Åbn `test/logtest.php` i browseren (`https://<din-host>/test/logtest.php`).
+2. Forvent svarteksten `OK`. Hvis du ser en fejl, undersøg `error_log`.
+3. Åbn `logs/contact-submissions.log` og verificér en ny JSON-linje med `"status":"selftest"`/`"reason":"selftest_ping"`.
+4. Gennemgå `error_log` for eventuelle `CONTACT FORM MAIL DEBUG` eller `CONTACT FORM WARNING` beskeder.
+5. (Valgfrit) Gentag testen med `RECAPTCHA_DEBUG=true` for at få ekstra logging.

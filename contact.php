@@ -37,6 +37,10 @@ include 'includes/site-header.php';
                             <input type="email" id="email" name="email" required class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400">
                         </div>
                         <div>
+                            <label for="phone" class="block text-sm font-medium text-gray-300 mb-2">Telefon (valgfri)</label>
+                            <input type="tel" id="phone" name="phone" class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400" autocomplete="tel">
+                        </div>
+                        <div>
                             <label for="message" class="block text-sm font-medium text-gray-300 mb-2">Besked</label>
                             <textarea id="message" name="message" rows="5" required class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400"></textarea>
                         </div>

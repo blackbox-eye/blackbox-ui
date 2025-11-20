@@ -63,6 +63,17 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         const formEndpoint = contactForm.dataset.endpoint || contactForm.getAttribute('action') || 'contact-submit.php';
 
+        // Log initial configuration
+        if (recaptchaDebug) {
+            console.log('[Contact Form] Configuration:', {
+                endpoint: formEndpoint,
+                recaptchaSiteKey: recaptchaSiteKey ? recaptchaSiteKey.substring(0, 20) + '...' : '[EMPTY]',
+                grecaptchaLoaded: typeof grecaptcha !== 'undefined',
+                enterpriseAvailable: typeof grecaptcha !== 'undefined' && grecaptcha.enterprise !== undefined,
+                debug: recaptchaDebug
+            });
+        }
+
         const setSubmittingState = (isSubmitting) => {
             if (submitButton) {
                 submitButton.disabled = isSubmitting;
@@ -95,36 +106,48 @@ document.addEventListener('DOMContentLoaded', () => {
                 return '';
             }
 
+            // Check if grecaptcha is loaded
+            if (typeof grecaptcha === 'undefined') {
+                recaptchaError('RECAPTCHA FRONTEND ERROR: grecaptcha not loaded - script may be blocked or site key invalid');
+                return '';
+            }
+
             // Check for Enterprise API first, fallback to standard API
-            const isEnterprise = typeof grecaptcha !== 'undefined' && grecaptcha.enterprise;
+            const isEnterprise = grecaptcha.enterprise !== undefined;
             const api = isEnterprise ? grecaptcha.enterprise : grecaptcha;
             recaptchaLog('Using', isEnterprise ? 'Enterprise' : 'Standard', 'reCAPTCHA API');
 
             if (!api) {
-                recaptchaError('reCAPTCHA API not available on window');
+                recaptchaError('RECAPTCHA FRONTEND ERROR: API not available');
                 return '';
             }
 
             return new Promise(resolve => {
                 try {
+                    const readyCheck = setTimeout(() => {
+                        recaptchaError('RECAPTCHA FRONTEND ERROR: ready() timeout - site key may be invalid');
+                        resolve('');
+                    }, 5000);
+
                     api.ready(() => {
+                        clearTimeout(readyCheck);
                         recaptchaLog('Executing reCAPTCHA with action "contact"');
                         api.execute(recaptchaSiteKey, { action: 'contact' })
                             .then(token => {
                                 if (!token) {
-                                    recaptchaError('reCAPTCHA returned empty token');
+                                    recaptchaError('RECAPTCHA FRONTEND ERROR: Empty token returned');
                                 } else {
                                     recaptchaLog('Token generated (length:', token.length + ')');
                                 }
                                 resolve(token || '');
                             })
                             .catch(error => {
-                                recaptchaError('Execution error', error);
+                                recaptchaError('RECAPTCHA FRONTEND ERROR: Execute failed -', error.message || error);
                                 resolve('');
                             });
                     });
                 } catch (error) {
-                    recaptchaError('Initialization error', error);
+                    recaptchaError('RECAPTCHA FRONTEND ERROR: Initialization failed -', error.message || error);
                     resolve('');
                 }
             });

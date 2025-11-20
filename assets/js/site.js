@@ -45,13 +45,147 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const contactForm = document.getElementById('contact-form');
-    const formSuccessMessage = document.getElementById('contact-form-success');
-    if (contactForm && formSuccessMessage) {
-        contactForm.addEventListener('submit', event => {
+    if (contactForm) {
+        const formSuccessMessage = document.getElementById('contact-form-success');
+        const formErrorMessage = document.getElementById('contact-form-error');
+        const submitButton = contactForm.querySelector('button[type="submit"]');
+        const recaptchaSiteKey = (window.RECAPTCHA_SITE_KEY || '').trim();
+        const recaptchaDebug = Boolean(window.RECAPTCHA_DEBUG);
+        const recaptchaLog = (...args) => {
+            if (recaptchaDebug) {
+                console.log('[reCAPTCHA]', ...args);
+            }
+        };
+        const recaptchaError = (...args) => {
+            if (recaptchaDebug) {
+                console.error('[reCAPTCHA]', ...args);
+            }
+        };
+        const formEndpoint = contactForm.dataset.endpoint || contactForm.getAttribute('action') || 'contact-submit.php';
+
+        const setSubmittingState = (isSubmitting) => {
+            if (submitButton) {
+                submitButton.disabled = isSubmitting;
+                submitButton.dataset.originalText = submitButton.dataset.originalText || submitButton.textContent;
+                submitButton.textContent = isSubmitting ? 'Sender...' : submitButton.dataset.originalText;
+            }
+        };
+
+        const displayMessage = (type, message) => {
+            if (formErrorMessage) {
+                formErrorMessage.classList.add('hidden');
+                formErrorMessage.textContent = '';
+            }
+            if (formSuccessMessage) {
+                formSuccessMessage.classList.add('hidden');
+            }
+
+            if (type === 'error' && formErrorMessage) {
+                formErrorMessage.textContent = message;
+                formErrorMessage.classList.remove('hidden');
+            }
+            if (type === 'success' && formSuccessMessage) {
+                formSuccessMessage.classList.remove('hidden');
+            }
+        };
+
+        const fetchRecaptchaToken = async () => {
+            if (!recaptchaSiteKey) {
+                recaptchaLog('Site key missing, skipping token fetch');
+                return '';
+            }
+
+            // Check for Enterprise API first, fallback to standard API
+            const isEnterprise = typeof grecaptcha !== 'undefined' && grecaptcha.enterprise;
+            const api = isEnterprise ? grecaptcha.enterprise : grecaptcha;
+            recaptchaLog('Using', isEnterprise ? 'Enterprise' : 'Standard', 'reCAPTCHA API');
+
+            if (!api) {
+                recaptchaError('reCAPTCHA API not available on window');
+                return '';
+            }
+
+            return new Promise(resolve => {
+                try {
+                    api.ready(() => {
+                        recaptchaLog('Executing reCAPTCHA with action "contact"');
+                        api.execute(recaptchaSiteKey, { action: 'contact' })
+                            .then(token => {
+                                if (!token) {
+                                    recaptchaError('reCAPTCHA returned empty token');
+                                } else {
+                                    recaptchaLog('Token generated (length:', token.length + ')');
+                                }
+                                resolve(token || '');
+                            })
+                            .catch(error => {
+                                recaptchaError('Execution error', error);
+                                resolve('');
+                            });
+                    });
+                } catch (error) {
+                    recaptchaError('Initialization error', error);
+                    resolve('');
+                }
+            });
+        };
+
+        const parseResponse = async (response) => {
+            const contentType = response.headers.get('content-type') || '';
+            if (contentType.includes('application/json')) {
+                return response.json();
+            }
+            const text = await response.text();
+            return { status: response.ok ? 'ok' : 'error', message: text };
+        };
+
+        contactForm.addEventListener('submit', async event => {
             event.preventDefault();
-            formSuccessMessage.classList.remove('hidden');
-            contactForm.reset();
-            setTimeout(() => formSuccessMessage.classList.add('hidden'), 5000);
+            displayMessage('reset');
+            setSubmittingState(true);
+
+            try {
+                const recaptchaToken = await fetchRecaptchaToken();
+                const formData = new FormData(contactForm);
+                if (recaptchaToken) {
+                    formData.set('recaptcha_token', recaptchaToken);
+                }
+
+                const response = await fetch(formEndpoint, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                const result = await parseResponse(response);
+
+                if (response.ok && result.success === true) {
+                    recaptchaLog('Submission succeeded');
+                    displayMessage('success');
+                    contactForm.reset();
+                    // Reset reCAPTCHA for next submission
+                    if (recaptchaSiteKey) {
+                        const isEnterprise = typeof grecaptcha !== 'undefined' && grecaptcha.enterprise;
+                        const api = isEnterprise ? grecaptcha.enterprise : grecaptcha;
+                        if (api && typeof api.reset === 'function') {
+                            try {
+                                api.reset();
+                            } catch (error) {
+                                recaptchaError('Reset failed', error);
+                            }
+                        }
+                    }
+                } else {
+                    const message = result.message || 'Der opstod en fejl. Prøv igen senere.';
+                    recaptchaError('Submission failed', message, result);
+                    displayMessage('error', message);
+                }
+            } catch (error) {
+                recaptchaError('Unexpected submission error', error);
+                displayMessage('error', 'Kunne ikke sende forespørgslen. Kontrollér din forbindelse og prøv igen.');
+            } finally {
+                setSubmittingState(false);
+            }
         });
     }
 

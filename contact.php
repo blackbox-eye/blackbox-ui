@@ -1,6 +1,16 @@
 <?php
+require_once 'includes/env.php';
 $page_title = 'Kontakt | Blackbox EYE™';
 $current_page = 'contact';
+$meta_description = 'Kontakt Blackbox EYE™ for fortrolig dialog om avancerede sikkerheds- og efterretningsløsninger. Vores specialister står klar til at hjælpe dig 24/7.';
+$meta_keywords = 'Blackbox EYE kontakt, sikkerhedskonsulent, cyber defense support, efterretning';
+$meta_og_image = BBX_SITE_BASE_URL . '/assets/logo.png';
+$structured_data = [
+    '@type' => 'ProfessionalService',
+    'serviceType' => 'Cybersecurity Operations & Intelligence',
+    'areaServed' => 'GLOBAL',
+    'availableLanguage' => ['da', 'en']
+];
 include 'includes/site-header.php';
 ?>
 
@@ -17,7 +27,7 @@ include 'includes/site-header.php';
 
             <div class="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10">
                 <div class="glass-effect rounded-2xl p-8 lg:col-span-2">
-                    <form id="contact-form" class="space-y-5">
+                    <form id="contact-form" class="space-y-5" data-endpoint="contact-submit.php" novalidate>
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-300 mb-2">Navn</label>
                             <input type="text" id="name" name="name" required class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400">
@@ -30,10 +40,12 @@ include 'includes/site-header.php';
                             <label for="message" class="block text-sm font-medium text-gray-300 mb-2">Besked</label>
                             <textarea id="message" name="message" rows="5" required class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400"></textarea>
                         </div>
+                        <input type="hidden" name="recaptcha_token" id="recaptcha_token" value="">
                         <button type="submit" class="w-full bg-amber-400 text-black font-semibold py-3 rounded-lg hover:bg-amber-500 transition-colors">
                             Send forespørgsel
                         </button>
                     </form>
+                    <div id="contact-form-error" class="hidden mt-4 text-center text-red-400 border border-red-500/60 rounded-md p-4 text-sm" role="alert"></div>
                     <div id="contact-form-success" class="hidden mt-6 text-center text-green-400 border border-green-400 rounded-md p-4 text-sm">
                         Tak for din henvendelse! Vi vender tilbage hurtigst muligt.
                     </div>

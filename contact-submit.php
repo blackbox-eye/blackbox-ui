@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/includes/env.php';
 require_once __DIR__ . '/includes/contact-log.php';
+require_once __DIR__ . '/includes/mail-helper.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -298,12 +299,12 @@ $contactRecipient = str_replace(["\r", "\n"], '', $contactRecipient);
 
 error_log('CONTACT FORM DEBUG: mail recipient configured as: ' . $contactRecipient);
 
-$subject     = 'Ny henvendelse fra Blackbox EYE kontaktformular';
-$fromAddress = 'noreply@blackbox.codes';
+// Prepare email content
+$subject = 'Ny henvendelse fra Blackbox EYE kontaktformular';
 
-$headerSafeEmail    = str_replace(["\r", "\n"], '', $rawInput['email']);
-$headerSafeName     = str_replace(["\r", "\n"], '', $rawInput['name']);
-$sanitizedMessage   = preg_replace("/[\r\n]+/", PHP_EOL, $rawInput['message']);
+$headerSafeEmail = str_replace(["\r", "\n"], '', $rawInput['email']);
+$headerSafeName = str_replace(["\r", "\n"], '', $rawInput['name']);
+$sanitizedMessage = preg_replace("/[\r\n]+/", PHP_EOL, $rawInput['message']);
 
 $emailBodyLines = [
     'Ny henvendelse fra kontaktformularen på Blackbox EYE™',
@@ -326,30 +327,27 @@ $emailBodyLines[] = 'Hostname: ' . ($hostname  ?? $expectedHostname);
 $emailBodyLines[] = 'API-mode: ' . $recaptchaMode;
 
 $emailBody = implode(PHP_EOL, $emailBodyLines);
-$emailBody = wordwrap($emailBody, 78, PHP_EOL);
-
-$headers = [
-    'From: Blackbox EYE <' . $fromAddress . '>',
-    'Content-Type: text/plain; charset=UTF-8',
-    'X-Mailer: PHP/' . phpversion(),
-];
-
-if ($headerSafeEmail !== '') {
-    $headers[] = 'Reply-To: ' . $headerSafeEmail;
-}
 
 // Always log mail operations for debugging
 error_log('CONTACT FORM MAIL DEBUG: about to send mail to ' . $contactRecipient);
 error_log('CONTACT FORM MAIL DEBUG: subject="' . $subject . '"');
-error_log('CONTACT FORM MAIL DEBUG: from="' . $fromAddress . '"');
 
-$mailSent = mail($contactRecipient, $subject, $emailBody, implode("\r\n", $headers));
+// Use robust mail helper with automatic SMTP fallback
+$mailSent = bbx_send_mail(
+    $contactRecipient,
+    $subject,
+    $emailBody,
+    'Blackbox EYE',
+    '', // Will use noreply@{domain} automatically
+    $headerSafeEmail,
+    $headerSafeName
+);
 
 if (!$mailSent) {
-    error_log('CONTACT FORM WARNING: mail() failed for contact submission to ' . $contactRecipient);
-    error_log('CONTACT FORM WARNING: mail() returned FALSE - check server mail configuration');
+    error_log('CONTACT FORM WARNING: Mail sending failed to ' . $contactRecipient);
+    error_log('CONTACT FORM WARNING: Check server mail configuration or configure SMTP credentials');
 } else {
-    error_log('CONTACT FORM MAIL DEBUG: mail() dispatched successfully to ' . $contactRecipient);
+    error_log('CONTACT FORM MAIL DEBUG: Mail sent successfully to ' . $contactRecipient);
 }
 
 // Log successful submission

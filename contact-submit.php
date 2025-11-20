@@ -19,7 +19,7 @@ function bbx_log_contact_submission(string $status, array $recaptcha_data = [], 
     // Ensure log directory exists
     if (!is_dir($logDirectory)) {
         error_log('CONTACT FORM DEBUG: logs directory does not exist, attempting to create: ' . $logDirectory);
-        if (!@mkdir($logDirectory, 0755, true)) {
+        if (!mkdir($logDirectory, 0755, true)) {
             $mkdirError = error_get_last();
             error_log('CONTACT FORM LOG ERROR: Could not create log directory: ' . $logDirectory);
             if ($mkdirError) {
@@ -69,7 +69,8 @@ function bbx_log_contact_submission(string $status, array $recaptcha_data = [], 
         // Always write fallback to error_log
         error_log('CONTACT FORM LOG FALLBACK: ' . $jsonLine);
     } else {
-        error_log('CONTACT FORM DEBUG: Successfully logged to: ' . $logFile . ' (' . $result . ' bytes written)');
+        $bytesWritten = $result > 0 ? $result . ' bytes' : 'empty write (0 bytes)';
+        error_log('CONTACT FORM DEBUG: Successfully logged to: ' . $logFile . ' (' . $bytesWritten . ')');
     }
 }
 
@@ -285,8 +286,9 @@ if ($recaptchaRequired) {
 }
 
 // Prepare and dispatch notification email once validation is complete
+// Get mail recipient from environment, with guaranteed fallback to ops@blackbox.codes
 $contactRecipient = bbx_env('CONTACT_EMAIL', 'ops@blackbox.codes');
-if ($contactRecipient === '' || $contactRecipient === null) {
+if ($contactRecipient === '') {
     $contactRecipient = 'ops@blackbox.codes';
     error_log('CONTACT FORM WARNING: CONTACT_EMAIL not set, using default: ops@blackbox.codes');
 }

@@ -13,17 +13,22 @@ function bbx_log_contact_submission(string $status, array $recaptcha_data = [], 
 {
     $logDirectory = __DIR__ . '/logs';
 
-    if (defined('BBX_DEBUG_RECAPTCHA') && BBX_DEBUG_RECAPTCHA) {
-        error_log('CONTACT FORM DEBUG: entering bbx_log_contact_submission() with status=' . $status . ' reason=' . ($reason !== '' ? $reason : '[empty]'));
-    }
+    // Always log function entry for debugging
+    error_log('CONTACT FORM DEBUG: entering bbx_log_contact_submission() with status=' . $status . ' reason=' . ($reason !== '' ? $reason : '[empty]'));
 
     // Ensure log directory exists
     if (!is_dir($logDirectory)) {
-        if (!mkdir($logDirectory, 0755, true)) {
+        error_log('CONTACT FORM DEBUG: logs directory does not exist, attempting to create: ' . $logDirectory);
+        if (!@mkdir($logDirectory, 0755, true)) {
+            $mkdirError = error_get_last();
             error_log('CONTACT FORM LOG ERROR: Could not create log directory: ' . $logDirectory);
-            return;
+            if ($mkdirError) {
+                error_log('CONTACT FORM LOG ERROR: mkdir() error: ' . $mkdirError['message']);
+            }
+            // Continue to fallback logging below
+        } else {
+            error_log('CONTACT FORM DEBUG: Created log directory: ' . $logDirectory);
         }
-        error_log('CONTACT FORM: Created log directory: ' . $logDirectory);
     }
 
     $logFile = $logDirectory . '/contact-submissions.log';
@@ -46,7 +51,8 @@ function bbx_log_contact_submission(string $status, array $recaptcha_data = [], 
 
     $jsonLine = json_encode($entry, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     if ($jsonLine === false) {
-        error_log('CONTACT FORM ERROR: Could not encode log entry to JSON');
+        error_log('CONTACT FORM LOG ERROR: Could not encode log entry to JSON');
+        error_log('CONTACT FORM LOG ERROR: Fallback raw entry: ' . print_r($entry, true));
         return;
     }
 
@@ -54,14 +60,16 @@ function bbx_log_contact_submission(string $status, array $recaptcha_data = [], 
     $result = @file_put_contents($logFile, $jsonLine . PHP_EOL, FILE_APPEND | LOCK_EX);
 
     if ($result === false) {
-        $entry['success'] = false;
-        $entry['reason']  = 'log_failure';
-        $fallback         = json_encode($entry, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?: $jsonLine;
-
+        $writeError = error_get_last();
         error_log('CONTACT FORM LOG ERROR: Could not write to log file: ' . $logFile);
-        error_log('CONTACT FORM LOG ERROR: Fallback entry => ' . $fallback);
-    } elseif (defined('BBX_DEBUG_RECAPTCHA') && BBX_DEBUG_RECAPTCHA) {
-        error_log('CONTACT FORM DEBUG: Successfully logged to: ' . $logFile);
+        if ($writeError) {
+            error_log('CONTACT FORM LOG ERROR: file_put_contents() error: ' . $writeError['message']);
+        }
+        
+        // Always write fallback to error_log
+        error_log('CONTACT FORM LOG FALLBACK: ' . $jsonLine);
+    } else {
+        error_log('CONTACT FORM DEBUG: Successfully logged to: ' . $logFile . ' (' . $result . ' bytes written)');
     }
 }
 
@@ -278,10 +286,14 @@ if ($recaptchaRequired) {
 
 // Prepare and dispatch notification email once validation is complete
 $contactRecipient = bbx_env('CONTACT_EMAIL', 'ops@blackbox.codes');
-if ($contactRecipient === '') {
+if ($contactRecipient === '' || $contactRecipient === null) {
     $contactRecipient = 'ops@blackbox.codes';
+    error_log('CONTACT FORM WARNING: CONTACT_EMAIL not set, using default: ops@blackbox.codes');
 }
+// Sanitize recipient to prevent header injection
 $contactRecipient = str_replace(["\r", "\n"], '', $contactRecipient);
+
+error_log('CONTACT FORM DEBUG: mail recipient configured as: ' . $contactRecipient);
 
 $subject     = 'Ny henvendelse fra Blackbox EYE kontaktformular';
 $fromAddress = 'noreply@blackbox.codes';
@@ -323,16 +335,18 @@ if ($headerSafeEmail !== '') {
     $headers[] = 'Reply-To: ' . $headerSafeEmail;
 }
 
-if (defined('BBX_DEBUG_RECAPTCHA') && BBX_DEBUG_RECAPTCHA) {
-    error_log('CONTACT FORM MAIL DEBUG: about to send mail to ' . $contactRecipient);
-}
+// Always log mail operations for debugging
+error_log('CONTACT FORM MAIL DEBUG: about to send mail to ' . $contactRecipient);
+error_log('CONTACT FORM MAIL DEBUG: subject="' . $subject . '"');
+error_log('CONTACT FORM MAIL DEBUG: from="' . $fromAddress . '"');
 
 $mailSent = mail($contactRecipient, $subject, $emailBody, implode("\r\n", $headers));
 
 if (!$mailSent) {
     error_log('CONTACT FORM WARNING: mail() failed for contact submission to ' . $contactRecipient);
-} elseif (defined('BBX_DEBUG_RECAPTCHA') && BBX_DEBUG_RECAPTCHA) {
-    error_log('CONTACT FORM MAIL DEBUG: mail() dispatched to ' . $contactRecipient);
+    error_log('CONTACT FORM WARNING: mail() returned FALSE - check server mail configuration');
+} else {
+    error_log('CONTACT FORM MAIL DEBUG: mail() dispatched successfully to ' . $contactRecipient);
 }
 
 // Log successful submission

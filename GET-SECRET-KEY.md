@@ -32,9 +32,9 @@ SetEnv RECAPTCHA_SECRET_KEY "YOUR_ACTUAL_KEY_FROM_GCP"
 ```
 
 ## Current Configuration Status
-✅ Site Key: `6Lf0xxIsAAAAALw3SGPZYYFJLIZE3dZ0ophlEK4G`  
-✅ Project ID: `gen-lang-client-0126039859`  
-❌ Secret Key: **MISSING - ADD THIS NOW**  
+✅ Site Key: `6Lf0xxIsAAAAALw3SGPZYYFJLIZE3dZ0ophlEK4G`
+✅ Project ID: `gen-lang-client-0126039859`
+❌ Secret Key: **MISSING - ADD THIS NOW**
 ✅ Debug Mode: `true`
 
 ## Test After Adding Key

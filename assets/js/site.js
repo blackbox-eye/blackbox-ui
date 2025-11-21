@@ -112,10 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 return '';
             }
 
-            // Check for Enterprise API first, fallback to standard API
-            const isEnterprise = grecaptcha.enterprise !== undefined;
-            const api = isEnterprise ? grecaptcha.enterprise : grecaptcha;
-            recaptchaLog('Using', isEnterprise ? 'Enterprise' : 'Standard', 'reCAPTCHA API');
+            // Check for grecaptcha API (Standard v3)
+            const api = typeof grecaptcha !== 'undefined' ? grecaptcha : null;
+            recaptchaLog('Using Standard reCAPTCHA v3 API');
 
             if (!api) {
                 recaptchaError('RECAPTCHA FRONTEND ERROR: API not available');
@@ -196,15 +195,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     displayMessage('success');
                     contactForm.reset();
                     // Reset reCAPTCHA for next submission
-                    if (recaptchaSiteKey) {
-                        const isEnterprise = typeof grecaptcha !== 'undefined' && grecaptcha.enterprise;
-                        const api = isEnterprise ? grecaptcha.enterprise : grecaptcha;
-                        if (api && typeof api.reset === 'function') {
-                            try {
-                                api.reset();
-                            } catch (error) {
-                                recaptchaError('Reset failed', error);
-                            }
+                    if (recaptchaSiteKey && typeof grecaptcha !== 'undefined') {
+                        try {
+                            grecaptcha.reset();
+                        } catch (error) {
+                            recaptchaError('Reset failed', error);
                         }
                     }
                 } else {

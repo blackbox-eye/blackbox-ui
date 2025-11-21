@@ -27,7 +27,7 @@ if (!defined('BBX_RECAPTCHA_SECRET_KEY')) {
 }
 
 if (!defined('BBX_RECAPTCHA_PROJECT_ID')) {
-    define('BBX_RECAPTCHA_PROJECT_ID', bbx_env('RECAPTCHA_PROJECT_ID'));
+    define('BBX_RECAPTCHA_PROJECT_ID', bbx_env('RECAPTCHA_PROJECT_ID')); // Optional - not used in Standard v3
 }
 
 if (!defined('BBX_DEBUG_RECAPTCHA')) {

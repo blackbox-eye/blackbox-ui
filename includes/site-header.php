@@ -83,7 +83,7 @@ $nav_links = [
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="config.js"></script>
     <?php if (BBX_RECAPTCHA_SITE_KEY !== ''): ?>
-        <script src="https://www.google.com/recaptcha/enterprise.js?render=<?= htmlspecialchars(BBX_RECAPTCHA_SITE_KEY) ?>" async defer></script>
+        <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(BBX_RECAPTCHA_SITE_KEY) ?>" async defer></script>
     <?php endif; ?>
     <script>
         window.RECAPTCHA_SITE_KEY = "<?= htmlspecialchars(BBX_RECAPTCHA_SITE_KEY) ?>";

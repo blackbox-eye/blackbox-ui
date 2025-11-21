@@ -127,15 +127,13 @@ if (!filter_var($rawInput['email'], FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
-// reCAPTCHA
+// reCAPTCHA v3 - Simple and reliable
 $recaptchaRequired = BBX_RECAPTCHA_SECRET_KEY !== '';
 
 // Log reCAPTCHA configuration status
 error_log('CONTACT FORM DEBUG: reCAPTCHA configured=' . ($recaptchaRequired ? 'YES' : 'NO'));
 
 if ($recaptchaRequired) {
-    $recaptchaMode = BBX_RECAPTCHA_PROJECT_ID !== '' ? 'enterprise' : 'standard';
-
     if (BBX_RECAPTCHA_SITE_KEY === '') {
         error_log('CONTACT FORM ERROR: RECAPTCHA_SECRET_KEY is set but RECAPTCHA_SITE_KEY is missing');
         bbx_log_contact_submission('recaptcha_error', [], 'missing_env', $logContext);
@@ -145,39 +143,26 @@ if ($recaptchaRequired) {
     }
 
     if ($rawInput['recaptcha_token'] === '') {
-        error_log('CONTACT FORM WARNING: Missing reCAPTCHA token in submission (site key may be invalid or script not loaded)');
+        error_log('CONTACT FORM WARNING: Missing reCAPTCHA token in submission');
         bbx_log_contact_submission('recaptcha_error', [], 'missing_token', $logContext);
         http_response_code(400);
         echo json_encode(['success' => false, 'message' => 'Security validation failed.']);
         exit;
     }
 
-    $isEnterpriseMode = BBX_RECAPTCHA_PROJECT_ID !== '';
-
-    if ($isEnterpriseMode) {
-        // Official reCAPTCHA Enterprise API structure
-        $verifyEndpoint = 'https://recaptchaenterprise.googleapis.com/v1/projects/' . BBX_RECAPTCHA_PROJECT_ID . '/assessments?key=' . BBX_RECAPTCHA_SECRET_KEY;
-        $payload = json_encode([
-            'event' => [
-                'token'   => $rawInput['recaptcha_token'],
-                'siteKey' => BBX_RECAPTCHA_SITE_KEY,
-            ],
-        ]);
-        $headers = ['Content-Type: application/json'];
-    } else {
-        $verifyEndpoint = 'https://www.google.com/recaptcha/api/siteverify';
-        $payload = http_build_query([
-            'secret'   => BBX_RECAPTCHA_SECRET_KEY,
-            'response' => $rawInput['recaptcha_token'],
-            'remoteip' => $_SERVER['REMOTE_ADDR'] ?? '',
-        ]);
-        $headers = ['Content-Type: application/x-www-form-urlencoded'];
-    }
+    // Standard reCAPTCHA v3 API
+    $verifyEndpoint = 'https://www.google.com/recaptcha/api/siteverify';
+    $payload = http_build_query([
+        'secret'   => BBX_RECAPTCHA_SECRET_KEY,
+        'response' => $rawInput['recaptcha_token'],
+        'remoteip' => $_SERVER['REMOTE_ADDR'] ?? '',
+    ]);
+    $headers = ['Content-Type: application/x-www-form-urlencoded'];
 
     if (BBX_DEBUG_RECAPTCHA) {
-        error_log('reCAPTCHA Debug - Mode: '     . ($isEnterpriseMode ? 'Enterprise' : 'Standard'));
+        error_log('reCAPTCHA Debug - Mode: Standard v3');
         error_log('reCAPTCHA Debug - Endpoint: ' . $verifyEndpoint);
-        error_log('reCAPTCHA Debug - Payload: '  . $payload);
+        error_log('reCAPTCHA Debug - Payload: ' . $payload);
     }
 
     $ch = curl_init($verifyEndpoint);
@@ -227,34 +212,12 @@ if ($recaptchaRequired) {
         error_log('reCAPTCHA Debug - Response: ' . json_encode($decoded));
     }
 
-    // Parse response according to official API documentation
-    if ($isEnterpriseMode) {
-        // Check if token is valid
-        $tokenValid = isset($decoded['tokenProperties']['valid']) ? (bool)$decoded['tokenProperties']['valid'] : false;
-
-        if (!$tokenValid) {
-            $invalidReason = $decoded['tokenProperties']['invalidReason'] ?? 'UNKNOWN';
-            error_log('CONTACT FORM ERROR: Invalid reCAPTCHA token - reason: ' . $invalidReason);
-            bbx_log_contact_submission('recaptcha_error', [], 'invalid_token_' . strtolower($invalidReason), $logContext);
-            http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'Security validation failed.']);
-            exit;
-        }
-
-        $score     = (float)($decoded['riskAnalysis']['score'] ?? 0.0);
-        $success   = $tokenValid;
-        $action    = $decoded['tokenProperties']['action']   ?? null;
-        $hostname  = $decoded['tokenProperties']['hostname'] ?? $expectedHostname;
-        $reasons   = $decoded['riskAnalysis']['reasons']     ?? [];
-    } else {
-        $score     = (float)($decoded['score'] ?? 0.0);
-        $success   = isset($decoded['success']) ? (bool)$decoded['success'] : false;
-        $action    = $decoded['action']   ?? null;
-        $hostname  = $decoded['hostname'] ?? $expectedHostname;
-        $reasons   = $decoded['error-codes'] ?? [];
-    }
-
-    // Validate requirements
+    // Parse Standard v3 response
+    $score     = (float)($decoded['score'] ?? 0.0);
+    $success   = isset($decoded['success']) ? (bool)$decoded['success'] : false;
+    $action    = $decoded['action']   ?? null;
+    $hostname  = $decoded['hostname'] ?? $expectedHostname;
+    $reasons   = $decoded['error-codes'] ?? [];    // Validate requirements
     $minScore    = 0.5;
     $actionValid = ($action === 'contact');
     $hostValid   = true;
@@ -284,7 +247,7 @@ if ($recaptchaRequired) {
         ], $reasonText, array_merge($logContext, [
             'expected_action'   => 'contact',
             'min_score'        => $minScore,
-            'api_mode'         => $isEnterpriseMode ? 'enterprise' : 'standard',
+            'api_mode'         => 'standard_v3',
             'expected_hostname' => $expectedHostname,
             'reasons'          => $reasons,
         ]));
@@ -301,6 +264,7 @@ if ($recaptchaRequired) {
     if (BBX_DEBUG_RECAPTCHA) {
         error_log('CONTACT FORM DEBUG: reCAPTCHA disabled (no secret key)');
     }
+    $recaptchaMode = 'disabled';
 }
 
 // Prepare and dispatch notification email once validation is complete
@@ -340,7 +304,7 @@ $emailBodyLines[] = '';
 $emailBodyLines[] = '---';
 $emailBodyLines[] = 'Score: '    . ($score     !== null ? number_format((float)$score, 2) : 'N/A');
 $emailBodyLines[] = 'Hostname: ' . ($hostname  ?? $expectedHostname);
-$emailBodyLines[] = 'API-mode: ' . $recaptchaMode;
+$emailBodyLines[] = 'API-mode: ' . ($recaptchaMode ?? 'standard_v3');
 
 $emailBody = implode(PHP_EOL, $emailBodyLines);
 
@@ -371,7 +335,7 @@ bbx_log_contact_submission('success', [
     'score'    => $score    ?? null,
     'action'   => $action   ?? 'contact',
     'hostname' => $hostname ?? $expectedHostname,
-    'api_mode' => $recaptchaMode,
+    'api_mode' => 'standard_v3',
 ], 'ok', array_merge($logContext, [
     'message_length'   => strlen($rawInput['message']),
     'has_phone'        => !empty($rawInput['phone']),

@@ -155,12 +155,12 @@ if ($recaptchaRequired) {
     $isEnterpriseMode = BBX_RECAPTCHA_PROJECT_ID !== '';
 
     if ($isEnterpriseMode) {
+        // Official reCAPTCHA Enterprise API structure
         $verifyEndpoint = 'https://recaptchaenterprise.googleapis.com/v1/projects/' . BBX_RECAPTCHA_PROJECT_ID . '/assessments?key=' . BBX_RECAPTCHA_SECRET_KEY;
         $payload = json_encode([
             'event' => [
-                'token'          => $rawInput['recaptcha_token'],
-                'siteKey'        => BBX_RECAPTCHA_SITE_KEY,
-                'expectedAction' => 'contact',
+                'token'   => $rawInput['recaptcha_token'],
+                'siteKey' => BBX_RECAPTCHA_SITE_KEY,
             ],
         ]);
         $headers = ['Content-Type: application/json'];
@@ -225,10 +225,22 @@ if ($recaptchaRequired) {
         error_log('reCAPTCHA Debug - Response: ' . json_encode($decoded));
     }
 
-    // Parse response
+    // Parse response according to official API documentation
     if ($isEnterpriseMode) {
+        // Check if token is valid
+        $tokenValid = isset($decoded['tokenProperties']['valid']) ? (bool)$decoded['tokenProperties']['valid'] : false;
+        
+        if (!$tokenValid) {
+            $invalidReason = $decoded['tokenProperties']['invalidReason'] ?? 'UNKNOWN';
+            error_log('CONTACT FORM ERROR: Invalid reCAPTCHA token - reason: ' . $invalidReason);
+            bbx_log_contact_submission('recaptcha_error', [], 'invalid_token_' . strtolower($invalidReason), $logContext);
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Security validation failed.']);
+            exit;
+        }
+        
         $score     = (float)($decoded['riskAnalysis']['score'] ?? 0.0);
-        $success   = isset($decoded['tokenProperties']['valid']) ? (bool)$decoded['tokenProperties']['valid'] : false;
+        $success   = $tokenValid;
         $action    = $decoded['tokenProperties']['action']   ?? null;
         $hostname  = $decoded['tokenProperties']['hostname'] ?? $expectedHostname;
         $reasons   = $decoded['riskAnalysis']['reasons']     ?? [];

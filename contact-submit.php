@@ -199,13 +199,15 @@ if ($recaptchaRequired) {
         error_log('CONTACT FORM ERROR: reCAPTCHA API request failed - HTTP ' . $httpCode . ' - ' . $curlError);
         if (BBX_DEBUG_RECAPTCHA) {
             error_log('CONTACT FORM DEBUG: API Endpoint: ' . $verifyEndpoint);
+            error_log('CONTACT FORM DEBUG: API Response Body: ' . substr($verifyResponse ?: 'empty', 0, 500));
         }
         bbx_log_contact_submission('recaptcha_error', [], 'api_error', array_merge($logContext, [
             'http_code'  => $httpCode,
             'curl_error' => $curlError,
+            'response_preview' => substr($verifyResponse ?: 'empty', 0, 200),
         ]));
         http_response_code(503);
-        echo json_encode(['success' => false, 'message' => 'Security validation failed.']);
+        echo json_encode(['success' => false, 'message' => 'Security validation failed. Check server logs for details.']);
         exit;
     }
 

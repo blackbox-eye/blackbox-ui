@@ -2,14 +2,18 @@
 
 ## Environment Configuration Required
 
-Set these environment variables on your server (typically via `.htaccess`):
+**CRITICAL**: Set these environment variables on your server (typically via `.htaccess`):
 
-```bash
+```apache
 SetEnv RECAPTCHA_SITE_KEY "your_site_key_here"
 SetEnv RECAPTCHA_SECRET_KEY "your_secret_key_here"
 SetEnv RECAPTCHA_PROJECT_ID "your_project_id_here"  # Enterprise API project
 SetEnv RECAPTCHA_DEBUG "true"                       # Optional: Enable debug logging
 ```
+
+**⚠️ Without these variables, the contact form will fail with "Invalid site key" errors.**
+
+See `RECAPTCHA-SETUP-GUIDE.md` for detailed setup instructions.
 
 ## Test Scenarios
 

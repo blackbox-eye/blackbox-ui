@@ -129,6 +129,10 @@ if (!filter_var($rawInput['email'], FILTER_VALIDATE_EMAIL)) {
 
 // reCAPTCHA
 $recaptchaRequired = BBX_RECAPTCHA_SECRET_KEY !== '';
+
+// Log reCAPTCHA configuration status
+error_log('CONTACT FORM DEBUG: reCAPTCHA configured=' . ($recaptchaRequired ? 'YES' : 'NO'));
+
 if ($recaptchaRequired) {
     $recaptchaMode = BBX_RECAPTCHA_PROJECT_ID !== '' ? 'enterprise' : 'standard';
 
@@ -141,9 +145,7 @@ if ($recaptchaRequired) {
     }
 
     if ($rawInput['recaptcha_token'] === '') {
-        if (BBX_DEBUG_RECAPTCHA) {
-            error_log('CONTACT FORM DEBUG: Missing reCAPTCHA token in submission');
-        }
+        error_log('CONTACT FORM WARNING: Missing reCAPTCHA token in submission (site key may be invalid or script not loaded)');
         bbx_log_contact_submission('recaptcha_error', [], 'missing_token', $logContext);
         http_response_code(400);
         echo json_encode(['success' => false, 'message' => 'Security validation failed.']);

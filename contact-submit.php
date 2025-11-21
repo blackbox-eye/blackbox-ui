@@ -231,7 +231,7 @@ if ($recaptchaRequired) {
     if ($isEnterpriseMode) {
         // Check if token is valid
         $tokenValid = isset($decoded['tokenProperties']['valid']) ? (bool)$decoded['tokenProperties']['valid'] : false;
-        
+
         if (!$tokenValid) {
             $invalidReason = $decoded['tokenProperties']['invalidReason'] ?? 'UNKNOWN';
             error_log('CONTACT FORM ERROR: Invalid reCAPTCHA token - reason: ' . $invalidReason);
@@ -240,7 +240,7 @@ if ($recaptchaRequired) {
             echo json_encode(['success' => false, 'message' => 'Security validation failed.']);
             exit;
         }
-        
+
         $score     = (float)($decoded['riskAnalysis']['score'] ?? 0.0);
         $success   = $tokenValid;
         $action    = $decoded['tokenProperties']['action']   ?? null;

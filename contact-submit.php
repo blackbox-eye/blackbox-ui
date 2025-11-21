@@ -67,7 +67,7 @@ function bbx_log_contact_submission(string $status, array $recaptcha_data = [], 
         if ($writeError) {
             error_log('CONTACT FORM LOG ERROR: file_put_contents() error: ' . $writeError['message']);
         }
-        
+
         // Always write fallback to error_log
         error_log('CONTACT FORM LOG FALLBACK: ' . $jsonLine);
     } else {

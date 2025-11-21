@@ -1,8 +1,10 @@
 # reCAPTCHA environment variables
-SetEnv RECAPTCHA_SITE_KEY "your_site_key_here"
-SetEnv RECAPTCHA_SECRET_KEY "REPLACE_ME"
-SetEnv RECAPTCHA_PROJECT_ID "gen-lang-client-0126039859"
-SetEnv RECAPTCHA_DEBUG "true"
+# REPLACE THESE WITH YOUR ACTUAL VALUES FROM GOOGLE CLOUD PLATFORM
+# See RECAPTCHA-SETUP-GUIDE.md for instructions
+# SetEnv RECAPTCHA_SITE_KEY "your_site_key_here"
+# SetEnv RECAPTCHA_SECRET_KEY "your_secret_key_here"
+# SetEnv RECAPTCHA_PROJECT_ID "your_gcp_project_id"
+# SetEnv RECAPTCHA_DEBUG "false"
 
 # Prioriter PHP-indgangen og fald tilbage til HTML hvis nødvendigt.
 DirectoryIndex index.php index.html

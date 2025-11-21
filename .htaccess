@@ -1,3 +1,9 @@
+# reCAPTCHA environment variables
+SetEnv RECAPTCHA_SITE_KEY "6Lf0xxIsAAAAALw3SGP2YFYJLIE3ZdZ0ophIEK4G"
+SetEnv RECAPTCHA_SECRET_KEY "AlzaSyaeP_NCRsleLNk20W7n51-BHFcC9zCzjNQ"
+SetEnv RECAPTCHA_PROJECT_ID "gen-lang-client-0126039859"
+SetEnv RECAPTCHA_DEBUG "true"
+
 # Prioriter PHP-indgangen og fald tilbage til HTML hvis nødvendigt.
 DirectoryIndex index.php index.html
 

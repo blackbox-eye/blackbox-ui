@@ -1,3 +1,11 @@
+# reCAPTCHA Enterprise environment variables
+# These values are from Google Cloud Platform - reCAPTCHA Enterprise
+# Key: blackbox-codes-contact-form
+SetEnv RECAPTCHA_SITE_KEY "6Lf0xxIsAAAAALw3SGPZYYFJLIZE3dZ0ophlEK4G"
+SetEnv RECAPTCHA_SECRET_KEY "AIzaSyBUGnBWS3DOfOsGSWKMxCA5v62YiUfpYSY"
+SetEnv RECAPTCHA_PROJECT_ID "gen-lang-client-0126039859"
+SetEnv RECAPTCHA_DEBUG "true"
+
 # Prioriter PHP-indgangen og fald tilbage til HTML hvis nødvendigt.
 DirectoryIndex index.php index.html
 

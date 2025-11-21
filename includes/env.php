@@ -34,6 +34,12 @@ if (!defined('BBX_DEBUG_RECAPTCHA')) {
     define('BBX_DEBUG_RECAPTCHA', bbx_env('RECAPTCHA_DEBUG') === 'true');
 }
 
+if (!defined('BBX_DEBUG_SMTP')) {
+    $smtpDebugFlag = strtolower(bbx_env('SMTP_DEBUG', ''));
+    $smtpDebugEnabled = $smtpDebugFlag === 'true' || $smtpDebugFlag === '1' || $smtpDebugFlag === 'on';
+    define('BBX_DEBUG_SMTP', $smtpDebugEnabled);
+}
+
 // Debug: Log all loaded reCAPTCHA values
 if (BBX_DEBUG_RECAPTCHA) {
     error_log('BBX ENV DEBUG - RECAPTCHA_SITE_KEY: ' . (BBX_RECAPTCHA_SITE_KEY ? '[SET]' : '[EMPTY]'));
@@ -47,4 +53,8 @@ if (BBX_RECAPTCHA_SITE_KEY !== '' && BBX_RECAPTCHA_SECRET_KEY === '') {
 }
 if (BBX_RECAPTCHA_SECRET_KEY !== '' && BBX_RECAPTCHA_PROJECT_ID === '') {
     error_log('reCAPTCHA Warning: RECAPTCHA_SECRET_KEY is set but RECAPTCHA_PROJECT_ID is missing for Enterprise API');
+}
+
+if (BBX_DEBUG_SMTP) {
+    error_log('BBX ENV DEBUG - SMTP debugging enabled');
 }

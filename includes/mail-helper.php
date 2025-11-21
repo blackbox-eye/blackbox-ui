@@ -42,6 +42,29 @@ function bbx_send_mail(
     $smtpSecure = bbx_env('SMTP_SECURE', 'tls'); // 'tls' or 'ssl'
     
     $useSmtp = !empty($smtpHost) && !empty($smtpUsername) && !empty($smtpPassword);
+
+    if (BBX_DEBUG_SMTP) {
+        $maskedUsername = $smtpUsername !== '' ? substr($smtpUsername, 0, 3) . '***' : '[EMPTY]';
+        error_log('CONTACT FORM MAIL DEBUG: SMTP configuration check');
+        error_log('CONTACT FORM MAIL DEBUG: Host=' . ($smtpHost !== '' ? $smtpHost : '[EMPTY]'));
+        error_log('CONTACT FORM MAIL DEBUG: Port=' . ($smtpPort > 0 ? (string)$smtpPort : '[INVALID]'));
+        error_log('CONTACT FORM MAIL DEBUG: Username=' . $maskedUsername);
+        error_log('CONTACT FORM MAIL DEBUG: Secure=' . ($smtpSecure !== '' ? $smtpSecure : '[EMPTY]'));
+    }
+
+    if (!$useSmtp && BBX_DEBUG_SMTP) {
+        $missing = [];
+        if ($smtpHost === '') {
+            $missing[] = 'SMTP_HOST';
+        }
+        if ($smtpUsername === '') {
+            $missing[] = 'SMTP_USERNAME';
+        }
+        if ($smtpPassword === '') {
+            $missing[] = 'SMTP_PASSWORD';
+        }
+        error_log('CONTACT FORM MAIL DEBUG: SMTP disabled – missing env vars: ' . implode(', ', $missing));
+    }
     
     if ($useSmtp) {
         error_log('CONTACT FORM MAIL: Using SMTP mode (host: ' . $smtpHost . ')');
@@ -191,12 +214,14 @@ function bbx_send_mail_smtp(
         $mail->Port       = $smtpPort;
         
         // Enable debug logging if in debug mode
-        if (defined('BBX_DEBUG_RECAPTCHA') && BBX_DEBUG_RECAPTCHA) {
+                if ((defined('BBX_DEBUG_RECAPTCHA') && BBX_DEBUG_RECAPTCHA) || (defined('BBX_DEBUG_SMTP') && BBX_DEBUG_SMTP)) {
             $mail->SMTPDebug = 2;
             $mail->Debugoutput = function($str, $level) {
                 error_log('SMTP DEBUG: ' . $str);
             };
         }
+
+                error_log('CONTACT FORM MAIL DEBUG: Initialising SMTP transport');
         
         // Use server domain if no from email provided
         if (empty($fromEmail)) {
@@ -224,6 +249,7 @@ function bbx_send_mail_smtp(
         error_log('CONTACT FORM MAIL DEBUG: From: ' . $fromEmail);
         error_log('CONTACT FORM MAIL DEBUG: Subject: ' . $subject);
         
+        error_log('CONTACT FORM MAIL DEBUG: Attempting to send SMTP message');
         $mail->send();
         error_log('CONTACT FORM MAIL DEBUG: SMTP mail sent successfully');
         return true;
@@ -231,6 +257,9 @@ function bbx_send_mail_smtp(
     } catch (Exception $e) {
         error_log('CONTACT FORM ERROR: SMTP send failed: ' . $mail->ErrorInfo);
         error_log('CONTACT FORM ERROR: Exception: ' . $e->getMessage());
+        if (BBX_DEBUG_SMTP) {
+            error_log('CONTACT FORM MAIL DEBUG: SMTP parameters used - Host=' . $smtpHost . ' Port=' . $smtpPort . ' Secure=' . $smtpSecure);
+        }
         return false;
     }
 }

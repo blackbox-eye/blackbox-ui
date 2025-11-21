@@ -61,6 +61,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('[reCAPTCHA]', ...args);
             }
         };
+        const recaptchaHasClients = () => {
+            if (typeof grecaptcha === 'undefined' || typeof grecaptcha.reset !== 'function') {
+                return false;
+            }
+            const cfg = grecaptcha.___grecaptcha_cfg;
+            if (!cfg || !cfg.clients) {
+                return false;
+            }
+            return Object.keys(cfg.clients).length > 0;
+        };
         const formEndpoint = contactForm.dataset.endpoint || contactForm.getAttribute('action') || 'contact-submit.php';
 
         // Log initial configuration
@@ -195,12 +205,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     displayMessage('success');
                     contactForm.reset();
                     // Reset reCAPTCHA for next submission
-                    if (recaptchaSiteKey && typeof grecaptcha !== 'undefined') {
+                    if (recaptchaSiteKey && typeof grecaptcha !== 'undefined' && recaptchaHasClients()) {
                         try {
                             grecaptcha.reset();
                         } catch (error) {
                             recaptchaError('Reset failed', error);
                         }
+                    } else if (recaptchaDebug) {
+                        recaptchaLog('Skipping grecaptcha.reset() – no clients registered (expected for v3).');
                     }
                 } else {
                     const message = result.message || 'Der opstod en fejl. Prøv igen senere.';

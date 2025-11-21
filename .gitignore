@@ -59,6 +59,7 @@ cover/
 error_log
 # .htaccess                  # tidligere ignore-regel (deaktiveret)
 !.htaccess                   # UNDTagelse: spor .htaccess i repo (ny politik)
+.htaccess.production         # IGNORER produktionsfil med rigtige credentials
 db.php
 logs/
 assets/cache/

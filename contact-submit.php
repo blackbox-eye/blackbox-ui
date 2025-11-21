@@ -134,6 +134,7 @@ $recaptchaRequired = BBX_RECAPTCHA_SECRET_KEY !== '';
 error_log('CONTACT FORM DEBUG: reCAPTCHA configured=' . ($recaptchaRequired ? 'YES' : 'NO'));
 
 if ($recaptchaRequired) {
+    $recaptchaMode = 'standard_v3';
     if (BBX_RECAPTCHA_SITE_KEY === '') {
         error_log('CONTACT FORM ERROR: RECAPTCHA_SECRET_KEY is set but RECAPTCHA_SITE_KEY is missing');
         bbx_log_contact_submission('recaptcha_error', [], 'missing_env', $logContext);
@@ -313,6 +314,8 @@ error_log('CONTACT FORM MAIL DEBUG: about to send mail to ' . $contactRecipient)
 error_log('CONTACT FORM MAIL DEBUG: subject="' . $subject . '"');
 
 // Use robust mail helper with automatic SMTP fallback
+$smtpConfigured = bbx_env('SMTP_HOST', '') !== '' && bbx_env('SMTP_USERNAME', '') !== '' && bbx_env('SMTP_PASSWORD', '') !== '';
+$mailTransport = $smtpConfigured ? 'smtp' : 'mail';
 $mailSent = bbx_send_mail(
     $contactRecipient,
     $subject,
@@ -326,6 +329,26 @@ $mailSent = bbx_send_mail(
 if (!$mailSent) {
     error_log('CONTACT FORM WARNING: Mail sending failed to ' . $contactRecipient);
     error_log('CONTACT FORM WARNING: Check server mail configuration or configure SMTP credentials');
+    bbx_log_contact_submission('mail_error', [
+        'score'    => $score    ?? null,
+        'action'   => $action   ?? 'contact',
+        'hostname' => $hostname ?? $expectedHostname,
+        'api_mode' => $recaptchaMode,
+    ], 'mail_dispatch_failed', array_merge($logContext, [
+        'message_length'   => strlen($rawInput['message']),
+        'has_phone'        => !empty($rawInput['phone']),
+        'expected_hostname' => $expectedHostname,
+        'mail_sent'        => false,
+        'mail_recipient'   => $contactRecipient,
+        'mail_transport'   => $mailTransport,
+    ]));
+    http_response_code(502);
+    echo json_encode([
+        'success' => false,
+        'status'  => 'mail_error',
+        'message' => 'Din henvendelse blev modtaget, men vi kunne ikke sende notifikationen. Prøv igen senere eller kontakt os direkte.',
+    ]);
+    exit;
 } else {
     error_log('CONTACT FORM MAIL DEBUG: Mail sent successfully to ' . $contactRecipient);
 }
@@ -335,13 +358,14 @@ bbx_log_contact_submission('success', [
     'score'    => $score    ?? null,
     'action'   => $action   ?? 'contact',
     'hostname' => $hostname ?? $expectedHostname,
-    'api_mode' => 'standard_v3',
+    'api_mode' => $recaptchaMode,
 ], 'ok', array_merge($logContext, [
     'message_length'   => strlen($rawInput['message']),
     'has_phone'        => !empty($rawInput['phone']),
     'expected_hostname' => $expectedHostname,
     'mail_sent'        => $mailSent,
     'mail_recipient'   => $contactRecipient,
+    'mail_transport'   => $mailTransport,
 ]));
 
 http_response_code(200);

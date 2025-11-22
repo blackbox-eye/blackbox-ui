@@ -1,0 +1,275 @@
+{
+  "site": {
+    "name": "BLACKBOX EYE™",
+    "tagline": "Enterprise Cyber Operations Platform"
+  },
+  "header": {
+    "menu": {
+      "about": "About",
+      "products": "Products",
+      "cases": "Case Studies",
+      "pricing": "Pricing",
+      "contact": "Contact"
+    },
+    "cta": {
+      "agent_login": "Agent Login",
+      "book_meeting": "Book Meeting"
+    }
+  },
+  "footer": {
+    "tagline": "Protect your organization with military-grade cybersecurity",
+    "company": {
+      "title": "Company",
+      "about": "About",
+      "cases": "Cases",
+      "careers": "Careers",
+      "contact": "Contact"
+    },
+    "products": {
+      "title": "Products",
+      "greyeye": "GreyEYE™",
+      "pve": "PVE™",
+      "idmatrix": "ID-Matrix™",
+      "aut": "AUT™"
+    },
+    "legal": {
+      "title": "Legal",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "security": "Security"
+    },
+    "copyright": "© 2025 Blackbox EYE™. All rights reserved."
+  },
+  "about": {
+    "title": "About Blackbox EYE™",
+    "breadcrumb": "About",
+    "subtitle": "Military-grade cybersecurity for Danish enterprises",
+    "intro": "Blackbox EYE™ delivers advanced cybersecurity solutions based on operational intelligence from special forces and elite units.",
+    "mission": {
+      "title": "Our Mission",
+      "text": "To protect Danish enterprises against advanced cyber threats through proven operational methodology and AI-driven analysis."
+    },
+    "values": {
+      "title": "Our Values",
+      "operational": "Operational Excellence",
+      "operational_desc": "Proven frameworks from special operations",
+      "innovation": "Innovation",
+      "innovation_desc": "AI-driven security technology",
+      "integrity": "Integrity",
+      "integrity_desc": "Transparent communication and compliance"
+    }
+  },
+  "products": {
+    "title": "Products",
+    "breadcrumb": "Products",
+    "subtitle": "AI-driven cybersecurity solutions",
+    "intro": "Blackbox EYE™ offers a complete suite of specialized modules to protect your organization.",
+    "greyeye": {
+      "title": "GreyEYE™",
+      "subtitle": "AI Security Assistant",
+      "description": "24/7 AI-driven monitoring and incident response with natural language interface",
+      "features": {
+        "monitoring": "Real-time threat monitoring",
+        "analysis": "Automated incident analysis",
+        "response": "AI-assisted response"
+      }
+    },
+    "pve": {
+      "title": "PVE™",
+      "subtitle": "Penetration & Vulnerability Engine",
+      "description": "Automated penetration testing and vulnerability scanning",
+      "features": {
+        "scanning": "Continuous vulnerability scanning",
+        "pentest": "Automated penetration testing",
+        "reporting": "Detailed compliance reports"
+      }
+    },
+    "idmatrix": {
+      "title": "ID-Matrix™",
+      "subtitle": "Identity & Access Control",
+      "description": "Enterprise identity management and zero-trust access control",
+      "features": {
+        "identity": "Centralized identity management",
+        "mfa": "Multi-factor authentication",
+        "zerotrust": "Zero-trust architecture"
+      }
+    },
+    "aut": {
+      "title": "AUT™",
+      "subtitle": "Awareness & Training",
+      "description": "AI-tailored security training and phishing simulation",
+      "features": {
+        "training": "Personalized training",
+        "simulation": "Realistic phishing tests",
+        "tracking": "Progress tracking"
+      }
+    }
+  },
+  "cases": {
+    "title": "Case Studies",
+    "breadcrumb": "Cases",
+    "subtitle": "Documented Impact",
+    "intro": "See how Blackbox EYE™ has helped Danish organizations strengthen their cybersecurity.",
+    "stats": {
+      "threats_blocked": "Threats Blocked",
+      "incidents_prevented": "Incidents Prevented",
+      "compliance_rate": "Compliance Rate"
+    }
+  },
+  "pricing": {
+    "title": "Pricing",
+    "breadcrumb": "Pricing",
+    "subtitle": "Licenses & Subscriptions",
+    "intro": "Solutions tailored to your risk profile",
+    "description": "Blackbox EYE™ offers complete license and subscription solutions – from selected modules to full operational integration. Use our AI security advisor to find the right match.",
+    "ai_advisor": {
+      "title": "AI Security Advisor",
+      "industry_label": "Industry",
+      "employees_label": "Number of employees",
+      "button": "✨ Get AI Recommendation",
+      "analyzing": "Analyzing your profile..."
+    },
+    "mvp": {
+      "section_title": "MVP Packages",
+      "basis": {
+        "badge": "MVP Starter",
+        "title": "MVP-Basis",
+        "price": "1,799 DKK",
+        "period": "per month + VAT",
+        "description": "Essential protection for small teams and startups.",
+        "features": {
+          "greyeye": "GreyEYE AI assistant (limited features)",
+          "idmatrix": "Basic ID-Matrix access",
+          "support": "Email support (weekdays)",
+          "users": "Up to 10 users"
+        },
+        "subscription": "Monthly subscription • No commitment"
+      },
+      "pro": {
+        "badge": "MVP Growth",
+        "title": "MVP-Pro",
+        "price": "3,499 DKK",
+        "period": "per month + VAT",
+        "description": "Extended MVP solution for growing businesses.",
+        "features": {
+          "includes": "Everything in MVP-Basis +",
+          "greyeye": "GreyEYE AI assistant (full features)",
+          "idmatrix": "Standard ID-Matrix access control",
+          "users": "Up to 25 users",
+          "support": "Chat support (weekdays 9-5)"
+        },
+        "subscription": "Monthly subscription • 3 months notice"
+      },
+      "premium": {
+        "badge": "MVP Elite",
+        "title": "MVP-Premium",
+        "price": "5,999 DKK",
+        "period": "per month + VAT",
+        "description": "Complete MVP package with priority support.",
+        "features": {
+          "includes": "Everything in MVP-Pro +",
+          "pve": "Basic PVE module",
+          "workshop": "Onboarding workshop (1 session)",
+          "users": "Up to 50 users",
+          "support": "Priority support"
+        },
+        "subscription": "Monthly subscription • 6 months notice"
+      }
+    },
+    "enterprise": {
+      "section_title": "Enterprise Solutions",
+      "section_description": "Scalable solutions for businesses with advanced security and compliance requirements.",
+      "standard": {
+        "title": "Standard",
+        "price": "9,900 DKK",
+        "period": "per month + VAT",
+        "description": "Effective security protection and digital solutions for daily use.",
+        "features": {
+          "greyeye": "GreyEYE AI assistant (full access)",
+          "idmatrix": "ID-Matrix access control",
+          "reporting": "Basic reporting and analytics",
+          "users": "Up to 100 users",
+          "support": "Email & chat support"
+        },
+        "subscription": "Annual subscription • Quarterly billing"
+      },
+      "premium": {
+        "badge": "Most Popular",
+        "title": "Premium",
+        "price": "18,900 DKK",
+        "period": "per month + VAT",
+        "description": "Extended access to advanced analysis tools and specialized modules.",
+        "features": {
+          "includes": "Everything in Standard +",
+          "pve": "PVE module (full version)",
+          "aut": "AUT training module",
+          "reporting": "Advanced reporting",
+          "users": "Up to 250 users",
+          "support": "Priority support 24/5"
+        },
+        "subscription": "Annual subscription • Monthly billing"
+      },
+      "enterprise": {
+        "title": "Enterprise",
+        "price": "39,000 DKK",
+        "period": "per month + VAT*",
+        "description": "Comprehensive, customized protection for larger organizations.",
+        "features": {
+          "includes": "Everything in Premium +",
+          "teams": "Access to specialist teams",
+          "operations": "24/7 operational readiness",
+          "manager": "Dedicated account manager",
+          "users": "Unlimited users",
+          "support": "VIP support & SLA guarantee"
+        },
+        "subscription": "*Or by arrangement • Annual subscription • Flexible billing"
+      }
+    },
+    "cta": {
+      "button": "Get Started",
+      "contact": "Contact Us"
+    },
+    "custom": {
+      "title": "Should we tailor a solution for you?",
+      "description": "Our experts combine operational experience with AI-driven analysis to deliver precisely the security level you need.",
+      "button": "Talk to Our Advisors"
+    }
+  },
+  "contact": {
+    "title": "Contact",
+    "breadcrumb": "Contact",
+    "subtitle": "Get in touch",
+    "intro": "Have questions about our solutions? Contact our security advisors.",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "company": "Company",
+      "phone": "Phone",
+      "message": "Message",
+      "submit": "Send Message",
+      "sending": "Sending...",
+      "success": "Thank you for your message! We'll get back to you as soon as possible.",
+      "error": "An error occurred. Please try again or contact us directly."
+    }
+  },
+  "alphabot": {
+    "title": "Talk to AlphaBot",
+    "subtitle": "Your AI Security Assistant",
+    "placeholder": "Ask me a question about cybersecurity...",
+    "send": "Send",
+    "thinking": "Thinking...",
+    "error": "Sorry, I couldn't process your request. Please try again."
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "close": "Close",
+    "read_more": "Read More",
+    "learn_more": "Learn More",
+    "get_started": "Get Started",
+    "contact_us": "Contact Us",
+    "back": "Back",
+    "next": "Next"
+  }
+}

@@ -1,0 +1,275 @@
+{
+  "site": {
+    "name": "BLACKBOX EYE™",
+    "tagline": "Enterprise Cyber Operations Platform"
+  },
+  "header": {
+    "menu": {
+      "about": "Om Os",
+      "products": "Produkter",
+      "cases": "Kundecases",
+      "pricing": "Priser",
+      "contact": "Kontakt"
+    },
+    "cta": {
+      "agent_login": "Agent Login",
+      "book_meeting": "Book Møde"
+    }
+  },
+  "footer": {
+    "tagline": "Beskyt jeres organisation med militær-grade cybersikkerhed",
+    "company": {
+      "title": "Virksomhed",
+      "about": "Om os",
+      "cases": "Cases",
+      "careers": "Karriere",
+      "contact": "Kontakt"
+    },
+    "products": {
+      "title": "Produkter",
+      "greyeye": "GreyEYE™",
+      "pve": "PVE™",
+      "idmatrix": "ID-Matrix™",
+      "aut": "AUT™"
+    },
+    "legal": {
+      "title": "Juridisk",
+      "privacy": "Privatlivspolitik",
+      "terms": "Handelsbetingelser",
+      "security": "Sikkerhed"
+    },
+    "copyright": "© 2025 Blackbox EYE™. Alle rettigheder forbeholdes."
+  },
+  "about": {
+    "title": "Om Blackbox EYE™",
+    "breadcrumb": "Om Os",
+    "subtitle": "Militær-grade cybersikkerhed til danske virksomheder",
+    "intro": "Blackbox EYE™ leverer avancerede cybersikkerhedsløsninger baseret på operational intelligence fra special forces og elite-enheder.",
+    "mission": {
+      "title": "Vores Mission",
+      "text": "At beskytte danske virksomheder mod avancerede cybertrusler gennem proven operational metodologi og AI-drevet analyse."
+    },
+    "values": {
+      "title": "Vores Værdier",
+      "operational": "Operational Excellence",
+      "operational_desc": "Proven frameworks fra special operations",
+      "innovation": "Innovation",
+      "innovation_desc": "AI-drevet sikkerhedsteknologi",
+      "integrity": "Integritet",
+      "integrity_desc": "Transparent kommunikation og compliance"
+    }
+  },
+  "products": {
+    "title": "Produkter",
+    "breadcrumb": "Produkter",
+    "subtitle": "AI-drevne cybersikkerhedsløsninger",
+    "intro": "Blackbox EYE™ tilbyder en komplet suite af specialiserede moduler til at beskytte din organisation.",
+    "greyeye": {
+      "title": "GreyEYE™",
+      "subtitle": "AI Security Assistant",
+      "description": "24/7 AI-drevet overvågning og incident response med natural language interface",
+      "features": {
+        "monitoring": "Real-time trusselovervågning",
+        "analysis": "Automatisk incident-analyse",
+        "response": "AI-assisteret response"
+      }
+    },
+    "pve": {
+      "title": "PVE™",
+      "subtitle": "Penetration & Vulnerability Engine",
+      "description": "Automatiseret penetration testing og vulnerability scanning",
+      "features": {
+        "scanning": "Kontinuerlig vulnerability scanning",
+        "pentest": "Automatiseret penetration testing",
+        "reporting": "Detailed compliance rapporter"
+      }
+    },
+    "idmatrix": {
+      "title": "ID-Matrix™",
+      "subtitle": "Identity & Access Control",
+      "description": "Enterprise identity management og zero-trust adgangskontrol",
+      "features": {
+        "identity": "Centraliseret identity management",
+        "mfa": "Multi-factor authentication",
+        "zerotrust": "Zero-trust arkitektur"
+      }
+    },
+    "aut": {
+      "title": "AUT™",
+      "subtitle": "Awareness & Training",
+      "description": "AI-tilpasset sikkerhedstræning og phishing simulation",
+      "features": {
+        "training": "Personaliseret træning",
+        "simulation": "Realistic phishing tests",
+        "tracking": "Progress tracking"
+      }
+    }
+  },
+  "cases": {
+    "title": "Kundecases",
+    "breadcrumb": "Kundecases",
+    "subtitle": "Dokumenteret effekt",
+    "intro": "Se hvordan Blackbox EYE™ har hjulpet danske organisationer med at styrke deres cybersikkerhed.",
+    "stats": {
+      "threats_blocked": "Trusler Blokeret",
+      "incidents_prevented": "Incidents Forhindret",
+      "compliance_rate": "Compliance Rate"
+    }
+  },
+  "pricing": {
+    "title": "Priser",
+    "breadcrumb": "Priser",
+    "subtitle": "Licenser & abonnementer",
+    "intro": "Løsninger tilpasset jeres risikoprofil",
+    "description": "Blackbox EYE™ tilbyder komplette licens- og abonnementsløsninger – fra udvalgte moduler til fuld operativ integration. Brug vores AI-sikkerhedsrådgiver til at finde det rigtige match.",
+    "ai_advisor": {
+      "title": "AI Sikkerhedsrådgiver",
+      "industry_label": "Branche",
+      "employees_label": "Antal medarbejdere",
+      "button": "✨ Få AI-anbefaling",
+      "analyzing": "Analyserer jeres profil..."
+    },
+    "mvp": {
+      "section_title": "MVP Pakker",
+      "basis": {
+        "badge": "MVP Starter",
+        "title": "MVP-Basis",
+        "price": "1.799 DKK",
+        "period": "pr. måned + moms",
+        "description": "Grundlæggende beskyttelse til små teams og startups.",
+        "features": {
+          "greyeye": "GreyEYE AI-assistent (begrænsede features)",
+          "idmatrix": "Basis ID-Matrix adgang",
+          "support": "Email support (hverdage)",
+          "users": "Op til 10 brugere"
+        },
+        "subscription": "Månedligt abonnement • Ingen binding"
+      },
+      "pro": {
+        "badge": "MVP Vækst",
+        "title": "MVP-Pro",
+        "price": "3.499 DKK",
+        "period": "pr. måned + moms",
+        "description": "Udvidet MVP-løsning til voksende virksomheder.",
+        "features": {
+          "includes": "Alt i MVP-Basis +",
+          "greyeye": "GreyEYE AI-assistent (fulde features)",
+          "idmatrix": "Standard ID-Matrix adgangskontrol",
+          "users": "Op til 25 brugere",
+          "support": "Chat support (hverdage 9-17)"
+        },
+        "subscription": "Månedligt abonnement • 3 måneders opsigelse"
+      },
+      "premium": {
+        "badge": "MVP Elite",
+        "title": "MVP-Premium",
+        "price": "5.999 DKK",
+        "period": "pr. måned + moms",
+        "description": "Komplet MVP-pakke med prioriteret support.",
+        "features": {
+          "includes": "Alt i MVP-Pro +",
+          "pve": "Basis PVE modul",
+          "workshop": "Onboarding workshop (1 session)",
+          "users": "Op til 50 brugere",
+          "support": "Prioriteret support"
+        },
+        "subscription": "Månedligt abonnement • 6 måneders opsigelse"
+      }
+    },
+    "enterprise": {
+      "section_title": "Enterprise Løsninger",
+      "section_description": "Skalerbare løsninger til virksomheder med avancerede sikkerhedsbehov og compliance-krav.",
+      "standard": {
+        "title": "Standard",
+        "price": "9.900 DKK",
+        "period": "pr. måned + moms",
+        "description": "Effektiv sikkerhedsbeskyttelse og digitale løsninger til daglig brug.",
+        "features": {
+          "greyeye": "GreyEYE AI-assistent (fuld adgang)",
+          "idmatrix": "ID-Matrix adgangskontrol",
+          "reporting": "Basis rapportering og analytics",
+          "users": "Op til 100 brugere",
+          "support": "Email & chat support"
+        },
+        "subscription": "Årligt abonnement • Kvartalsvis fakturering"
+      },
+      "premium": {
+        "badge": "Mest populære",
+        "title": "Premium",
+        "price": "18.900 DKK",
+        "period": "pr. måned + moms",
+        "description": "Udvidet adgang til avancerede analyseværktøjer og specialmoduler.",
+        "features": {
+          "includes": "Alt i Standard +",
+          "pve": "PVE modul (fuld version)",
+          "aut": "AUT træningsmodul",
+          "reporting": "Avanceret rapportering",
+          "users": "Op til 250 brugere",
+          "support": "Prioriteret support 24/5"
+        },
+        "subscription": "Årligt abonnement • Månedlig fakturering"
+      },
+      "enterprise": {
+        "title": "Enterprise",
+        "price": "39.000 DKK",
+        "period": "pr. måned + moms*",
+        "description": "Helhedsorienteret, skræddersyet beskyttelse for større organisationer.",
+        "features": {
+          "includes": "Alt i Premium +",
+          "teams": "Adgang til specialteams",
+          "operations": "24/7 operationel beredskab",
+          "manager": "Dedikeret account manager",
+          "users": "Ubegrænset brugere",
+          "support": "VIP support & SLA garanti"
+        },
+        "subscription": "*Eller efter aftale • Årligt abonnement • Fleksibel fakturering"
+      }
+    },
+    "cta": {
+      "button": "Kom i gang",
+      "contact": "Kontakt os"
+    },
+    "custom": {
+      "title": "Skal vi skræddersy en løsning til jer?",
+      "description": "Vores eksperter kombinerer operative erfaringer med AI-drevet analyse for at levere præcis det sikkerhedsniveau, I har brug for.",
+      "button": "Tal med vores rådgivere"
+    }
+  },
+  "contact": {
+    "title": "Kontakt",
+    "breadcrumb": "Kontakt",
+    "subtitle": "Kom i kontakt med os",
+    "intro": "Har du spørgsmål til vores løsninger? Kontakt vores sikkerhedsrådgivere.",
+    "form": {
+      "name": "Navn",
+      "email": "Email",
+      "company": "Virksomhed",
+      "phone": "Telefon",
+      "message": "Besked",
+      "submit": "Send besked",
+      "sending": "Sender...",
+      "success": "Tak for din besked! Vi vender tilbage hurtigst muligt.",
+      "error": "Der opstod en fejl. Prøv igen eller kontakt os direkte."
+    }
+  },
+  "alphabot": {
+    "title": "Tal med AlphaBot",
+    "subtitle": "Din AI sikkerhedsassistent",
+    "placeholder": "Stil mig et spørgsmål om cybersikkerhed...",
+    "send": "Send",
+    "thinking": "Tænker...",
+    "error": "Beklager, jeg kunne ikke behandle din forespørgsel. Prøv igen."
+  },
+  "common": {
+    "loading": "Indlæser...",
+    "error": "Der opstod en fejl",
+    "success": "Succes",
+    "close": "Luk",
+    "read_more": "Læs mere",
+    "learn_more": "Lær mere",
+    "get_started": "Kom i gang",
+    "contact_us": "Kontakt os",
+    "back": "Tilbage",
+    "next": "Næste"
+  }
+}

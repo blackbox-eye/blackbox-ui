@@ -105,7 +105,7 @@ $nav_links = [
             --glitch-dark-green: #003d00;
             --glitch-fire: #ffac00;
             --text-high-emphasis: #EAEAEA;
-            --text-medium-emphasis: #9CA3AF;
+            --text-medium-emphasis: #B0B8C6; /* Improved contrast 4.52:1 */
             --glass-border: rgba(255, 255, 255, 0.1);
             --glass-bg: rgba(22, 28, 39, 0.6);
             --digital-rain-color: #008000;
@@ -191,6 +191,52 @@ $nav_links = [
             border-radius: 2px;
         }
 
+        /* Skip to main content link for keyboard navigation */
+        .skip-link {
+            position: absolute;
+            top: -100px;
+            left: 0;
+            background: var(--primary-accent);
+            color: #000;
+            padding: 8px 16px;
+            text-decoration: none;
+            font-weight: bold;
+            z-index: 100;
+            transition: top 0.2s ease;
+        }
+        
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Respect user's motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .section-fade-in {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            
+            .glitch-logo {
+                animation: none !important;
+            }
+            
+            .glitch-logo span {
+                animation: none !important;
+            }
+            
+            #hero-canvas {
+                display: none;
+            }
+        }
+
         .glitch-logo {
             font-family: 'Chakra Petch', sans-serif;
             font-weight: 700;
@@ -248,6 +294,9 @@ $nav_links = [
 </head>
 
 <body class="antialiased">
+
+    <!-- Skip navigation for keyboard users (WCAG 2.1) -->
+    <a href="#main-content" class="skip-link">Spring til hovedindhold</a>
 
     <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
         <div class="container mx-auto px-4">

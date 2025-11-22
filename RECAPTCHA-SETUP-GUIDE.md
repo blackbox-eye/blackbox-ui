@@ -1,252 +1,158 @@
-# reCAPTCHA Enterprise Setup Guide
+# reCAPTCHA Standard v3 Setup Guide
 
 ## 🎯 Overview
-
-This guide explains how to configure reCAPTCHA Enterprise for the Blackbox EYE contact form.
-
-## 📋 Prerequisites
-
-1. Google Cloud Platform account
-2. reCAPTCHA Enterprise API enabled
-3. Site key registered for domain `blackbox.codes`
-4. Access to server `.htaccess` or environment variables
+This guide documents how to configure Google reCAPTCHA **Standard v3** for the Blackbox EYE contact form. The backend now calls `https://www.google.com/recaptcha/api/siteverify`, so no Google Cloud project ID is required.
 
 ---
 
-## 🔑 Required Environment Variables
+## 📋 Prerequisites
+- Google account with access to the [Google reCAPTCHA Admin Console](https://www.google.com/recaptcha/admin/create)
+- Domains `blackbox.codes` and `www.blackbox.codes` verified in the reCAPTCHA console
+- Server access to manage environment variables (`.htaccess`, cPanel MultiPHP INI Editor, or Apache config)
 
-Add these to your `.htaccess` file or server environment:
+---
 
-```apache
-SetEnv RECAPTCHA_SITE_KEY "your_site_key_here"
-SetEnv RECAPTCHA_SECRET_KEY "your_secret_key_here"
-SetEnv RECAPTCHA_PROJECT_ID "your_project_id_here"
-SetEnv RECAPTCHA_DEBUG "false"
-```
+## 🔑 Environment Variables
+Add these values to your server environment. Use `.htaccess`, the cPanel MultiPHP INI Editor (preferred), or another secure mechanism.
 
-### Variable Descriptions
+| Variable | Required | Example | Notes |
+|----------|----------|---------|-------|
+| `RECAPTCHA_SITE_KEY` | ✅ | `6LeXXXX...` | Public key embedded in the frontend |
+| `RECAPTCHA_SECRET_KEY` | ✅ | `6LeXXXX...` | Secret used by the backend verification endpoint |
+| `RECAPTCHA_PROJECT_ID` | ➖ | *(leave unset)* | Only required if you re-enable Enterprise |
+| `RECAPTCHA_DEBUG` | ➖ | `false` | Enables verbose logging for troubleshooting |
 
-| Variable | Description | Required | Example |
-|----------|-------------|----------|---------|
-| `RECAPTCHA_SITE_KEY` | Public site key for frontend | YES | `6LcXXXXXXXXXXXXX...` |
-| `RECAPTCHA_SECRET_KEY` | Secret key for backend verification | YES | `6LcXXXXXXXXXXXXX...` |
-| `RECAPTCHA_PROJECT_ID` | GCP project ID for Enterprise API | YES (for Enterprise) | `blackbox-eye-12345` |
-| `RECAPTCHA_DEBUG` | Enable debug logging | NO | `true` or `false` |
+📌 **Do not** store these values in version control. Prefer the MultiPHP INI Editor to keep secrets out of the web root.
 
 ---
 
 ## 🚀 Setup Steps
 
-### Step 1: Create reCAPTCHA Enterprise Keys
+### Step 1 – Create Standard v3 Keys
+1. Visit the [reCAPTCHA Admin Console](https://www.google.com/recaptcha/admin/create).
+2. Choose **reCAPTCHA v3**.
+3. Enter a label (e.g. `Blackbox EYE Contact Form`).
+4. Add the domains `blackbox.codes` and `www.blackbox.codes`.
+5. Accept the terms and submit.
+6. Copy both the **Site key** and **Secret key**.
 
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Enable **reCAPTCHA Enterprise API**
-3. Navigate to **Security** > **reCAPTCHA Enterprise**
-4. Click **Create Key**
-5. Configure:
-   - **Display name**: Blackbox EYE Contact Form
-   - **Platform type**: Website
-   - **Domains**: `blackbox.codes`, `www.blackbox.codes`
-   - **reCAPTCHA type**: Score-based (recommended)
-6. Save the **Site Key** and **API Key** (Secret Key)
-7. Note your **Project ID** from the GCP project
+### Step 2 – Configure Server Environment
 
-### Step 2: Configure Server Environment
-
-**Option A: Using .htaccess (cPanel)**
-
-Add to `.htaccess` in the site root:
-
+**Option A: `.htaccess` (quick start)**
 ```apache
-# reCAPTCHA Enterprise Configuration
-SetEnv RECAPTCHA_SITE_KEY "6LcXXXXXXXXXXXXXXXXX"
-SetEnv RECAPTCHA_SECRET_KEY "6LcXXXXXXXXXXXXXXXXX"
-SetEnv RECAPTCHA_PROJECT_ID "your-project-id"
+# reCAPTCHA Standard v3
+SetEnv RECAPTCHA_SITE_KEY "6LeXXXXXXXXXXXXXXXXXXXX"
+SetEnv RECAPTCHA_SECRET_KEY "6LeXXXXXXXXXXXXXXXXXXXX"
 SetEnv RECAPTCHA_DEBUG "false"
 ```
+Leave `RECAPTCHA_PROJECT_ID` unset for Standard v3.
 
-**Option B: Using php.ini or server config**
-
-```ini
-env[RECAPTCHA_SITE_KEY] = "6LcXXXXXXXXXXXXXXXXX"
-env[RECAPTCHA_SECRET_KEY] = "6LcXXXXXXXXXXXXXXXXX"
-env[RECAPTCHA_PROJECT_ID] = "your-project-id"
-env[RECAPTCHA_DEBUG] = "false"
+**Option B: MultiPHP INI Editor (recommended)**
 ```
+[Environment]
+RECAPTCHA_SITE_KEY="6LeXXXXXXXXXXXXXXXXXXXX"
+RECAPTCHA_SECRET_KEY="6LeXXXXXXXXXXXXXXXXXXXX"
+RECAPTCHA_DEBUG="false"
+```
+Using the INI editor keeps secrets off disk and works reliably with php-fpm.
 
-### Step 3: Verify Configuration
-
-1. Visit `/contact.php?RECAPTCHA_DEBUG=true`
-2. Open browser console
-3. Look for:
+### Step 3 – Verify Frontend
+1. Open `https://blackbox.codes/contact.php?RECAPTCHA_DEBUG=true`.
+2. Open DevTools ▸ **Console**.
+3. You should see:
    ```
    [Contact Form] Configuration: {
      endpoint: "contact-submit.php",
-     recaptchaSiteKey: "6LcXXXXXXXXXXXXX...",
+     recaptchaSiteKey: "6Le7iBMsAAAAACp8jtY4J...",
      grecaptchaLoaded: true,
-     enterpriseAvailable: true,
+     enterpriseAvailable: false,
      debug: true
    }
    ```
+4. Submitting the form should log `Parsed response: { success: true, ... }`.
 
-### Step 4: Test Submission
-
-1. Fill out contact form
-2. Submit
-3. Check console for:
-   - `[reCAPTCHA] Contact form submit started`
-   - `[reCAPTCHA] Using Enterprise reCAPTCHA API`
-   - `[reCAPTCHA] Token generated (length: 2000+)`
-   - `[reCAPTCHA] Response status: 200 OK`
-   - `[reCAPTCHA] Parsed response: {success: true, ...}`
+### Step 4 – Verify Backend
+1. Check `error_log` after a submission with `RECAPTCHA_DEBUG=true`.
+2. A successful validation looks like:
+   ```
+   CONTACT FORM DEBUG: reCAPTCHA validation successful - Score: 0.90, Action: contact
+   ```
+3. The contact log (`logs/contact-submissions.log`) should include `"api_mode": "standard_v3"`.
 
 ---
 
 ## 🐛 Troubleshooting
 
-### Error: "Invalid site key or not loaded in api.js"
+**"Invalid site key"**
+- Confirm the site key matches the reCAPTCHA console.
+- Ensure the domain is whitelisted in the console.
 
-**Cause**: Site key is empty, invalid, or not registered for current domain
+**"grecaptcha not loaded"**
+- Check for script blockers.
+- Ensure `<script src="https://www.google.com/recaptcha/api.js" async defer></script>` is present.
 
-**Solutions**:
-1. Verify `RECAPTCHA_SITE_KEY` is set in `.htaccess`
-2. Confirm site key is registered for `blackbox.codes` in GCP Console
-3. Check browser console for key value (first 20 chars)
-4. Restart PHP/web server after changing `.htaccess`
+**"Missing reCAPTCHA token"**
+- Token acquisition timed out (>5s).
+- Look for `[reCAPTCHA] RECAPTCHA FRONTEND ERROR` in the console.
+- Verify the site key is non-empty and the action is `contact`.
 
-### Error: "grecaptcha not loaded - script may be blocked"
+**Low score (<0.5)**
+- Google flagged the request.
+- Consider additional checks (honeypot) or review logs for abuse patterns.
 
-**Cause**: reCAPTCHA script failed to load
-
-**Solutions**:
-1. Check if `RECAPTCHA_SITE_KEY` is empty (script won't load)
-2. Verify no ad blockers are active
-3. Check browser Network tab for failed script loads
-4. Ensure site key is valid
-
-### Error: "Missing reCAPTCHA token in submission"
-
-**Cause**: Frontend couldn't generate token
-
-**Solutions**:
-1. Check console for frontend errors
-2. Verify site key matches domain
-3. Ensure script loaded successfully
-4. Check if `grecaptcha.enterprise` is available
-
-### Error: "reCAPTCHA API request failed - HTTP 400/401"
-
-**Cause**: Invalid secret key or project ID
-
-**Solutions**:
-1. Verify `RECAPTCHA_SECRET_KEY` in `.htaccess`
-2. Confirm `RECAPTCHA_PROJECT_ID` matches GCP project
-3. Check API is enabled in GCP Console
-4. Verify service account has correct permissions
-
-### No Errors But Form Doesn't Submit
-
-**Cause**: Script loading but execution failing silently
-
-**Solutions**:
-1. Enable debug mode: `?RECAPTCHA_DEBUG=true`
-2. Set `window.RECAPTCHA_DEBUG = true` in console
-3. Check for JavaScript errors
-4. Verify `data-endpoint="contact-submit.php"` on form
-5. Check Network tab for POST request
+**PHP still reports missing env vars**
+- Confirm the updated `includes/env.php` is deployed (it now checks `$_SERVER` and `$_ENV`).
+- If using `.htaccess`, reload php-fpm or re-save in MultiPHP.
 
 ---
 
-## 🔒 Security Best Practices
-
-### Do:
-✅ Keep secret key confidential  
-✅ Use environment variables (not git)  
-✅ Set minimum score threshold (0.5 recommended)  
-✅ Validate hostname in backend  
-✅ Log all validation attempts  
-✅ Monitor for unusual patterns  
-
-### Don't:
-❌ Commit keys to git  
-❌ Expose secret key in client code  
-❌ Skip hostname validation  
-❌ Trust score alone (use action + hostname)  
-❌ Ignore failed validations  
+## 🔒 Security Notes
+- Keep `RECAPTCHA_SECRET_KEY` out of git and out of the document root.
+- Disable `RECAPTCHA_DEBUG` after troubleshooting to reduce log noise.
+- Validate hostname (`blackbox.codes`) and action (`contact`) server-side (already enforced in `contact-submit.php`).
+- Rotate keys if you suspect leaks or after major infrastructure changes.
 
 ---
 
-## 📊 Monitoring
-
-### Backend Logs (error_log)
-
-When `RECAPTCHA_DEBUG=true`, you'll see:
-
+## 📊 Monitoring & Logs
+With debug enabled you should see lines like:
 ```
 CONTACT FORM DEBUG: reCAPTCHA configured=YES
-reCAPTCHA Debug - Mode: Enterprise
-reCAPTCHA Debug - Endpoint: https://recaptchaenterprise.googleapis.com/...
-reCAPTCHA Debug - Response: {"tokenProperties":{"valid":true,...},"riskAnalysis":{"score":0.9,...}}
-CONTACT FORM DEBUG: reCAPTCHA validation successful - Score: 0.9, Action: contact
+reCAPTCHA Debug - Mode: Standard v3
+reCAPTCHA Debug - Endpoint: https://www.google.com/recaptcha/api/siteverify
+reCAPTCHA Debug - Response: {"success":true,"score":0.9,"action":"contact","hostname":"blackbox.codes"}
 ```
-
-### Contact Submission Logs
-
-Check `logs/contact-submissions.log`:
-
+Contact submissions log (`logs/contact-submissions.log`) entry example:
 ```json
 {
-  "timestamp": "2025-11-21T10:30:00+00:00",
-  "ip": "203.0.113.42",
+  "timestamp": "2025-11-21T02:21:05+00:00",
   "hostname": "blackbox.codes",
   "action": "contact",
-  "score": 0.92,
-  "success": true,
-  "reason": "ok",
-  "name": "John Doe",
-  "email": "john@example.com",
-  "api_mode": "enterprise",
-  "mail_sent": true,
-  "mail_recipient": "ops@blackbox.codes"
+  "score": 0.9,
+  "api_mode": "standard_v3",
+  "mail_sent": true
 }
 ```
 
 ---
 
 ## 🧪 Testing Checklist
-
-After configuration, verify:
-
-- [ ] Site key visible in page source (first 20 chars)
-- [ ] reCAPTCHA Enterprise script loads without errors
-- [ ] Console shows configuration object with all fields
-- [ ] Form submission generates token
-- [ ] POST request sent to `contact-submit.php`
-- [ ] Response is JSON with `{success: true}`
-- [ ] Log entry created in `logs/contact-submissions.log`
-- [ ] Email received at `ops@blackbox.codes`
-- [ ] error_log shows successful validation (if debug enabled)
+- [ ] Site key present in markup (first 6–8 chars match console)
+- [ ] Console shows `enterpriseAvailable: false`
+- [ ] POST to `contact-submit.php` returns `{ success: true }`
+- [ ] `error_log` records successful validation details
+- [ ] `logs/contact-submissions.log` records `standard_v3`
+- [ ] Notification email received at `ops@blackbox.codes`
 
 ---
 
-## 📚 Additional Resources
-
-- [reCAPTCHA Enterprise Documentation](https://cloud.google.com/recaptcha-enterprise/docs)
-- [reCAPTCHA API Reference](https://cloud.google.com/recaptcha-enterprise/docs/reference/rest)
-- [Score Interpretation Guide](https://cloud.google.com/recaptcha-enterprise/docs/interpret-assessment)
-
----
-
-## 🆘 Support
-
-If issues persist after following this guide:
-
-1. Check `CONTACT-FORM-TEST-PLAN.md` for detailed test procedures
-2. Review `CONTACT-FORM-FIX-ANALYSIS.md` for technical details
-3. Enable debug mode and collect console + error_log output
-4. Verify all environment variables are set correctly
+## 📚 Helpful Links
+- [Google reCAPTCHA Admin Console](https://www.google.com/recaptcha/admin)
+- [reCAPTCHA v3 Documentation](https://developers.google.com/recaptcha/docs/v3)
+- [SMTP Deployment Guide](SMTP-DEPLOYMENT-GUIDE.md)
+- [Contact Form Test Plan](CONTACT-FORM-EMAIL-TEST-PLAN.md)
 
 ---
 
-*Last updated: 2025-11-21*  
-*ALPHA Interface GUI - reCAPTCHA Enterprise Integration*
+*Last updated: 2025-11-21*
+*Maintainer: ALPHA Interface GUI Team*

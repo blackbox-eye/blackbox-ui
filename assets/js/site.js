@@ -233,44 +233,82 @@ document.addEventListener('DOMContentLoaded', () => {
         const ctx = heroCanvas.getContext('2d');
         const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@#$%^&*()_+-=[]{}|;':,./<>?".split('');
         let drops = [];
+        let animationId = null;
+        let isAnimating = false;
 
-        const setupCanvas = () => {
-            heroCanvas.width = window.innerWidth;
-            heroCanvas.height = window.innerHeight;
-            const columns = Math.floor(heroCanvas.width / 20);
-            drops = Array.from({ length: columns }, () => Math.floor(Math.random() * (heroCanvas.height / 20)));
-        };
+        // Check if user prefers reduced motion
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        
+        if (prefersReducedMotion) {
+            heroCanvas.style.display = 'none';
+        } else {
+            const setupCanvas = () => {
+                heroCanvas.width = window.innerWidth;
+                heroCanvas.height = window.innerHeight;
+                const columns = Math.floor(heroCanvas.width / 20);
+                drops = Array.from({ length: columns }, () => Math.floor(Math.random() * (heroCanvas.height / 20)));
+            };
 
-        const drawDigitalRain = () => {
-            ctx.fillStyle = 'rgba(16, 20, 25, 0.05)';
-            ctx.fillRect(0, 0, heroCanvas.width, heroCanvas.height);
+            const drawDigitalRain = () => {
+                ctx.fillStyle = 'rgba(16, 20, 25, 0.05)';
+                ctx.fillRect(0, 0, heroCanvas.width, heroCanvas.height);
 
-            const color = getComputedStyle(document.documentElement)
-                .getPropertyValue('--digital-rain-color')
-                .trim() || '#008000';
+                const color = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--digital-rain-color')
+                    .trim() || '#008000';
 
-            ctx.fillStyle = color;
-            ctx.font = '15px monospace';
+                ctx.fillStyle = color;
+                ctx.font = '15px monospace';
 
-            drops.forEach((drop, index) => {
-                const text = chars[Math.floor(Math.random() * chars.length)];
-                ctx.fillText(text, index * 20, drop * 20);
+                drops.forEach((drop, index) => {
+                    const text = chars[Math.floor(Math.random() * chars.length)];
+                    ctx.fillText(text, index * 20, drop * 20);
 
-                if (drop * 20 > heroCanvas.height && Math.random() > 0.975) {
-                    drops[index] = 0;
+                    if (drop * 20 > heroCanvas.height && Math.random() > 0.975) {
+                        drops[index] = 0;
+                    }
+                    drops[index] = drop + 1;
+                });
+                
+                if (isAnimating) {
+                    animationId = requestAnimationFrame(drawDigitalRain);
                 }
-                drops[index] = drop + 1;
-            });
-        };
+            };
 
-        setupCanvas();
-        let intervalId = window.setInterval(drawDigitalRain, 33);
+            const startAnimation = () => {
+                if (!isAnimating) {
+                    isAnimating = true;
+                    drawDigitalRain();
+                }
+            };
 
-        window.addEventListener('resize', () => {
-            window.clearInterval(intervalId);
+            const stopAnimation = () => {
+                isAnimating = false;
+                if (animationId) {
+                    cancelAnimationFrame(animationId);
+                    animationId = null;
+                }
+            };
+
             setupCanvas();
-            intervalId = window.setInterval(drawDigitalRain, 33);
-        });
+            startAnimation();
+
+            // Pause animation when tab is hidden (performance optimization)
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    stopAnimation();
+                } else {
+                    startAnimation();
+                }
+            });
+
+            // Restart animation on resize
+            window.addEventListener('resize', () => {
+                stopAnimation();
+                setupCanvas();
+                startAnimation();
+            });
+        }
     }
 
     const hasAIConfig = typeof window.AI_CONFIG !== 'undefined';
@@ -413,15 +451,56 @@ document.addEventListener('DOMContentLoaded', () => {
         const modalLoader = document.getElementById('modal-loader');
         const modalResult = document.getElementById('modal-result');
         const modalContent = document.getElementById('modal-content');
+        
+        let lastFocusedElement = null;
 
         const showModal = () => {
+            lastFocusedElement = document.activeElement;
             geminiModal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
+            
+            // Set focus to close button and setup focus trap
+            setTimeout(() => {
+                closeModalBtn?.focus();
+                setupFocusTrap(modalContent);
+            }, 100);
         };
 
         const hideModal = () => {
             geminiModal.classList.add('hidden');
             document.body.style.overflow = '';
+            
+            // Restore focus to trigger element
+            if (lastFocusedElement) {
+                lastFocusedElement.focus();
+            }
+        };
+        
+        const setupFocusTrap = (container) => {
+            if (!container) return;
+            
+            const focusableElements = container.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            
+            if (focusableElements.length === 0) return;
+            
+            const firstElement = focusableElements[0];
+            const lastElement = focusableElements[focusableElements.length - 1];
+            
+            const handleTabKey = (e) => {
+                if (e.key !== 'Tab') return;
+                
+                if (e.shiftKey && document.activeElement === firstElement) {
+                    e.preventDefault();
+                    lastElement.focus();
+                } else if (!e.shiftKey && document.activeElement === lastElement) {
+                    e.preventDefault();
+                    firstElement.focus();
+                }
+            };
+            
+            container.addEventListener('keydown', handleTabKey);
         };
 
         geminiTriggerBtns.forEach(btn => {
@@ -452,8 +531,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 hideModal();
             }
         });
-        modalContent?.addEventListener('keydown', event => {
-            if (event.key === 'Escape') {
+        
+        // ESC key to close modal
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !geminiModal.classList.contains('hidden')) {
                 hideModal();
             }
         });

@@ -4,7 +4,7 @@ $current_page = 'home';
 include 'includes/site-header.php';
 ?>
 
-<main class="pt-20">
+<main id="main-content" class="pt-20">
     <section id="home" class="relative min-h-[85vh] w-full flex items-center justify-center text-center overflow-hidden">
         <canvas id="hero-canvas" class="absolute inset-0 w-full h-full z-0"></canvas>
         <div class="relative z-10 px-4 py-24 sm:py-32">

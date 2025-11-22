@@ -3,18 +3,6 @@ SetEnv RECAPTCHA_SITE_KEY "6Le7iBMsAAAAACp8jtY4JSVP_uWS-p4h24ZOm5i_"
 SetEnv RECAPTCHA_SECRET_KEY "6Le7iBMsAAAAAPbQw4-eaH1DpN-lTk49HXU_06qp"
 SetEnv RECAPTCHA_DEBUG "true"
 
-# SMTP Configuration (Proton Mail)
-# DEVELOPMENT: Use placeholder - real credentials in .htaccess.production
-SetEnv SMTP_HOST "smtp.protonmail.ch"
-SetEnv SMTP_PORT "587"
-SetEnv SMTP_USERNAME "ops@blackbox.codes"
-SetEnv SMTP_PASSWORD "REPLACE_ON_SERVER"
-SetEnv SMTP_SECURE "tls"
-SetEnv SMTP_DEBUG "true"
-
-# Contact form recipient
-SetEnv CONTACT_EMAIL "ops@blackbox.codes"
-
 # Prioriter PHP-indgangen og fald tilbage til HTML hvis nødvendigt.
 DirectoryIndex index.php index.html
 

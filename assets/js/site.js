@@ -317,11 +317,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const heroCanvas = document.getElementById('hero-canvas');
     if (heroCanvas) {
-        const ctx = heroCanvas.getContext('2d');
+        const ctx = heroCanvas.getContext('2d', { alpha: false });
         const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@#$%^&*()_+-=[]{}|;':,./<>?".split('');
         let drops = [];
         let animationId = null;
         let isAnimating = false;
+        let lastFrameTime = 0;
+        const targetFPS = 30;
+        const frameInterval = 1000 / targetFPS;
 
         // Check if user prefers reduced motion
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -330,32 +333,45 @@ document.addEventListener('DOMContentLoaded', () => {
             heroCanvas.style.display = 'none';
         } else {
             const setupCanvas = () => {
-                heroCanvas.width = window.innerWidth;
-                heroCanvas.height = window.innerHeight;
-                const columns = Math.floor(heroCanvas.width / 20);
-                drops = Array.from({ length: columns }, () => Math.floor(Math.random() * (heroCanvas.height / 20)));
+                const dpr = window.devicePixelRatio || 1;
+                heroCanvas.width = window.innerWidth * dpr;
+                heroCanvas.height = window.innerHeight * dpr;
+                heroCanvas.style.width = window.innerWidth + 'px';
+                heroCanvas.style.height = window.innerHeight + 'px';
+                ctx.scale(dpr, dpr);
+                
+                const columns = Math.floor(window.innerWidth / 20);
+                drops = Array.from({ length: columns }, () => Math.floor(Math.random() * (window.innerHeight / 20)));
             };
 
-            const drawDigitalRain = () => {
-                ctx.fillStyle = 'rgba(16, 20, 25, 0.05)';
-                ctx.fillRect(0, 0, heroCanvas.width, heroCanvas.height);
+            const drawDigitalRain = (currentTime) => {
+                if (!isAnimating) return;
 
-                const color = getComputedStyle(document.documentElement)
-                    .getPropertyValue('--digital-rain-color')
-                    .trim() || '#008000';
+                const elapsed = currentTime - lastFrameTime;
+                
+                if (elapsed > frameInterval) {
+                    lastFrameTime = currentTime - (elapsed % frameInterval);
+                    
+                    ctx.fillStyle = 'rgba(16, 20, 25, 0.05)';
+                    ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
-                ctx.fillStyle = color;
-                ctx.font = '15px monospace';
+                    const color = getComputedStyle(document.documentElement)
+                        .getPropertyValue('--digital-rain-color')
+                        .trim() || '#008000';
 
-                drops.forEach((drop, index) => {
-                    const text = chars[Math.floor(Math.random() * chars.length)];
-                    ctx.fillText(text, index * 20, drop * 20);
+                    ctx.fillStyle = color;
+                    ctx.font = '15px monospace';
 
-                    if (drop * 20 > heroCanvas.height && Math.random() > 0.975) {
-                        drops[index] = 0;
-                    }
-                    drops[index] = drop + 1;
-                });
+                    drops.forEach((drop, index) => {
+                        const text = chars[Math.floor(Math.random() * chars.length)];
+                        ctx.fillText(text, index * 20, drop * 20);
+
+                        if (drop * 20 > window.innerHeight && Math.random() > 0.975) {
+                            drops[index] = 0;
+                        }
+                        drops[index] = drop + 1;
+                    });
+                }
 
                 if (isAnimating) {
                     animationId = requestAnimationFrame(drawDigitalRain);
@@ -365,7 +381,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const startAnimation = () => {
                 if (!isAnimating) {
                     isAnimating = true;
-                    drawDigitalRain();
+                    lastFrameTime = performance.now();
+                    animationId = requestAnimationFrame(drawDigitalRain);
                 }
             };
 
@@ -389,11 +406,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Restart animation on resize
+            // Restart animation on resize with debounce
+            let resizeTimeout;
             window.addEventListener('resize', () => {
-                stopAnimation();
-                setupCanvas();
-                startAnimation();
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    stopAnimation();
+                    setupCanvas();
+                    startAnimation();
+                }, 250);
             });
         }
     }

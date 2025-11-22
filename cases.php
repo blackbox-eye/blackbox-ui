@@ -53,8 +53,7 @@ include 'includes/site-header.php';
                 </p>
                 <div class="space-y-4">
                     <label for="case-input" class="block text-sm font-medium text-gray-300 mb-2">Din udfordring</label>
-                    <textarea id="case-input" rows="4" class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="F.eks. 'Vi er bekymrede for phishing-mails til vores bogholderi...'"
-                    ></textarea>
+                    <textarea id="case-input" rows="4" class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="F.eks. 'Vi er bekymrede for phishing-mails til vores bogholderi...'"></textarea>
                     <button id="analyze-case-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
                         Få AI-analyse
                     </button>

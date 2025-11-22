@@ -1,8 +1,8 @@
 # UX Accessibility Report – ALPHA Interface GUI
 
-**Version:** 1.0  
-**Dato:** 2025-11-22  
-**Sprint:** 1 af 5 (P0 - Kritisk Tilgængelighed)  
+**Version:** 1.0
+**Dato:** 2025-11-22
+**Sprint:** 1 af 5 (P0 - Kritisk Tilgængelighed)
 **Status:** ✅ Implementeret – Afventer test & review
 
 ---
@@ -30,10 +30,10 @@ Denne rapport dokumenterer implementeringen af kritiske WCAG 2.1 Level AA tilgæ
 
 ### 2.1 Skip Navigation Link (WCAG 2.4.1)
 
-**Problem:**  
+**Problem:**
 Tastaturbrugere skulle tabbe gennem hele navigationsmenu for at nå hovedindhold.
 
-**Løsning:**  
+**Løsning:**
 Implementeret skip-link som første element i `<body>`, kun synlig ved fokus.
 
 **Kode:**
@@ -73,23 +73,23 @@ Implementeret skip-link som første element i `<body>`, kun synlig ved fokus.
 
 ### 2.2 ARIA Live Regions (WCAG 4.1.3)
 
-**Problem:**  
+**Problem:**
 Success/error-beskeder i kontaktformular blev ikke annonceret til skærmlæsere.
 
-**Løsning:**  
+**Løsning:**
 Tilføjet `aria-live="polite"`, `aria-atomic="true"` og semantiske roller.
 
 **Kode:**
 ```html
 <!-- contact.php -->
-<div id="contact-form-error" 
-     class="hidden mt-4 text-center text-red-400 border border-red-500/60 rounded-md p-4 text-sm" 
+<div id="contact-form-error"
+     class="hidden mt-4 text-center text-red-400 border border-red-500/60 rounded-md p-4 text-sm"
      role="alert"
      aria-live="polite"
      aria-atomic="true">
 </div>
 
-<div id="contact-form-success" 
+<div id="contact-form-success"
      class="hidden mt-6 text-center text-green-400 border border-green-400 rounded-md p-4 text-sm"
      role="status"
      aria-live="polite"
@@ -114,10 +114,10 @@ Tilføjet `aria-live="polite"`, `aria-atomic="true"` og semantiske roller.
 
 ### 2.3 Forbedret Farvekontrast (WCAG 1.4.3)
 
-**Problem:**  
+**Problem:**
 Flere tekst-kombinationer fandt ikke WCAG AA-kravet om 4.5:1 kontrast-ratio.
 
-**Løsning:**  
+**Løsning:**
 Opdateret CSS-variabler og Tailwind-klasser.
 
 **Ændringer:**
@@ -141,10 +141,10 @@ Opdateret CSS-variabler og Tailwind-klasser.
 
 ### 2.4 Modal Focus Trap (WCAG 2.4.3)
 
-**Problem:**  
+**Problem:**
 Tastaturnavigation kunne forlade modal-vinduet og fokusere på baggrundselementer.
 
-**Løsning:**  
+**Løsning:**
 Implementeret cyklisk tab-navigation og focus-restore.
 
 **Funktionalitet:**
@@ -159,19 +159,19 @@ Implementeret cyklisk tab-navigation og focus-restore.
 // assets/js/site.js
 const setupFocusTrap = (container) => {
     if (!container) return;
-    
+
     const focusableElements = container.querySelectorAll(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
     );
-    
+
     if (focusableElements.length === 0) return;
-    
+
     const firstElement = focusableElements[0];
     const lastElement = focusableElements[focusableElements.length - 1];
-    
+
     const handleTabKey = (e) => {
         if (e.key !== 'Tab') return;
-        
+
         if (e.shiftKey && document.activeElement === firstElement) {
             e.preventDefault();
             lastElement.focus();
@@ -180,7 +180,7 @@ const setupFocusTrap = (container) => {
             firstElement.focus();
         }
     };
-    
+
     container.addEventListener('keydown', handleTabKey);
 };
 ```
@@ -198,10 +198,10 @@ const setupFocusTrap = (container) => {
 
 ### 2.5 Prefers-Reduced-Motion Support (WCAG 2.3.3)
 
-**Problem:**  
+**Problem:**
 Animationer (glitch, digital rain, fade-ins) kunne forårsage ubehag for brugere med vestibulære lidelser eller motion sickness.
 
-**Løsning:**  
+**Løsning:**
 Respektér `prefers-reduced-motion: reduce` media query.
 
 **Implementering:**
@@ -216,20 +216,20 @@ Respektér `prefers-reduced-motion: reduce` media query.
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
-    
+
     .section-fade-in {
         opacity: 1 !important;
         transform: none !important;
     }
-    
+
     .glitch-logo {
         animation: none !important;
     }
-    
+
     .glitch-logo span {
         animation: none !important;
     }
-    
+
     #hero-canvas {
         display: none;
     }
@@ -266,10 +266,10 @@ if (prefersReducedMotion) {
 
 ### 2.6 Performance-Optimering af Digital Rain
 
-**Problem:**  
+**Problem:**
 Canvas-animation kørte kontinuerligt på 30 FPS, selv når tab var skjult eller brugeren scrollede væk.
 
-**Løsning:**  
+**Løsning:**
 Implementeret intelligent pausing og optimeret rendering.
 
 **Forbedringer:**
@@ -319,10 +319,10 @@ document.addEventListener('visibilitychange', () => {
 
 ### 2.7 Landmark Regions & Semantic HTML
 
-**Problem:**  
+**Problem:**
 Manglede `id="main-content"` på `<main>` elementer.
 
-**Løsning:**  
+**Løsning:**
 Tilføjet til alle sider for skip-link kompatibilitet.
 
 **Påvirkede filer:**
@@ -460,32 +460,32 @@ Tilføjet til alle sider for skip-link kompatibilitet.
 
 ### 5.1 Minor Issues (ikke-kritiske)
 
-**1. Form Validation UX**  
-**Problem:** HTML5 validation bobler ikke vises ved tastatur-navigation  
-**Impact:** Lav (native validation fungerer stadig)  
+**1. Form Validation UX**
+**Problem:** HTML5 validation bobler ikke vises ved tastatur-navigation
+**Impact:** Lav (native validation fungerer stadig)
 **Løsning:** Planlagt i Sprint 2 (custom inline validation)
 
-**2. AI-komponenter Loading States**  
-**Problem:** Ingen screen reader-feedback mens AI-request kører  
-**Impact:** Medium  
+**2. AI-komponenter Loading States**
+**Problem:** Ingen screen reader-feedback mens AI-request kører
+**Impact:** Medium
 **Løsning:** Planlagt i Sprint 2 (ARIA live status updates)
 
-**3. AlphaBot Focus Trap**  
-**Problem:** Chat-widget har ikke focus trap endnu  
-**Impact:** Medium (feature ikke aktiveret i prod)  
+**3. AlphaBot Focus Trap**
+**Problem:** Chat-widget har ikke focus trap endnu
+**Impact:** Medium (feature ikke aktiveret i prod)
 **Løsning:** Samme pattern som Gemini modal, implementeres når feature aktiveres
 
 ---
 
 ### 5.2 Tekniske Begrænsninger
 
-**Canvas Accessibility:**  
+**Canvas Accessibility:**
 Digital rain canvas har ingen tekstalternativ. Dette er acceptabelt da:
 - Det er rent dekorativt (ingen information)
 - Det kan deaktiveres via prefers-reduced-motion
 - Det påvirker ikke sitets funktionalitet
 
-**Third-party Scripts:**  
+**Third-party Scripts:**
 reCAPTCHA v3 og Gemini API er eksterne tjenester med egne tilgængelighedsniveauer. Vi har ingen kontrol over deres implementation.
 
 ---
@@ -600,6 +600,6 @@ Sprint 1 har succesfuldt implementeret alle kritiske P0 accessibility-forbedring
 **Version log:**
 - v1.0 (2025-11-22): Initial rapport efter Sprint 1 implementering
 
-**Forfatter:** ALPHA‑UX‑Frontend‑Agent  
-**Reviewers:** [Pending assignment]  
+**Forfatter:** ALPHA‑UX‑Frontend‑Agent
+**Reviewers:** [Pending assignment]
 **Status:** ✅ Klar til review

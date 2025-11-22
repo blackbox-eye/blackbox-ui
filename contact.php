@@ -49,17 +49,17 @@ include 'includes/site-header.php';
                             Send forespørgsel
                         </button>
                     </form>
-                    <div id="contact-form-error" 
-                         class="hidden mt-4 text-center text-red-400 border border-red-500/60 rounded-md p-4 text-sm" 
-                         role="alert"
-                         aria-live="polite"
-                         aria-atomic="true">
+                    <div id="contact-form-error"
+                        class="hidden mt-4 text-center text-red-400 border border-red-500/60 rounded-md p-4 text-sm"
+                        role="alert"
+                        aria-live="polite"
+                        aria-atomic="true">
                     </div>
-                    <div id="contact-form-success" 
-                         class="hidden mt-6 text-center text-green-400 border border-green-400 rounded-md p-4 text-sm"
-                         role="status"
-                         aria-live="polite"
-                         aria-atomic="true">
+                    <div id="contact-form-success"
+                        class="hidden mt-6 text-center text-green-400 border border-green-400 rounded-md p-4 text-sm"
+                        role="status"
+                        aria-live="polite"
+                        aria-atomic="true">
                         Tak for din henvendelse! Vi vender tilbage hurtigst muligt.
                     </div>
                 </div>

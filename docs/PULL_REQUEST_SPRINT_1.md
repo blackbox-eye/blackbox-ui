@@ -195,7 +195,7 @@ Testet og valideret i:
 3. AI loading states
 4. Sticky CTA button
 
-**Estimat:** 1 uge  
+**Estimat:** 1 uge
 **Branch:** `feat/ux-improvements-sprint-2`
 
 ### Monitoring
@@ -239,8 +239,8 @@ Sprint 1 er succesfuldt gennemført med alle P0-mål opfyldt. Sitet er nu signif
 
 ---
 
-**Branch:** `feat/ui-enhancements`  
-**Base:** `main`  
-**Type:** Feature  
-**Scope:** Accessibility + Performance  
+**Branch:** `feat/ui-enhancements`
+**Base:** `main`
+**Type:** Feature
+**Scope:** Accessibility + Performance
 **Breaking Changes:** Ingen

@@ -1,9 +1,9 @@
 # Feature Branch: UI/UX Enhancements
 
-**Branch:** `feat/ui-enhancements`  
-**Base:** `main`  
-**Status:** 🟢 Sprint 1 Complete – Ready for Review  
-**Created:** 2025-11-22  
+**Branch:** `feat/ui-enhancements`
+**Base:** `main`
+**Status:** 🟢 Sprint 1 Complete – Ready for Review
+**Created:** 2025-11-22
 **Last Updated:** 2025-11-22
 
 ---
@@ -17,7 +17,7 @@ Forbedre ALPHA Interface GUI's udseende, brugeroplevelse (UX), tilgængelighed o
 ## 📦 Sprints Overview
 
 ### ✅ Sprint 1: Tilgængelighed (P0) – **COMPLETED**
-**Varighed:** 1 dag  
+**Varighed:** 1 dag
 **Status:** Ready for review
 
 **Deliverables:**
@@ -38,7 +38,7 @@ Forbedre ALPHA Interface GUI's udseende, brugeroplevelse (UX), tilgængelighed o
 ---
 
 ### ⏳ Sprint 2: UX-forbedringer (P1) – **PLANNED**
-**Varighed:** 1 uge  
+**Varighed:** 1 uge
 **Status:** Not started
 
 **Planned Deliverables:**
@@ -52,7 +52,7 @@ Forbedre ALPHA Interface GUI's udseende, brugeroplevelse (UX), tilgængelighed o
 ---
 
 ### 📋 Sprint 3: Performance (P1/P2) – **PLANNED**
-**Varighed:** 1 uge  
+**Varighed:** 1 uge
 **Status:** Not started
 
 **Planned Deliverables:**
@@ -65,7 +65,7 @@ Forbedre ALPHA Interface GUI's udseende, brugeroplevelse (UX), tilgængelighed o
 ---
 
 ### 🎨 Sprint 4: Design System (P2) – **PLANNED**
-**Varighed:** 1.5 uge  
+**Varighed:** 1.5 uge
 **Status:** Not started
 
 **Planned Deliverables:**
@@ -78,7 +78,7 @@ Forbedre ALPHA Interface GUI's udseende, brugeroplevelse (UX), tilgængelighed o
 ---
 
 ### 🌍 Sprint 5: Internationalisering (P2/P3) – **PLANNED**
-**Varighed:** 1.5 uge  
+**Varighed:** 1.5 uge
 **Status:** Not started
 
 **Planned Deliverables:**
@@ -92,9 +92,9 @@ Forbedre ALPHA Interface GUI's udseende, brugeroplevelse (UX), tilgængelighed o
 
 ## 📊 Current Branch Stats
 
-**Total Commits:** 4  
-**Files Changed:** 15  
-**Insertions:** ~2,100  
+**Total Commits:** 4
+**Files Changed:** 15
+**Insertions:** ~2,100
 **Deletions:** ~350
 
 **Key Files Modified:**
@@ -263,7 +263,7 @@ feat(a11y): Add skip navigation link for keyboard users
 - Email: ops@blackbox.codes
 - Slack: #aig-frontend-team (internal)
 
-**Maintainer:** ALPHA‑UX‑Frontend‑Agent  
+**Maintainer:** ALPHA‑UX‑Frontend‑Agent
 **Last Updated:** 2025-11-22
 
 ---

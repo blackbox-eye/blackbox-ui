@@ -1,8 +1,8 @@
 # UX/UI Analyse og Forbedringsplan – ALPHA Interface GUI
 
-**Version:** 1.0  
-**Dato:** 2025-11-22  
-**Ansvarlig:** ALPHA‑UX‑Frontend‑Agent  
+**Version:** 1.0
+**Dato:** 2025-11-22
+**Ansvarlig:** ALPHA‑UX‑Frontend‑Agent
 **Status:** Initial analyse og handlingsplan
 
 ---
@@ -136,7 +136,7 @@ Analysen identificerer 6 hovedområder med i alt 23 konkrete forbedringspunkter,
 ## 4. Fase 1: Tilgængelighed & WCAG-compliance (P0)
 
 ### 4.1 Skip Navigation Link
-**Problem:** Tastaturbrugere skal tabbe gennem hele navigation for at nå indhold  
+**Problem:** Tastaturbrugere skal tabbe gennem hele navigation for at nå indhold
 **Løsning:** Tilføj skip-link som første element i `<body>`
 
 ```html
@@ -160,25 +160,25 @@ Analysen identificerer 6 hovedområder med i alt 23 konkrete forbedringspunkter,
 }
 ```
 
-**Fil:** `includes/site-header.php` (efter `<body>`)  
+**Fil:** `includes/site-header.php` (efter `<body>`)
 **Estimat:** 15 min
 
 ---
 
 ### 4.2 ARIA Live Regions for Formular-feedback
-**Problem:** Success/error-beskeder ikke annonceret til skærmlæsere  
+**Problem:** Success/error-beskeder ikke annonceret til skærmlæsere
 **Løsning:** Tilføj `aria-live="polite"` og `aria-atomic="true"`
 
 ```html
-<div id="contact-form-error" 
-     class="hidden mt-4 text-center text-red-400 border border-red-500/60 rounded-md p-4 text-sm" 
+<div id="contact-form-error"
+     class="hidden mt-4 text-center text-red-400 border border-red-500/60 rounded-md p-4 text-sm"
      role="alert"
      aria-live="polite"
      aria-atomic="true">
 </div>
 ```
 
-**Filer:** `contact.php`, `assets/js/site.js`  
+**Filer:** `contact.php`, `assets/js/site.js`
 **Estimat:** 30 min
 
 ---
@@ -193,13 +193,13 @@ Analysen identificerer 6 hovedområder med i alt 23 konkrete forbedringspunkter,
 | Footer links | `text-gray-400` | `text-gray-300` | 7.1:1 |
 | Placeholder text | `#567` (legacy) | `#8B92A0` | 4.6:1 |
 
-**Implementering:** Global søg-og-erstat i `style.css` og Tailwind classes  
+**Implementering:** Global søg-og-erstat i `style.css` og Tailwind classes
 **Estimat:** 2 timer (inkl. test)
 
 ---
 
 ### 4.4 Focus Trap for Modals
-**Problem:** Tastaturnavigation kan forlade modal-vinduet  
+**Problem:** Tastaturnavigation kan forlade modal-vinduet
 **Løsning:** Implementer focus trap med cyclic tab-navigation
 
 ```javascript
@@ -225,7 +225,7 @@ modalContent.addEventListener('keydown', (e) => {
 firstElement.focus();
 ```
 
-**Fil:** `assets/js/site.js` (geminiModal, alphabotContainer)  
+**Fil:** `assets/js/site.js` (geminiModal, alphabotContainer)
 **Estimat:** 1 time
 
 ---
@@ -243,19 +243,19 @@ firstElement.focus();
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  
+
   .section-fade-in {
     opacity: 1;
     transform: none;
   }
-  
+
   #hero-canvas {
     display: none; /* Stop digital rain */
   }
 }
 ```
 
-**Fil:** `includes/site-header.php` (inline styles)  
+**Fil:** `includes/site-header.php` (inline styles)
 **Estimat:** 45 min
 
 ---
@@ -270,7 +270,7 @@ firstElement.focus();
   <label for="email" class="block text-sm font-medium text-gray-300 mb-2">
     Email <span class="text-red-400" aria-label="påkrævet">*</span>
   </label>
-  <input type="email" id="email" name="email" required 
+  <input type="email" id="email" name="email" required
          aria-describedby="email-error"
          class="block w-full ...">
   <div id="email-error" class="hidden text-red-400 text-xs mt-1" role="alert">
@@ -292,7 +292,7 @@ contactForm.querySelectorAll('input[required], textarea[required]').forEach(fiel
 });
 ```
 
-**Filer:** `contact.php`, `assets/js/site.js`  
+**Filer:** `contact.php`, `assets/js/site.js`
 **Estimat:** 2 timer
 
 ---
@@ -300,7 +300,7 @@ contactForm.querySelectorAll('input[required], textarea[required]').forEach(fiel
 ## 5. Fase 2: UX-forbedringer & Navigation (P1)
 
 ### 5.1 Breadcrumb Navigation
-**Problem:** Ingen kontekstuel navigation på dybereliggende sider  
+**Problem:** Ingen kontekstuel navigation på dybereliggende sider
 **Fordel:** Forbedrer orienterbarhed og SEO
 
 **Implementering:**
@@ -322,7 +322,7 @@ contactForm.querySelectorAll('input[required], textarea[required]').forEach(fiel
 }
 ```
 
-**Filer:** `includes/site-header.php` (ny funktion), alle sider  
+**Filer:** `includes/site-header.php` (ny funktion), alle sider
 **Estimat:** 3 timer
 
 ---
@@ -363,7 +363,7 @@ contactForm.querySelectorAll('input[required], textarea[required]').forEach(fiel
 **Løsning:** Floating action button (bottom-right)
 
 ```html
-<a href="contact.php" 
+<a href="contact.php"
    class="fixed bottom-6 right-6 bg-amber-400 text-black p-4 rounded-full shadow-2xl hover:scale-110 transition-transform z-40"
    aria-label="Kontakt os">
   <svg><!-- Mail icon --></svg>
@@ -453,7 +453,7 @@ alphaToggleBtn?.addEventListener('click', async () => {
   --brand-gold: #FFC700;
   --brand-gold-dark: #bfa650;
   --brand-green: #00aa55;
-  
+
   /* Semantic colors */
   --color-bg-primary: var(--brand-dark);
   --color-bg-glass: rgba(22, 28, 39, 0.6);
@@ -463,12 +463,12 @@ alphaToggleBtn?.addEventListener('click', async () => {
   --color-accent-primary: var(--brand-gold);
   --color-accent-success: #22c55e;
   --color-accent-error: #ef4444;
-  
+
   /* Effects */
   --effect-glitch-green: #003d00;
   --effect-glitch-fire: #ffac00;
   --effect-digital-rain: #008000;
-  
+
   /* Glass morphism */
   --glass-border: rgba(255, 255, 255, 0.1);
   --glass-bg: var(--color-bg-glass);
@@ -624,7 +624,7 @@ function t($key) {
 ## 10. Implementeringsplan & Tidsestimat
 
 ### Sprint 1 (Tilgængelighed - P0)
-**Mål:** WCAG 2.1 AA compliance  
+**Mål:** WCAG 2.1 AA compliance
 **Varighed:** 1 uge
 
 | Opgave | Estimat | Status |
@@ -640,7 +640,7 @@ function t($key) {
 ---
 
 ### Sprint 2 (UX & Navigation - P1)
-**Mål:** Forbedret brugeroplevelse  
+**Mål:** Forbedret brugeroplevelse
 **Varighed:** 1 uge
 
 | Opgave | Estimat | Status |
@@ -654,7 +654,7 @@ function t($key) {
 ---
 
 ### Sprint 3 (Performance - P1/P2)
-**Mål:** Optimeret performance  
+**Mål:** Optimeret performance
 **Varighed:** 1 uge
 
 | Opgave | Estimat | Status |
@@ -667,7 +667,7 @@ function t($key) {
 ---
 
 ### Sprint 4 (Design System - P2)
-**Mål:** Konsistent designsystem  
+**Mål:** Konsistent designsystem
 **Varighed:** 1.5 uge
 
 | Opgave | Estimat | Status |
@@ -680,7 +680,7 @@ function t($key) {
 ---
 
 ### Sprint 5 (i18n - P2/P3)
-**Mål:** Flersprogethed  
+**Mål:** Flersprogethed
 **Varighed:** 1.5 uge
 
 | Opgave | Estimat | Status |

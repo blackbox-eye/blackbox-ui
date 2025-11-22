@@ -2,27 +2,74 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenuClose = document.getElementById('mobile-menu-close');
     const mobileMenu = document.getElementById('mobile-menu');
+    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
     const mobileNavLinks = document.querySelectorAll('.nav-link-mobile');
     const header = document.getElementById('main-header');
 
-    if (mobileMenuButton && mobileMenu) {
-        mobileMenuButton.addEventListener('click', () => {
-            const isHidden = mobileMenu.classList.toggle('hidden');
-            mobileMenuButton.setAttribute('aria-expanded', String(!isHidden));
-            document.body.style.overflow = isHidden ? '' : 'hidden';
-        });
-    }
+    // Mobile menu functionality with improved UX
+    if (mobileMenuButton && mobileMenu && mobileMenuOverlay) {
+        let lastFocusedElement = null;
 
-    mobileNavLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (mobileMenu) {
-                mobileMenu.classList.add('hidden');
-                mobileMenuButton?.setAttribute('aria-expanded', 'false');
-                document.body.style.overflow = '';
+        const openMobileMenu = () => {
+            lastFocusedElement = document.activeElement;
+            mobileMenu.classList.add('active');
+            mobileMenuOverlay.classList.add('active');
+            mobileMenuButton.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+
+            // Focus first link after animation
+            setTimeout(() => {
+                const firstLink = mobileMenu.querySelector('a');
+                if (firstLink) firstLink.focus();
+            }, 100);
+        };
+
+        const closeMobileMenu = () => {
+            mobileMenu.classList.remove('active');
+            mobileMenuOverlay.classList.remove('active');
+            mobileMenuButton.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+
+            // Restore focus
+            if (lastFocusedElement) {
+                lastFocusedElement.focus();
+            }
+        };
+
+        // Toggle menu on button click
+        mobileMenuButton.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.contains('active');
+            if (isOpen) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
             }
         });
-    });
+
+        // Close button
+        if (mobileMenuClose) {
+            mobileMenuClose.addEventListener('click', closeMobileMenu);
+        }
+
+        // Close on overlay click
+        mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+
+        // Close on ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                closeMobileMenu();
+            }
+        });
+
+        // Close on navigation click
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                closeMobileMenu();
+            });
+        });
+    }
 
     if (header) {
         const toggleHeaderGlass = () => {
@@ -30,6 +77,26 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         toggleHeaderGlass();
         window.addEventListener('scroll', toggleHeaderGlass);
+    }
+
+    // Sticky CTA visibility on scroll
+    const stickyCTA = document.getElementById('sticky-cta');
+    if (stickyCTA) {
+        const toggleStickyCTA = () => {
+            const scrollPosition = window.scrollY;
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+
+            // Show after scrolling 50% of viewport height
+            // Hide when near bottom (within 200px of footer)
+            const shouldShow = scrollPosition > windowHeight * 0.5 &&
+                               scrollPosition < documentHeight - windowHeight - 200;
+
+            stickyCTA.classList.toggle('visible', shouldShow);
+        };
+
+        toggleStickyCTA();
+        window.addEventListener('scroll', toggleStickyCTA);
     }
 
     const fadeSections = document.querySelectorAll('.section-fade-in');
@@ -108,6 +175,26 @@ document.addEventListener('DOMContentLoaded', () => {
             if (type === 'success' && formSuccessMessage) {
                 formSuccessMessage.classList.remove('hidden');
             }
+        };
+
+        const showAILoadingState = (container, message = 'Analyserer...') => {
+            container.innerHTML = `
+                <div class="ai-loading-container">
+                    <div class="ai-spinner"></div>
+                    <p class="ai-loading-text">${message}</p>
+                </div>
+            `;
+            container.classList.remove('hidden');
+        };
+
+        const showSkeletonLoader = (container) => {
+            container.innerHTML = `
+                <div class="skeleton-heading skeleton"></div>
+                <div class="skeleton-line skeleton"></div>
+                <div class="skeleton-line skeleton"></div>
+                <div class="skeleton-line skeleton short"></div>
+            `;
+            container.classList.remove('hidden');
         };
 
         const fetchRecaptchaToken = async () => {
@@ -238,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Check if user prefers reduced motion
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        
+
         if (prefersReducedMotion) {
             heroCanvas.style.display = 'none';
         } else {
@@ -269,7 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     drops[index] = drop + 1;
                 });
-                
+
                 if (isAnimating) {
                     animationId = requestAnimationFrame(drawDigitalRain);
                 }
@@ -362,6 +449,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Show improved loading state
+        if (resultElement) {
+            showAILoadingState(resultElement, 'AI-assistenten analyserer din forespørgsel...');
+        }
+
         const payload = {
             contents: [
                 {
@@ -435,8 +527,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (quickAssessmentOutputEl) {
-                quickAssessmentOutputEl.classList.remove('hidden');
-                quickAssessmentOutputEl.innerHTML = '<div class="flex flex-col items-center"><div class="spinner"></div><p class="mt-4 text-gray-300">Analyserer din situation...</p></div>';
+                showAILoadingState(quickAssessmentOutputEl, 'Analyserer din sikkerhedssituation...');
             }
 
             const prompt = `Du er strategisk sikkerhedsrådgiver for Blackbox EYE™. Evaluer følgende udfordring og returnér tre korte afsnit: 1) Primær trussel, 2) Hurtig gevinst, 3) Foreslået Blackbox-modul. Brug et professionelt, roligt danske sprog. Kundens beskrivelse: "${quickAssessmentInput.value.trim()}".`;
@@ -451,14 +542,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const modalLoader = document.getElementById('modal-loader');
         const modalResult = document.getElementById('modal-result');
         const modalContent = document.getElementById('modal-content');
-        
+
         let lastFocusedElement = null;
 
         const showModal = () => {
             lastFocusedElement = document.activeElement;
             geminiModal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
-            
+
             // Set focus to close button and setup focus trap
             setTimeout(() => {
                 closeModalBtn?.focus();
@@ -469,28 +560,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const hideModal = () => {
             geminiModal.classList.add('hidden');
             document.body.style.overflow = '';
-            
+
             // Restore focus to trigger element
             if (lastFocusedElement) {
                 lastFocusedElement.focus();
             }
         };
-        
+
         const setupFocusTrap = (container) => {
             if (!container) return;
-            
+
             const focusableElements = container.querySelectorAll(
                 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
             );
-            
+
             if (focusableElements.length === 0) return;
-            
+
             const firstElement = focusableElements[0];
             const lastElement = focusableElements[focusableElements.length - 1];
-            
+
             const handleTabKey = (e) => {
                 if (e.key !== 'Tab') return;
-                
+
                 if (e.shiftKey && document.activeElement === firstElement) {
                     e.preventDefault();
                     lastElement.focus();
@@ -499,7 +590,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     firstElement.focus();
                 }
             };
-            
+
             container.addEventListener('keydown', handleTabKey);
         };
 
@@ -516,8 +607,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 showModal();
-                if (modalLoader) modalLoader.classList.remove('hidden');
-                if (modalResult) {
+                if (modalLoader && modalResult) {
+                    showAILoadingState(modalLoader);
                     modalResult.innerHTML = '';
                     modalResult.classList.add('hidden');
                 }
@@ -531,7 +622,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 hideModal();
             }
         });
-        
+
         // ESC key to close modal
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Escape' && !geminiModal.classList.contains('hidden')) {
@@ -552,7 +643,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const employees = employeeCountInput && 'value' in employeeCountInput ? employeeCountInput.value : '0';
 
             recommendationContainer?.classList.remove('hidden');
-            recommendationLoader?.classList.remove('hidden');
+            if (recommendationLoader) showSkeletonLoader(recommendationLoader);
             if (recommendationResult) {
                 recommendationResult.classList.add('hidden');
                 recommendationResult.innerHTML = '';
@@ -578,7 +669,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             caseContainer?.classList.remove('hidden');
-            caseLoader?.classList.remove('hidden');
+            if (caseLoader) showSkeletonLoader(caseLoader);
             if (caseResult) {
                 caseResult.classList.add('hidden');
                 caseResult.innerHTML = '';

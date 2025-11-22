@@ -39,6 +39,19 @@
         </div>
     </footer>
 
+    <!-- Sticky CTA Button -->
+    <a href="contact.php"
+        id="sticky-cta"
+        class="sticky-cta"
+        aria-label="Book sikkerhedsmøde">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+        <span class="hidden sm:inline">Book Møde</span>
+        <span class="sm:hidden">Kontakt</span>
+    </a>
+
     <script src="assets/js/site.js"></script>
-</body>
-</html>
+    </body>
+
+    </html>

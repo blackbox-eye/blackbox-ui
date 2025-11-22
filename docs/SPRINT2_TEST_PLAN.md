@@ -21,12 +21,14 @@ All features maintain **WCAG 2.1 AA compliance** and respect user motion prefere
 
 ## 🎯 Test Objectives
 
-- ✅ Verify all four features function correctly across devices
+- ✅ Verify all features function correctly across devices
 - ✅ Ensure keyboard navigation and screen reader compatibility
 - ✅ Validate responsive design (mobile, tablet, desktop)
 - ✅ Confirm Lighthouse score ≥95 (Performance, Accessibility, Best Practices, SEO)
 - ✅ Test reduced motion preferences
 - ✅ Verify AI loading states integrate seamlessly
+- ✅ Verify improved spacing (pt-24 → pt-16) between header and content
+- ✅ Verify Sticky CTA appears earlier (20% scroll vs 50%)
 
 ---
 
@@ -90,7 +92,7 @@ All features maintain **WCAG 2.1 AA compliance** and respect user motion prefere
 | Test Case | Steps | Expected Result | Status |
 |-----------|-------|-----------------|--------|
 | **Initial State** | Load page, stay at top | Button hidden (not visible) | ⏳ |
-| **Scroll Trigger** | Scroll down 50% of viewport | Button slides up from bottom-right | ⏳ |
+| **Scroll Trigger (20%)** | Scroll down 20% of viewport | Button slides up from bottom-right (earlier visibility) | ⏳ |
 | **Near Footer** | Scroll to bottom (within 200px) | Button hides to avoid footer overlap | ⏳ |
 | **Scroll Up** | Scroll back to top 50% | Button fades out | ⏳ |
 | **Mobile Text** | View on <640px screen | Shows "Kontakt" only (short text) | ⏳ |

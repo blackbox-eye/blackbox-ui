@@ -4,7 +4,7 @@ $current_page = 'products';
 include 'includes/site-header.php';
 ?>
 
-<main class="pt-24">
+<main class="pt-16">
     <section class="py-20 sm:py-24 section-fade-in">
         <div class="container mx-auto px-4">
             <div class="text-center max-w-3xl mx-auto mb-12">

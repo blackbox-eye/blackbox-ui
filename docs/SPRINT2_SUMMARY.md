@@ -1,8 +1,38 @@
 # 🎉 Sprint 2 Complete – UX Enhancements
 
-**Branch:** `feat/ui-enhancements-sprint2`
-**Status:** ✅ Ready for QA Testing
-**Commits:** 2 (main implementation + documentation)
+**Branch:** `main` (merged from `feat/ui-enhancements-sprint2`)
+**Status:** ✅ Production Ready + Post-Merge Optimizations Applied
+**Commits:** 4 (implementation + documentation + QA + optimizations)
+**Last Updated:** November 22, 2025
+
+---
+
+## 🆕 Post-Merge Optimizations (November 22, 2025)
+
+### Visual & UX Improvements
+1. **Reduced Header Spacing** ✅
+   - Changed all pages from `pt-24` to `pt-16` (33% reduction)
+   - Breadcrumb from `pt-20` to `pt-16`
+   - Tighter, more compact layout across all pages
+   - Files: `about.php`, `products.php`, `cases.php`, `contact.php`, `pricing.php`, `includes/site-header.php`
+
+2. **Earlier Sticky CTA Visibility** ✅
+   - Scroll threshold reduced from 50% to 20% viewport
+   - Users see "Book Møde" CTA much faster (1-2 seconds scroll)
+   - Better conversion optimization
+   - File: `assets/js/site.js` (line ~91)
+
+3. **Complete Pricing Information** ✅
+   - Added all 6 pricing tiers with exact DKK amounts:
+     - MVP-Basis: 1.799 DKK/md
+     - MVP-Pro: 3.499 DKK/md
+     - MVP-Premium: 5.999 DKK/md
+     - Standard: 9.900 DKK/md
+     - Premium: 18.900 DKK/md
+     - Enterprise: 39.000 DKK/md (eller efter aftale)
+   - Added subscription details and user limits
+   - Added billing frequency information
+   - File: `pricing.php`
 
 ---
 
@@ -40,15 +70,16 @@
 
 ### 4. 📞 Sticky CTA Button
 
-- **Status:** ✅ Complete
+- **Status:** ✅ Complete + Optimized
 - **Code:** `includes/site-header.php` (CSS), `includes/site-footer.php` (HTML), `assets/js/site.js` (scroll logic)
 - **Features:**
-  - Scroll-triggered (shows at 50% viewport)
+  - Scroll-triggered (shows at 20% viewport - OPTIMIZED from 50%)
   - Hides near footer (200px threshold)
   - Responsive text: "Kontakt" (mobile) / "Book Møde" (desktop)
   - Hover scale effect
   - Calendar icon
   - ARIA label for accessibility
+- **Optimization:** Earlier visibility ensures users discover CTA within 1-2 seconds of scrolling
 
 ### 5. 🤖 AlphaBot Widget (Restored)
 

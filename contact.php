@@ -14,7 +14,7 @@ $structured_data = [
 include 'includes/site-header.php';
 ?>
 
-<main id="main-content" class="pt-24">
+<main id="main-content" class="pt-16">
     <section class="py-20 sm:py-24 section-fade-in">
         <div class="container mx-auto px-4">
             <div class="text-center max-w-2xl mx-auto mb-12">

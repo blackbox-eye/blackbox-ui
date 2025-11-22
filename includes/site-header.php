@@ -1003,7 +1003,7 @@ if (!empty($disable_alphabot)) {
         $breadcrumb_schema = aig_breadcrumb_structured_data($breadcrumbs);
     ?>
         <!-- Breadcrumb Navigation -->
-        <nav aria-label="Breadcrumb" class="pt-20 pb-2">
+        <nav aria-label="Breadcrumb" class="pt-16 pb-2">
             <div class="container mx-auto px-4">
                 <ol class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
                     <?php foreach ($breadcrumbs as $index => $crumb): ?>

@@ -87,9 +87,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const windowHeight = window.innerHeight;
             const documentHeight = document.documentElement.scrollHeight;
 
-            // Show after scrolling 50% of viewport height
+            // Show after scrolling 20% of viewport height (earlier visibility)
             // Hide when near bottom (within 200px of footer)
-            const shouldShow = scrollPosition > windowHeight * 0.5 &&
+            const shouldShow = scrollPosition > windowHeight * 0.2 &&
                                scrollPosition < documentHeight - windowHeight - 200;
 
             stickyCTA.classList.toggle('visible', shouldShow);

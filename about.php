@@ -4,7 +4,7 @@ $current_page = 'about';
 include 'includes/site-header.php';
 ?>
 
-<main class="pt-24">
+<main class="pt-16">
     <section class="py-20 sm:py-24">
         <div class="container mx-auto px-4">
             <div class="glass-effect rounded-3xl p-8 sm:p-12 mb-16 text-center section-fade-in">

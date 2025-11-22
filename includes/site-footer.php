@@ -59,27 +59,27 @@
                     class="alphabot-panel"
                     role="dialog"
                     aria-modal="false"
-                    aria-label="AlphaBot sikkerhedsassistent">
+                    aria-label="<?= htmlspecialchars(t('alphabot.subtitle')) ?>">
                     <div class="alphabot-panel-header">
                         <div>
-                            <p class="alphabot-panel-title">GreyEYE AlphaBot</p>
-                            <p class="alphabot-panel-subtitle">AI-sikkerhedsrådgiver 24/7</p>
+                            <p class="alphabot-panel-title"><?= t('alphabot.title') ?></p>
+                            <p class="alphabot-panel-subtitle"><?= t('alphabot.panel_tagline') ?></p>
                         </div>
-                        <button type="button" id="alphabot-close-btn" class="alphabot-close-btn" aria-label="Luk AlphaBot">&times;</button>
+                        <button type="button" id="alphabot-close-btn" class="alphabot-close-btn" aria-label="<?= htmlspecialchars(t('common.close')) ?>">&times;</button>
                     </div>
-                    <div id="alphabot-messages" class="alphabot-messages" role="log" aria-live="polite" aria-label="AlphaBot samtale"></div>
+                    <div id="alphabot-messages" class="alphabot-messages" role="log" aria-live="polite" aria-label="<?= htmlspecialchars(t('alphabot.subtitle')) ?>"></div>
                     <div class="alphabot-input-group">
-                        <label for="alphabot-input" class="sr-only">Skriv dit spørgsmål til AlphaBot</label>
+                        <label for="alphabot-input" class="sr-only"><?= t('alphabot.subtitle') ?></label>
                         <textarea id="alphabot-input"
                             rows="2"
-                            placeholder="Stil et spørgsmål om sikkerhed..."
+                            placeholder="<?= htmlspecialchars(t('alphabot.placeholder')) ?>"
                             aria-describedby="alphabot-hint"></textarea>
                         <button type="button" id="alphabot-send-btn" class="alphabot-send-btn" disabled>
-                            <span id="send-text">Send</span>
+                            <span id="send-text"><?= t('alphabot.send') ?></span>
                             <span id="send-loader" class="hidden ai-spinner" aria-hidden="true"></span>
                         </button>
                     </div>
-                    <p id="alphabot-hint" class="text-xs text-gray-400 mt-2">Enter sender beskeden. Shift + Enter giver linjeskift.</p>
+                    <p id="alphabot-hint" class="text-xs text-gray-400 mt-2"><?= t('alphabot.hint') ?></p>
                 </section>
             </div>
         <?php endif; ?>

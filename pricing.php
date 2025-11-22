@@ -1,6 +1,7 @@
 <?php
-$page_title = 'Priser | Blackbox EYE™';
+require_once __DIR__ . '/includes/i18n.php';
 $current_page = 'pricing';
+$page_title = t('pricing.title') . ' | ' . t('site.name');
 include 'includes/site-header.php';
 ?>
 

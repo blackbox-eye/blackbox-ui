@@ -2,6 +2,8 @@
 require_once __DIR__ . '/env.php';
 require_once __DIR__ . '/i18n.php';
 
+$current_language = bbx_get_language();
+
 // Handle language switching via query parameter
 if (isset($_GET['lang']) && in_array($_GET['lang'], ['da', 'en'])) {
     bbx_set_language($_GET['lang']);
@@ -148,7 +150,7 @@ if (!empty($disable_alphabot)) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="da" class="scroll-smooth">
+<html lang="<?= htmlspecialchars($current_language) ?>" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
@@ -159,6 +161,20 @@ if (!empty($disable_alphabot)) {
     <meta name="author" content="<?= htmlspecialchars($meta_author) ?>">
     <meta name="robots" content="<?= htmlspecialchars($meta_robots) ?>">
     <link rel="canonical" href="<?= htmlspecialchars($canonical_url) ?>">
+    <?php
+    $hreflang_locales = [
+        'da' => 'da-DK',
+        'en' => 'en'
+    ];
+    $canonical_base = strtok($canonical_url, '?') ?: $canonical_url;
+    $alternate_links = [];
+    foreach ($hreflang_locales as $lang_code => $locale_code) {
+        $alternate_links[$lang_code] = $canonical_base . '?lang=' . $lang_code;
+    }
+    foreach ($alternate_links as $lang_code => $href): ?>
+        <link rel="alternate" hreflang="<?= htmlspecialchars($hreflang_locales[$lang_code]) ?>" href="<?= htmlspecialchars($href) ?>">
+    <?php endforeach; ?>
+    <link rel="alternate" hreflang="x-default" href="<?= htmlspecialchars($alternate_links['en'] ?? $canonical_base) ?>">
 
     <meta property="og:title" content="<?= htmlspecialchars($meta_og_title) ?>">
     <meta property="og:description" content="<?= htmlspecialchars($meta_og_description) ?>">
@@ -971,16 +987,16 @@ if (!empty($disable_alphabot)) {
                     <!-- Language Switcher -->
                     <div class="flex items-center gap-1 border border-gray-600 rounded-lg p-1 flex-shrink-0">
                         <a href="?lang=da"
-                            class="language-switch px-3 py-1.5 rounded text-xs lg:text-sm font-medium transition-all <?= bbx_get_language() === 'da' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>"
-                            aria-label="Skift til dansk"
-                            <?= bbx_get_language() === 'da' ? 'aria-current="true"' : '' ?>>
-                            DA
+                            class="language-switch px-3 py-1.5 rounded text-xs lg:text-sm font-medium transition-all <?= $current_language === 'da' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>"
+                            aria-label="<?= htmlspecialchars(t('header.language.switch_da')) ?>"
+                            <?= $current_language === 'da' ? 'aria-current="true"' : '' ?>>
+                            <?= t('header.language.da') ?>
                         </a>
                         <a href="?lang=en"
-                            class="language-switch px-3 py-1.5 rounded text-xs lg:text-sm font-medium transition-all <?= bbx_get_language() === 'en' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>"
-                            aria-label="Switch to English"
-                            <?= bbx_get_language() === 'en' ? 'aria-current="true"' : '' ?>>
-                            EN
+                            class="language-switch px-3 py-1.5 rounded text-xs lg:text-sm font-medium transition-all <?= $current_language === 'en' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>"
+                            aria-label="<?= htmlspecialchars(t('header.language.switch_en')) ?>"
+                            <?= $current_language === 'en' ? 'aria-current="true"' : '' ?>>
+                            <?= t('header.language.en') ?>
                         </a>
                     </div>
                 </div>
@@ -1018,6 +1034,20 @@ if (!empty($disable_alphabot)) {
             <a href="agent-login.php" class="mt-8 inline-block border border-amber-400 text-amber-400 py-3 px-8 rounded-lg text-xl font-semibold">
                 <?= t('header.cta.agent_login') ?>
             </a>
+            <div class="flex items-center justify-center gap-3 pt-6">
+                <a href="?lang=da"
+                    class="language-switch px-4 py-2 rounded-lg text-base font-semibold transition-all <?= $current_language === 'da' ? 'bg-amber-400 text-black' : 'text-gray-300 border border-gray-600' ?>"
+                    aria-label="<?= htmlspecialchars(t('header.language.switch_da')) ?>"
+                    <?= $current_language === 'da' ? 'aria-current="true"' : '' ?>>
+                    <?= t('header.language.da') ?>
+                </a>
+                <a href="?lang=en"
+                    class="language-switch px-4 py-2 rounded-lg text-base font-semibold transition-all <?= $current_language === 'en' ? 'bg-amber-400 text-black' : 'text-gray-300 border border-gray-600' ?>"
+                    aria-label="<?= htmlspecialchars(t('header.language.switch_en')) ?>"
+                    <?= $current_language === 'en' ? 'aria-current="true"' : '' ?>>
+                    <?= t('header.language.en') ?>
+                </a>
+            </div>
         </nav>
     </div>
 

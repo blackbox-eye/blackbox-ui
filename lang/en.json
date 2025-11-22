@@ -15,6 +15,12 @@
     "cta": {
       "agent_login": "Agent Login",
       "book_meeting": "Book Meeting"
+    },
+    "language": {
+      "da": "DA",
+      "en": "EN",
+      "switch_da": "Switch to Danish",
+      "switch_en": "Switch to English"
     }
   },
   "footer": {
@@ -36,6 +42,87 @@
     },
     "copyright": "© 2025 Blackbox EYE™. All rights reserved."
   },
+  "home": {
+    "meta": {
+      "title": "BLACKBOX EYE™ – Intelligent security. Ready for action.",
+      "description": "The complete AI-driven security platform that protects your business 24/7 and turns employees into your strongest line of defense."
+    },
+    "hero": {
+      "headline": "Make invisible threats visible.",
+      "subheadline": "The complete AI-driven security platform that proactively protects your organization 24/7—and turns employees into your strongest line of defense.",
+      "primary_cta": "Book a No-Obligation Demo",
+      "secondary_cta": "Explore the Platform"
+    },
+    "tactical": {
+      "tagline": "The Tactical Overview",
+      "title": "From strategy to operational effect",
+      "description": "One platform, five focus areas. Navigate directly to the intelligence you need.",
+      "cards": {
+        "about": {
+          "title": "About Us",
+          "body": "Dive into our mission, values, and discreet specialist teams that deliver operational perfection.",
+          "cta": "Learn More"
+        },
+        "products": {
+          "title": "Products",
+          "body": "See how our AI modules operate as one defense layer—from PVE to GreyEYE.",
+          "cta": "View Products"
+        },
+        "cases": {
+          "title": "Case Studies",
+          "body": "Review documented impact and let AI analyze your situation in seconds.",
+          "cta": "See Proof"
+        },
+        "pricing": {
+          "title": "Pricing",
+          "body": "Find the right package with help from our AI security advisor.",
+          "cta": "View Plans"
+        },
+        "contact": {
+          "title": "Contact",
+          "body": "Confidential dialogue with our experts—when only the absolute best is acceptable.",
+          "cta": "Contact the Team"
+        }
+      }
+    },
+    "operational": {
+      "tagline": "Activate the tactical advantage",
+      "title": "From intelligence to response—without friction",
+      "description": "Blackbox EYE™ combines AI-driven analysis modules with operational readiness. Our platform is used by organizations with zero tolerance for compromise.",
+      "bullets": {
+        "penetration": {
+          "title": "Continuous penetration testing",
+          "body": "and vulnerability hunting via the PVE module."
+        },
+        "monitoring": {
+          "title": "Live monitoring",
+          "body": "of insider and network threats with GreyEYE."
+        },
+        "expertise": {
+          "title": "Expertise on-demand",
+          "body": "from Recon, Red, Stealth, and Blue Teams."
+        }
+      },
+      "panel": {
+        "title": "Need a rapid assessment?",
+        "description": "Share a short description of your challenge and our AI consultant will deliver a tailored first response.",
+        "label": "Your challenge",
+        "placeholder": "E.g. 'We lack visibility into privileged access during the night shift.'",
+        "button": "Trigger AI Assessment",
+        "loading": "Analyzing your security posture...",
+        "error": "Unable to generate a response. Please try again."
+      }
+    },
+    "cta": {
+      "title": "Ready to scale your resilience?",
+      "description": "Contact our operational team or jump straight to the sections that match your needs.",
+      "actions": {
+        "cases": "See Documented Impact",
+        "pricing": "Request Pricing",
+        "contact": "Contact Us"
+      }
+    }
+  },
   "about": {
     "title": "About Blackbox EYE™",
     "breadcrumb": "About",
@@ -53,6 +140,69 @@
       "innovation_desc": "AI-driven security technology",
       "integrity": "Integrity",
       "integrity_desc": "Transparent communication and compliance"
+    },
+    "hero_section": {
+      "tagline": "Our DNA",
+      "title": "Blackbox EYE™ – Intelligent security. Ready for action.",
+      "description": "We are a globally recognized specialist in advanced intelligence and security solutions. Our teams combine breakthrough technology, uncompromising discretion, and maximum reliability."
+    },
+    "pillars": {
+      "vision_title": "Vision",
+      "vision_body": "To set the global standard for discreet security, analysis, and operational protection—with zero compromise.",
+      "mission_title": "Mission",
+      "mission_body": "To protect, prepare, and strengthen our clients through unrivaled security solutions that stay ahead of today’s and tomorrow’s threats."
+    },
+    "values_grid": {
+      "title": "Our Values",
+      "items": {
+        "discretion": {
+          "title": "Discretion",
+          "body": "We operate invisibly and relentlessly in the background—always one step ahead."
+        },
+        "innovation": {
+          "title": "Innovation",
+          "body": "Constant development and integration of next-gen technologies."
+        },
+        "integrity": {
+          "title": "Integrity",
+          "body": "Uncompromised confidentiality, accountability, and reliability."
+        },
+        "perfection": {
+          "title": "Perfection",
+          "body": "Zero margin for error—every detail matters."
+        }
+      }
+    },
+    "teams": {
+      "title": "Exclusive Special Teams",
+      "description": "For the most demanding missions, you can—under full confidentiality—deploy our specialized units. Each team works with a dedicated focus to eliminate even the most complex threats.",
+      "units": {
+        "recon": {
+          "title": "Recon Team",
+          "body": "Deep intelligence, analysis, and information gathering alongside discreet field work."
+        },
+        "red": {
+          "title": "Red Team",
+          "body": "Realistic penetration tests and attack simulations—physical and digital."
+        },
+        "stealth": {
+          "title": "Stealth Team",
+          "body": "Undercover operations and discreet collection of critical intelligence."
+        },
+        "blue": {
+          "title": "Blue Team",
+          "body": "Proactive experts in defense, security architecture, and threat response."
+        },
+        "custom": {
+          "title": "Custom Operations",
+          "body": "Tailored missions based on your specific requirements—with maximum discretion and effect."
+        }
+      }
+    },
+    "cta": {
+      "title": "Want to understand our operating model?",
+      "description": "Contact our Chief Intelligence Officer for a confidential brief or book a walk-through of our special teams.",
+      "button": "Contact Our Experts"
     }
   },
   "products": {
@@ -60,6 +210,13 @@
     "breadcrumb": "Products",
     "subtitle": "AI-driven cybersecurity solutions",
     "intro": "Blackbox EYE™ offers a complete suite of specialized modules to protect your organization.",
+    "hero_section": {
+      "tagline": "The Platform",
+      "title": "A holistic security strategy in one place",
+      "description": "Every module inside Blackbox EYE™ is a specialized line of defense. Use our AI assistant to generate concrete threat scenarios and see how we neutralize them."
+    },
+    "scenario_button": "✨ Generate a Threat Scenario",
+    "key_features_heading": "Key Capabilities",
     "greyeye": {
       "title": "GreyEYE™",
       "subtitle": "AI Security Assistant",
@@ -67,8 +224,35 @@
       "features": {
         "monitoring": "Real-time threat monitoring",
         "analysis": "Automated incident analysis",
-        "response": "AI-assisted response"
+        "response": "AI-assisted response",
+        "intelligence": "Global threat intelligence and correlation"
       }
+    },
+    "extras": {
+      "title": "Additional Modules & Integrations",
+      "items": {
+        "idmatrix": {
+          "title": "ID-Matrix",
+          "body": "Granular access control, live session monitoring, and biometric safeguards."
+        },
+        "aut": {
+          "title": "AUT – Awareness & Training",
+          "body": "Scenario-based awareness training powered by AI and adaptive learning."
+        },
+        "bridge": {
+          "title": "Operational Bridge",
+          "body": "Integrate our platform with your existing SOC, SIEM, and workflows."
+        },
+        "command": {
+          "title": "Live Command Center",
+          "body": "Real-time situation rooms, mission control dashboards, and automated playbooks."
+        }
+      }
+    },
+    "cta": {
+      "title": "Ready to see the modules in action?",
+      "description": "Book a confidential demo and we’ll show how Blackbox EYE™ deploys inside your environment without friction.",
+      "button": "Contact Our Product Team"
     },
     "pve": {
       "title": "PVE™",
@@ -77,7 +261,8 @@
       "features": {
         "scanning": "Continuous vulnerability scanning",
         "pentest": "Automated penetration testing",
-        "reporting": "Detailed compliance reports"
+        "reporting": "Detailed compliance reports",
+        "simulation": "Adaptive threat simulation against emerging attacks"
       }
     },
     "idmatrix": {
@@ -106,6 +291,49 @@
     "breadcrumb": "Cases",
     "subtitle": "Documented Impact",
     "intro": "See how Blackbox EYE™ has helped Danish organizations strengthen their cybersecurity.",
+    "hero_section": {
+      "tagline": "Documented impact",
+      "title": "Proven value in the real world",
+      "description": "See how we have neutralized critical threats for high-demand clients—and let our AI analyze your own situation."
+    },
+    "labels": {
+      "challenge": "Challenge",
+      "solution": "Solution",
+      "result": "Result"
+    },
+    "cards": {
+      "municipality": {
+        "title": "Municipality with critical infrastructure",
+        "challenge": "Unauthorized access to technical installations.",
+        "solution": "ID-Matrix and GreyEYE implemented to log every access attempt and deliver weekly reports.",
+        "result": "80% reduction in access breaches."
+      },
+      "realestate": {
+        "title": "Real estate operator",
+        "challenge": "Limited oversight across 12 sites and recurring theft.",
+        "solution": "Platform integrated with existing cameras plus mobile access for facility managers.",
+        "result": "65% fewer theft incidents within three months."
+      },
+      "security": {
+        "title": "Security firm",
+        "challenge": "Manual logbooks and slow response time.",
+        "solution": "GreyEYE now assists guards with automated documentation and live updates.",
+        "result": "New differentiation lever in the market."
+      }
+    },
+    "analysis": {
+      "title": "✨ Analyze your situation",
+      "description": "Briefly describe a security challenge inside your organization and our AI consultant will generate a targeted recommendation based on previous cases.",
+      "label": "Your challenge",
+      "placeholder": "E.g. 'We worry about phishing emails targeting our finance team...'",
+      "button": "Request AI Analysis",
+      "loading": "Analyzing your scenario..."
+    },
+    "cta": {
+      "title": "Ready to create your next success story?",
+      "description": "Reach out for a confidential dialogue and receive an operational plan tailored to your risk profile.",
+      "button": "Book a confidential brief"
+    },
     "stats": {
       "threats_blocked": "Threats Blocked",
       "incidents_prevented": "Incidents Prevented",
@@ -244,16 +472,45 @@
     "breadcrumb": "Contact",
     "subtitle": "Get in touch",
     "intro": "Have questions about our solutions? Contact our security advisors.",
+    "hero_section": {
+      "tagline": "Confidential dialogue",
+      "title": "Contact us—when only the absolute best will do",
+      "description": "At Blackbox EYE™ uncompromised confidentiality and impenetrable protection are fundamentals. Nothing is left to chance."
+    },
     "form": {
       "name": "Name",
       "email": "Email",
       "company": "Company",
       "phone": "Phone",
+      "phone_optional": "Phone (optional)",
       "message": "Message",
       "submit": "Send Message",
       "sending": "Sending...",
       "success": "Thank you for your message! We'll get back to you as soon as possible.",
       "error": "An error occurred. Please try again or contact us directly."
+    },
+    "details": {
+      "direct": {
+        "title": "Direct contact",
+        "email": "ops@blackbox.codes",
+        "phone": "+45 31 33 00 33"
+      },
+      "offices": {
+        "title": "Global offices",
+        "switzerland": "Switzerland – Geneva Branch",
+        "switzerland_address": "Rue du Rhône 80, 1204 Geneva, Switzerland",
+        "uae": "UAE – Dubai HQ",
+        "uae_address": "Emirates Financial Towers, South Tower, Level 27, DIFC, Dubai, UAE"
+      },
+      "secure": {
+        "title": "Secure communications",
+        "body": "PGP keys and secure channels are provided post-NDA."
+      }
+    },
+    "cta": {
+      "title": "Prefer a direct strategy session?",
+      "description": "Book a confidential strategy or crisis meeting—on-site or virtual. We adapt to your security protocols.",
+      "button": "Request NDA & secure line"
     }
   },
   "alphabot": {
@@ -262,7 +519,10 @@
     "placeholder": "Ask me a question about cybersecurity...",
     "send": "Send",
     "thinking": "Thinking...",
-    "error": "Sorry, I couldn't process your request. Please try again."
+    "error": "Sorry, I couldn't process your request. Please try again.",
+    "panel_tagline": "AI security advisor 24/7",
+    "hint": "Press Enter to send. Shift + Enter adds a new line.",
+    "aria_toggle": "Open AlphaBot security assistant"
   },
   "common": {
     "loading": "Loading...",
@@ -274,6 +534,12 @@
     "get_started": "Get Started",
     "contact_us": "Contact Us",
     "back": "Back",
-    "next": "Next"
+    "next": "Next",
+    "skip_link": "Skip to main content",
+    "ai_loading": "The AI assistant is analyzing your request...",
+    "ai_missing_config": "AI configuration is missing. Contact the administrator.",
+    "ai_rate_limit": "Too many requests. Please wait a moment and try again.",
+    "ai_timeout": "The request took too long—please try again.",
+    "ai_error": "An error occurred while communicating with the AI assistant."
   }
 }

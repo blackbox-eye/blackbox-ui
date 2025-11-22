@@ -1,12 +1,41 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
+    // ==========================================
+    // NAVIGATION SCROLL EFFECT
+    // ==========================================
+    const header = document.getElementById('main-header');
+    
+    const handleScroll = () => {
+        if (window.scrollY > 50) {
+            header?.classList.add('scrolled');
+        } else {
+            header?.classList.remove('scrolled');
+        }
+    };
+
+    // Initial check
+    handleScroll();
+    
+    // Throttled scroll listener for performance
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+        if (!scrollTimeout) {
+            scrollTimeout = setTimeout(() => {
+                handleScroll();
+                scrollTimeout = null;
+            }, 10);
+        }
+    }, { passive: true });
+
+    // ==========================================
+    // MOBILE MENU FUNCTIONALITY
+    // ==========================================
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenuClose = document.getElementById('mobile-menu-close');
     const mobileMenu = document.getElementById('mobile-menu');
     const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
     const mobileNavLinks = document.querySelectorAll('.nav-link-mobile');
-    const header = document.getElementById('main-header');
 
     // Mobile menu functionality with improved UX
     if (mobileMenuButton && mobileMenu && mobileMenuOverlay) {
@@ -315,85 +344,95 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ==========================================
+    // MATRIX RAIN ANIMATION - INFINITE LOOP
+    // ==========================================
     const heroCanvas = document.getElementById('hero-canvas');
     if (heroCanvas) {
         const ctx = heroCanvas.getContext('2d', { alpha: false });
         const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@#$%^&*()_+-=[]{}|;':,./<>?".split('');
         let drops = [];
         let lastFrameTime = 0;
-        const targetFPS = 30;
-        const frameInterval = 1000 / targetFPS;
+        const FPS = 30;
+        const frameInterval = 1000 / FPS;
 
-        // Check if user prefers reduced motion
+        // Respect accessibility preference
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         if (prefersReducedMotion) {
             heroCanvas.style.display = 'none';
+            console.log('Matrix animation disabled - user prefers reduced motion');
         } else {
+            // Setup canvas dimensions
             const setupCanvas = () => {
                 const dpr = window.devicePixelRatio || 1;
-                heroCanvas.width = window.innerWidth * dpr;
-                heroCanvas.height = window.innerHeight * dpr;
-                heroCanvas.style.width = window.innerWidth + 'px';
-                heroCanvas.style.height = window.innerHeight + 'px';
+                const w = window.innerWidth;
+                const h = window.innerHeight;
+                
+                heroCanvas.width = w * dpr;
+                heroCanvas.height = h * dpr;
+                heroCanvas.style.width = w + 'px';
+                heroCanvas.style.height = h + 'px';
                 ctx.scale(dpr, dpr);
 
-                const columns = Math.floor(window.innerWidth / 20);
-                drops = Array.from({ length: columns }, () => Math.floor(Math.random() * (window.innerHeight / 20)));
+                const columns = Math.floor(w / 20);
+                drops = Array.from({ length: columns }, () => Math.floor(Math.random() * (h / 20)));
             };
 
-            const drawDigitalRain = (currentTime) => {
-                // ALWAYS continue the loop - this is the key fix
-                requestAnimationFrame(drawDigitalRain);
+            // Main animation loop - NEVER STOPS
+            const animate = (timestamp) => {
+                // Schedule next frame FIRST - guarantees infinite loop
+                requestAnimationFrame(animate);
 
-                const elapsed = currentTime - lastFrameTime;
+                // FPS throttling
+                const elapsed = timestamp - lastFrameTime;
+                if (elapsed < frameInterval) return;
+                
+                lastFrameTime = timestamp - (elapsed % frameInterval);
 
-                // Only draw when enough time has passed (FPS limiting)
-                if (elapsed > frameInterval) {
-                    lastFrameTime = currentTime - (elapsed % frameInterval);
+                // Fade effect
+                ctx.fillStyle = 'rgba(16, 20, 25, 0.05)';
+                ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
-                    // Clear canvas with slight fade effect
-                    ctx.fillStyle = 'rgba(16, 20, 25, 0.05)';
-                    ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+                // Rain color
+                const color = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--digital-rain-color')
+                    .trim() || '#008000';
 
-                    // Get color from CSS variable
-                    const color = getComputedStyle(document.documentElement)
-                        .getPropertyValue('--digital-rain-color')
-                        .trim() || '#008000';
+                ctx.fillStyle = color;
+                ctx.font = '15px monospace';
 
-                    ctx.fillStyle = color;
-                    ctx.font = '15px monospace';
+                // Draw all drops
+                for (let i = 0; i < drops.length; i++) {
+                    const char = chars[Math.floor(Math.random() * chars.length)];
+                    const x = i * 20;
+                    const y = drops[i] * 20;
+                    
+                    ctx.fillText(char, x, y);
 
-                    // Draw each drop
-                    drops.forEach((drop, index) => {
-                        const text = chars[Math.floor(Math.random() * chars.length)];
-                        ctx.fillText(text, index * 20, drop * 20);
-
-                        // Reset drop to top when it reaches bottom
-                        if (drop * 20 > window.innerHeight && Math.random() > 0.975) {
-                            drops[index] = 0;
-                        }
-                        drops[index] = drop + 1;
-                    });
+                    // Reset when off-screen
+                    if (y > window.innerHeight && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
                 }
             };
 
-            // Initialize canvas and start animation
+            // Initialize
             setupCanvas();
             lastFrameTime = performance.now();
-            requestAnimationFrame(drawDigitalRain);
+            requestAnimationFrame(animate);
 
-            // Handle window resize with debounce
-            let resizeTimeout;
+            // Resize handler
+            let resizeTimer;
             window.addEventListener('resize', () => {
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(() => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
                     setupCanvas();
-                }, 250);
+                }, 200);
             });
 
-            // Log confirmation
-            console.log('Matrix rain animation initialized - running continuously');
+            console.log('✅ Matrix rain animation started - infinite loop active');
         }
     }
 

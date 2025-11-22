@@ -21,6 +21,11 @@
       "en": "EN",
       "switch_da": "Skift til dansk",
       "switch_en": "Switch to English"
+    },
+    "mobile": {
+      "navigation": "Navigation",
+      "open_menu": "Åbn navigationsmenu",
+      "close_menu": "Luk navigationsmenu"
     }
   },
   "footer": {

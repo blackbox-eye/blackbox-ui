@@ -206,6 +206,19 @@ if (!empty($disable_alphabot)) {
     </script>
 
     <style>
+        /* Navigation Scroll Effect */
+        #main-header {
+            background-color: transparent;
+            backdrop-filter: none;
+        }
+
+        #main-header.scrolled {
+            background-color: rgba(16, 20, 25, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
         :root {
             --bg-color: #101419;
             --primary-accent: #FFC700;
@@ -968,7 +981,7 @@ if (!empty($disable_alphabot)) {
 <body class="antialiased">
 
     <!-- Skip navigation for keyboard users (WCAG 2.1) -->
-    <a href="#main-content" class="skip-link">Spring til hovedindhold</a>
+    <a href="#main-content" class="skip-link"><?= t('common.skip_link') ?></a>
 
     <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
         <div class="container mx-auto px-4">
@@ -1007,8 +1020,8 @@ if (!empty($disable_alphabot)) {
                         </a>
                     </div>
                 </div>
-                <button id="mobile-menu-button" class="md:hidden text-white p-2 -mr-2" aria-controls="mobile-menu" aria-expanded="false" aria-label="Åbn navigation menu">
-                    <span class="sr-only">Åbn menu</span>
+                <button id="mobile-menu-button" class="md:hidden text-white p-2 -mr-2" aria-controls="mobile-menu" aria-expanded="false" aria-label="<?= htmlspecialchars(t('header.mobile.open_menu')) ?>">
+                    <span class="sr-only"><?= t('header.mobile.open_menu') ?></span>
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
                     </svg>
@@ -1023,8 +1036,8 @@ if (!empty($disable_alphabot)) {
     <!-- Mobile menu -->
     <div id="mobile-menu" class="md:hidden fixed top-0 right-0 bottom-0 w-4/5 max-w-sm glass-effect z-40 p-8 shadow-2xl">
         <div class="flex justify-between items-center mb-8">
-            <span class="text-lg font-semibold text-white">Navigation</span>
-            <button id="mobile-menu-close" class="text-white p-2 -mr-2" aria-label="Luk navigation menu">
+            <span class="text-lg font-semibold text-white"><?= t('header.mobile.navigation') ?></span>
+            <button id="mobile-menu-close" class="text-white p-2 -mr-2" aria-label="<?= htmlspecialchars(t('header.mobile.close_menu')) ?>">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>

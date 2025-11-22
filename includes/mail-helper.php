@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 /**
  * Robust mail sending function with fallback to SMTP
- * 
+ *
  * This function first attempts to send email using PHP's mail() function
  * with enhanced headers. If SMTP credentials are configured via environment
  * variables, it will use PHPMailer with SMTP authentication instead.
- * 
+ *
  * Environment variables for SMTP (optional):
  * - SMTP_HOST: SMTP server hostname (e.g., smtp.protonmail.ch, smtp.gmail.com)
  * - SMTP_PORT: SMTP port (typically 587 for TLS, 465 for SSL)
  * - SMTP_USERNAME: SMTP authentication username
  * - SMTP_PASSWORD: SMTP authentication password
  * - SMTP_SECURE: Encryption type ('tls' or 'ssl')
- * 
+ *
  * @param string $to Recipient email address
  * @param string $subject Email subject
  * @param string $message Email body (plain text)
@@ -40,7 +40,7 @@ function bbx_send_mail(
     $smtpUsername = bbx_env('SMTP_USERNAME', '');
     $smtpPassword = bbx_env('SMTP_PASSWORD', '');
     $smtpSecure = bbx_env('SMTP_SECURE', 'tls'); // 'tls' or 'ssl'
-    
+
     $useSmtp = !empty($smtpHost) && !empty($smtpUsername) && !empty($smtpPassword);
 
     if (BBX_DEBUG_SMTP) {
@@ -65,7 +65,7 @@ function bbx_send_mail(
         }
         error_log('CONTACT FORM MAIL DEBUG: SMTP disabled – missing env vars: ' . implode(', ', $missing));
     }
-    
+
     if ($useSmtp) {
         error_log('CONTACT FORM MAIL: Using SMTP mode (host: ' . $smtpHost . ')');
         return bbx_send_mail_smtp(
@@ -98,7 +98,7 @@ function bbx_send_mail(
 
 /**
  * Send email using PHP's native mail() function with enhanced headers
- * 
+ *
  * @return bool True if mail was sent successfully
  */
 function bbx_send_mail_native(
@@ -115,17 +115,17 @@ function bbx_send_mail_native(
     if (empty($fromEmail)) {
         $fromEmail = 'noreply@' . $serverDomain;
     }
-    
+
     // Sanitize inputs
     $to = str_replace(["\r", "\n"], '', $to);
     $fromEmail = str_replace(["\r", "\n"], '', $fromEmail);
     $fromName = str_replace(["\r", "\n"], '', $fromName);
     $replyToEmail = str_replace(["\r", "\n"], '', $replyToEmail);
     $replyToName = str_replace(["\r", "\n"], '', $replyToName);
-    
+
     // Generate unique Message-ID
     $messageId = '<' . md5(uniqid((string)time(), true)) . '@' . $serverDomain . '>';
-    
+
     // Build headers with all necessary fields for deliverability
     $headers = [
         'From: ' . $fromName . ' <' . $fromEmail . '>',
@@ -138,7 +138,7 @@ function bbx_send_mail_native(
         'X-Mailer: PHP/' . phpversion(),
         'X-Priority: 3',
     ];
-    
+
     // Add Reply-To if provided
     if (!empty($replyToEmail)) {
         if (!empty($replyToName)) {
@@ -147,20 +147,20 @@ function bbx_send_mail_native(
             $headers[] = 'Reply-To: ' . $replyToEmail;
         }
     }
-    
+
     // Prepare message body
     $body = wordwrap($message, 78, PHP_EOL);
-    
+
     // Log mail attempt
     error_log('CONTACT FORM MAIL DEBUG: Sending via mail() to ' . $to);
     error_log('CONTACT FORM MAIL DEBUG: From: ' . $fromEmail);
     error_log('CONTACT FORM MAIL DEBUG: Subject: ' . $subject);
     error_log('CONTACT FORM MAIL DEBUG: Message-ID: ' . $messageId);
-    
+
     // Send mail with envelope sender parameter for better deliverability
     $additionalParams = '-f' . $fromEmail;
     $result = @mail($to, $subject, $body, implode("\r\n", $headers), $additionalParams);
-    
+
     if (!$result) {
         $lastError = error_get_last();
         error_log('CONTACT FORM WARNING: mail() failed');
@@ -173,13 +173,13 @@ function bbx_send_mail_native(
     } else {
         error_log('CONTACT FORM MAIL DEBUG: mail() dispatched successfully');
     }
-    
+
     return $result;
 }
 
 /**
  * Send email using PHPMailer with SMTP authentication
- * 
+ *
  * @return bool True if mail was sent successfully
  */
 function bbx_send_mail_smtp(
@@ -200,9 +200,9 @@ function bbx_send_mail_smtp(
     require_once __DIR__ . '/PHPMailer/Exception.php';
     require_once __DIR__ . '/PHPMailer/PHPMailer.php';
     require_once __DIR__ . '/PHPMailer/SMTP.php';
-    
+
     $mail = new PHPMailer\PHPMailer\PHPMailer(true);
-    
+
     try {
         // Server settings
         $mail->isSMTP();
@@ -212,48 +212,47 @@ function bbx_send_mail_smtp(
         $mail->Password   = $smtpPassword;
         $mail->SMTPSecure = $smtpSecure === 'ssl' ? PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS : PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = $smtpPort;
-        
+
         // Enable debug logging if in debug mode
-                if ((defined('BBX_DEBUG_RECAPTCHA') && BBX_DEBUG_RECAPTCHA) || (defined('BBX_DEBUG_SMTP') && BBX_DEBUG_SMTP)) {
+        if ((defined('BBX_DEBUG_RECAPTCHA') && BBX_DEBUG_RECAPTCHA) || (defined('BBX_DEBUG_SMTP') && BBX_DEBUG_SMTP)) {
             $mail->SMTPDebug = 2;
-            $mail->Debugoutput = function($str, $level) {
+            $mail->Debugoutput = function ($str, $level) {
                 error_log('SMTP DEBUG: ' . $str);
             };
         }
 
-                error_log('CONTACT FORM MAIL DEBUG: Initialising SMTP transport');
-        
+        error_log('CONTACT FORM MAIL DEBUG: Initialising SMTP transport');
+
         // Use server domain if no from email provided
         if (empty($fromEmail)) {
             $serverDomain = $_SERVER['HTTP_HOST'] ?? 'blackbox.codes';
             $fromEmail = 'noreply@' . $serverDomain;
         }
-        
+
         // Recipients
         $mail->setFrom($fromEmail, $fromName);
         $mail->addAddress($to);
-        
+
         // Add Reply-To if provided
         if (!empty($replyToEmail)) {
             $mail->addReplyTo($replyToEmail, $replyToName);
         }
-        
+
         // Content
         $mail->isHTML(false);
         $mail->CharSet = 'UTF-8';
         $mail->Subject = $subject;
         $mail->Body    = $message;
-        
+
         error_log('CONTACT FORM MAIL DEBUG: Sending via SMTP to ' . $to);
         error_log('CONTACT FORM MAIL DEBUG: SMTP Host: ' . $smtpHost . ':' . $smtpPort);
         error_log('CONTACT FORM MAIL DEBUG: From: ' . $fromEmail);
         error_log('CONTACT FORM MAIL DEBUG: Subject: ' . $subject);
-        
+
         error_log('CONTACT FORM MAIL DEBUG: Attempting to send SMTP message');
         $mail->send();
         error_log('CONTACT FORM MAIL DEBUG: SMTP mail sent successfully');
         return true;
-        
     } catch (Exception $e) {
         error_log('CONTACT FORM ERROR: SMTP send failed: ' . $mail->ErrorInfo);
         error_log('CONTACT FORM ERROR: Exception: ' . $e->getMessage());

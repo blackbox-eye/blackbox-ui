@@ -2,10 +2,10 @@
 if (!function_exists('bbx_env')) {
     /**
      * Get environment variable from multiple sources
-     * 
+     *
      * Checks in order: getenv(), $_SERVER, $_ENV
      * This ensures compatibility with Apache SetEnv, php-fpm, and CLI environments
-     * 
+     *
      * @param string $key Environment variable name
      * @param string $default Default value if not found
      * @return string The environment variable value or default
@@ -14,21 +14,21 @@ if (!function_exists('bbx_env')) {
     {
         // Try getenv() first (works in some configurations)
         $value = getenv($key);
-        
+
         // If getenv() fails or returns empty, fallback to $_SERVER (Apache SetEnv)
         if ($value === false || $value === '') {
             if (isset($_SERVER[$key]) && $_SERVER[$key] !== '') {
                 return (string)$_SERVER[$key];
             }
-            
+
             // Final fallback to $_ENV
             if (isset($_ENV[$key]) && $_ENV[$key] !== '') {
                 return (string)$_ENV[$key];
             }
-            
+
             return $default;
         }
-        
+
         return (string)$value;
     }
 }

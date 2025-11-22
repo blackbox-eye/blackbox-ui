@@ -46,6 +46,81 @@ if (!function_exists('aig_nav_class')) {
     {
         return $slug === $current ? 'aria-current="page"' : '';
     }
+
+    /**
+     * Generate breadcrumb trail based on current page
+     * @param string $current_page Current page slug
+     * @param string $page_title Optional custom page title
+     * @return array Breadcrumb items
+     */
+    function aig_get_breadcrumbs(string $current_page, string $page_title = ''): array
+    {
+        $breadcrumb_map = [
+            'index' => ['label' => 'Hjem', 'href' => '/'],
+            'home' => ['label' => 'Hjem', 'href' => '/'],
+            'about' => ['label' => 'Om Os', 'href' => 'about.php'],
+            'products' => ['label' => 'Produkter', 'href' => 'products.php'],
+            'cases' => ['label' => 'Kundecases', 'href' => 'cases.php'],
+            'pricing' => ['label' => 'Priser', 'href' => 'pricing.php'],
+            'contact' => ['label' => 'Kontakt', 'href' => 'contact.php'],
+            'agent-login' => ['label' => 'Agent Login', 'href' => 'agent-login.php'],
+            'dashboard' => ['label' => 'Dashboard', 'href' => 'dashboard.php'],
+            'admin' => ['label' => 'Admin', 'href' => 'admin.php'],
+            'settings' => ['label' => 'Indstillinger', 'href' => 'settings.php'],
+        ];
+
+        $breadcrumbs = [
+            ['label' => 'Hjem', 'href' => '/', 'current' => false]
+        ];
+
+        // Skip breadcrumbs for home page
+        if ($current_page === 'index' || $current_page === 'home') {
+            return [];
+        }
+
+        // Add current page
+        if (isset($breadcrumb_map[$current_page])) {
+            $breadcrumbs[] = [
+                'label' => $page_title ?: $breadcrumb_map[$current_page]['label'],
+                'href' => $breadcrumb_map[$current_page]['href'],
+                'current' => true
+            ];
+        } else {
+            // Fallback for unknown pages
+            $label = $page_title ?: ucfirst(str_replace('-', ' ', $current_page));
+            $breadcrumbs[] = [
+                'label' => $label,
+                'href' => $current_page . '.php',
+                'current' => true
+            ];
+        }
+
+        return $breadcrumbs;
+    }
+
+    /**
+     * Generate structured data for breadcrumbs (schema.org)
+     * @param array $breadcrumbs Breadcrumb items
+     * @return array Structured data
+     */
+    function aig_breadcrumb_structured_data(array $breadcrumbs): array
+    {
+        $items = [];
+        foreach ($breadcrumbs as $index => $crumb) {
+            $items[] = [
+                '@type' => 'ListItem',
+                'position' => $index + 1,
+                'name' => $crumb['label'],
+                'item' => BBX_SITE_BASE_URL . '/' . ltrim($crumb['href'], '/')
+            ];
+        }
+
+        return [
+            '@context' => 'https://schema.org',
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => $items
+        ];
+    }
 }
 
 $nav_links = [
@@ -55,6 +130,12 @@ $nav_links = [
     ['slug' => 'pricing', 'label' => 'Priser', 'href' => 'pricing.php'],
     ['slug' => 'contact', 'label' => 'Kontakt', 'href' => 'contact.php'],
 ];
+
+$alphabot_enabled_pages = ['home', 'index', 'about', 'products', 'cases', 'pricing', 'contact'];
+$show_alphabot = $show_alphabot ?? in_array($current_page, $alphabot_enabled_pages, true);
+if (!empty($disable_alphabot)) {
+    $show_alphabot = false;
+}
 ?>
 <!DOCTYPE html>
 <html lang="da" class="scroll-smooth">
@@ -105,7 +186,8 @@ $nav_links = [
             --glitch-dark-green: #003d00;
             --glitch-fire: #ffac00;
             --text-high-emphasis: #EAEAEA;
-            --text-medium-emphasis: #9CA3AF;
+            --text-medium-emphasis: #B0B8C6;
+            /* Improved contrast 4.52:1 */
             --glass-border: rgba(255, 255, 255, 0.1);
             --glass-bg: rgba(22, 28, 39, 0.6);
             --digital-rain-color: #008000;
@@ -191,6 +273,609 @@ $nav_links = [
             border-radius: 2px;
         }
 
+        /* Skip to main content link for keyboard navigation */
+        .skip-link {
+            position: absolute;
+            top: -100px;
+            left: 0;
+            background: var(--primary-accent);
+            color: #000;
+            padding: 8px 16px;
+            text-decoration: none;
+            font-weight: bold;
+            z-index: 100;
+            transition: top 0.2s ease;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Breadcrumb navigation */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            color: var(--text-medium-emphasis);
+        }
+
+        .breadcrumb-item a {
+            color: var(--text-medium-emphasis);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .breadcrumb-item a:hover {
+            color: var(--text-high-emphasis);
+        }
+
+        .breadcrumb-item a:focus-visible {
+            outline: 2px solid var(--primary-accent);
+            outline-offset: 2px;
+            border-radius: 2px;
+        }
+
+        .breadcrumb-separator {
+            color: #6B7280;
+            margin: 0 0.25rem;
+            user-select: none;
+        }
+
+        .breadcrumb-item[aria-current="page"] {
+            color: var(--text-high-emphasis);
+            font-weight: 500;
+        }
+
+        @media (max-width: 640px) {
+            .breadcrumb {
+                font-size: 0.75rem;
+                padding: 0.375rem 0;
+            }
+        }
+
+        /* Mobile menu improvements */
+        #mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-out;
+            will-change: transform;
+        }
+
+        #mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        #mobile-menu-overlay {
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+            pointer-events: none;
+        }
+
+        #mobile-menu-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            #mobile-menu,
+            #mobile-menu-overlay {
+                transition: none !important;
+            }
+        }
+
+        /* AI Loading States & Skeleton Screens */
+        .ai-loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            min-height: 200px;
+        }
+
+        .ai-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(255, 199, 0, 0.2);
+            border-top-color: var(--primary-accent);
+            border-radius: 50%;
+            animation: ai-spin 0.8s linear infinite;
+        }
+
+        @keyframes ai-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .ai-loading-text {
+            margin-top: 1rem;
+            color: var(--text-medium-emphasis);
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg,
+                    rgba(255, 255, 255, 0.05) 25%,
+                    rgba(255, 255, 255, 0.1) 50%,
+                    rgba(255, 255, 255, 0.05) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s ease-in-out infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .skeleton-line {
+            height: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .skeleton-line.short {
+            width: 60%;
+        }
+
+        .skeleton-heading {
+            height: 1.5rem;
+            width: 80%;
+            margin-bottom: 1rem;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .ai-spinner,
+            .skeleton {
+                animation: none !important;
+            }
+
+            .ai-spinner {
+                opacity: 0.5;
+            }
+        }
+
+        /* Command Rail (AlphaBot + CTA) */
+        .bbx-command-rail {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 45;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+
+        .bbx-command-rail--cta-only {
+            gap: 0;
+        }
+
+        /* Sticky CTA Button */
+        .sticky-cta {
+            position: relative;
+            background: var(--primary-accent);
+            color: #000;
+            padding: 1rem 1.5rem;
+            border-radius: 3rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 199, 0, 0.4);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+            opacity: 0;
+            transform: translateY(100px);
+            pointer-events: none;
+        }
+
+        .sticky-cta.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .sticky-cta:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 199, 0, 0.6);
+        }
+
+        .sticky-cta:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        @media (max-width: 1024px) {
+            .bbx-command-rail {
+                right: 1rem;
+                bottom: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .bbx-command-rail {
+                position: static;
+                width: 100%;
+                bottom: auto;
+                right: auto;
+                gap: 0;
+            }
+
+            .sticky-cta {
+                position: fixed;
+                left: 1rem;
+                right: 1rem;
+                bottom: 1rem;
+                width: auto;
+                justify-content: center;
+                font-size: 0.95rem;
+                border-radius: 1rem;
+            }
+        }
+
+        /* AlphaBot Widget */
+        .alphabot-widget {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            width: auto;
+            min-width: 15rem;
+            z-index: 46;
+        }
+
+        .alphabot-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(14, 20, 29, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-high-emphasis);
+            padding: 0.65rem 1.25rem;
+            border-radius: 999px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .alphabot-toggle:focus-visible {
+            outline: 2px solid var(--primary-accent);
+            outline-offset: 3px;
+        }
+
+        .alphabot-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.45);
+        }
+
+        .alphabot-widget.open .alphabot-toggle {
+            box-shadow: 0 0 25px rgba(255, 199, 0, 0.35);
+        }
+
+        .alphabot-status-dot {
+            width: 0.65rem;
+            height: 0.65rem;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.6);
+        }
+
+        .alphabot-panel {
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            margin-bottom: 1rem;
+            width: min(22rem, calc(100vw - 4rem));
+            max-height: 60vh;
+            background: rgba(8, 13, 20, 0.98);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1.25rem;
+            padding: 1.25rem;
+            box-shadow: 0 25px 55px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            transform: translate3d(0, 10px, 0);
+            pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .alphabot-widget.open .alphabot-panel {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+            pointer-events: auto;
+        }
+
+        .alphabot-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .alphabot-panel-title {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .alphabot-panel-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-medium-emphasis);
+        }
+
+        .alphabot-close-btn {
+            border: none;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-high-emphasis);
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+
+        .alphabot-close-btn:hover,
+        .alphabot-close-btn:focus-visible {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .alphabot-messages {
+            flex: 1;
+            min-height: 0;
+            max-height: 18rem;
+            overflow-y: auto;
+            padding-right: 0.35rem;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .alphabot-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .alphabot-messages::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 999px;
+        }
+
+        .chat-message {
+            display: flex;
+            width: 100%;
+        }
+
+        .chat-message .message-text {
+            padding: 0.75rem 1rem;
+            border-radius: 0.85rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+            width: 100%;
+        }
+
+        .chat-message.bot .message-text {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .chat-message.user {
+            justify-content: flex-end;
+        }
+
+        .chat-message.user .message-text {
+            background: rgba(255, 199, 0, 0.15);
+            color: var(--text-high-emphasis);
+        }
+
+        .alphabot-input-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-end;
+        }
+
+        #alphabot-input {
+            flex: 1;
+            background: rgba(13, 18, 27, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            padding: 0.75rem 1rem;
+            resize: none;
+            min-height: 3rem;
+            color: var(--text-high-emphasis);
+            font-size: 0.9rem;
+        }
+
+        #alphabot-input:focus-visible {
+            outline: 2px solid var(--primary-accent);
+            outline-offset: 2px;
+        }
+
+        .alphabot-send-btn {
+            background: var(--primary-accent);
+            color: #000;
+            border: none;
+            border-radius: 999px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            min-width: 5.5rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .alphabot-send-btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .alphabot-send-btn:not(:disabled):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
+        }
+
+        .alphabot-send-btn .ai-spinner {
+            width: 20px;
+            height: 20px;
+            border-width: 3px;
+        }
+
+        .alphabot-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            z-index: 44;
+            display: none;
+        }
+
+        .alphabot-overlay.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        @media (max-width: 1024px) {
+            .alphabot-panel {
+                width: min(20rem, calc(100vw - 4.5rem));
+            }
+        }
+
+        @media (max-width: 768px) {
+            body.alphabot-locked {
+                overflow: hidden;
+            }
+
+            .bbx-command-rail {
+                padding-bottom: calc(env(safe-area-inset-bottom, 1rem) + 4.5rem);
+            }
+
+            .alphabot-overlay {
+                display: block;
+            }
+
+            .alphabot-widget {
+                position: fixed;
+                bottom: calc(5.25rem + env(safe-area-inset-bottom, 1rem));
+                right: 1rem;
+                width: auto;
+                min-width: 0;
+            }
+
+            .alphabot-toggle {
+                padding: 0.85rem;
+                border-radius: 999px;
+                box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+            }
+
+            .alphabot-toggle .alphabot-label {
+                display: none;
+            }
+
+            .alphabot-panel {
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                border-radius: 1.5rem 1.5rem 0 0;
+                max-height: 65vh;
+                transform: translateY(110%);
+                padding: 1.25rem clamp(1rem, 4vw, 1.5rem) calc(1.25rem + env(safe-area-inset-bottom, 0));
+                box-shadow: 0 -20px 55px rgba(0, 0, 0, 0.65);
+                border-width: 1px 0 0 0;
+                border-top: 2px solid rgba(255, 199, 0, 0.25);
+            }
+
+            .alphabot-widget.open .alphabot-panel {
+                transform: translateY(0);
+            }
+
+            .alphabot-messages {
+                max-height: calc(45vh - 6rem);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .alphabot-toggle,
+            .alphabot-panel,
+            .alphabot-send-btn {
+                transition: none !important;
+            }
+
+            .alphabot-widget.open .alphabot-panel,
+            .alphabot-panel {
+                transform: none !important;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .sticky-cta {
+                transition: opacity 0.1s ease !important;
+                transform: none !important;
+            }
+
+            .sticky-cta.visible {
+                transform: none !important;
+            }
+
+            .sticky-cta:hover {
+                transform: none !important;
+            }
+        }
+
+        /* Respect user's motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            .section-fade-in {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+
+            .glitch-logo {
+                animation: none !important;
+            }
+
+            .glitch-logo span {
+                animation: none !important;
+            }
+
+            #hero-canvas {
+                display: none;
+            }
+        }
+
         .glitch-logo {
             font-family: 'Chakra Petch', sans-serif;
             font-weight: 700;
@@ -249,29 +934,32 @@ $nav_links = [
 
 <body class="antialiased">
 
+    <!-- Skip navigation for keyboard users (WCAG 2.1) -->
+    <a href="#main-content" class="skip-link">Spring til hovedindhold</a>
+
     <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
         <div class="container mx-auto px-4">
-            <div class="flex justify-between items-center h-20">
+            <div class="flex justify-between items-center h-20 gap-6 md:gap-8 lg:gap-12 xl:gap-16">
                 <div class="glitch-logo flex-shrink-0" aria-label="Blackbox EYE">
                     Blackbox EYE&trade;
                     <span aria-hidden="true">Blackbox EYE&trade;</span>
                     <span aria-hidden="true">Blackbox EYE&trade;</span>
                 </div>
-                <div class="hidden md:flex items-center space-x-4 lg:space-x-8">
-                    <nav class="flex items-center space-x-4 lg:space-x-8">
+                <div class="hidden md:flex items-center gap-3 lg:gap-8 xl:gap-10 flex-nowrap">
+                    <nav class="flex items-center gap-3 lg:gap-8 xl:gap-10 flex-nowrap">
                         <?php foreach ($nav_links as $link): ?>
                             <a href="<?= $link['href'] ?>"
-                                class="nav-link <?= aig_nav_class($link['slug'], $current_page) ?> transition-colors"
+                                class="nav-link <?= aig_nav_class($link['slug'], $current_page) ?> transition-colors whitespace-nowrap text-sm lg:text-base"
                                 <?= aig_nav_aria($link['slug'], $current_page) ?>>
                                 <?= htmlspecialchars($link['label']) ?>
                             </a>
                         <?php endforeach; ?>
                     </nav>
-                    <a href="agent-login.php" class="hidden lg:inline-block border border-amber-400 text-amber-400 py-2 px-6 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold">
+                    <a href="agent-login.php" class="md:inline-block border border-amber-400 text-amber-400 py-2 px-4 lg:px-6 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold whitespace-nowrap flex-shrink-0 text-sm lg:text-base">
                         Agent Login
                     </a>
                 </div>
-                <button id="mobile-menu-button" class="md:hidden text-white p-2 -mr-2" aria-controls="mobile-menu" aria-expanded="false">
+                <button id="mobile-menu-button" class="md:hidden text-white p-2 -mr-2" aria-controls="mobile-menu" aria-expanded="false" aria-label="Åbn navigation menu">
                     <span class="sr-only">Åbn menu</span>
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
@@ -281,7 +969,19 @@ $nav_links = [
         </div>
     </header>
 
-    <div id="mobile-menu" class="hidden md:hidden fixed top-20 left-0 right-0 bottom-0 glass-effect z-40 p-8">
+    <!-- Mobile menu overlay -->
+    <div id="mobile-menu-overlay" class="md:hidden fixed inset-0 bg-black/70 z-39" aria-hidden="true"></div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="md:hidden fixed top-0 right-0 bottom-0 w-4/5 max-w-sm glass-effect z-40 p-8 shadow-2xl">
+        <div class="flex justify-between items-center mb-8">
+            <span class="text-lg font-semibold text-white">Navigation</span>
+            <button id="mobile-menu-close" class="text-white p-2 -mr-2" aria-label="Luk navigation menu">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
         <nav class="flex flex-col space-y-8 text-center mt-8">
             <?php foreach ($nav_links as $link): ?>
                 <a href="<?= $link['href'] ?>"
@@ -295,3 +995,42 @@ $nav_links = [
             </a>
         </nav>
     </div>
+
+    <?php
+    // Generate breadcrumbs (skip for home page)
+    $breadcrumbs = aig_get_breadcrumbs($current_page, $page_title ?? '');
+    if (!empty($breadcrumbs)):
+        $breadcrumb_schema = aig_breadcrumb_structured_data($breadcrumbs);
+    ?>
+        <!-- Breadcrumb Navigation -->
+        <nav aria-label="Breadcrumb" class="pt-20 pb-2">
+            <div class="container mx-auto px-4">
+                <ol class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+                    <?php foreach ($breadcrumbs as $index => $crumb): ?>
+                        <li class="breadcrumb-item"
+                            itemprop="itemListElement"
+                            itemscope
+                            itemtype="https://schema.org/ListItem"
+                            <?= $crumb['current'] ? 'aria-current="page"' : '' ?>>
+                            <?php if (!$crumb['current']): ?>
+                                <a href="<?= htmlspecialchars($crumb['href']) ?>"
+                                    itemprop="item">
+                                    <span itemprop="name"><?= htmlspecialchars($crumb['label']) ?></span>
+                                </a>
+                                <meta itemprop="position" content="<?= $index + 1 ?>">
+                                <span class="breadcrumb-separator" aria-hidden="true">/</span>
+                            <?php else: ?>
+                                <span itemprop="name"><?= htmlspecialchars($crumb['label']) ?></span>
+                                <meta itemprop="position" content="<?= $index + 1 ?>">
+                            <?php endif; ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ol>
+            </div>
+        </nav>
+
+        <!-- Breadcrumb Structured Data -->
+        <script type="application/ld+json">
+            <?= json_encode($breadcrumb_schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) ?>
+        </script>
+    <?php endif; ?>

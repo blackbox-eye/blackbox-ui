@@ -4,11 +4,11 @@ SetEnv RECAPTCHA_SECRET_KEY "6Le7iBMsAAAAAPbQw4-eaH1DpN-lTk49HXU_06qp"
 SetEnv RECAPTCHA_DEBUG "true"
 
 # SMTP Configuration (Proton Mail)
-# DEVELOPMENT: Use placeholder - real credentials in .htaccess.production
+# PRODUCTION: This file contains real credentials - deploy via cPanel only
 SetEnv SMTP_HOST "smtp.protonmail.ch"
 SetEnv SMTP_PORT "587"
 SetEnv SMTP_USERNAME "ops@blackbox.codes"
-SetEnv SMTP_PASSWORD "REPLACE_ON_SERVER"
+SetEnv SMTP_PASSWORD "CWCNKK8JGUM79P7Y"
 SetEnv SMTP_SECURE "tls"
 SetEnv SMTP_DEBUG "true"
 

@@ -14,7 +14,7 @@ $structured_data = [
 include 'includes/site-header.php';
 ?>
 
-<main class="pt-24">
+<main id="main-content" class="pt-24">
     <section class="py-20 sm:py-24 section-fade-in">
         <div class="container mx-auto px-4">
             <div class="text-center max-w-2xl mx-auto mb-12">
@@ -49,8 +49,17 @@ include 'includes/site-header.php';
                             Send forespørgsel
                         </button>
                     </form>
-                    <div id="contact-form-error" class="hidden mt-4 text-center text-red-400 border border-red-500/60 rounded-md p-4 text-sm" role="alert"></div>
-                    <div id="contact-form-success" class="hidden mt-6 text-center text-green-400 border border-green-400 rounded-md p-4 text-sm">
+                    <div id="contact-form-error"
+                        class="hidden mt-4 text-center text-red-400 border border-red-500/60 rounded-md p-4 text-sm"
+                        role="alert"
+                        aria-live="polite"
+                        aria-atomic="true">
+                    </div>
+                    <div id="contact-form-success"
+                        class="hidden mt-6 text-center text-green-400 border border-green-400 rounded-md p-4 text-sm"
+                        role="status"
+                        aria-live="polite"
+                        aria-atomic="true">
                         Tak for din henvendelse! Vi vender tilbage hurtigst muligt.
                     </div>
                 </div>

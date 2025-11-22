@@ -339,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 heroCanvas.style.width = window.innerWidth + 'px';
                 heroCanvas.style.height = window.innerHeight + 'px';
                 ctx.scale(dpr, dpr);
-                
+
                 const columns = Math.floor(window.innerWidth / 20);
                 drops = Array.from({ length: columns }, () => Math.floor(Math.random() * (window.innerHeight / 20)));
             };
@@ -348,10 +348,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!isAnimating) return;
 
                 const elapsed = currentTime - lastFrameTime;
-                
+
                 if (elapsed > frameInterval) {
                     lastFrameTime = currentTime - (elapsed % frameInterval);
-                    
+
                     ctx.fillStyle = 'rgba(16, 20, 25, 0.05)';
                     ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
@@ -397,25 +397,21 @@ document.addEventListener('DOMContentLoaded', () => {
             setupCanvas();
             startAnimation();
 
-            // Pause animation when tab is hidden (performance optimization)
-            document.addEventListener('visibilitychange', () => {
-                if (document.hidden) {
-                    stopAnimation();
-                } else {
-                    startAnimation();
-                }
-            });
-
-            // Restart animation on resize with debounce
+            // Restart animation on resize with debounce - keep animation running
             let resizeTimeout;
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimeout);
                 resizeTimeout = setTimeout(() => {
-                    stopAnimation();
                     setupCanvas();
-                    startAnimation();
+                    // Don't stop, just update and continue
+                    if (!isAnimating) {
+                        startAnimation();
+                    }
                 }, 250);
             });
+
+            // Keep animation running even when tab is hidden (user preference)
+            // Animation continues for better visual experience when user returns
         }
     }
 

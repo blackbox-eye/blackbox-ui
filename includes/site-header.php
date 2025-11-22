@@ -219,6 +219,13 @@ if (!empty($disable_alphabot)) {
             --digital-rain-color: #008000;
         }
 
+        /* Hide reCAPTCHA badge completely */
+        .grecaptcha-badge {
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-high-emphasis);

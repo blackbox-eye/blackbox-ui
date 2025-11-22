@@ -8,18 +8,18 @@ include 'includes/site-header.php';
     <section class="py-16 sm:py-20 section-fade-in">
         <div class="container mx-auto px-4">
             <div class="text-center max-w-3xl mx-auto mb-12">
-                <p class="text-amber-400 uppercase tracking-widest text-sm font-semibold mb-4">Licenser &amp; abonnementer</p>
-                <h1 class="text-3xl sm:text-5xl font-bold mb-6">Løsninger tilpasset jeres risikoprofil</h1>
+                <p class="text-amber-400 uppercase tracking-widest text-sm font-semibold mb-4"><?= t('pricing.subtitle') ?></p>
+                <h1 class="text-3xl sm:text-5xl font-bold mb-6"><?= t('pricing.intro') ?></h1>
                 <p class="text-gray-300 text-base sm:text-lg">
-                    Blackbox EYE™ tilbyder komplette licens- og abonnementsløsninger – fra udvalgte moduler til fuld operativ integration. Brug vores AI-sikkerhedsrådgiver til at finde det rigtige match.
+                    <?= t('pricing.description') ?>
                 </p>
             </div>
 
             <div class="max-w-4xl mx-auto glass-effect rounded-3xl p-6 sm:p-8 lg:p-10 mb-16">
-                <h2 class="text-xl sm:text-2xl font-bold text-center mb-6">AI Sikkerhedsrådgiver</h2>
+                <h2 class="text-xl sm:text-2xl font-bold text-center mb-6"><?= t('pricing.ai_advisor.title') ?></h2>
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
                     <div>
-                        <label for="industry-select" class="block text-sm font-medium text-gray-300 mb-2">Branche</label>
+                        <label for="industry-select" class="block text-sm font-medium text-gray-300 mb-2"><?= t('pricing.ai_advisor.industry_label') ?></label>
                         <select id="industry-select" class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400">
                             <option>Produktionsvirksomhed</option>
                             <option>Offentlig institution</option>
@@ -30,12 +30,12 @@ include 'includes/site-header.php';
                         </select>
                     </div>
                     <div>
-                        <label for="employee-count" class="block text-sm font-medium text-gray-300 mb-2">Antal medarbejdere</label>
+                        <label for="employee-count" class="block text-sm font-medium text-gray-300 mb-2"><?= t('pricing.ai_advisor.employees_label') ?></label>
                         <input type="number" id="employee-count" value="50" min="1" class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400">
                     </div>
                     <div class="lg:self-end">
                         <button id="get-recommendation-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors">
-                            ✨ Få AI-anbefaling
+                            <?= t('pricing.ai_advisor.button') ?>
                         </button>
                     </div>
                 </div>
@@ -43,7 +43,7 @@ include 'includes/site-header.php';
                     <div class="border-t border-gray-700 pt-6">
                         <div id="recommendation-loader" class="flex flex-col items-center justify-center text-center">
                             <div class="spinner"></div>
-                            <p class="mt-4 text-gray-300">Analyserer jeres profil...</p>
+                            <p class="mt-4 text-gray-300"><?= t('pricing.ai_advisor.analyzing') ?></p>
                         </div>
                         <div id="recommendation-result" class="hidden prose prose-invert max-w-none text-gray-200 text-sm sm:text-base" aria-live="polite"></div>
                     </div>
@@ -154,8 +154,8 @@ include 'includes/site-header.php';
             </div>
 
             <div class="text-center mb-12">
-                <h3 class="text-2xl font-bold mb-4">Enterprise Løsninger</h3>
-                <p class="text-gray-400 max-w-2xl mx-auto">Skalerbare løsninger til virksomheder med avancerede sikkerhedsbehov og compliance-krav.</p>
+                <h3 class="text-2xl font-bold mb-4"><?= t('pricing.enterprise.section_title') ?></h3>
+                <p class="text-gray-400 max-w-2xl mx-auto"><?= t('pricing.enterprise.section_description') ?></p>
             </div>
 
             <div class="pricing-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
@@ -264,10 +264,10 @@ include 'includes/site-header.php';
 
     <section class="py-16 sm:py-20 bg-gray-900/40 section-fade-in">
         <div class="container mx-auto px-4 text-center">
-            <h2 class="text-3xl sm:text-4xl font-bold mb-4">Skal vi skræddersy en løsning til jer?</h2>
-            <p class="text-gray-400 max-w-2xl mx-auto mb-8">Vores eksperter kombinerer operative erfaringer med AI-drevet analyse for at levere præcis det sikkerhedsniveau, I har brug for.</p>
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4"><?= t('pricing.custom.title') ?></h2>
+            <p class="text-gray-400 max-w-2xl mx-auto mb-8"><?= t('pricing.custom.description') ?></p>
             <a href="contact.php" class="inline-flex items-center justify-center bg-amber-400 text-black font-semibold py-3 px-8 rounded-lg hover:bg-amber-500 transition-colors">
-                Tal med vores rådgivere
+                <?= t('pricing.custom.button') ?>
             </a>
         </div>
     </section>

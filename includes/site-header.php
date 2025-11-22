@@ -1,5 +1,15 @@
 <?php
 require_once __DIR__ . '/env.php';
+require_once __DIR__ . '/i18n.php';
+
+// Handle language switching via query parameter
+if (isset($_GET['lang']) && in_array($_GET['lang'], ['da', 'en'])) {
+    bbx_set_language($_GET['lang']);
+    // Redirect to remove query parameter from URL
+    $redirect_url = strtok($_SERVER['REQUEST_URI'], '?');
+    header('Location: ' . $redirect_url);
+    exit;
+}
 
 $page_title = $page_title ?? 'Blackbox EYE™ - Intelligent Sikkerhed';
 $current_page = $current_page ?? basename($_SERVER['PHP_SELF'], '.php');
@@ -56,14 +66,14 @@ if (!function_exists('aig_nav_class')) {
     function aig_get_breadcrumbs(string $current_page, string $page_title = ''): array
     {
         $breadcrumb_map = [
-            'index' => ['label' => 'Hjem', 'href' => '/'],
-            'home' => ['label' => 'Hjem', 'href' => '/'],
-            'about' => ['label' => 'Om Os', 'href' => 'about.php'],
-            'products' => ['label' => 'Produkter', 'href' => 'products.php'],
-            'cases' => ['label' => 'Kundecases', 'href' => 'cases.php'],
-            'pricing' => ['label' => 'Priser', 'href' => 'pricing.php'],
-            'contact' => ['label' => 'Kontakt', 'href' => 'contact.php'],
-            'agent-login' => ['label' => 'Agent Login', 'href' => 'agent-login.php'],
+            'index' => ['label' => t('header.menu.about'), 'href' => '/'],
+            'home' => ['label' => t('header.menu.about'), 'href' => '/'],
+            'about' => ['label' => t('header.menu.about'), 'href' => 'about.php'],
+            'products' => ['label' => t('header.menu.products'), 'href' => 'products.php'],
+            'cases' => ['label' => t('header.menu.cases'), 'href' => 'cases.php'],
+            'pricing' => ['label' => t('header.menu.pricing'), 'href' => 'pricing.php'],
+            'contact' => ['label' => t('header.menu.contact'), 'href' => 'contact.php'],
+            'agent-login' => ['label' => t('header.cta.agent_login'), 'href' => 'agent-login.php'],
             'dashboard' => ['label' => 'Dashboard', 'href' => 'dashboard.php'],
             'admin' => ['label' => 'Admin', 'href' => 'admin.php'],
             'settings' => ['label' => 'Indstillinger', 'href' => 'settings.php'],
@@ -124,11 +134,11 @@ if (!function_exists('aig_nav_class')) {
 }
 
 $nav_links = [
-    ['slug' => 'about', 'label' => 'Om Os', 'href' => 'about.php'],
-    ['slug' => 'products', 'label' => 'Produkter', 'href' => 'products.php'],
-    ['slug' => 'cases', 'label' => 'Kundecases', 'href' => 'cases.php'],
-    ['slug' => 'pricing', 'label' => 'Priser', 'href' => 'pricing.php'],
-    ['slug' => 'contact', 'label' => 'Kontakt', 'href' => 'contact.php'],
+    ['slug' => 'about', 'label' => t('header.menu.about'), 'href' => 'about.php'],
+    ['slug' => 'products', 'label' => t('header.menu.products'), 'href' => 'products.php'],
+    ['slug' => 'cases', 'label' => t('header.menu.cases'), 'href' => 'cases.php'],
+    ['slug' => 'pricing', 'label' => t('header.menu.pricing'), 'href' => 'pricing.php'],
+    ['slug' => 'contact', 'label' => t('header.menu.contact'), 'href' => 'contact.php'],
 ];
 
 $alphabot_enabled_pages = ['home', 'index', 'about', 'products', 'cases', 'pricing', 'contact'];
@@ -956,8 +966,23 @@ if (!empty($disable_alphabot)) {
                         <?php endforeach; ?>
                     </nav>
                     <a href="agent-login.php" class="md:inline-block border border-amber-400 text-amber-400 py-2 px-4 lg:px-6 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold whitespace-nowrap flex-shrink-0 text-sm lg:text-base">
-                        Agent Login
+                        <?= t('header.cta.agent_login') ?>
                     </a>
+                    <!-- Language Switcher -->
+                    <div class="flex items-center gap-1 border border-gray-600 rounded-lg p-1 flex-shrink-0">
+                        <a href="?lang=da" 
+                           class="language-switch px-3 py-1.5 rounded text-xs lg:text-sm font-medium transition-all <?= bbx_get_language() === 'da' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>"
+                           aria-label="Skift til dansk"
+                           <?= bbx_get_language() === 'da' ? 'aria-current="true"' : '' ?>>
+                            DA
+                        </a>
+                        <a href="?lang=en" 
+                           class="language-switch px-3 py-1.5 rounded text-xs lg:text-sm font-medium transition-all <?= bbx_get_language() === 'en' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>"
+                           aria-label="Switch to English"
+                           <?= bbx_get_language() === 'en' ? 'aria-current="true"' : '' ?>>
+                            EN
+                        </a>
+                    </div>
                 </div>
                 <button id="mobile-menu-button" class="md:hidden text-white p-2 -mr-2" aria-controls="mobile-menu" aria-expanded="false" aria-label="Åbn navigation menu">
                     <span class="sr-only">Åbn menu</span>
@@ -991,7 +1016,7 @@ if (!empty($disable_alphabot)) {
                 </a>
             <?php endforeach; ?>
             <a href="agent-login.php" class="mt-8 inline-block border border-amber-400 text-amber-400 py-3 px-8 rounded-lg text-xl font-semibold">
-                Agent Login
+                <?= t('header.cta.agent_login') ?>
             </a>
         </nav>
     </div>

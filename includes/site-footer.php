@@ -40,55 +40,62 @@
     </footer>
 
     <?php if (!empty($show_alphabot)): ?>
-        <div id="alphabot-container" class="alphabot-widget" data-component="alphabot" aria-live="polite">
-            <button type="button"
-                id="alphabot-toggle-btn"
-                class="alphabot-toggle"
-                aria-expanded="false"
-                aria-controls="alphabot-panel">
-                <span class="alphabot-status-dot" aria-hidden="true"></span>
-                <span>Tal med AlphaBot</span>
-            </button>
-            <section id="alphabot-panel"
-                class="alphabot-panel"
-                role="dialog"
-                aria-modal="false"
-                aria-label="AlphaBot sikkerhedsassistent">
-                <div class="alphabot-panel-header">
-                    <div>
-                        <p class="alphabot-panel-title">GreyEYE AlphaBot</p>
-                        <p class="alphabot-panel-subtitle">AI-sikkerhedsrådgiver 24/7</p>
-                    </div>
-                    <button type="button" id="alphabot-close-btn" class="alphabot-close-btn" aria-label="Luk AlphaBot">&times;</button>
-                </div>
-                <div id="alphabot-messages" class="alphabot-messages" role="log" aria-live="polite" aria-label="AlphaBot samtale"></div>
-                <div class="alphabot-input-group">
-                    <label for="alphabot-input" class="sr-only">Skriv dit spørgsmål til AlphaBot</label>
-                    <textarea id="alphabot-input"
-                        rows="2"
-                        placeholder="Stil et spørgsmål om sikkerhed..."
-                        aria-describedby="alphabot-hint"></textarea>
-                    <button type="button" id="alphabot-send-btn" class="alphabot-send-btn" disabled>
-                        <span id="send-text">Send</span>
-                        <span id="send-loader" class="hidden ai-spinner" aria-hidden="true"></span>
-                    </button>
-                </div>
-                <p id="alphabot-hint" class="text-xs text-gray-400 mt-2">Enter sender beskeden. Shift + Enter giver linjeskift.</p>
-            </section>
-        </div>
+        <div id="alphabot-overlay" class="alphabot-overlay" aria-hidden="true"></div>
     <?php endif; ?>
 
-    <!-- Sticky CTA Button -->
-    <a href="contact.php"
-        id="sticky-cta"
-        class="sticky-cta"
-        aria-label="Book sikkerhedsmøde">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-        </svg>
-        <span class="hidden sm:inline">Book Møde</span>
-        <span class="sm:hidden">Kontakt</span>
-    </a>
+    <div class="bbx-command-rail<?= empty($show_alphabot) ? ' bbx-command-rail--cta-only' : '' ?>">
+        <?php if (!empty($show_alphabot)): ?>
+            <div id="alphabot-container" class="alphabot-widget" data-component="alphabot" aria-live="polite">
+                <button type="button"
+                    id="alphabot-toggle-btn"
+                    class="alphabot-toggle"
+                    aria-expanded="false"
+                    aria-controls="alphabot-panel"
+                    aria-label="Åbn AlphaBot sikkerhedsassistent">
+                    <span class="alphabot-status-dot" aria-hidden="true"></span>
+                    <span class="alphabot-label">Tal med AlphaBot</span>
+                </button>
+                <section id="alphabot-panel"
+                    class="alphabot-panel"
+                    role="dialog"
+                    aria-modal="false"
+                    aria-label="AlphaBot sikkerhedsassistent">
+                    <div class="alphabot-panel-header">
+                        <div>
+                            <p class="alphabot-panel-title">GreyEYE AlphaBot</p>
+                            <p class="alphabot-panel-subtitle">AI-sikkerhedsrådgiver 24/7</p>
+                        </div>
+                        <button type="button" id="alphabot-close-btn" class="alphabot-close-btn" aria-label="Luk AlphaBot">&times;</button>
+                    </div>
+                    <div id="alphabot-messages" class="alphabot-messages" role="log" aria-live="polite" aria-label="AlphaBot samtale"></div>
+                    <div class="alphabot-input-group">
+                        <label for="alphabot-input" class="sr-only">Skriv dit spørgsmål til AlphaBot</label>
+                        <textarea id="alphabot-input"
+                            rows="2"
+                            placeholder="Stil et spørgsmål om sikkerhed..."
+                            aria-describedby="alphabot-hint"></textarea>
+                        <button type="button" id="alphabot-send-btn" class="alphabot-send-btn" disabled>
+                            <span id="send-text">Send</span>
+                            <span id="send-loader" class="hidden ai-spinner" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <p id="alphabot-hint" class="text-xs text-gray-400 mt-2">Enter sender beskeden. Shift + Enter giver linjeskift.</p>
+                </section>
+            </div>
+        <?php endif; ?>
+
+        <!-- Sticky CTA Button -->
+        <a href="contact.php"
+            id="sticky-cta"
+            class="sticky-cta"
+            aria-label="Book sikkerhedsmøde">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <span class="hidden sm:inline">Book Møde</span>
+            <span class="sm:hidden">Kontakt</span>
+        </a>
+    </div>
 
     <script src="assets/js/site.js"></script>
     </body>

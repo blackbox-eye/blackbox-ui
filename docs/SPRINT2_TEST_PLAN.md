@@ -8,11 +8,12 @@
 
 ## 📋 Executive Summary
 
-Sprint 2 introduces four major UX improvements to the ALPHA Interface:
+Sprint 2 introduces five major UX improvements to the ALPHA Interface:
 1. **Breadcrumb Navigation** – Semantic navigation with structured data
 2. **Enhanced Mobile Menu** – Smooth animations and keyboard accessibility
 3. **AI Loading States** – Professional spinners and skeleton screens
 4. **Sticky CTA Button** – Scroll-triggered contact prompt
+5. **Alpha Command Rail** – Right-side control rail merging AlphaBot + CTA
 
 All features maintain **WCAG 2.1 AA compliance** and respect user motion preferences.
 
@@ -104,22 +105,27 @@ All features maintain **WCAG 2.1 AA compliance** and respect user motion prefere
 
 ---
 
-### 5. AlphaBot Widget
+### 5. Alpha Command Rail & AlphaBot
 
 | Test Case | Steps | Expected Result | Status |
 |-----------|-------|-----------------|--------|
-| **Visibility (priority pages)** | Visit `index.php`, `about.php`, `products.php`, `cases.php`, `pricing.php`, `contact.php` | "Tal med AlphaBot" toggle visible bottom-left | ⏳ |
+| **Visibility (priority pages)** | Visit `index.php`, `about.php`, `products.php`, `cases.php`, `pricing.php`, `contact.php` | Command rail pinned bottom-right, "Tal med AlphaBot" toggle sits above CTA | ⏳ |
+| **Default State (Closed)** | Load any marketing page | AlphaBot panel closed by default, only toggle button visible | ⏳ |
+| **State Reset Between Pages** | Open AlphaBot, navigate to another page | Bot starts closed on new page (state does not persist) | ⏳ |
 | **Hidden on ops pages** | Visit `agent-login.php` or `dashboard.php` | Widget absent to avoid operator UI | ⏳ |
-| **Toggle Interaction** | Click "Tal med AlphaBot" | Panel slides in, textarea receives focus, aria-expanded="true" | ⏳ |
+| **Toggle Interaction** | Click "Tal med AlphaBot" | Panel slides in from right, textarea receives focus, aria-expanded="true" | ⏳ |
 | **Close Controls** | Click × button or outside panel | Panel closes, focus returns to toggle, aria-expanded="false" | ⏳ |
 | **ESC Dismissal** | Open panel, press ESC | Panel closes instantly, sticky CTA unaffected | ⏳ |
-| **Sticky CTA Separation** | On mobile (375px) scroll until CTA shows | AlphaBot (bottom-left) and CTA (bottom-right) never overlap | ⏳ |
+| **Desktop Rail Alignment** | Desktop @1440px, open AlphaBot | Panel slides up from toggle (1rem gap), 22rem width, max-height 60vh keeps it compact | ⏳ |
+| **Mobile Slide-Up Panel** | Viewport ≤768px, open AlphaBot | Panel slides up from bottom (max 65vh), amber border-top separates from sticky bar, tighter padding | ⏳ |
+| **Overlay & Body Lock** | Mobile open panel, attempt to scroll page | `alphabot-overlay` visible, body scroll locked until close | ⏳ |
 | **Reduced Motion** | Enable `prefers-reduced-motion`, toggle panel | Panel shows/hides without slide animation | ⏳ |
 | **Keyboard Send** | Type message, press Enter (Shift+Enter for newline) | Message sent, send button disabled until response | ⏳ |
 | **Screen Reader Labels** | With NVDA focus toggle & textarea | Announces button label + dialog role, log region reads replies | ⏳ |
 | **Graceful Errors** | Simulate API failure (disconnect network) | Friendly fallback message displayed inside log | ⏳ |
+| **CTA-Only Fallback** | Temporarily disable AlphaBot config | Rail still renders sticky CTA anchored right, no layout shift | ⏳ |
 
-**Pass Criteria:** 10/10 tests pass
+**Pass Criteria:** 14/14 tests pass
 
 ---
 
@@ -228,6 +234,8 @@ All features maintain **WCAG 2.1 AA compliance** and respect user motion prefere
 | Breadcrumb | 375×667 | Before Sprint 2 | After Sprint 2 |
 | Mobile Menu (open) | 375×667 | Sprint 1 menu | Sprint 2 slide-in |
 | Sticky CTA | 375×667 | N/A (new) | Scrolled >50% |
+| Command Rail | 1920×1080 | Pre-rail layout | AlphaBot + CTA stacked right |
+| Command Rail | 375×667 | FAB-only before | Slide-up rail + overlay |
 | AI Spinner | 768×1024 | Old loader | New spinner |
 | Skeleton Screen | 1920×1080 | Old loader | New skeleton |
 
@@ -261,10 +269,10 @@ All features maintain **WCAG 2.1 AA compliance** and respect user motion prefere
    - Scroll down (CTA appears instantly)
    - Click CTA → contact page loads
 
-5. **AlphaBot + Sticky CTA**
+5. **Command Rail (AlphaBot + CTA)**
    - On mobile viewport, scroll to show CTA and open AlphaBot
-   - Confirm widgets anchor to opposite corners without overlap
-   - Close AlphaBot while CTA remains visible
+   - Confirm both controls stay inside right-side rail column (CTA below toggle)
+   - Overlay appears, body scroll locked, closing panel restores scroll and leaves CTA visible
 
 **Pass Criteria:** 5/5 scenarios work without conflicts
 
@@ -306,6 +314,13 @@ All features maintain **WCAG 2.1 AA compliance** and respect user motion prefere
 **Tools:** Google Analytics 4, Plausible, or custom tracking
 
 ---
+
+### Known Behavior Notes
+
+- **AlphaBot Default State:** Bot always starts closed on page load (never auto-opens)
+- **State Persistence:** AlphaBot open/closed state resets between page navigations (no localStorage persistence)
+- **Mobile Panel Height:** Limited to 65vh (desktop 60vh) for compact appearance while keeping CTA bar visible
+- **Agent Login Visibility:** Shows at md: breakpoint (768px+) alongside horizontal nav, hidden on mobile menu only
 
 ## 🐛 Known Issues & Edge Cases
 
@@ -378,6 +393,11 @@ All features maintain **WCAG 2.1 AA compliance** and respect user motion prefere
    - Visible state (scrolled 50%)
    - Hover state (desktop)
    - Mobile vs. desktop text difference
+5. **Alpha Command Rail**
+   - Desktop: AlphaBot toggle + CTA stacked right (1rem gap), panel opens upward (60vh max, 22rem wide)
+   - Mobile: FAB toggle, slide-up panel (65vh max) with amber top-border separation, compact padding
+   - Overlay/body-lock evidence (screenshot of dimmed background)
+   - Default closed state on page load (toggle visible, panel hidden)
 
 **Storage:** `/docs/reports/sprint2_visual_evidence/`
 

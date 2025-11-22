@@ -688,6 +688,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const alphaContainer = document.getElementById('alphabot-container');
     const alphaToggleBtn = document.getElementById('alphabot-toggle-btn');
     const alphaCloseBtn = document.getElementById('alphabot-close-btn');
+    const alphaOverlay = document.getElementById('alphabot-overlay');
+    if (alphaOverlay) {
+        alphaOverlay.setAttribute('aria-hidden', 'true');
+    }
+    const alphaMobileQuery = window.matchMedia('(max-width: 768px)');
+    const setAlphaBodyLock = (state) => {
+        if (state && alphaMobileQuery.matches) {
+            document.body.classList.add('alphabot-locked');
+        } else if (!state) {
+            document.body.classList.remove('alphabot-locked');
+        }
+    };
+
     if (alphaContainer && alphaToggleBtn && hasAIConfig && geminiReady) {
         const messagesDiv = document.getElementById('alphabot-messages');
         const inputEl = document.getElementById('alphabot-input');
@@ -776,12 +789,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const openAlphaBot = () => {
                 alphaContainer.classList.add('open');
                 alphaToggleBtn.setAttribute('aria-expanded', 'true');
+                alphaOverlay?.classList.add('visible');
+                alphaOverlay?.setAttribute('aria-hidden', 'false');
+                setAlphaBodyLock(true);
                 inputEl.focus();
             };
 
             const closeAlphaBot = (focusToggle = true) => {
                 alphaContainer.classList.remove('open');
                 alphaToggleBtn.setAttribute('aria-expanded', 'false');
+                alphaOverlay?.classList.remove('visible');
+                alphaOverlay?.setAttribute('aria-hidden', 'true');
+                setAlphaBodyLock(false);
                 if (focusToggle) {
                     alphaToggleBtn.focus();
                 }
@@ -809,6 +828,16 @@ document.addEventListener('DOMContentLoaded', () => {
             document.addEventListener('click', (event) => {
                 if (!alphaContainer.contains(event.target) && alphaContainer.classList.contains('open')) {
                     closeAlphaBot(false);
+                }
+            });
+
+            alphaOverlay?.addEventListener('click', () => closeAlphaBot());
+
+            alphaMobileQuery.addEventListener?.('change', () => {
+                if (!alphaMobileQuery.matches) {
+                    document.body.classList.remove('alphabot-locked');
+                } else if (!alphaContainer.classList.contains('open')) {
+                    document.body.classList.remove('alphabot-locked');
                 }
             });
 

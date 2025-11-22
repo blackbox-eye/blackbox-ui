@@ -298,7 +298,7 @@ if (!empty($disable_alphabot)) {
             flex-wrap: wrap;
             gap: 0.5rem;
             font-size: 0.875rem;
-            padding: 0.75rem 0;
+            padding: 0.5rem 0;
         }
 
         .breadcrumb-item {
@@ -337,7 +337,7 @@ if (!empty($disable_alphabot)) {
         @media (max-width: 640px) {
             .breadcrumb {
                 font-size: 0.75rem;
-                padding: 0.5rem 0;
+                padding: 0.375rem 0;
             }
         }
 
@@ -450,19 +450,32 @@ if (!empty($disable_alphabot)) {
             }
         }
 
-        /* Sticky CTA Button */
-        .sticky-cta {
+        /* Command Rail (AlphaBot + CTA) */
+        .bbx-command-rail {
             position: fixed;
             bottom: 1.5rem;
             right: 1.5rem;
             z-index: 45;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+
+        .bbx-command-rail--cta-only {
+            gap: 0;
+        }
+
+        /* Sticky CTA Button */
+        .sticky-cta {
+            position: relative;
             background: var(--primary-accent);
             color: #000;
             padding: 1rem 1.5rem;
-            border-radius: 50px;
+            border-radius: 3rem;
             font-weight: 600;
             text-decoration: none;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 0.5rem;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 199, 0, 0.4);
@@ -487,26 +500,43 @@ if (!empty($disable_alphabot)) {
             transform: translateY(0) scale(0.98);
         }
 
-        @media (max-width: 768px) {
-            .sticky-cta {
-                bottom: 1rem;
+        @media (max-width: 1024px) {
+            .bbx-command-rail {
                 right: 1rem;
-                padding: 0.875rem 1.25rem;
-                font-size: 0.875rem;
+                bottom: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .bbx-command-rail {
+                position: static;
+                width: 100%;
+                bottom: auto;
+                right: auto;
+                gap: 0;
+            }
+
+            .sticky-cta {
+                position: fixed;
+                left: 1rem;
+                right: 1rem;
+                bottom: 1rem;
+                width: auto;
+                justify-content: center;
+                font-size: 0.95rem;
+                border-radius: 1rem;
             }
         }
 
         /* AlphaBot Widget */
         .alphabot-widget {
-            position: fixed;
-            bottom: 1.5rem;
-            left: 1.5rem;
-            z-index: 44;
+            position: relative;
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            gap: 0.75rem;
-            width: min(22rem, calc(100vw - 3rem));
+            align-items: flex-end;
+            width: auto;
+            min-width: 15rem;
+            z-index: 46;
         }
 
         .alphabot-toggle {
@@ -520,7 +550,7 @@ if (!empty($disable_alphabot)) {
             border-radius: 999px;
             font-weight: 600;
             letter-spacing: 0.02em;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
@@ -531,7 +561,7 @@ if (!empty($disable_alphabot)) {
 
         .alphabot-toggle:hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.45);
+            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.45);
         }
 
         .alphabot-widget.open .alphabot-toggle {
@@ -547,21 +577,28 @@ if (!empty($disable_alphabot)) {
         }
 
         .alphabot-panel {
-            width: 100%;
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            margin-bottom: 1rem;
+            width: min(22rem, calc(100vw - 4rem));
+            max-height: 60vh;
             background: rgba(8, 13, 20, 0.98);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 1.25rem;
             padding: 1.25rem;
-            box-shadow: 0 25px 55px rgba(0, 0, 0, 0.55);
+            box-shadow: 0 25px 55px rgba(0, 0, 0, 0.6);
             opacity: 0;
-            transform: translateY(20px);
+            transform: translate3d(0, 10px, 0);
             pointer-events: none;
             transition: opacity 0.25s ease, transform 0.25s ease;
+            display: flex;
+            flex-direction: column;
         }
 
         .alphabot-widget.open .alphabot-panel {
             opacity: 1;
-            transform: translateY(0);
+            transform: translate3d(0, 0, 0);
             pointer-events: auto;
         }
 
@@ -602,7 +639,9 @@ if (!empty($disable_alphabot)) {
         }
 
         .alphabot-messages {
-            max-height: 16rem;
+            flex: 1;
+            min-height: 0;
+            max-height: 18rem;
             overflow-y: auto;
             padding-right: 0.35rem;
             margin-bottom: 1rem;
@@ -702,26 +741,85 @@ if (!empty($disable_alphabot)) {
             border-width: 3px;
         }
 
-        @media (max-width: 640px) {
-            .alphabot-widget {
-                left: 1rem;
-                right: 1rem;
-                width: auto;
-                max-width: none;
-                bottom: 4.5rem;
+        .alphabot-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            z-index: 44;
+            display: none;
+        }
+
+        .alphabot-overlay.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        @media (max-width: 1024px) {
+            .alphabot-panel {
+                width: min(20rem, calc(100vw - 4.5rem));
+            }
+        }
+
+        @media (max-width: 768px) {
+            body.alphabot-locked {
+                overflow: hidden;
             }
 
-            .alphabot-panel {
-                width: 100%;
-                order: 2;
+            .bbx-command-rail {
+                padding-bottom: calc(env(safe-area-inset-bottom, 1rem) + 4.5rem);
+            }
+
+            .alphabot-overlay {
+                display: block;
+            }
+
+            .alphabot-widget {
+                position: fixed;
+                bottom: calc(5.25rem + env(safe-area-inset-bottom, 1rem));
+                right: 1rem;
+                width: auto;
+                min-width: 0;
             }
 
             .alphabot-toggle {
-                order: 1;
+                padding: 0.85rem;
+                border-radius: 999px;
+                box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+            }
+
+            .alphabot-toggle .alphabot-label {
+                display: none;
+            }
+
+            .alphabot-panel {
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                border-radius: 1.5rem 1.5rem 0 0;
+                max-height: 65vh;
+                transform: translateY(110%);
+                padding: 1.25rem clamp(1rem, 4vw, 1.5rem) calc(1.25rem + env(safe-area-inset-bottom, 0));
+                box-shadow: 0 -20px 55px rgba(0, 0, 0, 0.65);
+                border-width: 1px 0 0 0;
+                border-top: 2px solid rgba(255, 199, 0, 0.25);
+            }
+
+            .alphabot-widget.open .alphabot-panel {
+                transform: translateY(0);
+            }
+
+            .alphabot-messages {
+                max-height: calc(45vh - 6rem);
             }
         }
 
         @media (prefers-reduced-motion: reduce) {
+
             .alphabot-toggle,
             .alphabot-panel,
             .alphabot-send-btn {
@@ -841,23 +939,23 @@ if (!empty($disable_alphabot)) {
 
     <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
         <div class="container mx-auto px-4">
-            <div class="flex justify-between items-center h-20">
+            <div class="flex justify-between items-center h-20 gap-6 md:gap-8 lg:gap-12 xl:gap-16">
                 <div class="glitch-logo flex-shrink-0" aria-label="Blackbox EYE">
                     Blackbox EYE&trade;
                     <span aria-hidden="true">Blackbox EYE&trade;</span>
                     <span aria-hidden="true">Blackbox EYE&trade;</span>
                 </div>
-                <div class="hidden md:flex items-center space-x-4 lg:space-x-8">
-                    <nav class="flex items-center space-x-4 lg:space-x-8">
+                <div class="hidden md:flex items-center gap-3 lg:gap-8 xl:gap-10 flex-nowrap">
+                    <nav class="flex items-center gap-3 lg:gap-8 xl:gap-10 flex-nowrap">
                         <?php foreach ($nav_links as $link): ?>
                             <a href="<?= $link['href'] ?>"
-                                class="nav-link <?= aig_nav_class($link['slug'], $current_page) ?> transition-colors"
+                                class="nav-link <?= aig_nav_class($link['slug'], $current_page) ?> transition-colors whitespace-nowrap text-sm lg:text-base"
                                 <?= aig_nav_aria($link['slug'], $current_page) ?>>
                                 <?= htmlspecialchars($link['label']) ?>
                             </a>
                         <?php endforeach; ?>
                     </nav>
-                    <a href="agent-login.php" class="hidden lg:inline-block border border-amber-400 text-amber-400 py-2 px-6 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold">
+                    <a href="agent-login.php" class="md:inline-block border border-amber-400 text-amber-400 py-2 px-4 lg:px-6 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold whitespace-nowrap flex-shrink-0 text-sm lg:text-base">
                         Agent Login
                     </a>
                 </div>
@@ -905,7 +1003,7 @@ if (!empty($disable_alphabot)) {
         $breadcrumb_schema = aig_breadcrumb_structured_data($breadcrumbs);
     ?>
         <!-- Breadcrumb Navigation -->
-        <nav aria-label="Breadcrumb" class="pt-20">
+        <nav aria-label="Breadcrumb" class="pt-20 pb-2">
             <div class="container mx-auto px-4">
                 <ol class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
                     <?php foreach ($breadcrumbs as $index => $crumb): ?>

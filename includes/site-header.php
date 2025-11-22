@@ -130,6 +130,12 @@ $nav_links = [
     ['slug' => 'pricing', 'label' => 'Priser', 'href' => 'pricing.php'],
     ['slug' => 'contact', 'label' => 'Kontakt', 'href' => 'contact.php'],
 ];
+
+$alphabot_enabled_pages = ['home', 'index', 'about', 'products', 'cases', 'pricing', 'contact'];
+$show_alphabot = $show_alphabot ?? in_array($current_page, $alphabot_enabled_pages, true);
+if (!empty($disable_alphabot)) {
+    $show_alphabot = false;
+}
 ?>
 <!DOCTYPE html>
 <html lang="da" class="scroll-smooth">
@@ -487,6 +493,244 @@ $nav_links = [
                 right: 1rem;
                 padding: 0.875rem 1.25rem;
                 font-size: 0.875rem;
+            }
+        }
+
+        /* AlphaBot Widget */
+        .alphabot-widget {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 1.5rem;
+            z-index: 44;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+            width: min(22rem, calc(100vw - 3rem));
+        }
+
+        .alphabot-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(14, 20, 29, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-high-emphasis);
+            padding: 0.65rem 1.25rem;
+            border-radius: 999px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .alphabot-toggle:focus-visible {
+            outline: 2px solid var(--primary-accent);
+            outline-offset: 3px;
+        }
+
+        .alphabot-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.45);
+        }
+
+        .alphabot-widget.open .alphabot-toggle {
+            box-shadow: 0 0 25px rgba(255, 199, 0, 0.35);
+        }
+
+        .alphabot-status-dot {
+            width: 0.65rem;
+            height: 0.65rem;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.6);
+        }
+
+        .alphabot-panel {
+            width: 100%;
+            background: rgba(8, 13, 20, 0.98);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1.25rem;
+            padding: 1.25rem;
+            box-shadow: 0 25px 55px rgba(0, 0, 0, 0.55);
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        .alphabot-widget.open .alphabot-panel {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .alphabot-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .alphabot-panel-title {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .alphabot-panel-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-medium-emphasis);
+        }
+
+        .alphabot-close-btn {
+            border: none;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-high-emphasis);
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+
+        .alphabot-close-btn:hover,
+        .alphabot-close-btn:focus-visible {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .alphabot-messages {
+            max-height: 16rem;
+            overflow-y: auto;
+            padding-right: 0.35rem;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .alphabot-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .alphabot-messages::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 999px;
+        }
+
+        .chat-message {
+            display: flex;
+            width: 100%;
+        }
+
+        .chat-message .message-text {
+            padding: 0.75rem 1rem;
+            border-radius: 0.85rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+            width: 100%;
+        }
+
+        .chat-message.bot .message-text {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .chat-message.user {
+            justify-content: flex-end;
+        }
+
+        .chat-message.user .message-text {
+            background: rgba(255, 199, 0, 0.15);
+            color: var(--text-high-emphasis);
+        }
+
+        .alphabot-input-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-end;
+        }
+
+        #alphabot-input {
+            flex: 1;
+            background: rgba(13, 18, 27, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            padding: 0.75rem 1rem;
+            resize: none;
+            min-height: 3rem;
+            color: var(--text-high-emphasis);
+            font-size: 0.9rem;
+        }
+
+        #alphabot-input:focus-visible {
+            outline: 2px solid var(--primary-accent);
+            outline-offset: 2px;
+        }
+
+        .alphabot-send-btn {
+            background: var(--primary-accent);
+            color: #000;
+            border: none;
+            border-radius: 999px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            min-width: 5.5rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .alphabot-send-btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .alphabot-send-btn:not(:disabled):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
+        }
+
+        .alphabot-send-btn .ai-spinner {
+            width: 20px;
+            height: 20px;
+            border-width: 3px;
+        }
+
+        @media (max-width: 640px) {
+            .alphabot-widget {
+                left: 1rem;
+                right: 1rem;
+                width: auto;
+                max-width: none;
+                bottom: 4.5rem;
+            }
+
+            .alphabot-panel {
+                width: 100%;
+                order: 2;
+            }
+
+            .alphabot-toggle {
+                order: 1;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .alphabot-toggle,
+            .alphabot-panel,
+            .alphabot-send-btn {
+                transition: none !important;
+            }
+
+            .alphabot-widget.open .alphabot-panel,
+            .alphabot-panel {
+                transform: none !important;
             }
         }
 

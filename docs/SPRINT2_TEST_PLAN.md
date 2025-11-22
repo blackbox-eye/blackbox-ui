@@ -1,7 +1,7 @@
 # Sprint 2 Test Plan – UX Enhancements
-**ALPHA Interface GUI – Blackbox EYE™**  
-**Version:** 1.0  
-**Date:** 2025-01-XX  
+**ALPHA Interface GUI – Blackbox EYE™**
+**Version:** 1.0
+**Date:** 2025-01-XX
 **Branch:** `feat/ui-enhancements-sprint2`
 
 ---
@@ -104,6 +104,25 @@ All features maintain **WCAG 2.1 AA compliance** and respect user motion prefere
 
 ---
 
+### 5. AlphaBot Widget
+
+| Test Case | Steps | Expected Result | Status |
+|-----------|-------|-----------------|--------|
+| **Visibility (priority pages)** | Visit `index.php`, `about.php`, `products.php`, `cases.php`, `pricing.php`, `contact.php` | "Tal med AlphaBot" toggle visible bottom-left | ⏳ |
+| **Hidden on ops pages** | Visit `agent-login.php` or `dashboard.php` | Widget absent to avoid operator UI | ⏳ |
+| **Toggle Interaction** | Click "Tal med AlphaBot" | Panel slides in, textarea receives focus, aria-expanded="true" | ⏳ |
+| **Close Controls** | Click × button or outside panel | Panel closes, focus returns to toggle, aria-expanded="false" | ⏳ |
+| **ESC Dismissal** | Open panel, press ESC | Panel closes instantly, sticky CTA unaffected | ⏳ |
+| **Sticky CTA Separation** | On mobile (375px) scroll until CTA shows | AlphaBot (bottom-left) and CTA (bottom-right) never overlap | ⏳ |
+| **Reduced Motion** | Enable `prefers-reduced-motion`, toggle panel | Panel shows/hides without slide animation | ⏳ |
+| **Keyboard Send** | Type message, press Enter (Shift+Enter for newline) | Message sent, send button disabled until response | ⏳ |
+| **Screen Reader Labels** | With NVDA focus toggle & textarea | Announces button label + dialog role, log region reads replies | ⏳ |
+| **Graceful Errors** | Simulate API failure (disconnect network) | Friendly fallback message displayed inside log | ⏳ |
+
+**Pass Criteria:** 10/10 tests pass
+
+---
+
 ## 📱 Device & Browser Matrix
 
 ### Minimum Testing Requirements
@@ -126,12 +145,13 @@ All features maintain **WCAG 2.1 AA compliance** and respect user motion prefere
 | **Breadcrumb** | Tab through links | All links focusable, visible focus ring | ⏳ |
 | **Mobile Menu** | Tab in open menu | Focus trapped, cycles through items | ⏳ |
 | **Mobile Menu** | Press ESC | Closes menu, focus returns to trigger | ⏳ |
+| **AlphaBot Widget** | Toggle + ESC | Panel toggles via button, ESC closes + focus returns | ⏳ |
 | **Sticky CTA** | Tab to button | Receives focus, activates with Enter/Space | ⏳ |
 | **Gemini Modal** | Tab in modal | Focus trapped, ESC closes | ⏳ |
 | **Gemini Modal** | Press ESC | Closes modal, focus returns to trigger | ⏳ |
 | **All Interactive** | Navigate without mouse | All features fully functional | ⏳ |
 
-**Pass Criteria:** 7/7 tests pass
+**Pass Criteria:** 8/8 tests pass
 
 ---
 
@@ -157,6 +177,11 @@ All features maintain **WCAG 2.1 AA compliance** and respect user motion prefere
    - Spinner container: Uses `aria-live="polite"` (verify)
    - Announces: "Loading" or "Indlæser" when visible
 
+5. **AlphaBot Widget**
+   - Toggle button announces expanded/collapsed state
+   - Panel exposes `role="dialog"` with descriptive label
+   - Message log (`role="log"`) reads new replies automatically
+
 **Tools:** NVDA (Windows), JAWS (Windows), VoiceOver (macOS/iOS)
 
 ---
@@ -173,6 +198,7 @@ All features maintain **WCAG 2.1 AA compliance** and respect user motion prefere
 | **SEO** | ≥95 | 100 | ≥95 | ⏳ |
 
 **Test Pages:**
+
 - `index.php` (homepage)
 - `products.php` (breadcrumb test)
 - `contact.php` (sticky CTA test)
@@ -235,7 +261,12 @@ All features maintain **WCAG 2.1 AA compliance** and respect user motion prefere
    - Scroll down (CTA appears instantly)
    - Click CTA → contact page loads
 
-**Pass Criteria:** 4/4 scenarios work without conflicts
+5. **AlphaBot + Sticky CTA**
+   - On mobile viewport, scroll to show CTA and open AlphaBot
+   - Confirm widgets anchor to opposite corners without overlap
+   - Close AlphaBot while CTA remains visible
+
+**Pass Criteria:** 5/5 scenarios work without conflicts
 
 ---
 
@@ -252,6 +283,7 @@ All features maintain **WCAG 2.1 AA compliance** and respect user motion prefere
 | **Skeleton Screen** | Pulse/shimmer | Static gradient | ⏳ |
 
 **Testing Method:**
+
 ```css
 /* Developer Tools → Rendering → Emulate CSS prefers-reduced-motion */
 ```
@@ -301,10 +333,10 @@ All features maintain **WCAG 2.1 AA compliance** and respect user motion prefere
 ### Test Session Template
 
 ```markdown
-**Tester:** [Name]  
-**Date:** 2025-01-XX  
-**Environment:** [Browser/Device]  
-**Branch:** feat/ui-enhancements-sprint2  
+**Tester:** [Name]
+**Date:** 2025-01-XX
+**Environment:** [Browser/Device]
+**Branch:** feat/ui-enhancements-sprint2
 **Commit:** [SHA]
 
 #### Test Results:
@@ -315,8 +347,8 @@ All features maintain **WCAG 2.1 AA compliance** and respect user motion prefere
 - Keyboard Accessibility: ✅/❌ (X/7 passed)
 - Lighthouse Score: Performance XX | A11y XX | BP XX | SEO XX
 
-**Critical Issues:** [List]  
-**Minor Issues:** [List]  
+**Critical Issues:** [List]
+**Minor Issues:** [List]
 **Notes:** [Any observations]
 ```
 
@@ -369,6 +401,7 @@ All features maintain **WCAG 2.1 AA compliance** and respect user motion prefere
 - [ ] Documentation updated (this file + CHANGELOG.md)
 
 **Sign-Off:**
+
 - Developer: _______________________ Date: _______
 - QA Lead: _________________________ Date: _______
 - Product Owner: ___________________ Date: _______
@@ -378,27 +411,31 @@ All features maintain **WCAG 2.1 AA compliance** and respect user motion prefere
 ## 📝 Test Data & Resources
 
 ### Test URLs
-```
+
+```text
 Local: http://localhost/ALPHA-Interface-GUI/
 Staging: https://staging.blackbox-eye.dk/ (if applicable)
 ```
 
 ### Test Accounts
+
 - Admin: [credentials in 1Password]
 - Agent: [credentials in 1Password]
 
 ### AI Test Prompts
-```
+
+```text
 Quick Assessment: "Hvad er jeres branche?" → "IT-sikkerhed"
 Recommendation: Industry "Sundhedssektor" + 500 employees
 Case Analysis: "Vi har oplevet gentagne angreb på vores VPN"
 ```
 
 ### Browser Extensions Needed
+
 - aXe DevTools (Accessibility)
 - Lighthouse (Performance)
 - WAVE (Accessibility)
-- React DevTools (if React added later)
+- React DevTools (if React added senere)
 
 ---
 
@@ -432,12 +469,12 @@ describe('Sprint 2 Features', () => {
 
 ## 📞 Support & Questions
 
-**Test Coordinator:** [Name/Email]  
-**Dev Lead:** [Name/Email]  
-**Sprint 2 Slack:** #sprint2-ux-enhancements  
+**Test Coordinator:** [Name/Email]
+**Dev Lead:** [Name/Email]
+**Sprint 2 Slack:** #sprint2-ux-enhancements
 **Bug Reports:** GitHub Issues with label `sprint-2`
 
 ---
 
-**Last Updated:** 2025-01-XX  
+**Last Updated:** 2025-01-XX
 **Next Review:** Post-Sprint 2 Retrospective

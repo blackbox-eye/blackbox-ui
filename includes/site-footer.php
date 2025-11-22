@@ -39,6 +39,45 @@
         </div>
     </footer>
 
+    <?php if (!empty($show_alphabot)): ?>
+        <div id="alphabot-container" class="alphabot-widget" data-component="alphabot" aria-live="polite">
+            <button type="button"
+                id="alphabot-toggle-btn"
+                class="alphabot-toggle"
+                aria-expanded="false"
+                aria-controls="alphabot-panel">
+                <span class="alphabot-status-dot" aria-hidden="true"></span>
+                <span>Tal med AlphaBot</span>
+            </button>
+            <section id="alphabot-panel"
+                class="alphabot-panel"
+                role="dialog"
+                aria-modal="false"
+                aria-label="AlphaBot sikkerhedsassistent">
+                <div class="alphabot-panel-header">
+                    <div>
+                        <p class="alphabot-panel-title">GreyEYE AlphaBot</p>
+                        <p class="alphabot-panel-subtitle">AI-sikkerhedsrådgiver 24/7</p>
+                    </div>
+                    <button type="button" id="alphabot-close-btn" class="alphabot-close-btn" aria-label="Luk AlphaBot">&times;</button>
+                </div>
+                <div id="alphabot-messages" class="alphabot-messages" role="log" aria-live="polite" aria-label="AlphaBot samtale"></div>
+                <div class="alphabot-input-group">
+                    <label for="alphabot-input" class="sr-only">Skriv dit spørgsmål til AlphaBot</label>
+                    <textarea id="alphabot-input"
+                        rows="2"
+                        placeholder="Stil et spørgsmål om sikkerhed..."
+                        aria-describedby="alphabot-hint"></textarea>
+                    <button type="button" id="alphabot-send-btn" class="alphabot-send-btn" disabled>
+                        <span id="send-text">Send</span>
+                        <span id="send-loader" class="hidden ai-spinner" aria-hidden="true"></span>
+                    </button>
+                </div>
+                <p id="alphabot-hint" class="text-xs text-gray-400 mt-2">Enter sender beskeden. Shift + Enter giver linjeskift.</p>
+            </section>
+        </div>
+    <?php endif; ?>
+
     <!-- Sticky CTA Button -->
     <a href="contact.php"
         id="sticky-cta"

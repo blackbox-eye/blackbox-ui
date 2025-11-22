@@ -773,15 +773,43 @@ document.addEventListener('DOMContentLoaded', () => {
                 void callAlphaBot();
             };
 
+            const openAlphaBot = () => {
+                alphaContainer.classList.add('open');
+                alphaToggleBtn.setAttribute('aria-expanded', 'true');
+                inputEl.focus();
+            };
+
+            const closeAlphaBot = (focusToggle = true) => {
+                alphaContainer.classList.remove('open');
+                alphaToggleBtn.setAttribute('aria-expanded', 'false');
+                if (focusToggle) {
+                    alphaToggleBtn.focus();
+                }
+            };
+
             alphaToggleBtn.addEventListener('click', () => {
-                alphaContainer.classList.toggle('open');
                 if (alphaContainer.classList.contains('open')) {
-                    inputEl.focus();
+                    closeAlphaBot(false);
+                } else {
+                    openAlphaBot();
                 }
             });
 
             alphaCloseBtn?.addEventListener('click', () => {
-                alphaContainer.classList.remove('open');
+                closeAlphaBot();
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && alphaContainer.classList.contains('open')) {
+                    event.preventDefault();
+                    closeAlphaBot();
+                }
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!alphaContainer.contains(event.target) && alphaContainer.classList.contains('open')) {
+                    closeAlphaBot(false);
+                }
             });
 
             sendBtn.addEventListener('click', sendMessage);

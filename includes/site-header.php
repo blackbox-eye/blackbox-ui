@@ -66,8 +66,8 @@ if (!function_exists('aig_nav_class')) {
     function aig_get_breadcrumbs(string $current_page, string $page_title = ''): array
     {
         $breadcrumb_map = [
-            'index' => ['label' => t('header.menu.about'), 'href' => '/'],
-            'home' => ['label' => t('header.menu.about'), 'href' => '/'],
+            'index' => ['label' => t('header.menu.home'), 'href' => '/'],
+            'home' => ['label' => t('header.menu.home'), 'href' => '/'],
             'about' => ['label' => t('header.menu.about'), 'href' => 'about.php'],
             'products' => ['label' => t('header.menu.products'), 'href' => 'products.php'],
             'cases' => ['label' => t('header.menu.cases'), 'href' => 'cases.php'],
@@ -80,7 +80,7 @@ if (!function_exists('aig_nav_class')) {
         ];
 
         $breadcrumbs = [
-            ['label' => 'Hjem', 'href' => '/', 'current' => false]
+            ['label' => t('header.menu.home'), 'href' => '/', 'current' => false]
         ];
 
         // Skip breadcrumbs for home page
@@ -970,16 +970,16 @@ if (!empty($disable_alphabot)) {
                     </a>
                     <!-- Language Switcher -->
                     <div class="flex items-center gap-1 border border-gray-600 rounded-lg p-1 flex-shrink-0">
-                        <a href="?lang=da" 
-                           class="language-switch px-3 py-1.5 rounded text-xs lg:text-sm font-medium transition-all <?= bbx_get_language() === 'da' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>"
-                           aria-label="Skift til dansk"
-                           <?= bbx_get_language() === 'da' ? 'aria-current="true"' : '' ?>>
+                        <a href="?lang=da"
+                            class="language-switch px-3 py-1.5 rounded text-xs lg:text-sm font-medium transition-all <?= bbx_get_language() === 'da' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>"
+                            aria-label="Skift til dansk"
+                            <?= bbx_get_language() === 'da' ? 'aria-current="true"' : '' ?>>
                             DA
                         </a>
-                        <a href="?lang=en" 
-                           class="language-switch px-3 py-1.5 rounded text-xs lg:text-sm font-medium transition-all <?= bbx_get_language() === 'en' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>"
-                           aria-label="Switch to English"
-                           <?= bbx_get_language() === 'en' ? 'aria-current="true"' : '' ?>>
+                        <a href="?lang=en"
+                            class="language-switch px-3 py-1.5 rounded text-xs lg:text-sm font-medium transition-all <?= bbx_get_language() === 'en' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>"
+                            aria-label="Switch to English"
+                            <?= bbx_get_language() === 'en' ? 'aria-current="true"' : '' ?>>
                             EN
                         </a>
                     </div>

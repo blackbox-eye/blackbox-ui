@@ -21,12 +21,12 @@ include 'includes/site-header.php';
                     <div>
                         <label for="industry-select" class="block text-sm font-medium text-gray-300 mb-2"><?= t('pricing.ai_advisor.industry_label') ?></label>
                         <select id="industry-select" class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400">
-                            <option>Produktionsvirksomhed</option>
-                            <option>Offentlig institution</option>
-                            <option>Advokatfirma</option>
-                            <option>Ejendomsselskab</option>
-                            <option>Detailhandel</option>
-                            <option>IT &amp; Teknologi</option>
+                            <option><?= t('pricing.ai_advisor.industries.manufacturing') ?></option>
+                            <option><?= t('pricing.ai_advisor.industries.public') ?></option>
+                            <option><?= t('pricing.ai_advisor.industries.law') ?></option>
+                            <option><?= t('pricing.ai_advisor.industries.real_estate') ?></option>
+                            <option><?= t('pricing.ai_advisor.industries.retail') ?></option>
+                            <option><?= t('pricing.ai_advisor.industries.it') ?></option>
                         </select>
                     </div>
                     <div>
@@ -54,102 +54,102 @@ include 'includes/site-header.php';
                 <!-- MVP-Basis -->
                 <article class="glass-effect rounded-2xl p-6 lg:p-8 text-center h-full flex flex-col">
                     <div class="mb-3">
-                        <span class="text-xs uppercase tracking-wider text-amber-400 font-semibold">MVP Starter</span>
+                        <span class="text-xs uppercase tracking-wider text-amber-400 font-semibold"><?= t('pricing.mvp.basis.badge') ?></span>
                     </div>
-                    <h2 class="text-xl lg:text-2xl font-bold mb-2">MVP-Basis</h2>
-                    <div class="text-3xl font-bold text-amber-400 mb-2">1.799 DKK</div>
-                    <p class="text-gray-400 text-sm mb-6">pr. måned + moms</p>
-                    <p class="text-gray-400 mb-6 text-sm lg:text-base">Grundlæggende beskyttelse til små teams og startups.</p>
+                    <h2 class="text-xl lg:text-2xl font-bold mb-2"><?= t('pricing.mvp.basis.title') ?></h2>
+                    <div class="text-3xl font-bold text-amber-400 mb-2"><?= t('pricing.mvp.basis.price') ?></div>
+                    <p class="text-gray-400 text-sm mb-6"><?= t('pricing.mvp.basis.period') ?></p>
+                    <p class="text-gray-400 mb-6 text-sm lg:text-base"><?= t('pricing.mvp.basis.description') ?></p>
                     <ul class="text-left space-y-2 lg:space-y-3 text-gray-300 my-6 lg:my-8 flex-grow text-sm lg:text-base">
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>GreyEYE AI-assistent (begrænsede features)</span>
+                            <span><?= t('pricing.mvp.basis.features.greyeye') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Basis ID-Matrix adgang</span>
+                            <span><?= t('pricing.mvp.basis.features.idmatrix') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Email support (hverdage)</span>
+                            <span><?= t('pricing.mvp.basis.features.support') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Op til 10 brugere</span>
+                            <span><?= t('pricing.mvp.basis.features.users') ?></span>
                         </li>
                     </ul>
-                    <div class="text-xs text-gray-500 mb-4">Månedligt abonnement • Ingen binding</div>
-                    <a href="contact.php" class="mt-auto w-full inline-block border border-amber-400 text-amber-400 py-3 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold text-sm lg:text-base">Kom i gang</a>
+                    <div class="text-xs text-gray-500 mb-4"><?= t('pricing.mvp.basis.subscription') ?></div>
+                    <a href="contact.php" class="mt-auto w-full inline-block border border-amber-400 text-amber-400 py-3 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold text-sm lg:text-base"><?= t('pricing.cta.button') ?></a>
                 </article>
 
                 <!-- MVP-Pro -->
                 <article class="glass-effect rounded-2xl p-6 lg:p-8 text-center h-full flex flex-col">
                     <div class="mb-3">
-                        <span class="text-xs uppercase tracking-wider text-blue-400 font-semibold">MVP Vækst</span>
+                        <span class="text-xs uppercase tracking-wider text-blue-400 font-semibold"><?= t('pricing.mvp.pro.badge') ?></span>
                     </div>
-                    <h2 class="text-xl lg:text-2xl font-bold mb-2">MVP-Pro</h2>
-                    <div class="text-3xl font-bold text-amber-400 mb-2">3.499 DKK</div>
-                    <p class="text-gray-400 text-sm mb-6">pr. måned + moms</p>
-                    <p class="text-gray-400 mb-6 text-sm lg:text-base">Udvidet MVP-løsning til voksende virksomheder.</p>
+                    <h2 class="text-xl lg:text-2xl font-bold mb-2"><?= t('pricing.mvp.pro.title') ?></h2>
+                    <div class="text-3xl font-bold text-amber-400 mb-2"><?= t('pricing.mvp.pro.price') ?></div>
+                    <p class="text-gray-400 text-sm mb-6"><?= t('pricing.mvp.pro.period') ?></p>
+                    <p class="text-gray-400 mb-6 text-sm lg:text-base"><?= t('pricing.mvp.pro.description') ?></p>
                     <ul class="text-left space-y-2 lg:space-y-3 text-gray-300 my-6 lg:my-8 flex-grow text-sm lg:text-base">
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Alt i MVP-Basis +</span>
+                            <span><?= t('pricing.mvp.pro.features.includes') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>GreyEYE AI-assistent (fulde features)</span>
+                            <span><?= t('pricing.mvp.pro.features.greyeye') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Standard ID-Matrix adgangskontrol</span>
+                            <span><?= t('pricing.mvp.pro.features.idmatrix') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Op til 25 brugere</span>
+                            <span><?= t('pricing.mvp.pro.features.users') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Chat support (hverdage 9-17)</span>
+                            <span><?= t('pricing.mvp.pro.features.support') ?></span>
                         </li>
                     </ul>
-                    <div class="text-xs text-gray-500 mb-4">Månedligt abonnement • 3 måneders opsigelse</div>
-                    <a href="contact.php" class="mt-auto w-full inline-block border border-amber-400 text-amber-400 py-3 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold text-sm lg:text-base">Kom i gang</a>
+                    <div class="text-xs text-gray-500 mb-4"><?= t('pricing.mvp.pro.subscription') ?></div>
+                    <a href="contact.php" class="mt-auto w-full inline-block border border-amber-400 text-amber-400 py-3 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold text-sm lg:text-base"><?= t('pricing.cta.button') ?></a>
                 </article>
 
                 <!-- MVP-Premium -->
                 <article class="glass-effect rounded-2xl p-6 lg:p-8 text-center h-full flex flex-col">
                     <div class="mb-3">
-                        <span class="text-xs uppercase tracking-wider text-purple-400 font-semibold">MVP Elite</span>
+                        <span class="text-xs uppercase tracking-wider text-purple-400 font-semibold"><?= t('pricing.mvp.premium.badge') ?></span>
                     </div>
-                    <h2 class="text-xl lg:text-2xl font-bold mb-2">MVP-Premium</h2>
-                    <div class="text-3xl font-bold text-amber-400 mb-2">5.999 DKK</div>
-                    <p class="text-gray-400 text-sm mb-6">pr. måned + moms</p>
-                    <p class="text-gray-400 mb-6 text-sm lg:text-base">Komplet MVP-pakke med prioriteret support.</p>
+                    <h2 class="text-xl lg:text-2xl font-bold mb-2"><?= t('pricing.mvp.premium.title') ?></h2>
+                    <div class="text-3xl font-bold text-amber-400 mb-2"><?= t('pricing.mvp.premium.price') ?></div>
+                    <p class="text-gray-400 text-sm mb-6"><?= t('pricing.mvp.premium.period') ?></p>
+                    <p class="text-gray-400 mb-6 text-sm lg:text-base"><?= t('pricing.mvp.premium.description') ?></p>
                     <ul class="text-left space-y-2 lg:space-y-3 text-gray-300 my-6 lg:my-8 flex-grow text-sm lg:text-base">
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Alt i MVP-Pro +</span>
+                            <span><?= t('pricing.mvp.premium.features.includes') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Basis PVE modul</span>
+                            <span><?= t('pricing.mvp.premium.features.pve') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Onboarding workshop (1 session)</span>
+                            <span><?= t('pricing.mvp.premium.features.workshop') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Op til 50 brugere</span>
+                            <span><?= t('pricing.mvp.premium.features.users') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Prioriteret support</span>
+                            <span><?= t('pricing.mvp.premium.features.support') ?></span>
                         </li>
                     </ul>
-                    <div class="text-xs text-gray-500 mb-4">Månedligt abonnement • 6 måneders opsigelse</div>
-                    <a href="contact.php" class="mt-auto w-full inline-block border border-amber-400 text-amber-400 py-3 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold text-sm lg:text-base">Kom i gang</a>
+                    <div class="text-xs text-gray-500 mb-4"><?= t('pricing.mvp.premium.subscription') ?></div>
+                    <a href="contact.php" class="mt-auto w-full inline-block border border-amber-400 text-amber-400 py-3 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold text-sm lg:text-base"><?= t('pricing.cta.button') ?></a>
                 </article>
             </div>
 
@@ -160,103 +160,103 @@ include 'includes/site-header.php';
 
             <div class="pricing-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
                 <article class="glass-effect rounded-2xl p-6 lg:p-8 text-center h-full flex flex-col order-2 lg:order-1">
-                    <h2 class="text-xl lg:text-2xl font-bold mb-2">Standard</h2>
-                    <div class="text-3xl font-bold text-amber-400 mb-2">9.900 DKK</div>
-                    <p class="text-gray-400 text-sm mb-6">pr. måned + moms</p>
-                    <p class="text-gray-400 mb-6 text-sm lg:text-base">Effektiv sikkerhedsbeskyttelse og digitale løsninger til daglig brug.</p>
+                    <h2 class="text-xl lg:text-2xl font-bold mb-2"><?= t('pricing.enterprise.standard.title') ?></h2>
+                    <div class="text-3xl font-bold text-amber-400 mb-2"><?= t('pricing.enterprise.standard.price') ?></div>
+                    <p class="text-gray-400 text-sm mb-6"><?= t('pricing.enterprise.standard.period') ?></p>
+                    <p class="text-gray-400 mb-6 text-sm lg:text-base"><?= t('pricing.enterprise.standard.description') ?></p>
                     <ul class="text-left space-y-2 lg:space-y-3 text-gray-300 my-6 lg:my-8 flex-grow text-sm lg:text-base">
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>GreyEYE AI-assistent (fuld adgang)</span>
+                            <span><?= t('pricing.enterprise.standard.features.greyeye') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>ID-Matrix adgangskontrol</span>
+                            <span><?= t('pricing.enterprise.standard.features.idmatrix') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Basis rapportering og analytics</span>
+                            <span><?= t('pricing.enterprise.standard.features.reporting') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Op til 100 brugere</span>
+                            <span><?= t('pricing.enterprise.standard.features.users') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Email & chat support</span>
+                            <span><?= t('pricing.enterprise.standard.features.support') ?></span>
                         </li>
                     </ul>
-                    <div class="text-xs text-gray-500 mb-4">Årligt abonnement • Kvartalsvis fakturering</div>
-                    <a href="contact.php" class="mt-auto w-full inline-block border border-amber-400 text-amber-400 py-3 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold text-sm lg:text-base">Kontakt os</a>
+                    <div class="text-xs text-gray-500 mb-4"><?= t('pricing.enterprise.standard.subscription') ?></div>
+                    <a href="contact.php" class="mt-auto w-full inline-block border border-amber-400 text-amber-400 py-3 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold text-sm lg:text-base"><?= t('pricing.cta.contact') ?></a>
                 </article>
                 <article class="relative glass-effect rounded-2xl p-6 lg:p-8 text-center border-2 border-amber-400 h-full flex flex-col order-1 lg:order-2 transform lg:scale-105 z-10">
-                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-400 text-black px-4 py-1 rounded-full text-xs lg:text-sm font-bold whitespace-nowrap">Mest populære</div>
-                    <h2 class="text-xl lg:text-2xl font-bold mb-2 mt-2">Premium</h2>
-                    <div class="text-3xl font-bold text-amber-400 mb-2">18.900 DKK</div>
-                    <p class="text-gray-400 text-sm mb-6">pr. måned + moms</p>
-                    <p class="text-gray-400 mb-6 text-sm lg:text-base">Udvidet adgang til avancerede analyseværktøjer og specialmoduler.</p>
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-400 text-black px-4 py-1 rounded-full text-xs lg:text-sm font-bold whitespace-nowrap"><?= t('pricing.enterprise.premium.badge') ?></div>
+                    <h2 class="text-xl lg:text-2xl font-bold mb-2 mt-2"><?= t('pricing.enterprise.premium.title') ?></h2>
+                    <div class="text-3xl font-bold text-amber-400 mb-2"><?= t('pricing.enterprise.premium.price') ?></div>
+                    <p class="text-gray-400 text-sm mb-6"><?= t('pricing.enterprise.premium.period') ?></p>
+                    <p class="text-gray-400 mb-6 text-sm lg:text-base"><?= t('pricing.enterprise.premium.description') ?></p>
                     <ul class="text-left space-y-2 lg:space-y-3 text-gray-300 my-6 lg:my-8 flex-grow text-sm lg:text-base">
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Alt i Standard +</span>
+                            <span><?= t('pricing.enterprise.premium.features.includes') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>PVE modul (fuld version)</span>
+                            <span><?= t('pricing.enterprise.premium.features.pve') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>AUT træningsmodul</span>
+                            <span><?= t('pricing.enterprise.premium.features.aut') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Avanceret rapportering</span>
+                            <span><?= t('pricing.enterprise.premium.features.reporting') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Op til 250 brugere</span>
+                            <span><?= t('pricing.enterprise.premium.features.users') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Prioriteret support 24/5</span>
+                            <span><?= t('pricing.enterprise.premium.features.support') ?></span>
                         </li>
                     </ul>
-                    <div class="text-xs text-gray-500 mb-4">Årligt abonnement • Månedlig fakturering</div>
-                    <a href="contact.php" class="mt-auto w-full inline-block bg-amber-400 text-black py-3 rounded-lg hover:bg-amber-500 transition-all font-semibold text-sm lg:text-base">Kontakt os</a>
+                    <div class="text-xs text-gray-500 mb-4"><?= t('pricing.enterprise.premium.subscription') ?></div>
+                    <a href="contact.php" class="mt-auto w-full inline-block bg-amber-400 text-black py-3 rounded-lg hover:bg-amber-500 transition-all font-semibold text-sm lg:text-base"><?= t('pricing.cta.contact') ?></a>
                 </article>
                 <article class="glass-effect rounded-2xl p-6 lg:p-8 text-center h-full flex flex-col order-3">
-                    <h2 class="text-xl lg:text-2xl font-bold mb-2">Enterprise</h2>
-                    <div class="text-3xl font-bold text-amber-400 mb-2">39.000 DKK</div>
-                    <p class="text-gray-400 text-sm mb-6">pr. måned + moms*</p>
-                    <p class="text-gray-400 mb-6 text-sm lg:text-base">Helhedsorienteret, skræddersyet beskyttelse for større organisationer.</p>
+                    <h2 class="text-xl lg:text-2xl font-bold mb-2"><?= t('pricing.enterprise.enterprise.title') ?></h2>
+                    <div class="text-3xl font-bold text-amber-400 mb-2"><?= t('pricing.enterprise.enterprise.price') ?></div>
+                    <p class="text-gray-400 text-sm mb-6"><?= t('pricing.enterprise.enterprise.period') ?></p>
+                    <p class="text-gray-400 mb-6 text-sm lg:text-base"><?= t('pricing.enterprise.enterprise.description') ?></p>
                     <ul class="text-left space-y-2 lg:space-y-3 text-gray-300 my-6 lg:my-8 flex-grow text-sm lg:text-base">
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Alt i Premium +</span>
+                            <span><?= t('pricing.enterprise.enterprise.features.includes') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Adgang til specialteams</span>
+                            <span><?= t('pricing.enterprise.enterprise.features.teams') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>24/7 operationel beredskab</span>
+                            <span><?= t('pricing.enterprise.enterprise.features.operations') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Dedikeret account manager</span>
+                            <span><?= t('pricing.enterprise.enterprise.features.manager') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>Ubegrænset brugere</span>
+                            <span><?= t('pricing.enterprise.enterprise.features.users') ?></span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-green-400 mr-2 mt-0.5">✓</span>
-                            <span>VIP support & SLA garanti</span>
+                            <span><?= t('pricing.enterprise.enterprise.features.support') ?></span>
                         </li>
                     </ul>
-                    <div class="text-xs text-gray-500 mb-4">*Eller efter aftale • Årligt abonnement • Fleksibel fakturering</div>
-                    <a href="contact.php" class="mt-auto w-full inline-block border border-amber-400 text-amber-400 py-3 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold text-sm lg:text-base">Kontakt os</a>
+                    <div class="text-xs text-gray-500 mb-4"><?= t('pricing.enterprise.enterprise.subscription') ?></div>
+                    <a href="contact.php" class="mt-auto w-full inline-block border border-amber-400 text-amber-400 py-3 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold text-sm lg:text-base"><?= t('pricing.cta.contact') ?></a>
                 </article>
             </div>
         </div>

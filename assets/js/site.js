@@ -320,8 +320,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const ctx = heroCanvas.getContext('2d', { alpha: false });
         const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@#$%^&*()_+-=[]{}|;':,./<>?".split('');
         let drops = [];
-        let animationId = null;
-        let isAnimating = false;
         let lastFrameTime = 0;
         const targetFPS = 30;
         const frameInterval = 1000 / targetFPS;
@@ -345,16 +343,20 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             const drawDigitalRain = (currentTime) => {
-                if (!isAnimating) return;
+                // ALWAYS continue the loop - this is the key fix
+                requestAnimationFrame(drawDigitalRain);
 
                 const elapsed = currentTime - lastFrameTime;
 
+                // Only draw when enough time has passed (FPS limiting)
                 if (elapsed > frameInterval) {
                     lastFrameTime = currentTime - (elapsed % frameInterval);
 
+                    // Clear canvas with slight fade effect
                     ctx.fillStyle = 'rgba(16, 20, 25, 0.05)';
                     ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
+                    // Get color from CSS variable
                     const color = getComputedStyle(document.documentElement)
                         .getPropertyValue('--digital-rain-color')
                         .trim() || '#008000';
@@ -362,56 +364,36 @@ document.addEventListener('DOMContentLoaded', () => {
                     ctx.fillStyle = color;
                     ctx.font = '15px monospace';
 
+                    // Draw each drop
                     drops.forEach((drop, index) => {
                         const text = chars[Math.floor(Math.random() * chars.length)];
                         ctx.fillText(text, index * 20, drop * 20);
 
+                        // Reset drop to top when it reaches bottom
                         if (drop * 20 > window.innerHeight && Math.random() > 0.975) {
                             drops[index] = 0;
                         }
                         drops[index] = drop + 1;
                     });
                 }
-
-                if (isAnimating) {
-                    animationId = requestAnimationFrame(drawDigitalRain);
-                }
             };
 
-            const startAnimation = () => {
-                if (!isAnimating) {
-                    isAnimating = true;
-                    lastFrameTime = performance.now();
-                    animationId = requestAnimationFrame(drawDigitalRain);
-                }
-            };
-
-            const stopAnimation = () => {
-                isAnimating = false;
-                if (animationId) {
-                    cancelAnimationFrame(animationId);
-                    animationId = null;
-                }
-            };
-
+            // Initialize canvas and start animation
             setupCanvas();
-            startAnimation();
+            lastFrameTime = performance.now();
+            requestAnimationFrame(drawDigitalRain);
 
-            // Restart animation on resize with debounce - keep animation running
+            // Handle window resize with debounce
             let resizeTimeout;
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimeout);
                 resizeTimeout = setTimeout(() => {
                     setupCanvas();
-                    // Don't stop, just update and continue
-                    if (!isAnimating) {
-                        startAnimation();
-                    }
                 }, 250);
             });
 
-            // Keep animation running even when tab is hidden (user preference)
-            // Animation continues for better visual experience when user returns
+            // Log confirmation
+            console.log('Matrix rain animation initialized - running continuously');
         }
     }
 

@@ -27,5 +27,6 @@ jobs:
           urls: |
             https://blackbox.codes
           uploadArtifacts: true
+          artifactName: lighthouse_results
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}

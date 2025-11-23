@@ -29,12 +29,13 @@
     }
   },
   "footer": {
-    "tagline": "Intelligent Security. Ready for Action.",
+    "tagline": "Intelligent Security. Ready to Act.",
+    "operational": "Operational 24/7",
     "offices": {
       "title": "Global Offices",
-      "switzerland": "Switzerland – Geneva Branch",
-      "switzerland_address": "Rue du Rhône 80, 1204 Geneva, Switzerland",
-      "uae": "UAE – Dubai HQ",
+      "switzerland": "Switzerland \u2013 Geneva Branch",
+      "switzerland_address": "Rue du Rh\u00f4ne 80, 1204 Geneva, Switzerland",
+      "uae": "UAE \u2013 Dubai HQ",
       "uae_address": "Emirates Financial Towers, South Tower, Level 27, DIFC, Dubai, UAE"
     },
     "contact": {
@@ -45,7 +46,12 @@
     "social": {
       "title": "Follow Us"
     },
-    "copyright": "© 2025 Blackbox EYE™. All rights reserved."
+    "copyright": "\u00a9 2025 Blackbox EYE\u2122. All rights reserved.",
+    "cta": {
+      "book_meeting": "Book Meeting",
+      "contact": "Contact",
+      "aria_label": "Book security meeting"
+    }
   },
   "home": {
     "meta": {

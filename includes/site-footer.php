@@ -8,7 +8,7 @@
                     <p class="text-gray-400 text-sm leading-relaxed mb-6"><?= t('footer.tagline') ?></p>
                     <div class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-400/10 border border-amber-400/20">
                         <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                        <span class="text-xs text-amber-400 font-semibold">Operational 24/7</span>
+                        <span class="text-xs text-amber-400 font-semibold"><?= t('footer.operational') ?></span>
                     </div>
                 </div>
 
@@ -123,12 +123,12 @@
         <a href="contact.php"
             id="sticky-cta"
             class="sticky-cta"
-            aria-label="Book sikkerhedsmøde">
+            aria-label="<?= htmlspecialchars(t('footer.cta.aria_label')) ?>">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
             </svg>
-            <span class="hidden sm:inline">Book Møde</span>
-            <span class="sm:hidden">Kontakt</span>
+            <span class="hidden sm:inline"><?= t('footer.cta.book_meeting') ?></span>
+            <span class="sm:hidden"><?= t('footer.cta.contact') ?></span>
         </a>
     </div>
 

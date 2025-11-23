@@ -7,6 +7,6 @@
     "test:ci": "playwright test --reporter=list --output=artifacts"
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.0"
+    "@playwright/test": "^1.56.1"
   }
 }

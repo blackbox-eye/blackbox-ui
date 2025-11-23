@@ -105,7 +105,9 @@ if [ -d "$LIGHTHOUSE_REPORTS" ] && command -v jq &> /dev/null; then
       SEO=$(jq -r '.categories.seo.score * 100 | floor' "$report" 2>/dev/null || echo "N/A")
       
       LCP=$(jq -r '.audits["largest-contentful-paint"].numericValue' "$report" 2>/dev/null || echo "N/A")
-      FID=$(jq -r '.audits["max-potential-fid"].numericValue' "$report" 2>/dev/null || echo "N/A")
+      # Note: max-potential-fid is deprecated, using total-blocking-time as alternative
+      TBT=$(jq -r '.audits["total-blocking-time"].numericValue' "$report" 2>/dev/null || echo "N/A")
+      FID=$(jq -r '.audits["max-potential-fid"].numericValue' "$report" 2>/dev/null || echo "$TBT")
       CLS=$(jq -r '.audits["cumulative-layout-shift"].numericValue' "$report" 2>/dev/null || echo "N/A")
       
       echo "  Performance: $PERF/100"

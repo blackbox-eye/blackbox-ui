@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+const { test } = require('@playwright/test');
 
 // Sprint 4 verification: Test header at specified screen sizes
 const viewports = [

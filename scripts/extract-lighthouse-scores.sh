@@ -34,9 +34,11 @@ for report in $JSON_REPORTS; do
     BEST=$(jq -r '.categories["best-practices"].score * 100 | floor' "$report" 2>/dev/null || echo "N/A")
     SEO=$(jq -r '.categories.seo.score * 100 | floor' "$report" 2>/dev/null || echo "N/A")
     
-    # Extract Core Web Vitals
+    # Extract Core Web Vitals (handle deprecated metrics gracefully)
     LCP=$(jq -r '.audits["largest-contentful-paint"].numericValue' "$report" 2>/dev/null || echo "N/A")
-    FID=$(jq -r '.audits["max-potential-fid"].numericValue' "$report" 2>/dev/null || echo "N/A")
+    # Note: max-potential-fid is deprecated, using total-blocking-time as alternative
+    TBT=$(jq -r '.audits["total-blocking-time"].numericValue' "$report" 2>/dev/null || echo "N/A")
+    FID=$(jq -r '.audits["max-potential-fid"].numericValue' "$report" 2>/dev/null || echo "$TBT")
     CLS=$(jq -r '.audits["cumulative-layout-shift"].numericValue' "$report" 2>/dev/null || echo "N/A")
     
     echo "  Performance: $PERF"

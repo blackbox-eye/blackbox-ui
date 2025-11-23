@@ -50,8 +50,8 @@ if (!function_exists('aig_nav_class')) {
     function aig_nav_class(string $slug, string $current): string
     {
         return $slug === $current
-            ? 'text-white font-semibold border-b border-amber-400'
-            : 'text-gray-400 hover:text-white';
+            ? 'nav-link-active'
+            : '';
     }
 
     function aig_nav_aria(string $slug, string $current): string
@@ -198,10 +198,10 @@ if (!empty($disable_alphabot)) {
 
     <!-- Tailwind CSS Production CDN (optimized) -->
     <link rel="stylesheet" href="https://cdn.tailwindcss.com/3.4.1">
-    
+
     <!-- Custom styles - must load AFTER Tailwind to override -->
     <link rel="stylesheet" href="/style.css">
-    
+
     <script src="config.js"></script>
     <?php if (BBX_RECAPTCHA_SITE_KEY !== ''): ?>
         <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(BBX_RECAPTCHA_SITE_KEY) ?>" async defer></script>
@@ -387,65 +387,6 @@ if (!empty($disable_alphabot)) {
             color: #6B7280;
             margin: 0 0.25rem;
             user-select: none;
-        }
-
-        /* ===== NAVIGATION LINK STYLES ===== */
-        /* Desktop navigation - LVHA order (Link, Visited, Hover, Active) */
-        .nav-link,
-        .nav-link:link {
-            color: #d1d5db !important;  /* gray-300 */
-            text-decoration: none !important;
-            transition: color 0.3s ease;
-        }
-
-        .nav-link:visited {
-            color: #d1d5db !important;  /* Same as unvisited to suppress browser blue/purple */
-        }
-
-        .nav-link:hover,
-        .nav-link:focus {
-            color: #fbbf24 !important;  /* amber-400 */
-        }
-
-        .nav-link:active {
-            color: #ffffff !important;
-        }
-
-        /* Active page state */
-        .nav-link.text-white,
-        .nav-link.text-white:link,
-        .nav-link.text-white:visited {
-            color: #ffffff !important;
-            font-weight: 600;
-        }
-
-        /* Mobile navigation */
-        .nav-link-mobile,
-        .nav-link-mobile:link {
-            color: #d1d5db !important;  /* gray-300 */
-            text-decoration: none !important;
-            transition: color 0.3s ease;
-        }
-
-        .nav-link-mobile:visited {
-            color: #d1d5db !important;
-        }
-
-        .nav-link-mobile:hover,
-        .nav-link-mobile:focus {
-            color: #fbbf24 !important;  /* amber-400 */
-        }
-
-        .nav-link-mobile:active {
-            color: #ffffff !important;
-        }
-
-        /* Mobile active page state */
-        .nav-link-mobile.text-white,
-        .nav-link-mobile.text-white:link,
-        .nav-link-mobile.text-white:visited {
-            color: #ffffff !important;
-            font-weight: 600;
         }
 
         .breadcrumb-item[aria-current="page"] {
@@ -1068,7 +1009,7 @@ if (!empty($disable_alphabot)) {
                     <nav class="flex items-center gap-3 lg:gap-8 xl:gap-10 flex-nowrap">
                         <?php foreach ($nav_links as $link): ?>
                             <a href="<?= $link['href'] ?>"
-                                class="nav-link <?= aig_nav_class($link['slug'], $current_page) ?> transition-colors whitespace-nowrap text-sm lg:text-base"
+                                class="nav-link <?= aig_nav_class($link['slug'], $current_page) ?> whitespace-nowrap"
                                 <?= aig_nav_aria($link['slug'], $current_page) ?>>
                                 <?= htmlspecialchars($link['label']) ?>
                             </a>
@@ -1093,11 +1034,11 @@ if (!empty($disable_alphabot)) {
                         </a>
                     </div>
                 </div>
-                <button id="mobile-menu-button" 
-                        class="md:hidden text-white p-2 -mr-2 bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-amber-400" 
-                        aria-controls="mobile-menu" 
-                        aria-expanded="false" 
-                        aria-label="<?= htmlspecialchars(t('header.mobile.open_menu')) ?>">
+                <button id="mobile-menu-button"
+                    class="md:hidden text-white p-2 -mr-2 bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    aria-controls="mobile-menu"
+                    aria-expanded="false"
+                    aria-label="<?= htmlspecialchars(t('header.mobile.open_menu')) ?>">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
                     </svg>
@@ -1122,7 +1063,7 @@ if (!empty($disable_alphabot)) {
         <nav class="flex flex-col space-y-8 text-center mt-8">
             <?php foreach ($nav_links as $link): ?>
                 <a href="<?= $link['href'] ?>"
-                    class="nav-link-mobile text-2xl <?= $link['slug'] === $current_page ? 'text-white font-semibold' : 'text-gray-300' ?>"
+                    class="nav-link-mobile <?= $link['slug'] === $current_page ? 'text-white font-semibold' : '' ?>"
                     <?= aig_nav_aria($link['slug'], $current_page) ?>>
                     <?= htmlspecialchars($link['label']) ?>
                 </a>

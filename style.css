@@ -440,81 +440,103 @@ html {
 
 /* Desktop navigation links */
 .nav-link {
-  color: #d1d5db !important;        /* text-gray-300 */
-  text-decoration: none !important;
+  color: #d1d5db;              /* text-gray-300 */
+  text-decoration: none;
   position: relative;
   display: inline-block;
   padding: 0.5rem 0;
-}
-
-.nav-link:hover {
-  color: #fbbf24 !important;        /* text-amber-400 */
+  transition: color 0.3s ease;
 }
 
 .nav-link:visited {
-  color: #d1d5db !important;
+  color: #d1d5db;              /* Same as unvisited - suppress browser blue/purple */
 }
 
-.nav-link.text-white {
-  color: #ffffff !important;
+.nav-link:hover {
+  color: #fbbf24;              /* text-amber-400 */
+}
+
+.nav-link:focus {
+  color: #fbbf24;
+  outline: 2px solid #fbbf24;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.nav-link:active {
+  color: #ffffff;
+}
+
+/* Active page styling */
+.nav-link.nav-link-active {
+  color: #ffffff;
   font-weight: 600;
+  border-bottom: 2px solid #fbbf24;
 }
 
-.nav-link.text-white:visited {
-  color: #ffffff !important;
+.nav-link.nav-link-active:visited {
+  color: #ffffff;
 }
 
-/* Underline animation for nav links */
-.nav-link::after {
+/* Underline animation for inactive nav links */
+.nav-link:not(.nav-link-active)::after {
   content: '';
   position: absolute;
   width: 0;
   height: 2px;
   bottom: 0;
   left: 0;
-  background-color: #fbbf24;        /* amber-400 */
+  background-color: #fbbf24;
   transition: width 0.3s ease;
 }
 
-.nav-link:hover::after {
-  width: 100%;
-}
-
-.nav-link.text-white::after {
+.nav-link:not(.nav-link-active):hover::after {
   width: 100%;
 }
 
 /* Mobile navigation links */
 .nav-link-mobile {
-  color: #d1d5db !important;        /* text-gray-300 */
-  text-decoration: none !important;
+  color: #d1d5db;              /* text-gray-300 */
+  text-decoration: none;
   display: block;
   transition: color 0.3s ease;
-}
-
-.nav-link-mobile:hover {
-  color: #fbbf24 !important;        /* text-amber-400 */
+  font-size: 1.5rem;           /* text-2xl */
 }
 
 .nav-link-mobile:visited {
-  color: #d1d5db !important;
+  color: #d1d5db;
 }
 
+.nav-link-mobile:hover {
+  color: #fbbf24;              /* text-amber-400 */
+}
+
+.nav-link-mobile:focus {
+  color: #fbbf24;
+  outline: 2px solid #fbbf24;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.nav-link-mobile:active {
+  color: #ffffff;
+}
+
+/* Mobile active page */
 .nav-link-mobile.text-white {
-  color: #ffffff !important;
+  color: #ffffff;
   font-weight: 600;
 }
 
 .nav-link-mobile.text-white:visited {
-  color: #ffffff !important;
+  color: #ffffff;
 }
 
-/* Force remove default link styling */
+/* Force remove all default link styling */
 a.nav-link,
 a.nav-link:visited,
 a.nav-link-mobile,
 a.nav-link-mobile:visited {
-  color: inherit;
   text-decoration: none;
 }
 

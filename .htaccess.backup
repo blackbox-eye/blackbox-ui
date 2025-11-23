@@ -1,6 +1,6 @@
 # reCAPTCHA v3 (Standard) - Simple and works!
-SetEnv RECAPTCHA_SITE_KEY "6Le7iBMsAAAAACp8jtY4JSVP_uWS-p4h24ZOm5i_"
-SetEnv RECAPTCHA_SECRET_KEY "6Le7iBMsAAAAAPbQw4-eaH1DpN-lTk49HXU_06qp"
+SetEnv RECAPTCHA_SITE_KEY "REPLACE_ON_SERVER"
+SetEnv RECAPTCHA_SECRET_KEY "REPLACE_ON_SERVER"
 SetEnv RECAPTCHA_DEBUG "true"
 
 # Prioriter PHP-indgangen og fald tilbage til HTML hvis nødvendigt.

@@ -148,8 +148,8 @@ $nav_links = [
 // Secondary navigation items (shown in mobile menu and footer)
 $secondary_nav_links = [
     ['slug' => 'about', 'label' => t('header.menu.about'), 'href' => 'about.php'],
-    ['slug' => 'demo', 'label' => t('header.menu.demo', 'Book Demo'), 'href' => 'demo.php'],
-    ['slug' => 'faq', 'label' => 'FAQ', 'href' => 'faq.php'],
+    ['slug' => 'demo', 'label' => t('header.menu.demo'), 'href' => 'demo.php'],
+    ['slug' => 'faq', 'label' => t('header.menu.faq'), 'href' => 'faq.php'],
 ];
 
 $alphabot_enabled_pages = ['home', 'index', 'about', 'products', 'cases', 'pricing', 'contact'];

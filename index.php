@@ -14,8 +14,8 @@ include 'includes/site-header.php';
         <!-- Content overlay with subtle gradient -->
         <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 pointer-events-none" style="z-index: 1;"></div>
 
-        <div class="relative px-4 py-32 sm:py-40 max-w-5xl mx-auto" style="z-index: 10;">
-            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold hero-gradient-text leading-tight mb-6 max-w-4xl mx-auto">
+        <div class="relative px-4 py-32 sm:py-40 max-w-4xl mx-auto" style="z-index: 10;">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold hero-gradient-text leading-tight mb-6 mx-auto">
                 <?= t('home.hero.headline') ?>
             </h1>
             <p class="text-base sm:text-lg md:text-xl lg:text-2xl max-w-3xl mx-auto text-gray-300 mb-10 leading-relaxed">

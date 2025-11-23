@@ -95,7 +95,7 @@ include 'includes/site-header.php';
                     
                     <!-- Calendly inline widget begin -->
                     <div class="calendly-inline-widget" 
-                         data-url="https://calendly.com/blackbox-eye-demo/30min" 
+                         data-url="<?= htmlspecialchars(BBX_CALENDLY_URL) ?>" 
                          style="min-width:320px;height:700px;">
                     </div>
                     <!-- Calendly inline widget end -->

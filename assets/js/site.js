@@ -42,6 +42,9 @@ const i18n = (() => {
 })();
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Enable JavaScript-dependent features
+    document.body.classList.add('js-enabled');
+
     // ==========================================
     // NAVIGATION SCROLL EFFECT
     // ==========================================

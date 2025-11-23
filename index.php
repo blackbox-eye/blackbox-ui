@@ -9,12 +9,12 @@ include 'includes/site-header.php';
 <main id="main-content" class="pt-0">
     <!-- Hero Section: Transparent background to show Matrix rain -->
     <section id="home" class="relative min-h-screen w-full flex items-center justify-center text-center overflow-hidden">
-        <canvas id="hero-canvas" class="absolute inset-0 w-full h-full -z-10 pointer-events-none"></canvas>
+        <canvas id="hero-canvas" class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: -10;"></canvas>
 
         <!-- Content overlay with subtle gradient -->
-        <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 z-10 pointer-events-none"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 pointer-events-none" style="z-index: 1;"></div>
 
-        <div class="relative z-20 px-4 py-32 sm:py-40">
+        <div class="relative px-4 py-32 sm:py-40" style="z-index: 10;">
             <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold hero-gradient-text leading-tight mb-6">
                 <?= t('home.hero.headline') ?>
             </h1>

@@ -1,0 +1,130 @@
+/* ========================================================
+   marketing.css — Navigation og marketing-specific styles
+   ======================================================== */
+
+/* Desktop navigation links */
+.nav-link {
+  color: #d1d5db;              /* text-gray-300 */
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem 0;
+  transition: color 0.3s ease;
+}
+
+.nav-link:link {
+  color: #d1d5db;
+}
+
+.nav-link:visited {
+  color: #d1d5db;              /* Same as unvisited - suppress browser blue/purple */
+}
+
+.nav-link:hover {
+  color: #fbbf24;              /* text-amber-400 */
+}
+
+.nav-link:focus {
+  color: #fbbf24;
+  outline: 2px solid #fbbf24;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.nav-link:active {
+  color: #ffffff;
+}
+
+/* Active page styling */
+.nav-link.nav-link-active {
+  color: #ffffff;
+  font-weight: 600;
+  border-bottom: 2px solid #fbbf24;
+}
+
+.nav-link.nav-link-active:visited {
+  color: #ffffff;
+}
+
+/* Underline animation for inactive nav links */
+.nav-link:not(.nav-link-active)::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #fbbf24;
+  transition: width 0.3s ease;
+}
+
+.nav-link:not(.nav-link-active):hover::after {
+  width: 100%;
+}
+
+/* Mobile navigation links */
+.nav-link-mobile {
+  color: #d1d5db;              /* text-gray-300 */
+  text-decoration: none;
+  display: block;
+  transition: color 0.3s ease;
+  font-size: 1.5rem;           /* text-2xl */
+}
+
+.nav-link-mobile:link {
+  color: #d1d5db;
+}
+
+.nav-link-mobile:visited {
+  color: #d1d5db;
+}
+
+.nav-link-mobile:hover {
+  color: #fbbf24;              /* text-amber-400 */
+}
+
+.nav-link-mobile:focus {
+  color: #fbbf24;
+  outline: 2px solid #fbbf24;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.nav-link-mobile:active {
+  color: #ffffff;
+}
+
+/* Mobile active page */
+.nav-link-mobile.text-white {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.nav-link-mobile.text-white:visited {
+  color: #ffffff;
+}
+
+/* Force remove all default link styling */
+a.nav-link,
+a.nav-link:visited,
+a.nav-link-mobile,
+a.nav-link-mobile:visited {
+  text-decoration: none;
+}
+
+/* Section fade-in — DEFAULT VISIBLE, JS adds animation */
+.section-fade-in {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+body.js-enabled .section-fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+body.js-enabled .section-fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}

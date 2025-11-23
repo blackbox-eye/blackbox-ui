@@ -219,8 +219,18 @@ if (!empty($disable_alphabot)) {
         </div>
     </noscript>
 
-    <!-- Custom styles - must load AFTER Tailwind to override -->
-    <link rel="stylesheet" href="/style.css">
+    <!-- Conditional CSS loading -->
+    <?php
+    // Admin pages need admin.css, marketing pages need marketing.css
+    $admin_pages = ['agent-login.php', 'dashboard.php', 'admin.php', 'settings.php'];
+    $current_script = basename($_SERVER['SCRIPT_NAME']);
+    $is_admin_page = in_array($current_script, $admin_pages);
+    
+    if ($is_admin_page): ?>
+        <link rel="stylesheet" href="/assets/css/admin.css">
+    <?php else: ?>
+        <link rel="stylesheet" href="/assets/css/marketing.css">
+    <?php endif; ?>
 
     <script src="config.js"></script>
     <?php if (BBX_RECAPTCHA_SITE_KEY !== ''): ?>

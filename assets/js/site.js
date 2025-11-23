@@ -1,5 +1,46 @@
 'use strict';
 
+// ==========================================
+// JAVASCRIPT I18N SYSTEM
+// ==========================================
+const i18n = (() => {
+    let translations = {};
+    const lang = document.documentElement.getAttribute('lang') || 'da';
+    
+    // Load translations from server
+    const loadTranslations = async () => {
+        try {
+            const response = await fetch(`/lang/${lang}.json`);
+            if (response.ok) {
+                translations = await response.json();
+            }
+        } catch (error) {
+            console.error('Failed to load translations:', error);
+        }
+    };
+    
+    // Get translation by key path (e.g., 'common.ai_loading')
+    const t = (key, fallback = '') => {
+        const keys = key.split('.');
+        let value = translations;
+        
+        for (const k of keys) {
+            if (value && typeof value === 'object' && k in value) {
+                value = value[k];
+            } else {
+                return fallback || key;
+            }
+        }
+        
+        return typeof value === 'string' ? value : fallback || key;
+    };
+    
+    // Initialize translations on load
+    loadTranslations();
+    
+    return { t, loadTranslations };
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // NAVIGATION SCROLL EFFECT
@@ -206,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        const showAILoadingState = (container, message = 'Analyserer...') => {
+        const showAILoadingState = (container, message = i18n.t('common.analyzing', 'Analyserer...')) => {
             container.innerHTML = `
                 <div class="ai-loading-container">
                     <div class="ai-spinner"></div>
@@ -331,13 +372,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         recaptchaLog('Skipping grecaptcha.reset() – no clients registered (expected for v3).');
                     }
                 } else {
-                    const message = result.message || 'Der opstod en fejl. Prøv igen senere.';
+                    const message = result.message || i18n.t('common.form_error_default', 'Der opstod en fejl. Pr\u00f8v igen senere.');
                     recaptchaError('Submission failed', message, result);
                     displayMessage('error', message);
                 }
             } catch (error) {
                 recaptchaError('Unexpected submission error', error);
-                displayMessage('error', 'Kunne ikke sende forespørgslen. Kontrollér din forbindelse og prøv igen.');
+                displayMessage('error', i18n.t('common.form_error_network', 'Kunne ikke sende foresp\u00f8rgslen. Kontroll\u00e9r din forbindelse og pr\u00f8v igen.'));
             } finally {
                 setSubmittingState(false);
             }
@@ -481,7 +522,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (requests.length >= limit) {
             if (loaderElement) loaderElement.classList.add('hidden');
             if (resultElement) {
-                resultElement.innerHTML = '<p class="text-yellow-400">For mange forespørgsler. Vent et øjeblik og prøv igen.</p>';
+                resultElement.innerHTML = `<p class="text-yellow-400">${i18n.t('common.ai_rate_limit', 'For mange foresp\u00f8rgsler. Vent et \u00f8jeblik og pr\u00f8v igen.')}</p>`;
                 resultElement.classList.remove('hidden');
             }
             return;
@@ -489,7 +530,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Show improved loading state
         if (resultElement) {
-            showAILoadingState(resultElement, 'AI-assistenten analyserer din forespørgsel...');
+            showAILoadingState(resultElement, i18n.t('common.ai_loading', 'AI-assistenten analyserer din foresp\u00f8rgsel...'));
         }
 
         const payload = {
@@ -528,7 +569,7 @@ document.addEventListener('DOMContentLoaded', () => {
             requests.push(now);
             localStorage.setItem(requestKey, JSON.stringify(requests));
 
-            let text = 'Kunne ikke generere et svar. Prøv venligst igen.';
+            let text = i18n.t('common.ai_no_response', 'Kunne ikke generere et svar. Pr\u00f8v venligst igen.');
             if (result?.candidates?.[0]?.content?.parts?.[0]?.text) {
                 text = result.candidates[0].content.parts[0].text;
             }
@@ -542,8 +583,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Gemini error', error);
             }
             const fallbackMessage = error.name === 'AbortError'
-                ? 'Forespørgslen tog for lang tid – prøv igen.'
-                : 'Der opstod en fejl under kommunikation med AI-assistenten.';
+                ? i18n.t('common.ai_timeout', 'Foresp\u00f8rgslen tog for lang tid \u2013 pr\u00f8v igen.')
+                : i18n.t('common.ai_error', 'Der opstod en fejl under kommunikation med AI-assistenten.');
             if (resultElement) {
                 resultElement.innerHTML = `<p class="text-red-400">${fallbackMessage}</p>`;
                 resultElement.classList.remove('hidden');
@@ -565,7 +606,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (quickAssessmentOutputEl) {
-                showAILoadingState(quickAssessmentOutputEl, 'Analyserer din sikkerhedssituation...');
+                showAILoadingState(quickAssessmentOutputEl, i18n.t('common.ai_analyzing_security', 'Analyserer din sikkerhedssituation...'));
             }
 
             const prompt = `Du er strategisk sikkerhedsrådgiver for Blackbox EYE™. Evaluer følgende udfordring og returnér tre korte afsnit: 1) Primær trussel, 2) Hurtig gevinst, 3) Foreslået Blackbox-modul. Brug et professionelt, roligt danske sprog. Kundens beskrivelse: "${quickAssessmentInput.value.trim()}".`;
@@ -800,13 +841,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         throw new Error(`AlphaBot API error: ${response.status} - ${errorText}`);
                     }
                     const result = await response.json();
-                    const reply = result?.candidates?.[0]?.content?.parts?.[0]?.text || 'Undskyld, jeg kunne ikke generere et svar.';
+                    const reply = result?.candidates?.[0]?.content?.parts?.[0]?.text || i18n.t('common.alphabot_error', 'Undskyld, jeg kunne ikke generere et svar.');
                     appendMessage('bot', reply.trim());
                     conversation.push({ role: 'model', parts: [{ text: reply.trim() }] });
                 } catch (error) {
                     const fallback = error.name === 'AbortError'
-                        ? 'Forespørgslen tog for lang tid – prøv igen.'
-                        : 'Der opstod en fejl under forbindelsen til AlphaBot. Prøv igen senere.';
+                        ? i18n.t('common.ai_timeout', 'Foresp\u00f8rgslen tog for lang tid \u2013 pr\u00f8v igen.')
+                        : i18n.t('common.alphabot_connection_error', 'Der opstod en fejl under forbindelsen til AlphaBot. Pr\u00f8v igen senere.');
                     appendMessage('bot', fallback);
                 } finally {
                     setProcessing(false);

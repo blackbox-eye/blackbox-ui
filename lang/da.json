@@ -541,10 +541,17 @@
     "back": "Tilbage",
     "next": "Næste",
     "skip_link": "Spring til hovedindhold",
+    "analyzing": "Analyserer...",
     "ai_loading": "AI-assistenten analyserer din forespørgsel...",
+    "ai_analyzing_security": "Analyserer din sikkerhedssituation...",
     "ai_missing_config": "AI-konfiguration mangler. Kontakt administratoren.",
     "ai_rate_limit": "For mange forespørgsler. Vent et øjeblik og prøv igen.",
     "ai_timeout": "Forespørgslen tog for lang tid – prøv igen.",
-    "ai_error": "Der opstod en fejl under kommunikationen med AI-assistenten."
+    "ai_error": "Der opstod en fejl under kommunikationen med AI-assistenten.",
+    "ai_no_response": "Kunne ikke generere et svar. Prøv venligst igen.",
+    "form_error_default": "Der opstod en fejl. Prøv igen senere.",
+    "form_error_network": "Kunne ikke sende forespørgslen. Kontrollér din forbindelse og prøv igen.",
+    "alphabot_error": "Undskyld, jeg kunne ikke generere et svar.",
+    "alphabot_connection_error": "Der opstod en fejl under forbindelsen til AlphaBot. Prøv igen senere."
   }
 }

@@ -541,10 +541,17 @@
     "back": "Back",
     "next": "Next",
     "skip_link": "Skip to main content",
+    "analyzing": "Analyzing...",
     "ai_loading": "The AI assistant is analyzing your request...",
+    "ai_analyzing_security": "Analyzing your security situation...",
     "ai_missing_config": "AI configuration is missing. Contact the administrator.",
     "ai_rate_limit": "Too many requests. Please wait a moment and try again.",
     "ai_timeout": "The request took too long—please try again.",
-    "ai_error": "An error occurred while communicating with the AI assistant."
+    "ai_error": "An error occurred while communicating with the AI assistant.",
+    "ai_no_response": "Could not generate a response. Please try again.",
+    "form_error_default": "An error occurred. Please try again later.",
+    "form_error_network": "Could not send the request. Check your connection and try again.",
+    "alphabot_error": "Sorry, I couldn't generate a response.",
+    "alphabot_connection_error": "An error occurred while connecting to AlphaBot. Please try again later."
   }
 }

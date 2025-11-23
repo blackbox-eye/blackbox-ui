@@ -1,0 +1,60 @@
+name: "CodeQL"
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * 0'
+
+jobs:
+  php-analysis:
+    name: PHP CodeQL Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL for PHP
+        uses: github/codeql-action/init@v2
+        with:
+          languages: php
+
+      - name: Install PHP dependencies (composer)
+        if: hashFiles('composer.json') != ''
+        run: |
+          composer install --no-interaction --no-progress --no-suggest || true
+
+      - name: Perform PHP CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+
+  js-analysis:
+    name: JavaScript CodeQL Analysis (Gated)
+    runs-on: ubuntu-latest
+    needs: php-analysis
+    if: ${{ secrets.ENABLE_JS_CODEQL == 'true' }}
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL for JavaScript
+        uses: github/codeql-action/init@v2
+        with:
+          languages: javascript
+
+      - name: Install JS dependencies (npm)
+        if: hashFiles('package.json') != ''
+        run: |
+          npm ci --prefer-offline --no-audit --progress=false || true
+
+      - name: Perform JavaScript CodeQL Analysis
+        uses: github/codeql-action/analyze@v2

@@ -139,6 +139,7 @@ $nav_links = [
     ['slug' => 'about', 'label' => t('header.menu.about'), 'href' => 'about.php'],
     ['slug' => 'products', 'label' => t('header.menu.products'), 'href' => 'products.php'],
     ['slug' => 'cases', 'label' => t('header.menu.cases'), 'href' => 'cases.php'],
+    ['slug' => 'blog', 'label' => t('blog.title'), 'href' => 'blog.php'],
     ['slug' => 'pricing', 'label' => t('header.menu.pricing'), 'href' => 'pricing.php'],
     ['slug' => 'contact', 'label' => t('header.menu.contact'), 'href' => 'contact.php'],
 ];
@@ -160,12 +161,12 @@ if (!empty($disable_alphabot)) {
     <meta name="keywords" content="<?= htmlspecialchars($meta_keywords) ?>">
     <meta name="author" content="<?= htmlspecialchars($meta_author) ?>">
     <meta name="robots" content="<?= htmlspecialchars($meta_robots) ?>">
-    
+
     <!-- Performance Optimization: Resource Hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="dns-prefetch" href="https://www.google.com">
     <link rel="dns-prefetch" href="https://generativelanguage.googleapis.com">
-    
+
     <link rel="canonical" href="<?= htmlspecialchars($canonical_url) ?>">
     <?php
     $hreflang_locales = [

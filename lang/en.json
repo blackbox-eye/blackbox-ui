@@ -559,5 +559,43 @@
     "form_error_network": "Could not send the request. Check your connection and try again.",
     "alphabot_error": "Sorry, I couldn't generate a response.",
     "alphabot_connection_error": "An error occurred while connecting to AlphaBot. Please try again later."
+  },
+  "blog": {
+    "title": "Blog",
+    "meta": {
+      "title": "Blackbox EYE Blog - Cybersecurity Insights & News",
+      "description": "Read the latest articles about cybersecurity, AI-powered threat detection, penetration testing, and enterprise security solutions."
+    },
+    "hero": {
+      "title": "Cybersecurity Insights",
+      "description": "In-depth articles about AI, security, and enterprise operations."
+    },
+    "filter": {
+      "all": "All Articles"
+    },
+    "empty": {
+      "message": "No articles found in this category.",
+      "back": "Back to All Articles"
+    },
+    "read_more": "Read More",
+    "views": "views",
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "newsletter": {
+      "title": "Get the latest cybersecurity news",
+      "description": "Subscribe to our newsletter and receive articles directly in your inbox.",
+      "placeholder": "Your email address",
+      "button": "Subscribe"
+    },
+    "post": {
+      "not_found": "Article not found",
+      "not_found_desc": "The article you're looking for doesn't exist or has been removed.",
+      "back_to_blog": "Back to Blog",
+      "tags": "Tags",
+      "share": "Share this article",
+      "related": "Related Articles"
+    }
   }
 }

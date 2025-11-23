@@ -1,8 +1,8 @@
 # Sprint 4 Roadmap - Performance & Content Features
-**Version:** 1.0  
-**Date:** November 23, 2025  
-**Sprint:** Sprint 4 (Performance + Content + Analytics)  
-**Duration:** 2-3 weeks  
+**Version:** 1.0
+**Date:** November 23, 2025
+**Sprint:** Sprint 4 (Performance + Content + Analytics)
+**Duration:** 2-3 weeks
 **Status:** 🟡 Planning Phase
 
 ---
@@ -36,26 +36,26 @@
   - Convert images to WebP format with fallbacks
   - Add responsive images with `srcset` and `sizes`
   - Compress existing images (target: 80-90% quality)
-  
+
 - [ ] **JavaScript Optimization**
   - Minify `site.js` (remove comments, whitespace)
   - Implement code splitting for AI features
   - Defer non-critical JavaScript
   - Remove unused JavaScript libraries
-  
+
 - [ ] **CSS Optimization**
   - Inline critical CSS for above-the-fold content
   - Minify Tailwind CSS output
   - Remove unused CSS classes (PurgeCSS)
   - Implement CSS containment for animations
-  
+
 - [ ] **Resource Hints**
   ```html
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="dns-prefetch" href="https://www.google.com">
   <link rel="preload" href="/assets/js/site.js" as="script">
   ```
-  
+
 - [ ] **Compression**
   - Enable Gzip compression on server
   - Configure Brotli compression (better than Gzip)
@@ -74,14 +74,14 @@
   - Image upload and management
   - SEO meta fields (title, description, keywords)
   - Publish scheduling and draft system
-  
+
 - **Public Blog Interface**
   - Blog listing page with pagination
   - Individual blog post pages
   - Categories and tags filtering
   - Related posts recommendations
   - Social sharing buttons
-  
+
 - **Multi-language Support**
   - Full DA/EN translation support
   - Language-specific blog posts
@@ -131,13 +131,13 @@ CREATE TABLE blog_posts (
   - Categorized FAQ items (Security, Pricing, Technical, etc.)
   - Multi-language questions and answers
   - Admin interface for FAQ management
-  
+
 - **AI-Powered Search**
   - Natural language search using Gemini API
   - Semantic matching (not just keyword search)
   - Search suggestions as user types
   - Fallback to traditional search if AI unavailable
-  
+
 - **UI Components**
   - Accordion-style FAQ display
   - Search bar with live results
@@ -196,7 +196,7 @@ async function searchFAQ(query, language) {
   - Enhanced ecommerce (pricing interactions)
   - User journey visualization
   - Conversion funnel analysis
-  
+
 - **Custom Analytics Dashboard**
   - Lead sources breakdown
   - Page performance metrics
@@ -357,7 +357,7 @@ echo '</urlset>';
 ### 6. AlphaBot Enhancements (Priority: MEDIUM)
 
 #### Multi-Language Support
-**Current State:** English prompt, Danish/English responses  
+**Current State:** English prompt, Danish/English responses
 **Target State:** Fully internationalized system
 
 **Implementation:**
@@ -366,7 +366,7 @@ echo '</urlset>';
 const userLanguage = i18n.lang; // 'da' or 'en'
 
 // System prompt in user's language
-const systemPrompt = userLanguage === 'da' 
+const systemPrompt = userLanguage === 'da'
     ? "Du er AlphaBot, en AI-sikkerhedsassistent for Blackbox EYE..."
     : "You are AlphaBot, an AI security assistant for Blackbox EYE...";
 
@@ -424,7 +424,7 @@ const loadConversation = () => {
     if (saved) {
         const history = JSON.parse(saved);
         // Filter messages from last 24 hours
-        const recent = history.filter(msg => 
+        const recent = history.filter(msg =>
             Date.now() - msg.timestamp < 86400000
         );
         return recent;
@@ -454,7 +454,7 @@ const callAlphaBotWithRetry = async (maxRetries = 2) => {
             return await callAlphaBot();
         } catch (error) {
             if (attempt === maxRetries - 1) {
-                appendMessage('bot', i18n.t('alphabot.error_final', 
+                appendMessage('bot', i18n.t('alphabot.error_final',
                     'Beklager, jeg oplever tekniske problemer. Prøv igen senere.'));
             } else {
                 // Retry with exponential backoff
@@ -475,7 +475,7 @@ const callAlphaBotWithRetry = async (maxRetries = 2) => {
 ### 7. Footer UI/UX Enhancements (Priority: LOW)
 
 #### Design Improvements
-**Current Footer:** Basic layout with offices, contact, social links  
+**Current Footer:** Basic layout with offices, contact, social links
 **Enhanced Footer:** Newsletter signup, better visual hierarchy, more CTAs
 
 **New Layout Structure:**
@@ -493,7 +493,7 @@ const callAlphaBotWithRetry = async (maxRetries = 2) => {
             <h3 class="text-2xl font-bold mb-3"><?= t('footer.newsletter.title') ?></h3>
             <p class="text-gray-400 mb-6"><?= t('footer.newsletter.description') ?></p>
             <form id="newsletter-form" class="flex gap-3">
-                <input type="email" placeholder="<?= t('footer.newsletter.placeholder') ?>" 
+                <input type="email" placeholder="<?= t('footer.newsletter.placeholder') ?>"
                     class="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-4 py-3">
                 <button type="submit" class="bg-amber-400 text-black px-8 py-3 rounded-lg font-semibold">
                     <?= t('footer.newsletter.button') ?>
@@ -507,7 +507,7 @@ const callAlphaBotWithRetry = async (maxRetries = 2) => {
 #### Enhanced Social Links
 ```html
 <div class="flex gap-3">
-    <a href="https://linkedin.com/company/blackboxeye" 
+    <a href="https://linkedin.com/company/blackboxeye"
         class="group w-12 h-12 rounded-xl bg-gray-800 hover:bg-amber-400 flex items-center justify-center transition-all transform hover:scale-110"
         aria-label="LinkedIn">
         <svg class="w-5 h-5 text-gray-400 group-hover:text-black transition-colors">
@@ -613,6 +613,6 @@ const callAlphaBotWithRetry = async (maxRetries = 2) => {
 
 ---
 
-**Last Updated:** November 23, 2025  
-**Sprint Lead:** GitHub Copilot  
+**Last Updated:** November 23, 2025
+**Sprint Lead:** GitHub Copilot
 **Status:** ✅ Planning Complete - Ready for Implementation

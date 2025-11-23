@@ -559,5 +559,43 @@
     "form_error_network": "Kunne ikke sende forespørgslen. Kontrollér din forbindelse og prøv igen.",
     "alphabot_error": "Undskyld, jeg kunne ikke generere et svar.",
     "alphabot_connection_error": "Der opstod en fejl under forbindelsen til AlphaBot. Prøv igen senere."
+  },
+  "blog": {
+    "title": "Blog",
+    "meta": {
+      "title": "Blackbox EYE Blog - Cybersikkerhed Insights & Nyheder",
+      "description": "Læs de seneste artikler om cybersikkerhed, AI-drevet trusselsdetektion, penetration testing og enterprise-sikkerhedsløsninger."
+    },
+    "hero": {
+      "title": "Cybersikkerhed Insights",
+      "description": "Dybdegående artikler om AI, sikkerhed, og enterprise operations."
+    },
+    "filter": {
+      "all": "Alle Artikler"
+    },
+    "empty": {
+      "message": "Ingen artikler fundet i denne kategori.",
+      "back": "Tilbage til Alle Artikler"
+    },
+    "read_more": "Læs Mere",
+    "views": "visninger",
+    "pagination": {
+      "previous": "Forrige",
+      "next": "Næste"
+    },
+    "newsletter": {
+      "title": "Få de seneste cybersikkerhedsnyheder",
+      "description": "Tilmeld dig vores nyhedsbrev og modtag artikler direkte i din indbakke.",
+      "placeholder": "Din e-mail adresse",
+      "button": "Tilmeld"
+    },
+    "post": {
+      "not_found": "Artikel ikke fundet",
+      "not_found_desc": "Den artikel du leder efter eksisterer ikke eller er blevet fjernet.",
+      "back_to_blog": "Tilbage til Blog",
+      "tags": "Tags",
+      "share": "Del denne artikel",
+      "related": "Relaterede Artikler"
+    }
   }
 }

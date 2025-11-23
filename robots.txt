@@ -1,0 +1,47 @@
+# robots.txt for Blackbox EYE (blackbox.codes)
+# Updated: November 23, 2025
+
+# Allow all bots to crawl public pages
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /includes/
+Disallow: /lang/
+Disallow: /logs/
+Disallow: /cgi-bin/
+Disallow: /assets/uploads/
+Disallow: /*?*agent_id=*
+Disallow: /*?*session=*
+Disallow: /agent-login.php
+Disallow: /dashboard.php
+Disallow: /settings.php
+Disallow: /admin.php
+
+# Allow crawling of assets for rendering
+Allow: /assets/css/
+Allow: /assets/js/
+Allow: /assets/images/
+
+# Sitemap location
+Sitemap: https://blackbox.codes/sitemap.xml
+
+# Crawl-delay for specific bots (optional)
+# User-agent: Googlebot
+# Crawl-delay: 0
+
+# User-agent: Bingbot
+# Crawl-delay: 0
+
+# Block bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /

@@ -132,7 +132,7 @@
         </a>
     </div>
 
-    <script src="assets/js/site.js"></script>
+    <script src="assets/js/site.js" defer></script>
     </body>
 
     </html>

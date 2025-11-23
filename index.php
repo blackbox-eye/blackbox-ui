@@ -10,10 +10,10 @@ include 'includes/site-header.php';
     <!-- Hero Section: Transparent background to show Matrix rain -->
     <section id="home" class="relative min-h-screen w-full flex items-center justify-center text-center overflow-hidden">
         <canvas id="hero-canvas" class="absolute inset-0 w-full h-full z-0"></canvas>
-        
+
         <!-- Content overlay with subtle gradient -->
         <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 z-5"></div>
-        
+
         <div class="relative z-10 px-4 py-32 sm:py-40">
             <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold hero-gradient-text leading-tight mb-6">
                 <?= t('home.hero.headline') ?>

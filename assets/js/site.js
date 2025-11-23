@@ -6,7 +6,7 @@
 const i18n = (() => {
     let translations = {};
     const lang = document.documentElement.getAttribute('lang') || 'da';
-    
+
     // Load translations from server
     const loadTranslations = async () => {
         try {
@@ -18,12 +18,12 @@ const i18n = (() => {
             console.error('Failed to load translations:', error);
         }
     };
-    
+
     // Get translation by key path (e.g., 'common.ai_loading')
     const t = (key, fallback = '') => {
         const keys = key.split('.');
         let value = translations;
-        
+
         for (const k of keys) {
             if (value && typeof value === 'object' && k in value) {
                 value = value[k];
@@ -31,13 +31,13 @@ const i18n = (() => {
                 return fallback || key;
             }
         }
-        
+
         return typeof value === 'string' ? value : fallback || key;
     };
-    
+
     // Initialize translations on load
     loadTranslations();
-    
+
     return { t, loadTranslations };
 })();
 
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // NAVIGATION SCROLL EFFECT
     // ==========================================
     const header = document.getElementById('main-header');
-    
+
     const handleScroll = () => {
         if (window.scrollY > 50) {
             header?.classList.add('scrolled');
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial check
     handleScroll();
-    
+
     // Throttled scroll listener for performance
     let scrollTimeout;
     window.addEventListener('scroll', () => {
@@ -409,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const dpr = window.devicePixelRatio || 1;
                 const w = window.innerWidth;
                 const h = window.innerHeight;
-                
+
                 heroCanvas.width = w * dpr;
                 heroCanvas.height = h * dpr;
                 heroCanvas.style.width = w + 'px';
@@ -428,7 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // FPS throttling
                 const elapsed = timestamp - lastFrameTime;
                 if (elapsed < frameInterval) return;
-                
+
                 lastFrameTime = timestamp - (elapsed % frameInterval);
 
                 // Fade effect
@@ -448,7 +448,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const char = chars[Math.floor(Math.random() * chars.length)];
                     const x = i * 20;
                     const y = drops[i] * 20;
-                    
+
                     ctx.fillText(char, x, y);
 
                     // Reset when off-screen

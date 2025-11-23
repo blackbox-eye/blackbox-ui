@@ -160,6 +160,12 @@ if (!empty($disable_alphabot)) {
     <meta name="keywords" content="<?= htmlspecialchars($meta_keywords) ?>">
     <meta name="author" content="<?= htmlspecialchars($meta_author) ?>">
     <meta name="robots" content="<?= htmlspecialchars($meta_robots) ?>">
+    
+    <!-- Performance Optimization: Resource Hints -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://www.google.com">
+    <link rel="dns-prefetch" href="https://generativelanguage.googleapis.com">
+    
     <link rel="canonical" href="<?= htmlspecialchars($canonical_url) ?>">
     <?php
     $hreflang_locales = [

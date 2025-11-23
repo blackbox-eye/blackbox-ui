@@ -435,5 +435,73 @@ html {
 }
 
 /* —————————————————————————————————————————————————————
+   11. Navigation Links Styling
+   ————————————————————————————————————————————————————— */
+
+/* Desktop navigation links */
+.nav-link {
+  color: #d1d5db !important;        /* text-gray-300 */
+  text-decoration: none !important;
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem 0;
+}
+
+.nav-link:hover {
+  color: #fbbf24 !important;        /* text-amber-400 */
+}
+
+.nav-link.text-white {
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+/* Underline animation for nav links */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #fbbf24;        /* amber-400 */
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-link.text-white::after {
+  width: 100%;
+}
+
+/* Mobile navigation links */
+.nav-link-mobile {
+  color: #d1d5db !important;        /* text-gray-300 */
+  text-decoration: none !important;
+  display: block;
+  transition: color 0.3s ease;
+}
+
+.nav-link-mobile:hover {
+  color: #fbbf24 !important;        /* text-amber-400 */
+}
+
+.nav-link-mobile.text-white {
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+/* Force remove default link styling */
+a.nav-link,
+a.nav-link:visited,
+a.nav-link-mobile,
+a.nav-link-mobile:visited {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* —————————————————————————————————————————————————————
    Slut på style.css
    ————————————————————————————————————————————————————— */

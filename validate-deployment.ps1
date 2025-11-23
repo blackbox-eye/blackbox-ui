@@ -24,14 +24,15 @@ Write-Host "4. DELETE test-db.php after verification`n"
 $dbCheck = Read-Host "Did database connection succeed? (y/n)"
 
 if ($dbCheck -eq "y") {
-    Write-Host "✅ Database connection: PASSED`n" -ForegroundColor Green
-    $dbStatus = "PASSED"
-} else {
-    Write-Host "❌ Database connection: FAILED`n" -ForegroundColor Red
-    $dbError = Read-Host "Enter error message"
-    $dbStatus = "FAILED: $dbError"
-    Write-Host "⚠️ Fix database connection before continuing!`n" -ForegroundColor Yellow
-    exit 1
+  Write-Host "✅ Database connection: PASSED`n" -ForegroundColor Green
+  $dbStatus = "PASSED"
+}
+else {
+  Write-Host "❌ Database connection: FAILED`n" -ForegroundColor Red
+  $dbError = Read-Host "Enter error message"
+  $dbStatus = "FAILED: $dbError"
+  Write-Host "⚠️ Fix database connection before continuing!`n" -ForegroundColor Yellow
+  exit 1
 }
 
 # ============================================
@@ -49,18 +50,19 @@ Write-Host "4. DELETE test-tables.php after verification`n"
 $tablesCheck = Read-Host "Do both tables exist? (y/n)"
 
 if ($tablesCheck -eq "y") {
-    Write-Host "✅ Database tables: PASSED`n" -ForegroundColor Green
-    $faqCount = Read-Host "faq_items row count"
-    $blogCount = Read-Host "blog_posts row count"
-    $tablesStatus = "PASSED (faq_items: $faqCount rows, blog_posts: $blogCount rows)"
-} else {
-    Write-Host "❌ Database tables: MISSING`n" -ForegroundColor Red
-    Write-Host "Import schema files via phpMyAdmin:`n" -ForegroundColor Yellow
-    Write-Host "- db/schema/faq_items.sql"
-    Write-Host "- db/schema/blog_posts.sql`n"
-    $continueAnyway = Read-Host "Continue anyway? (y/n)"
-    if ($continueAnyway -ne "y") { exit 1 }
-    $tablesStatus = "FAILED - Needs schema import"
+  Write-Host "✅ Database tables: PASSED`n" -ForegroundColor Green
+  $faqCount = Read-Host "faq_items row count"
+  $blogCount = Read-Host "blog_posts row count"
+  $tablesStatus = "PASSED (faq_items: $faqCount rows, blog_posts: $blogCount rows)"
+}
+else {
+  Write-Host "❌ Database tables: MISSING`n" -ForegroundColor Red
+  Write-Host "Import schema files via phpMyAdmin:`n" -ForegroundColor Yellow
+  Write-Host "- db/schema/faq_items.sql"
+  Write-Host "- db/schema/blog_posts.sql`n"
+  $continueAnyway = Read-Host "Continue anyway? (y/n)"
+  if ($continueAnyway -ne "y") { exit 1 }
+  $tablesStatus = "FAILED - Needs schema import"
 }
 
 # ============================================
@@ -80,11 +82,12 @@ Write-Host "6. DevTools → Network → Check style.css has 'cf-cache-status: MI
 $cacheCheck = Read-Host "Was Cloudflare cache purged successfully? (y/n)"
 
 if ($cacheCheck -eq "y") {
-    Write-Host "✅ Cloudflare cache: PURGED`n" -ForegroundColor Green
-    $cacheStatus = "PURGED"
-} else {
-    Write-Host "⚠️ Cloudflare cache: NOT PURGED`n" -ForegroundColor Yellow
-    $cacheStatus = "PENDING"
+  Write-Host "✅ Cloudflare cache: PURGED`n" -ForegroundColor Green
+  $cacheStatus = "PURGED"
+}
+else {
+  Write-Host "⚠️ Cloudflare cache: NOT PURGED`n" -ForegroundColor Yellow
+  $cacheStatus = "PENDING"
 }
 
 # ============================================
@@ -112,16 +115,16 @@ $firefoxTest = Read-Host "Firefox tests passed? (y/n)"
 $edgeTest = Read-Host "Edge tests passed? (y/n)"
 
 $browserResults = @{
-    Chrome = if ($chromeTest -eq "y") { "PASSED" } else { "FAILED" }
-    Brave = if ($braveTest -eq "y") { "PASSED" } else { "FAILED" }
-    Firefox = if ($firefoxTest -eq "y") { "PASSED" } else { "FAILED" }
-    Edge = if ($edgeTest -eq "y") { "PASSED" } else { "FAILED" }
+  Chrome  = if ($chromeTest -eq "y") { "PASSED" } else { "FAILED" }
+  Brave   = if ($braveTest -eq "y") { "PASSED" } else { "FAILED" }
+  Firefox = if ($firefoxTest -eq "y") { "PASSED" } else { "FAILED" }
+  Edge    = if ($edgeTest -eq "y") { "PASSED" } else { "FAILED" }
 }
 
 Write-Host "`nBrowser Test Results:" -ForegroundColor Cyan
 $browserResults.GetEnumerator() | ForEach-Object {
-    $icon = if ($_.Value -eq "PASSED") { "✅" } else { "❌" }
-    Write-Host "  $icon $($_.Key): $($_.Value)"
+  $icon = if ($_.Value -eq "PASSED") { "✅" } else { "❌" }
+  Write-Host "  $icon $($_.Key): $($_.Value)"
 }
 Write-Host ""
 
@@ -142,33 +145,34 @@ Write-Host "6. Repeat for Mobile`n"
 $runLighthouse = Read-Host "Ready to input Lighthouse scores? (y/n)"
 
 if ($runLighthouse -eq "y") {
-    Write-Host "`n--- DESKTOP SCORES ---" -ForegroundColor Cyan
-    $desktopPerf = Read-Host "Performance (0-100)"
-    $desktopA11y = Read-Host "Accessibility (0-100)"
-    $desktopBP = Read-Host "Best Practices (0-100)"
-    $desktopSEO = Read-Host "SEO (0-100)"
-    
-    Write-Host "`n--- MOBILE SCORES ---" -ForegroundColor Cyan
-    $mobilePerf = Read-Host "Performance (0-100)"
-    $mobileA11y = Read-Host "Accessibility (0-100)"
-    $mobileBP = Read-Host "Best Practices (0-100)"
-    $mobileSEO = Read-Host "SEO (0-100)"
-    
-    Write-Host "`n--- CORE WEB VITALS ---" -ForegroundColor Cyan
-    $lcp = Read-Host "LCP - Largest Contentful Paint (seconds)"
-    $fid = Read-Host "FID - First Input Delay (ms)"
-    $cls = Read-Host "CLS - Cumulative Layout Shift (0.0-1.0)"
-    
-    $lighthouseStatus = "COMPLETED"
-} else {
-    Write-Host "⚠️ Lighthouse audit skipped`n" -ForegroundColor Yellow
-    $lighthouseStatus = "SKIPPED"
-    $desktopPerf = "N/A"
-    $desktopA11y = "N/A"
-    $mobilePerf = "N/A"
-    $lcp = "N/A"
-    $fid = "N/A"
-    $cls = "N/A"
+  Write-Host "`n--- DESKTOP SCORES ---" -ForegroundColor Cyan
+  $desktopPerf = Read-Host "Performance (0-100)"
+  $desktopA11y = Read-Host "Accessibility (0-100)"
+  $desktopBP = Read-Host "Best Practices (0-100)"
+  $desktopSEO = Read-Host "SEO (0-100)"
+
+  Write-Host "`n--- MOBILE SCORES ---" -ForegroundColor Cyan
+  $mobilePerf = Read-Host "Performance (0-100)"
+  $mobileA11y = Read-Host "Accessibility (0-100)"
+  $mobileBP = Read-Host "Best Practices (0-100)"
+  $mobileSEO = Read-Host "SEO (0-100)"
+
+  Write-Host "`n--- CORE WEB VITALS ---" -ForegroundColor Cyan
+  $lcp = Read-Host "LCP - Largest Contentful Paint (seconds)"
+  $fid = Read-Host "FID - First Input Delay (ms)"
+  $cls = Read-Host "CLS - Cumulative Layout Shift (0.0-1.0)"
+
+  $lighthouseStatus = "COMPLETED"
+}
+else {
+  Write-Host "⚠️ Lighthouse audit skipped`n" -ForegroundColor Yellow
+  $lighthouseStatus = "SKIPPED"
+  $desktopPerf = "N/A"
+  $desktopA11y = "N/A"
+  $mobilePerf = "N/A"
+  $lcp = "N/A"
+  $fid = "N/A"
+  $cls = "N/A"
 }
 
 # ============================================
@@ -260,34 +264,34 @@ Verified style.css loading with new navigation CSS.
 $hasIssues = $false
 
 if ($dbStatus -like "FAILED*") {
-    $report += "`n### Critical: Database Connection`n"
-    $report += "Database connection failed. Review error message and fix credentials.`n"
-    $hasIssues = $true
+  $report += "`n### Critical: Database Connection`n"
+  $report += "Database connection failed. Review error message and fix credentials.`n"
+  $hasIssues = $true
 }
 
 if ($tablesStatus -like "FAILED*") {
-    $report += "`n### Critical: Database Tables Missing`n"
-    $report += "Import schema files via phpMyAdmin or MySQL CLI.`n"
-    $hasIssues = $true
+  $report += "`n### Critical: Database Tables Missing`n"
+  $report += "Import schema files via phpMyAdmin or MySQL CLI.`n"
+  $hasIssues = $true
 }
 
 if ($browserResults.Values -contains "FAILED") {
-    $report += "`n### Medium: Cross-Browser Issues`n"
-    $failedBrowsers = $browserResults.GetEnumerator() | Where-Object { $_.Value -eq "FAILED" } | ForEach-Object { $_.Key }
-    $report += "Failed in: $($failedBrowsers -join ', ')`n"
-    $report += "Review navigation CSS and test specific browser rendering.`n"
-    $hasIssues = $true
+  $report += "`n### Medium: Cross-Browser Issues`n"
+  $failedBrowsers = $browserResults.GetEnumerator() | Where-Object { $_.Value -eq "FAILED" } | ForEach-Object { $_.Key }
+  $report += "Failed in: $($failedBrowsers -join ', ')`n"
+  $report += "Review navigation CSS and test specific browser rendering.`n"
+  $hasIssues = $true
 }
 
 if ([int]$desktopPerf -lt 85 -and $desktopPerf -ne "N/A") {
-    $report += "`n### Low: Performance Below Target`n"
-    $report += "Desktop Performance score: $desktopPerf (target: > 85)`n"
-    $report += "Consider image optimization, CSS/JS minification, caching improvements.`n"
-    $hasIssues = $true
+  $report += "`n### Low: Performance Below Target`n"
+  $report += "Desktop Performance score: $desktopPerf (target: > 85)`n"
+  $report += "Consider image optimization, CSS/JS minification, caching improvements.`n"
+  $hasIssues = $true
 }
 
 if (-not $hasIssues) {
-    $report += "`n**No critical issues found.** ✅`n"
+  $report += "`n**No critical issues found.** ✅`n"
 }
 
 $report += @"
@@ -299,18 +303,19 @@ $report += @"
 "@
 
 # Determine overall status
-$allPassed = $dbStatus -eq "PASSED" -and 
-             $tablesStatus -like "PASSED*" -and 
-             $cacheStatus -eq "PURGED" -and 
-             -not ($browserResults.Values -contains "FAILED") -and
-             $lighthouseStatus -eq "COMPLETED"
+$allPassed = $dbStatus -eq "PASSED" -and
+$tablesStatus -like "PASSED*" -and
+$cacheStatus -eq "PURGED" -and
+-not ($browserResults.Values -contains "FAILED") -and
+$lighthouseStatus -eq "COMPLETED"
 
 if ($allPassed) {
-    $report += "**Overall Status:** 🟢 **DEPLOYMENT SUCCESSFUL**`n`n"
-    $report += "All validation checks passed. Ready for final release tagging.`n"
-} else {
-    $report += "**Overall Status:** 🟡 **DEPLOYMENT PARTIAL**`n`n"
-    $report += "Some validation checks failed or incomplete. Review issues above.`n"
+  $report += "**Overall Status:** 🟢 **DEPLOYMENT SUCCESSFUL**`n`n"
+  $report += "All validation checks passed. Ready for final release tagging.`n"
+}
+else {
+  $report += "**Overall Status:** 🟡 **DEPLOYMENT PARTIAL**`n`n"
+  $report += "Some validation checks failed or incomplete. Review issues above.`n"
 }
 
 $report += @"
@@ -322,7 +327,7 @@ $report += @"
 "@
 
 if ($allPassed) {
-    $report += @"
+  $report += @"
 1. ✅ Tag release: ``git tag -a v1.0.0-sprint4 -m "Sprint 4 validated"``
 2. ✅ Push tag: ``git push origin v1.0.0-sprint4``
 3. ✅ Create GitHub release with these results
@@ -331,8 +336,9 @@ if ($allPassed) {
 
 **Deployment ready for production announcement!** 🚀
 "@
-} else {
-    $report += @"
+}
+else {
+  $report += @"
 1. ⚠️ Fix critical issues listed above
 2. ⚠️ Re-run failed validation checks
 3. ⚠️ Re-run this script after fixes
@@ -357,12 +363,12 @@ Write-Host "Lighthouse: $lighthouseStatus"
 Write-Host ""
 
 if ($allPassed) {
-    Write-Host "🟢 DEPLOYMENT SUCCESSFUL - Ready for release!" -ForegroundColor Green
-    
-    $tagRelease = Read-Host "`nCreate git tag v1.0.0-sprint4 now? (y/n)"
-    if ($tagRelease -eq "y") {
-        Write-Host "`nCreating git tag..." -ForegroundColor Yellow
-        git tag -a v1.0.0-sprint4 -m "Sprint 4: Navigation Fix + Performance Optimization
+  Write-Host "🟢 DEPLOYMENT SUCCESSFUL - Ready for release!" -ForegroundColor Green
+
+  $tagRelease = Read-Host "`nCreate git tag v1.0.0-sprint4 now? (y/n)"
+  if ($tagRelease -eq "y") {
+    Write-Host "`nCreating git tag..." -ForegroundColor Yellow
+    git tag -a v1.0.0-sprint4 -m "Sprint 4: Navigation Fix + Performance Optimization
 
 Deployment validated on $(Get-Date -Format 'yyyy-MM-dd'):
 - Database connection: $dbStatus
@@ -374,19 +380,20 @@ Deployment validated on $(Get-Date -Format 'yyyy-MM-dd'):
 - Core Web Vitals: LCP $lcp s, FID $fid ms, CLS $cls
 
 All validation checks passed successfully."
-        
-        Write-Host "✅ Tag created: v1.0.0-sprint4" -ForegroundColor Green
-        
-        $pushTag = Read-Host "Push tag to GitHub? (y/n)"
-        if ($pushTag -eq "y") {
-            git push origin v1.0.0-sprint4
-            Write-Host "✅ Tag pushed to GitHub" -ForegroundColor Green
-            Write-Host "`nCreate GitHub release at:" -ForegroundColor Yellow
-            Write-Host "https://github.com/AlphaAcces/ALPHA-Interface-GUI/releases/new?tag=v1.0.0-sprint4"
-        }
+
+    Write-Host "✅ Tag created: v1.0.0-sprint4" -ForegroundColor Green
+
+    $pushTag = Read-Host "Push tag to GitHub? (y/n)"
+    if ($pushTag -eq "y") {
+      git push origin v1.0.0-sprint4
+      Write-Host "✅ Tag pushed to GitHub" -ForegroundColor Green
+      Write-Host "`nCreate GitHub release at:" -ForegroundColor Yellow
+      Write-Host "https://github.com/AlphaAcces/ALPHA-Interface-GUI/releases/new?tag=v1.0.0-sprint4"
     }
-} else {
-    Write-Host "🟡 DEPLOYMENT PARTIAL - Review issues in report" -ForegroundColor Yellow
+  }
+}
+else {
+  Write-Host "🟡 DEPLOYMENT PARTIAL - Review issues in report" -ForegroundColor Yellow
 }
 
 Write-Host "`n=== VALIDATION COMPLETE ===`n" -ForegroundColor Cyan

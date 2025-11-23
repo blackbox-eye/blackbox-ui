@@ -174,8 +174,10 @@
 
 **Check Command** (via SSH if accessible):
 ```bash
-mysql -u blackowu_bbx_user -p'Ninjabankingcoin2025' blackowu_blackbox \
-  -e "SHOW TABLES LIKE 'faq_items'; SHOW TABLES LIKE 'blog_posts';"
+# Use an environment variable or prompt for the DB password rather than embedding it in docs.
+# Example (replace with secure method on server):
+mysql -u blackowu_bbx_user -p"$DB_PASSWORD" blackowu_blackbox \
+   -e "SHOW TABLES LIKE 'faq_items'; SHOW TABLES LIKE 'blog_posts';"
 ```
 
 ---

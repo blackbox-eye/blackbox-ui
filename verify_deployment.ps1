@@ -66,8 +66,9 @@ if (-not $dbPass -or $dbPass.Trim() -eq "") {
   Write-Host "❌ DB_PASSWORD environment variable is not set. Set it before running this script." -ForegroundColor Red
   Write-Host "   Example (PowerShell):`n     $env:DB_PASSWORD = 'your_db_password'`n     ./verify_deployment.ps1" -ForegroundColor Yellow
   $dbConnectionStatus = "UNKNOWN"
-} else {
-  $escapedPass = $dbPass -replace "'","'\\''"
+}
+else {
+  $escapedPass = $dbPass -replace "'", "'\\''"
   $checkDbConnectionScript = @"
 mysql -u blackowu_bbx_user -p'$escapedPass' -h localhost blackowu_blackbox -e 'SELECT 1;' 2>&1
 if [ \$? -eq 0 ]; then
@@ -137,7 +138,8 @@ mysql -u blackowu_bbx_user -p'$escapedPass' -h localhost blackowu_blackbox -e 'S
     Write-Host "❌ Unable to check tables: $($_.Exception.Message)" -ForegroundColor Red
     $tablesStatus = "SSH_FAILED"
   }
-} else {
+}
+else {
   Write-Host "⚠️ Skipping table check because DB connectivity could not be verified." -ForegroundColor Yellow
   $tablesStatus = "SKIPPED"
 }

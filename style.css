@@ -451,9 +451,17 @@ html {
   color: #fbbf24 !important;        /* text-amber-400 */
 }
 
+.nav-link:visited {
+  color: #d1d5db !important;
+}
+
 .nav-link.text-white {
   color: #ffffff !important;
   font-weight: 600;
+}
+
+.nav-link.text-white:visited {
+  color: #ffffff !important;
 }
 
 /* Underline animation for nav links */
@@ -488,9 +496,17 @@ html {
   color: #fbbf24 !important;        /* text-amber-400 */
 }
 
+.nav-link-mobile:visited {
+  color: #d1d5db !important;
+}
+
 .nav-link-mobile.text-white {
   color: #ffffff !important;
   font-weight: 600;
+}
+
+.nav-link-mobile.text-white:visited {
+  color: #ffffff !important;
 }
 
 /* Force remove default link styling */

@@ -71,13 +71,13 @@ include 'includes/site-header.php';
       <div class="container mx-auto px-4">
         <div class="glass-effect rounded-2xl p-8 text-center border border-red-500/30">
           <h2 class="text-2xl font-bold mb-4 text-white">
-            <?= t('blog.error.title', 'Bloggen er midlertidigt utilgængelig') ?>
+            Bloggen er midlertidigt utilgængelig
           </h2>
           <p class="text-gray-300 mb-6">
             <?= htmlspecialchars($blog_error_message) ?>
           </p>
           <a href="contact.php" class="inline-flex items-center gap-2 px-6 py-3 bg-amber-400 text-black font-semibold rounded-lg hover:bg-amber-500 transition-colors">
-            <?= t('common.contact_support', 'Kontakt support') ?>
+            Kontakt support
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
             </svg>

@@ -2,6 +2,45 @@
 
 Alle større ændringer i ALPHA Interface GUI (AIG) dokumenteres her, så audit og drift altid kan følge release-tracking.
 
+## [v1.0.0-sprint4] – 2025-11-23 (Sprint 4)
+### Added
+- **Comprehensive Visual Regression Testing**
+  - Playwright-baseret automatiseret visual testing med cross-browser support
+  - 4 viewport sizes: Mobile (375×812), Tablet (768×1024), Desktop Medium (1024×768), Desktop Large (1440×900)
+  - 4 browser configurations: Chromium, Firefox, WebKit, Chromium-dark
+  - 24 screenshots genereret og arkiveret (full page + header-only)
+  - 16/16 tests bestået med 49,5 sekunders eksekvering
+
+- **Lighthouse CI Integration**
+  - Automatiseret Lighthouse audit på hver deployment
+  - Core Web Vitals monitoring (LCP, FID, CLS)
+  - Performance, Accessibility, Best Practices, SEO score tracking
+  - Note: Artifact upload issue identificeret - audit kører perfekt, men GitHub Actions API afviser artifact
+
+- **Enhanced Header Verification**
+  - FAQ link synlighed og funktionalitet bekræftet på alle viewports
+  - Language selection buttons verificeret cross-browser
+  - Responsive navigation menu behavior valideret
+  - Mobile menu toggle testet på mobile/tablet devices
+
+### Infrastructure
+- `.github/workflows/visual-regression.yml` - Playwright visual testing workflow
+- `.github/workflows/lighthouse.yml` - Lighthouse CI audit workflow
+- `tests/visual.spec.js` - Visual regression test suite
+- `playwright.config.js` - Browser og viewport konfiguration
+- `scripts/extract-lighthouse-scores.sh` - Utility script til score extraction
+- `docs/sprint4/screenshots/` - Permanent storage af visual regression screenshots
+
+### Documentation
+- `SPRINT4_VERIFICATION_AUDIT.md` - Komplet verifikationsrapport med test-resultater
+- `RELEASE_NOTES_v1.0.0-sprint4.md` - Release notes med detaljerede test metrics
+- `docs/sprint4/screenshots/README.md` - Screenshot artifact dokumentation
+
+### Known Issues
+- Lighthouse artifact upload fejler konsekvent pga. GitHub Actions API-begrænsning
+  - Workaround: Kør Lighthouse manuelt via Chrome DevTools eller CLI
+  - Impact: Automatiseret performance-tracking ikke tilgængelig via artifacts
+
 ## [v1.2] – 2025-01-XX (Sprint 2)
 ### Added
 - **Breadcrumb Navigation (P1)**

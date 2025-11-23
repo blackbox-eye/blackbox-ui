@@ -1,7 +1,7 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 # ALPHA Interface GUI - Secure CI/CD Pipeline v2.0
 # ═══════════════════════════════════════════════════════════════════════════════
-# 
+#
 # This workflow implements a hardened deployment pipeline with:
 # - FTPS/TLS encryption for all FTP operations
 # - Comprehensive smoke tests across multiple endpoints
@@ -50,22 +50,22 @@ jobs:
       - name: Verify critical files exist
         run: |
           echo "🔍 Verifying repository structure..."
-          
+
           # Check for required files
           MISSING_FILES=()
-          
+
           if [ ! -f README.md ]; then
             MISSING_FILES+=("README.md")
           fi
-          
+
           if [ ! -f index.php ]; then
             MISSING_FILES+=("index.php")
           fi
-          
+
           if [ ! -f .htaccess ]; then
             echo "⚠️  Warning: .htaccess not found (optional)"
           fi
-          
+
           # Report results
           if [ ${#MISSING_FILES[@]} -eq 0 ]; then
             echo "✅ All critical files present"
@@ -82,7 +82,7 @@ jobs:
       - name: Validate workflow configuration
         run: |
           echo "🔍 Validating workflow configuration..."
-          
+
           # Check if running on correct branch
           if [ "${{ github.ref }}" != "refs/heads/main" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
             echo "ℹ️  Not on main branch - deployment will be skipped"
@@ -119,37 +119,37 @@ jobs:
           echo "🔐 Connecting to FTP server with TLS encryption..."
           echo "   Host: $FTP_HOST"
           echo "   Path: $FTP_REMOTE_PATH"
-          
+
           # Execute secure FTP operation
           lftp -c "
             # Security settings: Force TLS encryption
             set ftp:ssl-force true;
             set ftp:ssl-protect-data true;
             set ssl:verify-certificate no;
-            
+
             # Connection settings
             set ftp:passive-mode on;
             set net:timeout 30;
             set net:max-retries 3;
             set net:reconnect-interval-base 5;
-            
+
             # Connect and authenticate
             open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST;
-            
+
             # Navigate to target directory
             cd $FTP_REMOTE_PATH || exit 1;
-            
+
             # Check if index.html exists
             echo '🔍 Checking for index.html...';
             ls -la index.html 2>/dev/null && echo '   ✓ index.html found' || echo '   ℹ️  index.html not present';
-            
+
             # Delete index.html (ignore error if not exists)
             rm -f index.html;
-            
+
             # Verify deletion
             echo '✅ Deletion completed';
             ls -la index.html 2>/dev/null && echo '⚠️  WARNING: index.html still exists!' || echo '   ✓ index.html successfully removed';
-            
+
             # Close connection
             bye
           " 2>&1 | grep -v "^put: " | grep -v "^get: " || {
@@ -160,7 +160,7 @@ jobs:
               exit 1
             fi
           }
-          
+
           echo "✅ index.html deletion process completed"
 
       - name: Validate operation
@@ -191,7 +191,7 @@ jobs:
           echo "   Repository: ${{ github.repository }}"
           echo "   Commit: ${{ github.sha }}"
           echo "   Branch: ${{ github.ref_name }}"
-          
+
           # Count files to be deployed
           FILE_COUNT=$(find . -type f ! -path "./.git/*" ! -path "./.github/*" | wc -l)
           echo "   Files: $FILE_COUNT"
@@ -275,10 +275,10 @@ jobs:
             SITE_URL="http://${{ secrets.FTP_HOST }}"
             echo "🌐 Using FTP_HOST as base URL: $SITE_URL"
           fi
-          
+
           # Remove trailing slash if present
           SITE_URL="${SITE_URL%/}"
-          
+
           # Export for subsequent steps
           echo "SITE_URL=$SITE_URL" >> $GITHUB_ENV
           echo "✅ Test environment configured"
@@ -290,18 +290,18 @@ jobs:
           echo "════════════════════════════════════════"
           URL="$SITE_URL/"
           echo "Target: $URL"
-          
+
           # Fetch HTTP status
           HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L "$URL" || echo "000")
           echo "HTTP Status: $HTTP_CODE"
-          
+
           # Validate status code
           if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || [ "$HTTP_CODE" = "302" ]; then
             echo "✅ Root endpoint accessible"
-            
+
             # Fetch and verify content
             RESPONSE=$(curl -s -L "$URL" 2>/dev/null || echo "CURL_FAILED")
-            
+
             if echo "$RESPONSE" | grep -qi "ALPHA\|blackbox\|<!DOCTYPE\|<html"; then
               echo "✅ Valid HTML content detected"
             else
@@ -319,10 +319,10 @@ jobs:
           echo "════════════════════════════════════════"
           URL="$SITE_URL/about.php"
           echo "Target: $URL"
-          
+
           HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L "$URL" || echo "000")
           echo "HTTP Status: $HTTP_CODE"
-          
+
           if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || [ "$HTTP_CODE" = "302" ]; then
             echo "✅ About page accessible"
           else
@@ -336,10 +336,10 @@ jobs:
           echo "════════════════════════════════════════"
           URL="$SITE_URL/cases.php"
           echo "Target: $URL"
-          
+
           HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L "$URL" || echo "000")
           echo "HTTP Status: $HTTP_CODE"
-          
+
           if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || [ "$HTTP_CODE" = "302" ]; then
             echo "✅ Cases page accessible"
           else
@@ -353,10 +353,10 @@ jobs:
           echo "════════════════════════════════════════"
           URL="$SITE_URL/contact.php"
           echo "Target: $URL"
-          
+
           HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L "$URL" || echo "000")
           echo "HTTP Status: $HTTP_CODE"
-          
+
           if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || [ "$HTTP_CODE" = "302" ]; then
             echo "✅ Contact page accessible"
           else
@@ -370,10 +370,10 @@ jobs:
           echo "════════════════════════════════════════"
           URL="$SITE_URL/index.html"
           echo "Target: $URL"
-          
+
           HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L "$URL" || echo "000")
           echo "HTTP Status: $HTTP_CODE"
-          
+
           if [ "$HTTP_CODE" = "404" ]; then
             echo "✅ index.html correctly returns 404 (deleted successfully)"
           elif [ "$HTTP_CODE" = "403" ]; then
@@ -391,9 +391,9 @@ jobs:
           echo "🧪 TEST 6: DirectoryIndex Verification"
           echo "════════════════════════════════════════"
           echo "Verifying index.php is served as DirectoryIndex..."
-          
+
           RESPONSE=$(curl -s -L "$SITE_URL/" 2>/dev/null || echo "CURL_FAILED")
-          
+
           # Check for PHP execution indicators
           if echo "$RESPONSE" | grep -qi "<?php\|<?="; then
             echo "⚠️  Raw PHP code detected (PHP not executing)"
@@ -403,11 +403,11 @@ jobs:
           else
             echo "⚠️  Unable to verify PHP execution"
           fi
-          
+
           # Check content length
           CONTENT_LENGTH=$(echo "$RESPONSE" | wc -c)
           echo "Content length: $CONTENT_LENGTH bytes"
-          
+
           if [ "$CONTENT_LENGTH" -gt 100 ]; then
             echo "✅ Substantial content returned"
           else

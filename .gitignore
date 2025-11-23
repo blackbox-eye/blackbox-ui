@@ -72,6 +72,12 @@ build/
 dist/
 generate_hash.php
 
+# Playwright test artifacts
+artifacts/
+!artifacts/.gitkeep
+.lighthouseci/
+test-results/
+
 # ────────────────────────────────────────────────────────────────────────────────
 # --- GitHub/CI artefakter ---
 .github/*

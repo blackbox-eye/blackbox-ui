@@ -120,7 +120,7 @@
         <?php endif; ?>
 
         <!-- Sticky CTA Button -->
-        <a href="contact.php"
+        <a href="demo.php"
             id="sticky-cta"
             class="sticky-cta"
             aria-label="<?= htmlspecialchars(t('footer.cta.aria_label')) ?>">

@@ -81,3 +81,36 @@ if (BBX_RECAPTCHA_SECRET_KEY !== '' && BBX_RECAPTCHA_PROJECT_ID === '') {
 if (BBX_DEBUG_SMTP) {
     error_log('BBX ENV DEBUG - SMTP debugging enabled');
 }
+
+// Third-party Integrations
+if (!defined('BBX_CALENDLY_URL')) {
+    define('BBX_CALENDLY_URL', bbx_env('CALENDLY_URL', 'https://calendly.com/blackbox-eye-demo/30min'));
+}
+
+if (!defined('BBX_GEMINI_API_KEY')) {
+    define('BBX_GEMINI_API_KEY', bbx_env('GEMINI_API_KEY'));
+}
+
+if (!defined('BBX_SMTP_HOST')) {
+    define('BBX_SMTP_HOST', bbx_env('SMTP_HOST'));
+}
+
+if (!defined('BBX_SMTP_PORT')) {
+    define('BBX_SMTP_PORT', bbx_env('SMTP_PORT', '587'));
+}
+
+if (!defined('BBX_SMTP_USERNAME')) {
+    define('BBX_SMTP_USERNAME', bbx_env('SMTP_USERNAME'));
+}
+
+if (!defined('BBX_SMTP_PASSWORD')) {
+    define('BBX_SMTP_PASSWORD', bbx_env('SMTP_PASSWORD'));
+}
+
+if (!defined('BBX_SMTP_SECURE')) {
+    define('BBX_SMTP_SECURE', bbx_env('SMTP_SECURE', 'tls'));
+}
+
+if (!defined('BBX_CONTACT_EMAIL')) {
+    define('BBX_CONTACT_EMAIL', bbx_env('CONTACT_EMAIL', 'ops@blackbox.codes'));
+}

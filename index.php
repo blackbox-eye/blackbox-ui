@@ -14,15 +14,15 @@ include 'includes/site-header.php';
         <!-- Content overlay with subtle gradient -->
         <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 pointer-events-none" style="z-index: 1;"></div>
 
-        <div class="relative px-4 py-32 sm:py-40" style="z-index: 10;">
-            <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold hero-gradient-text leading-tight mb-6">
+        <div class="relative px-4 py-32 sm:py-40 max-w-4xl mx-auto" style="z-index: 10;">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold hero-gradient-text leading-tight mb-6 mx-auto">
                 <?= t('home.hero.headline') ?>
             </h1>
-            <p class="text-base sm:text-lg md:text-xl max-w-3xl mx-auto text-gray-300 mb-10">
+            <p class="text-base sm:text-lg md:text-xl lg:text-2xl max-w-3xl mx-auto text-gray-300 mb-10 leading-relaxed">
                 <?= t('home.hero.subheadline') ?>
             </p>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="contact.php" class="bg-amber-400 text-black font-bold py-3 px-8 sm:py-4 sm:px-10 rounded-lg text-base sm:text-lg hover:scale-105 transition-transform inline-block">
+                <a href="demo.php" class="bg-amber-400 text-black font-bold py-3 px-8 sm:py-4 sm:px-10 rounded-lg text-base sm:text-lg hover:scale-105 transition-transform inline-block">
                     <?= t('home.hero.primary_cta') ?>
                 </a>
                 <a href="products.php" class="border border-amber-400 text-amber-400 font-semibold py-3 px-8 sm:py-4 sm:px-10 rounded-lg text-base sm:text-lg hover:bg-amber-400 hover:text-black transition-transform inline-block">

@@ -140,6 +140,7 @@ $nav_links = [
     ['slug' => 'products', 'label' => t('header.menu.products'), 'href' => 'products.php'],
     ['slug' => 'cases', 'label' => t('header.menu.cases'), 'href' => 'cases.php'],
     ['slug' => 'blog', 'label' => t('blog.title'), 'href' => 'blog.php'],
+    ['slug' => 'faq', 'label' => t('faq.hero.title'), 'href' => 'faq.php'],
     ['slug' => 'pricing', 'label' => t('header.menu.pricing'), 'href' => 'pricing.php'],
     ['slug' => 'contact', 'label' => t('header.menu.contact'), 'href' => 'contact.php'],
 ];
@@ -151,11 +152,12 @@ if (!empty($disable_alphabot)) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="<?= htmlspecialchars($current_language) ?>" class="scroll-smooth">
+<html lang="<?= htmlspecialchars($current_language) ?>" class="scroll-smooth" style="color-scheme: light;">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light only">
     <title><?= htmlspecialchars($page_title) ?></title>
     <meta name="description" content="<?= htmlspecialchars($meta_description) ?>">
     <meta name="keywords" content="<?= htmlspecialchars($meta_keywords) ?>">
@@ -1039,10 +1041,10 @@ if (!empty($disable_alphabot)) {
     </header>
 
     <!-- Mobile menu overlay -->
-    <div id="mobile-menu-overlay" class="md:hidden fixed inset-0 bg-black/70 z-39" aria-hidden="true"></div>
+    <div id="mobile-menu-overlay" class="md:hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-39" aria-hidden="true"></div>
 
     <!-- Mobile menu -->
-    <div id="mobile-menu" class="md:hidden fixed top-0 right-0 bottom-0 w-4/5 max-w-sm glass-effect z-40 p-8 shadow-2xl">
+    <div id="mobile-menu" class="md:hidden fixed top-0 right-0 bottom-0 w-4/5 max-w-sm bg-gray-900/95 backdrop-blur-md z-40 p-8 shadow-2xl border-l border-gray-800">
         <div class="flex justify-between items-center mb-8">
             <span class="text-lg font-semibold text-white"><?= t('header.mobile.navigation') ?></span>
             <button id="mobile-menu-close" class="text-white p-2 -mr-2" aria-label="<?= htmlspecialchars(t('header.mobile.close_menu')) ?>">

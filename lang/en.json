@@ -591,11 +591,42 @@
     },
     "post": {
       "not_found": "Article not found",
-      "not_found_desc": "The article you're looking for doesn't exist or has been removed.",
+      "not_found_desc": "The article you are looking for does not exist or has been removed.",
       "back_to_blog": "Back to Blog",
       "tags": "Tags",
       "share": "Share this article",
       "related": "Related Articles"
+    }
+  },
+  "faq": {
+    "meta": {
+      "title": "FAQ - Frequently Asked Questions | Blackbox EYE",
+      "description": "Find answers to the most common questions about Blackbox EYE's cybersecurity solutions, pricing, technical support and integration."
+    },
+    "hero": {
+      "title": "Frequently Asked Questions",
+      "description": "Get answers to your questions about our cybersecurity solutions. Use the AI-powered search to quickly find exactly what you're looking for."
+    },
+    "filter": {
+      "all": "All Categories"
+    },
+    "search": {
+      "placeholder": "Ask a question or search for a topic...",
+      "results": "Search Results",
+      "no_results": "No results found. Try different keywords or contact our support."
+    },
+    "questions": "questions",
+    "empty": {
+      "message": "No questions found in this category."
+    },
+    "helpful": {
+      "question": "Was this answer helpful?"
+    },
+    "cta": {
+      "title": "Still have questions?",
+      "description": "Our team is ready to help you. Contact us for personal consultation or book a demo.",
+      "contact": "Contact Support",
+      "pricing": "View Pricing"
     }
   }
 }

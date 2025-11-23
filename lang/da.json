@@ -597,5 +597,36 @@
       "share": "Del denne artikel",
       "related": "Relaterede Artikler"
     }
+  },
+  "faq": {
+    "meta": {
+      "title": "FAQ - Ofte Stillede Spørgsmål | Blackbox EYE",
+      "description": "Find svar på de mest almindelige spørgsmål om Blackbox EYE's cybersikkerhedsløsninger, priser, teknisk support og integration."
+    },
+    "hero": {
+      "title": "Ofte Stillede Spørgsmål",
+      "description": "Få svar på dine spørgsmål om vores cybersikkerhedsløsninger. Brug AI-søgningen til hurtigt at finde præcis det, du leder efter."
+    },
+    "filter": {
+      "all": "Alle Kategorier"
+    },
+    "search": {
+      "placeholder": "Stil et spørgsmål eller søg efter et emne...",
+      "results": "Søgeresultater",
+      "no_results": "Ingen resultater fundet. Prøv andre søgeord eller kontakt vores support."
+    },
+    "questions": "spørgsmål",
+    "empty": {
+      "message": "Ingen spørgsmål fundet i denne kategori."
+    },
+    "helpful": {
+      "question": "Var dette svar nyttigt?"
+    },
+    "cta": {
+      "title": "Har du stadig spørgsmål?",
+      "description": "Vores team er klar til at hjælpe dig. Kontakt os for personlig rådgivning eller book en demo.",
+      "contact": "Kontakt Support",
+      "pricing": "Se Priser"
+    }
   }
 }

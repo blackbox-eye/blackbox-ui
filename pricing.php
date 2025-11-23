@@ -51,9 +51,9 @@ include 'includes/site-header.php';
                 </div>
             </div>
 
-            <div class="pricing-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch mb-12">
+            <div class="pricing-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch mb-16">
                 <!-- MVP-Basis -->
-                <article class="glass-effect rounded-2xl p-6 lg:p-8 text-center h-full flex flex-col">
+                <article class="glass-effect rounded-2xl p-6 lg:p-8 text-center flex flex-col">
                     <div class="mb-3">
                         <span class="text-xs uppercase tracking-wider text-amber-400 font-semibold"><?= t('pricing.mvp.basis.badge') ?></span>
                     </div>
@@ -84,7 +84,7 @@ include 'includes/site-header.php';
                 </article>
 
                 <!-- MVP-Pro -->
-                <article class="glass-effect rounded-2xl p-6 lg:p-8 text-center h-full flex flex-col">
+                <article class="glass-effect rounded-2xl p-6 lg:p-8 text-center flex flex-col min-h-[500px]">
                     <div class="mb-3">
                         <span class="text-xs uppercase tracking-wider text-blue-400 font-semibold"><?= t('pricing.mvp.pro.badge') ?></span>
                     </div>
@@ -119,9 +119,9 @@ include 'includes/site-header.php';
                 </article>
 
                 <!-- MVP-Premium -->
-                <article class="glass-effect rounded-2xl p-6 lg:p-8 text-center h-full flex flex-col">
+                <article class="glass-effect rounded-2xl p-6 lg:p-8 text-center flex flex-col min-h-[500px]">
                     <div class="mb-3">
-                        <span class="text-xs uppercase tracking-wider text-purple-400 font-semibold"><?= t('pricing.mvp.premium.badge') ?></span>
+                        <span class="text-xs uppercase tracking-wider text-amber-400 font-semibold"><?= t('pricing.mvp.premium.badge') ?></span>
                     </div>
                     <h2 class="text-xl lg:text-2xl font-bold mb-2"><?= t('pricing.mvp.premium.title') ?></h2>
                     <div class="text-3xl font-bold text-amber-400 mb-2"><?= t('pricing.mvp.premium.price') ?></div>
@@ -159,8 +159,8 @@ include 'includes/site-header.php';
                 <p class="text-gray-400 max-w-2xl mx-auto"><?= t('pricing.enterprise.section_description') ?></p>
             </div>
 
-            <div class="pricing-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
-                <article class="glass-effect rounded-2xl p-6 lg:p-8 text-center h-full flex flex-col order-2 lg:order-1">
+            <div class="pricing-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch mb-16">
+                <article class="glass-effect rounded-2xl p-6 lg:p-8 text-center flex flex-col order-2 lg:order-1">
                     <h2 class="text-xl lg:text-2xl font-bold mb-2"><?= t('pricing.enterprise.standard.title') ?></h2>
                     <div class="text-3xl font-bold text-amber-400 mb-2"><?= t('pricing.enterprise.standard.price') ?></div>
                     <p class="text-gray-400 text-sm mb-6"><?= t('pricing.enterprise.standard.period') ?></p>
@@ -190,7 +190,7 @@ include 'includes/site-header.php';
                     <div class="text-xs text-gray-500 mb-4"><?= t('pricing.enterprise.standard.subscription') ?></div>
                     <a href="contact.php" class="mt-auto w-full inline-block border border-amber-400 text-amber-400 py-3 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold text-sm lg:text-base"><?= t('pricing.cta.contact') ?></a>
                 </article>
-                <article class="relative glass-effect rounded-2xl p-6 lg:p-8 text-center border-2 border-amber-400 h-full flex flex-col order-1 lg:order-2 transform lg:scale-105 z-10">
+                <article class="relative glass-effect rounded-2xl p-6 lg:p-8 text-center border-2 border-amber-400 flex flex-col min-h-[500px] order-1 lg:order-2 transform lg:scale-105 z-10">
                     <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-400 text-black px-4 py-1 rounded-full text-xs lg:text-sm font-bold whitespace-nowrap"><?= t('pricing.enterprise.premium.badge') ?></div>
                     <h2 class="text-xl lg:text-2xl font-bold mb-2 mt-2"><?= t('pricing.enterprise.premium.title') ?></h2>
                     <div class="text-3xl font-bold text-amber-400 mb-2"><?= t('pricing.enterprise.premium.price') ?></div>
@@ -225,7 +225,7 @@ include 'includes/site-header.php';
                     <div class="text-xs text-gray-500 mb-4"><?= t('pricing.enterprise.premium.subscription') ?></div>
                     <a href="contact.php" class="mt-auto w-full inline-block bg-amber-400 text-black py-3 rounded-lg hover:bg-amber-500 transition-all font-semibold text-sm lg:text-base"><?= t('pricing.cta.contact') ?></a>
                 </article>
-                <article class="glass-effect rounded-2xl p-6 lg:p-8 text-center h-full flex flex-col order-3">
+                <article class="glass-effect rounded-2xl p-6 lg:p-8 text-center flex flex-col min-h-[500px] order-3">
                     <h2 class="text-xl lg:text-2xl font-bold mb-2"><?= t('pricing.enterprise.enterprise.title') ?></h2>
                     <div class="text-3xl font-bold text-amber-400 mb-2"><?= t('pricing.enterprise.enterprise.price') ?></div>
                     <p class="text-gray-400 text-sm mb-6"><?= t('pricing.enterprise.enterprise.period') ?></p>

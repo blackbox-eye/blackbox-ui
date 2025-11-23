@@ -5,7 +5,7 @@
 CREATE TABLE IF NOT EXISTS blog_posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     slug VARCHAR(255) UNIQUE NOT NULL,
-    
+
     -- Multi-language content
     title_da VARCHAR(255) NOT NULL,
     title_en VARCHAR(255) NOT NULL,
@@ -13,30 +13,30 @@ CREATE TABLE IF NOT EXISTS blog_posts (
     content_en TEXT NOT NULL,
     excerpt_da TEXT,
     excerpt_en TEXT,
-    
+
     -- Media
     featured_image VARCHAR(255),
-    
+
     -- Organization
     category VARCHAR(100),
     tags JSON,
     author VARCHAR(100) DEFAULT 'Blackbox EYE',
-    
+
     -- Publishing
     status ENUM('draft', 'published', 'archived') DEFAULT 'draft',
     publish_date DATETIME,
-    
+
     -- Timestamps
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    
+
     -- SEO
     meta_description_da TEXT,
     meta_description_en TEXT,
-    
+
     -- Analytics
     views INT DEFAULT 0,
-    
+
     -- Indexes for performance
     INDEX idx_status_publish (status, publish_date DESC),
     INDEX idx_category (category),
@@ -46,16 +46,16 @@ CREATE TABLE IF NOT EXISTS blog_posts (
 
 -- Sample blog post (Danish cybersecurity topic)
 INSERT INTO blog_posts (
-    slug, 
-    title_da, 
-    title_en, 
-    content_da, 
-    content_en, 
-    excerpt_da, 
+    slug,
+    title_da,
+    title_en,
+    content_da,
+    content_en,
+    excerpt_da,
     excerpt_en,
-    category, 
-    tags, 
-    status, 
+    category,
+    tags,
+    status,
     publish_date,
     meta_description_da,
     meta_description_en
@@ -76,7 +76,7 @@ INSERT INTO blog_posts (
 </ul>
 
 <p>Med Blackbox EYE får din virksomhed adgang til enterprise-grade AI-sikkerhed, der beskytte mod nuværende og fremtidige trusler.</p>',
-    
+
     '<p>Artificial intelligence is revolutionizing cybersecurity by identifying threats faster and more accurately than traditional methods. Blackbox EYE utilizes advanced AI models for proactive threat detection.</p>
 
 <h2>How AI Improves Security</h2>
@@ -90,7 +90,7 @@ INSERT INTO blog_posts (
 </ul>
 
 <p>With Blackbox EYE, your business gains access to enterprise-grade AI security that protects against current and future threats.</p>',
-    
+
     'Kunstig intelligens revolutionerer cybersikkerhed ved at identificere trusler hurtigere og mere præcist end traditionelle metoder.',
     'Artificial intelligence is revolutionizing cybersecurity by identifying threats faster and more accurately than traditional methods.',
     'Cybersecurity',

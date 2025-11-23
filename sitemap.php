@@ -55,9 +55,9 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
   // Blog posts (dynamically generated)
   try {
     $blog_stmt = $pdo->query("
-      SELECT slug, updated_at 
-      FROM blog_posts 
-      WHERE status = 'published' 
+      SELECT slug, updated_at
+      FROM blog_posts
+      WHERE status = 'published'
       AND publish_date <= NOW()
       ORDER BY publish_date DESC
     ");
@@ -71,7 +71,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
         <xhtml:link rel="alternate" hreflang="da-DK" href="https://blackbox.codes/blog-post.php?slug=<?= htmlspecialchars($post['slug']) ?>&lang=da" />
         <xhtml:link rel="alternate" hreflang="en" href="https://blackbox.codes/blog-post.php?slug=<?= htmlspecialchars($post['slug']) ?>&lang=en" />
       </url>
-    <?php endwhile;
+  <?php endwhile;
   } catch (PDOException $e) {
     // Silently fail if table doesn't exist yet
   }
@@ -85,6 +85,16 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="da-DK" href="https://blackbox.codes/blog.php?lang=da" />
     <xhtml:link rel="alternate" hreflang="en" href="https://blackbox.codes/blog.php?lang=en" />
+  </url>
+
+  <!-- FAQ page -->
+  <url>
+    <loc>https://blackbox.codes/faq.php</loc>
+    <lastmod><?= date('Y-m-d') ?></lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="da-DK" href="https://blackbox.codes/faq.php?lang=da" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://blackbox.codes/faq.php?lang=en" />
   </url>
 
 </urlset>

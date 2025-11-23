@@ -390,12 +390,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     const heroCanvas = document.getElementById('hero-canvas');
     if (heroCanvas) {
+        // Hide canvas until fully initialized
+        heroCanvas.style.opacity = '0';
+        heroCanvas.style.transition = 'opacity 0.3s ease-in';
+        
         const ctx = heroCanvas.getContext('2d', { alpha: false });
         const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@#$%^&*()_+-=[]{}|;':,./<>?".split('');
         let drops = [];
         let lastFrameTime = 0;
         const FPS = 30;
         const frameInterval = 1000 / FPS;
+        let isInitialized = false;
 
         // Respect accessibility preference
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -418,6 +423,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const columns = Math.floor(w / 20);
                 drops = Array.from({ length: columns }, () => Math.floor(Math.random() * (h / 20)));
+                
+                // Show canvas after initialization
+                if (!isInitialized) {
+                    isInitialized = true;
+                    setTimeout(() => {
+                        heroCanvas.style.opacity = '1';
+                    }, 100);
+                }
             };
 
             // Main animation loop - NEVER STOPS

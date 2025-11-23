@@ -2,22 +2,27 @@
 # CodeQL Security Analysis Workflow
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-# ⚠️  IMPORTANT: This workflow requires "Code scanning" to be enabled in GitHub
+# ⚠️  IMPORTANT: Dette workflow kræver at "Code scanning" er aktiveret i GitHub
 #     Repository Settings → Security → Code security and analysis
 #
-# To enable Code scanning:
-# 1. Go to: https://github.com/AlphaAcces/ALPHA-Interface-GUI/settings/security_analysis
-# 2. Click "Set up" next to "Code scanning"
-# 3. Select "GitHub Actions" as the analysis method
-# 4. Enable the feature
+# Sådan aktiverer du CodeQL scanning:
+# 1. Gå til: https://github.com/AlphaAcces/ALPHA-Interface-GUI/settings/security_analysis
+# 2. Klik "Set up" ved siden af "Code scanning"
+# 3. Vælg "GitHub Actions" som analyse-metode
+# 4. Aktiver funktionen
+# 5. Gem ændringerne
 #
-# Once enabled, this workflow will:
-# - Scan PHP code for security vulnerabilities
-# - Optionally scan JavaScript (when ENABLE_JS_CODEQL secret is set to 'true')
-# - Upload results to Security → Code scanning alerts
+# Efter aktivering skal du uncommente de automatiske triggers herunder (push, PR, schedule)
+# for at få automatisk scanning ved hver kode-ændring.
 #
-# Current status: DISABLED - Workflow configured but code scanning not enabled
-# See: SECURITY_IMPLEMENTATION_SUMMARY.md for detailed setup instructions
+# Når aktiveret, vil dette workflow:
+# - Scanne PHP-kode for sikkerhedssårbarheder (altid aktiv)
+# - Optionelt scanne JavaScript (når ENABLE_JS_CODEQL secret er sat til 'true')
+# - Uploade resultater til Security → Code scanning alerts
+# - Køre ugentligt for at opdage nye sårbarheder
+#
+# Nuværende status: KONFIGURERET men code scanning ikke aktiveret
+# Se: SECURITY_IMPLEMENTATION_SUMMARY.md for detaljerede instruktioner
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 

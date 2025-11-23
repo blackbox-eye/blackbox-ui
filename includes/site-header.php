@@ -193,7 +193,8 @@ if (!empty($disable_alphabot)) {
     <meta name="twitter:description" content="<?= htmlspecialchars($meta_og_description) ?>">
     <meta name="twitter:image" content="<?= htmlspecialchars($meta_og_image) ?>">
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS Production CDN (optimized) -->
+    <link rel="stylesheet" href="https://cdn.tailwindcss.com/3.4.1">
     <script src="config.js"></script>
     <?php if (BBX_RECAPTCHA_SITE_KEY !== ''): ?>
         <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(BBX_RECAPTCHA_SITE_KEY) ?>" async defer></script>

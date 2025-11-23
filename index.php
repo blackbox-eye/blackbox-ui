@@ -14,11 +14,11 @@ include 'includes/site-header.php';
         <!-- Content overlay with subtle gradient -->
         <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 pointer-events-none" style="z-index: 1;"></div>
 
-        <div class="relative px-4 py-32 sm:py-40 max-w-4xl mx-auto" style="z-index: 10;">
-            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold hero-gradient-text leading-tight mb-6 mx-auto">
+        <div class="relative px-4 py-28 sm:py-36 max-w-4xl mx-auto" style="z-index: 10;">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black hero-gradient-text leading-tight sm:leading-tight md:leading-[1.05] tracking-tight mb-6 mx-auto max-w-3xl">
                 <?= t('home.hero.headline') ?>
             </h1>
-            <p class="text-base sm:text-lg md:text-xl lg:text-2xl max-w-3xl mx-auto text-gray-300 mb-10 leading-relaxed">
+            <p class="text-lg sm:text-xl md:text-2xl max-w-2xl mx-auto text-gray-300 mb-10 leading-relaxed">
                 <?= t('home.hero.subheadline') ?>
             </p>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">

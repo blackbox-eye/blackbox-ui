@@ -75,6 +75,8 @@ if (!function_exists('aig_nav_class')) {
             'cases' => ['label' => t('header.menu.cases'), 'href' => 'cases.php'],
             'pricing' => ['label' => t('header.menu.pricing'), 'href' => 'pricing.php'],
             'contact' => ['label' => t('header.menu.contact'), 'href' => 'contact.php'],
+            'demo' => ['label' => t('header.menu.demo'), 'href' => 'demo.php'],
+            'free-scan' => ['label' => t('header.menu.free_scan'), 'href' => 'free-scan.php'],
             'agent-login' => ['label' => t('header.cta.agent_login'), 'href' => 'agent-login.php'],
             'dashboard' => ['label' => 'Dashboard', 'href' => 'dashboard.php'],
             'admin' => ['label' => 'Admin', 'href' => 'admin.php'],
@@ -138,21 +140,42 @@ if (!function_exists('aig_nav_class')) {
 // Navigation links - Optimized for Sprint 5 UX improvements
 // Reduced to essential items for better mobile experience
 $nav_links = [
-    ['slug' => 'products', 'label' => t('header.menu.products'), 'href' => 'products.php'],
-    ['slug' => 'cases', 'label' => t('header.menu.cases'), 'href' => 'cases.php'],
-    ['slug' => 'pricing', 'label' => t('header.menu.pricing'), 'href' => 'pricing.php'],
-    ['slug' => 'blog', 'label' => t('blog.title'), 'href' => 'blog.php'],
-    ['slug' => 'contact', 'label' => t('header.menu.contact'), 'href' => 'contact.php'],
+    [
+        'slug' => 'products',
+        'label' => t('header.menu.solutions'),
+        'href' => 'products.php',
+    ],
+    [
+        'slug' => 'cases',
+        'label' => t('header.menu.cases_results'),
+        'href' => 'cases.php',
+    ],
+    [
+        'slug' => 'pricing',
+        'label' => t('header.menu.pricing_demo'),
+        'href' => 'pricing.php',
+    ],
+    [
+        'slug' => 'blog',
+        'label' => t('header.menu.resources'),
+        'href' => 'blog.php',
+    ],
+    [
+        'slug' => 'contact',
+        'label' => t('header.menu.about_contact'),
+        'href' => 'contact.php',
+    ],
 ];
 
-// Secondary navigation items (shown in mobile menu and footer)
+// Secondary navigation items for quick access in mobile drawer
 $secondary_nav_links = [
-    ['slug' => 'about', 'label' => t('header.menu.about'), 'href' => 'about.php'],
     ['slug' => 'demo', 'label' => t('header.menu.demo'), 'href' => 'demo.php'],
-    ['slug' => 'faq', 'label' => t('header.menu.faq'), 'href' => 'faq.php'],
+    ['slug' => 'pricing', 'label' => t('header.menu.pricing'), 'href' => 'pricing.php'],
+    ['slug' => 'free-scan', 'label' => t('header.menu.free_scan'), 'href' => 'free-scan.php'],
+    ['slug' => 'faq', 'label' => 'FAQ', 'href' => 'faq.php'],
 ];
 
-$alphabot_enabled_pages = ['home', 'index', 'about', 'products', 'cases', 'pricing', 'contact'];
+$alphabot_enabled_pages = ['home', 'index', 'about', 'products', 'cases', 'pricing', 'contact', 'demo', 'free-scan'];
 $show_alphabot = $show_alphabot ?? in_array($current_page, $alphabot_enabled_pages, true);
 if (!empty($disable_alphabot)) {
     $show_alphabot = false;
@@ -1102,35 +1125,45 @@ if (!empty($disable_alphabot)) {
     <div id="mobile-menu-overlay" class="md:hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-39" aria-hidden="true"></div>
 
     <!-- Mobile menu -->
-    <div id="mobile-menu" class="md:hidden fixed top-0 right-0 bottom-0 w-4/5 max-w-sm bg-gray-900/95 backdrop-blur-md z-40 p-8 shadow-2xl border-l border-gray-800">
-        <div class="flex justify-between items-center mb-8">
-            <span class="text-lg font-semibold text-white"><?= t('header.mobile.navigation') ?></span>
-            <button id="mobile-menu-close" class="text-white p-2 -mr-2" aria-label="<?= htmlspecialchars(t('header.mobile.close_menu')) ?>">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div id="mobile-menu" class="md:hidden fixed top-0 right-0 bottom-0 w-4/5 max-w-sm bg-gray-900/95 backdrop-blur-md z-40 p-8 shadow-2xl border-l border-gray-800" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-heading">
+        <div class="flex justify-between items-center mb-6">
+            <span id="mobile-menu-heading" class="text-lg font-semibold text-white"><?= t('header.mobile.navigation') ?></span>
+            <button id="mobile-menu-close" class="text-white p-2 -mr-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400" aria-label="<?= htmlspecialchars(t('header.mobile.close_menu')) ?>">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
             </button>
         </div>
-        <nav class="flex flex-col space-y-8 text-center mt-8">
-            <?php foreach ($nav_links as $link): ?>
-                <a href="<?= $link['href'] ?>"
-                    class="nav-link-mobile <?= $link['slug'] === $current_page ? 'text-white font-semibold' : '' ?>"
-                    <?= aig_nav_aria($link['slug'], $current_page) ?>>
-                    <?= htmlspecialchars($link['label']) ?>
-                </a>
-            <?php endforeach; ?>
-            
-            <!-- Secondary navigation in mobile menu -->
-            <div class="border-t border-gray-700 pt-6 mt-4">
-                <?php foreach ($secondary_nav_links as $link): ?>
-                    <a href="<?= $link['href'] ?>"
-                        class="nav-link-mobile text-lg <?= $link['slug'] === $current_page ? 'text-white font-semibold' : 'text-gray-400' ?>"
-                        <?= aig_nav_aria($link['slug'], $current_page) ?>>
-                        <?= htmlspecialchars($link['label']) ?>
-                    </a>
+        <nav class="mt-6" aria-label="<?= htmlspecialchars(t('header.mobile.primary_navigation')) ?>">
+            <ul class="flex flex-col space-y-6 text-center" role="list">
+                <?php foreach ($nav_links as $index => $link): ?>
+                    <li>
+                        <a href="<?= $link['href'] ?>"
+                            class="nav-link-mobile <?= $link['slug'] === $current_page ? 'text-white font-semibold' : '' ?>"
+                            data-mobile-nav-index="<?= $index ?>"
+                            <?= aig_nav_aria($link['slug'], $current_page) ?>>
+                            <?= htmlspecialchars($link['label']) ?>
+                        </a>
+                    </li>
                 <?php endforeach; ?>
+            </ul>
+
+            <!-- Secondary navigation in mobile menu -->
+            <div class="border-t border-gray-700 pt-6 mt-6" aria-label="<?= htmlspecialchars(t('header.mobile.secondary_navigation')) ?>">
+                <ul class="flex flex-col space-y-4 text-center" role="list">
+                    <?php foreach ($secondary_nav_links as $offset => $link): ?>
+                        <li>
+                            <a href="<?= $link['href'] ?>"
+                                class="nav-link-mobile text-lg <?= $link['slug'] === $current_page ? 'text-white font-semibold' : 'text-gray-400' ?>"
+                                data-mobile-secondary-index="<?= $offset ?>"
+                                <?= aig_nav_aria($link['slug'], $current_page) ?>>
+                                <?= htmlspecialchars($link['label']) ?>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
             </div>
-            
+
             <a href="agent-login.php" class="mt-8 inline-block border border-amber-400 text-amber-400 py-3 px-8 rounded-lg text-xl font-semibold">
                 <?= t('header.cta.agent_login') ?>
             </a>

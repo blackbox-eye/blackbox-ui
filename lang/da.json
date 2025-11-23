@@ -10,7 +10,14 @@
       "products": "Produkter",
       "cases": "Kundecases",
       "pricing": "Priser",
-      "contact": "Kontakt"
+      "contact": "Kontakt",
+      "solutions": "Løsninger",
+      "cases_results": "Cases & Resultater",
+      "pricing_demo": "Priser & Demo",
+      "resources": "Ressourcer",
+      "about_contact": "Om & Kontakt",
+      "demo": "Book demo",
+      "free_scan": "Gratis sårbarhedstjek"
     },
     "cta": {
       "agent_login": "Agent Login",
@@ -25,7 +32,9 @@
     "mobile": {
       "navigation": "Navigation",
       "open_menu": "Åbn navigationsmenu",
-      "close_menu": "Luk navigationsmenu"
+      "close_menu": "Luk navigationsmenu",
+      "primary_navigation": "Primær navigation",
+      "secondary_navigation": "Flere muligheder"
     }
   },
   "footer": {
@@ -59,8 +68,8 @@
       "description": "Den komplette AI-drevne sikkerhedsplatform, der beskytter din virksomhed 24/7 – og gør medarbejdere til jeres stærkeste forsvarslinje."
     },
     "hero": {
-      "headline": "Gør usynlige trusler synlige.",
-      "subheadline": "Den komplette AI-drevne sikkerhedsplatform, der proaktivt beskytter din virksomhed 24/7 – og omdanner medarbejdere til jeres stærkeste forsvarslinje.",
+      "headline": "Stop avancerede angreb, før de rammer.",
+      "subheadline": "Blackbox EYE™ samler efterretninger, AI og operativ respons i én platform, så I blokerer zero-day trusler, før de bliver til hændelser.",
       "primary_cta": "Book en uforpligtende demo",
       "secondary_cta": "Udforsk platformen"
     },
@@ -372,6 +381,41 @@
         "it": "IT & Teknologi"
       }
     },
+    "calculator": {
+      "title": "Priskalkulator",
+      "description": "Få et lynestimat baseret på jeres størrelse og hvilke moduler I aktiverer.",
+      "users_label": "Antal brugere",
+      "users_help": "Medtag medarbejdere og eksterne, der skal have adgang.",
+      "endpoints_label": "Kritiske endpoints",
+      "endpoints_help": "Servere, cloud workloads, OT og andre systemer, der skal overvåges.",
+      "addons_label": "Tilføj moduler",
+      "addons_help": "Vælg de komponenter, der skal med i første fase.",
+      "addons": {
+        "pve": "Penetration & Vulnerability Engine (PVE)",
+        "aut": "Awareness & Training (AUT)",
+        "bridge": "Operational Bridge integration",
+        "support": "24/7 incident response standby"
+      },
+      "submit": "Beregn pris",
+      "reset": "Nulstil",
+      "result": {
+        "heading": "Estimeret månedlig investering",
+        "monthly_label": "Anslået pris pr. måned",
+        "per_user_label": "Ca. pris pr. bruger",
+        "recommended_plan": "Anbefalet pakke",
+        "addons_label": "Inkluderede moduler",
+        "badge_popular": "Mest valgt",
+        "next_steps": "Book en demo for at få en skræddersyet tilbudspakke og teknisk walkthrough.",
+        "compliance_note": "Alle estimater inkluderer standard compliance-rapportering og onboarding.",
+        "estimation_disclaimer": "Prisen er vejledende og afhænger af miljø, SLA og kontraktvilkår."
+      },
+      "validation": {
+        "users_required": "Angiv antallet af brugere.",
+        "endpoints_required": "Angiv antallet af kritiske endpoints.",
+        "users_min": "Der skal være mindst 1 bruger.",
+        "endpoints_min": "Angiv mindst 1 endpoint."
+      }
+    },
     "mvp": {
       "section_title": "MVP Pakker",
       "basis": {
@@ -476,6 +520,53 @@
       "title": "Skal vi skræddersy en løsning til jer?",
       "description": "Vores eksperter kombinerer operative erfaringer med AI-drevet analyse for at levere præcis det sikkerhedsniveau, I har brug for.",
       "button": "Tal med vores rådgivere"
+    }
+  },
+  "free_scan": {
+    "meta": {
+      "title": "Gratis sårbarhedstjek | BLACKBOX EYE™",
+      "description": "Få en mock-rapport på sekunder og se hvordan vores PVE-modul prioriterer fundne svagheder."
+    },
+    "hero": {
+      "tagline": "Lead flow",
+      "title": "Gratis sårbarhedstjek på få sekunder",
+      "description": "Indtast jeres domæne og få et overflade-scan med de vigtigste observationer. Book en demo for en fuld PVE-rapport."
+    },
+    "form": {
+      "title": "Få din rapport",
+      "description": "Vi viser et eksempel på, hvordan vores PVE prioriterer findings baseret på offentligt tilgængelige data.",
+      "domain_label": "Domæne",
+      "domain_placeholder": "example.com",
+      "email_label": "Arbejdsmail (valgfri)",
+      "email_placeholder": "navn@virksomhed.dk",
+      "submit": "Generér rapport",
+      "loading": "Analyserer angrebsfladen...",
+      "success_title": "Mock-rapport klar",
+      "success_message": "Nedenfor finder du et overblik. Book en demo for en komplet penetrationstest.",
+      "rate_limit_note": "Maks. 3 gratis scans pr. organisation pr. døgn.",
+      "privacy_note": "Vi gemmer ikke det indtastede domæne. Demonstrationen viser kun formatet."
+    },
+    "report": {
+      "score_label": "Sikkerhedsscore",
+      "issues_heading": "Fremhævede fund",
+      "no_issues": "Ingen kritiske fund i denne mock.",
+      "severity": {
+        "high": "Høj risiko",
+        "medium": "Middel risiko",
+        "low": "Lav risiko"
+      },
+      "cta_text": "Klar til en fuld, automatiseret PVE-rapport?",
+      "cta_description": "Se hvordan vores specialister aktiverer hele PVE-modulet og leverer en komplet rapport med anbefalinger.",
+      "cta_link": "Book en demo"
+    },
+    "validation": {
+      "domain_required": "Indtast et domæne.",
+      "domain_invalid": "Angiv et gyldigt domæne (fx example.com).",
+      "email_invalid": "Angiv en gyldig e-mailadresse."
+    },
+    "errors": {
+      "generic": "Vi kunne ikke gennemføre scanningen. Prøv igen.",
+      "rate_limited": "Du har nået maksimum for gratis scans i dag. Kontakt os for en fuld rapport."
     }
   },
   "contact": {

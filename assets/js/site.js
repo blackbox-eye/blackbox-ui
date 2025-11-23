@@ -7,7 +7,6 @@ const i18n = (() => {
     let translations = {};
     const lang = document.documentElement.getAttribute('lang') || 'da';
 
-    // Load translations from server
     const loadTranslations = async () => {
         try {
             const response = await fetch(`/lang/${lang}.json`);
@@ -19,128 +18,152 @@ const i18n = (() => {
         }
     };
 
-    // Get translation by key path (e.g., 'common.ai_loading')
-    const t = (key, fallback = '') => {
-        const keys = key.split('.');
-        let value = translations;
+    void loadTranslations();
 
-        for (const k of keys) {
-            if (value && typeof value === 'object' && k in value) {
-                value = value[k];
-            } else {
-                return fallback || key;
+    return {
+        t: (key, fallback = '') => {
+            const keys = key.split('.');
+            let value = translations;
+
+            for (const part of keys) {
+                if (!value || typeof value !== 'object' || !(part in value)) {
+                    return fallback || key;
+                }
+                value = value[part];
             }
-        }
 
-        return typeof value === 'string' ? value : fallback || key;
+            return typeof value === 'string' ? value : fallback || key;
+        },
+        loadTranslations
     };
-
-    // Initialize translations on load
-    loadTranslations();
-
-    return { t, loadTranslations };
 })();
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Enable JavaScript-dependent features
     document.body.classList.add('js-enabled');
 
-    // ==========================================
-    // NAVIGATION SCROLL EFFECT
-    // ==========================================
     const header = document.getElementById('main-header');
-
-    const handleScroll = () => {
+    const updateHeaderScrollState = () => {
+        if (!header) {
+            return;
+        }
         if (window.scrollY > 50) {
-            header?.classList.add('scrolled');
+            header.classList.add('scrolled');
         } else {
-            header?.classList.remove('scrolled');
+            header.classList.remove('scrolled');
         }
     };
 
-    // Initial check
-    handleScroll();
-
-    // Throttled scroll listener for performance
-    let scrollTimeout;
+    let headerScrollThrottle;
+    updateHeaderScrollState();
     window.addEventListener('scroll', () => {
-        if (!scrollTimeout) {
-            scrollTimeout = setTimeout(() => {
-                handleScroll();
-                scrollTimeout = null;
+        if (!headerScrollThrottle) {
+            headerScrollThrottle = window.setTimeout(() => {
+                updateHeaderScrollState();
+                headerScrollThrottle = null;
             }, 10);
         }
     }, { passive: true });
 
-    // ==========================================
-    // MOBILE MENU FUNCTIONALITY
-    // ==========================================
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenuClose = document.getElementById('mobile-menu-close');
     const mobileMenu = document.getElementById('mobile-menu');
     const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
     const mobileNavLinks = document.querySelectorAll('.nav-link-mobile');
 
-    // Mobile menu functionality with improved UX
     if (mobileMenuButton && mobileMenu && mobileMenuOverlay) {
         let lastFocusedElement = null;
+        let focusTrapListener = null;
+        const focusableSelectors = 'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
+        const getFocusableElements = () => Array.from(mobileMenu.querySelectorAll(focusableSelectors))
+            .filter((element) => !element.hasAttribute('disabled') && element.getAttribute('tabindex') !== '-1');
+
+        const enableFocusTrap = () => {
+            disableFocusTrap();
+            focusTrapListener = (event) => {
+                if (event.key !== 'Tab') {
+                    return;
+                }
+
+                const focusable = getFocusableElements();
+                if (!focusable.length) {
+                    return;
+                }
+
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+
+                if (event.shiftKey && document.activeElement === first) {
+                    event.preventDefault();
+                    last.focus();
+                } else if (!event.shiftKey && document.activeElement === last) {
+                    event.preventDefault();
+                    first.focus();
+                }
+            };
+
+            mobileMenu.addEventListener('keydown', focusTrapListener);
+        };
+
+        const disableFocusTrap = () => {
+            if (focusTrapListener) {
+                mobileMenu.removeEventListener('keydown', focusTrapListener);
+                focusTrapListener = null;
+            }
+        };
 
         const openMobileMenu = () => {
-            lastFocusedElement = document.activeElement;
+            lastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
             mobileMenu.classList.add('active');
-            mobileMenuOverlay.classList.add('active');
+            mobileMenu.setAttribute('aria-hidden', 'false');
             mobileMenuButton.setAttribute('aria-expanded', 'true');
+            mobileMenuOverlay.classList.add('active');
+            mobileMenuOverlay.setAttribute('aria-hidden', 'false');
             document.body.style.overflow = 'hidden';
 
-            // Focus first link after animation
-            setTimeout(() => {
-                const firstLink = mobileMenu.querySelector('a');
-                if (firstLink) firstLink.focus();
+            enableFocusTrap();
+
+            window.setTimeout(() => {
+                const firstFocusable = getFocusableElements()[0];
+                firstFocusable?.focus();
             }, 100);
         };
 
         const closeMobileMenu = () => {
+            disableFocusTrap();
             mobileMenu.classList.remove('active');
-            mobileMenuOverlay.classList.remove('active');
+            mobileMenu.setAttribute('aria-hidden', 'true');
             mobileMenuButton.setAttribute('aria-expanded', 'false');
+            mobileMenuOverlay.classList.remove('active');
+            mobileMenuOverlay.setAttribute('aria-hidden', 'true');
             document.body.style.overflow = '';
 
-            // Restore focus
             if (lastFocusedElement) {
                 lastFocusedElement.focus();
+                lastFocusedElement = null;
             }
         };
 
-        // Toggle menu on button click
         mobileMenuButton.addEventListener('click', () => {
-            const isOpen = mobileMenu.classList.contains('active');
-            if (isOpen) {
+            if (mobileMenu.classList.contains('active')) {
                 closeMobileMenu();
             } else {
                 openMobileMenu();
             }
         });
 
-        // Close button
-        if (mobileMenuClose) {
-            mobileMenuClose.addEventListener('click', closeMobileMenu);
-        }
-
-        // Close on overlay click
+        mobileMenuClose?.addEventListener('click', closeMobileMenu);
         mobileMenuOverlay.addEventListener('click', closeMobileMenu);
 
-        // Close on ESC key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                event.preventDefault();
                 closeMobileMenu();
             }
         });
 
-        // Close on navigation click
-        mobileNavLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                closeMobileMenu();
-            });
+        mobileNavLinks.forEach((link) => {
+            link.addEventListener('click', closeMobileMenu);
         });
     }
 
@@ -149,90 +172,201 @@ document.addEventListener('DOMContentLoaded', () => {
             header.classList.toggle('glass-effect', window.scrollY > 50);
         };
         toggleHeaderGlass();
-        window.addEventListener('scroll', toggleHeaderGlass);
+        window.addEventListener('scroll', toggleHeaderGlass, { passive: true });
     }
 
-    // Sticky CTA visibility on scroll
     const stickyCTA = document.getElementById('sticky-cta');
     if (stickyCTA) {
         const toggleStickyCTA = () => {
             const scrollPosition = window.scrollY;
             const windowHeight = window.innerHeight;
             const documentHeight = document.documentElement.scrollHeight;
-
-            // Show after scrolling 20% of viewport height (earlier visibility)
-            // Hide when near bottom (within 200px of footer)
-            const shouldShow = scrollPosition > windowHeight * 0.2 &&
-                               scrollPosition < documentHeight - windowHeight - 200;
-
+            const shouldShow = scrollPosition > windowHeight * 0.2 && scrollPosition < documentHeight - windowHeight - 200;
             stickyCTA.classList.toggle('visible', shouldShow);
         };
 
         toggleStickyCTA();
-        window.addEventListener('scroll', toggleStickyCTA);
+        window.addEventListener('scroll', toggleStickyCTA, { passive: true });
     }
 
     const fadeSections = document.querySelectorAll('.section-fade-in');
     if (fadeSections.length) {
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
                 }
             });
         }, { threshold: 0.1 });
-        fadeSections.forEach(section => observer.observe(section));
+
+        fadeSections.forEach((section) => observer.observe(section));
     }
+
+    const recaptchaSiteKey = (window.RECAPTCHA_SITE_KEY || '').trim();
+    const recaptchaDebug = Boolean(window.RECAPTCHA_DEBUG);
+    const recaptchaLog = (...args) => {
+        if (recaptchaDebug) {
+            console.log('[reCAPTCHA]', ...args);
+        }
+    };
+    const recaptchaError = (...args) => {
+        if (recaptchaDebug) {
+            console.error('[reCAPTCHA]', ...args);
+        }
+    };
+
+    const recaptchaHasClients = () => {
+        if (typeof grecaptcha === 'undefined' || typeof grecaptcha.reset !== 'function') {
+            return false;
+        }
+        const cfg = grecaptcha.___grecaptcha_cfg;
+        if (!cfg || !cfg.clients) {
+            return false;
+        }
+        return Object.keys(cfg.clients).length > 0;
+    };
+
+    const fetchRecaptchaToken = async (action = 'contact') => {
+        if (!recaptchaSiteKey) {
+            recaptchaLog('Site key missing, skipping token fetch');
+            return '';
+        }
+        if (typeof grecaptcha === 'undefined') {
+            recaptchaError('RECAPTCHA FRONTEND ERROR: grecaptcha not loaded - script may be blocked or site key invalid');
+            return '';
+        }
+
+        return new Promise((resolve) => {
+            try {
+                const readyTimeout = window.setTimeout(() => {
+                    recaptchaError('RECAPTCHA FRONTEND ERROR: ready() timeout - site key may be invalid');
+                    resolve('');
+                }, 5000);
+
+                grecaptcha.ready(() => {
+                    window.clearTimeout(readyTimeout);
+                    recaptchaLog(`Executing reCAPTCHA with action "${action}"`);
+                    grecaptcha.execute(recaptchaSiteKey, { action })
+                        .then((token) => {
+                            if (token) {
+                                recaptchaLog('Token generated (length:', token.length, ')');
+                            } else {
+                                recaptchaError('RECAPTCHA FRONTEND ERROR: Empty token returned');
+                            }
+                            resolve(token || '');
+                        })
+                        .catch((error) => {
+                            recaptchaError('RECAPTCHA FRONTEND ERROR: Execute failed -', error?.message || error);
+                            resolve('');
+                        });
+                });
+            } catch (error) {
+                recaptchaError('RECAPTCHA FRONTEND ERROR: Initialization failed -', error?.message || error);
+                resolve('');
+            }
+        });
+    };
+
+    const parseJsonResponse = async (response) => {
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+            return response.json();
+        }
+        const text = await response.text();
+        return { status: response.ok ? 'ok' : 'error', message: text };
+    };
+
+    const setSubmittingState = (button, isSubmitting, loadingText = '...') => {
+        if (!button) {
+            return;
+        }
+
+        if (isSubmitting) {
+            button.disabled = true;
+            if (!button.dataset.originalText) {
+                button.dataset.originalText = button.textContent || '';
+            }
+            button.textContent = loadingText;
+        } else {
+            button.disabled = false;
+            if (button.dataset.originalText) {
+                button.textContent = button.dataset.originalText;
+            }
+        }
+    };
+
+    const showFieldError = (input, message) => {
+        if (!input) {
+            return;
+        }
+        input.classList.add('border-red-500', 'focus-visible:outline-red-500');
+        const messageId = input.getAttribute('aria-describedby');
+        if (messageId) {
+            const messageEl = document.getElementById(messageId);
+            if (messageEl) {
+                messageEl.textContent = message;
+                messageEl.classList.remove('hidden');
+            }
+        }
+    };
+
+    const clearFieldError = (input) => {
+        if (!input) {
+            return;
+        }
+        input.classList.remove('border-red-500', 'focus-visible:outline-red-500');
+        const messageId = input.getAttribute('aria-describedby');
+        if (messageId) {
+            const messageEl = document.getElementById(messageId);
+            if (messageEl) {
+                messageEl.textContent = '';
+                messageEl.classList.add('hidden');
+            }
+        }
+    };
+
+    const showSkeletonLoader = (container) => {
+        if (!container) {
+            return;
+        }
+        container.innerHTML = `
+            <div class="space-y-4">
+                <div class="h-4 rounded bg-gray-800/60 animate-pulse"></div>
+                <div class="h-4 rounded bg-gray-800/40 animate-pulse"></div>
+                <div class="h-4 rounded bg-gray-800/60 animate-pulse"></div>
+            </div>
+        `;
+        container.classList.remove('hidden');
+    };
+
+    const showAILoadingState = (element, message) => {
+        if (!element) {
+            return;
+        }
+        element.innerHTML = `
+            <div class="flex items-center gap-3 text-amber-300">
+                <span class="inline-flex h-3 w-3 rounded-full bg-amber-400 animate-pulse"></span>
+                <span>${message}</span>
+            </div>
+        `;
+        element.classList.remove('hidden');
+    };
 
     const contactForm = document.getElementById('contact-form');
     if (contactForm) {
         const formSuccessMessage = document.getElementById('contact-form-success');
         const formErrorMessage = document.getElementById('contact-form-error');
         const submitButton = contactForm.querySelector('button[type="submit"]');
-        const recaptchaSiteKey = (window.RECAPTCHA_SITE_KEY || '').trim();
-        const recaptchaDebug = Boolean(window.RECAPTCHA_DEBUG);
-        const recaptchaLog = (...args) => {
-            if (recaptchaDebug) {
-                console.log('[reCAPTCHA]', ...args);
-            }
-        };
-        const recaptchaError = (...args) => {
-            if (recaptchaDebug) {
-                console.error('[reCAPTCHA]', ...args);
-            }
-        };
-        const recaptchaHasClients = () => {
-            if (typeof grecaptcha === 'undefined' || typeof grecaptcha.reset !== 'function') {
-                return false;
-            }
-            const cfg = grecaptcha.___grecaptcha_cfg;
-            if (!cfg || !cfg.clients) {
-                return false;
-            }
-            return Object.keys(cfg.clients).length > 0;
-        };
         const formEndpoint = contactForm.dataset.endpoint || contactForm.getAttribute('action') || 'contact-submit.php';
 
-        // Log initial configuration
-        if (recaptchaDebug) {
-            console.log('[Contact Form] Configuration:', {
-                endpoint: formEndpoint,
-                recaptchaSiteKey: recaptchaSiteKey ? recaptchaSiteKey.substring(0, 20) + '...' : '[EMPTY]',
-                grecaptchaLoaded: typeof grecaptcha !== 'undefined',
-                enterpriseAvailable: typeof grecaptcha !== 'undefined' && grecaptcha.enterprise !== undefined,
-                debug: recaptchaDebug
-            });
-        }
+        recaptchaLog('[Contact Form] Configuration:', {
+            endpoint: formEndpoint,
+            recaptchaSiteKey: recaptchaSiteKey ? `${recaptchaSiteKey.substring(0, 20)}...` : '[EMPTY]',
+            grecaptchaLoaded: typeof grecaptcha !== 'undefined',
+            enterpriseAvailable: typeof grecaptcha !== 'undefined' && typeof grecaptcha.enterprise !== 'undefined'
+        });
 
-        const setSubmittingState = (isSubmitting) => {
-            if (submitButton) {
-                submitButton.disabled = isSubmitting;
-                submitButton.dataset.originalText = submitButton.dataset.originalText || submitButton.textContent;
-                submitButton.textContent = isSubmitting ? 'Sender...' : submitButton.dataset.originalText;
-            }
-        };
-
-        const displayMessage = (type, message) => {
+        const resetMessages = () => {
             if (formErrorMessage) {
                 formErrorMessage.classList.add('hidden');
                 formErrorMessage.textContent = '';
@@ -240,7 +374,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (formSuccessMessage) {
                 formSuccessMessage.classList.add('hidden');
             }
+        };
 
+        const displayMessage = (type, message = '') => {
+            resetMessages();
             if (type === 'error' && formErrorMessage) {
                 formErrorMessage.textContent = message;
                 formErrorMessage.classList.remove('hidden');
@@ -250,96 +387,19 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        const showAILoadingState = (container, message = i18n.t('common.analyzing', 'Analyserer...')) => {
-            container.innerHTML = `
-                <div class="ai-loading-container">
-                    <div class="ai-spinner"></div>
-                    <p class="ai-loading-text">${message}</p>
-                </div>
-            `;
-            container.classList.remove('hidden');
+        const setContactSubmitting = (isSubmitting) => {
+            setSubmittingState(submitButton, isSubmitting, i18n.t('contact.form.loading', 'Sender...'));
         };
 
-        const showSkeletonLoader = (container) => {
-            container.innerHTML = `
-                <div class="skeleton-heading skeleton"></div>
-                <div class="skeleton-line skeleton"></div>
-                <div class="skeleton-line skeleton"></div>
-                <div class="skeleton-line skeleton short"></div>
-            `;
-            container.classList.remove('hidden');
-        };
-
-        const fetchRecaptchaToken = async () => {
-            if (!recaptchaSiteKey) {
-                recaptchaLog('Site key missing, skipping token fetch');
-                return '';
-            }
-
-            // Check if grecaptcha is loaded
-            if (typeof grecaptcha === 'undefined') {
-                recaptchaError('RECAPTCHA FRONTEND ERROR: grecaptcha not loaded - script may be blocked or site key invalid');
-                return '';
-            }
-
-            // Check for grecaptcha API (Standard v3)
-            const api = typeof grecaptcha !== 'undefined' ? grecaptcha : null;
-            recaptchaLog('Using Standard reCAPTCHA v3 API');
-
-            if (!api) {
-                recaptchaError('RECAPTCHA FRONTEND ERROR: API not available');
-                return '';
-            }
-
-            return new Promise(resolve => {
-                try {
-                    const readyCheck = setTimeout(() => {
-                        recaptchaError('RECAPTCHA FRONTEND ERROR: ready() timeout - site key may be invalid');
-                        resolve('');
-                    }, 5000);
-
-                    api.ready(() => {
-                        clearTimeout(readyCheck);
-                        recaptchaLog('Executing reCAPTCHA with action "contact"');
-                        api.execute(recaptchaSiteKey, { action: 'contact' })
-                            .then(token => {
-                                if (!token) {
-                                    recaptchaError('RECAPTCHA FRONTEND ERROR: Empty token returned');
-                                } else {
-                                    recaptchaLog('Token generated (length:', token.length + ')');
-                                }
-                                resolve(token || '');
-                            })
-                            .catch(error => {
-                                recaptchaError('RECAPTCHA FRONTEND ERROR: Execute failed -', error.message || error);
-                                resolve('');
-                            });
-                    });
-                } catch (error) {
-                    recaptchaError('RECAPTCHA FRONTEND ERROR: Initialization failed -', error.message || error);
-                    resolve('');
-                }
-            });
-        };
-
-        const parseResponse = async (response) => {
-            const contentType = response.headers.get('content-type') || '';
-            if (contentType.includes('application/json')) {
-                return response.json();
-            }
-            const text = await response.text();
-            return { status: response.ok ? 'ok' : 'error', message: text };
-        };
-
-        contactForm.addEventListener('submit', async event => {
+        contactForm.addEventListener('submit', async (event) => {
             event.preventDefault();
-            displayMessage('reset');
-            setSubmittingState(true);
+            resetMessages();
+            setContactSubmitting(true);
 
             recaptchaLog('Contact form submit started');
 
             try {
-                const recaptchaToken = await fetchRecaptchaToken();
+                const recaptchaToken = await fetchRecaptchaToken('contact');
                 const formData = new FormData(contactForm);
                 if (recaptchaToken) {
                     formData.set('recaptcha_token', recaptchaToken);
@@ -357,33 +417,468 @@ document.addEventListener('DOMContentLoaded', () => {
                 recaptchaLog('Response status:', response.status, response.statusText);
                 recaptchaLog('Response headers:', Object.fromEntries(response.headers.entries()));
 
-                const result = await parseResponse(response);
+                const result = await parseJsonResponse(response);
                 recaptchaLog('Parsed response:', result);
 
                 if (response.ok && result.success === true) {
                     recaptchaLog('Submission succeeded');
                     displayMessage('success');
                     contactForm.reset();
-                    // Reset reCAPTCHA for next submission
+
                     if (recaptchaSiteKey && typeof grecaptcha !== 'undefined' && recaptchaHasClients()) {
                         try {
                             grecaptcha.reset();
                         } catch (error) {
                             recaptchaError('Reset failed', error);
                         }
-                    } else if (recaptchaDebug) {
+                    } else {
                         recaptchaLog('Skipping grecaptcha.reset() – no clients registered (expected for v3).');
                     }
                 } else {
-                    const message = result.message || i18n.t('common.form_error_default', 'Der opstod en fejl. Pr\u00f8v igen senere.');
+                    const message = result.message || i18n.t('common.form_error_default', 'Der opstod en fejl. Prøv igen senere.');
                     recaptchaError('Submission failed', message, result);
                     displayMessage('error', message);
                 }
             } catch (error) {
                 recaptchaError('Unexpected submission error', error);
-                displayMessage('error', i18n.t('common.form_error_network', 'Kunne ikke sende foresp\u00f8rgslen. Kontroll\u00e9r din forbindelse og pr\u00f8v igen.'));
+                displayMessage('error', i18n.t('common.form_error_network', 'Kunne ikke sende forespørgslen. Kontrollér din forbindelse og prøv igen.'));
             } finally {
-                setSubmittingState(false);
+                setContactSubmitting(false);
+            }
+        });
+    }
+
+    const calendlyPopupButtons = document.querySelectorAll('[data-calendly-launch="popup"]');
+    if (calendlyPopupButtons.length) {
+        calendlyPopupButtons.forEach((button) => {
+            button.addEventListener('click', (event) => {
+                event.preventDefault();
+                const url = button.getAttribute('data-calendly-url');
+                if (!url) {
+                    return;
+                }
+                if (window.Calendly && typeof window.Calendly.initPopupWidget === 'function') {
+                    window.Calendly.initPopupWidget({ url });
+                } else {
+                    window.open(url, '_blank', 'noopener');
+                }
+            });
+        });
+    }
+
+    const scanForm = document.getElementById('vulnerability-scan-form');
+    if (scanForm) {
+        const domainInput = scanForm.querySelector('#scan-domain');
+        const emailInput = scanForm.querySelector('#scan-email');
+        const statusEl = document.getElementById('vulnerability-scan-status');
+        const successCard = document.getElementById('vulnerability-scan-success');
+        const resultContainer = document.getElementById('vulnerability-scan-result');
+        const submitButton = scanForm.querySelector('button[type="submit"]');
+        const endpoint = scanForm.dataset.endpoint || scanForm.getAttribute('action') || 'scan-submit.php';
+        const loadingMessage = submitButton?.dataset.loadingText || i18n.t('free_scan.form.loading', 'Analyserer angrebsfladen...');
+
+        const setScanSubmitting = (isSubmitting) => {
+            setSubmittingState(submitButton, isSubmitting, loadingMessage);
+        };
+
+        const resetScanOutput = () => {
+            if (statusEl) {
+                statusEl.classList.add('hidden');
+                statusEl.textContent = '';
+                statusEl.classList.remove('text-rose-400', 'text-emerald-400', 'text-amber-300');
+            }
+            if (successCard) {
+                successCard.classList.add('hidden');
+            }
+            if (resultContainer) {
+                resultContainer.classList.add('hidden');
+                resultContainer.innerHTML = '';
+            }
+            clearFieldError(domainInput);
+            clearFieldError(emailInput);
+        };
+
+        const updateScanStatus = (message, tone = 'info') => {
+            if (!statusEl) {
+                return;
+            }
+            statusEl.textContent = message;
+            statusEl.classList.remove('hidden', 'text-rose-400', 'text-emerald-400', 'text-amber-300');
+            if (tone === 'error') {
+                statusEl.classList.add('text-rose-400');
+            } else if (tone === 'success') {
+                statusEl.classList.add('text-emerald-400');
+            } else {
+                statusEl.classList.add('text-amber-300');
+            }
+        };
+
+        const renderScanReport = (report) => {
+            if (!resultContainer) {
+                return;
+            }
+
+            const labels = resultContainer.dataset;
+            const severityLabel = (severity) => {
+                if (severity === 'high') return labels.labelSeverityHigh || 'High risk';
+                if (severity === 'medium') return labels.labelSeverityMedium || 'Medium risk';
+                return labels.labelSeverityLow || 'Low risk';
+            };
+
+            const severityClass = (severity) => {
+                if (severity === 'high') return 'bg-red-500/20 text-red-300 border border-red-500/40';
+                if (severity === 'medium') return 'bg-amber-500/20 text-amber-200 border border-amber-500/40';
+                return 'bg-emerald-500/20 text-emerald-200 border border-emerald-500/40';
+            };
+
+            const issues = Array.isArray(report?.issues) ? report.issues : [];
+            const issuesMarkup = issues.length
+                ? issues.map((issue) => `
+                    <li class="border border-gray-800/60 rounded-xl p-4 bg-gray-900/50 space-y-2">
+                        <div class="flex items-center justify-between gap-3">
+                            <span class="font-semibold text-white">${issue.title || ''}</span>
+                            <span class="text-xs px-2 py-1 rounded-full ${severityClass(issue.severity)}">
+                                ${severityLabel(issue.severity || 'low')}
+                            </span>
+                        </div>
+                        <p class="text-sm text-gray-300">${issue.description || ''}</p>
+                    </li>
+                `).join('')
+                : `<li class="text-sm text-gray-300">${labels.labelNoIssues || 'No critical findings in this mock.'}</li>`;
+
+            const planMap = {
+                'pricing.mvp.basis.title': labels.planMvpBasis,
+                'pricing.mvp.pro.title': labels.planMvpPro,
+                'pricing.mvp.premium.title': labels.planMvpPremium,
+                'pricing.enterprise.standard.title': labels.planStandard,
+                'pricing.enterprise.premium.title': labels.planPremium,
+                'pricing.enterprise.enterprise.title': labels.planEnterprise
+            };
+
+            const recommendedPlan = planMap[report?.planRecommendation] || planMap['pricing.enterprise.standard.title'] || '';
+
+            const scoreLabel = labels.labelScore || 'Security score';
+            const issuesLabel = labels.labelIssues || 'Highlighted findings';
+            const recommendedLabel = labels.labelRecommended || 'Recommended plan';
+            const complianceLabel = labels.labelCompliance || '';
+            const disclaimerLabel = labels.labelDisclaimer || '';
+            const nextStepsLabel = labels.labelNext || '';
+            const ctaLabel = labels.labelCta || 'Book a demo';
+            const demoUrl = labels.demoUrl || 'demo.php';
+
+            resultContainer.innerHTML = `
+                <div class="border border-gray-800/60 rounded-2xl p-6 bg-gray-900/40 space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div>
+                            <p class="text-xs uppercase tracking-wide text-gray-400">${scoreLabel}</p>
+                            <p class="text-4xl font-black text-amber-400">${report?.score ?? '--'}</p>
+                            <p class="text-xs text-gray-500 mt-2">${complianceLabel}</p>
+                        </div>
+                        <div class="text-sm text-gray-300 sm:text-right">
+                            <p class="font-semibold text-white">${recommendedLabel}</p>
+                            <p>${recommendedPlan}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-3 text-white">${issuesLabel}</h4>
+                        <ul class="space-y-4">${issuesMarkup}</ul>
+                    </div>
+                    <div class="space-y-3 text-sm text-gray-300">
+                        <p>${nextStepsLabel}</p>
+                        <p class="text-xs text-gray-500">${disclaimerLabel}</p>
+                    </div>
+                    <div>
+                        <a href="${demoUrl}" class="inline-flex items-center justify-center bg-amber-400 text-black font-semibold py-3 px-6 rounded-lg hover:bg-amber-500 transition-colors">${ctaLabel}</a>
+                    </div>
+                </div>
+            `;
+            resultContainer.classList.remove('hidden');
+        };
+
+        const validateScanForm = () => {
+            let hasError = false;
+            const domainValue = domainInput?.value.trim() || '';
+            const domainRequiredMessage = domainInput?.dataset.errorMessage || i18n.t('free_scan.validation.domain_required', 'Indtast et domæne.');
+            const domainInvalidMessage = domainInput?.dataset.invalidMessage || i18n.t('free_scan.validation.domain_invalid', 'Angiv et gyldigt domæne (fx example.com).');
+
+            if (!domainValue) {
+                showFieldError(domainInput, domainRequiredMessage);
+                hasError = true;
+            } else {
+                const domainPattern = /^(?!-)(?:[a-z0-9-]{1,63}\.)+[a-z]{2,}$/i;
+                if (!domainPattern.test(domainValue)) {
+                    showFieldError(domainInput, domainInvalidMessage);
+                    hasError = true;
+                }
+            }
+
+            const emailValue = emailInput?.value.trim() || '';
+            if (emailValue) {
+                const emailInvalidMessage = emailInput?.dataset.invalidMessage || i18n.t('free_scan.validation.email_invalid', 'Angiv en gyldig e-mailadresse.');
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(emailValue)) {
+                    showFieldError(emailInput, emailInvalidMessage);
+                    hasError = true;
+                }
+            }
+
+            return !hasError;
+        };
+
+        domainInput?.addEventListener('input', () => {
+            clearFieldError(domainInput);
+            if (statusEl) {
+                statusEl.classList.add('hidden');
+            }
+        });
+
+        emailInput?.addEventListener('input', () => {
+            clearFieldError(emailInput);
+        });
+
+        scanForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            resetScanOutput();
+
+            if (!validateScanForm()) {
+                updateScanStatus(i18n.t('free_scan.errors.validation', 'Kontrollér felterne og prøv igen.'), 'error');
+                return;
+            }
+
+            updateScanStatus(loadingMessage, 'info');
+            setScanSubmitting(true);
+
+            try {
+                const recaptchaToken = await fetchRecaptchaToken('lead_scan');
+                const formData = new FormData(scanForm);
+                if (recaptchaToken) {
+                    formData.set('recaptcha_token', recaptchaToken);
+                }
+
+                if (resultContainer) {
+                    showSkeletonLoader(resultContainer);
+                }
+
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                const result = await parseJsonResponse(response);
+
+                if (response.ok && result.success) {
+                    updateScanStatus(i18n.t('free_scan.form.success_status', 'Mock-rapport genereret.'), 'success');
+                    if (successCard) {
+                        successCard.classList.remove('hidden');
+                    }
+                    renderScanReport(result.report || {});
+                } else {
+                    const message = result.message || i18n.t('free_scan.errors.generic', 'Vi kunne ikke gennemføre scanningen. Prøv igen.');
+                    updateScanStatus(message, 'error');
+                    if (result.field === 'domain') {
+                        showFieldError(domainInput, message);
+                    } else if (result.field === 'email') {
+                        showFieldError(emailInput, message);
+                    }
+                    if (resultContainer) {
+                        resultContainer.classList.add('hidden');
+                        resultContainer.innerHTML = '';
+                    }
+                }
+            } catch (error) {
+                recaptchaError('Free scan submission error', error);
+                updateScanStatus(i18n.t('free_scan.errors.network', 'Forbindelsen blev afbrudt. Prøv igen.'), 'error');
+            } finally {
+                setScanSubmitting(false);
+            }
+        });
+    }
+
+    const pricingCalculator = document.getElementById('pricing-calculator');
+    const pricingCalculatorForm = document.getElementById('pricing-calculator-form');
+    if (pricingCalculator && pricingCalculatorForm) {
+        const usersInput = pricingCalculatorForm.querySelector('#calc-users');
+        const endpointsInput = pricingCalculatorForm.querySelector('#calc-endpoints');
+        const addonInputs = Array.from(pricingCalculatorForm.querySelectorAll('input[name="addons"]'));
+        const submitButton = pricingCalculatorForm.querySelector('button[type="submit"]');
+        const resultContainer = document.getElementById('pricing-calculator-result');
+        const statusEl = document.getElementById('pricing-calculator-status');
+        const labels = pricingCalculator.dataset;
+
+        const planLabels = {
+            mvpBasis: labels.planMvpBasis,
+            mvpPro: labels.planMvpPro,
+            mvpPremium: labels.planMvpPremium,
+            standard: labels.planStandard,
+            premium: labels.planPremium,
+            enterprise: labels.planEnterprise
+        };
+
+        const planMatrix = [
+            { maxUsers: 10, slug: 'mvpBasis', base: 1799 },
+            { maxUsers: 25, slug: 'mvpPro', base: 3499 },
+            { maxUsers: 50, slug: 'mvpPremium', base: 5999 },
+            { maxUsers: 100, slug: 'standard', base: 9900 },
+            { maxUsers: 250, slug: 'premium', base: 18900 },
+            { maxUsers: Infinity, slug: 'enterprise', base: 39900 }
+        ];
+
+        const addonPricing = {
+            pve: 2900,
+            aut: 1200,
+            bridge: 1800,
+            support: 3500
+        };
+
+        const formatCurrency = (value) => currencyFormatter.format(Math.round(value));
+
+        const setCalculatorSubmitting = (isSubmitting) => {
+            const loadingText = submitButton?.dataset.loadingText || i18n.t('pricing.calculator.loading', 'Beregner...');
+            setSubmittingState(submitButton, isSubmitting, loadingText);
+        };
+
+        const showCalcStatus = (message) => {
+            if (statusEl) {
+                statusEl.textContent = message || '';
+            }
+        };
+
+        const resetCalculator = () => {
+            clearFieldError(usersInput);
+            clearFieldError(endpointsInput);
+            showCalcStatus('');
+            if (resultContainer) {
+                resultContainer.classList.add('hidden');
+                resultContainer.innerHTML = '';
+            }
+        };
+
+        const getSelectedAddonLabels = () => addonInputs
+            .filter(input => input.checked)
+            .map(input => {
+                const wrapper = input.nextElementSibling;
+                const titleEl = wrapper?.querySelector('.font-semibold');
+                return titleEl ? titleEl.textContent.trim() : input.value;
+            });
+
+        const validateCalculator = () => {
+            let valid = true;
+            const usersValue = Number.parseInt(usersInput?.value, 10);
+            const endpointsValue = Number.parseInt(endpointsInput?.value, 10);
+
+            if (!usersValue || usersValue < 1) {
+                const message = usersInput?.dataset.requiredMessage || i18n.t('pricing.calculator.validation.users_required', 'Angiv antal brugere.');
+                showFieldError(usersInput, message);
+                valid = false;
+            }
+
+            if ((!endpointsValue && endpointsValue !== 0) || endpointsValue < 0) {
+                const message = endpointsInput?.dataset.requiredMessage || i18n.t('pricing.calculator.validation.endpoints_required', 'Angiv antal aktive endpoints.');
+                showFieldError(endpointsInput, message);
+                valid = false;
+            }
+
+            return valid;
+        };
+
+        usersInput?.addEventListener('input', () => clearFieldError(usersInput));
+        endpointsInput?.addEventListener('input', () => clearFieldError(endpointsInput));
+
+        pricingCalculatorForm.addEventListener('reset', () => {
+            window.setTimeout(resetCalculator, 0);
+        });
+
+        pricingCalculatorForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            resetCalculator();
+
+            if (!validateCalculator()) {
+                showCalcStatus(i18n.t('pricing.calculator.validation.error', 'Ret de markerede felter for at fortsætte.'));
+                return;
+            }
+
+            setCalculatorSubmitting(true);
+
+            try {
+                const users = Number.parseInt(usersInput?.value, 10) || 0;
+                const endpoints = Number.parseInt(endpointsInput?.value, 10) || 0;
+                const selectedAddons = addonInputs.filter(input => input.checked).map(input => input.value);
+
+                const selectedPlan = planMatrix.find(plan => users <= plan.maxUsers) || planMatrix[planMatrix.length - 1];
+                let total = selectedPlan.base;
+
+                const endpointTierSize = 50;
+                const endpointTierPrice = 1200;
+                const extraEndpointTiers = Math.max(0, Math.ceil(endpoints / endpointTierSize) - 1);
+                total += extraEndpointTiers * endpointTierPrice;
+
+                selectedAddons.forEach(key => {
+                    total += addonPricing[key] || 0;
+                });
+
+                const perUser = users > 0 ? total / users : total;
+
+                const selectedAddonLabels = getSelectedAddonLabels();
+                const addonsList = selectedAddonLabels.length
+                    ? selectedAddonLabels.map(label => `<li>• ${label}</li>`).join('')
+                    : `<li>${i18n.t('pricing.calculator.no_addons', 'No add-ons selected')}</li>`;
+
+                const planLabel = planLabels[selectedPlan.slug] || labels.planStandard || 'Standard';
+                const resultHeading = labels.resultHeading || 'Estimeret investering';
+                const monthlyLabel = labels.resultMonthly || 'Anslået pris pr. måned';
+                const perUserLabel = labels.resultPerUser || 'Pris pr. bruger';
+                const recommendedLabel = labels.resultRecommended || 'Anbefalet plan';
+                const addonsLabel = labels.resultAddons || 'Tilvalg';
+                const complianceLabel = labels.resultCompliance || '';
+                const disclaimerLabel = labels.resultDisclaimer || '';
+                const nextStepsLabel = labels.resultNext || '';
+                const demoLabel = labels.demoLabel || i18n.t('header.menu.demo', 'Book demo');
+                const popularBadge = labels.resultPopular || '';
+
+                if (resultContainer) {
+                    resultContainer.innerHTML = `
+                        <div class="border border-gray-800/60 rounded-2xl p-6 bg-gray-900/40 space-y-6">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                <div>
+                                    <h3 class="text-xl font-semibold text-white">${resultHeading}</h3>
+                                    <p class="text-sm text-gray-400">${nextStepsLabel}</p>
+                                </div>
+                                <div class="text-sm text-gray-300 sm:text-right">
+                                    <p class="text-xs uppercase text-gray-500">${monthlyLabel}</p>
+                                    <p class="text-3xl font-bold text-amber-400">${formatCurrency(total)}</p>
+                                </div>
+                            </div>
+                            <div class="grid sm:grid-cols-3 gap-4">
+                                <div>
+                                    <p class="text-xs uppercase text-gray-500">${perUserLabel}</p>
+                                    <p class="text-lg font-semibold text-white">${formatCurrency(perUser)}</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs uppercase text-gray-500">${recommendedLabel}</p>
+                                    <p class="text-lg font-semibold text-white">${planLabel}</p>
+                                    ${selectedPlan.slug === 'premium' ? `<span class="inline-flex mt-2 text-xs px-2 py-1 rounded-full bg-amber-500/20 text-amber-200">${popularBadge}</span>` : ''}
+                                </div>
+                                <div>
+                                    <p class="text-xs uppercase text-gray-500">${addonsLabel}</p>
+                                    <ul class="text-sm text-gray-300 space-y-1">${addonsList}</ul>
+                                </div>
+                            </div>
+                            <div class="text-sm text-gray-400 space-y-2">
+                                <p>${complianceLabel}</p>
+                                <p class="text-xs text-gray-500">${disclaimerLabel}</p>
+                            </div>
+                            <div>
+                                <a href="demo.php" class="inline-flex items-center justify-center bg-amber-400 text-black font-semibold py-3 px-6 rounded-lg hover:bg-amber-500 transition-colors">${demoLabel}</a>
+                            </div>
+                        </div>
+                    `;
+                    resultContainer.classList.remove('hidden');
+                }
+
+                showCalcStatus(i18n.t('pricing.calculator.status_ready', 'Estimatet er klar.'));
+            } finally {
+                setCalculatorSubmitting(false);
             }
         });
     }

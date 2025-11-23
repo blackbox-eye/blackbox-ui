@@ -10,7 +10,14 @@
       "products": "Products",
       "cases": "Case Studies",
       "pricing": "Pricing",
-      "contact": "Contact"
+      "contact": "Contact",
+      "solutions": "Solutions",
+      "cases_results": "Cases & Results",
+      "pricing_demo": "Pricing & Demo",
+      "resources": "Resources",
+      "about_contact": "About & Contact",
+      "demo": "Book Demo",
+      "free_scan": "Free Vulnerability Check"
     },
     "cta": {
       "agent_login": "Agent Login",
@@ -25,7 +32,9 @@
     "mobile": {
       "navigation": "Navigation",
       "open_menu": "Open navigation menu",
-      "close_menu": "Close navigation menu"
+      "close_menu": "Close navigation menu",
+      "primary_navigation": "Primary navigation",
+      "secondary_navigation": "More options"
     }
   },
   "footer": {
@@ -59,8 +68,8 @@
       "description": "The complete AI-driven security platform that protects your business 24/7 and turns employees into your strongest line of defense."
     },
     "hero": {
-      "headline": "Make invisible threats visible.",
-      "subheadline": "The complete AI-driven security platform that proactively protects your organization 24/7—and turns employees into your strongest line of defense.",
+      "headline": "Stop advanced attacks before they land.",
+      "subheadline": "Blackbox EYE™ unifies intelligence, AI, and operational response so you intercept zero-day threats before they become incidents.",
       "primary_cta": "Book a No-Obligation Demo",
       "secondary_cta": "Explore the Platform"
     },
@@ -372,6 +381,41 @@
         "it": "IT & Technology"
       }
     },
+    "calculator": {
+      "title": "Pricing Calculator",
+      "description": "Generate a quick estimate based on your team size and the modules you enable.",
+      "users_label": "Number of users",
+      "users_help": "Include employees and external stakeholders who need access.",
+      "endpoints_label": "Critical endpoints",
+      "endpoints_help": "Servers, cloud workloads, OT systems, and other monitored assets.",
+      "addons_label": "Add modules",
+      "addons_help": "Select the components you want included in phase one.",
+      "addons": {
+        "pve": "Penetration & Vulnerability Engine (PVE)",
+        "aut": "Awareness & Training (AUT)",
+        "bridge": "Operational Bridge integration",
+        "support": "24/7 incident response standby"
+      },
+      "submit": "Calculate investment",
+      "reset": "Reset",
+      "result": {
+        "heading": "Estimated monthly investment",
+        "monthly_label": "Projected monthly price",
+        "per_user_label": "Approx. cost per user",
+        "recommended_plan": "Recommended plan",
+        "addons_label": "Included modules",
+        "badge_popular": "Most selected",
+        "next_steps": "Book a demo to receive a tailored proposal and technical walkthrough.",
+        "compliance_note": "All estimates include baseline compliance reporting and onboarding support.",
+        "estimation_disclaimer": "Figures are indicative and depend on environment, SLA, and contract terms."
+      },
+      "validation": {
+        "users_required": "Please enter the number of users.",
+        "endpoints_required": "Please enter the number of critical endpoints.",
+        "users_min": "You need at least one user.",
+        "endpoints_min": "Provide at least one endpoint."
+      }
+    },
     "mvp": {
       "section_title": "MVP Packages",
       "basis": {
@@ -476,6 +520,53 @@
       "title": "Should we tailor a solution for you?",
       "description": "Our experts combine operational experience with AI-driven analysis to deliver precisely the security level you need.",
       "button": "Talk to Our Advisors"
+    }
+  },
+  "free_scan": {
+    "meta": {
+      "title": "Free Vulnerability Check | BLACKBOX EYE™",
+      "description": "Generate a mock report in seconds and see how our PVE module prioritizes exposures."
+    },
+    "hero": {
+      "tagline": "Lead flow",
+      "title": "Free vulnerability scan in seconds",
+      "description": "Enter your domain to receive a surface-level mock report with the top observations. Book a demo for the full PVE assessment."
+    },
+    "form": {
+      "title": "Get your report",
+      "description": "We illustrate how our PVE engine prioritizes findings from publicly available data.",
+      "domain_label": "Domain",
+      "domain_placeholder": "example.com",
+      "email_label": "Work email (optional)",
+      "email_placeholder": "name@company.com",
+      "submit": "Generate report",
+      "loading": "Scanning the attack surface...",
+      "success_title": "Mock report ready",
+      "success_message": "Review the highlights below. Book a demo to unlock a complete penetration assessment.",
+      "rate_limit_note": "Maximum 3 free scans per organization per day.",
+      "privacy_note": "We do not store the domain you provide. This demo showcases the report format only."
+    },
+    "report": {
+      "score_label": "Security score",
+      "issues_heading": "Highlighted findings",
+      "no_issues": "No critical findings detected in this mock.",
+      "severity": {
+        "high": "High risk",
+        "medium": "Medium risk",
+        "low": "Low risk"
+      },
+      "cta_text": "Ready for a full automated PVE report?",
+      "cta_description": "See how our specialists activate the full PVE module and deliver a complete report with remediation guidance.",
+      "cta_link": "Book a demo"
+    },
+    "validation": {
+      "domain_required": "Please enter a domain.",
+      "domain_invalid": "Enter a valid domain (e.g. example.com).",
+      "email_invalid": "Please provide a valid email address."
+    },
+    "errors": {
+      "generic": "We could not complete the scan. Please try again.",
+      "rate_limited": "You have reached the daily limit for free scans. Contact us for a full report."
     }
   },
   "contact": {

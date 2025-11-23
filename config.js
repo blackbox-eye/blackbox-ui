@@ -1,8 +1,10 @@
 // AI Configuration for Blackbox EYE™
 // Dette er en placeholder - i produktion bør API-nøgler gemmes sikkert på serveren
 const AI_CONFIG = {
-    // Midlertidig løsning - flyttes til server-side miljø i produktion
-    GEMINI_API_KEY: "AIzaSyAmX6gTIN2tIiQ99HM8LopGsD-jmUENYLw",
+    // Do NOT keep API keys in client-side files. Use server-side environment variables
+    // or GitHub Actions secrets and proxy requests through the backend.
+    // In production set the key in your hosting environment and access it server-side.
+    GEMINI_API_KEY: "REPLACE_WITH_SERVER_SECRET",
     GEMINI_MODEL: "gemini-2.0-flash",
     API_BASE_URL: "https://generativelanguage.googleapis.com/v1beta/models",
     

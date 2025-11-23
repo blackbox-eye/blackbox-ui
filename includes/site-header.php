@@ -135,15 +135,21 @@ if (!function_exists('aig_nav_class')) {
     }
 }
 
+// Navigation links - Optimized for Sprint 5 UX improvements
+// Reduced to essential items for better mobile experience
 $nav_links = [
-    ['slug' => 'about', 'label' => t('header.menu.about'), 'href' => 'about.php'],
     ['slug' => 'products', 'label' => t('header.menu.products'), 'href' => 'products.php'],
     ['slug' => 'cases', 'label' => t('header.menu.cases'), 'href' => 'cases.php'],
-    ['slug' => 'blog', 'label' => t('blog.title'), 'href' => 'blog.php'],
-    // Use the short, language-agnostic label 'FAQ' to avoid long menu wrapping
-    ['slug' => 'faq', 'label' => 'FAQ', 'href' => 'faq.php'],
     ['slug' => 'pricing', 'label' => t('header.menu.pricing'), 'href' => 'pricing.php'],
+    ['slug' => 'blog', 'label' => t('blog.title'), 'href' => 'blog.php'],
     ['slug' => 'contact', 'label' => t('header.menu.contact'), 'href' => 'contact.php'],
+];
+
+// Secondary navigation items (shown in mobile menu and footer)
+$secondary_nav_links = [
+    ['slug' => 'about', 'label' => t('header.menu.about'), 'href' => 'about.php'],
+    ['slug' => 'demo', 'label' => t('header.menu.demo', 'Book Demo'), 'href' => 'demo.php'],
+    ['slug' => 'faq', 'label' => 'FAQ', 'href' => 'faq.php'],
 ];
 
 $alphabot_enabled_pages = ['home', 'index', 'about', 'products', 'cases', 'pricing', 'contact'];
@@ -1113,6 +1119,18 @@ if (!empty($disable_alphabot)) {
                     <?= htmlspecialchars($link['label']) ?>
                 </a>
             <?php endforeach; ?>
+            
+            <!-- Secondary navigation in mobile menu -->
+            <div class="border-t border-gray-700 pt-6 mt-4">
+                <?php foreach ($secondary_nav_links as $link): ?>
+                    <a href="<?= $link['href'] ?>"
+                        class="nav-link-mobile text-lg <?= $link['slug'] === $current_page ? 'text-white font-semibold' : 'text-gray-400' ?>"
+                        <?= aig_nav_aria($link['slug'], $current_page) ?>>
+                        <?= htmlspecialchars($link['label']) ?>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+            
             <a href="agent-login.php" class="mt-8 inline-block border border-amber-400 text-amber-400 py-3 px-8 rounded-lg text-xl font-semibold">
                 <?= t('header.cta.agent_login') ?>
             </a>

@@ -1,17 +1,54 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# CodeQL Security Analysis Workflow
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# ⚠️  IMPORTANT: This workflow requires "Code scanning" to be enabled in GitHub
+#     Repository Settings → Security → Code security and analysis
+#
+# To enable Code scanning:
+# 1. Go to: https://github.com/AlphaAcces/ALPHA-Interface-GUI/settings/security_analysis
+# 2. Click "Set up" next to "Code scanning"
+# 3. Select "GitHub Actions" as the analysis method
+# 4. Enable the feature
+#
+# Once enabled, this workflow will:
+# - Scan PHP code for security vulnerabilities
+# - Optionally scan JavaScript (when ENABLE_JS_CODEQL secret is set to 'true')
+# - Upload results to Security → Code scanning alerts
+#
+# Current status: DISABLED - Workflow configured but code scanning not enabled
+# See: SECURITY_IMPLEMENTATION_SUMMARY.md for detailed setup instructions
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
 name: "CodeQL"
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  schedule:
-    - cron: '0 0 * * 0'
+  # Disabled by default - uncomment when code scanning is enabled
+  # push:
+  #   branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
+  # schedule:
+  #   - cron: '0 0 * * 0'
+  
+  # Manual workflow dispatch - allows testing without automatic triggers
+  workflow_dispatch:
+    inputs:
+      enable_php:
+        description: 'Run PHP analysis'
+        required: false
+        default: 'true'
+      enable_js:
+        description: 'Run JavaScript analysis'
+        required: false
+        default: 'false'
 
 jobs:
   php-analysis:
     name: PHP CodeQL Analysis
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.enable_php == 'true' }}
     permissions:
       actions: read
       contents: read
@@ -32,12 +69,22 @@ jobs:
 
       - name: Perform PHP CodeQL Analysis
         uses: github/codeql-action/analyze@v2
+        continue-on-error: true
+        id: php-analysis
+        
+      - name: Check analysis status
+        if: steps.php-analysis.outcome == 'failure'
+        run: |
+          echo "⚠️  CodeQL analysis failed - likely because code scanning is not enabled"
+          echo "📋 See SECURITY_IMPLEMENTATION_SUMMARY.md for setup instructions"
+          echo "🔗 Enable at: https://github.com/${{ github.repository }}/settings/security_analysis"
+          exit 1
 
   js-analysis:
     name: JavaScript CodeQL Analysis (Gated)
     runs-on: ubuntu-latest
     needs: php-analysis
-    if: ${{ secrets.ENABLE_JS_CODEQL == 'true' }}
+    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.enable_js == 'true' }}
     permissions:
       actions: read
       contents: read
@@ -58,3 +105,13 @@ jobs:
 
       - name: Perform JavaScript CodeQL Analysis
         uses: github/codeql-action/analyze@v2
+        continue-on-error: true
+        id: js-analysis
+        
+      - name: Check analysis status
+        if: steps.js-analysis.outcome == 'failure'
+        run: |
+          echo "⚠️  CodeQL analysis failed - likely because code scanning is not enabled"
+          echo "📋 See SECURITY_IMPLEMENTATION_SUMMARY.md for setup instructions"
+          echo "🔗 Enable at: https://github.com/${{ github.repository }}/settings/security_analysis"
+          exit 1

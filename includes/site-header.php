@@ -196,8 +196,28 @@ if (!empty($disable_alphabot)) {
     <meta name="twitter:description" content="<?= htmlspecialchars($meta_og_description) ?>">
     <meta name="twitter:image" content="<?= htmlspecialchars($meta_og_image) ?>">
 
-    <!-- Tailwind CSS Production CDN (optimized) -->
-    <link rel="stylesheet" href="https://cdn.tailwindcss.com/3.4.1">
+    <!-- Tailwind CSS Production CDN (must load via script) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <noscript>
+        <style>
+            body {
+                background-color: #101419;
+                color: #e5e7eb;
+            }
+            .noscript-warning {
+                margin: 2rem;
+                padding: 1.5rem;
+                border: 1px solid #fbbf24;
+                background: rgba(17, 24, 39, 0.9);
+                border-radius: 0.75rem;
+                font-size: 1rem;
+                line-height: 1.5;
+            }
+        </style>
+        <div class="noscript-warning">
+            Tailwind CSS kræver JavaScript for at indlæse designet. Aktivér venligst JavaScript eller kontakt supporten.
+        </div>
+    </noscript>
 
     <!-- Custom styles - must load AFTER Tailwind to override -->
     <link rel="stylesheet" href="/style.css">

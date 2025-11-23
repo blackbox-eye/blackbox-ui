@@ -1025,29 +1025,29 @@ if (!empty($disable_alphabot)) {
                     <span aria-hidden="true">Blackbox EYE&trade;</span>
                     <span aria-hidden="true">Blackbox EYE&trade;</span>
                 </div>
-                <div class="hidden md:flex items-center gap-3 lg:gap-8 xl:gap-10 flex-nowrap">
-                    <nav class="flex items-center gap-3 lg:gap-8 xl:gap-10 flex-nowrap">
+                <div class="hidden md:flex items-center gap-2 lg:gap-4 xl:gap-6 flex-nowrap">
+                    <nav class="flex items-center gap-2 lg:gap-4 xl:gap-6 flex-nowrap">
                         <?php foreach ($nav_links as $link): ?>
                             <a href="<?= $link['href'] ?>"
-                                class="nav-link <?= aig_nav_class($link['slug'], $current_page) ?> whitespace-nowrap"
+                                class="nav-link <?= aig_nav_class($link['slug'], $current_page) ?> whitespace-nowrap text-sm lg:text-base"
                                 <?= aig_nav_aria($link['slug'], $current_page) ?>>
                                 <?= htmlspecialchars($link['label']) ?>
                             </a>
                         <?php endforeach; ?>
                     </nav>
-                    <a href="agent-login.php" class="md:inline-block border border-amber-400 text-amber-400 py-2 px-4 lg:px-6 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold whitespace-nowrap flex-shrink-0 text-sm lg:text-base">
+                    <a href="agent-login.php" class="md:inline-block border border-amber-400 text-amber-400 py-1.5 px-3 lg:py-2 lg:px-5 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold whitespace-nowrap flex-shrink-0 text-xs lg:text-sm">
                         <?= t('header.cta.agent_login') ?>
                     </a>
                     <!-- Language Switcher -->
-                    <div class="flex items-center gap-1 border border-gray-600 rounded-lg p-1 flex-shrink-0">
+                    <div class="flex items-center gap-0.5 border border-gray-600 rounded-lg p-0.5 flex-shrink-0">
                         <a href="?lang=da"
-                            class="language-switch px-3 py-1.5 rounded text-xs lg:text-sm font-medium transition-all <?= $current_language === 'da' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>"
+                            class="language-switch px-2 py-1 rounded text-xs font-medium transition-all <?= $current_language === 'da' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>"
                             aria-label="<?= htmlspecialchars(t('header.language.switch_da')) ?>"
                             <?= $current_language === 'da' ? 'aria-current="true"' : '' ?>>
                             <?= t('header.language.da') ?>
                         </a>
                         <a href="?lang=en"
-                            class="language-switch px-3 py-1.5 rounded text-xs lg:text-sm font-medium transition-all <?= $current_language === 'en' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>"
+                            class="language-switch px-2 py-1 rounded text-xs font-medium transition-all <?= $current_language === 'en' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>"
                             aria-label="<?= htmlspecialchars(t('header.language.switch_en')) ?>"
                             <?= $current_language === 'en' ? 'aria-current="true"' : '' ?>>
                             <?= t('header.language.en') ?>

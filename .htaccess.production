@@ -1,16 +1,16 @@
 # reCAPTCHA v3 (Standard) - Simple and works!
-SetEnv RECAPTCHA_SITE_KEY "6Le7iBMsAAAAACp8jtY4JSVP_uWS-p4h24ZOm5i_"
-SetEnv RECAPTCHA_SECRET_KEY "6Le7iBMsAAAAAPbQw4-eaH1DpN-lTk49HXU_06qp"
-SetEnv RECAPTCHA_DEBUG "true"
+SetEnv RECAPTCHA_SITE_KEY "REPLACE_ON_SERVER"
+SetEnv RECAPTCHA_SECRET_KEY "REPLACE_ON_SERVER"
+SetEnv RECAPTCHA_DEBUG "false"
 
 # SMTP Configuration (Proton Mail)
 # PRODUCTION: This file contains real credentials - deploy via cPanel only
-SetEnv SMTP_HOST "smtp.protonmail.ch"
-SetEnv SMTP_PORT "587"
-SetEnv SMTP_USERNAME "ops@blackbox.codes"
-SetEnv SMTP_PASSWORD "CWCNKK8JGUM79P7Y"
-SetEnv SMTP_SECURE "tls"
-SetEnv SMTP_DEBUG "true"
+SetEnv SMTP_HOST "REPLACE_ON_SERVER"
+SetEnv SMTP_PORT "REPLACE_ON_SERVER"
+SetEnv SMTP_USERNAME "REPLACE_ON_SERVER"
+SetEnv SMTP_PASSWORD "REPLACE_ON_SERVER"
+SetEnv SMTP_SECURE "REPLACE_ON_SERVER"
+SetEnv SMTP_DEBUG "false"
 
 # Contact form recipient
 SetEnv CONTACT_EMAIL "ops@blackbox.codes"

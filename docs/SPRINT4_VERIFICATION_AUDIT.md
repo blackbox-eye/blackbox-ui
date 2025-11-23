@@ -636,6 +636,36 @@ $ch = curl_init('https://generativelanguage.googleapis.com/v1beta/models/gemini-
 
 ---
 
+## 📚 Related Documents & Resumé
+
+- **Concept & Design:** `docs/UX-UI-ANALYSIS-AND-PLAN.md` — design decisions, component maps and interaction flows for sprint features.
+- **Delivery Artifacts:** `docs/SPRINT4_ROADMAP.md`, `docs/SPRINT4_PROGRESS.md` — lists scope delivered vs remaining items.
+- **Operational Guides:** `SMTP-DEPLOYMENT-GUIDE.md`, `RECAPTCHA-SETUP-GUIDE.md`, `CI_CD_SETUP_GUIDE.md` — deployment and infra notes.
+- **Test Plans:** `docs/VISUAL_TEST_PROTOCOL.md`, `docs/SPRINT2_TEST_PLAN.md` — visual and acceptance criteria used for verification.
+
+Short resumé: these documents collectively define the sprint scope (UI fixes, Lighthouse/visual testing automation, secret-handling recommendations, and release gating). The code changes made for Sprint 4 align with the stated designs and test plans; outstanding items are cross-browser verification and Lighthouse score capture.
+
+## 🔐 Security Findings & Remediation (summary)
+
+- Hardcoded secrets found in the repository were replaced with placeholders in tracked files and scripts. Notable edits in this session:
+  - `db.php` now reads DB password from environment (`DB_PASSWORD`) instead of containing a literal.
+  - Tracked `htaccess` and deployment docs updated to use `REPLACE_ON_SERVER` placeholders for reCAPTCHA and SMTP values.
+  - `verify_deployment.ps1` already requires `DB_PASSWORD` (verified) and avoids literal passwords.
+  - Documentation files containing example passwords were scrubbed to placeholders.
+
+- Immediate actions performed:
+  1. Replaced inline secrets in tracked files (committed to branch `security-scrub`).
+  2. Created guidance to store secrets in hosting environment (cPanel MultiPHP INI Editor) or GitHub Secrets for CI.
+
+- Recommended next steps (must do):
+  1. Rotate any credentials that may have been exposed historically (DB, SMTP, Cloudflare tokens).
+  2. Enable GitHub Secret Scanning and push protection in the repository settings.
+  3. Add required secrets to GitHub Actions secrets: `DB_PASSWORD`, `CF_API_TOKEN`, `CF_ZONE_ID`, `FTP_USERNAME`, `FTP_PASSWORD` (or use SSH key), `GEMINI_API_KEY` and any other production API keys.
+  4. Consider migrating credential storage to a vault (HashiCorp Vault / AWS Secrets Manager / Azure Key Vault) for long-term automation.
+
+These steps will close the loop on the security remediation and ensure CI/CD workflows handle secrets safely.
+
+
 ## 🚨 CRITICAL FIX SESSION - November 23, 2025
 
 ### User Reported Issue

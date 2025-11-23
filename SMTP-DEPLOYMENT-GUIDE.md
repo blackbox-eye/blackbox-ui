@@ -50,7 +50,7 @@ Alternativt kan du sætte SMTP-credentials via MultiPHP INI Editor i stedet:
    SMTP_HOST=smtp.protonmail.ch
    SMTP_PORT=587
    SMTP_USERNAME=ops@blackbox.codes
-   SMTP_PASSWORD=CWCNKK8JGUM79P7Y
+   SMTP_PASSWORD=REPLACE_ON_SERVER
    SMTP_SECURE=tls
    SMTP_DEBUG=true
    CONTACT_EMAIL=ops@blackbox.codes

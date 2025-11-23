@@ -327,15 +327,18 @@ if (!empty($disable_alphabot)) {
                 padding-left: 1rem;
                 padding-right: 1rem;
             }
+
             .language-switcher-wrapper {
                 flex-shrink: 0;
                 display: inline-flex;
                 gap: 0.25rem;
                 margin-left: 0.5rem;
             }
+
             .language-switch {
                 white-space: nowrap;
             }
+
             .nav-link {
                 font-size: 0.95rem;
             }

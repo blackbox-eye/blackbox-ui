@@ -122,12 +122,13 @@ if ($allTablesExist) {
     }
   }
 
-    echo "\nOption B - Via MySQL CLI:\n";
-    foreach ($requiredTables as $tableName => $tableInfo) {
-        if (!$tableStats[$tableName]['exists']) {
-            echo "mysql -u bbx_user -p blackowu_blackbox < {$tableInfo['schema_file']}\n";
-        }
-    }  echo "\nAfter import:\n";
+  echo "\nOption B - Via MySQL CLI:\n";
+  foreach ($requiredTables as $tableName => $tableInfo) {
+    if (!$tableStats[$tableName]['exists']) {
+      echo "mysql -u bbx_user -p blackowu_blackbox < {$tableInfo['schema_file']}\n";
+    }
+  }
+  echo "\nAfter import:\n";
   echo "1. Refresh this page to verify\n";
   echo "2. ⚠️ DELETE this test file!\n";
 }

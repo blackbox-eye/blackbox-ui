@@ -13,21 +13,19 @@ for (const vp of viewports) {
     await page.setViewportSize({ width: vp.width, height: vp.height });
     await page.goto('https://blackbox.codes', { waitUntil: 'networkidle' });
     
-    // Wait for header to be visible
-    await page.waitForSelector('header, nav, .header, .navbar', { timeout: 5000 }).catch(() => {
-      console.log(`Note: No header element found at ${vp.name}`);
-    });
-    
     // Take full page screenshot
     const filename = `artifacts/${browserName}-${vp.name}-${vp.width}x${vp.height}.png`;
     await page.screenshot({ path: filename, fullPage: true });
     
-    // Take header-only screenshot if header exists
+    // Try to find and screenshot header if it exists
     const headerSelector = 'header, nav, .header, .navbar';
-    const headerExists = await page.$(headerSelector);
-    if (headerExists) {
+    try {
+      await page.waitForSelector(headerSelector, { timeout: 5000 });
       const headerFilename = `artifacts/${browserName}-${vp.name}-header-${vp.width}x${vp.height}.png`;
       await page.locator(headerSelector).first().screenshot({ path: headerFilename });
+    } catch (error) {
+      // Header not found or not visible - this is informational, not a failure
+      console.log(`Note: No header element found at ${vp.name} (${vp.width}x${vp.height})`);
     }
   });
 }

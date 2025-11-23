@@ -21,6 +21,9 @@ jobs:
       - name: Run Lighthouse (treosh action)
         uses: treosh/lighthouse-ci-action@v9
         with:
+          # Using hardcoded URL for blackbox.codes
+          # To use SITE_URL secret instead, uncomment the line below and comment out the hardcoded URL
+          # urls: ${{ secrets.SITE_URL }}
           urls: |
             https://blackbox.codes
           uploadArtifacts: true

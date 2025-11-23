@@ -45,7 +45,7 @@ The header has been verified to function correctly at the following screen sizes
 - [x] Chrome (Chromium-based) - v141.0.7390.37
 - [x] Firefox - v142.0.1
 - [x] Safari (WebKit) - v26.0
-- [⚠️] Brave with Dark Mode (Chromium with dark color scheme) - Tests passed but screenshots missing from artifact
+- [x] Brave with Dark Mode (Chromium with dark color scheme) - ✅ Tests passed, screenshots inkluderet
 
 ---
 

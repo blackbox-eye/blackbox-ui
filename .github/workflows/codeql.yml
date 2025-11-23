@@ -43,8 +43,10 @@ jobs:
       fail-fast: false
       matrix:
         # Scan multiple languages
-        language: [ 'javascript', 'python' ]
-        # Note: PHP analysis is done through 'python' queries that cover PHP patterns
+        # Note: JavaScript covers most web vulnerabilities. PHP analysis requires
+        # dedicated tools (e.g., Psalm, PHPStan) or community queries.
+        # TODO: Consider adding PHP-specific SAST tools for comprehensive coverage.
+        language: [ 'javascript' ]
 
     steps:
       - name: Checkout repository
@@ -80,4 +82,9 @@ jobs:
           echo "Language: ${{ matrix.language }}"
           echo "Query Suite: security-extended"
           echo "Results: Check Security > Code scanning alerts"
+          echo ""
+          echo "NOTE: For PHP-specific vulnerabilities, consider using:"
+          echo "  - Psalm (static analysis)"
+          echo "  - PHPStan (static analysis)"
+          echo "  - RIPS (commercial SAST)"
           echo "════════════════════════════════════════════════════════════"

@@ -140,7 +140,8 @@ $nav_links = [
     ['slug' => 'products', 'label' => t('header.menu.products'), 'href' => 'products.php'],
     ['slug' => 'cases', 'label' => t('header.menu.cases'), 'href' => 'cases.php'],
     ['slug' => 'blog', 'label' => t('blog.title'), 'href' => 'blog.php'],
-    ['slug' => 'faq', 'label' => t('faq.hero.title'), 'href' => 'faq.php'],
+    // Use the short, language-agnostic label 'FAQ' to avoid long menu wrapping
+    ['slug' => 'faq', 'label' => 'FAQ', 'href' => 'faq.php'],
     ['slug' => 'pricing', 'label' => t('header.menu.pricing'), 'href' => 'pricing.php'],
     ['slug' => 'contact', 'label' => t('header.menu.contact'), 'href' => 'contact.php'],
 ];

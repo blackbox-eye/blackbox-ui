@@ -1,0 +1,12 @@
+{
+  "name": "blackbox-visual-tests",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "playwright test --reporter=list",
+    "test:ci": "playwright test --reporter=list --output=artifacts"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  }
+}

@@ -320,6 +320,27 @@ if (!empty($disable_alphabot)) {
             }
         }
 
+        /* Header fix: keep language buttons visible and prevent overflow
+           Ensures language switcher does not get pushed off-screen on narrow viewports */
+        @media (max-width: 1024px) {
+            header#main-header .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            .language-switcher-wrapper {
+                flex-shrink: 0;
+                display: inline-flex;
+                gap: 0.25rem;
+                margin-left: 0.5rem;
+            }
+            .language-switch {
+                white-space: nowrap;
+            }
+            .nav-link {
+                font-size: 0.95rem;
+            }
+        }
+
         .glass-effect {
             background-color: var(--glass-bg);
             backdrop-filter: blur(12px);
@@ -1040,7 +1061,7 @@ if (!empty($disable_alphabot)) {
                         <?= t('header.cta.agent_login') ?>
                     </a>
                     <!-- Language Switcher -->
-                    <div class="flex items-center gap-0.5 border border-gray-600 rounded-lg p-0.5 flex-shrink-0">
+                    <div class="language-switcher-wrapper flex items-center gap-0.5 border border-gray-600 rounded-lg p-0.5">
                         <a href="?lang=da"
                             class="language-switch px-2 py-1 rounded text-xs font-medium transition-all <?= $current_language === 'da' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>"
                             aria-label="<?= htmlspecialchars(t('header.language.switch_da')) ?>"

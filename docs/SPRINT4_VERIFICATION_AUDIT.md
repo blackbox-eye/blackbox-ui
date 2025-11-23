@@ -636,6 +636,11 @@ $ch = curl_init('https://generativelanguage.googleapis.com/v1beta/models/gemini-
 
 ---
 
+## 🔁 PR Creation Note
+
+The security scrub changes are available on the `security-scrub` branch. A PR should be created manually via the GitHub UI using the contents of `PR_BODY.md` at the repository root. This was done intentionally to avoid requiring CLI tools or PATs in this environment. The `PR_BODY.md` file contains the suggested PR title, full description of changes, and a security checklist for reviewers.
+
+
 ## 🚨 CRITICAL FIX SESSION - November 23, 2025
 
 ### User Reported Issue

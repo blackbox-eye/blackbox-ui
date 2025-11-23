@@ -446,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Fade effect
                 ctx.fillStyle = 'rgba(16, 20, 25, 0.05)';
-                ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+                ctx.fillRect(0, 0, heroCanvas.width / (window.devicePixelRatio || 1), heroCanvas.height / (window.devicePixelRatio || 1));
 
                 // Rain color
                 const color = getComputedStyle(document.documentElement)
@@ -465,7 +465,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     ctx.fillText(char, x, y);
 
                     // Reset when off-screen
-                    if (y > window.innerHeight && Math.random() > 0.975) {
+                    const canvasHeight = heroCanvas.height / (window.devicePixelRatio || 1);
+                    if (y > canvasHeight && Math.random() > 0.975) {
                         drops[i] = 0;
                     }
                     drops[i]++;

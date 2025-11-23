@@ -60,8 +60,16 @@ Write-Host ""
 Write-Host "📋 STEP 2: Testing MySQL database connection..." -ForegroundColor Green
 Write-Host ""
 
-$checkDbConnectionScript = @"
-mysql -u blackowu_bbx_user -p'Ninjabankingcoin2025' -h localhost blackowu_blackbox -e 'SELECT 1;' 2>&1
+# Use environment variable DB_PASSWORD for security. Do NOT hardcode the DB password in repo.
+$dbPass = $env:DB_PASSWORD
+if (-not $dbPass -or $dbPass.Trim() -eq "") {
+  Write-Host "❌ DB_PASSWORD environment variable is not set. Set it before running this script." -ForegroundColor Red
+  Write-Host "   Example (PowerShell):`n     $env:DB_PASSWORD = 'your_db_password'`n     ./verify_deployment.ps1" -ForegroundColor Yellow
+  $dbConnectionStatus = "UNKNOWN"
+} else {
+  $escapedPass = $dbPass -replace "'","'\\''"
+  $checkDbConnectionScript = @"
+mysql -u blackowu_bbx_user -p'$escapedPass' -h localhost blackowu_blackbox -e 'SELECT 1;' 2>&1
 if [ \$? -eq 0 ]; then
     echo 'DB_CONNECTION=SUCCESS'
 else
@@ -69,27 +77,28 @@ else
 fi
 "@
 
-try {
-  $result = ssh -i $SSH_KEY $SSH_HOST $checkDbConnectionScript 2>&1
+  try {
+    $result = ssh -i $SSH_KEY $SSH_HOST $checkDbConnectionScript 2>&1
 
-  if ($result -match "DB_CONNECTION=SUCCESS") {
-    Write-Host "✅ MySQL connection successful" -ForegroundColor Green
-    $dbConnectionStatus = "CONNECTED"
+    if ($result -match "DB_CONNECTION=SUCCESS") {
+      Write-Host "✅ MySQL connection successful" -ForegroundColor Green
+      $dbConnectionStatus = "CONNECTED"
+    }
+    elseif ($result -match "DB_CONNECTION=FAILED") {
+      Write-Host "❌ MySQL connection FAILED" -ForegroundColor Red
+      Write-Host "   Check credentials, database name, and user privileges" -ForegroundColor Yellow
+      $dbConnectionStatus = "FAILED"
+    }
+    else {
+      Write-Host "⚠️  Unable to test database connection" -ForegroundColor Yellow
+      Write-Host "   Response: $result" -ForegroundColor Gray
+      $dbConnectionStatus = "UNKNOWN"
+    }
   }
-  elseif ($result -match "DB_CONNECTION=FAILED") {
-    Write-Host "❌ MySQL connection FAILED" -ForegroundColor Red
-    Write-Host "   Check credentials, database name, and user privileges" -ForegroundColor Yellow
-    $dbConnectionStatus = "FAILED"
+  catch {
+    Write-Host "❌ SSH command failed: $($_.Exception.Message)" -ForegroundColor Red
+    $dbConnectionStatus = "SSH_FAILED"
   }
-  else {
-    Write-Host "⚠️  Unable to test database connection" -ForegroundColor Yellow
-    Write-Host "   Response: $result" -ForegroundColor Gray
-    $dbConnectionStatus = "UNKNOWN"
-  }
-}
-catch {
-  Write-Host "❌ SSH command failed: $($_.Exception.Message)" -ForegroundColor Red
-  $dbConnectionStatus = "SSH_FAILED"
 }
 
 Write-Host ""
@@ -101,31 +110,36 @@ Write-Host ""
 Write-Host "📋 STEP 3: Checking database tables..." -ForegroundColor Green
 Write-Host ""
 
-$checkTablesScript = @"
-mysql -u blackowu_bbx_user -p'Ninjabankingcoin2025' -h localhost blackowu_blackbox -e 'SHOW TABLES;' 2>&1 | grep -E 'faq_items|blog_posts' | wc -l
+if ($dbConnectionStatus -eq "CONNECTED") {
+  $checkTablesScript = @"
+mysql -u blackowu_bbx_user -p'$escapedPass' -h localhost blackowu_blackbox -e 'SHOW TABLES;' 2>&1 | grep -E 'faq_items|blog_posts' | wc -l
 "@
 
-try {
-  $result = ssh -i $SSH_KEY $SSH_HOST $checkTablesScript 2>&1
-  $tableCount = [int]$result.Trim()
+  try {
+    $result = ssh -i $SSH_KEY $SSH_HOST $checkTablesScript 2>&1
+    $tableCount = [int]$result.Trim()
 
-  if ($tableCount -eq 2) {
-    Write-Host "✅ Both faq_items and blog_posts tables exist" -ForegroundColor Green
-    $tablesStatus = "EXISTS"
+    if ($tableCount -eq 2) {
+      Write-Host "✅ Both faq_items and blog_posts tables exist" -ForegroundColor Green
+      $tablesStatus = "EXISTS"
+    }
+    elseif ($tableCount -eq 1) {
+      Write-Host "⚠️  Only 1 of 2 required tables exists" -ForegroundColor Yellow
+      $tablesStatus = "PARTIAL"
+    }
+    else {
+      Write-Host "❌ Required tables (faq_items, blog_posts) do NOT exist" -ForegroundColor Red
+      Write-Host "   This is why FAQ/Blog show error fallback UI" -ForegroundColor Yellow
+      $tablesStatus = "MISSING"
+    }
   }
-  elseif ($tableCount -eq 1) {
-    Write-Host "⚠️  Only 1 of 2 required tables exists" -ForegroundColor Yellow
-    $tablesStatus = "PARTIAL"
+  catch {
+    Write-Host "❌ Unable to check tables: $($_.Exception.Message)" -ForegroundColor Red
+    $tablesStatus = "SSH_FAILED"
   }
-  else {
-    Write-Host "❌ Required tables (faq_items, blog_posts) do NOT exist" -ForegroundColor Red
-    Write-Host "   This is why FAQ/Blog show error fallback UI" -ForegroundColor Yellow
-    $tablesStatus = "MISSING"
-  }
-}
-catch {
-  Write-Host "❌ Unable to check tables: $($_.Exception.Message)" -ForegroundColor Red
-  $tablesStatus = "SSH_FAILED"
+} else {
+  Write-Host "⚠️ Skipping table check because DB connectivity could not be verified." -ForegroundColor Yellow
+  $tablesStatus = "SKIPPED"
 }
 
 Write-Host ""

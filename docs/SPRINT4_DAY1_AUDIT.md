@@ -1,7 +1,7 @@
 # Sprint 4 - Dag 1 Audit & Status
 
-**Dato:** 23. november 2025  
-**Status:** ✅ Alle opgaver fra dag 1 gennemført  
+**Dato:** 23. november 2025
+**Status:** ✅ Alle opgaver fra dag 1 gennemført
 **Commits:** 7 nye commits (total 12 commits ahead of origin/main)
 
 ---
@@ -185,12 +185,12 @@ if (heroCanvas) {
     // Hide canvas until fully initialized
     heroCanvas.style.opacity = '0';
     heroCanvas.style.transition = 'opacity 0.3s ease-in';
-    
+
     let isInitialized = false;
-    
+
     const setupCanvas = () => {
         // ... setup code ...
-        
+
         // Show canvas after initialization
         if (!isInitialized) {
             isInitialized = true;
@@ -363,6 +363,6 @@ if (heroCanvas) {
 
 ---
 
-**Prepared by:** GitHub Copilot  
-**Review Date:** 23. november 2025  
+**Prepared by:** GitHub Copilot
+**Review Date:** 23. november 2025
 **Next Review:** Efter Lighthouse audit

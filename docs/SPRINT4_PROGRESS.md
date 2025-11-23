@@ -162,7 +162,7 @@
 - [x] Hero canvas race condition fixed (opacity transition on load)
 - [x] Re-minified site.js with canvas fix
 
-**Commits:** 
+**Commits:**
 - 751edf8 (UI fixes)
 - 6758a9e (Re-minify site.js)
 
@@ -197,7 +197,7 @@
 - [ ] Event tracking for forms/CTAs/AlphaBot
 
 ### 9. Advanced SEO Optimization
-**Status:** Not started  
+**Status:** Not started
 **Priority:** MEDIUM
 **Estimated Time:** 1-2 days
 

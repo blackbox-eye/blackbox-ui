@@ -393,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Hide canvas until fully initialized
         heroCanvas.style.opacity = '0';
         heroCanvas.style.transition = 'opacity 0.3s ease-in';
-        
+
         const ctx = heroCanvas.getContext('2d', { alpha: false });
         const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@#$%^&*()_+-=[]{}|;':,./<>?".split('');
         let drops = [];
@@ -423,7 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const columns = Math.floor(w / 20);
                 drops = Array.from({ length: columns }, () => Math.floor(Math.random() * (h / 20)));
-                
+
                 // Show canvas after initialization
                 if (!isInitialized) {
                     isInitialized = true;

@@ -24,15 +24,15 @@
   color: #fbbf24;              /* text-amber-400 */
 }
 
+.nav-link:active {
+  color: #ffffff;
+}
+
 .nav-link:focus {
   color: #fbbf24;
   outline: 2px solid #fbbf24;
   outline-offset: 4px;
   border-radius: 4px;
-}
-
-.nav-link:active {
-  color: #ffffff;
 }
 
 /* Active page styling */
@@ -83,15 +83,15 @@
   color: #fbbf24;              /* text-amber-400 */
 }
 
+.nav-link-mobile:active {
+  color: #ffffff;
+}
+
 .nav-link-mobile:focus {
   color: #fbbf24;
   outline: 2px solid #fbbf24;
   outline-offset: 4px;
   border-radius: 4px;
-}
-
-.nav-link-mobile:active {
-  color: #ffffff;
 }
 
 /* Mobile active page */
@@ -114,17 +114,17 @@ a.nav-link-mobile:visited {
 
 /* Section fade-in — DEFAULT VISIBLE, JS adds animation */
 .section-fade-in {
-    opacity: 1;
-    transform: none;
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
 body.js-enabled .section-fade-in {
-    opacity: 0;
-    transform: translateY(20px);
+  opacity: 0;
+  transform: translateY(2rem);
 }
 
 body.js-enabled .section-fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
+  opacity: 1;
+  transform: translateY(0);
 }

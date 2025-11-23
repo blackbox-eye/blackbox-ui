@@ -1,9 +1,9 @@
-# Visual Test Protocol - Navigation Fix Verification
+# Visual Test Protocol - Navigation & Content Verification
 
-**Commit:** b56daff  
-**Date:** November 23, 2025  
-**Tester:** [Your Name]  
-**Server:** http://localhost:8000
+**Commit (under test):** Pending local hotfix (marketing fallback + FAQ/Blog DB handling)
+**Date:** November 23, 2025
+**Tester:** GitHub Copilot (local PHP dev server)
+**Server:** http://localhost:8000 ( `& "C:\php view\php.exe" -S localhost:8000` )
 
 ---
 
@@ -14,6 +14,36 @@ Verify that navigation links display correct colors across all states:
 - **Visited:** Gray-300 (#d1d5db) - NOT browser purple (#551A8B)
 - **Hover:** Amber-400 (#fbbf24)
 - **Active Page:** White (#ffffff) with amber underline
+- Confirm marketing content is visible even if JavaScript fails
+- Confirm FAQ/Blog endpoints respond with HTTP 200 and render fallback messaging when DB is unavailable
+
+---
+
+## 🆕 Marketing Content Visibility (No-JS Fallback)
+
+**Goal:** Prove at enheder uden JavaScript stadig ser ALT indhold (ingen blank side).
+
+1. Åbn Chrome → `Ctrl+Shift+P` → skriv `Disable JavaScript` → tryk `Enter`.
+2. Hard-refresh (`Ctrl+Shift+R`).
+3. Bekræft følgende på `index.php`, `about.php`, `cases.php`, `pricing.php`:
+   - Hero-overskrift + knapper synlige.
+   - Sektioner med `.section-fade-in` er VISIBLE med `opacity:1` (ingen translation).
+   - Footer indlæses.
+4. Re-enable JavaScript via Command Menu → `Enable JavaScript` → refresh → sektioner skal animere ind, men kun efter `body.js-enabled` er sat.
+5. Inspect `.section-fade-in` i DevTools → Computed → `opacity` = 1 uden JS, 0/visible med JS.
+
+**FAIL IF:** Noget indhold stadig skjult uden JS, eller `.section-fade-in` viser `opacity:0` før `body.js-enabled` tilføjes.
+
+---
+
+## ✅ site.min.js Integritetscheck
+
+1. Åbn terminal i repo-roden.
+2. Kør `Get-Item .\assets\js\site.min.js | Select-Object Length`.
+3. **Expected:** `Length = 18200` (± par bytes efter fremtidige builds). Alt < 1KB = korrupt.
+4. Hvis korrupt → kør `npx terser assets/js/site.js -c -m -o assets/js/site.min.js` og commit filen.
+
+Documenter output i audit-filen.
 
 ---
 
@@ -274,8 +304,8 @@ Copy this to `test-results/TEST_RESULTS.md`:
 ```markdown
 # Test Results - Navigation Fix Verification
 
-**Date:** November 23, 2025  
-**Commit:** b56daff  
+**Date:** November 23, 2025
+**Commit:** b56daff
 **Tester:** [Your Name]
 
 ## Desktop Navigation (Chrome)
@@ -297,6 +327,13 @@ Copy this to `test-results/TEST_RESULTS.md`:
 - [ ] Brave Dark Mode: Matrix animation OK ✅ / ❌
 - [ ] Firefox: Navigation works ✅ / ❌
 - [ ] Edge: Navigation works ✅ / ❌
+
+## 🩺 FAQ & Blog HTTP Smoke Test
+- [ ] Start lokal PHP server (`& "C:\php view\php.exe" -S localhost:8000`) ✅ / ❌
+- [ ] `faq.php` svarer `200 OK` (`Invoke-WebRequest -UseBasicParsing http://localhost:8000/faq.php`) ✅ / ❌
+- [ ] `blog.php` svarer `200 OK` ✅ / ❌
+- [ ] Ingen fejlsektion vises når DB er aktiv
+- [ ] Simuleret DB-fejl (midlertidigt forkerte creds) viser glas-fejlblok i stedet for HTTP 500 ✅ / ❌
 
 ## Lighthouse Scores
 **Desktop:**
@@ -327,8 +364,8 @@ Copy this to `test-results/TEST_RESULTS.md`:
 - [List any low priority issues]
 
 ## Conclusion
-[ ] All tests passed - ready for production  
-[ ] Some issues found - fixes required  
+[ ] All tests passed - ready for production
+[ ] Some issues found - fixes required
 [ ] Major issues found - rework needed
 
 **Overall Status:** 🟢 PASS / 🟡 PARTIAL / 🔴 FAIL

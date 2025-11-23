@@ -204,6 +204,7 @@ if (!empty($disable_alphabot)) {
                 background-color: #101419;
                 color: #e5e7eb;
             }
+
             .noscript-warning {
                 margin: 2rem;
                 padding: 1.5rem;
@@ -225,7 +226,7 @@ if (!empty($disable_alphabot)) {
     $admin_pages = ['agent-login.php', 'dashboard.php', 'admin.php', 'settings.php'];
     $current_script = basename($_SERVER['SCRIPT_NAME']);
     $is_admin_page = in_array($current_script, $admin_pages);
-    
+
     if ($is_admin_page): ?>
         <link rel="stylesheet" href="/assets/css/admin.css">
     <?php else: ?>
@@ -329,17 +330,6 @@ if (!empty($disable_alphabot)) {
             background: linear-gradient(90deg, var(--primary-accent), #FFFFFF);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-
-        .section-fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-
-        .section-fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         .spinner {

@@ -22,63 +22,77 @@ $lang = bbx_get_language();
 $selected_category = isset($_GET['category']) ? $_GET['category'] : null;
 
 // Fetch FAQ categories
-$categories_sql = "SELECT DISTINCT category FROM faq_items ORDER BY category";
-$categories = $pdo->query($categories_sql)->fetchAll(PDO::FETCH_COLUMN);
-
-// Fetch FAQ items
-if ($selected_category) {
-  $faq_sql = "
-        SELECT
-            id,
-            category,
-            " . ($lang === 'da' ? 'question_da AS question' : 'question_en AS question') . ",
-            " . ($lang === 'da' ? 'answer_da AS answer' : 'answer_en AS answer') . ",
-            keywords,
-            helpful_count,
-            not_helpful_count,
-            order_index
-        FROM faq_items
-        WHERE category = :category
-        ORDER BY order_index ASC, id ASC
-    ";
-  $stmt = $pdo->prepare($faq_sql);
-  $stmt->execute(['category' => $selected_category]);
-} else {
-  $faq_sql = "
-        SELECT
-            id,
-            category,
-            " . ($lang === 'da' ? 'question_da AS question' : 'question_en AS question') . ",
-            " . ($lang === 'da' ? 'answer_da AS answer' : 'answer_en AS answer') . ",
-            keywords,
-            helpful_count,
-            not_helpful_count,
-            order_index
-        FROM faq_items
-        ORDER BY category, order_index ASC, id ASC
-    ";
-  $stmt = $pdo->query($faq_sql);
-}
-
-$faqs = $stmt->fetchAll();
-
-// Group FAQs by category for display
+$categories = [];
+$faqs = [];
 $faqs_by_category = [];
-foreach ($faqs as $faq) {
-  $faqs_by_category[$faq['category']][] = $faq;
-}
-
-// Structured data for FAQPage
 $faq_schema_items = [];
-foreach ($faqs as $faq) {
-  $faq_schema_items[] = [
-    '@type' => 'Question',
-    'name' => $faq['question'],
-    'acceptedAnswer' => [
-      '@type' => 'Answer',
-      'text' => strip_tags($faq['answer'])
-    ]
-  ];
+$faq_data_error = false;
+$faq_error_message = '';
+
+if (!isset($pdo) || !($pdo instanceof PDO)) {
+  $faq_data_error = true;
+  $faq_error_message = t('common.form_error_default', 'Vi kunne ikke hente FAQ-indholdet lige nu. Prøv igen senere eller kontakt support.');
+  error_log('[FAQ] PDO instance is missing for faq.php');
+} else {
+  try {
+    $categories_sql = "SELECT DISTINCT category FROM faq_items ORDER BY category";
+    $categories = $pdo->query($categories_sql)->fetchAll(PDO::FETCH_COLUMN);
+
+    if ($selected_category) {
+      $faq_sql = "
+            SELECT
+                id,
+                category,
+                " . ($lang === 'da' ? 'question_da AS question' : 'question_en AS question') . ",
+                " . ($lang === 'da' ? 'answer_da AS answer' : 'answer_en AS answer') . ",
+                keywords,
+                helpful_count,
+                not_helpful_count,
+                order_index
+            FROM faq_items
+            WHERE category = :category
+            ORDER BY order_index ASC, id ASC
+        ";
+      $stmt = $pdo->prepare($faq_sql);
+      $stmt->execute(['category' => $selected_category]);
+    } else {
+      $faq_sql = "
+            SELECT
+                id,
+                category,
+                " . ($lang === 'da' ? 'question_da AS question' : 'question_en AS question') . ",
+                " . ($lang === 'da' ? 'answer_da AS answer' : 'answer_en AS answer') . ",
+                keywords,
+                helpful_count,
+                not_helpful_count,
+                order_index
+            FROM faq_items
+            ORDER BY category, order_index ASC, id ASC
+        ";
+      $stmt = $pdo->query($faq_sql);
+    }
+
+    $faqs = $stmt->fetchAll();
+
+    foreach ($faqs as $faq) {
+      $faqs_by_category[$faq['category']][] = $faq;
+      $faq_schema_items[] = [
+        '@type' => 'Question',
+        'name' => $faq['question'],
+        'acceptedAnswer' => [
+          '@type' => 'Answer',
+          'text' => strip_tags($faq['answer'])
+        ]
+      ];
+    }
+  } catch (Throwable $e) {
+    $faq_data_error = true;
+    $faq_error_message = t('common.form_error_default', 'Vi kunne ikke hente FAQ-indholdet lige nu. Prøv igen senere eller kontakt support.');
+    error_log('[FAQ] Failed to render faq.php: ' . $e->getMessage());
+    $faqs = [];
+    $faqs_by_category = [];
+    $faq_schema_items = [];
+  }
 }
 
 $structured_data = [
@@ -122,100 +136,121 @@ include 'includes/site-header.php';
     </div>
   </section>
 
-  <!-- Category Filter -->
-  <section class="py-8 border-b border-gray-800">
-    <div class="container mx-auto px-4">
-      <div class="flex flex-wrap justify-center gap-3">
-        <a href="faq.php"
-          class="px-4 py-2 rounded-lg transition-colors <?= $selected_category === null ? 'bg-amber-400 text-black font-semibold' : 'bg-gray-800 hover:bg-gray-700 text-gray-300' ?>">
-          <?= t('faq.filter.all') ?>
-        </a>
-        <?php foreach ($categories as $cat): ?>
-          <a href="faq.php?category=<?= urlencode($cat) ?>"
-            class="px-4 py-2 rounded-lg transition-colors <?= $selected_category === $cat ? 'bg-amber-400 text-black font-semibold' : 'bg-gray-800 hover:bg-gray-700 text-gray-300' ?>">
-            <?= htmlspecialchars($cat) ?>
+  <?php if ($faq_data_error): ?>
+    <section class="py-16">
+      <div class="container mx-auto px-4">
+        <div class="glass-effect rounded-2xl p-8 text-center border border-red-500/30">
+          <h2 class="text-2xl font-bold mb-4 text-white">
+            <?= t('faq.error.title', 'FAQ-indholdet er midlertidigt utilgængeligt') ?>
+          </h2>
+          <p class="text-gray-300 mb-6">
+            <?= htmlspecialchars($faq_error_message) ?>
+          </p>
+          <a href="contact.php" class="inline-flex items-center gap-2 px-6 py-3 bg-amber-400 text-black font-semibold rounded-lg hover:bg-amber-500 transition-colors">
+            <?= t('common.contact_support', 'Kontakt support') ?>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
           </a>
-        <?php endforeach; ?>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  <?php else: ?>
+    <!-- Category Filter -->
+    <section class="py-8 border-b border-gray-800">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-wrap justify-center gap-3">
+          <a href="faq.php"
+            class="px-4 py-2 rounded-lg transition-colors <?= $selected_category === null ? 'bg-amber-400 text-black font-semibold' : 'bg-gray-800 hover:bg-gray-700 text-gray-300' ?>">
+            <?= t('faq.filter.all') ?>
+          </a>
+          <?php foreach ($categories as $cat): ?>
+            <a href="faq.php?category=<?= urlencode($cat) ?>"
+              class="px-4 py-2 rounded-lg transition-colors <?= $selected_category === $cat ? 'bg-amber-400 text-black font-semibold' : 'bg-gray-800 hover:bg-gray-700 text-gray-300' ?>">
+              <?= htmlspecialchars($cat) ?>
+            </a>
+          <?php endforeach; ?>
+        </div>
+      </div>
+    </section>
 
-  <!-- FAQ Accordion -->
-  <section class="py-16">
-    <div class="container mx-auto px-4">
-      <div class="max-w-4xl mx-auto">
-        <?php if (empty($faqs)): ?>
-          <div class="text-center py-16">
-            <p class="text-xl text-gray-400"><?= t('faq.empty.message') ?></p>
-          </div>
-        <?php else: ?>
-          <?php foreach ($faqs_by_category as $category => $category_faqs): ?>
-            <!-- Category Header -->
-            <div class="mb-8">
-              <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
-                <span class="text-amber-400"><?= htmlspecialchars($category) ?></span>
-                <span class="text-sm text-gray-400 font-normal">(<?= count($category_faqs) ?> <?= t('faq.questions') ?>)</span>
-              </h2>
+    <!-- FAQ Accordion -->
+    <section class="py-16">
+      <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto">
+          <?php if (empty($faqs)): ?>
+            <div class="text-center py-16">
+              <p class="text-xl text-gray-400"><?= t('faq.empty.message') ?></p>
+            </div>
+          <?php else: ?>
+            <?php foreach ($faqs_by_category as $category => $category_faqs): ?>
+              <!-- Category Header -->
+              <div class="mb-8">
+                <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                  <span class="text-amber-400"><?= htmlspecialchars($category) ?></span>
+                  <span class="text-sm text-gray-400 font-normal">(<?= count($category_faqs) ?> <?= t('faq.questions') ?>)</span>
+                </h2>
 
-              <!-- FAQ Items -->
-              <div class="space-y-4">
-                <?php foreach ($category_faqs as $faq): ?>
-                  <div class="faq-item glass-effect rounded-xl overflow-hidden" data-faq-id="<?= $faq['id'] ?>">
-                    <!-- Question (clickable) -->
-                    <button class="faq-question w-full text-left px-6 py-5 flex items-center justify-between hover:bg-gray-800/50 transition-colors"
-                      aria-expanded="false"
-                      aria-controls="faq-answer-<?= $faq['id'] ?>">
-                      <span class="text-lg font-semibold text-white pr-4"><?= htmlspecialchars($faq['question']) ?></span>
-                      <svg class="faq-icon w-6 h-6 text-amber-400 flex-shrink-0 transition-transform duration-300"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                      </svg>
-                    </button>
+                <!-- FAQ Items -->
+                <div class="space-y-4">
+                  <?php foreach ($category_faqs as $faq): ?>
+                    <div class="faq-item glass-effect rounded-xl overflow-hidden" data-faq-id="<?= $faq['id'] ?>">
+                      <!-- Question (clickable) -->
+                      <button class="faq-question w-full text-left px-6 py-5 flex items-center justify-between hover:bg-gray-800/50 transition-colors"
+                        aria-expanded="false"
+                        aria-controls="faq-answer-<?= $faq['id'] ?>">
+                        <span class="text-lg font-semibold text-white pr-4"><?= htmlspecialchars($faq['question']) ?></span>
+                        <svg class="faq-icon w-6 h-6 text-amber-400 flex-shrink-0 transition-transform duration-300"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                      </button>
 
-                    <!-- Answer (collapsible) -->
-                    <div id="faq-answer-<?= $faq['id'] ?>"
-                      class="faq-answer hidden px-6 pb-5"
-                      role="region">
-                      <div class="pt-4 border-t border-gray-700">
-                        <p class="text-gray-300 leading-relaxed mb-4">
-                          <?= nl2br(htmlspecialchars($faq['answer'])) ?>
-                        </p>
+                      <!-- Answer (collapsible) -->
+                      <div id="faq-answer-<?= $faq['id'] ?>"
+                        class="faq-answer hidden px-6 pb-5"
+                        role="region">
+                        <div class="pt-4 border-t border-gray-700">
+                          <p class="text-gray-300 leading-relaxed mb-4">
+                            <?= nl2br(htmlspecialchars($faq['answer'])) ?>
+                          </p>
 
-                        <!-- Helpfulness Feedback -->
-                        <div class="flex items-center gap-4 pt-4 border-t border-gray-800">
-                          <span class="text-sm text-gray-400"><?= t('faq.helpful.question') ?></span>
-                          <div class="flex items-center gap-2">
-                            <button class="faq-helpful-btn px-3 py-1 bg-gray-800 hover:bg-green-600 rounded-lg transition-colors text-sm flex items-center gap-1"
-                              data-faq-id="<?= $faq['id'] ?>"
-                              data-vote="helpful">
-                              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
-                              </svg>
-                              <span class="helpful-count"><?= $faq['helpful_count'] ?></span>
-                            </button>
-                            <button class="faq-helpful-btn px-3 py-1 bg-gray-800 hover:bg-red-600 rounded-lg transition-colors text-sm flex items-center gap-1"
-                              data-faq-id="<?= $faq['id'] ?>"
-                              data-vote="not-helpful">
-                              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5"></path>
-                              </svg>
-                              <span class="not-helpful-count"><?= $faq['not_helpful_count'] ?></span>
-                            </button>
+                          <!-- Helpfulness Feedback -->
+                          <div class="flex items-center gap-4 pt-4 border-t border-gray-800">
+                            <span class="text-sm text-gray-400"><?= t('faq.helpful.question') ?></span>
+                            <div class="flex items-center gap-2">
+                              <button class="faq-helpful-btn px-3 py-1 bg-gray-800 hover:bg-green-600 rounded-lg transition-colors text-sm flex items-center gap-1"
+                                data-faq-id="<?= $faq['id'] ?>"
+                                data-vote="helpful">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+                                </svg>
+                                <span class="helpful-count"><?= $faq['helpful_count'] ?></span>
+                              </button>
+                              <button class="faq-helpful-btn px-3 py-1 bg-gray-800 hover:bg-red-600 rounded-lg transition-colors text-sm flex items-center gap-1"
+                                data-faq-id="<?= $faq['id'] ?>"
+                                data-vote="not-helpful">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5"></path>
+                                </svg>
+                                <span class="not-helpful-count"><?= $faq['not_helpful_count'] ?></span>
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                <?php endforeach; ?>
+                  <?php endforeach; ?>
+                </div>
               </div>
-            </div>
-          <?php endforeach; ?>
-        <?php endif; ?>
+            <?php endforeach; ?>
+          <?php endif; ?>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  <?php endif; ?>
 
   <!-- CTA Section -->
   <section class="py-16 bg-gradient-to-r from-amber-400/10 to-amber-600/10 border-y border-amber-400/20">

@@ -12,6 +12,26 @@ require_once __DIR__ . '/env.php';
 require_once __DIR__ . '/i18n.php';
 
 /**
+ * Ensure that a PDO instance is available before running queries.
+ *
+ * @param string $context Helpful identifier for error logs
+ * @return PDO
+ * @throws RuntimeException when the PDO instance is missing
+ */
+function bbx_require_pdo(string $context): PDO
+{
+  global $pdo;
+
+  if ($pdo instanceof PDO) {
+    return $pdo;
+  }
+
+  $message = "[DB] PDO instance is not available ({$context}).";
+  error_log($message);
+  throw new RuntimeException($message);
+}
+
+/**
  * Get all published blog posts with pagination
  *
  * @param int $page Current page number
@@ -21,7 +41,7 @@ require_once __DIR__ . '/i18n.php';
  */
 function bbx_get_blog_posts(int $page = 1, int $per_page = 10, ?string $category = null): array
 {
-  global $pdo;
+  $pdo = bbx_require_pdo(__FUNCTION__);
 
   $offset = ($page - 1) * $per_page;
   $lang = bbx_get_language();
@@ -76,7 +96,7 @@ function bbx_get_blog_posts(int $page = 1, int $per_page = 10, ?string $category
  */
 function bbx_get_blog_post(string $slug): ?array
 {
-  global $pdo;
+  $pdo = bbx_require_pdo(__FUNCTION__);
 
   $lang = bbx_get_language();
 
@@ -124,7 +144,7 @@ function bbx_get_blog_post(string $slug): ?array
  */
 function bbx_get_blog_posts_count(?string $category = null): int
 {
-  global $pdo;
+  $pdo = bbx_require_pdo(__FUNCTION__);
 
   $sql = "SELECT COUNT(*) FROM blog_posts WHERE status = 'published' AND publish_date <= NOW()";
 
@@ -150,7 +170,7 @@ function bbx_get_blog_posts_count(?string $category = null): int
  */
 function bbx_get_blog_categories(): array
 {
-  global $pdo;
+  $pdo = bbx_require_pdo(__FUNCTION__);
 
   $sql = "
         SELECT DISTINCT category
@@ -173,7 +193,7 @@ function bbx_get_blog_categories(): array
  */
 function bbx_get_related_posts(int $post_id, int $limit = 3): array
 {
-  global $pdo;
+  $pdo = bbx_require_pdo(__FUNCTION__);
   $lang = bbx_get_language();
 
   // Get current post's category

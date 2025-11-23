@@ -550,7 +550,194 @@ $ch = curl_init('https://generativelanguage.googleapis.com/v1beta/models/gemini-
 
 ---
 
-**Prepared by:** GitHub Copilot (self-audit)
-**Commit:** 744cdc0 (navigation fix)
-**Status:** Navigation ✅ FIXED | Testing ⚠️ PENDING
+**Prepared by:** GitHub Copilot (self-audit)  
+**Commit:** b56daff (navigation CSS architecture fix)  
+**Status:** Navigation ✅ FIXED (pending visual verification) | Testing 🔄 IN PROGRESS  
 **Next Review:** Efter cross-browser testing
+
+---
+
+## 🧪 LIVE TESTING LOG
+
+### Test Session #1 - November 23, 2025
+
+#### Test Setup
+- **Server:** PHP 8.x built-in server (localhost:8000)
+- **Commit:** b56daff - "fix(nav): remove inline styles, use external CSS with proper specificity"
+- **Browsers Available:** Chrome, Brave, Edge, Firefox
+- **Device Emulation:** Chrome DevTools (iPhone 12 Pro, Samsung Galaxy S21, iPad)
+
+#### Changes Implemented in b56daff
+1. ✅ Removed 70+ lines duplicate inline navigation CSS from site-header.php
+2. ✅ Updated `aig_nav_class()` to return `'nav-link-active'` instead of Tailwind utilities
+3. ✅ Removed `!important` flags from style.css (no longer needed)
+4. ✅ Added `.nav-link-active` class with white color + amber underline
+5. ✅ Fixed `:visited` pseudo-class to suppress browser blue/purple defaults
+6. ✅ Added proper `:focus` styles with outline for accessibility
+7. ✅ Cleaned navigation HTML of redundant `text-gray-300`, `text-2xl` classes
+
+---
+
+### Visual Test Checklist
+
+#### Desktop Navigation (Chrome)
+- [ ] **Initial Load Test**
+  - [ ] All navigation links display as gray-300 (#d1d5db) - NOT blue
+  - [ ] Logo "Blackbox EYE" visible and styled correctly
+  - [ ] Language switcher (DA/EN) styled correctly
+  - [ ] "Agent Login" CTA button styled correctly (amber border)
+
+- [ ] **Hover State Test**
+  - [ ] Hover over "Om os" → changes to amber-400 (#fbbf24)
+  - [ ] Hover over "Produkter" → changes to amber-400
+  - [ ] Hover over "Kundecases" → changes to amber-400
+  - [ ] Hover over "Priser" → changes to amber-400
+  - [ ] Hover over "Kontakt" → changes to amber-400
+  - [ ] Underline animation appears on hover (0.3s transition)
+
+- [ ] **Active Page State Test**
+  - [ ] Current page link shows WHITE color (#ffffff)
+  - [ ] Current page link has AMBER underline (border-bottom: 2px solid #fbbf24)
+  - [ ] Current page link has font-weight: 600 (semibold)
+
+- [ ] **Visited State Test**
+  - [ ] Click "Om os", then click "Produkter"
+  - [ ] Go back to homepage - verify "Om os" visited link is STILL gray-300
+  - [ ] Verify NO purple/blue color on visited links
+  - [ ] Click through ALL links and verify visited color persistence
+
+- [ ] **Language Switcher Test**
+  - [ ] Click "EN" - page reloads with English text
+  - [ ] Navigation maintains correct colors in English
+  - [ ] Click "DA" - page reloads with Danish text
+  - [ ] Navigation maintains correct colors in Danish
+
+#### Mobile Menu (Chrome DevTools Emulation)
+- [ ] **iPhone 12 Pro (390x844px) Test**
+  - [ ] Desktop navigation hides (md:hidden)
+  - [ ] Hamburger button visible in top-right
+  - [ ] Hamburger button has NO white box behind it ✅ (sr-only removed)
+  - [ ] Click hamburger → mobile menu slides in from right
+  - [ ] Overlay appears (bg-black/80 backdrop-blur-sm)
+  - [ ] Mobile nav links display as gray-300 (#d1d5db)
+  - [ ] Current page link shows white + font-weight: 600
+  - [ ] Close button (X) works - menu slides out
+  - [ ] Click overlay → menu closes
+
+- [ ] **Samsung Galaxy S21 (360x800px) Test**
+  - [ ] Same tests as iPhone
+  - [ ] Verify no horizontal scroll issues
+  - [ ] Verify touch targets are large enough (44x44px minimum)
+
+- [ ] **iPad (768x1024px) Test**
+  - [ ] Desktop navigation displays (md:flex)
+  - [ ] Mobile menu button hidden
+  - [ ] Navigation behaves same as desktop
+
+#### Cross-Browser Testing
+- [ ] **Brave Browser (Desktop)**
+  - [ ] Repeat all desktop navigation tests
+  - [ ] Test with Shields UP
+  - [ ] Test with Shields DOWN
+  - [ ] **Force Dark Mode Test:**
+    - [ ] Enable "Force dark mode for websites" in brave://flags
+    - [ ] Visit localhost:8000
+    - [ ] Matrix animation renders correctly (NOT inverted)
+    - [ ] Hero gradient text has NO white boxes
+    - [ ] Navigation colors maintained (#d1d5db gray, NOT inverted)
+    - [ ] Mobile menu overlay (bg-black/80) works correctly
+
+- [ ] **Firefox (Desktop)**
+  - [ ] Repeat all desktop navigation tests
+  - [ ] Verify :visited pseudo-class works (may have stricter privacy)
+  - [ ] Check hover transitions smooth (Firefox rendering engine)
+
+- [ ] **Edge (Desktop)**
+  - [ ] Repeat all desktop navigation tests
+  - [ ] Verify Chromium rendering matches Chrome
+
+---
+
+### Lighthouse Audit Results
+
+#### Desktop Audit (localhost:8000)
+**Run Date:** [PENDING]  
+**Commit:** b56daff
+
+- **Performance:** [ ] / 100
+  - LCP (Largest Contentful Paint): [ ] s (target: < 2.5s)
+  - FID (First Input Delay): [ ] ms (target: < 100ms)
+  - CLS (Cumulative Layout Shift): [ ] (target: < 0.1)
+  - Speed Index: [ ] s
+  - Time to Interactive: [ ] s
+  - Total Blocking Time: [ ] ms
+
+- **Accessibility:** [ ] / 100
+  - [ ] Color contrast ratios pass WCAG AA (4.5:1 for normal text)
+  - [ ] All links have accessible names
+  - [ ] Focus indicators visible and sufficient
+  - [ ] ARIA attributes correctly implemented
+
+- **Best Practices:** [ ] / 100
+  - [ ] HTTPS (N/A on localhost)
+  - [ ] No browser errors in console
+  - [ ] Images have correct aspect ratios
+  - [ ] No deprecated APIs used
+
+- **SEO:** [ ] / 100
+  - [ ] Meta description present and unique
+  - [ ] Title tag present and unique
+  - [ ] Links have descriptive text
+  - [ ] Page has valid hreflang
+  - [ ] Structured data valid (BlogPosting, FAQPage, Organization)
+
+#### Mobile Audit (Emulated Nexus 5X)
+**Run Date:** [PENDING]  
+**Commit:** b56daff
+
+- **Performance:** [ ] / 100
+  - LCP: [ ] s
+  - FID: [ ] ms
+  - CLS: [ ]
+
+- **Accessibility:** [ ] / 100
+- **Best Practices:** [ ] / 100
+- **SEO:** [ ] / 100
+  - [ ] Viewport meta tag present
+  - [ ] Text readable without zooming
+  - [ ] Tap targets sized appropriately (48x48px minimum)
+
+---
+
+### Issues Found During Testing
+
+#### Critical Issues (Must Fix Before Production)
+*[None found yet - testing in progress]*
+
+#### Medium Priority Issues
+*[None found yet - testing in progress]*
+
+#### Low Priority / Nice-to-Have
+*[None found yet - testing in progress]*
+
+---
+
+### Test Completion Summary
+
+**Tests Completed:** 0 / 54  
+**Tests Passed:** 0  
+**Tests Failed:** 0  
+**Tests Skipped:** 0  
+
+**Overall Status:** 🟡 TESTING IN PROGRESS
+
+**Next Steps:**
+1. Complete visual verification in Chrome DevTools
+2. Run Lighthouse audit (Desktop + Mobile)
+3. Test in Brave with dark mode forced
+4. Test in Firefox and Edge
+5. Document all findings
+6. Create fix commits if issues found
+7. Final push to production
+
+---

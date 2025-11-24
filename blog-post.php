@@ -140,7 +140,9 @@ include 'includes/site-header.php';
           <div class="aspect-video bg-gray-800 rounded-2xl overflow-hidden mb-12">
             <img src="<?= htmlspecialchars($post['featured_image']) ?>"
               alt="<?= htmlspecialchars($post['title']) ?>"
-              class="w-full h-full object-cover">
+              class="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async">
           </div>
         <?php endif; ?>
 
@@ -202,6 +204,7 @@ include 'includes/site-header.php';
                       <img src="<?= htmlspecialchars($related['featured_image']) ?>"
                         alt="<?= htmlspecialchars($related['title']) ?>"
                         loading="lazy"
+                        decoding="async"
                         class="w-full h-full object-cover">
                     </div>
                   <?php endif; ?>

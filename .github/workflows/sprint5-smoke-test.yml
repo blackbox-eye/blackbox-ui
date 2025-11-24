@@ -13,21 +13,21 @@ on:
 jobs:
   smoke-test:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
           extensions: mbstring, json
-          
+
       - name: Start PHP server
         run: |
           php -S localhost:8000 &
           sleep 2
-          
+
       - name: Test endpoints
         run: |
           curl -f http://localhost:8000/index.php || exit 1
@@ -35,12 +35,12 @@ jobs:
           curl -f http://localhost:8000/pricing.php || exit 1
           curl -f http://localhost:8000/free-scan.php || exit 1
           echo "✅ All pages load successfully"
-          
+
       - name: Check JavaScript syntax
         run: |
           npx esprima assets/js/site.js || exit 1
           echo "✅ JavaScript syntax valid"
-          
+
       - name: Verify translation files
         run: |
           php -r "json_decode(file_get_contents('lang/da.json'), true) or exit(1);"
@@ -49,20 +49,20 @@ jobs:
 
   lighthouse:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          
+
       - name: Start PHP server
         run: |
           php -S localhost:8000 &
           sleep 2
-          
+
       - name: Audit with Lighthouse CI
         uses: treosh/lighthouse-ci-action@v10
         with:
@@ -74,7 +74,7 @@ jobs:
           uploadArtifacts: true
           temporaryPublicStorage: true
           budgetPath: ./.lighthouserc.json
-          
+
       - name: Check Lighthouse scores
         run: |
           echo "📊 Lighthouse audit complete"

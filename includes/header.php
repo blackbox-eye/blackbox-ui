@@ -22,6 +22,7 @@ require __DIR__ . '/../db.php';
   <link
     href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap"
     rel="stylesheet"
+    crossorigin="anonymous"
   >
 
   <!-- Hoved-stylesheet -->

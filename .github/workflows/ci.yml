@@ -41,6 +41,7 @@ jobs:
   build:
     name: "✅ Build & Verify"
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     permissions:
       contents: read
     steps:
@@ -90,6 +91,33 @@ jobs:
             echo "✅ Deployment conditions met"
           fi
 
+      - name: Validate deployment secrets
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_REMOTE_PATH: ${{ secrets.FTP_REMOTE_PATH }}
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          echo "🔐 Validating required deployment secrets..."
+          missing=0
+          for var in FTP_HOST FTP_USERNAME FTP_PASSWORD FTP_REMOTE_PATH CF_ZONE_ID CF_API_TOKEN; do
+            if [ -z "${!var}" ]; then
+              echo "::error::$var secret is not configured"
+              missing=1
+            else
+              echo "   ✓ $var detected"
+            fi
+          done
+
+          if [ $missing -ne 0 ]; then
+            echo "❌ Missing required secrets. Aborting pipeline."
+            exit 1
+          fi
+
+          echo "✅ All required secrets are available"
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # JOB 2: SECURE DELETE index.html ON REMOTE
 # Removes static index.html to ensure index.php is served (DirectoryIndex priority)
@@ -99,6 +127,7 @@ jobs:
     name: "🗑️  Secure Delete index.html"
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     if: github.ref == 'refs/heads/main'
     permissions: {}  # No GitHub token permissions needed
     steps:
@@ -178,6 +207,7 @@ jobs:
     name: "🚀 Secure FTP Deploy"
     needs: delete-index-html
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     if: github.ref == 'refs/heads/main'
     permissions:
       contents: read
@@ -236,6 +266,7 @@ jobs:
     name: "🧪 Smoke Tests"
     needs: ftp-deploy
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     if: github.ref == 'refs/heads/main'
     permissions: {}  # No GitHub token permissions needed
     steps:
@@ -266,15 +297,12 @@ jobs:
 
       - name: Configure test environment
         id: config
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
         run: |
-          # Determine base URL for testing
-          if [ -n "${{ secrets.SITE_URL }}" ]; then
-            SITE_URL="${{ secrets.SITE_URL }}"
-            echo "🌐 Using custom SITE_URL: $SITE_URL"
-          else
-            SITE_URL="http://${{ secrets.FTP_HOST }}"
-            echo "🌐 Using FTP_HOST as base URL: $SITE_URL"
-          fi
+          # Ensure SITE_URL is set (previous steps export to GITHUB_ENV)
+          SITE_URL="http://$FTP_HOST"
+          echo "Current SITE_URL: $SITE_URL"
 
           # Remove trailing slash if present
           SITE_URL="${SITE_URL%/}"

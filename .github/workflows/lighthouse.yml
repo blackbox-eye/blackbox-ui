@@ -9,6 +9,7 @@ jobs:
   lighthouse:
     name: Lighthouse CI
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -17,6 +18,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+
+      - name: Validate Lighthouse token
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -z "$LHCI_GITHUB_APP_TOKEN" ]; then
+            echo "::error::Missing GitHub token for Lighthouse CI"
+            exit 1
+          fi
+          echo "GitHub token available for Lighthouse CI."
 
       - name: Run Lighthouse (treosh action)
         uses: treosh/lighthouse-ci-action@v9
@@ -27,6 +38,6 @@ jobs:
           urls: |
             https://blackbox.codes
           uploadArtifacts: true
-          artifactName: lighthouse_results
+          artifactName: lighthouse-results
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}

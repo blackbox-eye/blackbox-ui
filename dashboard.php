@@ -8,12 +8,13 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
 ?>
 <!DOCTYPE html>
 <html lang="da">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Chosen Palette: Aura Gold & Deep Space -->
     <!-- Application Structure Plan: Applikationen benytter en avanceret CSS Grid-struktur låst til 100% af skærmhøjden for at eliminere vertikal scrolling. Layoutet er defineret via 'grid-template-areas', som intelligent omstrukturerer modulernes placering ved forskellige skærmstørrelser (breakpoints) for optimal pladsudnyttelse. Dette skaber en fast, men fuldt responsiv oplevelse. Kerneinteraktionen er centreret omkring 'progressive disclosure' (faneblade, modaler) for at håndtere høj informations-tæthed inden for den faste ramme. -->
-    <!-- Visualization & Content Choices: 
+    <!-- Visualization & Content Choices:
         - Rapport Info: Global trusselsvisualisering -> Mål: Skabe et "wow-faktor" kommandocenter -> Metode: Animeret HTML Canvas -> Interaktion: Passiv realtidsfølelse -> Begrundelse: Central, visuelt engagerende komponent.
         - Rapport Info: Serverbelastning over tid -> Mål: Vise trends -> Metode: Chart.js linjegraf -> Interaktion: Hover for tooltips -> Begrundelse: Standard, klar visualisering af tidsseriedata.
         - Rapport Info: Aktive alarmer -> Mål: Præsentere handlingsorienterede events -> Metode: Dynamisk genereret liste af "glas"-kort -> Interaktion: Klik på 'Undersøg' åbner en modal -> Begrundelse: Isolerer detaljer og holder brugeren i kontekst.
@@ -23,10 +24,12 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <title>Blackbox EYE // Aura Kontrolpanel</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"
+        integrity="sha256-s4B2di9zY7yekStouOA0gmeY213ya7YfAA7C56MTe8c="
+        crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet" crossorigin="anonymous">
     <style>
         :root {
             --brand-gold: #D4AF35;
@@ -40,7 +43,7 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
             --text-secondary: #8B949E;
             --critical: #F85149;
         }
-        
+
         body {
             background-color: var(--background-dark);
             font-family: 'Roboto Condensed', sans-serif;
@@ -54,10 +57,13 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
             font-family: 'Orbitron', sans-serif;
             letter-spacing: 0.05em;
         }
-        
+
         .background-container {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             z-index: -2;
         }
 
@@ -68,19 +74,23 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
             transform: translate(-50%, -50%);
             width: 80vh;
             height: 80vh;
-            background: url('https://i.imgur.com/uF6X2xH.png') no-repeat center center; /* Placeholder for logo emblem */
+            background: url('https://i.imgur.com/uF6X2xH.png') no-repeat center center;
+            /* Placeholder for logo emblem */
             background-size: contain;
             opacity: 0.02;
         }
 
         .noise-overlay {
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1000 1000' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
             opacity: 0.04;
             pointer-events: none;
         }
-        
+
         .glass-module {
             background: var(--glass-bg);
             backdrop-filter: blur(var(--glass-blur));
@@ -91,10 +101,17 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
             background-clip: padding-box;
             border-image: linear-gradient(135deg, var(--brand-gold-transparent-heavy), var(--brand-gold-transparent-light)) 1;
         }
-        
+
         @keyframes pulse-critical {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(248, 81, 73, 0.4); }
-            70% { box-shadow: 0 0 10px 15px rgba(248, 81, 73, 0); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(248, 81, 73, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 10px 15px rgba(248, 81, 73, 0);
+            }
         }
 
         .pulse-critical {
@@ -124,13 +141,30 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
                 "nav status status status net net net net ai ai ai";
         }
 
-        #nav-menu { grid-area: nav; }
-        #threat-module { grid-area: map; }
-        #alerts-module { grid-area: alerts; }
-        #status-module { grid-area: status; }
-        #net-module { grid-area: net; }
-        #ai-module { grid-area: ai; }
-        
+        #nav-menu {
+            grid-area: nav;
+        }
+
+        #threat-module {
+            grid-area: map;
+        }
+
+        #alerts-module {
+            grid-area: alerts;
+        }
+
+        #status-module {
+            grid-area: status;
+        }
+
+        #net-module {
+            grid-area: net;
+        }
+
+        #ai-module {
+            grid-area: ai;
+        }
+
         @media (max-width: 1440px) {
             #main-grid {
                 grid-template-columns: 250px repeat(10, 1fr);
@@ -148,14 +182,15 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
                     "nav net-spare net-spare net-spare net-spare net-spare net net net net net"
                     "nav net-spare net-spare net-spare net-spare net-spare net net net net net";
             }
+
             /* Adjust module visibility or content for this breakpoint if needed */
         }
-        
+
         @media (max-width: 1024px) {
-             #main-grid {
+            #main-grid {
                 grid-template-columns: repeat(12, 1fr);
                 grid-template-rows: auto;
-                 grid-template-areas:
+                grid-template-areas:
                     "nav nav nav nav nav nav nav nav nav nav nav nav"
                     "map map map map map map map map map map map map"
                     "map map map map map map map map map map map map"
@@ -163,13 +198,18 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
                     "alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts"
                     "status status status status status status net net net net net net"
                     "ai ai ai ai ai ai ai ai ai ai ai ai";
-                 overflow-y: auto; /* Allow scroll only on smallest screens */
+                overflow-y: auto;
+                /* Allow scroll only on smallest screens */
             }
-             #nav-menu { flex-direction: row; justify-content: space-around; }
-        }
 
+            #nav-menu {
+                flex-direction: row;
+                justify-content: space-around;
+            }
+        }
     </style>
 </head>
+
 <body>
     <div class="background-container">
         <div class="watermark-logo"></div>
@@ -188,25 +228,33 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
             <ul class="space-y-2 flex-grow">
                 <li>
                     <a href="dashboard.php" class="flex items-center p-3 text-lg rounded-lg transition-colors <?php echo $currentScript === 'dashboard.php' ? 'text-[var(--brand-gold)] bg-white/5' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">
-                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
                         Dashboard
                     </a>
                 </li>
                 <li>
                     <a href="admin.php" class="flex items-center p-3 text-lg rounded-lg transition-colors <?php echo $currentScript === 'admin.php' ? 'text-[var(--brand-gold)] bg-white/5' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">
-                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
                         Brugerstyring
                     </a>
                 </li>
                 <li>
                     <a href="download-logs.php" class="flex items-center p-3 text-lg rounded-lg transition-colors <?php echo $currentScript === 'download-logs.php' ? 'text-[var(--brand-gold)] bg-white/5' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">
-                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
                         Systemlogs
                     </a>
                 </li>
                 <li>
                     <a href="settings.php" class="flex items-center p-3 text-lg rounded-lg transition-colors <?php echo $currentScript === 'settings.php' ? 'text-[var(--brand-gold)] bg-white/5' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">
-                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7h2a2 2 0 012 2v10a2 2 0 01-2 2H7a2 2 0 01-2-2V9a2 2 0 012-2h2m4 0h-4m4 0v-2a2 2 0 00-2-2h-2a2 2 0 00-2 2v2m4 0h-4"></path></svg>
+                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7h2a2 2 0 012 2v10a2 2 0 01-2 2H7a2 2 0 01-2-2V9a2 2 0 012-2h2m4 0h-4m4 0v-2a2 2 0 00-2-2h-2a2 2 0 00-2 2v2m4 0h-4"></path>
+                        </svg>
                         Indstillinger
                     </a>
                 </li>
@@ -219,7 +267,7 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
         </nav>
 
         <div id="threat-module" class="glass-module flex flex-col">
-             <div class="flex border-b border-[var(--border-color)] px-4">
+            <div class="flex border-b border-[var(--border-color)] px-4">
                 <button data-target="map-content" class="tab-button font-brand p-4 text-[var(--brand-gold)] border-b-2 border-[var(--brand-gold)]">GLOBAL TRUSSELSOVERSIGT</button>
                 <button data-target="load-content" class="tab-button font-brand p-4 text-gray-400 border-b-2 border-transparent hover:text-white">SERVERBELASTNING</button>
             </div>
@@ -241,20 +289,36 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
         <div id="status-module" class="glass-module p-4 flex flex-col">
             <h2 class="font-brand text-lg text-white mb-4">SYSTEMSTATUS</h2>
             <ul class="space-y-4 text-sm flex-grow">
-                 <li class="flex justify-between items-center"><span>Firewall Service</span><span class="text-xs font-bold py-1 px-3 rounded-full bg-green-500/20 text-green-400">OPERATIONEL</span></li>
-                 <li class="flex justify-between items-center"><span>Threat Intel DB</span><span class="text-xs font-bold py-1 px-3 rounded-full bg-green-500/20 text-green-400">STABIL</span></li>
-                 <li class="flex justify-between items-center"><span>AI Core "GREY-E"</span><span class="text-xs font-bold py-1 px-3 rounded-full bg-green-500/20 text-green-400">AKTIV</span></li>
-                 <li class="flex justify-between items-center"><span>API Gateway</span><span class="text-xs font-bold py-1 px-3 rounded-full bg-yellow-500/20 text-yellow-400">HØJ LATENS</span></li>
-             </ul>
+                <li class="flex justify-between items-center"><span>Firewall Service</span><span class="text-xs font-bold py-1 px-3 rounded-full bg-green-500/20 text-green-400">OPERATIONEL</span></li>
+                <li class="flex justify-between items-center"><span>Threat Intel DB</span><span class="text-xs font-bold py-1 px-3 rounded-full bg-green-500/20 text-green-400">STABIL</span></li>
+                <li class="flex justify-between items-center"><span>AI Core "GREY-E"</span><span class="text-xs font-bold py-1 px-3 rounded-full bg-green-500/20 text-green-400">AKTIV</span></li>
+                <li class="flex justify-between items-center"><span>API Gateway</span><span class="text-xs font-bold py-1 px-3 rounded-full bg-yellow-500/20 text-yellow-400">HØJ LATENS</span></li>
+            </ul>
         </div>
 
         <div id="net-module" class="glass-module p-4 flex flex-col">
             <h2 class="font-brand text-lg text-white mb-4">NETVÆRKSOVERVÅGNING</h2>
             <ul class="space-y-4 text-sm flex-grow">
-                <li class="flex items-center"><span class="w-24">Port 22 (SSH)</span><div class="flex-grow bg-black/30 rounded-full h-2"><div class="bg-blue-400 h-2 rounded-full" style="width: 45%"></div></div></li>
-                <li class="flex items-center"><span class="w-24">Port 443 (HTTPS)</span><div class="flex-grow bg-black/30 rounded-full h-2"><div class="bg-yellow-400 h-2 rounded-full" style="width: 88%"></div></div></li>
-                <li class="flex items-center"><span class="w-24">Port 3306 (DB)</span><div class="flex-grow bg-black/30 rounded-full h-2"><div class="bg-red-500 h-2 rounded-full" style="width: 95%"></div></div></li>
-                <li class="flex items-center"><span class="w-24">Port 9200 (ES)</span><div class="flex-grow bg-black/30 rounded-full h-2"><div class="bg-blue-400 h-2 rounded-full" style="width: 20%"></div></div></li>
+                <li class="flex items-center"><span class="w-24">Port 22 (SSH)</span>
+                    <div class="flex-grow bg-black/30 rounded-full h-2">
+                        <div class="bg-blue-400 h-2 rounded-full" style="width: 45%"></div>
+                    </div>
+                </li>
+                <li class="flex items-center"><span class="w-24">Port 443 (HTTPS)</span>
+                    <div class="flex-grow bg-black/30 rounded-full h-2">
+                        <div class="bg-yellow-400 h-2 rounded-full" style="width: 88%"></div>
+                    </div>
+                </li>
+                <li class="flex items-center"><span class="w-24">Port 3306 (DB)</span>
+                    <div class="flex-grow bg-black/30 rounded-full h-2">
+                        <div class="bg-red-500 h-2 rounded-full" style="width: 95%"></div>
+                    </div>
+                </li>
+                <li class="flex items-center"><span class="w-24">Port 9200 (ES)</span>
+                    <div class="flex-grow bg-black/30 rounded-full h-2">
+                        <div class="bg-blue-400 h-2 rounded-full" style="width: 20%"></div>
+                    </div>
+                </li>
             </ul>
         </div>
 
@@ -279,12 +343,29 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const mockAlerts = [
-                { id: 'a1', severity: 'critical', title: 'Brute Force Angreb Opdaget', target: 'SSH på SRV-01', time: '2 min siden' },
-                { id: 'a2', severity: 'critical', title: 'Anormal Udgående Trafik', target: 'DB-CLUSTER-03', time: '5 min siden' },
-                { id: 'a3', severity: 'warning', title: 'Flere Fejlede Logins', target: 'Admin Portal', time: '12 min siden' },
+            const mockAlerts = [{
+                    id: 'a1',
+                    severity: 'critical',
+                    title: 'Brute Force Angreb Opdaget',
+                    target: 'SSH på SRV-01',
+                    time: '2 min siden'
+                },
+                {
+                    id: 'a2',
+                    severity: 'critical',
+                    title: 'Anormal Udgående Trafik',
+                    target: 'DB-CLUSTER-03',
+                    time: '5 min siden'
+                },
+                {
+                    id: 'a3',
+                    severity: 'warning',
+                    title: 'Flere Fejlede Logins',
+                    target: 'Admin Portal',
+                    time: '12 min siden'
+                },
             ];
-            
+
             const alertsContainer = document.getElementById('active-alerts-container');
             if (alertsContainer) {
                 mockAlerts.forEach(alert => {
@@ -303,7 +384,7 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
 
             const alertModal = document.getElementById('alertModal');
             const closeModal = document.getElementById('closeModal');
-            
+
             document.querySelectorAll('.open-modal-btn').forEach(button => {
                 button.addEventListener('click', () => {
                     alertModal.classList.remove('hidden');
@@ -322,7 +403,7 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
             tabButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     const targetId = button.dataset.target;
-                    
+
                     document.querySelectorAll('.tab-button').forEach(btn => {
                         btn.classList.remove('text-[var(--brand-gold)]', 'border-[var(--brand-gold)]');
                         btn.classList.add('text-gray-400', 'border-transparent');
@@ -343,28 +424,93 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
                 new Chart(serverLoadCtx, {
                     type: 'line',
                     data: {
-                        labels: Array.from({length: 12}, (_, i) => `${60 - i*5}m`),
-                        datasets: [
-                            { label: 'CPU Belastning', data: [22, 25, 30, 45, 50, 55, 60, 58, 52, 40, 35, 28].reverse(), borderColor: 'rgba(212, 175, 55, 1)', backgroundColor: 'rgba(212, 175, 55, 0.2)', borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0 },
-                            { label: 'Hukommelsesbrug', data: [15, 18, 22, 20, 28, 35, 33, 40, 38, 30, 25, 20].reverse(), borderColor: 'rgba(59, 130, 246, 1)', backgroundColor: 'rgba(59, 130, 246, 0.1)', borderWidth: 2, fill: false, tension: 0.4, pointRadius: 0 }
+                        labels: Array.from({
+                            length: 12
+                        }, (_, i) => `${60 - i*5}m`),
+                        datasets: [{
+                                label: 'CPU Belastning',
+                                data: [22, 25, 30, 45, 50, 55, 60, 58, 52, 40, 35, 28].reverse(),
+                                borderColor: 'rgba(212, 175, 55, 1)',
+                                backgroundColor: 'rgba(212, 175, 55, 0.2)',
+                                borderWidth: 2,
+                                fill: true,
+                                tension: 0.4,
+                                pointRadius: 0
+                            },
+                            {
+                                label: 'Hukommelsesbrug',
+                                data: [15, 18, 22, 20, 28, 35, 33, 40, 38, 30, 25, 20].reverse(),
+                                borderColor: 'rgba(59, 130, 246, 1)',
+                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                borderWidth: 2,
+                                fill: false,
+                                tension: 0.4,
+                                pointRadius: 0
+                            }
                         ]
                     },
                     options: {
-                        responsive: true, maintainAspectRatio: false,
-                        scales: { y: { beginAtZero: true, max: 100, ticks: { color: 'rgba(255,255,255,0.5)', callback: (v) => v + '%' }, grid: { color: 'rgba(255,255,255,0.1)' } }, x: { ticks: { color: 'rgba(255,255,255,0.5)' }, grid: { display: false } } },
-                        plugins: { legend: { position: 'top', align: 'end', labels: { color: 'rgba(255,255,255,0.8)'} } }
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: {
+                                    color: 'rgba(255,255,255,0.5)',
+                                    callback: (v) => v + '%'
+                                },
+                                grid: {
+                                    color: 'rgba(255,255,255,0.1)'
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    color: 'rgba(255,255,255,0.5)'
+                                },
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                align: 'end',
+                                labels: {
+                                    color: 'rgba(255,255,255,0.8)'
+                                }
+                            }
+                        }
                     }
                 });
             }
 
             // Threat Map Canvas
             const threatMapCanvas = document.getElementById('threatMapCanvas');
-            if(threatMapCanvas){
+            if (threatMapCanvas) {
                 const ctx = threatMapCanvas.getContext('2d');
                 let width, height, animationFrameId;
-                const points = Array.from({length: 15}, () => ({ x: Math.random(), y: Math.random(), radius: Math.random() * 3 + 1, alpha: 0, alphaChange: Math.random() * 0.02 + 0.01 }));
-                const arcs = Array.from({length: 5}, () => ({ startX: Math.random(), startY: Math.random(), endX: Math.random(), endY: Math.random(), progress: Math.random(), speed: Math.random() * 0.005 + 0.002 }));
-                
+                const points = Array.from({
+                    length: 15
+                }, () => ({
+                    x: Math.random(),
+                    y: Math.random(),
+                    radius: Math.random() * 3 + 1,
+                    alpha: 0,
+                    alphaChange: Math.random() * 0.02 + 0.01
+                }));
+                const arcs = Array.from({
+                    length: 5
+                }, () => ({
+                    startX: Math.random(),
+                    startY: Math.random(),
+                    endX: Math.random(),
+                    endY: Math.random(),
+                    progress: Math.random(),
+                    speed: Math.random() * 0.005 + 0.002
+                }));
+
                 const resizeCanvas = () => {
                     const container = threatMapCanvas.parentElement;
                     if (!container) return;
@@ -375,20 +521,46 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
                 };
 
                 function draw() {
-                    if(!ctx || !width || !height) return;
+                    if (!ctx || !width || !height) return;
                     ctx.clearRect(0, 0, width, height);
                     points.forEach(p => {
-                        ctx.beginPath(); ctx.arc(p.x * width, p.y * height, p.radius, 0, Math.PI * 2); ctx.fillStyle = `rgba(248, 81, 73, ${p.alpha})`; ctx.fill(); p.alpha += p.alphaChange; if(p.alpha > 1 || p.alpha < 0) p.alphaChange *= -1;
+                        ctx.beginPath();
+                        ctx.arc(p.x * width, p.y * height, p.radius, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(248, 81, 73, ${p.alpha})`;
+                        ctx.fill();
+                        p.alpha += p.alphaChange;
+                        if (p.alpha > 1 || p.alpha < 0) p.alphaChange *= -1;
                     });
                     arcs.forEach(a => {
-                        ctx.beginPath(); const cpX = (a.startX + a.endX) / 2 + (a.startY - a.endY) * 0.4; const cpY = (a.startY + a.endY) / 2 + (a.endX - a.startX) * 0.4; ctx.moveTo(a.startX * width, a.startY * height); ctx.quadraticCurveTo(cpX * width, cpY * height, a.endX * width, a.endY * height); ctx.strokeStyle = `rgba(212, 175, 55, 0.4)`; ctx.lineWidth = 1; ctx.stroke(); a.progress += a.speed; if(a.progress >= 1){ a.progress = 0; a.startX = Math.random(); a.startY = Math.random(); a.endX = Math.random(); a.endY = Math.random(); }
+                        ctx.beginPath();
+                        const cpX = (a.startX + a.endX) / 2 + (a.startY - a.endY) * 0.4;
+                        const cpY = (a.startY + a.endY) / 2 + (a.endX - a.startX) * 0.4;
+                        ctx.moveTo(a.startX * width, a.startY * height);
+                        ctx.quadraticCurveTo(cpX * width, cpY * height, a.endX * width, a.endY * height);
+                        ctx.strokeStyle = `rgba(212, 175, 55, 0.4)`;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                        a.progress += a.speed;
+                        if (a.progress >= 1) {
+                            a.progress = 0;
+                            a.startX = Math.random();
+                            a.startY = Math.random();
+                            a.endX = Math.random();
+                            a.endY = Math.random();
+                        }
                     });
                     animationFrameId = requestAnimationFrame(draw);
                 }
-                
+
                 new IntersectionObserver((entries) => {
                     const entry = entries[0];
-                    if (entry.isIntersecting) { resizeCanvas(); if (!animationFrameId) draw(); } else { cancelAnimationFrame(animationFrameId); animationFrameId = null; }
+                    if (entry.isIntersecting) {
+                        resizeCanvas();
+                        if (!animationFrameId) draw();
+                    } else {
+                        cancelAnimationFrame(animationFrameId);
+                        animationFrameId = null;
+                    }
                 }).observe(threatMapCanvas);
 
                 window.addEventListener('resize', resizeCanvas);
@@ -396,4 +568,5 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
         });
     </script>
 </body>
+
 </html>

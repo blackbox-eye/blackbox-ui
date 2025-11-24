@@ -127,6 +127,7 @@ include 'includes/site-header.php';
                     <img src="<?= htmlspecialchars($post['featured_image']) ?>"
                       alt="<?= htmlspecialchars($post['title']) ?>"
                       loading="lazy"
+                      decoding="async"
                       class="w-full h-full object-cover">
                   </div>
                 <?php endif; ?>

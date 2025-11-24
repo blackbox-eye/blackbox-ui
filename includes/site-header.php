@@ -195,7 +195,8 @@ if (!empty($disable_alphabot)) {
     <meta name="robots" content="<?= htmlspecialchars($meta_robots) ?>">
 
     <!-- Performance Optimization: Resource Hints -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
     <link rel="dns-prefetch" href="https://www.google.com">
     <link rel="dns-prefetch" href="https://generativelanguage.googleapis.com">
 
@@ -227,7 +228,7 @@ if (!empty($disable_alphabot)) {
     <meta name="twitter:image" content="<?= htmlspecialchars($meta_og_image) ?>">
 
     <!-- Tailwind CSS Production CDN (must load via script) -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com" crossorigin="anonymous"></script>
     <noscript>
         <style>
             body {
@@ -272,9 +273,9 @@ if (!empty($disable_alphabot)) {
         window.BBX_SITE_BASE_URL = "<?= htmlspecialchars(BBX_SITE_BASE_URL) ?>";
         window.RECAPTCHA_DEBUG = <?= BBX_DEBUG_RECAPTCHA ? 'true' : 'false' ?>;
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Chakra+Petch:wght@700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Chakra+Petch:wght@700&display=swap" rel="stylesheet" crossorigin="anonymous">
 
     <script type="application/ld+json">
         <?= json_encode($default_structured_data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) ?>

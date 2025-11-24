@@ -27,6 +27,7 @@ jobs:
           urls: |
             ${{ secrets.SITE_URL || 'https://blackbox.codes' }}
           uploadArtifacts: true
-          artifactName: lighthouse_results
+          # Use a hyphen instead of underscore to satisfy GitHub's artifact naming requirements
+          artifactName: lighthouse-results
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}

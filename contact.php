@@ -28,25 +28,39 @@ include 'includes/site-header.php';
 
             <div class="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10">
                 <div class="glass-effect rounded-2xl p-8 lg:col-span-2">
-                    <form id="contact-form" class="space-y-5" data-endpoint="contact-submit.php" novalidate>
+                    <form id="contact-form" class="space-y-5" data-endpoint="contact-submit.php" novalidate aria-label="Contact form">
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-300 mb-2"><?= t('contact.form.name') ?></label>
-                            <input type="text" id="name" name="name" required class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                            <input type="text" id="name" name="name" required 
+                                   autocomplete="name"
+                                   aria-required="true"
+                                   class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400">
                         </div>
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-300 mb-2"><?= t('contact.form.email') ?></label>
-                            <input type="email" id="email" name="email" required class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                            <input type="email" id="email" name="email" required 
+                                   autocomplete="email"
+                                   aria-required="true"
+                                   class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400">
                         </div>
                         <div>
                             <label for="phone" class="block text-sm font-medium text-gray-300 mb-2"><?= t('contact.form.phone_optional') ?></label>
-                            <input type="tel" id="phone" name="phone" class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400" autocomplete="tel">
+                            <input type="tel" id="phone" name="phone" 
+                                   autocomplete="tel"
+                                   aria-required="false"
+                                   class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400">
                         </div>
                         <div>
                             <label for="message" class="block text-sm font-medium text-gray-300 mb-2"><?= t('contact.form.message') ?></label>
-                            <textarea id="message" name="message" rows="5" required class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400"></textarea>
+                            <textarea id="message" name="message" rows="5" required 
+                                      aria-required="true"
+                                      class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400"></textarea>
                         </div>
                         <input type="hidden" name="recaptcha_token" id="recaptcha_token" value="">
-                        <button type="submit" class="w-full bg-amber-400 text-black font-semibold py-3 rounded-lg hover:bg-amber-500 transition-colors" data-sending-text="<?= htmlspecialchars(t('contact.form.sending')) ?>">
+                        <button type="submit" 
+                                aria-label="<?= htmlspecialchars(t('contact.form.submit')) ?>"
+                                class="w-full bg-amber-400 text-black font-semibold py-3 rounded-lg hover:bg-amber-500 transition-colors" 
+                                data-sending-text="<?= htmlspecialchars(t('contact.form.sending')) ?>">
                             <?= t('contact.form.submit') ?>
                         </button>
                     </form>

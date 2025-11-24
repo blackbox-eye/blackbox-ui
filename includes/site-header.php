@@ -77,6 +77,7 @@ if (!function_exists('aig_nav_class')) {
             'contact' => ['label' => t('header.menu.contact'), 'href' => 'contact.php'],
             'demo' => ['label' => t('header.menu.demo'), 'href' => 'demo.php'],
             'free-scan' => ['label' => t('header.menu.free_scan'), 'href' => 'free-scan.php'],
+            'faq' => ['label' => 'FAQ', 'href' => 'faq.php'],
             'agent-login' => ['label' => t('header.cta.agent_login'), 'href' => 'agent-login.php'],
             'dashboard' => ['label' => 'Dashboard', 'href' => 'dashboard.php'],
             'admin' => ['label' => 'Admin', 'href' => 'admin.php'],
@@ -161,6 +162,11 @@ $nav_links = [
         'href' => 'blog.php',
     ],
     [
+        'slug' => 'faq',
+        'label' => 'FAQ',
+        'href' => 'faq.php',
+    ],
+    [
         'slug' => 'contact',
         'label' => t('header.menu.about_contact'),
         'href' => 'contact.php',
@@ -175,7 +181,7 @@ $secondary_nav_links = [
     ['slug' => 'faq', 'label' => 'FAQ', 'href' => 'faq.php'],
 ];
 
-$alphabot_enabled_pages = ['home', 'index', 'about', 'products', 'cases', 'pricing', 'contact', 'demo', 'free-scan'];
+$alphabot_enabled_pages = ['home', 'index', 'about', 'products', 'cases', 'pricing', 'contact', 'demo', 'free-scan', 'faq'];
 $show_alphabot = $show_alphabot ?? in_array($current_page, $alphabot_enabled_pages, true);
 if (!empty($disable_alphabot)) {
     $show_alphabot = false;
@@ -257,11 +263,14 @@ if (!empty($disable_alphabot)) {
     $admin_pages = ['agent-login.php', 'dashboard.php', 'admin.php', 'settings.php'];
     $current_script = basename($_SERVER['SCRIPT_NAME']);
     $is_admin_page = in_array($current_script, $admin_pages);
+    // Use minified CSS in production (when DEBUG is not set or false)
+    $use_minified = !defined('BBX_DEBUG_RECAPTCHA') || !BBX_DEBUG_RECAPTCHA;
+    $css_suffix = $use_minified ? '.min.css' : '.css';
 
     if ($is_admin_page): ?>
-        <link rel="stylesheet" href="/assets/css/admin.css">
+        <link rel="stylesheet" href="/assets/css/admin<?= $css_suffix ?>">
     <?php else: ?>
-        <link rel="stylesheet" href="/assets/css/marketing.css">
+        <link rel="stylesheet" href="/assets/css/marketing<?= $css_suffix ?>">
     <?php endif; ?>
 
     <script src="config.js"></script>

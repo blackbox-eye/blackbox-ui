@@ -17,27 +17,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = trim($_POST['password'] ?? '');
     $pin      = trim($_POST['pin'] ?? '');
     $token    = trim($_POST['token'] ?? '');
+    $normalizedAgentId = mb_strtolower($agent_id, 'UTF-8');
 
     // Robusthedstjek: Sikrer at $pdo er tilgængelig før brug
     if (isset($pdo)) {
         // Forbereder og udfører databasekald for at finde agenten
-        $stmt = $pdo->prepare("SELECT * FROM agents WHERE agent_id = ?");
-        $stmt->execute([$agent_id]);
+        $stmt = $pdo->prepare("SELECT * FROM agents WHERE LOWER(agent_id) = ? LIMIT 1");
+        $stmt->execute([$normalizedAgentId]);
         $agent = $stmt->fetch();
 
-        // Validerer login-oplysningerne (UDEN hash – ren tekst sammenligning)
-        if ($agent && $password === $agent['password'] && $pin === $agent['pin']) {
-            session_regenerate_id(true);
-            $_SESSION['agent_id'] = $agent['agent_id'];
-            $_SESSION['is_admin'] = (bool)$agent['is_admin'];
-            log_agent_event($agent['agent_id'], 'LOGIN_SUCCESS');
-            header("Location: dashboard.php");
-            exit;
+        $attemptId = $agent_id !== '' ? $agent_id : 'unknown';
+
+        if ($agent) {
+            $storedPassword = (string) ($agent['password'] ?? '');
+            $passwordMatch  = false;
+            $rehashNeeded   = false;
+
+            if ($storedPassword !== '') {
+                if (password_verify($password, $storedPassword)) {
+                    $passwordMatch = true;
+                    $rehashNeeded = password_needs_rehash($storedPassword, PASSWORD_DEFAULT);
+                } elseif (hash_equals($storedPassword, $password)) {
+                    $passwordMatch = true;
+                    $rehashNeeded = true; // Upgrade legacy klartekst-credentials til moderne hash
+                }
+            }
+
+            $storedPinRaw   = (string) ($agent['pin'] ?? '');
+            $providedPinRaw = $pin;
+
+            if ($storedPinRaw !== '' && $providedPinRaw !== '') {
+                $pinLength = max(strlen($storedPinRaw), strlen($providedPinRaw));
+                $storedPinCanonical = str_pad($storedPinRaw, $pinLength, '0', STR_PAD_LEFT);
+                $providedPinCanonical = str_pad($providedPinRaw, $pinLength, '0', STR_PAD_LEFT);
+                $pinMatch = hash_equals($storedPinCanonical, $providedPinCanonical);
+            } else {
+                $pinMatch = false;
+            }
+            $isActive = strtolower((string) $agent['status']) === 'active';
+
+            if ($passwordMatch && $pinMatch && $isActive) {
+                if ($rehashNeeded) {
+                    $newHash = password_hash($password, PASSWORD_DEFAULT);
+                    try {
+                        $upgradeStmt = $pdo->prepare("UPDATE agents SET password = ? WHERE id = ?");
+                        $upgradeStmt->execute([$newHash, $agent['id']]);
+                    } catch (Throwable $upgradeError) {
+                        error_log('[LOGIN] Password rehash failed for agent ' . $agent['agent_id'] . ': ' . $upgradeError->getMessage());
+                    }
+                }
+
+                session_regenerate_id(true);
+                $_SESSION['agent_id'] = $agent['agent_id'];
+                $_SESSION['is_admin'] = (bool)$agent['is_admin'];
+                log_agent_event($agent['agent_id'], 'LOGIN_SUCCESS');
+                header("Location: dashboard.php");
+                exit;
+            }
+
+            $failure = [
+                'status'   => $agent['status'] ?? 'unknown',
+                'reason'   => !$isActive ? 'inactive_agent' : (!$passwordMatch ? 'password_mismatch' : 'pin_mismatch')
+            ];
+            log_agent_event($attemptId, 'LOGIN_FAILED', $failure);
         } else {
-            $attemptId = $agent_id !== '' ? $agent_id : 'unknown';
-            log_agent_event($attemptId, 'LOGIN_FAILED', ['reason' => 'invalid_credentials']);
-            $error = "Ugyldigt Agent ID, Password eller PIN.";
+            log_agent_event($attemptId, 'LOGIN_FAILED', ['reason' => 'agent_not_found']);
         }
+
+        $error = "Ugyldigt Agent ID, Password eller PIN.";
     } else {
         if ($agent_id !== '') {
             log_agent_event($agent_id, 'LOGIN_FAILED', ['reason' => 'db_unavailable']);
@@ -199,13 +246,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="p-8 space-y-6 glass-effect rounded-2xl z-10">
 
                 <header class="flex flex-col items-center text-center">
-                    <img src="assets/logo.png" alt="Blackbox EYE Emblem" class="h-24 w-24 mb-4" loading="lazy">
-                    <!-- OPDATERET: Bruger den nye subtile glitch-effekt -->
-                    <h1 class="subtle-glitch-logo" aria-label="Blackbox EYE">
-                        Blackbox EYE&trade;
-                        <span aria-hidden="true">Blackbox EYE&trade;</span>
-                        <span aria-hidden="true">Blackbox EYE&trade;</span>
-                    </h1>
+                        <img src="assets/logo.png" alt="Blackbox EYE Emblem" class="h-24 w-24 mb-4" loading="lazy">
+                        <!-- OPDATERET: Bruger den nye subtile glitch-effekt -->
+                        <h1 class="subtle-glitch-logo" aria-label="Blackbox EYE">
+                            Blackbox EYE&trade;
+                            <span aria-hidden="true">Blackbox EYE&trade;</span>
+                            <span aria-hidden="true">Blackbox EYE&trade;</span>
+                        </h1>
                 </header>
 
                 <?php if (!empty($error)): ?>

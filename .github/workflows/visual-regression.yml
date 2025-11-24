@@ -1,8 +1,9 @@
+---
 name: Visual Regression
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -16,7 +17,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Validate GitHub token
         env:
@@ -38,7 +39,9 @@ jobs:
         run: npm run test:ci
 
       - name: Upload screenshots
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: visual-screenshots
           path: artifacts/**
+          if-no-files-found: warn

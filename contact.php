@@ -28,7 +28,7 @@ include 'includes/site-header.php';
 
             <div class="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10">
                 <div class="glass-effect rounded-2xl p-8 lg:col-span-2">
-                    <form id="contact-form" class="space-y-5" data-endpoint="contact-submit.php" novalidate aria-label="<?= htmlspecialchars(t('contact.form.submit')) ?>">
+                    <form id="contact-form" class="space-y-5" data-endpoint="contact-submit.php" novalidate aria-label="Contact form">
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-300 mb-2"><?= t('contact.form.name') ?></label>
                             <input type="text" id="name" name="name" required 

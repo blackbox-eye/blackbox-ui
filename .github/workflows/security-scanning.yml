@@ -146,7 +146,7 @@ jobs:
           echo "════════════════════════════════════════"
           echo "🔬 Running Semgrep SAST scan..."
           echo "════════════════════════════════════════"
-          semgrep scan --config=auto --json --output=semgrep-results.json || true
+          semgrep scan --config=auto --sarif --output=semgrep-results.sarif || true
           semgrep scan --config=auto --text || true
 
       - name: Upload Semgrep results
@@ -154,7 +154,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: semgrep-results
-          path: semgrep-results.json
+          path: semgrep-results.sarif
           retention-days: 30
 
       - name: Upload to GitHub Security
@@ -162,7 +162,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         continue-on-error: true
         with:
-          sarif_file: semgrep-results.json
+          sarif_file: semgrep-results.sarif
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # JOB 4: Secret Scanning med TruffleHog
@@ -186,7 +186,7 @@ jobs:
           path: ./
           base: ${{ github.event.repository.default_branch }}
           head: HEAD
-          extra_args: --only-verified --json > trufflehog-results.json
+          extra_args: --only-verified
 
       - name: Display findings
         if: always()
@@ -194,21 +194,8 @@ jobs:
           echo "════════════════════════════════════════"
           echo "🔐 TruffleHog Secret Scan Results"
           echo "════════════════════════════════════════"
-          if [ -f trufflehog-results.json ]; then
-            echo "Scan completed - check artifacts for details"
-            cat trufflehog-results.json | head -20 || echo "No verified secrets found ✅"
-          else
-            echo "✅ No secrets detected"
-          fi
-
-      - name: Upload TruffleHog results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: trufflehog-results
-          path: trufflehog-results.json
-          retention-days: 30
-          if-no-files-found: ignore
+          echo "✅ TruffleHog scan completed"
+          echo "   Check action logs for any findings"
 
   # ═══════════════════════════════════════════════════════════════════════════════
   # JOB 5: License Compliance Check

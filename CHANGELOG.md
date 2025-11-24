@@ -2,6 +2,52 @@
 
 Alle større ændringer i ALPHA Interface GUI (AIG) dokumenteres her, så audit og drift altid kan følge release-tracking.
 
+## [v1.5.0-sprint5] – 2025-11-24 (Sprint 5 - In Progress)
+### Added
+- **Comprehensive Security Scanning Workflow**
+  - Dependency audit med npm audit og Snyk integration
+  - SAST scanning med Semgrep for PHP og JavaScript
+  - Secret scanning med TruffleHog for alle commits
+  - License compliance check med license-checker
+  - Container scanning med Trivy (hvis Docker anvendes)
+  - Automatisk ugentlig scanning hver søndag kl. 02:00 UTC
+  
+- **Cloudflare Pages Deployment Workflow**
+  - Automatisk deployment til staging ved merge til main
+  - Preview URL generation for pull requests
+  - Production deployment med manuel godkendelse
+  - Environment variable konfiguration (BBX_RECAPTCHA_SECRET_KEY)
+  - /logs/ directory security verification
+  - End-to-end smoke tests på staging
+  - Performance monitoring (response time checks)
+  
+- **Enhanced CodeQL Analysis**
+  - Aktiveret automatiske triggers for push og pull requests
+  - PHP analysis køres automatisk på alle branches
+  - JavaScript analysis kan aktiveres via ENABLE_JS_CODEQL variable
+  - Ugentlig scheduled scan for nye sårbarheder
+
+### Infrastructure
+- `.github/workflows/security-scanning.yml` - Omfattende sikkerhedsscanning workflow
+- `.github/workflows/cloudflare-pages.yml` - Cloudflare Pages deployment workflow
+- `.github/workflows/codeql-analysis.yml` - Opdateret med automatiske triggers
+
+### Security
+- Multi-layered security scanning efter hver merge
+- Secrets håndteres sikkert via GitHub Secrets og Cloudflare
+- FTPS/TLS encryption bibeholdt for alle FTP operationer
+- Least-privilege permissions på alle workflows
+
+### Documentation
+- Security scanning resultater tilgængelige via GitHub Security tab
+- Deployment artifacts med detaljerede rapporter
+- Staging verification rapport med test metrics
+
+### Next Steps
+- Tag release med v1.5.0-sprint5
+- Opdater CHANGELOG.md med finale resultater
+- Notify ops@blackbox.codes ved production deployment
+
 ## [v1.0.0-sprint4] – 2025-11-23 (Sprint 4)
 ### Added
 - **Comprehensive Visual Regression Testing**

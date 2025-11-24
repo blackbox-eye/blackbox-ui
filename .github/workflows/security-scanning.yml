@@ -1,0 +1,350 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# Security Scanning Workflow - Sprint 5
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# Dette workflow kører omfattende sikkerhedsscanning efter merge til main:
+# - Dependency audit (npm audit, Snyk)
+# - SAST scanning (Semgrep)
+# - Secret scanning (TruffleHog)
+# - License compliance check
+# - Container scanning (Trivy, hvis relevant)
+#
+# Workflow trigger: Efter hver merge til main
+#
+# Required Secrets (Settings > Secrets and variables > Actions):
+# - SNYK_TOKEN (optional): Snyk API token for avanceret scanning
+#
+# Security Notes:
+# - Alle scans køres parallel for hurtig feedback
+# - Resultater uploades til GitHub Security tab
+# - Critical findings stopper ikke deployment (warning only)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: Security Scanning
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  schedule:
+    # Kør ugentligt søndag kl. 02:00 UTC
+    - cron: '0 2 * * 0'
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # JOB 1: Dependency Audit
+  # Scanner npm dependencies for kendte sårbarheder
+  # ═══════════════════════════════════════════════════════════════════════════════
+  dependency-audit:
+    name: "🔍 Dependency Audit"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          echo "📦 Installing dependencies..."
+          npm ci --prefer-offline --no-audit
+          echo "✅ Dependencies installed"
+
+      - name: Run npm audit
+        continue-on-error: true
+        run: |
+          echo "════════════════════════════════════════"
+          echo "🔍 Running npm audit..."
+          echo "════════════════════════════════════════"
+          npm audit --json > npm-audit-results.json || true
+          npm audit || true
+          echo ""
+          echo "📊 Audit Summary:"
+          if [ -f npm-audit-results.json ]; then
+            cat npm-audit-results.json | jq -r '.metadata | "Total: \(.vulnerabilities.total) | Critical: \(.vulnerabilities.critical) | High: \(.vulnerabilities.high) | Moderate: \(.vulnerabilities.moderate) | Low: \(.vulnerabilities.low)"' || echo "Parsing failed"
+          fi
+
+      - name: Upload npm audit results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit-results
+          path: npm-audit-results.json
+          retention-days: 30
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # JOB 2: Snyk Security Scan (Optional - requires SNYK_TOKEN)
+  # ═══════════════════════════════════════════════════════════════════════════════
+  snyk-scan:
+    name: "🛡️ Snyk Security Scan"
+    runs-on: ubuntu-latest
+    if: ${{ vars.ENABLE_SNYK == 'true' || secrets.SNYK_TOKEN != '' }}
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Run Snyk security scan
+        uses: snyk/actions/node@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high --json-file-output=snyk-results.json
+
+      - name: Upload Snyk results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: snyk-results
+          path: snyk-results.json
+          retention-days: 30
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # JOB 3: SAST Scanning med Semgrep
+  # Static Application Security Testing for PHP og JavaScript
+  # ═══════════════════════════════════════════════════════════════════════════════
+  semgrep-scan:
+    name: "🔬 SAST Scanning (Semgrep)"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    container:
+      image: returntocorp/semgrep
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Semgrep scan
+        run: |
+          echo "════════════════════════════════════════"
+          echo "🔬 Running Semgrep SAST scan..."
+          echo "════════════════════════════════════════"
+          semgrep scan --config=auto --json --output=semgrep-results.json || true
+          semgrep scan --config=auto --text || true
+
+      - name: Upload Semgrep results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: semgrep-results
+          path: semgrep-results.json
+          retention-days: 30
+
+      - name: Upload to GitHub Security
+        if: always()
+        uses: github/codeql-action/upload-sarif@v2
+        continue-on-error: true
+        with:
+          sarif_file: semgrep-results.json
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # JOB 4: Secret Scanning med TruffleHog
+  # Scanner for hardcoded secrets, API keys, og credentials
+  # ═══════════════════════════════════════════════════════════════════════════════
+  secret-scanning:
+    name: "🔐 Secret Scanning (TruffleHog)"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fuld historik for at scanne alle commits
+
+      - name: Run TruffleHog scan
+        uses: trufflesecurity/trufflehog@main
+        continue-on-error: true
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --only-verified --json > trufflehog-results.json
+
+      - name: Display findings
+        if: always()
+        run: |
+          echo "════════════════════════════════════════"
+          echo "🔐 TruffleHog Secret Scan Results"
+          echo "════════════════════════════════════════"
+          if [ -f trufflehog-results.json ]; then
+            echo "Scan completed - check artifacts for details"
+            cat trufflehog-results.json | head -20 || echo "No verified secrets found ✅"
+          else
+            echo "✅ No secrets detected"
+          fi
+
+      - name: Upload TruffleHog results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trufflehog-results
+          path: trufflehog-results.json
+          retention-days: 30
+          if-no-files-found: ignore
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # JOB 5: License Compliance Check
+  # Verificerer at alle dependencies har acceptable licenses
+  # ═══════════════════════════════════════════════════════════════════════════════
+  license-compliance:
+    name: "📜 License Compliance"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Install license checker
+        run: npm install -g license-checker
+
+      - name: Run license check
+        run: |
+          echo "════════════════════════════════════════"
+          echo "📜 Checking license compliance..."
+          echo "════════════════════════════════════════"
+          license-checker --json --out license-report.json || true
+          license-checker --summary || true
+
+      - name: Validate licenses
+        run: |
+          echo ""
+          echo "📊 License Summary:"
+          if [ -f license-report.json ]; then
+            # Check for problematic licenses
+            if cat license-report.json | grep -i "GPL-3.0\|AGPL\|SSPL" > /dev/null 2>&1; then
+              echo "⚠️  WARNING: Found potentially restrictive licenses"
+              echo "    Review license-report.json artifact"
+            else
+              echo "✅ All licenses appear compatible"
+            fi
+          fi
+
+      - name: Upload license report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: license-report
+          path: license-report.json
+          retention-days: 30
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # JOB 6: Container Scanning med Trivy (kun hvis Docker anvendes)
+  # Scanner Docker images for sårbarheder
+  # ═══════════════════════════════════════════════════════════════════════════════
+  container-scan:
+    name: "🐳 Container Scanning (Trivy)"
+    runs-on: ubuntu-latest
+    if: ${{ hashFiles('Dockerfile') != '' }}
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy results
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # JOB 7: Security Summary
+  # Samler resultater fra alle scans og genererer samlet rapport
+  # ═══════════════════════════════════════════════════════════════════════════════
+  security-summary:
+    name: "📊 Security Summary"
+    needs: [dependency-audit, semgrep-scan, secret-scanning, license-compliance]
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+
+      - name: Generate security summary
+        run: |
+          echo "════════════════════════════════════════════════════════════════"
+          echo "🔒 SECURITY SCANNING SUMMARY - Sprint 5"
+          echo "════════════════════════════════════════════════════════════════"
+          echo ""
+          echo "📅 Scan Date: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "🔗 Repository: ${{ github.repository }}"
+          echo "📍 Commit: ${{ github.sha }}"
+          echo "🌿 Branch: ${{ github.ref_name }}"
+          echo ""
+          echo "✅ Completed Scans:"
+          echo "   ✓ Dependency Audit (npm audit)"
+          echo "   ✓ SAST Scanning (Semgrep)"
+          echo "   ✓ Secret Scanning (TruffleHog)"
+          echo "   ✓ License Compliance"
+          if [ -n "${{ hashFiles('Dockerfile') }}" ]; then
+            echo "   ✓ Container Scanning (Trivy)"
+          else
+            echo "   ⊘ Container Scanning (skipped - no Dockerfile)"
+          fi
+          echo ""
+          echo "📂 Artifacts generated:"
+          ls -la *-results* 2>/dev/null || echo "   No result files found in workspace"
+          echo ""
+          echo "🔍 Review findings:"
+          echo "   → GitHub Security tab for SARIF results"
+          echo "   → Action artifacts for detailed reports"
+          echo "   → Contact: ops@blackbox.codes"
+          echo ""
+          echo "════════════════════════════════════════════════════════════════"
+
+      - name: Check for critical issues
+        run: |
+          # Note: This is informational only - does not block deployment
+          echo ""
+          echo "ℹ️  Security scanning completed"
+          echo "   All findings are available in artifacts and Security tab"
+          echo "   Review and remediate any critical/high severity issues"

@@ -51,6 +51,7 @@ jobs:
   php-analysis:
     name: PHP CodeQL Analysis
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: |
       github.event_name == 'workflow_dispatch' &&
       github.event.inputs.enable_php == 'true'
@@ -90,6 +91,7 @@ jobs:
   js-analysis:
     name: JavaScript CodeQL Analysis (Gated)
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: php-analysis
     if: |
       github.event_name == 'workflow_dispatch' &&

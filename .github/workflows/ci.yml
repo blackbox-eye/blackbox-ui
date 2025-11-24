@@ -45,11 +45,48 @@ jobs:
   build:
     name: "✅ Build & Verify"
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Validate required secrets
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "🔐 Validating required secrets..."
+          MISSING_SECRETS=()
+
+          if [ -z "${{ secrets.FTP_HOST }}" ]; then
+            MISSING_SECRETS+=("FTP_HOST")
+          fi
+
+          if [ -z "${{ secrets.FTP_USERNAME }}" ]; then
+            MISSING_SECRETS+=("FTP_USERNAME")
+          fi
+
+          if [ -z "${{ secrets.FTP_PASSWORD }}" ]; then
+            MISSING_SECRETS+=("FTP_PASSWORD")
+          fi
+
+          if [ -z "${{ secrets.FTP_REMOTE_PATH }}" ]; then
+            MISSING_SECRETS+=("FTP_REMOTE_PATH")
+          fi
+
+          if [ ${#MISSING_SECRETS[@]} -gt 0 ]; then
+            echo "❌ Missing required secrets:" >&2
+            for secret in "${MISSING_SECRETS[@]}"; do
+              echo "   ✗ $secret" >&2
+            done
+            echo "" >&2
+            echo "Configure secrets at:" >&2
+            REPO="${{ github.repository }}"
+            echo "https://github.com/$REPO/settings/secrets/actions" >&2
+            exit 1
+          fi
+
+          echo "✅ All required secrets are configured"
 
       - name: Verify critical files exist
         run: |
@@ -106,6 +143,7 @@ jobs:
     name: "🗑️  Secure Delete index.html"
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     if: github.ref == 'refs/heads/main'
     permissions: {}  # No GitHub token permissions needed
     steps:
@@ -189,6 +227,7 @@ jobs:
     name: "🚀 Secure FTP Deploy"
     needs: delete-index-html
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: github.ref == 'refs/heads/main'
     permissions:
       contents: read
@@ -248,6 +287,7 @@ jobs:
     name: "🧪 Smoke Tests"
     needs: ftp-deploy
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     if: github.ref == 'refs/heads/main'
     permissions: {}  # No GitHub token permissions needed
     steps:

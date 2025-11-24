@@ -29,12 +29,16 @@ test.describe('Web Optimization Tests', () => {
         await page.goto('/blog-post.php?slug=test', { timeout: 5000 });
         
         const featuredImage = page.locator('img').first();
-        if (await featuredImage.count() > 0) {
+        const imageCount = await featuredImage.count();
+        
+        if (imageCount > 0) {
           const loading = await featuredImage.getAttribute('loading');
           expect(loading).toBe('lazy');
+        } else {
+          test.skip(true, 'No blog posts available for testing');
         }
       } catch (e) {
-        test.skip();
+        test.skip(true, 'Blog post page not accessible or no test data available');
       }
     });
     
@@ -175,12 +179,14 @@ test.describe('Web Optimization Tests', () => {
     });
     
     test('Mobile menu should open/close with keyboard', async ({ page }) => {
+      const MAX_TAB_ATTEMPTS = 10;
+      
       await page.setViewportSize({ width: 375, height: 667 }); // Mobile size
       await page.goto('/index.php');
       
-      // Tab to mobile menu button
+      // Tab to mobile menu button with a limit
       let focused = null;
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < MAX_TAB_ATTEMPTS; i++) {
         await page.keyboard.press('Tab');
         focused = await page.evaluate(() => document.activeElement.id);
         if (focused === 'mobile-menu-button') break;
@@ -191,15 +197,23 @@ test.describe('Web Optimization Tests', () => {
       // Press Enter to open menu
       await page.keyboard.press('Enter');
       
-      // Check menu is open
+      // Wait for menu to be active (deterministic wait)
+      await page.waitForFunction(
+        () => document.getElementById('mobile-menu').classList.contains('active'),
+        { timeout: 2000 }
+      );
+      
       const menuClass = await page.locator('#mobile-menu').getAttribute('class');
       expect(menuClass).toContain('active');
       
       // Press Escape to close
       await page.keyboard.press('Escape');
       
-      // Wait a bit for animation
-      await page.waitForTimeout(500);
+      // Wait for menu to close (deterministic wait)
+      await page.waitForFunction(
+        () => !document.getElementById('mobile-menu').classList.contains('active'),
+        { timeout: 2000 }
+      );
       
       // Check menu is closed
       const menuClassAfter = await page.locator('#mobile-menu').getAttribute('class');

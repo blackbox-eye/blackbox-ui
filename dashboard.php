@@ -24,6 +24,8 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
     <title>Blackbox EYE // Aura Kontrolpanel</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js: Using pinned version 4.4.1 with SRI for security -->
+    <!-- SRI Hash verified: sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb -->
+    <!-- Generated: 2025-11-24 via: curl -s https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js | openssl dgst -sha384 -binary | openssl base64 -A -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" 
             integrity="sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb"
             crossorigin="anonymous"></script>

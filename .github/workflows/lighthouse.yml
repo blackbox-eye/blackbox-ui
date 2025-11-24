@@ -21,13 +21,12 @@ jobs:
           node-version: '20'
 
       - name: Run Lighthouse (treosh action)
-        uses: treosh/lighthouse-ci-action@v9
+        uses: treosh/lighthouse-ci-action@v12
         with:
           # Use SITE_URL secret if available, fallback to hardcoded
           urls: |
             ${{ secrets.SITE_URL || 'https://blackbox.codes' }}
           uploadArtifacts: true
-          # Use a hyphen instead of underscore to satisfy GitHub's artifact naming requirements
           artifactName: lighthouse-results
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}

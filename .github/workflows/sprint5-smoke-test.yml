@@ -37,25 +37,42 @@ jobs:
           echo "🔍 Running Lighthouse CI with assertions..."
           echo "   Target URL: $SITE_URL"
 
+          set +e
           npx -y @lhci/cli@0.13.x autorun \
             --collect.url="$SITE_URL" \
             --collect.numberOfRuns=1 \
             --assert.assertMatrix="./.lighthouseci/assertions.json" \
             --upload.target=filesystem \
-            --upload.outputDir=./lighthouse-results \
-            || true
+            --upload.outputDir=./lighthouse-results
+          LHCI_EXIT=$?
+          set -e
 
-          echo "✅ Lighthouse CI run completed."
+          if [ $LHCI_EXIT -eq 0 ]; then
+            echo "✅ Lighthouse CI assertions passed."
+          elif [ $LHCI_EXIT -eq 1 ]; then
+            echo "⚠️ Lighthouse CI assertions failed (exit code 1)."
+            echo "   This is expected if performance/accessibility thresholds are not met."
+          else
+            echo "❌ Lighthouse CI encountered an error (exit code $LHCI_EXIT)."
+            exit $LHCI_EXIT
+          fi
 
       - name: Ensure artifact directory is not empty
         run: |
           echo "Checking lighthouse-results directory..."
-          if [ ! -d "lighthouse-results" ] || [ -z "$(ls -A lighthouse-results 2>/dev/null)" ]; then
-            echo "lighthouse-results is empty or missing. Creating placeholder."
+          if [ ! -d "lighthouse-results" ]; then
+            echo "Directory missing. Creating with placeholder."
             mkdir -p lighthouse-results
-            echo '{"placeholder": true, "timestamp": "'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'"}' \
+            echo '{"placeholder": true, "reason": "directory_missing", "timestamp": "'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'"}' \
               > lighthouse-results/placeholder.json
+          elif [ -z "$(ls -A lighthouse-results)" ]; then
+            echo "Directory empty. Adding placeholder."
+            echo '{"placeholder": true, "reason": "directory_empty", "timestamp": "'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'"}' \
+              > lighthouse-results/placeholder.json
+          else
+            echo "Directory contains files."
           fi
+          echo "Contents:"
           ls -la lighthouse-results/
 
       - name: Upload Lighthouse results

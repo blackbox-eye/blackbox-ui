@@ -140,6 +140,7 @@ include 'includes/site-header.php';
           <div class="aspect-video bg-gray-800 rounded-2xl overflow-hidden mb-12">
             <img src="<?= htmlspecialchars($post['featured_image']) ?>"
               alt="<?= htmlspecialchars($post['title']) ?>"
+              loading="lazy"
               class="w-full h-full object-cover">
           </div>
         <?php endif; ?>

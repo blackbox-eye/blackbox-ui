@@ -1,0 +1,8 @@
+{
+  "assertions": {
+    "categories:performance": ["error", { "minScore": 0.5 }],
+    "categories:accessibility": ["warn", { "minScore": 0.5 }],
+    "metrics:largest-contentful-paint": ["warn", { "maxNumericValue": 4000 }],
+    "metrics:total-blocking-time": ["warn", { "maxNumericValue": 300 }]
+  }
+}

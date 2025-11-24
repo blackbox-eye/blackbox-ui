@@ -38,8 +38,8 @@ jobs:
 
       - name: Check JavaScript syntax
         run: |
-          npx esprima assets/js/site.js || exit 1
-          echo "✅ JavaScript syntax valid"
+          npm install acorn
+          node -e "const acorn = require('acorn'); const fs = require('fs'); try { acorn.parse(fs.readFileSync('assets/js/site.js', 'utf8'), { ecmaVersion: 2021, sourceType: 'script' }); console.log('✅ JavaScript syntax valid'); } catch(e) { console.error('❌', e.message); process.exit(1); }"
 
       - name: Verify translation files
         run: |

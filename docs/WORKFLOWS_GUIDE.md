@@ -275,8 +275,8 @@ Alle workflows kan køres manuelt via Actions tab:
 ## 📚 Relaterede Dokumenter
 
 - [CI/CD Setup Guide](CI_CD_SETUP_GUIDE.md) - Opsætningsvejledning
-- [README.md](../README.md) - Projekt oversigt
-- [SECURITY.md](../SECURITY.md) - Security politik
+- [README](../README.md) - Projekt oversigt
+- [SECURITY](../SECURITY.md) - Security politik
 
 ## 🆘 Support
 

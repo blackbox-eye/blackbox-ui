@@ -233,11 +233,14 @@ if (!empty($disable_alphabot)) {
     $admin_pages = ['agent-login.php', 'dashboard.php', 'admin.php', 'settings.php'];
     $current_script = basename($_SERVER['SCRIPT_NAME']);
     $is_admin_page = in_array($current_script, $admin_pages);
+    // Use minified CSS in production (when DEBUG is not set or false)
+    $use_minified = !defined('BBX_DEBUG_RECAPTCHA') || !BBX_DEBUG_RECAPTCHA;
+    $css_suffix = $use_minified ? '.min.css' : '.css';
 
     if ($is_admin_page): ?>
-        <link rel="stylesheet" href="/assets/css/admin.css">
+        <link rel="stylesheet" href="/assets/css/admin<?= $css_suffix ?>">
     <?php else: ?>
-        <link rel="stylesheet" href="/assets/css/marketing.css">
+        <link rel="stylesheet" href="/assets/css/marketing<?= $css_suffix ?>">
     <?php endif; ?>
 
     <script src="config.js"></script>

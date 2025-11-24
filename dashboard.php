@@ -23,8 +23,9 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <title>Blackbox EYE // Aura Kontrolpanel</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js: Using latest stable version. For SRI, pin to specific version (e.g., @4.4.1) -->
+    <!-- Chart.js: Using pinned version 4.4.1 with SRI for security -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" 
+            integrity="sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb"
             crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

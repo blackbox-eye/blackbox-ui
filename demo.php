@@ -186,8 +186,14 @@ include 'includes/site-header.php';
 </main>
 
 <!-- Calendly badge widget begin -->
-<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
-<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+<!-- Note: Calendly resources are dynamically updated. SRI not recommended but using crossorigin for security -->
+<link href="https://assets.calendly.com/assets/external/widget.css" 
+      rel="stylesheet" 
+      crossorigin="anonymous">
+<script src="https://assets.calendly.com/assets/external/widget.js" 
+        type="text/javascript" 
+        async 
+        crossorigin="anonymous"></script>
 <!-- Calendly badge widget end -->
 
 <?php include 'includes/site-footer.php'; ?>

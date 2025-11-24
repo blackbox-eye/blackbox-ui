@@ -1,6 +1,6 @@
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════
 # ALPHA Interface GUI - Secure CI/CD Pipeline v2.0
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════
 #
 # This workflow implements a hardened deployment pipeline with:
 # - FTPS/TLS encryption for all FTP operations
@@ -9,34 +9,38 @@
 # - Security-first configuration
 #
 # Required Secrets (Settings > Secrets and variables > Actions):
-# - FTP_HOST          : FTP server hostname (e.g., ftp.example.com)
-# - FTP_USERNAME      : FTP account username
-# - FTP_PASSWORD      : FTP account password (stored securely)
-# - FTP_REMOTE_PATH   : Remote path to site root (e.g., /public_html)
-# - SITE_URL (optional): Custom site URL for smoke tests (e.g., https://blackbox.codes)
-#                        If not set, defaults to http://FTP_HOST
+# - FTP_HOST        : FTP server hostname (e.g., ftp.example.com)
+# - FTP_USERNAME    : FTP account username
+# - FTP_PASSWORD    : FTP account password (stored securely)
+# - FTP_REMOTE_PATH : Remote path (e.g., /public_html)
+# - SITE_URL (opt)  : Site URL (e.g., https://blackbox.codes)
+#                     If not set, defaults to http://FTP_HOST
+#
+# Optional Secrets:
+# - CF_ZONE_ID      : Cloudflare Zone ID for cache purging
+# - CF_API_TOKEN    : Cloudflare API token
 #
 # Security Notes:
-# - All FTP operations use FTPS (FTP over TLS) when supported by server
-# - Credentials are never logged or exposed in workflow output
-# - Certificate verification can be adjusted based on server configuration
-# ═══════════════════════════════════════════════════════════════════════════════
-
+# - All FTP operations use FTPS (FTP over TLS)
+# - Credentials are never logged or exposed
+# - Certificate verification adjustable per server config
+# ═══════════════════════════════════════════════════════════════
+---
 name: CI & Deploy (Secure)
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 # Explicit permissions for GITHUB_TOKEN (security best practice)
 permissions:
   contents: read
 
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════
 # JOB 1: BUILD & VERIFICATION
-# Validates repository structure and required files before deployment
-# ═══════════════════════════════════════════════════════════════════════════════
+# Validates repository structure and required files
+# ═══════════════════════════════════════════════════════════════
 jobs:
   build:
     name: "✅ Build & Verify"
@@ -84,17 +88,20 @@ jobs:
           echo "🔍 Validating workflow configuration..."
 
           # Check if running on correct branch
-          if [ "${{ github.ref }}" != "refs/heads/main" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
-            echo "ℹ️  Not on main branch - deployment will be skipped"
+          REF="${{ github.ref }}"
+          EVENT="${{ github.event_name }}"
+          if [ "$REF" != "refs/heads/main" ] && \
+             [ "$EVENT" != "workflow_dispatch" ]; then
+            echo "ℹ️  Not on main - deployment skipped"
           else
             echo "✅ Deployment conditions met"
           fi
 
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════
 # JOB 2: SECURE DELETE index.html ON REMOTE
-# Removes static index.html to ensure index.php is served (DirectoryIndex priority)
+# Removes static index.html (DirectoryIndex priority fix)
 # Uses FTPS (FTP over TLS) for encrypted transmission
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════
   delete-index-html:
     name: "🗑️  Secure Delete index.html"
     needs: build
@@ -141,22 +148,26 @@ jobs:
 
             # Check if index.html exists
             echo '🔍 Checking for index.html...';
-            ls -la index.html 2>/dev/null && echo '   ✓ index.html found' || echo '   ℹ️  index.html not present';
+            ls -la index.html 2>/dev/null && \
+              echo '   ✓ index.html found' || \
+              echo '   ℹ️  index.html not present';
 
             # Delete index.html (ignore error if not exists)
             rm -f index.html;
 
             # Verify deletion
             echo '✅ Deletion completed';
-            ls -la index.html 2>/dev/null && echo '⚠️  WARNING: index.html still exists!' || echo '   ✓ index.html successfully removed';
+            ls -la index.html 2>/dev/null && \
+              echo '⚠️  WARNING: index.html still exists!' || \
+              echo '   ✓ index.html successfully removed';
 
             # Close connection
             bye
           " 2>&1 | grep -v "^put: " | grep -v "^get: " || {
             EXIT_CODE=$?
             if [ $EXIT_CODE -ne 0 ]; then
-              echo "❌ FTP operation failed with exit code $EXIT_CODE" >&2
-              echo "⚠️  This may indicate a connection or authentication issue" >&2
+              echo "❌ FTP failed (exit code $EXIT_CODE)" >&2
+              echo "⚠️  Connection or auth issue" >&2
               exit 1
             fi
           }
@@ -169,11 +180,11 @@ jobs:
           echo "   → index.html removed from remote"
           echo "   → index.php will be served as DirectoryIndex"
 
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════
 # JOB 3: SECURE FTP DEPLOYMENT
-# Uploads repository files to remote server via FTPS
-# Uses SamKirkland/FTP-Deploy-Action with secure configuration
-# ═══════════════════════════════════════════════════════════════════════════════
+# Uploads repository files via FTPS
+# Uses SamKirkland/FTP-Deploy-Action with secure config
+# ═══════════════════════════════════════════════════════════════
   ftp-deploy:
     name: "🚀 Secure FTP Deploy"
     needs: delete-index-html
@@ -193,7 +204,8 @@ jobs:
           echo "   Branch: ${{ github.ref_name }}"
 
           # Count files to be deployed
-          FILE_COUNT=$(find . -type f ! -path "./.git/*" ! -path "./.github/*" | wc -l)
+          FILE_COUNT=$(find . -type f ! -path "./.git/*" \
+            ! -path "./.github/*" | wc -l)
           echo "   Files: $FILE_COUNT"
           echo "✅ Deployment preparation complete"
 
@@ -227,11 +239,11 @@ jobs:
           echo "Time: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
           echo "════════════════════════════════════════"
 
-# ═══════════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════
 # JOB 4: COMPREHENSIVE SMOKE TESTS
-# Validates deployment success across multiple endpoints
-# Tests HTTP status codes, content verification, and index.html removal
-# ═══════════════════════════════════════════════════════════════════════════════
+# Validates deployment across multiple endpoints
+# Tests HTTP codes, content, index.html removal
+# ═══════════════════════════════════════════════════════════════
   smoke-tests:
     name: "🧪 Smoke Tests"
     needs: ftp-deploy
@@ -247,18 +259,23 @@ jobs:
           echo "✅ Ready for testing"
 
       - name: Purge Cloudflare cache
-        if: github.ref == 'refs/heads/main'
+        if: |
+          github.ref == 'refs/heads/main' &&
+          secrets.CF_ZONE_ID != '' &&
+          secrets.CF_API_TOKEN != ''
         env:
           CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: |
-          echo "🔄 Purging Cloudflare cache for zone $CF_ZONE_ID..."
-          resp=$(curl -s -w "%{http_code}" -o /tmp/cf_response.json -X POST "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache" \
+          echo "🔄 Purging Cloudflare cache..."
+          resp=$(curl -s -w "%{http_code}" -o /tmp/cf_response.json \
+            -X POST \
+            "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache" \
             -H "Authorization: Bearer ${CF_API_TOKEN}" \
             -H "Content-Type: application/json" \
             --data '{"purge_everything":true}')
-          if [ "$resp" != "200" ] ; then
-            echo "Cloudflare purge failed (HTTP $resp). Response:" >&2
+          if [ "$resp" != "200" ]; then
+            echo "Cloudflare purge failed (HTTP $resp):" >&2
             cat /tmp/cf_response.json >&2
             exit 1
           fi
@@ -292,17 +309,21 @@ jobs:
           echo "Target: $URL"
 
           # Fetch HTTP status
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L "$URL" || echo "000")
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+            -L "$URL" || echo "000")
           echo "HTTP Status: $HTTP_CODE"
 
           # Validate status code
-          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || [ "$HTTP_CODE" = "302" ]; then
+          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || \
+             [ "$HTTP_CODE" = "302" ]; then
             echo "✅ Root endpoint accessible"
 
             # Fetch and verify content
-            RESPONSE=$(curl -s -L "$URL" 2>/dev/null || echo "CURL_FAILED")
+            RESPONSE=$(curl -s -L "$URL" 2>/dev/null || \
+              echo "CURL_FAILED")
 
-            if echo "$RESPONSE" | grep -qi "ALPHA\|blackbox\|<!DOCTYPE\|<html"; then
+            if echo "$RESPONSE" | \
+               grep -qi "ALPHA\|blackbox\|<!DOCTYPE\|<html"; then
               echo "✅ Valid HTML content detected"
             else
               echo "⚠️  Content validation inconclusive"
@@ -320,13 +341,15 @@ jobs:
           URL="$SITE_URL/about.php"
           echo "Target: $URL"
 
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L "$URL" || echo "000")
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+            -L "$URL" || echo "000")
           echo "HTTP Status: $HTTP_CODE"
 
-          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || [ "$HTTP_CODE" = "302" ]; then
+          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || \
+             [ "$HTTP_CODE" = "302" ]; then
             echo "✅ About page accessible"
           else
-            echo "⚠️  About page returned HTTP $HTTP_CODE (may not exist)"
+            echo "⚠️  About page HTTP $HTTP_CODE (may not exist)"
           fi
 
       - name: Test 3 - Cases page
@@ -337,13 +360,15 @@ jobs:
           URL="$SITE_URL/cases.php"
           echo "Target: $URL"
 
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L "$URL" || echo "000")
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+            -L "$URL" || echo "000")
           echo "HTTP Status: $HTTP_CODE"
 
-          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || [ "$HTTP_CODE" = "302" ]; then
+          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || \
+             [ "$HTTP_CODE" = "302" ]; then
             echo "✅ Cases page accessible"
           else
-            echo "⚠️  Cases page returned HTTP $HTTP_CODE (may not exist)"
+            echo "⚠️  Cases page HTTP $HTTP_CODE (may not exist)"
           fi
 
       - name: Test 4 - Contact page
@@ -354,13 +379,15 @@ jobs:
           URL="$SITE_URL/contact.php"
           echo "Target: $URL"
 
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L "$URL" || echo "000")
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+            -L "$URL" || echo "000")
           echo "HTTP Status: $HTTP_CODE"
 
-          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || [ "$HTTP_CODE" = "302" ]; then
+          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || \
+             [ "$HTTP_CODE" = "302" ]; then
             echo "✅ Contact page accessible"
           else
-            echo "⚠️  Contact page returned HTTP $HTTP_CODE (may not exist)"
+            echo "⚠️  Contact HTTP $HTTP_CODE (may not exist)"
           fi
 
       - name: Test 5 - Verify index.html is NOT served
@@ -371,15 +398,16 @@ jobs:
           URL="$SITE_URL/index.html"
           echo "Target: $URL"
 
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L "$URL" || echo "000")
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+            -L "$URL" || echo "000")
           echo "HTTP Status: $HTTP_CODE"
 
           if [ "$HTTP_CODE" = "404" ]; then
-            echo "✅ index.html correctly returns 404 (deleted successfully)"
+            echo "✅ index.html returns 404 (deleted)"
           elif [ "$HTTP_CODE" = "403" ]; then
-            echo "✅ index.html returns 403 (access denied - acceptable)"
+            echo "✅ index.html returns 403 (acceptable)"
           elif [ "$HTTP_CODE" = "301" ] || [ "$HTTP_CODE" = "302" ]; then
-            echo "✅ index.html redirects (DirectoryIndex working)"
+            echo "✅ index.html redirects (DirectoryIndex OK)"
           else
             echo "⚠️  index.html returned HTTP $HTTP_CODE"
             echo "    This may require manual verification"
@@ -390,16 +418,18 @@ jobs:
           echo "════════════════════════════════════════"
           echo "🧪 TEST 6: DirectoryIndex Verification"
           echo "════════════════════════════════════════"
-          echo "Verifying index.php is served as DirectoryIndex..."
+          echo "Verifying index.php is served..."
 
-          RESPONSE=$(curl -s -L "$SITE_URL/" 2>/dev/null || echo "CURL_FAILED")
+          RESPONSE=$(curl -s -L "$SITE_URL/" 2>/dev/null || \
+            echo "CURL_FAILED")
 
           # Check for PHP execution indicators
           if echo "$RESPONSE" | grep -qi "<?php\|<?="; then
             echo "⚠️  Raw PHP code detected (PHP not executing)"
             exit 1
-          elif echo "$RESPONSE" | grep -qi "<!DOCTYPE\|<html\|<head"; then
-            echo "✅ HTML output detected (PHP executing correctly)"
+          elif echo "$RESPONSE" | \
+               grep -qi "<!DOCTYPE\|<html\|<head"; then
+            echo "✅ HTML output detected (PHP executing)"
           else
             echo "⚠️  Unable to verify PHP execution"
           fi
@@ -417,9 +447,9 @@ jobs:
       - name: Smoke test summary
         run: |
           echo ""
-          echo "════════════════════════════════════════════════════════════════"
+          echo "══════════════════════════════════════════════════"
           echo "🎉 SMOKE TESTS COMPLETED"
-          echo "════════════════════════════════════════════════════════════════"
+          echo "══════════════════════════════════════════════════"
           echo ""
           echo "📊 Deployment Information:"
           echo "   Repository: ${{ github.repository }}"
@@ -440,4 +470,4 @@ jobs:
           echo "   ✓ Credentials protected"
           echo "   ✓ TLS data protection active"
           echo ""
-          echo "════════════════════════════════════════════════════════════════"
+          echo "══════════════════════════════════════════════════"

@@ -1,8 +1,9 @@
+---
 name: Lighthouse Audit
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -21,11 +22,9 @@ jobs:
       - name: Run Lighthouse (treosh action)
         uses: treosh/lighthouse-ci-action@v9
         with:
-          # Using hardcoded URL for blackbox.codes
-          # To use SITE_URL secret instead, uncomment the line below and comment out the hardcoded URL
-          # urls: ${{ secrets.SITE_URL }}
+          # Use SITE_URL secret if available, fallback to hardcoded
           urls: |
-            https://blackbox.codes
+            ${{ secrets.SITE_URL || 'https://blackbox.codes' }}
           uploadArtifacts: true
           artifactName: lighthouse_results
         env:

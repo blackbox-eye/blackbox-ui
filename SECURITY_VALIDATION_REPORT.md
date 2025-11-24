@@ -204,7 +204,7 @@ Alle secrets håndteres korrekt via GitHub Actions secrets:
 
 ### 🔴 Høj Prioritet (Før Produktion)
 1. **Implementér password hashing:** Skift fra plaintext til `password_hash()`/`password_verify()`
-2. **Aktivér CodeQL scanning:** Følg instruktioner i SECURITY_IMPLEMENTATION_SUMMARY.md
+2. **Aktivér CodeQL scanning:** Følg instruktioner i CODEQL_ACTIVATION_GUIDE.md
 3. **CSRF protection:** Implementér tokens i alle state-changing forms
 
 ### 🟡 Medium Prioritet (3 måneder)

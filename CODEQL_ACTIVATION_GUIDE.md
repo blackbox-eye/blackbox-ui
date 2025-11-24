@@ -169,7 +169,9 @@ Hvis du oplever problemer:
 
 - [GitHub CodeQL Documentation](https://docs.github.com/en/code-security/code-scanning)
 - [CodeQL Query Reference](https://codeql.github.com/docs/)
-- `SECURITY_IMPLEMENTATION_SUMMARY.md` (i dette repo)
+- `SECURITY_IMPLEMENTATION_SUMMARY.md` - Tidligere CodeQL konfiguration og historik
+- `SECURITY_VALIDATION_REPORT.md` - Detaljeret sikkerhedsanalyse rapport
+- `VALIDATION_SUMMARY.md` - Executive summary og handlingsplan
 
 ---
 

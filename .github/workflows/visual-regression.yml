@@ -1,15 +1,60 @@
+# ═══════════════════════════════════════════════════════════════
+# Visual Regression Testing Workflow
+# ═══════════════════════════════════════════════════════════════
+#
+# Kører Playwright visuelle tests for UI ændringer.
+# Triggeres kun ved relevante fil-ændringer (PHP, assets, includes).
+# Ignorerer docs, agents og markdown-filer for at reducere støj.
+#
+# ═══════════════════════════════════════════════════════════════
 ---
 name: Visual Regression
 
 on:
   push:
     branches: [main]
+    paths:
+      - 'includes/**'
+      - 'assets/**'
+      - '*.php'
+      - 'lang/**'
+    paths-ignore:
+      - '.github/agents/**'
+      - 'docs/**'
+      - '**/*.md'
+      - 'README.md'
+      - 'CHANGELOG.md'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'includes/**'
+      - 'assets/**'
+      - '*.php'
+      - 'lang/**'
+    paths-ignore:
+      - '.github/agents/**'
+      - 'docs/**'
+      - '**/*.md'
+      - 'README.md'
+      - 'CHANGELOG.md'
   workflow_dispatch:
+
+# Prevent multiple runs on same branch - auto-cancel old runs
+concurrency:
+  group: visual-regression-${{ github.ref }}
+  cancel-in-progress: true
+
+# Minimal permissions for security
+permissions:
+  contents: read
 
 jobs:
   visual:
+    name: "🎨 Visual Tests"
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -18,6 +63,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
 
       - name: Validate GitHub token
         env:
@@ -30,7 +76,7 @@ jobs:
           echo "GitHub token available."
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci --prefer-offline --no-audit
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps

@@ -1,3 +1,12 @@
+# ═══════════════════════════════════════════════════════════════
+# Sprint 5 Smoke Test Workflow
+# ═══════════════════════════════════════════════════════════════
+#
+# Kører endpoint-tests og Lighthouse audits for PR'er mod main.
+# Triggeres kun ved relevante fil-ændringer.
+#
+# ═══════════════════════════════════════════════════════════════
+---
 name: Sprint 5 Smoke Test
 
 on:
@@ -10,10 +19,22 @@ on:
       - 'lang/*.json'
       - 'includes/*.php'
 
+# Prevent multiple runs on same PR - auto-cancel old runs
+concurrency:
+  group: sprint5-smoke-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+# Minimal permissions for security
+permissions:
+  contents: read
+
 jobs:
   smoke-test:
+    name: "🧪 Smoke Test"
     runs-on: ubuntu-latest
-
+    timeout-minutes: 15
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
@@ -36,9 +57,17 @@ jobs:
           curl -f http://localhost:8000/free-scan.php || exit 1
           echo "✅ All pages load successfully"
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
       - name: Check JavaScript syntax
         run: |
-          npm install acorn
           node -e "const acorn = require('acorn'); const fs = require('fs'); try { acorn.parse(fs.readFileSync('assets/js/site.js', 'utf8'), { ecmaVersion: 2021, sourceType: 'script' }); console.log('✅ JavaScript syntax valid'); } catch(e) { console.error('❌', e.message); process.exit(1); }"
 
       - name: Verify translation files
@@ -48,8 +77,11 @@ jobs:
           echo "✅ Translation files valid JSON"
 
   lighthouse:
+    name: "🔦 Lighthouse Audit"
     runs-on: ubuntu-latest
-
+    timeout-minutes: 20
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
@@ -63,8 +95,14 @@ jobs:
           php -S localhost:8000 &
           sleep 2
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
       - name: Audit with Lighthouse CI
-        uses: treosh/lighthouse-ci-action@v10
+        uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
             http://localhost:8000/index.php

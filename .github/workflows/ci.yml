@@ -31,7 +31,16 @@ name: CI & Deploy (Secure)
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '.github/agents/**'
+      - 'docs/**'
+      - '**/*.md'
   workflow_dispatch:
+
+# Prevent multiple deployment runs
+concurrency:
+  group: ci-deploy-${{ github.ref }}
+  cancel-in-progress: false  # Don't cancel in-progress deployments
 
 # Explicit permissions for GITHUB_TOKEN (security best practice)
 permissions:

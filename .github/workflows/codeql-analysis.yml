@@ -34,8 +34,16 @@ on:
   # Automatiske triggers - aktiveret for Sprint 5 security scanning
   push:
     branches: [main]
+    paths-ignore:
+      - '.github/agents/**'
+      - 'docs/**'
+      - '**/*.md'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - '.github/agents/**'
+      - 'docs/**'
+      - '**/*.md'
   schedule:
     # Kør ugentligt søndag kl. 00:00 UTC
     - cron: '0 0 * * 0'
@@ -52,9 +60,14 @@ on:
         required: false
         default: 'false'
 
+# Prevent multiple CodeQL runs on same branch
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   php-analysis:
-    name: PHP CodeQL Analysis
+    name: "🔐 PHP CodeQL Analysis"
     runs-on: ubuntu-latest
     timeout-minutes: 30
     # Kører altid undtagen ved manual dispatch hvor enable_php er sat til false
@@ -120,7 +133,7 @@ jobs:
           fi
 
   js-analysis:
-    name: JavaScript CodeQL Analysis (Gated)
+    name: "🔐 JavaScript CodeQL Analysis (Gated)"
     runs-on: ubuntu-latest
     timeout-minutes: 30
     needs: php-analysis

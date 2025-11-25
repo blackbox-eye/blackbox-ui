@@ -535,7 +535,9 @@
         "users_required": "Please enter the number of users.",
         "endpoints_required": "Please enter the number of critical endpoints.",
         "users_min": "You need at least one user.",
+        "users_max": "Contact us directly for more than 10,000 users.",
         "endpoints_min": "Provide at least one endpoint.",
+        "endpoints_max": "Contact us directly for more than 50,000 endpoints.",
         "error": "Review the highlighted fields to continue."
       }
     },

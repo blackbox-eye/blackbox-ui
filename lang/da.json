@@ -495,7 +495,9 @@
         "users_required": "Angiv antallet af brugere.",
         "endpoints_required": "Angiv antallet af kritiske endpoints.",
         "users_min": "Der skal være mindst 1 bruger.",
+        "users_max": "Kontakt os direkte for over 10.000 brugere.",
         "endpoints_min": "Angiv mindst 1 endpoint.",
+        "endpoints_max": "Kontakt os direkte for over 50.000 endpoints.",
         "error": "Ret de markerede felter for at fortsætte."
       }
     },

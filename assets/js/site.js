@@ -862,15 +862,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const usersValue = Number.parseInt(usersInput?.value, 10);
             const endpointsValue = Number.parseInt(endpointsInput?.value, 10);
 
-            if (!usersValue || usersValue < 1) {
-                const message = usersInput?.dataset.requiredMessage || i18n.t('pricing.calculator.validation.users_required', 'Angiv antal brugere.');
+            // Users validation
+            if (Number.isNaN(usersValue) || usersValue < 1) {
+                const message = usersInput?.dataset.minMessage || usersInput?.dataset.requiredMessage || i18n.t('pricing.calculator.validation.users_min', 'Der skal være mindst 1 bruger.');
                 showFieldError(usersInput, message);
+                valid = false;
+            } else if (usersValue > 10000) {
+                showFieldError(usersInput, i18n.t('pricing.calculator.validation.users_max', 'Kontakt os direkte for over 10.000 brugere.'));
                 valid = false;
             }
 
-            if ((!endpointsValue && endpointsValue !== 0) || endpointsValue < 0) {
+            // Endpoints validation
+            if (Number.isNaN(endpointsValue) || endpointsValue < 0) {
                 const message = endpointsInput?.dataset.requiredMessage || i18n.t('pricing.calculator.validation.endpoints_required', 'Angiv antal aktive endpoints.');
                 showFieldError(endpointsInput, message);
+                valid = false;
+            } else if (endpointsValue > 50000) {
+                showFieldError(endpointsInput, i18n.t('pricing.calculator.validation.endpoints_max', 'Kontakt os direkte for over 50.000 endpoints.'));
                 valid = false;
             }
 

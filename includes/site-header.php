@@ -240,202 +240,9 @@ if (!empty($disable_alphabot)) {
 
     <!-- Local compiled Tailwind CSS (v3 build) -->
     <link rel="stylesheet" href="/assets/css/tailwind.full.css">
-
-    <!-- Critical inline styles for dark theme and custom colors (Tailwind v2 doesn't have all colors) -->
-    <style>
-        /* Custom color extensions for amber-400, gray-900 etc */
-        .bg-amber-400 {
-            background-color: #fbbf24 !important;
-        }
-
-        .text-amber-400 {
-            color: #fbbf24 !important;
-        }
-
-        .border-amber-400 {
-            border-color: #fbbf24 !important;
-        }
-
-        .hover\:bg-amber-400:hover {
-            background-color: #fbbf24 !important;
-        }
-
-        .hover\:bg-amber-500:hover {
-            background-color: #f59e0b !important;
-        }
-
-        .hover\:text-amber-400:hover {
-            color: #fbbf24 !important;
-        }
-
-        .hover\:text-amber-300:hover {
-            color: #fcd34d !important;
-        }
-
-        .bg-amber-400\/10 {
-            background-color: rgba(251, 191, 36, 0.1);
-        }
-
-        .bg-amber-400\/20 {
-            background-color: rgba(251, 191, 36, 0.2);
-        }
-
-        .border-amber-400\/20 {
-            border-color: rgba(251, 191, 36, 0.2);
-        }
-
-        .ring-amber-400 {
-            --tw-ring-color: #fbbf24;
-        }
-
-        .focus\:ring-amber-400:focus {
-            --tw-ring-color: #fbbf24;
-        }
-
-        /* Gray colors used in the site */
-        .bg-gray-900 {
-            background-color: #111827 !important;
-        }
-
-        .bg-gray-900\/95 {
-            background-color: rgba(17, 24, 39, 0.95);
-        }
-
-        .bg-gray-900\/40 {
-            background-color: rgba(17, 24, 39, 0.4);
-        }
-
-        .bg-gray-900\/30 {
-            background-color: rgba(17, 24, 39, 0.3);
-        }
-
-        .bg-gray-800 {
-            background-color: #1f2937 !important;
-        }
-
-        .bg-gray-800\/60 {
-            background-color: rgba(31, 41, 55, 0.6);
-        }
-
-        .text-gray-300 {
-            color: #d1d5db !important;
-        }
-
-        .text-gray-400 {
-            color: #9ca3af !important;
-        }
-
-        .text-gray-500 {
-            color: #6b7280 !important;
-        }
-
-        .text-gray-600 {
-            color: #4b5563 !important;
-        }
-
-        .border-gray-600 {
-            border-color: #4b5563 !important;
-        }
-
-        .border-gray-700 {
-            border-color: #374151 !important;
-        }
-
-        .border-gray-800 {
-            border-color: #1f2937 !important;
-        }
-
-        .border-gray-800\/50 {
-            border-color: rgba(31, 41, 55, 0.5);
-        }
-
-        .hover\:text-white:hover {
-            color: #ffffff !important;
-        }
-
-        /* Green for status indicators */
-        .bg-green-400 {
-            background-color: #4ade80 !important;
-        }
-
-        .text-green-400 {
-            color: #4ade80 !important;
-        }
-
-        /* Black with opacity */
-        .bg-black\/40 {
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        .bg-black\/60 {
-            background-color: rgba(0, 0, 0, 0.6);
-        }
-
-        .bg-black\/80 {
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-
-        /* Backdrop blur */
-        .backdrop-blur-sm {
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-        }
-
-        .backdrop-blur-md {
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-
-        /* Z-index extensions */
-        .z-39 {
-            z-index: 39;
-        }
-
-        .z-45 {
-            z-index: 45;
-        }
-
-        .z-46 {
-            z-index: 46;
-        }
-
-        /* Dark site background */
-        body {
-            background-color: #101419;
-        }
-
-        /* Fix for container on dark backgrounds */
-        .container {
-            max-width: 1280px;
-        }
-
-        /* Gradient backgrounds */
-        .bg-gradient-to-b {
-            background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
-        }
-
-        .from-black\/40 {
-            --tw-gradient-from: rgba(0, 0, 0, 0.4);
-            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(0, 0, 0, 0));
-        }
-
-        .via-transparent {
-            --tw-gradient-stops: var(--tw-gradient-from), transparent, var(--tw-gradient-to, transparent);
-        }
-
-        .to-black\/60 {
-            --tw-gradient-to: rgba(0, 0, 0, 0.6);
-        }
-
-        .from-gray-900\/50 {
-            --tw-gradient-from: rgba(17, 24, 39, 0.5);
-            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(17, 24, 39, 0));
-        }
-
-        .to-black {
-            --tw-gradient-to: #000000;
-        }
-    </style>
+    <!-- Custom UI components extracted from previous inline styles -->
+    <link rel="stylesheet" href="/assets/css/custom-ui.css">
+    <!-- Removed redundant inline Tailwind utility overrides -->
 
     <!-- Conditional CSS loading -->
     <?php
@@ -1263,48 +1070,35 @@ if (!empty($disable_alphabot)) {
 
     <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
         <div class="container mx-auto px-4">
-            <div class="flex justify-between items-center h-20 gap-6 md:gap-8 lg:gap-12 xl:gap-16">
-                <div class="glitch-logo flex-shrink-0" aria-label="Blackbox EYE">
+            <div class="flex items-center h-20 gap-4 md:gap-6 lg:gap-10">
+                <div class="glitch-logo flex-shrink-0 mr-2" aria-label="Blackbox EYE">
                     Blackbox EYE&trade;
                     <span aria-hidden="true">Blackbox EYE&trade;</span>
                     <span aria-hidden="true">Blackbox EYE&trade;</span>
                 </div>
-                <div class="hidden md:flex items-center gap-2 lg:gap-4 xl:gap-6 flex-nowrap">
-                    <nav class="flex items-center gap-2 lg:gap-4 xl:gap-6 flex-nowrap">
-                        <?php foreach ($nav_links as $link): ?>
-                            <a href="<?= $link['href'] ?>"
-                                class="nav-link <?= aig_nav_class($link['slug'], $current_page) ?> whitespace-nowrap text-sm lg:text-base"
-                                <?= aig_nav_aria($link['slug'], $current_page) ?>>
-                                <?= htmlspecialchars($link['label']) ?>
-                            </a>
-                        <?php endforeach; ?>
-                    </nav>
-                    <a href="agent-login.php" class="md:inline-block border border-amber-400 text-amber-400 py-1.5 px-3 lg:py-2 lg:px-5 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold whitespace-nowrap flex-shrink-0 text-xs lg:text-sm">
+                <nav class="hidden md:flex flex-1 items-center gap-3 lg:gap-5 xl:gap-6 flex-wrap overflow-x-auto" aria-label="Primary">
+                    <?php foreach ($nav_links as $link): ?>
+                        <a href="<?= $link['href'] ?>" class="nav-link <?= aig_nav_class($link['slug'], $current_page) ?> whitespace-nowrap text-sm lg:text-base" <?= aig_nav_aria($link['slug'], $current_page) ?>>
+                            <?= htmlspecialchars($link['label']) ?>
+                        </a>
+                    <?php endforeach; ?>
+                </nav>
+                <div class="hidden md:flex items-center gap-2 lg:gap-3 flex-shrink-0">
+                    <a href="agent-login.php" class="border border-amber-400 text-amber-400 py-1.5 px-3 lg:py-2 lg:px-5 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold whitespace-nowrap text-xs lg:text-sm">
                         <?= t('header.cta.agent_login') ?>
                     </a>
-                    <!-- Language Switcher -->
                     <div class="language-switcher-wrapper flex items-center gap-0.5 border border-gray-600 rounded-lg p-0.5">
-                        <a href="?lang=da"
-                            class="language-switch px-2 py-1 rounded text-xs font-medium transition-all <?= $current_language === 'da' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>"
-                            aria-label="<?= htmlspecialchars(t('header.language.switch_da')) ?>"
-                            <?= $current_language === 'da' ? 'aria-current="true"' : '' ?>>
+                        <a href="?lang=da" class="language-switch px-2 py-1 rounded text-xs font-medium transition-all <?= $current_language === 'da' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>" aria-label="<?= htmlspecialchars(t('header.language.switch_da')) ?>" <?= $current_language === 'da' ? 'aria-current="true"' : '' ?>>
                             <?= t('header.language.da') ?>
                         </a>
-                        <a href="?lang=en"
-                            class="language-switch px-2 py-1 rounded text-xs font-medium transition-all <?= $current_language === 'en' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>"
-                            aria-label="<?= htmlspecialchars(t('header.language.switch_en')) ?>"
-                            <?= $current_language === 'en' ? 'aria-current="true"' : '' ?>>
+                        <a href="?lang=en" class="language-switch px-2 py-1 rounded text-xs font-medium transition-all <?= $current_language === 'en' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>" aria-label="<?= htmlspecialchars(t('header.language.switch_en')) ?>" <?= $current_language === 'en' ? 'aria-current="true"' : '' ?>>
                             <?= t('header.language.en') ?>
                         </a>
                     </div>
                 </div>
-                <button id="mobile-menu-button"
-                    class="md:hidden text-white p-2 -mr-2 bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-amber-400"
-                    aria-controls="mobile-menu"
-                    aria-expanded="false"
-                    aria-label="<?= htmlspecialchars(t('header.mobile.open_menu')) ?>">
+                <button id="mobile-menu-button" class="md:hidden text-white p-2 -mr-2 bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-amber-400" aria-controls="mobile-menu" aria-expanded="false" aria-label="<?= htmlspecialchars(t('header.mobile.open_menu')) ?>">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
                     </svg>
                 </button>
             </div>

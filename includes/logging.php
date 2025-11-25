@@ -154,7 +154,8 @@ function bbx_log(string $channel, int $level, string $event, array $context = []
 
     $jsonLine = json_encode($entry, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     if ($jsonLine === false) {
-        // Fail silently - don't block page load for logging issues
+        // Log to PHP error_log (won't cause recursion) and fail silently
+        error_log('BBX_LOG: JSON encode failed for event ' . $event . ' (json_last_error: ' . json_last_error() . ')');
         return;
     }
 

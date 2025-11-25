@@ -1,15 +1,27 @@
 /**
  * Blackbox EYE™ - Self-hosted fonts
  *
- * Font files should be placed in /assets/fonts/ directory:
- * - Inter-Regular.woff2, Inter-Medium.woff2, Inter-SemiBold.woff2, Inter-Bold.woff2
+ * SETUP REQUIRED: Font files must be placed in /assets/fonts/ directory.
+ *
+ * Required font files:
+ * - Inter-Light.woff2, Inter-Regular.woff2, Inter-Medium.woff2
+ * - Inter-SemiBold.woff2, Inter-Bold.woff2, Inter-Black.woff2
  * - ChakraPetch-Bold.woff2
+ * - SourceCodePro-Regular.woff2
+ * - Orbitron-Regular.woff2, Orbitron-Medium.woff2, Orbitron-Bold.woff2
+ * - RobotoCondensed-Light.woff2, RobotoCondensed-Regular.woff2, RobotoCondensed-Bold.woff2
  *
  * Download fonts from:
  * - Inter: https://rsms.me/inter/ or https://fonts.google.com/specimen/Inter
  * - Chakra Petch: https://fonts.google.com/specimen/Chakra+Petch
+ * - Source Code Pro: https://fonts.google.com/specimen/Source+Code+Pro
+ * - Orbitron: https://fonts.google.com/specimen/Orbitron
+ * - Roboto Condensed: https://fonts.google.com/specimen/Roboto+Condensed
  *
  * For best performance, use woff2 format only (widely supported).
+ *
+ * FALLBACK: If font files are not available, fonts will fall back to
+ * system fonts via the local() directive and Tailwind's font-family stack.
  */
 
 /* Inter - Variable weight font (300-900) */

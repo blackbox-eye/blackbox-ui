@@ -49,7 +49,10 @@ if (!in_array($action, $validActions, true)) {
 http_response_code(200);
 echo json_encode(['success' => true]);
 
-// Flush output and continue logging in background if PHP-FPM available
+// Flush output and continue logging in background if PHP-FPM available.
+// fastcgi_finish_request() is only available in PHP-FPM environments.
+// When not available, logging still happens but blocks until complete
+// (still safe as file_put_contents is fast for small writes).
 if (function_exists('fastcgi_finish_request')) {
   fastcgi_finish_request();
 }

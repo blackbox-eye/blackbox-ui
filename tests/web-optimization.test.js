@@ -96,7 +96,7 @@ test.describe('Web Optimization Tests', () => {
       const crossorigin = await chartScript.getAttribute('crossorigin');
       
       expect(integrity).toBeTruthy();
-      expect(integrity).toContain('sha');
+      expect(integrity).toMatch(/^sha(256|384|512)-/);
       expect(crossorigin).toBe('anonymous');
     });
   });

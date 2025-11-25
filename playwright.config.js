@@ -13,7 +13,7 @@ module.exports = defineConfig({
     command: 'php -S localhost:8000',
     url: 'http://localhost:8000',
     reuseExistingServer: !process.env.CI,
-    timeout: 120000,
+    timeout: 60000,
   },
   projects: [
     {

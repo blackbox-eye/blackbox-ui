@@ -391,14 +391,25 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!input) {
             return;
         }
-        input.classList.add('border-red-500', 'focus-visible:outline-red-500');
-        const messageId = input.getAttribute('aria-describedby');
-        if (messageId) {
-            const messageEl = document.getElementById(messageId);
-            if (messageEl) {
-                messageEl.textContent = message;
-                messageEl.classList.remove('hidden');
+        input.classList.add('field-error');
+        input.setAttribute('aria-invalid', 'true');
+
+        // Find error element - check for data-error-for first, then aria-describedby
+        let errorEl = document.querySelector(`[data-error-for="${input.id}"]`);
+        if (!errorEl) {
+            const messageIds = input.getAttribute('aria-describedby');
+            if (messageIds) {
+                const ids = messageIds.split(' ');
+                const errorId = ids.find(id => id.includes('error'));
+                if (errorId) {
+                    errorEl = document.getElementById(errorId);
+                }
             }
+        }
+
+        if (errorEl) {
+            errorEl.textContent = message;
+            errorEl.classList.remove('hidden');
         }
     };
 
@@ -406,14 +417,25 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!input) {
             return;
         }
-        input.classList.remove('border-red-500', 'focus-visible:outline-red-500');
-        const messageId = input.getAttribute('aria-describedby');
-        if (messageId) {
-            const messageEl = document.getElementById(messageId);
-            if (messageEl) {
-                messageEl.textContent = '';
-                messageEl.classList.add('hidden');
+        input.classList.remove('field-error');
+        input.removeAttribute('aria-invalid');
+
+        // Find error element - check for data-error-for first, then aria-describedby
+        let errorEl = document.querySelector(`[data-error-for="${input.id}"]`);
+        if (!errorEl) {
+            const messageIds = input.getAttribute('aria-describedby');
+            if (messageIds) {
+                const ids = messageIds.split(' ');
+                const errorId = ids.find(id => id.includes('error'));
+                if (errorId) {
+                    errorEl = document.getElementById(errorId);
+                }
             }
+        }
+
+        if (errorEl) {
+            errorEl.textContent = '';
+            errorEl.classList.add('hidden');
         }
     };
 

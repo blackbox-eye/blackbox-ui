@@ -1,84 +1,81 @@
----
 name: Sprint 5 Smoke Test
 
 on:
-  push:
+  pull_request:
     branches: [main]
-  workflow_dispatch:
+    paths:
+      - 'assets/js/site.js'
+      - 'assets/js/site.min.js'
+      - '*.php'
+      - 'lang/*.json'
+      - 'includes/*.php'
 
 jobs:
-  lighthouse:
-    name: Lighthouse CI (Assertions)
+  smoke-test:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    permissions:
-      contents: read
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          node-version: '20'
+          php-version: '8.2'
+          extensions: mbstring, json
 
-      - name: Install Chrome dependencies
+      - name: Start PHP server
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libgbm1 libatk-bridge2.0-0 libgtk-3-0
+          php -S localhost:8000 &
+          sleep 2
 
-      - name: Create output directory
-        run: mkdir -p lighthouse-results
-
-      - name: Run Lighthouse CI (assertions only)
-        env:
-          SITE_URL: ${{ secrets.SITE_URL || 'https://blackbox.codes' }}
+      - name: Test endpoints
         run: |
-          echo "🔍 Running Lighthouse CI with assertions..."
-          echo "   Target URL: $SITE_URL"
+          curl -f http://localhost:8000/index.php || exit 1
+          curl -f http://localhost:8000/demo.php || exit 1
+          curl -f http://localhost:8000/pricing.php || exit 1
+          curl -f http://localhost:8000/free-scan.php || exit 1
+          echo "✅ All pages load successfully"
 
-          set +e
-          npx -y @lhci/cli@0.13.x autorun \
-            --collect.url="$SITE_URL" \
-            --collect.numberOfRuns=1 \
-            --assert.assertMatrix="./.lighthouseci/assertions.json" \
-            --upload.target=filesystem \
-            --upload.outputDir=./lighthouse-results
-          LHCI_EXIT=$?
-          set -e
-
-          if [ $LHCI_EXIT -eq 0 ]; then
-            echo "✅ Lighthouse CI assertions passed."
-          elif [ $LHCI_EXIT -eq 1 ]; then
-            echo "⚠️ Lighthouse CI assertions failed (exit code 1)."
-            echo "   This is expected if performance/accessibility thresholds are not met."
-          else
-            echo "❌ Lighthouse CI encountered an error (exit code $LHCI_EXIT)."
-            exit $LHCI_EXIT
-          fi
-
-      - name: Ensure artifact directory is not empty
+      - name: Check JavaScript syntax
         run: |
-          echo "Checking lighthouse-results directory..."
-          if [ ! -d "lighthouse-results" ]; then
-            echo "Directory missing. Creating with placeholder."
-            mkdir -p lighthouse-results
-            echo '{"placeholder": true, "reason": "directory_missing", "timestamp": "'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'"}' \
-              > lighthouse-results/placeholder.json
-          elif [ -z "$(ls -A lighthouse-results)" ]; then
-            echo "Directory empty. Adding placeholder."
-            echo '{"placeholder": true, "reason": "directory_empty", "timestamp": "'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'"}' \
-              > lighthouse-results/placeholder.json
-          else
-            echo "Directory contains files."
-          fi
-          echo "Contents:"
-          ls -la lighthouse-results/
+          npm install acorn
+          node -e "const acorn = require('acorn'); const fs = require('fs'); try { acorn.parse(fs.readFileSync('assets/js/site.js', 'utf8'), { ecmaVersion: 2021, sourceType: 'script' }); console.log('✅ JavaScript syntax valid'); } catch(e) { console.error('❌', e.message); process.exit(1); }"
 
-      - name: Upload Lighthouse results
-        uses: actions/upload-artifact@v4
+      - name: Verify translation files
+        run: |
+          php -r "json_decode(file_get_contents('lang/da.json'), true) or exit(1);"
+          php -r "json_decode(file_get_contents('lang/en.json'), true) or exit(1);"
+          echo "✅ Translation files valid JSON"
+
+  lighthouse:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          name: lhci-results
-          path: lighthouse-results/
-          retention-days: 14
-          if-no-files-found: warn
+          php-version: '8.2'
+
+      - name: Start PHP server
+        run: |
+          php -S localhost:8000 &
+          sleep 2
+
+      - name: Audit with Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          urls: |
+            http://localhost:8000/index.php
+            http://localhost:8000/demo.php
+            http://localhost:8000/pricing.php
+            http://localhost:8000/free-scan.php
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          budgetPath: ./.lighthouserc.json
+
+      - name: Check Lighthouse scores
+        run: |
+          echo "📊 Lighthouse audit complete"
+          echo "View results in artifacts"

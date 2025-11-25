@@ -51,6 +51,115 @@ include 'includes/site-header.php';
                 </div>
             </div>
 
+            <div id="pricing-calculator"
+                class="max-w-4xl mx-auto glass-effect rounded-3xl p-6 sm:p-8 lg:p-10 mb-16"
+                data-result-heading="<?= htmlspecialchars(t('pricing.calculator.result.heading')) ?>"
+                data-result-monthly="<?= htmlspecialchars(t('pricing.calculator.result.monthly_label')) ?>"
+                data-result-per-user="<?= htmlspecialchars(t('pricing.calculator.result.per_user_label')) ?>"
+                data-result-recommended="<?= htmlspecialchars(t('pricing.calculator.result.recommended_plan')) ?>"
+                data-result-addons="<?= htmlspecialchars(t('pricing.calculator.result.addons_label')) ?>"
+                data-result-next="<?= htmlspecialchars(t('pricing.calculator.result.next_steps')) ?>"
+                data-result-compliance="<?= htmlspecialchars(t('pricing.calculator.result.compliance_note')) ?>"
+                data-result-disclaimer="<?= htmlspecialchars(t('pricing.calculator.result.estimation_disclaimer')) ?>"
+                data-result-popular="<?= htmlspecialchars(t('pricing.calculator.result.badge_popular')) ?>"
+                data-demo-label="<?= htmlspecialchars(t('header.menu.demo')) ?>"
+                data-plan-mvp-basis="<?= htmlspecialchars(t('pricing.mvp.basis.title')) ?>"
+                data-plan-mvp-pro="<?= htmlspecialchars(t('pricing.mvp.pro.title')) ?>"
+                data-plan-mvp-premium="<?= htmlspecialchars(t('pricing.mvp.premium.title')) ?>"
+                data-plan-standard="<?= htmlspecialchars(t('pricing.enterprise.standard.title')) ?>"
+                data-plan-premium="<?= htmlspecialchars(t('pricing.enterprise.premium.title')) ?>"
+                data-plan-enterprise="<?= htmlspecialchars(t('pricing.enterprise.enterprise.title')) ?>">
+                <div class="max-w-3xl mx-auto text-center mb-10">
+                    <h2 class="text-2xl sm:text-3xl font-bold mb-4"><?= t('pricing.calculator.title') ?></h2>
+                    <p class="text-gray-300 text-base sm:text-lg">
+                        <?= t('pricing.calculator.description') ?>
+                    </p>
+                </div>
+                <form id="pricing-calculator-form" class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start" novalidate>
+                    <div class="space-y-6">
+                        <div>
+                            <label for="calc-users" class="block text-sm font-medium text-gray-300 mb-2"><?= t('pricing.calculator.users_label') ?></label>
+                            <input
+                                type="number"
+                                id="calc-users"
+                                name="users"
+                                class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                                min="1"
+                                step="1"
+                                inputmode="numeric"
+                                required
+                                data-required-message="<?= htmlspecialchars(t('pricing.calculator.validation.users_required')) ?>"
+                                data-min-message="<?= htmlspecialchars(t('pricing.calculator.validation.users_min')) ?>"
+                                aria-describedby="calc-users-help calc-users-error">
+                            <p id="calc-users-help" class="text-xs text-gray-400 mt-2"><?= t('pricing.calculator.users_help') ?></p>
+                            <p id="calc-users-error" class="text-sm text-rose-400 mt-2 hidden" data-error-for="calc-users"></p>
+                        </div>
+                        <div>
+                            <label for="calc-endpoints" class="block text-sm font-medium text-gray-300 mb-2"><?= t('pricing.calculator.endpoints_label') ?></label>
+                            <input
+                                type="number"
+                                id="calc-endpoints"
+                                name="endpoints"
+                                class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                                min="0"
+                                step="10"
+                                inputmode="numeric"
+                                required
+                                data-required-message="<?= htmlspecialchars(t('pricing.calculator.validation.endpoints_required')) ?>"
+                                aria-describedby="calc-endpoints-help calc-endpoints-error">
+                            <p id="calc-endpoints-help" class="text-xs text-gray-400 mt-2"><?= t('pricing.calculator.endpoints_help') ?></p>
+                            <p id="calc-endpoints-error" class="text-sm text-rose-400 mt-2 hidden" data-error-for="calc-endpoints"></p>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <fieldset>
+                            <legend class="block text-sm font-medium text-gray-300 mb-2"><?= t('pricing.calculator.addons_label') ?></legend>
+                            <p class="text-xs text-gray-400 mb-4" id="calc-addons-help"><?= t('pricing.calculator.addons_help') ?></p>
+                            <div class="space-y-3" role="group" aria-describedby="calc-addons-help">
+                                <label class="flex items-start gap-3 bg-gray-800/50 border border-gray-700 rounded-xl px-4 py-3 hover:border-amber-400 transition-colors">
+                                    <input type="checkbox" class="mt-1 accent-amber-400" name="addons" value="pve">
+                                    <span class="text-sm text-gray-200">
+                                        <span class="block font-semibold text-white"><?= t('pricing.calculator.addons.pve.title') ?></span>
+                                        <span class="block text-xs text-gray-400 mt-1"><?= t('pricing.calculator.addons.pve.description') ?></span>
+                                    </span>
+                                </label>
+                                <label class="flex items-start gap-3 bg-gray-800/50 border border-gray-700 rounded-xl px-4 py-3 hover:border-amber-400 transition-colors">
+                                    <input type="checkbox" class="mt-1 accent-amber-400" name="addons" value="aut">
+                                    <span class="text-sm text-gray-200">
+                                        <span class="block font-semibold text-white"><?= t('pricing.calculator.addons.aut.title') ?></span>
+                                        <span class="block text-xs text-gray-400 mt-1"><?= t('pricing.calculator.addons.aut.description') ?></span>
+                                    </span>
+                                </label>
+                                <label class="flex items-start gap-3 bg-gray-800/50 border border-gray-700 rounded-xl px-4 py-3 hover:border-amber-400 transition-colors">
+                                    <input type="checkbox" class="mt-1 accent-amber-400" name="addons" value="bridge">
+                                    <span class="text-sm text-gray-200">
+                                        <span class="block font-semibold text-white"><?= t('pricing.calculator.addons.bridge.title') ?></span>
+                                        <span class="block text-xs text-gray-400 mt-1"><?= t('pricing.calculator.addons.bridge.description') ?></span>
+                                    </span>
+                                </label>
+                                <label class="flex items-start gap-3 bg-gray-800/50 border border-gray-700 rounded-xl px-4 py-3 hover:border-amber-400 transition-colors">
+                                    <input type="checkbox" class="mt-1 accent-amber-400" name="addons" value="support">
+                                    <span class="text-sm text-gray-200">
+                                        <span class="block font-semibold text-white"><?= t('pricing.calculator.addons.support.title') ?></span>
+                                        <span class="block text-xs text-gray-400 mt-1"><?= t('pricing.calculator.addons.support.description') ?></span>
+                                    </span>
+                                </label>
+                            </div>
+                        </fieldset>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <button type="submit" class="inline-flex items-center justify-center bg-amber-400 text-black font-semibold py-3 px-6 rounded-lg hover:bg-amber-500 transition-colors" data-loading-text="<?= htmlspecialchars(t('pricing.calculator.loading', 'Beregner...')) ?>">
+                                <?= t('pricing.calculator.submit') ?>
+                            </button>
+                            <button type="reset" class="inline-flex items-center justify-center border border-gray-600 text-gray-300 font-semibold py-3 px-6 rounded-lg hover:border-amber-400 hover:text-white transition-colors">
+                                <?= t('pricing.calculator.reset') ?>
+                            </button>
+                        </div>
+                        <p id="pricing-calculator-status" class="sr-only" aria-live="polite"></p>
+                    </div>
+                </form>
+                <div id="pricing-calculator-result" class="hidden mt-10" aria-live="polite"></div>
+            </div>
+
             <div class="pricing-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch mb-16">
                 <!-- MVP-Basis -->
                 <article class="glass-effect rounded-2xl p-6 lg:p-8 text-center flex flex-col">

@@ -17,27 +17,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = trim($_POST['password'] ?? '');
     $pin      = trim($_POST['pin'] ?? '');
     $token    = trim($_POST['token'] ?? '');
+    $normalizedAgentId = mb_strtolower($agent_id, 'UTF-8');
 
     // Robusthedstjek: Sikrer at $pdo er tilgængelig før brug
     if (isset($pdo)) {
         // Forbereder og udfører databasekald for at finde agenten
-        $stmt = $pdo->prepare("SELECT * FROM agents WHERE agent_id = ?");
-        $stmt->execute([$agent_id]);
+        $stmt = $pdo->prepare("SELECT * FROM agents WHERE LOWER(agent_id) = ? LIMIT 1");
+        $stmt->execute([$normalizedAgentId]);
         $agent = $stmt->fetch();
 
-        // Validerer login-oplysningerne (UDEN hash – ren tekst sammenligning)
-        if ($agent && $password === $agent['password'] && $pin === $agent['pin']) {
-            session_regenerate_id(true);
-            $_SESSION['agent_id'] = $agent['agent_id'];
-            $_SESSION['is_admin'] = (bool)$agent['is_admin'];
-            log_agent_event($agent['agent_id'], 'LOGIN_SUCCESS');
-            header("Location: dashboard.php");
-            exit;
+        $attemptId = $agent_id !== '' ? $agent_id : 'unknown';
+
+        if ($agent) {
+            $storedPassword = (string) ($agent['password'] ?? '');
+            $passwordMatch  = false;
+            $rehashNeeded   = false;
+
+            if ($storedPassword !== '') {
+                if (password_verify($password, $storedPassword)) {
+                    $passwordMatch = true;
+                    $rehashNeeded = password_needs_rehash($storedPassword, PASSWORD_DEFAULT);
+                } elseif (hash_equals($storedPassword, $password)) {
+                    $passwordMatch = true;
+                    $rehashNeeded = true; // Upgrade legacy klartekst-credentials til moderne hash
+                }
+            }
+
+            $storedPinRaw   = (string) ($agent['pin'] ?? '');
+            $providedPinRaw = $pin;
+
+            if ($storedPinRaw !== '' && $providedPinRaw !== '') {
+                $pinLength = max(strlen($storedPinRaw), strlen($providedPinRaw));
+                $storedPinCanonical = str_pad($storedPinRaw, $pinLength, '0', STR_PAD_LEFT);
+                $providedPinCanonical = str_pad($providedPinRaw, $pinLength, '0', STR_PAD_LEFT);
+                $pinMatch = hash_equals($storedPinCanonical, $providedPinCanonical);
+            } else {
+                $pinMatch = false;
+            }
+            $isActive = strtolower((string) $agent['status']) === 'active';
+
+            if ($passwordMatch && $pinMatch && $isActive) {
+                if ($rehashNeeded) {
+                    $newHash = password_hash($password, PASSWORD_DEFAULT);
+                    try {
+                        $upgradeStmt = $pdo->prepare("UPDATE agents SET password = ? WHERE id = ?");
+                        $upgradeStmt->execute([$newHash, $agent['id']]);
+                    } catch (Throwable $upgradeError) {
+                        error_log('[LOGIN] Password rehash failed for agent ' . $agent['agent_id'] . ': ' . $upgradeError->getMessage());
+                    }
+                }
+
+                session_regenerate_id(true);
+                $_SESSION['agent_id'] = $agent['agent_id'];
+                $_SESSION['is_admin'] = (bool)$agent['is_admin'];
+                log_agent_event($agent['agent_id'], 'LOGIN_SUCCESS');
+                header("Location: dashboard.php");
+                exit;
+            }
+
+            $failure = [
+                'status'   => $agent['status'] ?? 'unknown',
+                'reason'   => !$isActive ? 'inactive_agent' : (!$passwordMatch ? 'password_mismatch' : 'pin_mismatch')
+            ];
+            log_agent_event($attemptId, 'LOGIN_FAILED', $failure);
         } else {
-            $attemptId = $agent_id !== '' ? $agent_id : 'unknown';
-            log_agent_event($attemptId, 'LOGIN_FAILED', ['reason' => 'invalid_credentials']);
-            $error = "Ugyldigt Agent ID, Password eller PIN.";
+            log_agent_event($attemptId, 'LOGIN_FAILED', ['reason' => 'agent_not_found']);
         }
+
+        $error = "Ugyldigt Agent ID, Password eller PIN.";
     } else {
         if ($agent_id !== '') {
             log_agent_event($agent_id, 'LOGIN_FAILED', ['reason' => 'db_unavailable']);
@@ -48,15 +95,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="da">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($page_title); ?> - Blackbox EYE</title>
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Chakra+Petch:wght@700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Chakra+Petch:wght@700&display=swap" rel="stylesheet" crossorigin="anonymous">
 
     <!-- --- ENDELIG, KORRIGERET STYLING --- -->
     <style>
@@ -67,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             --glass-border: rgba(255, 255, 255, 0.2);
             --glass-bg: rgba(22, 28, 39, 0.75);
             /* OPDATERET: Øget gennemsigtighed med ca. 15% */
-            --input-bg: rgba(25, 31, 41, 0.35); 
+            --input-bg: rgba(25, 31, 41, 0.35);
             --digital-rain-color: #008000;
             --digital-rain-gold: #FFD700;
             --digital-rain-white: #EAEAEA;
@@ -94,10 +142,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: 1px solid var(--glass-border);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
         }
-        
+
         @keyframes fade-in-box {
-            from { opacity: 0; transform: translateY(30px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         /* NYT: Subtil glitch-effekt til logo */
@@ -107,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             text-transform: uppercase;
             position: relative;
             /* OPDATERET: 15% mindre font-størrelse */
-            font-size: 1.9rem; 
+            font-size: 1.9rem;
             line-height: 1;
             color: var(--text-high-emphasis);
             animation: glitch-subtle 4s infinite step-end;
@@ -134,13 +189,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         @keyframes glitch-subtle {
-            0% { text-shadow: 0.01em 0 0 var(--digital-rain-color); }
-            2% { text-shadow: 0.01em 0 0 var(--digital-rain-gold); }
-            3% { text-shadow: -0.01em 0 0 var(--digital-rain-white); }
-            4% { text-shadow: 0.01em 0 0 var(--digital-rain-color); }
-            100% { text-shadow: 0.01em 0 0 var(--digital-rain-color); }
+            0% {
+                text-shadow: 0.01em 0 0 var(--digital-rain-color);
+            }
+
+            2% {
+                text-shadow: 0.01em 0 0 var(--digital-rain-gold);
+            }
+
+            3% {
+                text-shadow: -0.01em 0 0 var(--digital-rain-white);
+            }
+
+            4% {
+                text-shadow: 0.01em 0 0 var(--digital-rain-color);
+            }
+
+            100% {
+                text-shadow: 0.01em 0 0 var(--digital-rain-color);
+            }
         }
-        
+
         .custom-input {
             background-color: var(--input-bg) !important;
             backdrop-filter: blur(3px);
@@ -166,17 +235,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </style>
 </head>
+
 <body class="antialiased">
 
     <canvas id="login-canvas" class="absolute top-0 left-0 w-full h-full z-0"></canvas>
 
     <main class="relative min-h-screen flex items-center justify-center p-4">
-        
+
         <div class="login-box-container w-full max-w-md">
             <div class="p-8 space-y-6 glass-effect rounded-2xl z-10">
-                
+
                 <header class="flex flex-col items-center text-center">
-                    <img src="assets/logo.png" alt="Blackbox EYE Emblem" class="h-24 w-24 mb-4" loading="lazy" width="96" height="96">
+                    <img src="assets/logo.png" alt="Blackbox EYE Emblem" class="h-24 w-24 mb-4" loading="lazy">
                     <!-- OPDATERET: Bruger den nye subtile glitch-effekt -->
                     <h1 class="subtle-glitch-logo" aria-label="Blackbox EYE">
                         Blackbox EYE&trade;
@@ -208,9 +278,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="token" class="sr-only">Token (valgfri)</label>
                         <input type="text" name="token" id="token" placeholder="Token (valgfri)" class="custom-input">
                     </div>
-                    
-                    <button type="submit" 
-                            class="w-full font-bold py-3 px-4 rounded-md bg-amber-400 text-black hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-amber-500 transition-all duration-300 transform hover:scale-105">
+
+                    <button type="submit"
+                        class="w-full font-bold py-3 px-4 rounded-md bg-amber-400 text-black hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-amber-500 transition-all duration-300 transform hover:scale-105">
                         AUTENTIFICER
                     </button>
                 </form>
@@ -227,7 +297,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const canvas = document.getElementById('login-canvas');
             if (canvas) {
                 const ctx = canvas.getContext('2d');
-                
+
                 const setupCanvas = () => {
                     canvas.width = window.innerWidth;
                     canvas.height = window.innerHeight;
@@ -237,9 +307,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 let columns = Math.floor(canvas.width / 20);
                 const drops = Array(columns).fill(1).map(() => Math.ceil(Math.random() * canvas.height));
                 const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@#$%^&*()_+-=[]{}|;':,./<>?".split('');
-                
-                const rainColor  = getComputedStyle(document.documentElement).getPropertyValue('--digital-rain-color').trim();
-                const goldColor  = getComputedStyle(document.documentElement).getPropertyValue('--digital-rain-gold').trim();
+
+                const rainColor = getComputedStyle(document.documentElement).getPropertyValue('--digital-rain-color').trim();
+                const goldColor = getComputedStyle(document.documentElement).getPropertyValue('--digital-rain-gold').trim();
                 const whiteColor = getComputedStyle(document.documentElement).getPropertyValue('--digital-rain-white').trim();
 
                 function drawDigitalRain() {
@@ -249,12 +319,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     for (let i = 0; i < drops.length; i++) {
                         const text = chars[Math.floor(Math.random() * chars.length)];
-                        
+
                         const random = Math.random();
                         if (random > 0.98) {
                             ctx.fillStyle = goldColor;
                         } else if (random > 0.96) {
-                             ctx.fillStyle = whiteColor;
+                            ctx.fillStyle = whiteColor;
                         } else {
                             ctx.fillStyle = rainColor;
                         }
@@ -267,7 +337,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         drops[i]++;
                     }
                 }
-                
+
                 let animationInterval = setInterval(drawDigitalRain, 35);
 
                 window.addEventListener('resize', () => {
@@ -281,4 +351,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
     </script>
 </body>
+
 </html>

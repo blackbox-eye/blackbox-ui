@@ -11,12 +11,13 @@ const viewports = [
 for (const vp of viewports) {
   test(`homepage ${vp.name} (${vp.width}x${vp.height})`, async ({ page, browserName }) => {
     await page.setViewportSize({ width: vp.width, height: vp.height });
-    await page.goto('https://blackbox.codes', { waitUntil: 'networkidle' });
-    
+    // Use baseURL from config (supports both localhost and production)
+    await page.goto('/', { waitUntil: 'networkidle' });
+
     // Take full page screenshot
     const filename = `artifacts/${browserName}-${vp.name}-${vp.width}x${vp.height}.png`;
     await page.screenshot({ path: filename, fullPage: true });
-    
+
     // Try to find and screenshot header if it exists
     const headerSelector = 'header, nav, .header, .navbar';
     try {

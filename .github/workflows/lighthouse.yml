@@ -20,6 +20,16 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Validate Lighthouse token
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -z "$LHCI_GITHUB_APP_TOKEN" ]; then
+            echo "::error::Missing GitHub token for Lighthouse CI"
+            exit 1
+          fi
+          echo "GitHub token available for Lighthouse CI."
+
       - name: Run Lighthouse (treosh action)
         uses: treosh/lighthouse-ci-action@v12
         with:

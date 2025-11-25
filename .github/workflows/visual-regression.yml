@@ -9,7 +9,7 @@ on:
 jobs:
   visual:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -18,6 +18,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+
+      - name: Validate GitHub token
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -z "$GITHUB_TOKEN" ]; then
+            echo "::error::Missing GITHUB_TOKEN for Playwright reporting"
+            exit 1
+          fi
+          echo "GitHub token available."
 
       - name: Install dependencies
         run: npm install

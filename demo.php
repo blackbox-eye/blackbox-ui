@@ -1,10 +1,11 @@
 <?php
+
 /**
  * Demo Booking Page - Blackbox EYE
  * Sprint 5: UX & Lead-Flow Improvements
- * 
+ *
  * This page provides a demo booking interface using Calendly integration
- * 
+ *
  * @version 1.0
  * @date 2025-11-23
  */
@@ -33,12 +34,20 @@ include 'includes/site-header.php';
                 <p class="text-amber-400 uppercase tracking-widest text-sm font-semibold mb-4">
                     <?= t('demo.hero.tagline', 'GRATIS DEMONSTRATION') ?>
                 </p>
-                <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 hero-gradient-text">
+                <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 hero-gradient-text tracking-tight">
                     <?= t('demo.hero.title', 'Se Blackbox EYE™ i aktion') ?>
                 </h1>
-                <p class="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-3xl mx-auto">
+                <p class="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto">
                     <?= t('demo.hero.description', 'Book en personlig demo og oplev hvordan vores AI-drevne sikkerhedsplatform kan transformere din cybersikkerhed. Få svar på dine spørgsmål fra vores eksperter.') ?>
                 </p>
+                <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#demo-booking" class="inline-flex items-center justify-center bg-amber-400 text-black font-semibold py-3 px-8 rounded-lg hover:bg-amber-500 transition-colors">
+                        <?= t('demo.hero.primary_cta', 'Book demo slot') ?>
+                    </a>
+                    <button type="button" class="inline-flex items-center justify-center border border-amber-400 text-amber-400 font-semibold py-3 px-8 rounded-lg hover:bg-amber-400 hover:text-black transition-colors" data-calendly-launch="popup" data-calendly-url="<?= htmlspecialchars(BBX_CALENDLY_URL) ?>">
+                        <?= t('demo.hero.secondary_cta', 'Åbn booking i popup') ?>
+                    </button>
+                </div>
             </div>
 
             <!-- Benefits Grid -->
@@ -87,21 +96,21 @@ include 'includes/site-header.php';
             </div>
 
             <!-- Calendly Embed Section -->
-            <div class="max-w-5xl mx-auto">
+            <div class="max-w-5xl mx-auto" id="demo-booking">
                 <div class="glass-effect rounded-2xl p-6 sm:p-8">
                     <h2 class="text-2xl font-bold mb-6 text-center">
                         <?= t('demo.booking.title', 'Vælg et tidspunkt der passer dig') ?>
                     </h2>
-                    
+
                     <!-- Calendly inline widget begin -->
-                    <div class="calendly-inline-widget" 
-                         data-url="<?= htmlspecialchars(BBX_CALENDLY_URL) ?>" 
-                         style="min-width:320px;height:700px;">
+                    <div class="calendly-inline-widget"
+                        data-url="<?= htmlspecialchars(BBX_CALENDLY_URL) ?>"
+                        style="min-width:320px;height:700px;">
                     </div>
                     <!-- Calendly inline widget end -->
-                    
+
                     <p class="text-center text-gray-400 text-sm mt-6">
-                        <?= t('demo.booking.note', 'Kan du ikke finde et passende tidspunkt? Kontakt os direkte på') ?> 
+                        <?= t('demo.booking.note', 'Kan du ikke finde et passende tidspunkt? Kontakt os direkte på') ?>
                         <a href="mailto:ops@blackbox.codes" class="text-amber-400 hover:text-amber-300">ops@blackbox.codes</a>
                     </p>
                 </div>
@@ -116,7 +125,7 @@ include 'includes/site-header.php';
                 <h2 class="text-3xl sm:text-4xl font-bold mb-8 text-center">
                     <?= t('demo.expect.title', 'Hvad kan du forvente?') ?>
                 </h2>
-                
+
                 <div class="space-y-6">
                     <div class="flex gap-4">
                         <div class="flex-shrink-0 w-10 h-10 rounded-full bg-amber-400 text-black flex items-center justify-center font-bold">
@@ -185,15 +194,42 @@ include 'includes/site-header.php';
     </section>
 </main>
 
-<!-- Calendly badge widget begin -->
-<!-- Note: Calendly resources are dynamically updated. SRI not recommended but using crossorigin for security -->
-<link href="https://assets.calendly.com/assets/external/widget.css" 
-      rel="stylesheet" 
-      crossorigin="anonymous">
-<script src="https://assets.calendly.com/assets/external/widget.js" 
-        type="text/javascript" 
-        async 
-        crossorigin="anonymous"></script>
-<!-- Calendly badge widget end -->
+<!-- Calendly widget scripts -->
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" crossorigin="anonymous">
+<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async crossorigin="anonymous"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Calendly popup buttons
+        const popupButtons = document.querySelectorAll('[data-calendly-launch="popup"]');
+        popupButtons.forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = this.getAttribute('data-calendly-url');
+                if (url && typeof Calendly !== 'undefined') {
+                    Calendly.initPopupWidget({
+                        url: url
+                    });
+                }
+            });
+        });
+
+        // Re-initialize inline widget if Calendly is loaded
+        if (typeof Calendly !== 'undefined') {
+            const inlineWidget = document.querySelector('.calendly-inline-widget');
+            if (inlineWidget) {
+                const widgetUrl = inlineWidget.getAttribute('data-url');
+                if (widgetUrl) {
+                    Calendly.initInlineWidget({
+                        url: widgetUrl,
+                        parentElement: inlineWidget,
+                        prefill: {},
+                        utm: {}
+                    });
+                }
+            }
+        }
+    });
+</script>
 
 <?php include 'includes/site-footer.php'; ?>

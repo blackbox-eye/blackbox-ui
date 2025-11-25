@@ -341,7 +341,7 @@ if (!empty($disable_alphabot)) {
                         </button>
                     </div>
                 </div>
-                <nav class="hidden md:block" aria-label="<?= htmlspecialchars(t('header.desktop.primary_navigation', 'Primær navigation')) ?>">
+                <nav class="main-nav" aria-label="<?= htmlspecialchars(t('header.desktop.primary_navigation', 'Primær navigation')) ?>">
                     <ul class="main-nav-list" role="list">
                         <?php foreach ($nav_links as $link): ?>
                             <li>

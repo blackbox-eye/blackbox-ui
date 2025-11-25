@@ -293,18 +293,18 @@ if (!empty($disable_alphabot)) {
                     <span aria-hidden="true">Blackbox EYE&trade;</span>
                     <span aria-hidden="true">Blackbox EYE&trade;</span>
                 </div>
-                <div class="hidden md:flex flex-1 relative items-center" aria-label="Primary Navigation Wrapper">
-                    <button id="nav-scroll-left" type="button" class="nav-scroll-btn hidden absolute left-0 h-12 w-10 flex items-center justify-center text-amber-400/70 hover:text-amber-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400" aria-label="Scroll navigation left">
+                <div class="hidden md:flex nav-scroll-container flex-1 relative items-center overflow-hidden" aria-label="Primary Navigation Wrapper">
+                    <button id="nav-scroll-left" type="button" class="nav-scroll-btn absolute left-0 h-12 w-10 flex items-center justify-center text-amber-400/70 hover:text-amber-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400" aria-label="Scroll navigation left" data-direction="left" hidden>
                         <span aria-hidden="true">&#8249;</span>
                     </button>
-                    <nav id="nav-scroll" class="nav-scroll flex flex-1 items-center gap-3 lg:gap-5 xl:gap-6 overflow-x-auto scroll-smooth px-1" aria-label="Primary" tabindex="0">
+                    <nav id="nav-scroll" class="nav-scroll flex flex-1 items-center gap-3 lg:gap-5 xl:gap-6 overflow-x-auto scroll-smooth px-6" aria-label="Primary" tabindex="0">
                         <?php foreach ($nav_links as $link): ?>
                             <a href="<?= $link['href'] ?>" class="nav-link <?= aig_nav_class($link['slug'], $current_page) ?> whitespace-nowrap text-sm lg:text-base" <?= aig_nav_aria($link['slug'], $current_page) ?>>
                                 <?= htmlspecialchars($link['label']) ?>
                             </a>
                         <?php endforeach; ?>
                     </nav>
-                    <button id="nav-scroll-right" type="button" class="nav-scroll-btn hidden absolute right-0 h-12 w-10 flex items-center justify-center text-amber-400/70 hover:text-amber-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400" aria-label="Scroll navigation right">
+                    <button id="nav-scroll-right" type="button" class="nav-scroll-btn absolute right-0 h-12 w-10 flex items-center justify-center text-amber-400/70 hover:text-amber-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400" aria-label="Scroll navigation right" data-direction="right" hidden>
                         <span aria-hidden="true">&#8250;</span>
                     </button>
                 </div>

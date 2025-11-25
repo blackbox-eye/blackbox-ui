@@ -69,9 +69,13 @@ body { background-color: var(--bg-color); color: var(--text-high-emphasis); font
 .skeleton-line.short{width:60%;}
 .skeleton-heading{height:1.5rem; width:80%; margin-bottom:1rem;}
 /* Horizontal Nav Scroll */
+.nav-scroll-container{position:relative; overflow:hidden;}
 .nav-scroll{scrollbar-width:none;}
 .nav-scroll::-webkit-scrollbar{display:none;}
-.nav-scroll-btn{background:linear-gradient(to right, rgba(16,20,25,.85), rgba(16,20,25,.2)); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); border:none; cursor:pointer; transition:color .2s ease, opacity .2s ease;}
+.nav-scroll-btn{background:rgba(16,20,25,.85); border:none; cursor:pointer; transition:color .2s ease, opacity .2s ease; pointer-events:auto;}
+.nav-scroll-btn[data-direction="left"]{background:linear-gradient(to right, rgba(16,20,25,.95) 40%, rgba(16,20,25,0));}
+.nav-scroll-btn[data-direction="right"]{background:linear-gradient(to left, rgba(16,20,25,.95) 40%, rgba(16,20,25,0));}
+.nav-scroll-btn span{font-size:1.5rem; line-height:1;}
 .nav-scroll-btn[hidden]{display:none !important;}
 .nav-scroll-btn:hover{color:var(--primary-accent);}
 .nav-scroll:focus-visible{outline:2px solid var(--primary-accent); outline-offset:2px; border-radius:4px;}

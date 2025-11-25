@@ -5,7 +5,8 @@
   "scripts": {
     "build:tailwind": "npx tailwindcss -i ./assets/css/tailwind-src.css -o ./assets/css/tailwind.full.css --minify",
     "test": "playwright test --reporter=list",
-    "test:ci": "playwright test --reporter=list --output=artifacts"
+    "test:ci": "playwright test --reporter=list --output=artifacts",
+    "a11y:contrast": "node tools/a11y/contrast-check.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.56.1",

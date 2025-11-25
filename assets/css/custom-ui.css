@@ -11,6 +11,7 @@
   --digital-rain-color: #008000;
 }
 body { background-color: var(--bg-color); color: var(--text-high-emphasis); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+.focus-visible:focus-visible, :focus-visible { outline:2px solid var(--primary-accent); outline-offset:2px; border-radius:2px; }
 .glass-effect { background-color: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); }
 #main-header { background-color: transparent; backdrop-filter: none; }
 #main-header.scrolled { background-color: rgba(16,20,25,0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 4px 6px -1px rgba(0,0,0,.3); }

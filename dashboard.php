@@ -24,191 +24,191 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <title>Blackbox EYE // Aura Kontrolpanel</title>
     <script src="https://cdn.tailwindcss.com"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"
         integrity="sha256-s4B2di9zY7yekStouOA0gmeY213ya7YfAA7C56MTe8c="
         crossorigin="anonymous">
-        </script>
-        <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet" crossorigin="anonymous">
-        <style>
-            :root {
-                --brand-gold: #D4AF35;
-                --brand-gold-transparent-heavy: rgba(212, 175, 55, 0.2);
-                --brand-gold-transparent-light: rgba(212, 175, 55, 0.1);
-                --background-dark: #0D1117;
-                --glass-bg: rgba(30, 35, 42, 0.5);
-                --glass-blur: 12px;
-                --border-color: rgba(212, 175, 55, 0.2);
-                --text-primary: #E6EDF3;
-                --text-secondary: #8B949E;
-                --critical: #F85149;
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <style>
+        :root {
+            --brand-gold: #D4AF35;
+            --brand-gold-transparent-heavy: rgba(212, 175, 55, 0.2);
+            --brand-gold-transparent-light: rgba(212, 175, 55, 0.1);
+            --background-dark: #0D1117;
+            --glass-bg: rgba(30, 35, 42, 0.5);
+            --glass-blur: 12px;
+            --border-color: rgba(212, 175, 55, 0.2);
+            --text-primary: #E6EDF3;
+            --text-secondary: #8B949E;
+            --critical: #F85149;
+        }
+
+        body {
+            background-color: var(--background-dark);
+            font-family: 'Roboto Condensed', sans-serif;
+            color: var(--text-primary);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .font-brand {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 0.05em;
+        }
+
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -2;
+        }
+
+        .watermark-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vh;
+            height: 80vh;
+            background: url('https://i.imgur.com/uF6X2xH.png') no-repeat center center;
+            /* Placeholder for logo emblem */
+            background-size: contain;
+            opacity: 0.02;
+        }
+
+        .noise-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1000 1000' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+            pointer-events: none;
+        }
+
+        .glass-module {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+            border: 1px solid transparent;
+            background-clip: padding-box;
+            border-image: linear-gradient(135deg, var(--brand-gold-transparent-heavy), var(--brand-gold-transparent-light)) 1;
+        }
+
+        @keyframes pulse-critical {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(248, 81, 73, 0.4);
             }
 
-            body {
-                background-color: var(--background-dark);
-                font-family: 'Roboto Condensed', sans-serif;
-                color: var(--text-primary);
-                overflow: hidden;
-                height: 100vh;
-                width: 100vw;
+            70% {
+                box-shadow: 0 0 10px 15px rgba(248, 81, 73, 0);
             }
+        }
 
-            .font-brand {
-                font-family: 'Orbitron', sans-serif;
-                letter-spacing: 0.05em;
-            }
+        .pulse-critical {
+            animation: pulse-critical 2s infinite;
+        }
 
-            .background-container {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                z-index: -2;
-            }
+        /* --- Grid Layout Definitions --- */
+        #main-grid {
+            display: grid;
+            height: 100%;
+            padding: 1rem;
+            gap: 1rem;
+            grid-template-columns: 280px repeat(10, 1fr);
+            grid-template-rows: repeat(12, 1fr);
+            grid-template-areas:
+                "nav map map map map map map map alerts alerts alerts"
+                "nav map map map map map map map alerts alerts alerts"
+                "nav map map map map map map map alerts alerts alerts"
+                "nav map map map map map map map alerts alerts alerts"
+                "nav map map map map map map map alerts alerts alerts"
+                "nav map map map map map map map ai ai ai"
+                "nav map map map map map map map ai ai ai"
+                "nav map map map map map map map ai ai ai"
+                "nav status status status net net net net ai ai ai"
+                "nav status status status net net net net ai ai ai"
+                "nav status status status net net net net ai ai ai"
+                "nav status status status net net net net ai ai ai";
+        }
 
-            .watermark-logo {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 80vh;
-                height: 80vh;
-                background: url('https://i.imgur.com/uF6X2xH.png') no-repeat center center;
-                /* Placeholder for logo emblem */
-                background-size: contain;
-                opacity: 0.02;
-            }
+        #nav-menu {
+            grid-area: nav;
+        }
 
-            .noise-overlay {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1000 1000' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-                opacity: 0.04;
-                pointer-events: none;
-            }
+        #threat-module {
+            grid-area: map;
+        }
 
-            .glass-module {
-                background: var(--glass-bg);
-                backdrop-filter: blur(var(--glass-blur));
-                -webkit-backdrop-filter: blur(var(--glass-blur));
-                border-radius: 12px;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-                border: 1px solid transparent;
-                background-clip: padding-box;
-                border-image: linear-gradient(135deg, var(--brand-gold-transparent-heavy), var(--brand-gold-transparent-light)) 1;
-            }
+        #alerts-module {
+            grid-area: alerts;
+        }
 
-            @keyframes pulse-critical {
+        #status-module {
+            grid-area: status;
+        }
 
-                0%,
-                100% {
-                    box-shadow: 0 0 0 0 rgba(248, 81, 73, 0.4);
-                }
+        #net-module {
+            grid-area: net;
+        }
 
-                70% {
-                    box-shadow: 0 0 10px 15px rgba(248, 81, 73, 0);
-                }
-            }
+        #ai-module {
+            grid-area: ai;
+        }
 
-            .pulse-critical {
-                animation: pulse-critical 2s infinite;
-            }
-
-            /* --- Grid Layout Definitions --- */
+        @media (max-width: 1440px) {
             #main-grid {
-                display: grid;
-                height: 100%;
-                padding: 1rem;
-                gap: 1rem;
-                grid-template-columns: 280px repeat(10, 1fr);
-                grid-template-rows: repeat(12, 1fr);
+                grid-template-columns: 250px repeat(10, 1fr);
                 grid-template-areas:
-                    "nav map map map map map map map alerts alerts alerts"
-                    "nav map map map map map map map alerts alerts alerts"
-                    "nav map map map map map map map alerts alerts alerts"
-                    "nav map map map map map map map alerts alerts alerts"
-                    "nav map map map map map map map alerts alerts alerts"
-                    "nav map map map map map map map ai ai ai"
-                    "nav map map map map map map map ai ai ai"
-                    "nav map map map map map map map ai ai ai"
-                    "nav status status status net net net net ai ai ai"
-                    "nav status status status net net net net ai ai ai"
-                    "nav status status status net net net net ai ai ai"
-                    "nav status status status net net net net ai ai ai";
+                    "nav map map map map map alerts alerts alerts alerts alerts"
+                    "nav map map map map map alerts alerts alerts alerts alerts"
+                    "nav map map map map map alerts alerts alerts alerts alerts"
+                    "nav map map map map map alerts alerts alerts alerts alerts"
+                    "nav map map map map map ai ai ai ai ai"
+                    "nav map map map map map ai ai ai ai ai"
+                    "nav status status status status status ai ai ai ai ai"
+                    "nav status status status status status ai ai ai ai ai"
+                    "nav status status status status status net net net net net"
+                    "nav status status status status status net net net net net"
+                    "nav net-spare net-spare net-spare net-spare net-spare net net net net net"
+                    "nav net-spare net-spare net-spare net-spare net-spare net net net net net";
+            }
+
+            /* Adjust module visibility or content for this breakpoint if needed */
+        }
+
+        @media (max-width: 1024px) {
+            #main-grid {
+                grid-template-columns: repeat(12, 1fr);
+                grid-template-rows: auto;
+                grid-template-areas:
+                    "nav nav nav nav nav nav nav nav nav nav nav nav"
+                    "map map map map map map map map map map map map"
+                    "map map map map map map map map map map map map"
+                    "alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts"
+                    "alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts"
+                    "status status status status status status net net net net net net"
+                    "ai ai ai ai ai ai ai ai ai ai ai ai";
+                overflow-y: auto;
+                /* Allow scroll only on smallest screens */
             }
 
             #nav-menu {
-                grid-area: nav;
+                flex-direction: row;
+                justify-content: space-around;
             }
-
-            #threat-module {
-                grid-area: map;
-            }
-
-            #alerts-module {
-                grid-area: alerts;
-            }
-
-            #status-module {
-                grid-area: status;
-            }
-
-            #net-module {
-                grid-area: net;
-            }
-
-            #ai-module {
-                grid-area: ai;
-            }
-
-            @media (max-width: 1440px) {
-                #main-grid {
-                    grid-template-columns: 250px repeat(10, 1fr);
-                    grid-template-areas:
-                        "nav map map map map map alerts alerts alerts alerts alerts"
-                        "nav map map map map map alerts alerts alerts alerts alerts"
-                        "nav map map map map map alerts alerts alerts alerts alerts"
-                        "nav map map map map map alerts alerts alerts alerts alerts"
-                        "nav map map map map map ai ai ai ai ai"
-                        "nav map map map map map ai ai ai ai ai"
-                        "nav status status status status status ai ai ai ai ai"
-                        "nav status status status status status ai ai ai ai ai"
-                        "nav status status status status status net net net net net"
-                        "nav status status status status status net net net net net"
-                        "nav net-spare net-spare net-spare net-spare net-spare net net net net net"
-                        "nav net-spare net-spare net-spare net-spare net-spare net net net net net";
-                }
-
-                /* Adjust module visibility or content for this breakpoint if needed */
-            }
-
-            @media (max-width: 1024px) {
-                #main-grid {
-                    grid-template-columns: repeat(12, 1fr);
-                    grid-template-rows: auto;
-                    grid-template-areas:
-                        "nav nav nav nav nav nav nav nav nav nav nav nav"
-                        "map map map map map map map map map map map map"
-                        "map map map map map map map map map map map map"
-                        "alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts"
-                        "alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts"
-                        "status status status status status status net net net net net net"
-                        "ai ai ai ai ai ai ai ai ai ai ai ai";
-                    overflow-y: auto;
-                    /* Allow scroll only on smallest screens */
-                }
-
-                #nav-menu {
-                    flex-direction: row;
-                    justify-content: space-around;
-                }
-            }
-        </style>
+        }
+    </style>
 </head>
 
 <body>

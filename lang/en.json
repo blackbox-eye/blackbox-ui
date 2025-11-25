@@ -689,6 +689,58 @@
       "related": "Related Articles"
     }
   },
+  "demo": {
+    "meta": {
+      "title": "Book a Demo | Blackbox EYE",
+      "description": "Book a free demo of the Blackbox EYE™ cybersecurity platform. See how our AI-driven solutions can protect your business."
+    },
+    "hero": {
+      "tagline": "FREE DEMONSTRATION",
+      "title": "See Blackbox EYE™ in action",
+      "description": "Book a personal demo and experience how our AI-driven security platform can transform your cybersecurity. Get answers to your questions from our experts.",
+      "primary_cta": "Book demo slot",
+      "secondary_cta": "Open booking in popup"
+    },
+    "benefits": {
+      "duration": {
+        "title": "30-45 minutes",
+        "description": "Perfect to get an overview of the platform"
+      },
+      "customized": {
+        "title": "Tailored to you",
+        "description": "Focused on your industry and your needs"
+      },
+      "noobligation": {
+        "title": "No obligations",
+        "description": "100% free and non-binding"
+      }
+    },
+    "booking": {
+      "title": "Choose a time that works for you",
+      "note": "Can't find a suitable time? Contact us directly at"
+    },
+    "expect": {
+      "title": "What can you expect?",
+      "step1": {
+        "title": "Introduction to the platform",
+        "description": "We'll show you how the GreyEYE AI assistant, PVE module, and ID-Matrix work together to protect your organization 24/7."
+      },
+      "step2": {
+        "title": "Live demonstration",
+        "description": "See a live example of how the platform identifies threats, performs automated pentests, and generates compliance reports."
+      },
+      "step3": {
+        "title": "Q&A and next steps",
+        "description": "Get answers to all your questions and discuss the right package and implementation for your organization."
+      }
+    },
+    "cta": {
+      "title": "Questions before the demo?",
+      "description": "Our team is ready to help you understand how Blackbox EYE can strengthen your security.",
+      "contact": "Contact us",
+      "pricing": "View pricing"
+    }
+  },
   "faq": {
     "meta": {
       "title": "FAQ - Frequently Asked Questions | Blackbox EYE",

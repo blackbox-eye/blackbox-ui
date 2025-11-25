@@ -246,13 +246,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="p-8 space-y-6 glass-effect rounded-2xl z-10">
 
                 <header class="flex flex-col items-center text-center">
-                        <img src="assets/logo.png" alt="Blackbox EYE Emblem" class="h-24 w-24 mb-4" loading="lazy">
-                        <!-- OPDATERET: Bruger den nye subtile glitch-effekt -->
-                        <h1 class="subtle-glitch-logo" aria-label="Blackbox EYE">
-                            Blackbox EYE&trade;
-                            <span aria-hidden="true">Blackbox EYE&trade;</span>
-                            <span aria-hidden="true">Blackbox EYE&trade;</span>
-                        </h1>
+                    <img src="assets/logo.png" alt="Blackbox EYE Emblem" class="h-24 w-24 mb-4" loading="lazy">
+                    <!-- OPDATERET: Bruger den nye subtile glitch-effekt -->
+                    <h1 class="subtle-glitch-logo" aria-label="Blackbox EYE">
+                        Blackbox EYE&trade;
+                        <span aria-hidden="true">Blackbox EYE&trade;</span>
+                        <span aria-hidden="true">Blackbox EYE&trade;</span>
+                    </h1>
                 </header>
 
                 <?php if (!empty($error)): ?>

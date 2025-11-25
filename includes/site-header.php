@@ -142,6 +142,11 @@ if (!function_exists('aig_nav_class')) {
 // Reduced to essential items for better mobile experience
 $nav_links = [
     [
+        'slug' => 'about',
+        'label' => t('header.menu.about'),
+        'href' => 'about.php',
+    ],
+    [
         'slug' => 'products',
         'label' => t('header.menu.solutions'),
         'href' => 'products.php',
@@ -168,7 +173,7 @@ $nav_links = [
     ],
     [
         'slug' => 'contact',
-        'label' => t('header.menu.about_contact'),
+        'label' => t('header.menu.contact'),
         'href' => 'contact.php',
     ],
 ];

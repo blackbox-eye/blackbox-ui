@@ -689,6 +689,58 @@
       "related": "Relaterede Artikler"
     }
   },
+  "demo": {
+    "meta": {
+      "title": "Book en Demo | Blackbox EYE",
+      "description": "Book en gratis demo af Blackbox EYE™ cybersikkerhedsplatform. Se hvordan vores AI-drevne løsninger kan beskytte din virksomhed."
+    },
+    "hero": {
+      "tagline": "GRATIS DEMONSTRATION",
+      "title": "Se Blackbox EYE™ i aktion",
+      "description": "Book en personlig demo og oplev hvordan vores AI-drevne sikkerhedsplatform kan transformere din cybersikkerhed. Få svar på dine spørgsmål fra vores eksperter.",
+      "primary_cta": "Book demo slot",
+      "secondary_cta": "Åbn booking i popup"
+    },
+    "benefits": {
+      "duration": {
+        "title": "30-45 minutter",
+        "description": "Perfekt til at få et overblik over platformen"
+      },
+      "customized": {
+        "title": "Skræddersyet til dig",
+        "description": "Fokuseret på din branche og dine behov"
+      },
+      "noobligation": {
+        "title": "Ingen forpligtelser",
+        "description": "100% gratis og uforpligtende"
+      }
+    },
+    "booking": {
+      "title": "Vælg et tidspunkt der passer dig",
+      "note": "Kan du ikke finde et passende tidspunkt? Kontakt os direkte på"
+    },
+    "expect": {
+      "title": "Hvad kan du forvente?",
+      "step1": {
+        "title": "Introduktion til platformen",
+        "description": "Vi viser dig hvordan GreyEYE AI-assistenten, PVE-modulet og ID-Matrix arbejder sammen for at beskytte din organisation 24/7."
+      },
+      "step2": {
+        "title": "Live demonstration",
+        "description": "Se et live eksempel på hvordan platformen identificerer trusler, udfører automatiske pentests og genererer compliance-rapporter."
+      },
+      "step3": {
+        "title": "Q&A og næste skridt",
+        "description": "Få svar på alle dine spørgsmål og diskutér den rette pakke og implementation for din organisation."
+      }
+    },
+    "cta": {
+      "title": "Har du spørgsmål før demoen?",
+      "description": "Vores team er klar til at hjælpe dig med at forstå hvordan Blackbox EYE kan styrke din sikkerhed.",
+      "contact": "Kontakt os",
+      "pricing": "Se priser"
+    }
+  },
   "faq": {
     "meta": {
       "title": "FAQ - Ofte Stillede Spørgsmål | Blackbox EYE",

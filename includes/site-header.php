@@ -162,13 +162,8 @@ $nav_links = [
         'href' => 'pricing.php',
     ],
     [
-        'slug' => 'blog',
-        'label' => t('header.menu.resources'),
-        'href' => 'blog.php',
-    ],
-    [
         'slug' => 'faq',
-        'label' => 'FAQ',
+        'label' => t('header.menu.resources'),
         'href' => 'faq.php',
     ],
     [
@@ -183,7 +178,7 @@ $secondary_nav_links = [
     ['slug' => 'demo', 'label' => t('header.menu.demo'), 'href' => 'demo.php'],
     ['slug' => 'pricing', 'label' => t('header.menu.pricing'), 'href' => 'pricing.php'],
     ['slug' => 'free-scan', 'label' => t('header.menu.free_scan'), 'href' => 'free-scan.php'],
-    ['slug' => 'faq', 'label' => 'FAQ', 'href' => 'faq.php'],
+    ['slug' => 'blog', 'label' => t('header.menu.resources'), 'href' => 'blog.php'],
 ];
 
 $alphabot_enabled_pages = ['home', 'index', 'about', 'products', 'cases', 'pricing', 'contact', 'demo', 'free-scan', 'faq'];
@@ -303,14 +298,29 @@ if (!empty($disable_alphabot)) {
 
     <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
         <div class="container mx-auto px-4">
-            <div class="flex flex-col gap-4 py-4 md:py-6">
-                <div class="flex items-center justify-between gap-3">
-                    <a href="/" class="glitch-logo flex-shrink-0" aria-label="<?= htmlspecialchars(t('header.menu.home')) ?>">
-                        Blackbox EYE&trade;
-                        <span aria-hidden="true">Blackbox EYE&trade;</span>
-                        <span aria-hidden="true">Blackbox EYE&trade;</span>
-                    </a>
-                    <div class="flex items-center gap-2 md:gap-3">
+            <div class="header-shell">
+                <div class="header-grid">
+                    <div class="header-brand">
+                        <a href="/" class="glitch-logo" aria-label="<?= htmlspecialchars(t('header.menu.home')) ?>">
+                            Blackbox EYE&trade;
+                            <span aria-hidden="true">Blackbox EYE&trade;</span>
+                            <span aria-hidden="true">Blackbox EYE&trade;</span>
+                        </a>
+                    </div>
+                    <nav class="main-nav header-nav hidden lg:block" aria-label="<?= htmlspecialchars(t('header.desktop.primary_navigation', 'Primær navigation')) ?>">
+                        <ul class="main-nav-list" role="list">
+                            <?php foreach ($nav_links as $link): ?>
+                                <li>
+                                    <a href="<?= $link['href'] ?>"
+                                        class="nav-chip <?= aig_nav_class($link['slug'], $current_page) ?>"
+                                        <?= aig_nav_aria($link['slug'], $current_page) ?>>
+                                        <span><?= htmlspecialchars($link['label']) ?></span>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </nav>
+                    <div class="header-actions">
                         <button type="button"
                             class="theme-toggle"
                             data-theme-toggle
@@ -321,39 +331,31 @@ if (!empty($disable_alphabot)) {
                             aria-pressed="false"
                             aria-label="<?= htmlspecialchars(t('header.theme.toggle_label', 'Skift farvetema')) ?>">
                             <span class="theme-toggle__icon" aria-hidden="true"></span>
-                            <span class="theme-toggle__text hidden sm:inline"><?= t('header.theme.toggle_text', 'Tema') ?></span>
+                            <span class="theme-toggle__text hidden xl:inline"><?= t('header.theme.toggle_text', 'Tema') ?></span>
                         </button>
-                        <a href="agent-login.php" class="hidden sm:inline-flex items-center border border-amber-400 text-amber-400 py-1.5 px-3 lg:py-2 lg:px-5 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold whitespace-nowrap text-xs lg:text-sm">
-                            <?= t('header.cta.agent_login') ?>
-                        </a>
-                        <div class="language-switcher-wrapper hidden md:flex items-center gap-0.5 border border-gray-600 rounded-lg p-0.5">
-                            <a href="?lang=da" class="language-switch px-2 py-1 rounded text-xs font-medium transition-all <?= $current_language === 'da' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>" aria-label="<?= htmlspecialchars(t('header.language.switch_da')) ?>" <?= $current_language === 'da' ? 'aria-current="true"' : '' ?>>
+                        <div class="language-switcher-wrapper hidden lg:flex items-center gap-0.5">
+                            <a href="?lang=da" class="language-switch <?= $current_language === 'da' ? 'is-active' : '' ?>" aria-label="<?= htmlspecialchars(t('header.language.switch_da')) ?>" <?= $current_language === 'da' ? 'aria-current="true"' : '' ?>>
                                 <?= t('header.language.da') ?>
                             </a>
-                            <a href="?lang=en" class="language-switch px-2 py-1 rounded text-xs font-medium transition-all <?= $current_language === 'en' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>" aria-label="<?= htmlspecialchars(t('header.language.switch_en')) ?>" <?= $current_language === 'en' ? 'aria-current="true"' : '' ?>>
+                            <a href="?lang=en" class="language-switch <?= $current_language === 'en' ? 'is-active' : '' ?>" aria-label="<?= htmlspecialchars(t('header.language.switch_en')) ?>" <?= $current_language === 'en' ? 'aria-current="true"' : '' ?>>
                                 <?= t('header.language.en') ?>
                             </a>
                         </div>
-                        <button id="mobile-menu-button" class="md:hidden text-white p-2 -mr-2 bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-amber-400" aria-controls="mobile-menu" aria-expanded="false" aria-label="<?= htmlspecialchars(t('header.mobile.open_menu')) ?>">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <a href="agent-login.php" class="header-cta agent-login-cta">
+                            <?= t('header.cta.agent_login') ?>
+                        </a>
+                        <button id="mobile-menu-button" class="header-burger" aria-controls="mobile-menu" aria-expanded="false" aria-label="<?= htmlspecialchars(t('header.mobile.open_menu')) ?>">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
                             </svg>
                         </button>
                     </div>
                 </div>
-                <nav class="main-nav" aria-label="<?= htmlspecialchars(t('header.desktop.primary_navigation', 'Primær navigation')) ?>">
-                    <ul class="main-nav-list" role="list">
-                        <?php foreach ($nav_links as $link): ?>
-                            <li>
-                                <a href="<?= $link['href'] ?>"
-                                    class="nav-chip <?= aig_nav_class($link['slug'], $current_page) ?>"
-                                    <?= aig_nav_aria($link['slug'], $current_page) ?>>
-                                    <span><?= htmlspecialchars($link['label']) ?></span>
-                                </a>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                </nav>
+                <div class="header-mobile-cta lg:hidden">
+                    <a href="demo.php" class="header-cta header-cta--wide">
+                        <?= t('header.menu.demo') ?>
+                    </a>
+                </div>
             </div>
         </div>
     </header>
@@ -362,7 +364,7 @@ if (!empty($disable_alphabot)) {
     <div id="mobile-menu-overlay" class="md:hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-39" aria-hidden="true"></div>
 
     <!-- Mobile menu -->
-    <div id="mobile-menu" class="md:hidden fixed top-0 right-0 bottom-0 w-4/5 max-w-sm bg-gray-900/95 backdrop-blur-md z-40 p-8 shadow-2xl border-l border-gray-800" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-heading">
+    <div id="mobile-menu" class="md:hidden fixed top-0 right-0 bottom-0 w-4/5 max-w-sm bg-gray-900/95 backdrop-blur-md z-40 p-8 shadow-2xl border-l border-gray-800" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-heading" aria-hidden="true">
         <div class="flex justify-between items-center mb-6">
             <span id="mobile-menu-heading" class="text-lg font-semibold text-white"><?= t('header.mobile.navigation') ?></span>
             <button id="mobile-menu-close" class="text-white p-2 -mr-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400" aria-label="<?= htmlspecialchars(t('header.mobile.close_menu')) ?>">
@@ -376,7 +378,7 @@ if (!empty($disable_alphabot)) {
                 <?php foreach ($nav_links as $index => $link): ?>
                     <li>
                         <a href="<?= $link['href'] ?>"
-                            class="nav-link-mobile <?= $link['slug'] === $current_page ? 'text-white font-semibold' : '' ?>"
+                            class="nav-link-mobile <?= $link['slug'] === $current_page ? 'is-active' : '' ?>"
                             data-mobile-nav-index="<?= $index ?>"
                             <?= aig_nav_aria($link['slug'], $current_page) ?>>
                             <?= htmlspecialchars($link['label']) ?>
@@ -391,7 +393,7 @@ if (!empty($disable_alphabot)) {
                     <?php foreach ($secondary_nav_links as $offset => $link): ?>
                         <li>
                             <a href="<?= $link['href'] ?>"
-                                class="nav-link-mobile text-lg <?= $link['slug'] === $current_page ? 'text-white font-semibold' : 'text-gray-400' ?>"
+                                class="nav-link-mobile nav-link-mobile--secondary <?= $link['slug'] === $current_page ? 'is-active' : '' ?>"
                                 data-mobile-secondary-index="<?= $offset ?>"
                                 <?= aig_nav_aria($link['slug'], $current_page) ?>>
                                 <?= htmlspecialchars($link['label']) ?>
@@ -419,18 +421,18 @@ if (!empty($disable_alphabot)) {
                 </button>
             </div>
 
-            <a href="agent-login.php" class="mt-8 inline-block border border-amber-400 text-amber-400 py-3 px-8 rounded-lg text-xl font-semibold">
+            <a href="agent-login.php" class="mt-8 header-cta header-cta--wide">
                 <?= t('header.cta.agent_login') ?>
             </a>
             <div class="flex items-center justify-center gap-3 pt-6">
                 <a href="?lang=da"
-                    class="language-switch px-4 py-2 rounded-lg text-base font-semibold transition-all <?= $current_language === 'da' ? 'bg-amber-400 text-black' : 'text-gray-300 border border-gray-600' ?>"
+                    class="language-switch language-switch--drawer <?= $current_language === 'da' ? 'is-active' : '' ?>"
                     aria-label="<?= htmlspecialchars(t('header.language.switch_da')) ?>"
                     <?= $current_language === 'da' ? 'aria-current="true"' : '' ?>>
                     <?= t('header.language.da') ?>
                 </a>
                 <a href="?lang=en"
-                    class="language-switch px-4 py-2 rounded-lg text-base font-semibold transition-all <?= $current_language === 'en' ? 'bg-amber-400 text-black' : 'text-gray-300 border border-gray-600' ?>"
+                    class="language-switch language-switch--drawer <?= $current_language === 'en' ? 'is-active' : '' ?>"
                     aria-label="<?= htmlspecialchars(t('header.language.switch_en')) ?>"
                     <?= $current_language === 'en' ? 'aria-current="true"' : '' ?>>
                     <?= t('header.language.en') ?>

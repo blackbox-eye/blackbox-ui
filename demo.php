@@ -52,7 +52,7 @@ $demo_slots = [
 
 <main id="main-content" class="pt-16">
     <!-- Hero Section -->
-    <section class="py-16 sm:py-20 section-fade-in">
+    <section class="py-16 sm:py-20 section-fade-in page-section">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto text-center mb-12">
                 <p class="text-amber-400 uppercase tracking-widest text-sm font-semibold mb-4">
@@ -192,7 +192,7 @@ $demo_slots = [
     </section>
 
     <!-- What to Expect Section -->
-    <section class="py-16 sm:py-20 bg-gray-900/40 section-fade-in">
+    <section class="py-16 sm:py-20 bg-gray-900/40 section-fade-in page-section page-section--soft">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto">
                 <h2 class="text-3xl sm:text-4xl font-bold mb-8 text-center">
@@ -247,7 +247,7 @@ $demo_slots = [
     </section>
 
     <!-- CTA Section -->
-    <section class="py-16 sm:py-20 section-fade-in">
+    <section class="py-16 sm:py-20 section-fade-in page-section">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-3xl sm:text-4xl font-bold mb-4">
                 <?= t('demo.cta.title', 'Har du spørgsmål før demoen?') ?>

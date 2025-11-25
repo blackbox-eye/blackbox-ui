@@ -16,7 +16,7 @@ include 'includes/site-header.php';
 ?>
 
 <main id="main-content" class="pt-16">
-    <section class="py-20 sm:py-24 section-fade-in">
+    <section class="py-20 sm:py-24 section-fade-in page-section">
         <div class="container mx-auto px-4">
             <div class="text-center max-w-2xl mx-auto mb-12">
                 <p class="text-amber-400 uppercase tracking-widest text-sm font-semibold mb-4"><?= t('contact.hero_section.tagline') ?></p>
@@ -31,36 +31,36 @@ include 'includes/site-header.php';
                     <form id="contact-form" class="space-y-5" data-endpoint="contact-submit.php" novalidate aria-label="Contact form">
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-300 mb-2"><?= t('contact.form.name') ?></label>
-                            <input type="text" id="name" name="name" required 
-                                   autocomplete="name"
-                                   aria-required="true"
-                                   class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                            <input type="text" id="name" name="name" required
+                                autocomplete="name"
+                                aria-required="true"
+                                class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400">
                         </div>
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-300 mb-2"><?= t('contact.form.email') ?></label>
-                            <input type="email" id="email" name="email" required 
-                                   autocomplete="email"
-                                   aria-required="true"
-                                   class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                            <input type="email" id="email" name="email" required
+                                autocomplete="email"
+                                aria-required="true"
+                                class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400">
                         </div>
                         <div>
                             <label for="phone" class="block text-sm font-medium text-gray-300 mb-2"><?= t('contact.form.phone_optional') ?></label>
-                            <input type="tel" id="phone" name="phone" 
-                                   autocomplete="tel"
-                                   aria-required="false"
-                                   class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                            <input type="tel" id="phone" name="phone"
+                                autocomplete="tel"
+                                aria-required="false"
+                                class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400">
                         </div>
                         <div>
                             <label for="message" class="block text-sm font-medium text-gray-300 mb-2"><?= t('contact.form.message') ?></label>
-                            <textarea id="message" name="message" rows="5" required 
-                                      aria-required="true"
-                                      class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400"></textarea>
+                            <textarea id="message" name="message" rows="5" required
+                                aria-required="true"
+                                class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400"></textarea>
                         </div>
                         <input type="hidden" name="recaptcha_token" id="recaptcha_token" value="">
-                        <button type="submit" 
-                                aria-label="<?= htmlspecialchars(t('contact.form.submit')) ?>"
-                                class="w-full bg-amber-400 text-black font-semibold py-3 rounded-lg hover:bg-amber-500 transition-colors" 
-                                data-sending-text="<?= htmlspecialchars(t('contact.form.sending')) ?>">
+                        <button type="submit"
+                            aria-label="<?= htmlspecialchars(t('contact.form.submit')) ?>"
+                            class="w-full bg-amber-400 text-black font-semibold py-3 rounded-lg hover:bg-amber-500 transition-colors"
+                            data-sending-text="<?= htmlspecialchars(t('contact.form.sending')) ?>">
                             <?= t('contact.form.submit') ?>
                         </button>
                     </form>
@@ -104,7 +104,7 @@ include 'includes/site-header.php';
         </div>
     </section>
 
-    <section class="py-16 sm:py-20 bg-gray-900/40 section-fade-in">
+    <section class="py-16 sm:py-20 bg-gray-900/40 section-fade-in page-section page-section--soft">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-3xl sm:text-4xl font-bold mb-4"><?= t('contact.cta.title') ?></h2>
             <p class="text-gray-400 max-w-2xl mx-auto mb-8"><?= t('contact.cta.description') ?></p>

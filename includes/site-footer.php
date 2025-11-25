@@ -94,6 +94,7 @@
                     class="alphabot-panel"
                     role="dialog"
                     aria-modal="false"
+                    aria-hidden="true"
                     aria-label="<?= htmlspecialchars(t('alphabot.subtitle')) ?>">
                     <div class="alphabot-panel-header">
                         <div>

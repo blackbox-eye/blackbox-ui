@@ -14,7 +14,7 @@
       "solutions": "Solutions",
       "cases_results": "Cases & Results",
       "pricing_demo": "Pricing & Demo",
-      "resources": "Resources",
+      "resources": "Resources / FAQ",
       "about_contact": "About & Contact",
       "demo": "Book Demo",
       "free_scan": "Free Vulnerability Check"
@@ -367,7 +367,21 @@
     "hero_section": {
       "tagline": "Documented impact",
       "title": "Proven value in the real world",
-      "description": "See how we have neutralized critical threats for high-demand clients—and let our AI analyze your own situation."
+      "description": "See how we have neutralized critical threats for high-demand clients—and let our AI analyze your own situation.",
+      "bullets": {
+        "evidence": {
+          "title": "Concrete impact",
+          "description": "Access response-time, threat suppression, and resilience metrics for each engagement."
+        },
+        "frameworks": {
+          "title": "Sector-specific playbooks",
+          "description": "Explore how municipalities, enterprises, and critical infrastructure activate Blackbox EYE™."
+        },
+        "results": {
+          "title": "Modules with outcomes",
+          "description": "Map every documented result directly to the modules and governance paths that delivered it."
+        }
+      }
     },
     "labels": {
       "challenge": "Challenge",
@@ -392,6 +406,46 @@
         "challenge": "Manual logbooks and slow response time.",
         "solution": "GreyEYE now assists guards with automated documentation and live updates.",
         "result": "New differentiation lever in the market."
+      }
+    },
+    "metrics": {
+      "response": "Reduced response time",
+      "response_caption": "Average reduction after six months with GreyEYE™",
+      "threats": "Automated attacks stopped",
+      "threats_caption": "Per quarter with PVE™ and AUT in production",
+      "incidents": "Critical incidents",
+      "incidents_caption": "Following Blackbox EYE™ onboarding for enterprise clients"
+    },
+    "navigator": {
+      "eyebrow": "Featured transformations",
+      "title": "Pick an industry and see the impact",
+      "subtitle": "We continuously refresh the overview with new KPIs from our deployments.",
+      "impact_label": "Impact over <span>12 months</span>",
+      "modules_label": "Core modules",
+      "cta": "Schedule a strategic alignment session",
+      "municipality": {
+        "label": "Nordic municipality",
+        "industry": "Public administration",
+        "impact": "72% faster incident response and full GDPR audit trail in 48 hours.",
+        "metric_one": "24/7 monitoring across 9,100 endpoints",
+        "metric_two": "Automated leadership reporting",
+        "metric_three": "Upgraded awareness program for 4,500 employees"
+      },
+      "realestate": {
+        "label": "International real estate group",
+        "industry": "PropTech & facility",
+        "impact": "Automated onboarding of new sites and 35% lower compliance cost.",
+        "metric_one": "Integration with 14 access control systems",
+        "metric_two": "Digital twin of security maturity per location",
+        "metric_three": "Automated ISO 27001 documentation"
+      },
+      "security": {
+        "label": "Global security company",
+        "industry": "Critical infrastructure",
+        "impact": "Zero critical outages in 18 months and 91% faster intelligence flow.",
+        "metric_one": "Fusion center with live threat feeds to 38 locations",
+        "metric_two": "Integrated insider threat detection with GreyEYE™",
+        "metric_three": "Predictive staffing powered by AlphaBot™ alerts"
       }
     },
     "analysis": {
@@ -444,11 +498,26 @@
       "addons_label": "Add modules",
       "addons_help": "Select the components you want included in phase one.",
       "addons": {
-        "pve": "Penetration & Vulnerability Engine (PVE)",
-        "aut": "Awareness & Training (AUT)",
-        "bridge": "Operational Bridge integration",
-        "support": "24/7 incident response standby"
+        "pve": {
+          "title": "Penetration & Vulnerability Engine (PVE)",
+          "description": "Continuous testing, exploit simulation, and automated remediation guidance."
+        },
+        "aut": {
+          "title": "Awareness & Training (AUT)",
+          "description": "Adaptive phishing simulations and AI-tailored awareness programs."
+        },
+        "bridge": {
+          "title": "Operational Bridge integration",
+          "description": "Connect SOC, SIEM, and ticketing systems for frictionless operations."
+        },
+        "support": {
+          "title": "24/7 incident response standby",
+          "description": "Direct access to our response team with prioritized SLAs."
+        }
       },
+      "status_ready": "Estimate prepared.",
+      "loading": "Calculating...",
+      "no_addons": "No add-ons selected.",
       "submit": "Calculate investment",
       "reset": "Reset",
       "result": {
@@ -466,7 +535,8 @@
         "users_required": "Please enter the number of users.",
         "endpoints_required": "Please enter the number of critical endpoints.",
         "users_min": "You need at least one user.",
-        "endpoints_min": "Provide at least one endpoint."
+        "endpoints_min": "Provide at least one endpoint.",
+        "error": "Review the highlighted fields to continue."
       }
     },
     "mvp": {
@@ -771,6 +841,30 @@
     "booking": {
       "title": "Choose a time that works for you",
       "note": "Can't find a suitable time? Contact us directly at"
+    },
+    "slots": {
+      "heading": "Next available demo slots",
+      "subheading": "Reserve a placeholder now—we confirm the final slot within two hours.",
+      "status_label": "Updated daily",
+      "reserve_cta": "Reserve",
+      "disclaimer": "Placeholder reservations secure priority in the final schedule and can be moved freely when our advisor follows up.",
+      "status": {
+        "open": "Open",
+        "limited": "Limited",
+        "waitlist": "Waitlist"
+      },
+      "slot_one": {
+        "title": "Tuesday",
+        "date": "16 July"
+      },
+      "slot_two": {
+        "title": "Wednesday",
+        "date": "17 July"
+      },
+      "slot_three": {
+        "title": "Friday",
+        "date": "19 July"
+      }
     },
     "expect": {
       "title": "What can you expect?",

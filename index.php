@@ -8,7 +8,7 @@ include 'includes/site-header.php';
 
 <main id="main-content" class="pt-0">
     <!-- Hero Section: Transparent background to show Matrix rain -->
-    <section id="home" class="relative min-h-screen w-full flex items-center justify-center text-center overflow-hidden">
+    <section id="home" class="relative min-h-screen w-full flex items-center justify-center text-center overflow-hidden page-section">
         <canvas id="hero-canvas" class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: -10;"></canvas>
 
         <!-- Content overlay with subtle gradient -->
@@ -32,7 +32,7 @@ include 'includes/site-header.php';
         </div>
     </section>
 
-    <section class="py-16 sm:py-20 section-fade-in">
+    <section class="py-16 sm:py-20 section-fade-in page-section">
         <div class="container mx-auto px-4">
             <div class="text-center max-w-3xl mx-auto mb-12">
                 <p class="text-amber-400 uppercase tracking-widest text-sm font-semibold mb-3"><?= t('home.tactical.tagline') ?></p>
@@ -67,7 +67,7 @@ include 'includes/site-header.php';
         </div>
     </section>
 
-    <section class="py-20 sm:py-24 bg-gray-900/30 section-fade-in">
+    <section class="py-20 sm:py-24 bg-gray-900/30 section-fade-in page-section page-section--soft">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
                 <div>
@@ -106,7 +106,7 @@ include 'includes/site-header.php';
         </div>
     </section>
 
-    <section class="py-20 sm:py-24 section-fade-in">
+    <section class="py-20 sm:py-24 section-fade-in page-section">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-3xl sm:text-4xl font-bold mb-4"><?= t('home.cta.title') ?></h2>
             <p class="text-gray-400 text-base sm:text-lg mb-10">

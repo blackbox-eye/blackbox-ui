@@ -1,18 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './index.php',
-    './products.php',
-    './pricing.php',
-    './contact.php',
-    './faq.php',
-    './demo.php',
-    './free-scan.php',
-    './includes/**/*.php',
+    './*.php',
+    './**/*.php',
+    './**/*.html',
     './assets/js/**/*.js',
     './lang/**/*.json'
   ],
-  darkMode: 'media',
+  darkMode: ['class', '[data-theme="dark"]'],
   theme: {
     container: {
       center: true,

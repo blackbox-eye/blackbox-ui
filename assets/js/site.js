@@ -830,10 +830,13 @@ document.addEventListener('DOMContentLoaded', () => {
             setSubmittingState(submitButton, isSubmitting, loadingText);
         };
 
-        const showCalcStatus = (message) => {
-            if (statusEl) {
-                statusEl.textContent = message || '';
+        const showCalcStatus = (message, tone = 'info') => {
+            if (!statusEl) {
+                return;
             }
+            statusEl.textContent = message || '';
+            statusEl.dataset.tone = tone;
+            statusEl.hidden = !message;
         };
 
         const resetCalculator = () => {
@@ -886,7 +889,7 @@ document.addEventListener('DOMContentLoaded', () => {
             resetCalculator();
 
             if (!validateCalculator()) {
-                showCalcStatus(i18n.t('pricing.calculator.validation.error', 'Ret de markerede felter for at fortsætte.'));
+                showCalcStatus(i18n.t('pricing.calculator.validation.error', 'Ret de markerede felter for at fortsætte.'), 'error');
                 return;
             }
 
@@ -968,7 +971,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     resultContainer.classList.remove('hidden');
                 }
 
-                showCalcStatus(i18n.t('pricing.calculator.status_ready', 'Estimatet er klar.'));
+                showCalcStatus(i18n.t('pricing.calculator.status_ready', 'Estimatet er klar.'), 'success');
             } finally {
                 setCalculatorSubmitting(false);
             }
@@ -993,6 +996,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const isActive = tab.dataset.caseTab === key;
                 tab.classList.toggle('is-active', isActive);
                 tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+                tab.setAttribute('tabindex', isActive ? '0' : '-1');
             });
         };
 
@@ -1420,19 +1424,76 @@ document.addEventListener('DOMContentLoaded', () => {
     const alphaToggleBtn = document.getElementById('alphabot-toggle-btn');
     const alphaCloseBtn = document.getElementById('alphabot-close-btn');
     const alphaOverlay = document.getElementById('alphabot-overlay');
+    const alphaPanel = document.getElementById('alphabot-panel');
+    const alphaRail = alphaContainer?.closest('.bbx-command-rail') ?? null;
     if (alphaOverlay) {
         alphaOverlay.setAttribute('aria-hidden', 'true');
     }
     const alphaMobileQuery = window.matchMedia('(max-width: 768px)');
     const setAlphaBodyLock = (state) => {
-        if (state && alphaMobileQuery.matches) {
+        if (state) {
             document.body.classList.add('alphabot-locked');
-        } else if (!state) {
+        } else {
             document.body.classList.remove('alphabot-locked');
         }
     };
+    const alphaInertTargets = () => {
+        const siblings = Array.from(document.body.children);
+        return siblings.filter((element) => {
+            if (element === alphaOverlay) {
+                return false;
+            }
+            if (alphaRail && element === alphaRail) {
+                return false;
+            }
+            if (alphaRail && alphaRail.contains(element)) {
+                return false;
+            }
+            if (alphaContainer && (element === alphaContainer || alphaContainer.contains(element))) {
+                return false;
+            }
+            return true;
+        });
+    };
+    const alphaInertState = new Map();
+    const setAlphaInert = (state) => {
+        const targets = alphaInertTargets();
+        targets.forEach((element) => {
+            if (state) {
+                if (!alphaInertState.has(element)) {
+                    alphaInertState.set(element, {
+                        ariaHidden: element.getAttribute('aria-hidden'),
+                        inert: element.hasAttribute('inert'),
+                    });
+                }
+                element.setAttribute('aria-hidden', 'true');
+                element.setAttribute('inert', '');
+            } else {
+                const previous = alphaInertState.get(element);
+                if (previous) {
+                    if (previous.ariaHidden === null) {
+                        element.removeAttribute('aria-hidden');
+                    } else {
+                        element.setAttribute('aria-hidden', previous.ariaHidden);
+                    }
+                    if (previous.inert) {
+                        element.setAttribute('inert', '');
+                    } else {
+                        element.removeAttribute('inert');
+                    }
+                } else {
+                    element.removeAttribute('aria-hidden');
+                    element.removeAttribute('inert');
+                }
+            }
+        });
 
-    if (alphaContainer && alphaToggleBtn && hasAIConfig && geminiReady) {
+        if (!state) {
+            alphaInertState.clear();
+        }
+    };
+
+    if (alphaContainer && alphaToggleBtn && alphaPanel && hasAIConfig && geminiReady) {
         const messagesDiv = document.getElementById('alphabot-messages');
         const inputEl = document.getElementById('alphabot-input');
         const sendBtn = document.getElementById('alphabot-send-btn');
@@ -1445,6 +1506,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 { role: 'model', parts: [{ text: 'Forstået. Jeg er klar til at assistere med sikkerhedsrelaterede spørgsmål og analyser.' }] }
             ];
             let isProcessing = false;
+            let alphaFocusTrapListener = null;
+            let alphaFocusContainListener = null;
+            let alphaLastFocusedElement = null;
+            let alphaIsOpen = false;
+
+            const alphaFocusableSelector = 'a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])';
+
+            const getAlphaFocusableElements = () => {
+                return Array.from(alphaPanel.querySelectorAll(alphaFocusableSelector))
+                    .filter((element) => element instanceof HTMLElement
+                        && !element.hasAttribute('disabled')
+                        && element.getAttribute('aria-hidden') !== 'true');
+            };
 
             const appendMessage = (role, text) => {
                 const wrapper = document.createElement('div');
@@ -1461,11 +1535,76 @@ document.addEventListener('DOMContentLoaded', () => {
                 messagesDiv.scrollTop = messagesDiv.scrollHeight;
             };
 
+            if (!messagesDiv.dataset.initialized) {
+                const introMessage = conversation[1]?.parts?.[0]?.text;
+                if (introMessage) {
+                    appendMessage('bot', introMessage.trim());
+                }
+                messagesDiv.dataset.initialized = 'true';
+            }
+
+            const enableAlphaFocusTrap = () => {
+                disableAlphaFocusTrap();
+                alphaFocusTrapListener = (event) => {
+                    if (!alphaIsOpen || event.key !== 'Tab') {
+                        return;
+                    }
+
+                    const focusable = getAlphaFocusableElements();
+                    if (!focusable.length) {
+                        return;
+                    }
+
+                    const first = focusable[0];
+                    const last = focusable[focusable.length - 1];
+                    const activeElement = document.activeElement;
+
+                    if (event.shiftKey) {
+                        if (activeElement === first || !alphaPanel.contains(activeElement)) {
+                            event.preventDefault();
+                            last.focus();
+                        }
+                    } else if (activeElement === last || !alphaPanel.contains(activeElement)) {
+                        event.preventDefault();
+                        first.focus();
+                    }
+                };
+
+                alphaFocusContainListener = (event) => {
+                    if (!alphaIsOpen) {
+                        return;
+                    }
+
+                    if (!alphaPanel.contains(event.target)) {
+                        const focusable = getAlphaFocusableElements();
+                        if (focusable.length) {
+                            focusable[0].focus();
+                        } else {
+                            alphaPanel.focus();
+                        }
+                    }
+                };
+
+                document.addEventListener('keydown', alphaFocusTrapListener, true);
+                document.addEventListener('focusin', alphaFocusContainListener, true);
+            };
+
+            const disableAlphaFocusTrap = () => {
+                if (alphaFocusTrapListener) {
+                    document.removeEventListener('keydown', alphaFocusTrapListener, true);
+                    alphaFocusTrapListener = null;
+                }
+                if (alphaFocusContainListener) {
+                    document.removeEventListener('focusin', alphaFocusContainListener, true);
+                    alphaFocusContainListener = null;
+                }
+            };
+
             const setProcessing = (state) => {
                 isProcessing = state;
                 if (sendBtn && inputEl) {
-                    sendBtn.disabled = state || !inputEl.value.trim();
                     inputEl.disabled = state;
+                    sendBtn.disabled = state || !inputEl.value.trim();
                 }
                 if (state) {
                     sendText.classList.add('hidden');
@@ -1518,11 +1657,17 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             const openAlphaBot = () => {
+                alphaLastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
                 alphaContainer.classList.add('open');
                 alphaToggleBtn.setAttribute('aria-expanded', 'true');
                 alphaOverlay?.classList.add('visible');
                 alphaOverlay?.setAttribute('aria-hidden', 'false');
+                alphaPanel.setAttribute('aria-hidden', 'false');
+                alphaPanel.setAttribute('aria-modal', 'true');
                 setAlphaBodyLock(true);
+                setAlphaInert(true);
+                alphaIsOpen = true;
+                enableAlphaFocusTrap();
                 inputEl.focus();
             };
 
@@ -1531,10 +1676,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 alphaToggleBtn.setAttribute('aria-expanded', 'false');
                 alphaOverlay?.classList.remove('visible');
                 alphaOverlay?.setAttribute('aria-hidden', 'true');
+                alphaPanel.setAttribute('aria-hidden', 'true');
+                alphaPanel.setAttribute('aria-modal', 'false');
                 setAlphaBodyLock(false);
+                setAlphaInert(false);
+                alphaIsOpen = false;
+                disableAlphaFocusTrap();
                 if (focusToggle) {
-                    alphaToggleBtn.focus();
+                    const focusTarget = alphaLastFocusedElement && alphaLastFocusedElement instanceof HTMLElement
+                        ? alphaLastFocusedElement
+                        : alphaToggleBtn;
+                    focusTarget?.focus();
                 }
+                alphaLastFocusedElement = null;
             };
 
             alphaToggleBtn.addEventListener('click', () => {
@@ -1549,12 +1703,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeAlphaBot();
             });
 
-            document.addEventListener('keydown', (event) => {
-                if (event.key === 'Escape' && alphaContainer.classList.contains('open')) {
-                    event.preventDefault();
-                    closeAlphaBot();
-                }
-            });
+            alphaOverlay?.addEventListener('click', () => closeAlphaBot());
 
             document.addEventListener('click', (event) => {
                 if (!alphaContainer.contains(event.target) && alphaContainer.classList.contains('open')) {
@@ -1562,12 +1711,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            alphaOverlay?.addEventListener('click', () => closeAlphaBot());
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && alphaContainer.classList.contains('open')) {
+                    event.preventDefault();
+                    closeAlphaBot();
+                }
+            });
 
             alphaMobileQuery.addEventListener?.('change', () => {
-                if (!alphaMobileQuery.matches) {
-                    document.body.classList.remove('alphabot-locked');
-                } else if (!alphaContainer.classList.contains('open')) {
+                if (!alphaContainer.classList.contains('open')) {
                     document.body.classList.remove('alphabot-locked');
                 }
             });

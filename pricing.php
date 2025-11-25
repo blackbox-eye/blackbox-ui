@@ -6,7 +6,7 @@ include 'includes/site-header.php';
 ?>
 
 <main class="pt-16">
-    <section class="py-16 sm:py-20 section-fade-in">
+    <section class="py-16 sm:py-20 section-fade-in page-section">
         <div class="container mx-auto px-4">
             <div class="text-center max-w-3xl mx-auto mb-12">
                 <p class="text-amber-400 uppercase tracking-widest text-sm font-semibold mb-4"><?= t('pricing.subtitle') ?></p>
@@ -154,10 +154,10 @@ include 'includes/site-header.php';
                                 <?= t('pricing.calculator.reset') ?>
                             </button>
                         </div>
-                        <p id="pricing-calculator-status" class="sr-only" aria-live="polite"></p>
+                        <p id="pricing-calculator-status" class="mt-2 text-sm text-gray-400" aria-live="polite" role="status" hidden></p>
                     </div>
                 </form>
-                <div id="pricing-calculator-result" class="hidden mt-10" aria-live="polite"></div>
+                <div id="pricing-calculator-result" class="hidden mt-10" aria-live="polite" role="region" aria-label="<?= htmlspecialchars(t('pricing.calculator.result.heading')) ?>"></div>
             </div>
 
             <div class="pricing-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch mb-16">
@@ -372,7 +372,7 @@ include 'includes/site-header.php';
         </div>
     </section>
 
-    <section class="py-16 sm:py-20 bg-gray-900/40 section-fade-in">
+    <section class="py-16 sm:py-20 bg-gray-900/40 section-fade-in page-section page-section--soft">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-3xl sm:text-4xl font-bold mb-4"><?= t('pricing.custom.title') ?></h2>
             <p class="text-gray-400 max-w-2xl mx-auto mb-8"><?= t('pricing.custom.description') ?></p>

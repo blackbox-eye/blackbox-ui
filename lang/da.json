@@ -14,7 +14,7 @@
       "solutions": "Løsninger",
       "cases_results": "Cases & Resultater",
       "pricing_demo": "Priser & Demo",
-      "resources": "Ressourcer",
+      "resources": "Ressourcer / FAQ",
       "about_contact": "Om & Kontakt",
       "demo": "Book demo",
       "free_scan": "Gratis sårbarhedstjek"
@@ -327,7 +327,21 @@
     "hero_section": {
       "tagline": "Dokumenteret effekt",
       "title": "Bevist værdi i den virkelige verden",
-      "description": "Se hvordan vi har neutraliseret kritiske trusler for kunder med høje krav – og lad vores AI analysere din egen situation."
+      "description": "Se hvordan vi har neutraliseret kritiske trusler for kunder med høje krav – og lad vores AI analysere din egen situation.",
+      "bullets": {
+        "evidence": {
+          "title": "Konkrete nøgletal",
+          "description": "Få adgang til responstid, trusselsstop og modenhed for hver implementering."
+        },
+        "frameworks": {
+          "title": "Branchetilpassede forløb",
+          "description": "Se hvordan kommuner, enterprise og kritisk infrastruktur aktiverer Blackbox EYE™."
+        },
+        "results": {
+          "title": "Moduler koblet til resultater",
+          "description": "Knyt hver dokumenteret effekt til de moduler og governance-spor der leverer den."
+        }
+      }
     },
     "labels": {
       "challenge": "Udfordring",
@@ -444,11 +458,26 @@
       "addons_label": "Tilføj moduler",
       "addons_help": "Vælg de komponenter, der skal med i første fase.",
       "addons": {
-        "pve": "Penetration & Vulnerability Engine (PVE)",
-        "aut": "Awareness & Training (AUT)",
-        "bridge": "Operational Bridge integration",
-        "support": "24/7 incident response standby"
+        "pve": {
+          "title": "Penetration & Vulnerability Engine (PVE)",
+          "description": "Kontinuerlig test, exploitsimulering og automatiseret udbedringsguidance."
+        },
+        "aut": {
+          "title": "Awareness & Training (AUT)",
+          "description": "Adaptiv phishing-træning og AI-tilpassede awareness-forløb."
+        },
+        "bridge": {
+          "title": "Operational Bridge integration",
+          "description": "Forbind SOC, SIEM og ticketing-systemer uden friktion."
+        },
+        "support": {
+          "title": "24/7 incident response standby",
+          "description": "Direkte adgang til vores response team med prioriterede SLA’er."
+        }
       },
+      "status_ready": "Estimat klar.",
+      "loading": "Beregner...",
+      "no_addons": "Ingen moduler valgt.",
       "submit": "Beregn pris",
       "reset": "Nulstil",
       "result": {
@@ -466,7 +495,8 @@
         "users_required": "Angiv antallet af brugere.",
         "endpoints_required": "Angiv antallet af kritiske endpoints.",
         "users_min": "Der skal være mindst 1 bruger.",
-        "endpoints_min": "Angiv mindst 1 endpoint."
+        "endpoints_min": "Angiv mindst 1 endpoint.",
+        "error": "Ret de markerede felter for at fortsætte."
       }
     },
     "mvp": {
@@ -771,6 +801,30 @@
     "booking": {
       "title": "Vælg et tidspunkt der passer dig",
       "note": "Kan du ikke finde et passende tidspunkt? Kontakt os direkte på"
+    },
+    "slots": {
+      "heading": "Næste ledige demo-slots",
+      "subheading": "Reserver et placeholder-slot nu – vi bekræfter endeligt inden for 2 timer.",
+      "status_label": "Opdateres dagligt",
+      "reserve_cta": "Reserver",
+      "disclaimer": "Placering af placeholders sikrer prioritet i den endelige plan og kan frit justeres, når vores rådgiver kontakter dig.",
+      "status": {
+        "open": "Åben",
+        "limited": "Begrænset",
+        "waitlist": "Venteliste"
+      },
+      "slot_one": {
+        "title": "Tirsdag",
+        "date": "16. juli"
+      },
+      "slot_two": {
+        "title": "Onsdag",
+        "date": "17. juli"
+      },
+      "slot_three": {
+        "title": "Fredag",
+        "date": "19. juli"
+      }
     },
     "expect": {
       "title": "Hvad kan du forvente?",

@@ -61,7 +61,7 @@ $case_navigator = [
 ?>
 
 <main class="pt-16">
-    <section class="py-20 sm:py-24 section-fade-in">
+    <section class="py-20 sm:py-24 section-fade-in page-section">
         <div class="container mx-auto px-4">
             <div class="text-center max-w-3xl mx-auto mb-12">
                 <p class="text-amber-400 uppercase tracking-widest text-sm font-semibold mb-4"><?= t('cases.hero_section.tagline') ?></p>
@@ -69,6 +69,17 @@ $case_navigator = [
                 <p class="text-gray-300 text-base sm:text-lg">
                     <?= t('cases.hero_section.description') ?>
                 </p>
+                <ul class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
+                    <?php foreach (['evidence', 'frameworks', 'results'] as $bullet_key): ?>
+                        <li class="surface-card p-5 flex items-start gap-3">
+                            <span class="text-emerald-400 mt-1" aria-hidden="true">✓</span>
+                            <span class="text-sm text-gray-300">
+                                <strong class="text-white block text-base mb-1"><?= t('cases.hero_section.bullets.' . $bullet_key . '.title') ?></strong>
+                                <?= t('cases.hero_section.bullets.' . $bullet_key . '.description') ?>
+                            </span>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-16">
@@ -98,6 +109,7 @@ $case_navigator = [
                             data-case-tab="<?= htmlspecialchars($key) ?>"
                             id="case-tab-<?= htmlspecialchars($key) ?>"
                             aria-selected="<?= $first_tab ? 'true' : 'false' ?>"
+                            tabindex="<?= $first_tab ? '0' : '-1' ?>"
                             aria-controls="case-panel-<?= htmlspecialchars($key) ?>">
                             <span class="case-navigator-tab__label"><?= htmlspecialchars($case['label']) ?></span>
                             <span class="case-navigator-tab__industry"><?= htmlspecialchars($case['industry']) ?></span>
@@ -160,7 +172,7 @@ $case_navigator = [
         </div>
     </section>
 
-    <section class="py-20 sm:py-24 bg-gray-900/30 section-fade-in">
+    <section class="py-20 sm:py-24 bg-gray-900/30 section-fade-in page-section page-section--soft">
         <div class="container mx-auto px-4">
             <div class="max-w-3xl mx-auto glass-effect rounded-3xl p-6 sm:p-8 lg:p-10">
                 <h2 class="text-2xl sm:text-3xl font-bold text-center mb-6"><?= t('cases.analysis.title') ?></h2>
@@ -187,7 +199,7 @@ $case_navigator = [
         </div>
     </section>
 
-    <section class="py-16 sm:py-20 section-fade-in">
+    <section class="py-16 sm:py-20 section-fade-in page-section">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-3xl sm:text-4xl font-bold mb-4"><?= t('cases.cta.title') ?></h2>
             <p class="text-gray-400 max-w-2xl mx-auto mb-8">

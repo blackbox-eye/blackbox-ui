@@ -916,8 +916,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         pricingCalculatorForm.addEventListener('submit', (event) => {
             event.preventDefault();
-            resetCalculator();
+            
+            // Clear previous errors and result, but keep validation state
+            showCalcStatus('');
+            if (resultContainer) {
+                resultContainer.classList.add('hidden');
+                resultContainer.innerHTML = '';
+            }
 
+            // Validate first - don't clear field errors before checking
             if (!validateCalculator()) {
                 showCalcStatus(i18n.t('pricing.calculator.validation.error', 'Ret de markerede felter for at fortsætte.'), 'error');
                 return;

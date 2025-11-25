@@ -1,0 +1,144 @@
+/**
+ * Blackbox EYE™ - Self-hosted fonts
+ *
+ * Font files should be placed in /assets/fonts/ directory:
+ * - Inter-Regular.woff2, Inter-Medium.woff2, Inter-SemiBold.woff2, Inter-Bold.woff2
+ * - ChakraPetch-Bold.woff2
+ *
+ * Download fonts from:
+ * - Inter: https://rsms.me/inter/ or https://fonts.google.com/specimen/Inter
+ * - Chakra Petch: https://fonts.google.com/specimen/Chakra+Petch
+ *
+ * For best performance, use woff2 format only (widely supported).
+ */
+
+/* Inter - Variable weight font (300-900) */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: local('Inter Light'), local('Inter-Light'),
+       url('/assets/fonts/Inter-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Inter Regular'), local('Inter-Regular'),
+       url('/assets/fonts/Inter-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: local('Inter Medium'), local('Inter-Medium'),
+       url('/assets/fonts/Inter-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Inter SemiBold'), local('Inter-SemiBold'),
+       url('/assets/fonts/Inter-SemiBold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Inter Bold'), local('Inter-Bold'),
+       url('/assets/fonts/Inter-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: local('Inter Black'), local('Inter-Black'),
+       url('/assets/fonts/Inter-Black.woff2') format('woff2');
+}
+
+/* Chakra Petch - Display font */
+@font-face {
+  font-family: 'Chakra Petch';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Chakra Petch Bold'), local('ChakraPetch-Bold'),
+       url('/assets/fonts/ChakraPetch-Bold.woff2') format('woff2');
+}
+
+/* Source Code Pro - Monospace font (used in some headers) */
+@font-face {
+  font-family: 'Source Code Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Source Code Pro'), local('SourceCodePro-Regular'),
+       url('/assets/fonts/SourceCodePro-Regular.woff2') format('woff2');
+}
+
+/* Orbitron - Display font (dashboard) */
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Orbitron Regular'), local('Orbitron-Regular'),
+       url('/assets/fonts/Orbitron-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: local('Orbitron Medium'), local('Orbitron-Medium'),
+       url('/assets/fonts/Orbitron-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Orbitron Bold'), local('Orbitron-Bold'),
+       url('/assets/fonts/Orbitron-Bold.woff2') format('woff2');
+}
+
+/* Roboto Condensed - Dashboard font */
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: local('Roboto Condensed Light'), local('RobotoCondensed-Light'),
+       url('/assets/fonts/RobotoCondensed-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Roboto Condensed'), local('RobotoCondensed-Regular'),
+       url('/assets/fonts/RobotoCondensed-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Roboto Condensed Bold'), local('RobotoCondensed-Bold'),
+       url('/assets/fonts/RobotoCondensed-Bold.woff2') format('woff2');
+}

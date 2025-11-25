@@ -28,9 +28,8 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
         integrity="sha256-s4B2di9zY7yekStouOA0gmeY213ya7YfAA7C56MTe8c="
         crossorigin="anonymous">
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <!-- Self-hosted fonts for performance -->
+    <link rel="stylesheet" href="/assets/fonts/fonts.css">
     <style>
         :root {
             --brand-gold: #D4AF35;

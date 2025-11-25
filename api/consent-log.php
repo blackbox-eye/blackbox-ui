@@ -5,6 +5,10 @@
  *
  * Receives cookie consent events via sendBeacon
  * Logs aggregated consent data without personal identifiers
+ *
+ * Non-blocking design: Returns response immediately and continues
+ * logging in the background via fastcgi_finish_request() or
+ * ignore_user_abort() for optimal TTFB.
  */
 
 declare(strict_types=1);
@@ -41,11 +45,20 @@ if (!in_array($action, $validActions, true)) {
   exit;
 }
 
-// Log consent event (no personal data)
+// Send response immediately before logging (non-blocking)
+http_response_code(200);
+echo json_encode(['success' => true]);
+
+// Flush output and continue logging in background if PHP-FPM available
+if (function_exists('fastcgi_finish_request')) {
+  fastcgi_finish_request();
+}
+
+// Allow script to continue even if client disconnects
+ignore_user_abort(true);
+
+// Log consent event (no personal data) - now runs after response is sent
 bbx_log_consent($action, [
   'consent_type' => $level,
   'categories' => $level === 'all' ? ['essential', 'analytics', 'marketing'] : ['essential'],
 ]);
-
-http_response_code(200);
-echo json_encode(['success' => true]);

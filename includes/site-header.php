@@ -217,8 +217,6 @@ if (!empty($disable_alphabot)) {
     <meta name="robots" content="<?= htmlspecialchars($meta_robots) ?>">
 
     <!-- Performance Optimization: Resource Hints -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
     <link rel="dns-prefetch" href="https://www.google.com">
     <link rel="dns-prefetch" href="https://generativelanguage.googleapis.com">
 
@@ -280,9 +278,8 @@ if (!empty($disable_alphabot)) {
         window.BBX_SITE_BASE_URL = "<?= htmlspecialchars(BBX_SITE_BASE_URL) ?>";
         window.RECAPTCHA_DEBUG = <?= BBX_DEBUG_RECAPTCHA ? 'true' : 'false' ?>;
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Chakra+Petch:wght@700&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <!-- Self-hosted fonts for performance (no external requests) -->
+    <link rel="stylesheet" href="/assets/fonts/fonts.css">
 
     <script type="application/ld+json">
         <?= json_encode($default_structured_data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) ?>

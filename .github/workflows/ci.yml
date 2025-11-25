@@ -520,6 +520,49 @@ jobs:
             echo "⚠️  Content length is suspiciously short"
           fi
 
+      - name: TTFB Performance Check
+        run: |
+          echo "════════════════════════════════════════"
+          echo "🧪 TTFB Performance Measurement"
+          echo "════════════════════════════════════════"
+          echo ""
+          echo "Measuring Time To First Byte (TTFB) for key endpoints..."
+          echo "Threshold: 300ms (warning at 250ms)"
+          echo ""
+
+          TTFB_FAILED=0
+
+          for ENDPOINT in "/" "/index.php" "/contact.php" "/api/consent-log.php"; do
+            URL="$SITE_URL$ENDPOINT"
+            echo "Testing: $URL"
+
+            # Measure TTFB using curl timing
+            TTFB=$(curl -s -o /dev/null -w "%{time_starttransfer}" \
+              -X GET -L "$URL" 2>/dev/null || echo "999")
+
+            # Convert to milliseconds
+            TTFB_MS=$(echo "$TTFB * 1000" | bc | cut -d'.' -f1)
+
+            echo "   TTFB: ${TTFB_MS}ms"
+
+            if [ "$TTFB_MS" -gt 300 ]; then
+              echo "   ⚠️  TTFB exceeds 300ms threshold!"
+              TTFB_FAILED=1
+            elif [ "$TTFB_MS" -gt 250 ]; then
+              echo "   ⚠️  TTFB approaching threshold (>250ms)"
+            else
+              echo "   ✅ TTFB within acceptable range"
+            fi
+            echo ""
+          done
+
+          if [ "$TTFB_FAILED" -eq 1 ]; then
+            echo "⚠️  Some endpoints exceeded TTFB threshold"
+            echo "   Consider: PHP-FPM tuning, max_execution_time, or caching"
+          else
+            echo "✅ All endpoints within TTFB threshold"
+          fi
+
       - name: Smoke test summary
         run: |
           echo ""

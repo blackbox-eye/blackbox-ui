@@ -19,11 +19,8 @@ require __DIR__ . '/../db.php';
       : 'blackbox.codes' ?>
   </title>
 
-  <!-- Google Font -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap"
-    rel="stylesheet"
-    crossorigin="anonymous">
+  <!-- Self-hosted fonts for performance -->
+  <link rel="stylesheet" href="/assets/fonts/fonts.css">
 
   <!-- Compiled Tailwind CSS (local, eliminates CDN/Rocket Loader issues) -->
   <link rel="stylesheet" href="/assets/css/tailwind.full.css">

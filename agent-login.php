@@ -102,9 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title><?php echo htmlspecialchars($page_title); ?> - Blackbox EYE</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Chakra+Petch:wght@700&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <!-- Self-hosted fonts for performance -->
+    <link rel="stylesheet" href="/assets/fonts/fonts.css">
 
     <!-- --- ENDELIG, KORRIGERET STYLING --- -->
     <style>

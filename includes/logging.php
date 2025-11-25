@@ -80,6 +80,10 @@ function bbx_rotate_log_if_needed(string $logFile, int $maxBytes = 10485760): vo
 /**
  * Core logging function with structured output
  *
+ * Non-blocking design: Uses error suppression and continues script execution
+ * even if logging fails. For PHP-FPM environments, consider using register_shutdown_function
+ * or fastcgi_finish_request() for fully async logging.
+ *
  * @param string $channel Log channel (agent, contact, security, consent, app)
  * @param int $level Log level (BBX_LOG_* constants)
  * @param string $event Event type/name
@@ -87,6 +91,9 @@ function bbx_rotate_log_if_needed(string $logFile, int $maxBytes = 10485760): vo
  */
 function bbx_log(string $channel, int $level, string $event, array $context = []): void
 {
+    // Allow script to continue even if client disconnects
+    ignore_user_abort(true);
+
     $logDir = bbx_log_directory();
     if (!is_dir($logDir)) {
         // Fail silently - don't block page load for logging issues
@@ -147,10 +154,11 @@ function bbx_log(string $channel, int $level, string $event, array $context = []
 
     $jsonLine = json_encode($entry, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     if ($jsonLine === false) {
-        error_log('BBX_LOG ERROR: JSON encode failed for event ' . $event);
+        // Fail silently - don't block page load for logging issues
         return;
     }
 
+    // Non-blocking write with error suppression
     @file_put_contents($logFile, $jsonLine . PHP_EOL, FILE_APPEND | LOCK_EX);
 }
 

@@ -144,6 +144,7 @@ jobs:
     needs: build
     if: |
       needs.build.outputs.skip_deploy != 'true' &&
+      github.event_name != 'pull_request' &&
       (github.event_name != 'workflow_dispatch' || github.event.inputs.environment == 'staging')
     runs-on: ubuntu-latest
     timeout-minutes: 15

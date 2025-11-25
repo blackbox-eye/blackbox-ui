@@ -75,8 +75,12 @@ generate_hash.php
 # Playwright test artifacts
 artifacts/
 !artifacts/.gitkeep
-.lighthouseci/
 test-results/
+
+# Lighthouse CI (allow config, ignore output)
+.lighthouseci/*.html
+.lighthouseci/*.json
+!.lighthouseci/assertions.json
 
 # ────────────────────────────────────────────────────────────────────────────────
 # --- GitHub/CI artefakter ---

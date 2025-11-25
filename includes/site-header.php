@@ -239,7 +239,8 @@ if (!empty($disable_alphabot)) {
     <meta name="twitter:image" content="<?= htmlspecialchars($meta_og_image) ?>">
 
     <!-- Tailwind CSS Production CDN (must load via script) -->
-    <script src="https://cdn.tailwindcss.com" crossorigin="anonymous"></script>
+    <!-- data-cfasync="false" prevents Cloudflare Rocket Loader from deferring this critical script -->
+    <script data-cfasync="false" src="https://cdn.tailwindcss.com" crossorigin="anonymous"></script>
     <noscript>
         <style>
             body {

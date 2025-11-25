@@ -194,9 +194,42 @@ include 'includes/site-header.php';
     </section>
 </main>
 
-<!-- Calendly badge widget begin -->
+<!-- Calendly widget scripts -->
 <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async crossorigin="anonymous"></script>
-<!-- Calendly badge widget end -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Calendly popup buttons
+        const popupButtons = document.querySelectorAll('[data-calendly-launch="popup"]');
+        popupButtons.forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = this.getAttribute('data-calendly-url');
+                if (url && typeof Calendly !== 'undefined') {
+                    Calendly.initPopupWidget({
+                        url: url
+                    });
+                }
+            });
+        });
+
+        // Re-initialize inline widget if Calendly is loaded
+        if (typeof Calendly !== 'undefined') {
+            const inlineWidget = document.querySelector('.calendly-inline-widget');
+            if (inlineWidget) {
+                const widgetUrl = inlineWidget.getAttribute('data-url');
+                if (widgetUrl) {
+                    Calendly.initInlineWidget({
+                        url: widgetUrl,
+                        parentElement: inlineWidget,
+                        prefill: {},
+                        utm: {}
+                    });
+                }
+            }
+        }
+    });
+</script>
 
 <?php include 'includes/site-footer.php'; ?>

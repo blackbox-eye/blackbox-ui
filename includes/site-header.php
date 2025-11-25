@@ -238,74 +238,203 @@ if (!empty($disable_alphabot)) {
     <meta name="twitter:description" content="<?= htmlspecialchars($meta_og_description) ?>">
     <meta name="twitter:image" content="<?= htmlspecialchars($meta_og_image) ?>">
 
-    <!-- Tailwind CSS - Using pre-built CDN (not Play CDN which requires JS runtime) -->
-    <!-- This is the compiled Tailwind CSS that works without JavaScript -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" crossorigin="anonymous">
-    
+    <!-- Local compiled Tailwind CSS (v3 build) -->
+    <link rel="stylesheet" href="/assets/css/tailwind.full.css">
+
     <!-- Critical inline styles for dark theme and custom colors (Tailwind v2 doesn't have all colors) -->
     <style>
         /* Custom color extensions for amber-400, gray-900 etc */
-        .bg-amber-400 { background-color: #fbbf24 !important; }
-        .text-amber-400 { color: #fbbf24 !important; }
-        .border-amber-400 { border-color: #fbbf24 !important; }
-        .hover\:bg-amber-400:hover { background-color: #fbbf24 !important; }
-        .hover\:bg-amber-500:hover { background-color: #f59e0b !important; }
-        .hover\:text-amber-400:hover { color: #fbbf24 !important; }
-        .hover\:text-amber-300:hover { color: #fcd34d !important; }
-        .bg-amber-400\/10 { background-color: rgba(251, 191, 36, 0.1); }
-        .bg-amber-400\/20 { background-color: rgba(251, 191, 36, 0.2); }
-        .border-amber-400\/20 { border-color: rgba(251, 191, 36, 0.2); }
-        .ring-amber-400 { --tw-ring-color: #fbbf24; }
-        .focus\:ring-amber-400:focus { --tw-ring-color: #fbbf24; }
-        
+        .bg-amber-400 {
+            background-color: #fbbf24 !important;
+        }
+
+        .text-amber-400 {
+            color: #fbbf24 !important;
+        }
+
+        .border-amber-400 {
+            border-color: #fbbf24 !important;
+        }
+
+        .hover\:bg-amber-400:hover {
+            background-color: #fbbf24 !important;
+        }
+
+        .hover\:bg-amber-500:hover {
+            background-color: #f59e0b !important;
+        }
+
+        .hover\:text-amber-400:hover {
+            color: #fbbf24 !important;
+        }
+
+        .hover\:text-amber-300:hover {
+            color: #fcd34d !important;
+        }
+
+        .bg-amber-400\/10 {
+            background-color: rgba(251, 191, 36, 0.1);
+        }
+
+        .bg-amber-400\/20 {
+            background-color: rgba(251, 191, 36, 0.2);
+        }
+
+        .border-amber-400\/20 {
+            border-color: rgba(251, 191, 36, 0.2);
+        }
+
+        .ring-amber-400 {
+            --tw-ring-color: #fbbf24;
+        }
+
+        .focus\:ring-amber-400:focus {
+            --tw-ring-color: #fbbf24;
+        }
+
         /* Gray colors used in the site */
-        .bg-gray-900 { background-color: #111827 !important; }
-        .bg-gray-900\/95 { background-color: rgba(17, 24, 39, 0.95); }
-        .bg-gray-900\/40 { background-color: rgba(17, 24, 39, 0.4); }
-        .bg-gray-900\/30 { background-color: rgba(17, 24, 39, 0.3); }
-        .bg-gray-800 { background-color: #1f2937 !important; }
-        .bg-gray-800\/60 { background-color: rgba(31, 41, 55, 0.6); }
-        .text-gray-300 { color: #d1d5db !important; }
-        .text-gray-400 { color: #9ca3af !important; }
-        .text-gray-500 { color: #6b7280 !important; }
-        .text-gray-600 { color: #4b5563 !important; }
-        .border-gray-600 { border-color: #4b5563 !important; }
-        .border-gray-700 { border-color: #374151 !important; }
-        .border-gray-800 { border-color: #1f2937 !important; }
-        .border-gray-800\/50 { border-color: rgba(31, 41, 55, 0.5); }
-        .hover\:text-white:hover { color: #ffffff !important; }
-        
+        .bg-gray-900 {
+            background-color: #111827 !important;
+        }
+
+        .bg-gray-900\/95 {
+            background-color: rgba(17, 24, 39, 0.95);
+        }
+
+        .bg-gray-900\/40 {
+            background-color: rgba(17, 24, 39, 0.4);
+        }
+
+        .bg-gray-900\/30 {
+            background-color: rgba(17, 24, 39, 0.3);
+        }
+
+        .bg-gray-800 {
+            background-color: #1f2937 !important;
+        }
+
+        .bg-gray-800\/60 {
+            background-color: rgba(31, 41, 55, 0.6);
+        }
+
+        .text-gray-300 {
+            color: #d1d5db !important;
+        }
+
+        .text-gray-400 {
+            color: #9ca3af !important;
+        }
+
+        .text-gray-500 {
+            color: #6b7280 !important;
+        }
+
+        .text-gray-600 {
+            color: #4b5563 !important;
+        }
+
+        .border-gray-600 {
+            border-color: #4b5563 !important;
+        }
+
+        .border-gray-700 {
+            border-color: #374151 !important;
+        }
+
+        .border-gray-800 {
+            border-color: #1f2937 !important;
+        }
+
+        .border-gray-800\/50 {
+            border-color: rgba(31, 41, 55, 0.5);
+        }
+
+        .hover\:text-white:hover {
+            color: #ffffff !important;
+        }
+
         /* Green for status indicators */
-        .bg-green-400 { background-color: #4ade80 !important; }
-        .text-green-400 { color: #4ade80 !important; }
-        
+        .bg-green-400 {
+            background-color: #4ade80 !important;
+        }
+
+        .text-green-400 {
+            color: #4ade80 !important;
+        }
+
         /* Black with opacity */
-        .bg-black\/40 { background-color: rgba(0, 0, 0, 0.4); }
-        .bg-black\/60 { background-color: rgba(0, 0, 0, 0.6); }
-        .bg-black\/80 { background-color: rgba(0, 0, 0, 0.8); }
-        
+        .bg-black\/40 {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .bg-black\/60 {
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        .bg-black\/80 {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
         /* Backdrop blur */
-        .backdrop-blur-sm { backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
-        .backdrop-blur-md { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-        
+        .backdrop-blur-sm {
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .backdrop-blur-md {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
         /* Z-index extensions */
-        .z-39 { z-index: 39; }
-        .z-45 { z-index: 45; }
-        .z-46 { z-index: 46; }
-        
+        .z-39 {
+            z-index: 39;
+        }
+
+        .z-45 {
+            z-index: 45;
+        }
+
+        .z-46 {
+            z-index: 46;
+        }
+
         /* Dark site background */
-        body { background-color: #101419; }
-        
+        body {
+            background-color: #101419;
+        }
+
         /* Fix for container on dark backgrounds */
-        .container { max-width: 1280px; }
-        
+        .container {
+            max-width: 1280px;
+        }
+
         /* Gradient backgrounds */
-        .bg-gradient-to-b { background-image: linear-gradient(to bottom, var(--tw-gradient-stops)); }
-        .from-black\/40 { --tw-gradient-from: rgba(0, 0, 0, 0.4); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(0, 0, 0, 0)); }
-        .via-transparent { --tw-gradient-stops: var(--tw-gradient-from), transparent, var(--tw-gradient-to, transparent); }
-        .to-black\/60 { --tw-gradient-to: rgba(0, 0, 0, 0.6); }
-        .from-gray-900\/50 { --tw-gradient-from: rgba(17, 24, 39, 0.5); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(17, 24, 39, 0)); }
-        .to-black { --tw-gradient-to: #000000; }
+        .bg-gradient-to-b {
+            background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
+        }
+
+        .from-black\/40 {
+            --tw-gradient-from: rgba(0, 0, 0, 0.4);
+            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(0, 0, 0, 0));
+        }
+
+        .via-transparent {
+            --tw-gradient-stops: var(--tw-gradient-from), transparent, var(--tw-gradient-to, transparent);
+        }
+
+        .to-black\/60 {
+            --tw-gradient-to: rgba(0, 0, 0, 0.6);
+        }
+
+        .from-gray-900\/50 {
+            --tw-gradient-from: rgba(17, 24, 39, 0.5);
+            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(17, 24, 39, 0));
+        }
+
+        .to-black {
+            --tw-gradient-to: #000000;
+        }
     </style>
 
     <!-- Conditional CSS loading -->

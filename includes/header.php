@@ -25,6 +25,9 @@ require __DIR__ . '/../db.php';
     rel="stylesheet"
     crossorigin="anonymous">
 
+  <!-- Compiled Tailwind CSS (local, eliminates CDN/Rocket Loader issues) -->
+  <link rel="stylesheet" href="/assets/css/tailwind.full.css">
+
   <!-- Hoved-stylesheet -->
   <link rel="stylesheet" href="/style.css">
 </head>

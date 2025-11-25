@@ -8,6 +8,11 @@ require_once __DIR__ . '/includes/mail-helper.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
+// Timeout constants for external API calls (in seconds)
+// Keep these low to avoid Cloudflare 522 timeouts
+define('BBX_RECAPTCHA_TIMEOUT', 5);
+define('BBX_RECAPTCHA_CONNECT_TIMEOUT', 3);
+
 // Reject non-POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -124,8 +129,8 @@ if ($recaptchaRequired) {
         CURLOPT_POST           => true,
         CURLOPT_POSTFIELDS     => $payload,
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT        => 5,
-        CURLOPT_CONNECTTIMEOUT => 3,
+        CURLOPT_TIMEOUT        => BBX_RECAPTCHA_TIMEOUT,
+        CURLOPT_CONNECTTIMEOUT => BBX_RECAPTCHA_CONNECT_TIMEOUT,
         CURLOPT_HTTPHEADER     => $headers,
         CURLOPT_SSL_VERIFYPEER => true,
     ]);

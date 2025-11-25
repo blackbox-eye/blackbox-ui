@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "build:tailwind": "npx tailwindcss -i ./assets/css/tailwind-src.css -o ./assets/css/tailwind.full.css --minify",
     "test": "playwright test --reporter=list",
     "test:ci": "playwright test --reporter=list --output=artifacts"
   },

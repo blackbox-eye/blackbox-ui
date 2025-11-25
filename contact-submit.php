@@ -8,74 +8,6 @@ require_once __DIR__ . '/includes/mail-helper.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
-/**
- * Log contact form submission with standardized format
- */
-function bbx_log_contact_submission(string $status, array $recaptcha_data = [], string $reason = '', array $extra = []): void
-{
-    $logDirectory = __DIR__ . '/logs';
-
-    // Always log function entry for debugging
-    error_log('CONTACT FORM DEBUG: entering bbx_log_contact_submission() with status=' . $status . ' reason=' . ($reason !== '' ? $reason : '[empty]'));
-
-    // Ensure log directory exists
-    if (!is_dir($logDirectory)) {
-        error_log('CONTACT FORM DEBUG: logs directory does not exist, attempting to create: ' . $logDirectory);
-        if (!mkdir($logDirectory, 0755, true)) {
-            $mkdirError = error_get_last();
-            error_log('CONTACT FORM LOG ERROR: Could not create log directory: ' . $logDirectory);
-            if ($mkdirError) {
-                error_log('CONTACT FORM LOG ERROR: mkdir() error: ' . $mkdirError['message']);
-            }
-            // Continue to fallback logging below
-        } else {
-            error_log('CONTACT FORM DEBUG: Created log directory: ' . $logDirectory);
-        }
-    }
-
-    $logFile = $logDirectory . '/contact-submissions.log';
-
-    // Create standardized log entry
-    $entry = [
-        'timestamp' => gmdate('c'),
-        'ip'        => $_SERVER['REMOTE_ADDR']    ?? 'unknown',
-        'hostname'  => $recaptcha_data['hostname'] ?? ($_SERVER['HTTP_HOST'] ?? 'unknown'),
-        'action'    => $recaptcha_data['action']  ?? 'contact',
-        'score'     => $recaptcha_data['score']   ?? null,
-        'success'   => $status === 'success',
-        'reason'    => $reason !== '' ? $reason : ($status === 'success' ? 'ok' : $status),
-    ];
-
-    // Add extra fields if provided
-    if (!empty($extra)) {
-        $entry = array_merge($entry, $extra);
-    }
-
-    $jsonLine = json_encode($entry, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-    if ($jsonLine === false) {
-        error_log('CONTACT FORM LOG ERROR: Could not encode log entry to JSON');
-        error_log('CONTACT FORM LOG ERROR: Fallback raw entry: ' . print_r($entry, true));
-        return;
-    }
-
-    // Write to log file with error handling
-    $result = @file_put_contents($logFile, $jsonLine . PHP_EOL, FILE_APPEND | LOCK_EX);
-
-    if ($result === false) {
-        $writeError = error_get_last();
-        error_log('CONTACT FORM LOG ERROR: Could not write to log file: ' . $logFile);
-        if ($writeError) {
-            error_log('CONTACT FORM LOG ERROR: file_put_contents() error: ' . $writeError['message']);
-        }
-
-        // Always write fallback to error_log
-        error_log('CONTACT FORM LOG FALLBACK: ' . $jsonLine);
-    } else {
-        $bytesWritten = $result > 0 ? $result . ' bytes' : 'empty write (0 bytes)';
-        error_log('CONTACT FORM DEBUG: Successfully logged to: ' . $logFile . ' (' . $bytesWritten . ')');
-    }
-}
-
 // Reject non-POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -192,7 +124,8 @@ if ($recaptchaRequired) {
         CURLOPT_POST           => true,
         CURLOPT_POSTFIELDS     => $payload,
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT        => 10,
+        CURLOPT_TIMEOUT        => 5,
+        CURLOPT_CONNECTTIMEOUT => 3,
         CURLOPT_HTTPHEADER     => $headers,
         CURLOPT_SSL_VERIFYPEER => true,
     ]);

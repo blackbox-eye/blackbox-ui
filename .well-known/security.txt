@@ -1,0 +1,35 @@
+# Blackbox EYE™ Security Policy
+# https://securitytxt.org/
+
+Contact: mailto:security@blackbox.codes
+Contact: mailto:ops@blackbox.codes
+Expires: 2026-12-31T23:59:59.000Z
+Encryption: https://blackbox.codes/pgp-key.asc
+Preferred-Languages: en, da
+Canonical: https://blackbox.codes/.well-known/security.txt
+Policy: https://blackbox.codes/security-policy.php
+
+# Acknowledgments
+# We appreciate responsible disclosure and will acknowledge security researchers
+# who report valid vulnerabilities.
+
+# Scope
+# This security policy applies to:
+# - blackbox.codes and all subdomains
+# - Blackbox EYE™ platform and related services
+# - Mobile applications (if applicable)
+
+# Out of scope
+# - Social engineering attacks
+# - Physical security testing
+# - Denial of service attacks
+# - Third-party services we integrate with
+
+# Response expectations
+# - We will acknowledge receipt within 48 hours
+# - We aim to provide a resolution timeline within 7 days
+# - We will keep you informed of our progress
+
+# Hall of Fame
+# Researchers who report valid vulnerabilities may be listed in our
+# security acknowledgments page (with permission).

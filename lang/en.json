@@ -69,6 +69,9 @@
       "title": "Follow Us"
     },
     "copyright": "\u00a9 2025 Blackbox EYE\u2122. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "recaptcha_notice": "This site is protected by reCAPTCHA",
     "cta": {
       "book_meeting": "Book Meeting",
       "contact": "Contact",

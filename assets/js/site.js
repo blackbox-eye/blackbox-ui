@@ -916,7 +916,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         pricingCalculatorForm.addEventListener('submit', (event) => {
             event.preventDefault();
-            
+
             // Clear previous errors and result, but keep validation state
             showCalcStatus('');
             if (resultContainer) {

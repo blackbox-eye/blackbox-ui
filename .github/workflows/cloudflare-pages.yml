@@ -155,8 +155,26 @@ jobs:
       - name: Install dependencies
         run: npm ci --prefer-offline --no-audit
 
+      - name: Validate secrets before deploy
+        id: validate-secrets
+        run: |
+          # Double-check secrets are present before attempting deploy
+          if [ -z "${{ secrets.CF_API_TOKEN }}${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+            echo "::error::Cloudflare API token not configured. Set CF_API_TOKEN or CLOUDFLARE_API_TOKEN in GitHub Secrets."
+            echo "has_secrets=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          if [ -z "${{ secrets.CF_ACCOUNT_ID }}${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" ]; then
+            echo "::error::Cloudflare Account ID not configured. Set CF_ACCOUNT_ID or CLOUDFLARE_ACCOUNT_ID in GitHub Secrets."
+            echo "has_secrets=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          echo "has_secrets=true" >> $GITHUB_OUTPUT
+          echo "✅ All required secrets are configured"
+
       - name: Deploy to Cloudflare Pages
         id: deploy
+        if: steps.validate-secrets.outputs.has_secrets == 'true'
         uses: cloudflare/pages-action@v1
         with:
           # Support both secret naming conventions - CF_API_TOKEN takes precedence
@@ -395,6 +413,20 @@ jobs:
 
       - name: Install dependencies
         run: npm ci --prefer-offline --no-audit
+
+      - name: Validate secrets before deploy
+        id: validate-prod-secrets
+        run: |
+          # Double-check secrets are present before attempting deploy
+          if [ -z "${{ secrets.CF_API_TOKEN }}${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+            echo "::error::Cloudflare API token not configured. Set CF_API_TOKEN or CLOUDFLARE_API_TOKEN in GitHub Secrets."
+            exit 1
+          fi
+          if [ -z "${{ secrets.CF_ACCOUNT_ID }}${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" ]; then
+            echo "::error::Cloudflare Account ID not configured. Set CF_ACCOUNT_ID or CLOUDFLARE_ACCOUNT_ID in GitHub Secrets."
+            exit 1
+          fi
+          echo "✅ All required secrets are configured for production"
 
       - name: Deploy to Cloudflare Pages (Production)
         id: deploy-prod

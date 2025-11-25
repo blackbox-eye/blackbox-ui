@@ -65,6 +65,11 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
       - name: Validate GitHub token
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -74,6 +79,15 @@ jobs:
             exit 1
           fi
           echo "GitHub token available."
+
+      - name: Create CI database stub
+        run: |
+          cat > db.php << 'EOF'
+          <?php
+          // CI stub - provides null PDO connection for testing
+          // Pages should handle $pdo being null gracefully
+          $pdo = null;
+          EOF
 
       - name: Install dependencies
         run: npm ci --prefer-offline --no-audit

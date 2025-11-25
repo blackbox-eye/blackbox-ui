@@ -89,15 +89,18 @@ function bbx_log(string $channel, int $level, string $event, array $context = []
 {
     $logDir = bbx_log_directory();
     if (!is_dir($logDir)) {
-        error_log('BBX_LOG ERROR: Log directory unavailable');
+        // Fail silently - don't block page load for logging issues
         return;
     }
 
     $safeChannel = preg_replace('/[^a-zA-Z0-9_-]/', '_', $channel) ?: 'app';
     $logFile = $logDir . '/' . $safeChannel . '.log';
 
-    // Rotate if needed
-    bbx_rotate_log_if_needed($logFile);
+    // Rotate only ~1% of requests to reduce I/O overhead (probabilistic rotation)
+    // This avoids filesize() check on every request while still rotating periodically
+    if (mt_rand(1, 100) === 1) {
+        bbx_rotate_log_if_needed($logFile);
+    }
 
     // Level name mapping
     $levelNames = [

@@ -9,6 +9,12 @@ module.exports = defineConfig({
     headless: true,
     screenshot: 'only-on-failure'
   },
+  webServer: {
+    command: 'php -S localhost:8000',
+    url: 'http://localhost:8000',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120000,
+  },
   projects: [
     {
       name: 'chromium',

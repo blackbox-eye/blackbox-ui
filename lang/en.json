@@ -29,6 +29,19 @@
       "switch_da": "Switch to Danish",
       "switch_en": "Switch to English"
     },
+    "theme": {
+      "label_dark": "Switch to dark theme",
+      "label_light": "Switch to light theme",
+      "text_dark": "Dark",
+      "text_light": "Light",
+      "toggle_label": "Toggle color theme",
+      "toggle_text": "Theme",
+      "mobile_title": "Color theme",
+      "mobile_description": "Toggle between dark and light experiences"
+    },
+    "desktop": {
+      "primary_navigation": "Primary navigation"
+    },
     "mobile": {
       "navigation": "Navigation",
       "open_menu": "Open navigation menu",
@@ -77,6 +90,46 @@
       "tagline": "The Tactical Overview",
       "title": "From strategy to operational effect",
       "description": "One platform, five focus areas. Navigate directly to the intelligence you need.",
+    "metrics": {
+      "response": "Reduced response time",
+      "response_caption": "Average reduction after 6 months with GreyEYE™",
+      "threats": "Automated attacks stopped",
+      "threats_caption": "Per quarter with PVE™ and AUT in production",
+      "incidents": "Critical incidents",
+      "incidents_caption": "After onboarding Blackbox EYE™ with enterprise clients"
+    },
+    "navigator": {
+      "eyebrow": "Featured transformations",
+      "title": "Pick an industry and see the impact",
+      "subtitle": "The overview is continuously refreshed with new KPIs from our deployments.",
+      "impact_label": "Impact over <span>12 months</span>",
+      "modules_label": "Core modules",
+      "cta": "Schedule a strategic alignment session",
+      "municipality": {
+        "label": "Nordic municipality",
+        "industry": "Public administration",
+        "impact": "72% faster incident response and full GDPR audit trail in 48 hours.",
+        "metric_one": "24/7 monitoring across 9,100 endpoints",
+        "metric_two": "Automated leadership reporting",
+        "metric_three": "Upgraded awareness program for 4,500 employees"
+      },
+      "realestate": {
+        "label": "International real estate group",
+        "industry": "PropTech & facility",
+        "impact": "Automated site onboarding and 35% lower compliance cost.",
+        "metric_one": "Integration with 14 access control systems",
+        "metric_two": "Digital twin of security maturity per location",
+        "metric_three": "Automated ISO 27001 documentation"
+      },
+      "security": {
+        "label": "Global security company",
+        "industry": "Critical infrastructure",
+        "impact": "Zero critical outages in 18 months and 91% faster intelligence flow.",
+        "metric_one": "Fusion center with live threat feeds to 38 locations",
+        "metric_two": "Integrated insider threat detection with GreyEYE™",
+        "metric_three": "Predictive staffing powered by AlphaBot™ alerts"
+      }
+    },
       "cards": {
         "about": {
           "title": "About Us",

@@ -29,6 +29,19 @@
       "switch_da": "Skift til dansk",
       "switch_en": "Switch to English"
     },
+    "theme": {
+      "label_dark": "Skift til mørkt tema",
+      "label_light": "Skift til lyst tema",
+      "text_dark": "Mørkt",
+      "text_light": "Lyst",
+      "toggle_label": "Skift farvetema",
+      "toggle_text": "Tema",
+      "mobile_title": "Farvetema",
+      "mobile_description": "Skift mellem mørk og lys oplevelse"
+    },
+    "desktop": {
+      "primary_navigation": "Primær navigation"
+    },
     "mobile": {
       "navigation": "Navigation",
       "open_menu": "Åbn navigationsmenu",
@@ -339,6 +352,46 @@
         "challenge": "Manuelle logbøger og langsom reaktionstid.",
         "solution": "GreyEYE assisterer nu vagter med automatisk dokumentation og live-opdateringer.",
         "result": "Ny differentieringsfaktor på markedet."
+      }
+    },
+    "metrics": {
+      "response": "Reduceret responstid",
+      "response_caption": "Gennemsnitlig reduktion efter 6 måneder med GreyEYE™",
+      "threats": "Automatisk standsede forsøg",
+      "threats_caption": "Pr. kvartal med PVE™ og AUT i produktion",
+      "incidents": "Kritiske hændelser",
+      "incidents_caption": "Efter onboarding af Blackbox EYE™ hos Enterprise-kunder"
+    },
+    "navigator": {
+      "eyebrow": "Udvalgte transformationer",
+      "title": "Vælg en branche og se effekten",
+      "subtitle": "Overblikket opdateres løbende med nye nøgletal fra vores implementeringer.",
+      "impact_label": "Impact på <span>12 mdr.</span>",
+      "modules_label": "Kerne-moduler",
+      "cta": "Planlæg et strategisk matchmøde",
+      "municipality": {
+        "label": "Nordisk kommune",
+        "industry": "Offentlig forvaltning",
+        "impact": "72% hurtigere hændelsesrespons og fuld audit-trail til GDPR på 48 timer.",
+        "metric_one": "24/7 overvågning af 9.100 endpoints",
+        "metric_two": "Automatiseret kommunikation til ledelsesrapportering",
+        "metric_three": "Opgraderet awareness-program for 4.500 medarbejdere"
+      },
+      "realestate": {
+        "label": "Internationalt ejendomsselskab",
+        "industry": "PropTech & Facility",
+        "impact": "Automatiseret scanning af nye lokationer og 35% lavere compliance-omkostning.",
+        "metric_one": "Integration til 14 adgangskontrolsystemer",
+        "metric_two": "Digital tvilling af sikkerhedsmodenhed pr. lokation",
+        "metric_three": "Automatiseret ISO 27001-dokumentation"
+      },
+      "security": {
+        "label": "Globalt vagtselskab",
+        "industry": "Critical infrastructure",
+        "impact": "0 kritiske driftsstop i 18 måneder og 91% hurtigere efterretningsflow.",
+        "metric_one": "Fusionscenter med live-threat feeds til 38 lokationer",
+        "metric_two": "Integreret insider threat-detection med GreyEYE™",
+        "metric_three": "Predictive staffing med AlphaBot™ alerts"
       }
     },
     "analysis": {

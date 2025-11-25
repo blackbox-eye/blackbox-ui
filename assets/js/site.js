@@ -38,8 +38,100 @@ const i18n = (() => {
     };
 })();
 
+const currencyFormatter = new Intl.NumberFormat('da-DK', {
+    style: 'currency',
+    currency: 'DKK',
+    maximumFractionDigits: 0
+});
+
+const THEME_STORAGE_KEY = 'bbx-theme';
+
 document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add('js-enabled');
+
+    const docEl = document.documentElement;
+    const metaColorScheme = document.querySelector('meta[name="color-scheme"]');
+    const themeToggleButtons = document.querySelectorAll('[data-theme-toggle]');
+    const prefersLight = window.matchMedia('(prefers-color-scheme: light)');
+    let storedTheme = null;
+
+    try {
+        const candidate = window.localStorage.getItem(THEME_STORAGE_KEY);
+        if (candidate === 'light' || candidate === 'dark') {
+            storedTheme = candidate;
+        }
+    } catch (error) {
+        storedTheme = null;
+    }
+
+    const setColorSchemeMeta = (theme) => {
+        if (!metaColorScheme) {
+            return;
+        }
+        metaColorScheme.setAttribute('content', theme === 'light' ? 'light dark' : 'dark light');
+    };
+
+    const syncThemeControls = (theme) => {
+        const isLight = theme === 'light';
+        themeToggleButtons.forEach((button) => {
+            button.setAttribute('aria-pressed', isLight ? 'true' : 'false');
+
+            const label = isLight
+                ? button.dataset.themeLabelDark || button.getAttribute('aria-label')
+                : button.dataset.themeLabelLight || button.getAttribute('aria-label');
+            if (label) {
+                button.setAttribute('aria-label', label);
+            }
+
+            const textEl = button.querySelector('.theme-toggle__text');
+            if (textEl) {
+                textEl.textContent = isLight
+                    ? button.dataset.themeTextDark || textEl.textContent
+                    : button.dataset.themeTextLight || textEl.textContent;
+            }
+        });
+    };
+
+    const applyTheme = (theme, { persist = false } = {}) => {
+        const nextTheme = theme === 'light' ? 'light' : 'dark';
+        docEl.dataset.theme = nextTheme;
+        docEl.style.colorScheme = nextTheme;
+        setColorSchemeMeta(nextTheme);
+        syncThemeControls(nextTheme);
+
+        if (persist) {
+            try {
+                window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+                storedTheme = nextTheme;
+            } catch (error) {
+                // Ignore storage failures (private mode, etc.)
+            }
+        }
+    };
+
+    const initialTheme = storedTheme || (docEl.dataset.theme === 'light' ? 'light' : 'dark');
+    applyTheme(initialTheme);
+
+    themeToggleButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            const currentTheme = docEl.dataset.theme === 'light' ? 'light' : 'dark';
+            const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
+            applyTheme(nextTheme, { persist: true });
+        });
+    });
+
+    const handleSystemThemeChange = (event) => {
+        if (storedTheme) {
+            return;
+        }
+        applyTheme(event.matches ? 'light' : 'dark');
+    };
+
+    if (typeof prefersLight.addEventListener === 'function') {
+        prefersLight.addEventListener('change', handleSystemThemeChange);
+    } else if (typeof prefersLight.addListener === 'function') {
+        prefersLight.addListener(handleSystemThemeChange);
+    }
 
     const header = document.getElementById('main-header');
     const updateHeaderScrollState = () => {
@@ -880,6 +972,54 @@ document.addEventListener('DOMContentLoaded', () => {
             } finally {
                 setCalculatorSubmitting(false);
             }
+        });
+    }
+
+    const caseNavigatorTabs = document.querySelectorAll('[data-case-tab]');
+    const caseNavigatorPanels = document.querySelectorAll('[data-case-panel]');
+    if (caseNavigatorTabs.length && caseNavigatorPanels.length) {
+        const activateCasePanel = (key) => {
+            caseNavigatorPanels.forEach((panel) => {
+                const isMatch = panel.dataset.casePanel === key;
+                panel.classList.toggle('is-visible', isMatch);
+                if (isMatch) {
+                    panel.removeAttribute('hidden');
+                } else {
+                    panel.setAttribute('hidden', 'hidden');
+                }
+            });
+
+            caseNavigatorTabs.forEach((tab) => {
+                const isActive = tab.dataset.caseTab === key;
+                tab.classList.toggle('is-active', isActive);
+                tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            });
+        };
+
+        caseNavigatorTabs.forEach((tab, index) => {
+            tab.addEventListener('click', () => {
+                activateCasePanel(tab.dataset.caseTab || '');
+            });
+
+            tab.addEventListener('keydown', (event) => {
+                const tabsArray = Array.from(caseNavigatorTabs);
+                if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+                    event.preventDefault();
+                    const nextTab = tabsArray[(index + 1) % tabsArray.length];
+                    nextTab.focus();
+                    activateCasePanel(nextTab.dataset.caseTab || '');
+                }
+                if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+                    event.preventDefault();
+                    const prevTab = tabsArray[(index - 1 + tabsArray.length) % tabsArray.length];
+                    prevTab.focus();
+                    activateCasePanel(prevTab.dataset.caseTab || '');
+                }
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    activateCasePanel(tab.dataset.caseTab || '');
+                }
+            });
         });
     }
 

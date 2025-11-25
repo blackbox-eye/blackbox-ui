@@ -24,6 +24,30 @@ $structured_data = [
 ];
 
 include 'includes/site-header.php';
+
+$demo_slots = [
+    [
+        'title' => t('demo.slots.slot_one.title', 'Tirsdag'),
+        'date' => t('demo.slots.slot_one.date', '16. juli'),
+        'times' => ['09:00 CET', '11:30 CET', '14:00 CET'],
+        'status' => t('demo.slots.status.open', 'Åben'),
+        'type' => 'open',
+    ],
+    [
+        'title' => t('demo.slots.slot_two.title', 'Onsdag'),
+        'date' => t('demo.slots.slot_two.date', '17. juli'),
+        'times' => ['10:00 CET', '13:00 CET'],
+        'status' => t('demo.slots.status.limited', 'Begrænset'),
+        'type' => 'limited',
+    ],
+    [
+        'title' => t('demo.slots.slot_three.title', 'Fredag'),
+        'date' => t('demo.slots.slot_three.date', '19. juli'),
+        'times' => ['09:30 CET', '12:00 CET', '15:30 CET'],
+        'status' => t('demo.slots.status.waitlist', 'Venteliste'),
+        'type' => 'waitlist',
+    ],
+];
 ?>
 
 <main id="main-content" class="pt-16">
@@ -93,6 +117,55 @@ include 'includes/site-header.php';
                         <?= t('demo.benefits.noobligation.description', '100% gratis og uforpligtende') ?>
                     </p>
                 </div>
+            </div>
+
+            <div class="glass-effect rounded-3xl p-6 sm:p-8 mb-16">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-semibold text-white"><?= t('demo.slots.heading', 'Næste ledige demo-slots') ?></h2>
+                        <p class="text-sm text-gray-400"><?= t('demo.slots.subheading', 'Book et placeholder-slot nu – vores team bekræfter endeligt inden for 2 timer.') ?></p>
+                    </div>
+                    <span class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-amber-300">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <?= t('demo.slots.status_label', 'Opdateres dagligt') ?>
+                    </span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 demo-slot-grid">
+                    <?php foreach ($demo_slots as $slot): ?>
+                        <?php
+                        $statusModifier = 'demo-slot-status--open';
+                        if ($slot['type'] === 'limited') {
+                            $statusModifier = 'demo-slot-status--limited';
+                        } elseif ($slot['type'] === 'waitlist') {
+                            $statusModifier = 'demo-slot-status--waitlist';
+                        }
+                        ?>
+                        <article class="glass-effect demo-slot-card flex flex-col gap-5 p-5">
+                            <div>
+                                <p class="text-sm uppercase tracking-wider text-gray-400"><?= htmlspecialchars($slot['title']) ?></p>
+                                <p class="text-xl font-semibold text-white"><?= htmlspecialchars($slot['date']) ?></p>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <?php foreach ($slot['times'] as $time): ?>
+                                    <span class="demo-slot-pill">
+                                        <?= htmlspecialchars($time) ?>
+                                    </span>
+                                <?php endforeach; ?>
+                            </div>
+                            <div class="flex items-center justify-between gap-4 mt-auto">
+                                <span class="demo-slot-status <?= $statusModifier ?>">
+                                    <?= htmlspecialchars($slot['status']) ?>
+                                </span>
+                                <a href="#demo-booking" class="inline-flex items-center text-sm font-semibold text-amber-300 hover:text-amber-200 transition-colors">
+                                    <?= t('demo.slots.reserve_cta', 'Reserver') ?>
+                                </a>
+                            </div>
+                        </article>
+                    <?php endforeach; ?>
+                </div>
+                <p class="text-xs text-gray-500 mt-6">
+                    <?= t('demo.slots.disclaimer', 'Placering af placeholders sikrer prioritet i den endelige bookingplan og kan frit ændres, når du bliver kontaktet af vores rådgiver.') ?>
+                </p>
             </div>
 
             <!-- Calendly Embed Section -->

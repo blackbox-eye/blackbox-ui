@@ -4,6 +4,60 @@ $current_page = 'cases';
 $page_title = t('cases.hero_section.title') . ' | ' . t('site.name');
 $meta_description = t('cases.hero_section.description');
 include 'includes/site-header.php';
+
+$case_metrics = [
+    [
+        'value' => '68%',
+        'label' => t('cases.metrics.response', 'Reduceret responstid'),
+        'caption' => t('cases.metrics.response_caption', 'Gennemsnitlig reduktion efter 6 måneder med GreyEYE™'),
+    ],
+    [
+        'value' => '42',
+        'label' => t('cases.metrics.threats', 'Automatisk standsede forsøg'),
+        'caption' => t('cases.metrics.threats_caption', 'Pr. kvartal med PVE™ og AUT i produktion'),
+    ],
+    [
+        'value' => '0',
+        'label' => t('cases.metrics.incidents', 'Kritiske hændelser'),
+        'caption' => t('cases.metrics.incidents_caption', 'Efter onboarding af Blackbox EYE™ hos Enterprise-kunder'),
+    ],
+];
+
+$case_navigator = [
+    'municipality' => [
+        'label' => t('cases.navigator.municipality.label', 'Nordisk kommune'),
+        'industry' => t('cases.navigator.municipality.industry', 'Offentlig forvaltning'),
+        'impact' => t('cases.navigator.municipality.impact', '72% hurtigere hændelsesrespons og fuld audit-trail til GDPR på 48 timer.'),
+        'metrics' => [
+            t('cases.navigator.municipality.metric_one', '24/7 overvågning af 9.100 endpoints'),
+            t('cases.navigator.municipality.metric_two', 'Automatiseret kommunikation til ledelsesrapportering'),
+            t('cases.navigator.municipality.metric_three', 'Opgraderet awareness-program for 4.500 medarbejdere'),
+        ],
+        'modules' => ['GreyEYE™ SOC Co-pilot', 'ID-Matrix™ Identity Shield'],
+    ],
+    'realestate' => [
+        'label' => t('cases.navigator.realestate.label', 'Internationalt ejendomsselskab'),
+        'industry' => t('cases.navigator.realestate.industry', 'PropTech & Facility'),
+        'impact' => t('cases.navigator.realestate.impact', 'Automatiseret scanning af nye lokationer og 35% lavere compliance-omkostning.'),
+        'metrics' => [
+            t('cases.navigator.realestate.metric_one', 'Integration til 14 adgangskontrolsystemer'),
+            t('cases.navigator.realestate.metric_two', 'Digital tvilling af sikkerhedsmodenhed pr. lokation'),
+            t('cases.navigator.realestate.metric_three', 'Automatiseret ISO 27001-dokumentation'),
+        ],
+        'modules' => ['PVE™ Penetration Engine', 'Bridge™ API Orchestrator'],
+    ],
+    'security' => [
+        'label' => t('cases.navigator.security.label', 'Globalt vagtselskab'),
+        'industry' => t('cases.navigator.security.industry', 'Critical infrastructure'),
+        'impact' => t('cases.navigator.security.impact', '0 kritiske driftsstop i 18 måneder og 91% hurtigere efterretningsflow.'),
+        'metrics' => [
+            t('cases.navigator.security.metric_one', 'Fusionscenter med live-threat feeds til 38 lokationer'),
+            t('cases.navigator.security.metric_two', 'Integreret insider threat-detection med GreyEYE™'),
+            t('cases.navigator.security.metric_three', 'Predictive staffing med AlphaBot™ alerts'),
+        ],
+        'modules' => ['AUT™ Autonomous Testing', 'AlphaBot™ Command'],
+    ],
+];
 ?>
 
 <main class="pt-16">
@@ -15,6 +69,80 @@ include 'includes/site-header.php';
                 <p class="text-gray-300 text-base sm:text-lg">
                     <?= t('cases.hero_section.description') ?>
                 </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-16">
+                <?php foreach ($case_metrics as $metric): ?>
+                    <article class="glass-effect case-metric-card">
+                        <p class="case-metric-value"><?= htmlspecialchars($metric['value']) ?></p>
+                        <p class="case-metric-label"><?= htmlspecialchars($metric['label']) ?></p>
+                        <p class="case-metric-caption"><?= htmlspecialchars($metric['caption']) ?></p>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+
+            <div class="glass-effect case-navigator">
+                <div class="case-navigator-header">
+                    <div>
+                        <p class="case-navigator-eyebrow"><?= t('cases.navigator.eyebrow', 'Udvalgte transformationer') ?></p>
+                        <h2 class="case-navigator-title"><?= t('cases.navigator.title', 'Vælg en branche og se effekten') ?></h2>
+                    </div>
+                    <p class="case-navigator-subtitle"><?= t('cases.navigator.subtitle', 'Overblikket opdateres løbende med nye nøgletal fra vores implementeringer.') ?></p>
+                </div>
+                <div class="case-navigator-tabs" role="tablist">
+                    <?php $first_tab = true; ?>
+                    <?php foreach ($case_navigator as $key => $case): ?>
+                        <button type="button"
+                            class="case-navigator-tab<?= $first_tab ? ' is-active' : '' ?>"
+                            role="tab"
+                            data-case-tab="<?= htmlspecialchars($key) ?>"
+                            id="case-tab-<?= htmlspecialchars($key) ?>"
+                            aria-selected="<?= $first_tab ? 'true' : 'false' ?>"
+                            aria-controls="case-panel-<?= htmlspecialchars($key) ?>">
+                            <span class="case-navigator-tab__label"><?= htmlspecialchars($case['label']) ?></span>
+                            <span class="case-navigator-tab__industry"><?= htmlspecialchars($case['industry']) ?></span>
+                        </button>
+                        <?php $first_tab = false; ?>
+                    <?php endforeach; ?>
+                </div>
+                <div class="case-navigator-panels">
+                    <?php $first_panel = true; ?>
+                    <?php foreach ($case_navigator as $key => $case): ?>
+                        <article class="case-navigator-panel<?= $first_panel ? ' is-visible' : '' ?>"
+                            role="tabpanel"
+                            id="case-panel-<?= htmlspecialchars($key) ?>"
+                            aria-labelledby="case-tab-<?= htmlspecialchars($key) ?>"
+                            data-case-panel="<?= htmlspecialchars($key) ?>"
+                            <?= $first_panel ? '' : 'hidden' ?>>
+                            <div class="case-navigator-impact">
+                                <p class="case-navigator-impact__label"><?= t('cases.navigator.impact_label', 'Impact på <span>12 mdr.</span>') ?></p>
+                                <p class="case-navigator-impact__value"><?= htmlspecialchars($case['impact']) ?></p>
+                            </div>
+                            <div class="case-navigator-details">
+                                <div class="case-navigator-metrics">
+                                    <?php foreach ($case['metrics'] as $item): ?>
+                                        <div class="case-navigator-metric">
+                                            <span class="case-navigator-metric__dot" aria-hidden="true"></span>
+                                            <p><?= htmlspecialchars($item) ?></p>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                                <div class="case-navigator-modules">
+                                    <p class="case-navigator-modules__label"><?= t('cases.navigator.modules_label', 'Kerne-moduler') ?></p>
+                                    <ul>
+                                        <?php foreach ($case['modules'] as $module): ?>
+                                            <li><?= htmlspecialchars($module) ?></li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                    <a href="contact.php" class="case-navigator-cta">
+                                        <?= t('cases.navigator.cta', 'Planlæg et strategisk matchmøde') ?>
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                        <?php $first_panel = false; ?>
+                    <?php endforeach; ?>
+                </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">

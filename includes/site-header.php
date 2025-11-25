@@ -193,12 +193,28 @@ if (!empty($disable_alphabot)) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="<?= htmlspecialchars($current_language) ?>" class="scroll-smooth" style="color-scheme: light;">
+<html lang="<?= htmlspecialchars($current_language) ?>" class="scroll-smooth" data-theme="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="light only">
+    <meta name="color-scheme" content="dark light">
+    <script>
+        (function() {
+            var storageKey = 'bbx-theme';
+            var preferred = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+            var storedTheme = null;
+            try {
+                storedTheme = window.localStorage.getItem(storageKey);
+            } catch (err) {
+                storedTheme = null;
+            }
+            var theme = storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : preferred;
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.style.colorScheme = theme;
+            window.__BBX_INITIAL_THEME__ = theme;
+        })();
+    </script>
     <title><?= htmlspecialchars($page_title) ?></title>
     <meta name="description" content="<?= htmlspecialchars($meta_description) ?>">
     <meta name="keywords" content="<?= htmlspecialchars($meta_keywords) ?>">
@@ -287,45 +303,57 @@ if (!empty($disable_alphabot)) {
 
     <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
         <div class="container mx-auto px-4">
-            <div class="flex items-center h-20 gap-4 md:gap-6 lg:gap-10">
-                <div class="glitch-logo flex-shrink-0 mr-2" aria-label="Blackbox EYE">
-                    Blackbox EYE&trade;
-                    <span aria-hidden="true">Blackbox EYE&trade;</span>
-                    <span aria-hidden="true">Blackbox EYE&trade;</span>
-                </div>
-                <div class="hidden md:flex nav-scroll-container flex-1 relative items-center overflow-hidden" aria-label="Primary Navigation Wrapper">
-                    <button id="nav-scroll-left" type="button" class="nav-scroll-btn absolute left-0 h-12 w-10 flex items-center justify-center text-amber-400/70 hover:text-amber-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400" aria-label="Scroll navigation left" data-direction="left" hidden>
-                        <span aria-hidden="true">&#8249;</span>
-                    </button>
-                    <nav id="nav-scroll" class="nav-scroll flex flex-1 items-center gap-3 lg:gap-5 xl:gap-6 overflow-x-auto scroll-smooth px-6" aria-label="Primary" tabindex="0">
-                        <?php foreach ($nav_links as $link): ?>
-                            <a href="<?= $link['href'] ?>" class="nav-link <?= aig_nav_class($link['slug'], $current_page) ?> whitespace-nowrap text-sm lg:text-base" <?= aig_nav_aria($link['slug'], $current_page) ?>>
-                                <?= htmlspecialchars($link['label']) ?>
-                            </a>
-                        <?php endforeach; ?>
-                    </nav>
-                    <button id="nav-scroll-right" type="button" class="nav-scroll-btn absolute right-0 h-12 w-10 flex items-center justify-center text-amber-400/70 hover:text-amber-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400" aria-label="Scroll navigation right" data-direction="right" hidden>
-                        <span aria-hidden="true">&#8250;</span>
-                    </button>
-                </div>
-                <div class="hidden md:flex items-center gap-2 lg:gap-3 flex-shrink-0">
-                    <a href="agent-login.php" class="border border-amber-400 text-amber-400 py-1.5 px-3 lg:py-2 lg:px-5 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold whitespace-nowrap text-xs lg:text-sm">
-                        <?= t('header.cta.agent_login') ?>
+            <div class="flex flex-col gap-4 py-4 md:py-6">
+                <div class="flex items-center justify-between gap-3">
+                    <a href="/" class="glitch-logo flex-shrink-0" aria-label="<?= htmlspecialchars(t('header.menu.home')) ?>">
+                        Blackbox EYE&trade;
+                        <span aria-hidden="true">Blackbox EYE&trade;</span>
+                        <span aria-hidden="true">Blackbox EYE&trade;</span>
                     </a>
-                    <div class="language-switcher-wrapper flex items-center gap-0.5 border border-gray-600 rounded-lg p-0.5">
-                        <a href="?lang=da" class="language-switch px-2 py-1 rounded text-xs font-medium transition-all <?= $current_language === 'da' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>" aria-label="<?= htmlspecialchars(t('header.language.switch_da')) ?>" <?= $current_language === 'da' ? 'aria-current="true"' : '' ?>>
-                            <?= t('header.language.da') ?>
+                    <div class="flex items-center gap-2 md:gap-3">
+                        <button type="button"
+                            class="theme-toggle"
+                            data-theme-toggle
+                            data-theme-label-dark="<?= htmlspecialchars(t('header.theme.label_dark', 'Skift til mørkt tema')) ?>"
+                            data-theme-label-light="<?= htmlspecialchars(t('header.theme.label_light', 'Skift til lyst tema')) ?>"
+                            data-theme-text-dark="<?= htmlspecialchars(t('header.theme.text_dark', 'Mørkt')) ?>"
+                            data-theme-text-light="<?= htmlspecialchars(t('header.theme.text_light', 'Lyst')) ?>"
+                            aria-pressed="false"
+                            aria-label="<?= htmlspecialchars(t('header.theme.toggle_label', 'Skift farvetema')) ?>">
+                            <span class="theme-toggle__icon" aria-hidden="true"></span>
+                            <span class="theme-toggle__text hidden sm:inline"><?= t('header.theme.toggle_text', 'Tema') ?></span>
+                        </button>
+                        <a href="agent-login.php" class="hidden sm:inline-flex items-center border border-amber-400 text-amber-400 py-1.5 px-3 lg:py-2 lg:px-5 rounded-lg hover:bg-amber-400 hover:text-black transition-all font-semibold whitespace-nowrap text-xs lg:text-sm">
+                            <?= t('header.cta.agent_login') ?>
                         </a>
-                        <a href="?lang=en" class="language-switch px-2 py-1 rounded text-xs font-medium transition-all <?= $current_language === 'en' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>" aria-label="<?= htmlspecialchars(t('header.language.switch_en')) ?>" <?= $current_language === 'en' ? 'aria-current="true"' : '' ?>>
-                            <?= t('header.language.en') ?>
-                        </a>
+                        <div class="language-switcher-wrapper hidden md:flex items-center gap-0.5 border border-gray-600 rounded-lg p-0.5">
+                            <a href="?lang=da" class="language-switch px-2 py-1 rounded text-xs font-medium transition-all <?= $current_language === 'da' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>" aria-label="<?= htmlspecialchars(t('header.language.switch_da')) ?>" <?= $current_language === 'da' ? 'aria-current="true"' : '' ?>>
+                                <?= t('header.language.da') ?>
+                            </a>
+                            <a href="?lang=en" class="language-switch px-2 py-1 rounded text-xs font-medium transition-all <?= $current_language === 'en' ? 'bg-amber-400 text-black' : 'text-gray-400 hover:text-white' ?>" aria-label="<?= htmlspecialchars(t('header.language.switch_en')) ?>" <?= $current_language === 'en' ? 'aria-current="true"' : '' ?>>
+                                <?= t('header.language.en') ?>
+                            </a>
+                        </div>
+                        <button id="mobile-menu-button" class="md:hidden text-white p-2 -mr-2 bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-amber-400" aria-controls="mobile-menu" aria-expanded="false" aria-label="<?= htmlspecialchars(t('header.mobile.open_menu')) ?>">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
-                <button id="mobile-menu-button" class="md:hidden text-white p-2 -mr-2 bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-amber-400" aria-controls="mobile-menu" aria-expanded="false" aria-label="<?= htmlspecialchars(t('header.mobile.open_menu')) ?>">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                    </svg>
-                </button>
+                <nav class="hidden md:block" aria-label="<?= htmlspecialchars(t('header.desktop.primary_navigation', 'Primær navigation')) ?>">
+                    <ul class="main-nav-list" role="list">
+                        <?php foreach ($nav_links as $link): ?>
+                            <li>
+                                <a href="<?= $link['href'] ?>"
+                                    class="nav-chip <?= aig_nav_class($link['slug'], $current_page) ?>"
+                                    <?= aig_nav_aria($link['slug'], $current_page) ?>>
+                                    <span><?= htmlspecialchars($link['label']) ?></span>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </nav>
             </div>
         </div>
     </header>
@@ -371,6 +399,24 @@ if (!empty($disable_alphabot)) {
                         </li>
                     <?php endforeach; ?>
                 </ul>
+            </div>
+
+            <div class="mobile-theme-toggle border border-gray-700 rounded-xl px-5 py-4 mt-8 text-left flex items-center justify-between gap-4">
+                <div>
+                    <p class="text-sm font-semibold text-white mb-1"><?= t('header.theme.mobile_title', 'Farvetema') ?></p>
+                    <p class="text-xs text-gray-400"><?= t('header.theme.mobile_description', 'Skift mellem mørk og lys oplevelse') ?></p>
+                </div>
+                <button type="button"
+                    class="theme-toggle theme-toggle--mobile"
+                    data-theme-toggle
+                    data-theme-label-dark="<?= htmlspecialchars(t('header.theme.label_dark', 'Skift til mørkt tema')) ?>"
+                    data-theme-label-light="<?= htmlspecialchars(t('header.theme.label_light', 'Skift til lyst tema')) ?>"
+                    data-theme-text-dark="<?= htmlspecialchars(t('header.theme.text_dark', 'Mørkt')) ?>"
+                    data-theme-text-light="<?= htmlspecialchars(t('header.theme.text_light', 'Lyst')) ?>"
+                    aria-pressed="false"
+                    aria-label="<?= htmlspecialchars(t('header.theme.toggle_label', 'Skift farvetema')) ?>">
+                    <span class="theme-toggle__icon" aria-hidden="true"></span>
+                </button>
             </div>
 
             <a href="agent-login.php" class="mt-8 inline-block border border-amber-400 text-amber-400 py-3 px-8 rounded-lg text-xl font-semibold">

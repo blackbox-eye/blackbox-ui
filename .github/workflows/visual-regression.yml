@@ -10,32 +10,24 @@
 ---
 name: Visual Regression
 
+# Note: GitHub Actions supports EITHER paths OR paths-ignore, not both.
+# We use paths-ignore since markdown/docs changes should not trigger visual tests.
 on:
   push:
     branches: [main]
-    paths:
-      - 'includes/**'
-      - 'assets/**'
-      - '*.php'
-      - 'lang/**'
     paths-ignore:
-      - '.github/agents/**'
-      - 'docs/**'
       - '**/*.md'
-      - 'README.md'
+      - 'docs/**'
+      - '.github/agents/**'
+      - 'LICENSE'
       - 'CHANGELOG.md'
   pull_request:
     branches: [main]
-    paths:
-      - 'includes/**'
-      - 'assets/**'
-      - '*.php'
-      - 'lang/**'
     paths-ignore:
-      - '.github/agents/**'
-      - 'docs/**'
       - '**/*.md'
-      - 'README.md'
+      - 'docs/**'
+      - '.github/agents/**'
+      - 'LICENSE'
       - 'CHANGELOG.md'
   workflow_dispatch:
 

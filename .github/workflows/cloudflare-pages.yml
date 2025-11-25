@@ -30,8 +30,16 @@ name: Cloudflare Pages Deploy
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '.github/agents/**'
+      - 'docs/**'
+      - '**/*.md'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - '.github/agents/**'
+      - 'docs/**'
+      - '**/*.md'
   workflow_dispatch:
     inputs:
       environment:
@@ -42,6 +50,11 @@ on:
         options:
           - staging
           - production
+
+# Prevent multiple deployments on same branch
+concurrency:
+  group: cloudflare-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -83,7 +96,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
 
       - name: Install dependencies
@@ -149,7 +162,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
 
       - name: Install dependencies
@@ -404,7 +417,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
 
       - name: Install dependencies

@@ -11,8 +11,8 @@ include 'includes/site-header.php';
     <section id="home" class="relative min-h-screen w-full flex items-center justify-center text-center overflow-hidden page-section">
         <canvas id="hero-canvas" class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: -10;"></canvas>
 
-        <!-- Content overlay with subtle gradient -->
-        <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 pointer-events-none" style="z-index: 1;"></div>
+        <!-- Content overlay with subtle gradient - adapts to theme -->
+        <div class="hero-overlay absolute inset-0 pointer-events-none" style="z-index: 1;"></div>
 
         <div class="relative px-4 py-28 sm:py-36 max-w-4xl mx-auto" style="z-index: 10;">
             <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black hero-gradient-text leading-tight sm:leading-tight md:leading-[1.05] tracking-tight mb-6 mx-auto max-w-3xl">

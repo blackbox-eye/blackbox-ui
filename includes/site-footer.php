@@ -68,11 +68,21 @@
             <div class="pt-8 border-t border-gray-800/50">
                 <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
                     <p><?= t('footer.copyright') ?></p>
-                    <p class="text-gray-600">This site is protected by reCAPTCHA (invisible)</p>
+                    <div class="flex items-center gap-4">
+                        <a href="privacy.php" class="hover:text-amber-400 transition-colors"><?= t('footer.privacy', 'Privatlivspolitik') ?></a>
+                        <span class="text-gray-700">|</span>
+                        <a href="terms.php" class="hover:text-amber-400 transition-colors"><?= t('footer.terms', 'Vilkår') ?></a>
+                        <span class="text-gray-700">|</span>
+                        <span class="text-gray-600"><?= t('footer.recaptcha_notice', 'This site is protected by reCAPTCHA') ?></span>
+                    </div>
                 </div>
             </div>
         </div>
     </footer>
+
+    <?php // Cookie Consent Banner (GDPR Compliance) 
+    ?>
+    <?php include __DIR__ . '/cookie-banner.php'; ?>
 
     <?php if (!empty($show_alphabot)): ?>
         <div id="alphabot-overlay" class="alphabot-overlay" aria-hidden="true"></div>

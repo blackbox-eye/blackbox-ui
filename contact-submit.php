@@ -92,11 +92,12 @@ if (defined('BBX_DEBUG_RECAPTCHA') && BBX_DEBUG_RECAPTCHA) {
 }
 
 $rawInput = [
-    'name'           => trim($_POST['name']           ?? ''),
-    'email'          => trim($_POST['email']          ?? ''),
-    'phone'          => trim($_POST['phone']          ?? ''),
-    'message'        => trim($_POST['message']        ?? ''),
+    'name'            => trim($_POST['name']            ?? ''),
+    'email'           => trim($_POST['email']           ?? ''),
+    'phone'           => trim($_POST['phone']           ?? ''),
+    'message'         => trim($_POST['message']         ?? ''),
     'recaptcha_token' => trim($_POST['recaptcha_token'] ?? ''),
+    'website_url'     => trim($_POST['website_url']     ?? ''), // Honeypot field
 ];
 
 $logContext = [
@@ -111,6 +112,26 @@ $action          = 'contact';
 $hostname        = $expectedHostname;
 $success         = false;
 $recaptchaMode   = 'disabled';
+
+// ───────────────────────────────────────────────────────────────────────────
+// Honeypot bot detection - silent rejection for bots that fill hidden field
+// ───────────────────────────────────────────────────────────────────────────
+if ($rawInput['website_url'] !== '') {
+    // Bot detected - log silently and return fake success to avoid detection
+    bbx_log_contact_submission('honeypot_triggered', [], 'bot_detected', array_merge($logContext, [
+        'honeypot_value' => substr($rawInput['website_url'], 0, 100), // truncate for log safety
+        'user_agent'     => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
+    ]));
+
+    // Return fake success to prevent bots from adapting
+    http_response_code(200);
+    echo json_encode([
+        'success' => true,
+        'status'  => 'ok',
+        'message' => 'Tak for din henvendelse! Vi vender tilbage hurtigst muligt.',
+    ]);
+    exit;
+}
 
 // Basic validation
 if ($rawInput['name'] === '' || $rawInput['email'] === '' || $rawInput['message'] === '') {

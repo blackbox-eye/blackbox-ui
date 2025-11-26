@@ -4,11 +4,18 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - 'assets/js/site.js'
-      - 'assets/js/site.min.js'
+      - 'assets/**'
+      - 'includes/**'
       - '*.php'
       - 'lang/*.json'
-      - 'includes/*.php'
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+
+# Isolate concurrency per-branch to prevent cross-PR cancellation
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   smoke-test:

@@ -33,6 +33,11 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Isolate concurrency per-branch to prevent cross-PR cancellation
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 # Explicit permissions for GITHUB_TOKEN (security best practice)
 permissions:
   contents: read

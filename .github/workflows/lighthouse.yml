@@ -6,6 +6,11 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Isolate concurrency per-branch to prevent cross-PR cancellation
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   lighthouse:
     name: Lighthouse CI

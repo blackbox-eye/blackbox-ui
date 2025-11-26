@@ -52,9 +52,9 @@ jobs:
       - name: Run Lighthouse (treosh action)
         uses: treosh/lighthouse-ci-action@v12
         with:
-          # Use SITE_URL secret if available, fallback to hardcoded
+          # Target URL for lighthouse audit
           urls: |
-            ${{ secrets.SITE_URL || 'https://blackbox.codes' }}
+            https://blackbox.codes
           uploadArtifacts: true
           artifactName: lighthouse-results
         env:

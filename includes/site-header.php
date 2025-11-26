@@ -296,10 +296,21 @@ if (!empty($disable_alphabot)) {
             <div class="header-shell">
                 <div class="header-grid">
                     <div class="header-brand">
-                        <a href="/" class="glitch-logo" aria-label="<?= htmlspecialchars(t('header.menu.home')) ?>">
-                            Blackbox EYE&trade;
-                            <span aria-hidden="true">Blackbox EYE&trade;</span>
-                            <span aria-hidden="true">Blackbox EYE&trade;</span>
+                        <a href="/" class="header-logo-link" aria-label="<?= htmlspecialchars(t('header.menu.home')) ?>">
+                            <!-- White logo for dark theme -->
+                            <img src="/assets/Logo_for BlackboxEYE™ (HVID).png"
+                                alt="BLACKBOX EYE™"
+                                class="header-logo header-logo--dark"
+                                loading="lazy"
+                                width="180"
+                                height="40">
+                            <!-- Black logo for light theme -->
+                            <img src="/assets/Logo_BlackboxEYE™ (sort).png"
+                                alt="BLACKBOX EYE™"
+                                class="header-logo header-logo--light"
+                                loading="lazy"
+                                width="180"
+                                height="40">
                         </a>
                     </div>
                     <nav class="main-nav header-nav hidden lg:block" aria-label="<?= htmlspecialchars(t('header.desktop.primary_navigation', 'Primær navigation')) ?>">

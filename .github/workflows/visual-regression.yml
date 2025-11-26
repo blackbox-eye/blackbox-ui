@@ -13,30 +13,24 @@ name: Visual Regression
 on:
   push:
     branches: [main]
-    paths:
-      - 'includes/**'
-      - 'assets/**'
-      - '*.php'
-      - 'lang/**'
+    # Use paths-ignore only (paths + paths-ignore combo is invalid)
     paths-ignore:
       - '.github/agents/**'
       - 'docs/**'
       - '**/*.md'
       - 'README.md'
       - 'CHANGELOG.md'
+      - '.well-known/**'
   pull_request:
     branches: [main]
-    paths:
-      - 'includes/**'
-      - 'assets/**'
-      - '*.php'
-      - 'lang/**'
+    # Use paths-ignore only (paths + paths-ignore combo is invalid)
     paths-ignore:
       - '.github/agents/**'
       - 'docs/**'
       - '**/*.md'
       - 'README.md'
       - 'CHANGELOG.md'
+      - '.well-known/**'
   workflow_dispatch:
 
 # Prevent multiple runs on same branch - auto-cancel old runs

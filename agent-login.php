@@ -197,18 +197,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       position: relative;
       z-index: 10;
       width: 100%;
-      max-width: 420px;
-      padding: 1.5rem;
+      max-width: 320px;
+      padding: 1rem;
     }
 
     .login-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 2.5rem 2rem;
+      border-radius: 14px;
+      padding: 1.75rem 1.5rem;
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5),
         0 0 0 1px rgba(255, 255, 255, 0.03) inset;
       animation: cardFadeIn 0.6s ease-out;
     }
@@ -228,27 +228,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     /* Logo section */
     .logo-section {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1.25rem;
     }
 
     .logo-image {
-      width: 140px;
+      width: 90px;
       height: auto;
-      margin: 0 auto 1.5rem;
+      margin: 0 auto 1rem;
       object-fit: contain;
-      filter: drop-shadow(0 4px 20px rgba(212, 175, 55, 0.25));
+      filter: drop-shadow(0 3px 12px rgba(212, 175, 55, 0.25));
     }
 
     .login-title {
-      font-size: 1.5rem;
+      font-size: 1.125rem;
       font-weight: 600;
       color: var(--text-primary);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.35rem;
       letter-spacing: -0.02em;
     }
 
     .login-subtitle {
-      font-size: 0.875rem;
+      font-size: 0.75rem;
       color: var(--text-secondary);
       font-weight: 400;
     }
@@ -258,10 +258,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       background: rgba(239, 68, 68, 0.1);
       border: 1px solid rgba(239, 68, 68, 0.2);
       color: #fca5a5;
-      padding: 0.875rem 1rem;
-      border-radius: 10px;
-      font-size: 0.875rem;
-      margin-bottom: 1.5rem;
+      padding: 0.625rem 0.875rem;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      margin-bottom: 1rem;
       text-align: center;
     }
 
@@ -269,7 +269,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     .login-form {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 0.75rem;
     }
 
     .input-group {
@@ -278,12 +278,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     .form-input {
       width: 100%;
-      padding: 0.875rem 1rem;
+      padding: 0.65rem 0.875rem;
       background: var(--input-bg);
       border: 1px solid var(--input-border);
-      border-radius: 10px;
+      border-radius: 8px;
       color: var(--text-primary);
-      font-size: 0.9375rem;
+      font-size: 0.8125rem;
       font-family: inherit;
       transition: all 0.2s ease;
       outline: none;
@@ -307,17 +307,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     /* Submit button */
     .submit-btn {
       width: 100%;
-      padding: 1rem;
+      padding: 0.75rem;
       background: linear-gradient(135deg, var(--btn-gold) 0%, var(--btn-gold-dark) 100%);
       color: #000;
       border: none;
-      border-radius: 10px;
-      font-size: 0.9375rem;
+      border-radius: 8px;
+      font-size: 0.8125rem;
       font-weight: 600;
       font-family: inherit;
       cursor: pointer;
       transition: all 0.2s ease;
-      margin-top: 0.5rem;
+      margin-top: 0.375rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -340,15 +340,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     /* Footer */
     .login-footer {
       text-align: center;
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
       border-top: 1px solid var(--card-border);
     }
 
     .footer-text {
-      font-size: 0.75rem;
+      font-size: 0.6875rem;
       color: var(--text-muted);
-      line-height: 1.5;
+      line-height: 1.4;
     }
 
     .footer-link {
@@ -365,14 +365,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     .status-badge {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
+      gap: 0.375rem;
+      padding: 0.35rem 0.75rem;
       background: rgba(212, 175, 55, 0.1);
       border: 1px solid rgba(212, 175, 55, 0.25);
       border-radius: 100px;
-      font-size: 0.75rem;
+      font-size: 0.625rem;
       color: var(--btn-gold);
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 100px;
+    font-size: 0.75rem;
+    color: var(--btn-gold);
+    margin-bottom: 1.5rem;
     }
 
     .status-dot {

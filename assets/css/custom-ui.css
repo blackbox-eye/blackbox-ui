@@ -358,10 +358,10 @@ body.alphabot-locked {
 /* Mobile menu nav links - compact left-aligned styling */
 .nav-link-mobile {
   display: block;
-  font-size: 0.85rem; /* Same size as secondary for consistency */
+  font-size: 0.8rem; /* Match secondary link size */
   font-weight: 500;
   color: var(--text-medium-emphasis);
-  padding: 0.5rem 0.75rem;
+  padding: 0.45rem 0.7rem;
   border-radius: 0.5rem;
   text-align: left;
   transition: color 0.15s ease, background-color 0.15s ease;
@@ -382,7 +382,7 @@ body.alphabot-locked {
 .nav-link-mobile--secondary {
   font-size: 0.8rem;
   color: var(--muted);
-  padding: 0.4rem 0.75rem;
+  padding: 0.4rem 0.7rem;
 }
 
 .nav-link-mobile--secondary:hover {

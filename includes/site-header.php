@@ -167,6 +167,11 @@ $nav_links = [
         'href' => 'faq.php',
     ],
     [
+        'slug' => 'blog',
+        'label' => t('header.menu.blog'),
+        'href' => 'blog.php',
+    ],
+    [
         'slug' => 'contact',
         'label' => t('header.menu.contact'),
         'href' => 'contact.php',
@@ -178,7 +183,7 @@ $secondary_nav_links = [
     ['slug' => 'demo', 'label' => t('header.menu.demo'), 'href' => 'demo.php'],
     ['slug' => 'pricing', 'label' => t('header.menu.pricing'), 'href' => 'pricing.php'],
     ['slug' => 'free-scan', 'label' => t('header.menu.free_scan'), 'href' => 'free-scan.php'],
-    ['slug' => 'blog', 'label' => t('header.menu.resources'), 'href' => 'blog.php'],
+    ['slug' => 'blog', 'label' => t('header.menu.blog'), 'href' => 'blog.php'],
 ];
 
 $alphabot_enabled_pages = ['home', 'index', 'about', 'products', 'cases', 'pricing', 'contact', 'demo', 'free-scan', 'faq'];

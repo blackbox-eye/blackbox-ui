@@ -218,10 +218,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       clip: rect(0, 0, 0, 0);
       border: 0;
     }
+    /* Back button */
+    .back-link {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255, 255, 255, 0.5);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      padding: 8px 12px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .back-link:hover {
+      color: #d4af37;
+      background: rgba(0, 0, 0, 0.5);
+      border-color: rgba(212, 175, 55, 0.3);
+      transform: translateX(-3px);
+    }
+    .back-link svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.3s ease;
+    }
+    .back-link:hover svg {
+      transform: translateX(-2px);
+    }
   </style>
 </head>
 
 <body>
+  <a href="index.php" class="back-link">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+    </svg>
+    <span>Tilbage</span>
+  </a>
+
   <main class="login-card">
     <div class="logo-section">
       <img src="assets/greyeeye_logo_transparent.png" alt="GreyEYE" class="logo-img">

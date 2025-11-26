@@ -35,7 +35,7 @@ include 'includes/site-header.php';
                         <input type="number" id="employee-count" value="50" min="1" class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400">
                     </div>
                     <div class="lg:self-end">
-                        <button id="get-recommendation-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors">
+                        <button id="get-recommendation-btn" class="w-full bg-amber-400 hover:bg-amber-500 text-black font-semibold py-2.5 px-4 rounded-lg transition-colors">
                             <?= t('pricing.ai_advisor.button') ?>
                         </button>
                     </div>

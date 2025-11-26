@@ -73,35 +73,182 @@
   --text-high-emphasis: #1F2933;
   --text-medium-emphasis: #4B5563;
   --muted: #6B7280;
-  --primary-accent: #FFB400;
-  --primary-accent-soft: rgba(255, 180, 0, 0.18);
-  --primary-accent-strong: rgba(255, 180, 0, 0.92);
+  /* Premium Gold Metal palette for light theme - Authentic Gold Coin Look */
+  --primary-accent: #B8860B;
+  --primary-accent-soft: rgba(184, 134, 11, 0.15);
+  --primary-accent-strong: rgba(184, 134, 11, 0.92);
+  --gold-gradient-start: #D4AF37;
+  --gold-gradient-mid: #B8860B;
+  --gold-gradient-end: #8B6914;
+  --gold-shine: #F4D03F;
+  --gold-shadow: #5C4800;
+  --gold-highlight: #FFE066;
   --glitch-dark-green: #00a651;
-  --glitch-fire: #ff7e00;
+  --glitch-fire: #B8860B;
   --toggle-track: rgba(15, 23, 42, 0.08);
   --toggle-knob: #0F172A;
   --toggle-knob-glow: rgba(15, 23, 42, 0.25);
   --nav-chip-bg: rgba(15, 23, 42, 0.04);
   --nav-chip-border: rgba(15, 23, 42, 0.08);
-  --nav-chip-active: rgba(255, 180, 0, 0.24);
+  --nav-chip-active: rgba(184, 134, 11, 0.24);
   --section-muted: rgba(255, 255, 255, 0.86);
   --section-soft: rgba(243, 246, 251, 0.9);
   --section-ring: rgba(15, 23, 42, 0.09);
-  --cta-contrast: #111827;
-  --cta-background: #FFB400;
-  --cta-background-hover: #ffcc4d;
-  --button-secondary-bg: rgba(15, 23, 42, 0.05);
-  --button-secondary-border: rgba(15, 23, 42, 0.12);
-  --button-secondary-text: #1F2937;
+  --cta-contrast: #1a1a1a;
+  --cta-background: linear-gradient(145deg, #D4AF37 0%, #B8860B 50%, #8B6914 100%);
+  --cta-background-hover: linear-gradient(145deg, #F4D03F 0%, #D4AF37 50%, #B8860B 100%);
+  --cta-background-solid: #B8860B;
+  --button-secondary-bg: transparent;
+  --button-secondary-border: #B8860B;
+  --button-secondary-text: #6B4E00;
   --form-field-bg: rgba(236, 240, 249, 0.95);
   --form-field-border: rgba(15, 23, 42, 0.12);
   --form-field-text: #111827;
   --form-field-placeholder: rgba(30, 41, 59, 0.5);
-  --badge-background: rgba(255, 184, 0, 0.2);
-  --badge-text: #92400E;
+  --badge-background: rgba(184, 134, 11, 0.15);
+  --badge-text: #6B4E00;
   --metric-card-bg: rgba(233, 236, 243, 0.9);
-  --outline-color: rgba(255, 180, 0, 0.65);
+  --outline-color: rgba(184, 134, 11, 0.65);
   --digital-rain-color: #0f172a;
+}
+
+/* ============================================
+   PREMIUM GOLD METAL BUTTONS - Light Theme
+   Authentic gold coin/metal aesthetic
+   ============================================ */
+
+/* Primary CTA Buttons - Gold Metal Effect */
+:root[data-theme="light"] .bg-amber-400,
+:root[data-theme="light"] .bg-yellow-400,
+:root[data-theme="light"] [class*="bg-amber-400"] {
+  background: linear-gradient(145deg, #D4AF37 0%, #B8860B 40%, #8B6914 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 224, 102, 0.5),
+    inset 0 -2px 4px rgba(92, 72, 0, 0.3),
+    0 4px 12px rgba(184, 134, 11, 0.35),
+    0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(139, 105, 20, 0.4) !important;
+  color: #1a1a1a !important;
+  text-shadow: 0 1px 0 rgba(255, 224, 102, 0.3);
+  transition: all 0.3s ease !important;
+}
+
+:root[data-theme="light"] .bg-amber-400:hover,
+:root[data-theme="light"] .bg-yellow-400:hover,
+:root[data-theme="light"] [class*="bg-amber-400"]:hover,
+:root[data-theme="light"] .hover\:bg-amber-500:hover,
+:root[data-theme="light"] .hover\:bg-yellow-500:hover {
+  background: linear-gradient(145deg, #F4D03F 0%, #D4AF37 40%, #B8860B 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 150, 0.6),
+    inset 0 -2px 4px rgba(92, 72, 0, 0.25),
+    0 6px 20px rgba(184, 134, 11, 0.45),
+    0 3px 6px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-2px);
+}
+
+:root[data-theme="light"] .bg-amber-400:active,
+:root[data-theme="light"] .bg-yellow-400:active {
+  background: linear-gradient(145deg, #B8860B 0%, #8B6914 50%, #6B5200 100%) !important;
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.1) !important;
+  transform: translateY(0);
+}
+
+/* Secondary Outline Buttons - Gold Border */
+:root[data-theme="light"] .border-amber-400,
+:root[data-theme="light"] .border-yellow-400,
+:root[data-theme="light"] [class*="border-amber-400"] {
+  border-color: #B8860B !important;
+  border-width: 2px !important;
+  background: transparent !important;
+  color: #8B6914 !important;
+  box-shadow: 0 2px 8px rgba(184, 134, 11, 0.15) !important;
+  transition: all 0.3s ease !important;
+}
+
+:root[data-theme="light"] .border-amber-400:hover,
+:root[data-theme="light"] .border-yellow-400:hover,
+:root[data-theme="light"] [class*="border-amber-400"]:hover {
+  background: linear-gradient(145deg, #D4AF37 0%, #B8860B 40%, #8B6914 100%) !important;
+  color: #1a1a1a !important;
+  border-color: #8B6914 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 224, 102, 0.5),
+    0 4px 12px rgba(184, 134, 11, 0.35) !important;
+}
+
+/* Text accents in light mode */
+:root[data-theme="light"] .text-amber-400,
+:root[data-theme="light"] .text-yellow-400 {
+  color: #8B6914 !important;
+  text-shadow: 0 0 1px rgba(184, 134, 11, 0.3);
+}
+
+/* Badge styling - Gold metal effect */
+:root[data-theme="light"] .bg-amber-400\/10,
+:root[data-theme="light"] .bg-amber-400\/20,
+:root[data-theme="light"] .bg-yellow-400\/10,
+:root[data-theme="light"] .bg-yellow-400\/20 {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(184, 134, 11, 0.2) 100%) !important;
+  border: 1px solid rgba(184, 134, 11, 0.25) !important;
+}
+
+/* Header CTA in light mode */
+:root[data-theme="light"] .header-cta {
+  background: linear-gradient(145deg, #D4AF37 0%, #B8860B 50%, #8B6914 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 224, 102, 0.4),
+    0 3px 10px rgba(184, 134, 11, 0.3);
+  border: 1px solid rgba(139, 105, 20, 0.3);
+}
+
+:root[data-theme="light"] .header-cta:hover {
+  background: linear-gradient(145deg, #F4D03F 0%, #D4AF37 50%, #B8860B 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 150, 0.5),
+    0 5px 15px rgba(184, 134, 11, 0.4);
+}
+
+/* Nav chips active state - gold */
+:root[data-theme="light"] .nav-chip.nav-link-active {
+  background: linear-gradient(145deg, #D4AF37 0%, #B8860B 50%, #8B6914 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 224, 102, 0.4),
+    0 3px 12px rgba(184, 134, 11, 0.35);
+  border: 1px solid rgba(139, 105, 20, 0.3);
+  color: #1a1a1a;
+}
+
+/* Form focus states with gold */
+:root[data-theme="light"] input:focus,
+:root[data-theme="light"] textarea:focus,
+:root[data-theme="light"] select:focus {
+  border-color: #B8860B !important;
+  box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.2) !important;
+}
+
+/* Links hover in gold */
+:root[data-theme="light"] a:hover {
+  color: #8B6914;
+}
+
+/* Sticky CTA gold metal */
+:root[data-theme="light"] .sticky-cta {
+  background: linear-gradient(145deg, #D4AF37 0%, #B8860B 50%, #8B6914 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 224, 102, 0.5),
+    0 8px 25px rgba(184, 134, 11, 0.4),
+    0 0 30px rgba(212, 175, 55, 0.3);
+}
+
+:root[data-theme="light"] .sticky-cta:hover {
+  background: linear-gradient(145deg, #F4D03F 0%, #D4AF37 50%, #B8860B 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 150, 0.6),
+    0 12px 35px rgba(184, 134, 11, 0.5),
+    0 0 40px rgba(212, 175, 55, 0.4);
 }
 
 html {
@@ -1554,4 +1701,167 @@ body.mobile-menu-open .alphabot-overlay {
 
 :root[data-theme="light"] .more-dropdown-item:hover {
   background: rgba(15, 23, 42, 0.05);
+}
+
+/* ============================================
+   COMPREHENSIVE LIGHT THEME QA FIXES
+   ============================================ */
+
+/* Text colors in light mode - ensure visibility */
+:root[data-theme="light"] .text-gray-300 {
+  color: #374151 !important;
+}
+
+:root[data-theme="light"] .text-gray-400 {
+  color: #4b5563 !important;
+}
+
+:root[data-theme="light"] .text-gray-500 {
+  color: #6b7280 !important;
+}
+
+/* Hero section text in light mode */
+:root[data-theme="light"] #home p.text-gray-300,
+:root[data-theme="light"] .page-section p.text-gray-300 {
+  color: #374151 !important;
+}
+
+/* Card text improvements */
+:root[data-theme="light"] .glass-effect p {
+  color: #4b5563 !important;
+}
+
+:root[data-theme="light"] .glass-effect h3,
+:root[data-theme="light"] .glass-effect h2 {
+  color: #111827 !important;
+}
+
+/* Pricing card improvements in light mode */
+:root[data-theme="light"] .pricing-grid article {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+}
+
+:root[data-theme="light"] .pricing-grid article:hover {
+  border-color: #B8860B;
+  box-shadow: 0 12px 40px rgba(184, 134, 11, 0.15);
+}
+
+:root[data-theme="light"] .pricing-grid .text-3xl.text-amber-400 {
+  color: #8B6914 !important;
+  font-weight: 800;
+}
+
+/* Footer in light mode */
+:root[data-theme="light"] footer {
+  background: linear-gradient(to bottom, rgba(243, 246, 251, 0.95), rgba(230, 235, 245, 0.98)) !important;
+  border-top-color: rgba(15, 23, 42, 0.1) !important;
+}
+
+:root[data-theme="light"] footer h4.text-white {
+  color: #111827 !important;
+}
+
+:root[data-theme="light"] footer .text-gray-400 {
+  color: #4b5563 !important;
+}
+
+:root[data-theme="light"] footer .text-gray-500 {
+  color: #6b7280 !important;
+}
+
+:root[data-theme="light"] footer .text-amber-400 {
+  color: #8B6914 !important;
+}
+
+:root[data-theme="light"] footer a:hover {
+  color: #8B6914 !important;
+}
+
+:root[data-theme="light"] footer .bg-gray-800 {
+  background: rgba(15, 23, 42, 0.08) !important;
+}
+
+:root[data-theme="light"] footer .bg-gray-800:hover {
+  background: linear-gradient(145deg, #D4AF37 0%, #B8860B 50%, #8B6914 100%) !important;
+}
+
+:root[data-theme="light"] footer .bg-amber-400\/10 {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(184, 134, 11, 0.2) 100%) !important;
+  border-color: rgba(184, 134, 11, 0.3) !important;
+}
+
+/* Form fields in light mode */
+:root[data-theme="light"] .bg-gray-800\/60,
+:root[data-theme="light"] .bg-gray-800\/50 {
+  background: rgba(243, 246, 251, 0.95) !important;
+  border-color: rgba(15, 23, 42, 0.15) !important;
+}
+
+:root[data-theme="light"] input,
+:root[data-theme="light"] textarea,
+:root[data-theme="light"] select {
+  color: #111827 !important;
+}
+
+:root[data-theme="light"] input::placeholder,
+:root[data-theme="light"] textarea::placeholder {
+  color: rgba(55, 65, 81, 0.6) !important;
+}
+
+/* Section backgrounds in light mode */
+:root[data-theme="light"] .bg-gray-900\/30,
+:root[data-theme="light"] .bg-gray-900\/40,
+:root[data-theme="light"] .bg-gray-900\/50 {
+  background: rgba(243, 246, 251, 0.85) !important;
+}
+
+/* Checkbox accent color */
+:root[data-theme="light"] .accent-amber-400 {
+  accent-color: #B8860B !important;
+}
+
+/* Green checkmarks visible in light mode */
+:root[data-theme="light"] .text-green-400 {
+  color: #059669 !important;
+}
+
+/* Blue badge in light mode */
+:root[data-theme="light"] .text-blue-400 {
+  color: #2563eb !important;
+}
+
+/* Featured card border in light mode */
+:root[data-theme="light"] .border-2.border-amber-400 {
+  border-color: #B8860B !important;
+  box-shadow: 0 8px 30px rgba(184, 134, 11, 0.2) !important;
+}
+
+/* Popular badge gold metal */
+:root[data-theme="light"] .bg-amber-400.text-black {
+  background: linear-gradient(145deg, #D4AF37 0%, #B8860B 50%, #8B6914 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 224, 102, 0.4) !important;
+}
+
+/* AlphaBot in light mode */
+:root[data-theme="light"] .alphabot-toggle {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12) !important;
+}
+
+:root[data-theme="light"] .alphabot-status-dot {
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.5) !important;
+}
+
+/* Cookie banner in light mode */
+:root[data-theme="light"] #cookie-banner {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border-color: rgba(15, 23, 42, 0.1) !important;
+}
+
+/* Arabic text in footer - ensure proper display */
+:root[data-theme="light"] [dir="rtl"] {
+  color: #8B6914 !important;
 }

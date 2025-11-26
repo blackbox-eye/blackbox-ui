@@ -140,14 +140,19 @@ $current_lang = bbx_get_language();
                     </div>
                     <div>
                         <h2 class="text-xl font-semibold text-amber-400 mb-2"><?= t('contact.details.offices.title') ?></h2>
-                        <p class="text-gray-400 text-sm mb-3">
+                        <p class="text-gray-400 text-sm mb-4">
                             <strong class="text-gray-200"><?= t('contact.details.offices.switzerland') ?></strong><br>
                             <?= t('contact.details.offices.switzerland_address') ?>
                         </p>
-                        <p class="text-gray-400 text-sm">
-                            <strong class="text-gray-200"><?= t('contact.details.offices.uae') ?></strong><br>
-                            <?= t('contact.details.offices.uae_address') ?>
-                        </p>
+                        <div class="border-t border-gray-700/50 pt-4">
+                            <p class="text-gray-400 text-sm">
+                                <strong class="text-gray-200"><?= t('contact.details.offices.uae') ?></strong><br>
+                                <span class="text-amber-400/80 text-xs" dir="rtl"><?= t('footer.offices.uae_company_ar') ?></span><br>
+                                <span class="text-gray-500 text-xs">(<?= t('footer.offices.uae_company_en') ?>)</span><br>
+                                <?= t('contact.details.offices.uae_address') ?><br>
+                                <span class="text-gray-300"><?= t('footer.offices.uae_phone') ?></span>
+                            </p>
+                        </div>
                     </div>
                     <div>
                         <h2 class="text-xl font-semibold text-amber-400 mb-2"><?= t('contact.details.secure.title') ?></h2>

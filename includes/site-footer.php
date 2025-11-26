@@ -15,14 +15,24 @@
                 <!-- Global Offices -->
                 <div class="text-center sm:text-left">
                     <h4 class="text-sm font-bold uppercase tracking-wider text-amber-400 mb-4"><?= t('footer.offices.title') ?></h4>
-                    <div class="space-y-5 text-gray-300">
-                        <div>
+                    <div class="space-y-6 text-gray-300">
+                        <!-- Geneva Office -->
+                        <div class="pb-4 border-b border-gray-700/50">
                             <p class="font-semibold text-white mb-1"><?= t('footer.offices.switzerland') ?></p>
                             <p class="text-xs leading-relaxed text-gray-400"><?= t('footer.offices.switzerland_address') ?></p>
                         </div>
+                        <!-- Dubai HQ -->
                         <div>
                             <p class="font-semibold text-white mb-1"><?= t('footer.offices.uae') ?></p>
-                            <p class="text-xs leading-relaxed text-gray-400"><?= t('footer.offices.uae_address') ?></p>
+                            <p class="text-xs text-amber-400/80 mb-1 font-medium" dir="rtl"><?= t('footer.offices.uae_company_ar') ?></p>
+                            <p class="text-xs text-gray-500 mb-2">(<?= t('footer.offices.uae_company_en') ?>)</p>
+                            <p class="text-xs leading-relaxed text-gray-400 mb-2"><?= t('footer.offices.uae_address') ?></p>
+                            <p class="text-xs text-gray-400">
+                                <svg class="w-3 h-3 inline mr-1 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                </svg>
+                                <a href="tel:+971547335770" class="hover:text-amber-400 transition-colors"><?= t('footer.offices.uae_phone') ?></a>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -41,9 +51,19 @@
                             <svg class="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                             </svg>
+                            <span class="text-xs text-gray-500 mr-1"><?= t('footer.contact.dk_label') ?></span>
                             <a href="tel:+4531330033" class="text-sm hover:text-amber-400 transition-colors">+45 31 33 00 33</a>
                         </li>
                     </ul>
+                    <!-- PGP Key Link -->
+                    <div class="mt-6 pt-4 border-t border-gray-700/50">
+                        <a href="contact.php#secure-comm" class="inline-flex items-center gap-2 text-xs text-gray-500 hover:text-amber-400 transition-colors">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                            <?= t('footer.pgp_link') ?>
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Social Links -->
@@ -80,7 +100,7 @@
         </div>
     </footer>
 
-    <?php // Cookie Consent Banner (GDPR Compliance) 
+    <?php // Cookie Consent Banner (GDPR Compliance)
     ?>
     <?php include __DIR__ . '/cookie-banner.php'; ?>
 

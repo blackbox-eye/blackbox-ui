@@ -218,6 +218,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       clip: rect(0, 0, 0, 0);
       border: 0;
     }
+
     /* Back button */
     .back-link {
       position: fixed;
@@ -238,17 +239,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       backdrop-filter: blur(8px);
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
+
     .back-link:hover {
       color: #d4af37;
       background: rgba(0, 0, 0, 0.5);
       border-color: rgba(212, 175, 55, 0.3);
       transform: translateX(-3px);
     }
+
     .back-link svg {
       width: 14px;
       height: 14px;
       transition: transform 0.3s ease;
     }
+
     .back-link:hover svg {
       transform: translateX(-2px);
     }
@@ -265,10 +269,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <main class="login-card">
     <div class="logo-section">
-      <img src="assets/greyeeye_logo_transparent.png" alt="GreyEYE" class="logo-img">
-            <h1 class="title">Sikker adgang</h1>
-            <p class="subtitle">GreyEYE Intelligence operatør-portal</p>
-        </div>    <?php if ($error): ?>
+      <img src="assets/Logo_BlackboxEYE™ (sort).png" alt="BLACKBOX EYE™" class="logo-img">
+      <h1 class="title">Sikker adgang</h1>
+      <p class="subtitle">BLACKBOX EYE™ operatør-portal</p>
+    </div> <?php if ($error): ?>
       <div class="error-box"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
 

@@ -372,10 +372,10 @@ body.alphabot-locked {
 /* Mobile menu nav links - compact left-aligned styling */
 .nav-link-mobile {
   display: block;
-  font-size: 0.8rem; /* Match secondary link size */
+  font-size: 0.68rem; /* Reduced by ~15% from 0.8rem */
   font-weight: 500;
   color: var(--text-medium-emphasis);
-  padding: 0.45rem 0.7rem;
+  padding: 0.4rem 0.65rem;
   border-radius: 0.5rem;
   text-align: left;
   transition: color 0.15s ease, background-color 0.15s ease;
@@ -394,9 +394,9 @@ body.alphabot-locked {
 }
 
 .nav-link-mobile--secondary {
-  font-size: 0.8rem;
+  font-size: 0.68rem; /* Reduced by ~15% from 0.8rem */
   color: var(--muted);
-  padding: 0.4rem 0.7rem;
+  padding: 0.35rem 0.65rem;
 }
 
 .product-icon {

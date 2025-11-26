@@ -285,45 +285,48 @@ include 'includes/site-header.php';
     </section>
   <?php else: ?>
 
-    <!-- Unified Sticky Navigation: Filter + Region Tabs -->
+    <!-- Unified Sticky Navigation: Improved Filter + Region Tabs -->
     <nav class="sticky top-16 z-30 bg-[var(--page-background)]/95 backdrop-blur-lg border-b border-gray-800/50" aria-label="Blog navigation">
       <div class="container mx-auto px-4">
-        <div class="flex items-center justify-between gap-4 py-3">
-          <!-- Left: Category filter (if available) -->
+        <!-- Two-row layout: categories top, regions bottom -->
+        <div class="flex flex-col gap-3 py-3">
+          <!-- Top row: Category filter -->
           <?php if (!empty($categories)): ?>
-            <div class="flex items-center gap-2 overflow-x-auto scrollbar-hide">
-              <span class="text-xs text-gray-500 hidden sm:inline"><?= t('blog.filter.label', 'Filter:') ?></span>
-              <a href="blog.php"
-                class="blog-filter-pill <?= $category_filter === null ? 'is-active' : '' ?>">
-                <?= t('blog.filter.all') ?>
-              </a>
-              <?php foreach ($categories as $cat): ?>
-                <a href="blog.php?category=<?= urlencode($cat) ?>"
-                  class="blog-filter-pill <?= $category_filter === $cat ? 'is-active' : '' ?>">
-                  <?= htmlspecialchars($cat) ?>
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-gray-500 flex-shrink-0 hidden sm:inline"><?= t('blog.filter.label', 'Filter:') ?></span>
+              <div class="flex items-center gap-2 overflow-x-auto scrollbar-hide flex-1">
+                <a href="blog.php"
+                  class="blog-filter-pill <?= $category_filter === null ? 'is-active' : '' ?>">
+                  <?= t('blog.filter.all') ?>
                 </a>
-              <?php endforeach; ?>
+                <?php foreach ($categories as $cat): ?>
+                  <a href="blog.php?category=<?= urlencode($cat) ?>"
+                    class="blog-filter-pill <?= $category_filter === $cat ? 'is-active' : '' ?>">
+                    <?= htmlspecialchars($cat) ?>
+                  </a>
+                <?php endforeach; ?>
+              </div>
             </div>
-          <?php else: ?>
-            <div></div>
           <?php endif; ?>
 
-          <!-- Right: Region tabs (compact) -->
-          <div class="flex items-center gap-1 flex-shrink-0">
-            <span class="text-xs text-gray-500 mr-1 hidden md:inline">Nyheder:</span>
-            <?php $first = true;
-            foreach ($news_items as $region_key => $region): ?>
-              <button
-                class="news-region-tab <?= $first ? 'is-active' : '' ?>"
-                data-region="<?= $region_key ?>"
-                aria-selected="<?= $first ? 'true' : 'false' ?>"
-                title="<?= $region['title'] ?>"
-                aria-label="<?= $region['title'] ?>">
-                <span class="region-badge region-badge--tab" aria-hidden="true"><?= htmlspecialchars($region['short']) ?></span>
-                <span class="hidden xl:inline text-xs"><?= $region['title'] ?></span>
-              </button>
-            <?php $first = false;
-            endforeach; ?>
+          <!-- Bottom row: Region tabs with label -->
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-gray-500 flex-shrink-0 hidden sm:inline"><?= t('blog.news.title', 'Nyheder') ?>:</span>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <?php $first = true;
+              foreach ($news_items as $region_key => $region): ?>
+                <button
+                  class="news-region-tab <?= $first ? 'is-active' : '' ?>"
+                  data-region="<?= $region_key ?>"
+                  aria-selected="<?= $first ? 'true' : 'false' ?>"
+                  title="<?= $region['title'] ?>"
+                  aria-label="<?= $region['title'] ?>">
+                  <span class="region-badge region-badge--tab" aria-hidden="true"><?= htmlspecialchars($region['short']) ?></span>
+                  <span class="hidden lg:inline text-xs"><?= $region['title'] ?></span>
+                </button>
+              <?php $first = false;
+              endforeach; ?>
+            </div>
           </div>
         </div>
       </div>
@@ -579,18 +582,20 @@ include 'includes/site-header.php';
     align-items: center;
     padding: 0.5rem 1rem;
     border-radius: 999px;
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     font-weight: 500;
     color: var(--text-medium-emphasis);
     background: var(--surface-200);
     border: 1px solid var(--surface-border);
     white-space: nowrap;
+    flex-shrink: 0;
     transition: all 0.2s ease;
   }
 
   .blog-filter-pill:hover {
     border-color: var(--primary-accent);
     color: var(--text-high-emphasis);
+    background: rgba(255, 199, 0, 0.08);
   }
 
   .blog-filter-pill.is-active {
@@ -598,6 +603,7 @@ include 'includes/site-header.php';
     color: #000;
     border-color: transparent;
     font-weight: 600;
+    box-shadow: 0 4px 12px rgba(255, 199, 0, 0.25);
   }
 
   /* Blog cards */
@@ -714,21 +720,22 @@ include 'includes/site-header.php';
   .news-region-tab {
     display: inline-flex;
     align-items: center;
-    gap: 0.375rem;
-    padding: 0.375rem 0.625rem;
-    border-radius: 0.5rem;
+    gap: 0.4rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: 0.6rem;
     font-size: 0.75rem;
     font-weight: 500;
     color: var(--text-medium-emphasis);
     background: transparent;
-    border: 1px solid transparent;
+    border: 1px solid var(--surface-border-soft);
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all 0.2s ease;
   }
 
   .news-region-tab:hover {
     color: var(--text-high-emphasis);
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--surface-border);
   }
 
   .news-region-tab:hover .region-badge {

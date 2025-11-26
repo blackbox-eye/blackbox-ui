@@ -11,6 +11,274 @@ $og_url = 'https://blackbox.codes/about.php';
 include 'includes/site-header.php';
 ?>
 
+<!-- Inline fix for missing Tailwind classes -->
+<style>
+    .w-7 {
+        width: 1.75rem;
+    }
+
+    .h-7 {
+        height: 1.75rem;
+    }
+
+    .w-8 {
+        width: 2rem;
+    }
+
+    .h-8 {
+        height: 2rem;
+    }
+
+    .w-14 {
+        width: 3.5rem;
+    }
+
+    .h-14 {
+        height: 3.5rem;
+    }
+
+    .w-16 {
+        width: 4rem;
+    }
+
+    .h-16 {
+        height: 4rem;
+    }
+
+    .w-32 {
+        width: 8rem;
+    }
+
+    .h-32 {
+        height: 8rem;
+    }
+
+    .w-96 {
+        width: 24rem;
+    }
+
+    .h-96 {
+        height: 24rem;
+    }
+
+    .w-0\.5 {
+        width: 0.125rem;
+    }
+
+    .min-h-\[70vh\] {
+        min-height: 70vh;
+    }
+
+    .max-w-6xl {
+        max-width: 72rem;
+    }
+
+    .max-w-7xl {
+        max-width: 80rem;
+    }
+
+    .gap-8 {
+        gap: 2rem;
+    }
+
+    .p-8 {
+        padding: 2rem;
+    }
+
+    .p-10 {
+        padding: 2.5rem;
+    }
+
+    .mb-8 {
+        margin-bottom: 2rem;
+    }
+
+    .mt-12 {
+        margin-top: 3rem;
+    }
+
+    .pt-8 {
+        padding-top: 2rem;
+    }
+
+    .py-28 {
+        padding-top: 7rem;
+        padding-bottom: 7rem;
+    }
+
+    .mb-16 {
+        margin-bottom: 4rem;
+    }
+
+    .bottom-8 {
+        bottom: 2rem;
+    }
+
+    .bottom-12 {
+        bottom: 3rem;
+    }
+
+    .top-12 {
+        top: 3rem;
+    }
+
+    .left-8 {
+        left: 2rem;
+    }
+
+    .text-blue-400 {
+        color: #60a5fa;
+    }
+
+    .text-red-400 {
+        color: #f87171;
+    }
+
+    .text-purple-400 {
+        color: #c084fc;
+    }
+
+    .text-cyan-400 {
+        color: #22d3ee;
+    }
+
+    .bg-blue-500\/20 {
+        background-color: rgba(59, 130, 246, 0.2);
+    }
+
+    .bg-red-500\/20 {
+        background-color: rgba(239, 68, 68, 0.2);
+    }
+
+    .bg-purple-500\/20 {
+        background-color: rgba(168, 85, 247, 0.2);
+    }
+
+    .bg-cyan-500\/20 {
+        background-color: rgba(6, 182, 212, 0.2);
+    }
+
+    .bg-blue-500\/10 {
+        background-color: rgba(59, 130, 246, 0.1);
+    }
+
+    .bg-blue-500\/5 {
+        background-color: rgba(59, 130, 246, 0.05);
+    }
+
+    .bg-amber-500\/20 {
+        background-color: rgba(245, 158, 11, 0.2);
+    }
+
+    .bg-amber-500\/10 {
+        background-color: rgba(245, 158, 11, 0.1);
+    }
+
+    .bg-amber-500\/5 {
+        background-color: rgba(245, 158, 11, 0.05);
+    }
+
+    .bg-purple-500\/20 {
+        background-color: rgba(168, 85, 247, 0.2);
+    }
+
+    .border-amber-500\/20 {
+        border-color: rgba(245, 158, 11, 0.2);
+    }
+
+    .border-amber-500\/30 {
+        border-color: rgba(245, 158, 11, 0.3);
+    }
+
+    .border-blue-500\/20 {
+        border-color: rgba(59, 130, 246, 0.2);
+    }
+
+    .hover\:border-amber-500\/40:hover {
+        border-color: rgba(245, 158, 11, 0.4);
+    }
+
+    .hover\:border-amber-500\/50:hover {
+        border-color: rgba(245, 158, 11, 0.5);
+    }
+
+    .hover\:border-blue-500\/40:hover {
+        border-color: rgba(59, 130, 246, 0.4);
+    }
+
+    .hover\:border-red-500\/40:hover {
+        border-color: rgba(239, 68, 68, 0.4);
+    }
+
+    .hover\:border-purple-500\/40:hover {
+        border-color: rgba(168, 85, 247, 0.4);
+    }
+
+    .hover\:border-cyan-500\/40:hover {
+        border-color: rgba(6, 182, 212, 0.4);
+    }
+
+    .group-hover\:bg-amber-500\/10:hover {
+        background-color: rgba(245, 158, 11, 0.1);
+    }
+
+    .group-hover\:bg-blue-500\/10:hover {
+        background-color: rgba(59, 130, 246, 0.1);
+    }
+
+    .group-hover\:bg-blue-500\/30:hover {
+        background-color: rgba(59, 130, 246, 0.3);
+    }
+
+    .group-hover\:bg-red-500\/30:hover {
+        background-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .group-hover\:bg-purple-500\/30:hover {
+        background-color: rgba(168, 85, 247, 0.3);
+    }
+
+    .group-hover\:bg-cyan-500\/30:hover {
+        background-color: rgba(6, 182, 212, 0.3);
+    }
+
+    .from-amber-500\/10 {
+        --tw-gradient-from: rgba(245, 158, 11, 0.1);
+    }
+
+    .from-amber-500\/20 {
+        --tw-gradient-from: rgba(245, 158, 11, 0.2);
+    }
+
+    .from-blue-500\/10 {
+        --tw-gradient-from: rgba(59, 130, 246, 0.1);
+    }
+
+    .via-purple-500\/20 {
+        --tw-gradient-via: rgba(168, 85, 247, 0.2);
+    }
+
+    .to-blue-500\/20 {
+        --tw-gradient-to: rgba(59, 130, 246, 0.2);
+    }
+
+    .to-purple-500\/20 {
+        --tw-gradient-to: rgba(168, 85, 247, 0.2);
+    }
+
+    .from-amber-400\/20 {
+        --tw-gradient-from: rgba(251, 191, 36, 0.2);
+    }
+
+    .via-amber-400\/40 {
+        --tw-gradient-via: rgba(251, 191, 36, 0.4);
+    }
+
+    .to-amber-400\/20 {
+        --tw-gradient-to: rgba(251, 191, 36, 0.2);
+    }
+</style>
+
 <!-- Structured Data for Organization -->
 <script type="application/ld+json">
     {

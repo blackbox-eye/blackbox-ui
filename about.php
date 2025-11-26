@@ -318,15 +318,6 @@ include 'includes/site-header.php';
         </div>
 
         <div class="container mx-auto px-4 relative z-10">
-            <!-- Breadcrumb -->
-            <nav aria-label="Breadcrumb" class="mb-8 max-w-4xl mx-auto">
-                <ol class="flex items-center gap-2 text-sm text-gray-400">
-                    <li><a href="index.php" class="hover:text-amber-400 transition-colors">Hjem</a></li>
-                    <li aria-hidden="true">/</li>
-                    <li aria-current="page" class="text-amber-400">Om os</li>
-                </ol>
-            </nav>
-
             <div class="max-w-4xl mx-auto text-center">
                 <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-400/10 border border-amber-400/30 mb-6 backdrop-blur-sm">
                     <div class="w-2 h-2 rounded-full bg-amber-400 animate-pulse motion-reduce:animate-none" aria-hidden="true"></div>
@@ -415,7 +406,7 @@ include 'includes/site-header.php';
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                             </svg>
                         </div>
-                        <h2 class="text-2xl sm:text-3xl font-bold text-amber-400 mb-4"><?= t('about.pillars.mission_title') ?></h2>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-blue-400 mb-4"><?= t('about.pillars.mission_title') ?></h2>
                         <p class="text-gray-300 leading-relaxed"><?= t('about.pillars.mission_body') ?></p>
                     </div>
                 </article>
@@ -444,14 +435,14 @@ include 'includes/site-header.php';
                 foreach ($values_data as $value): ?>
                     <div class="group relative">
                         <div class="absolute inset-0 bg-gradient-to-br from-amber-500/20 to-transparent rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
-                        <div class="relative bg-gray-900/60 backdrop-blur-sm border border-gray-800 rounded-2xl p-8 hover:border-amber-500/50 transition-all duration-300">
-                            <div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center mb-4 group-hover:bg-amber-500/20 transition-colors duration-300">
-                                <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="relative bg-gray-900/80 backdrop-blur-sm border border-gray-700 rounded-2xl p-10 hover:border-amber-400/60 transition-all duration-300 min-h-[280px] flex flex-col">
+                            <div class="w-16 h-16 rounded-2xl bg-amber-500/15 flex items-center justify-center mb-6 group-hover:bg-amber-500/25 transition-colors duration-300">
+                                <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <?= $value['icon'] ?>
                                 </svg>
                             </div>
-                            <h3 class="text-xl font-bold text-white mb-3"><?= t('about.values_grid.items.' . $value['key'] . '.title') ?></h3>
-                            <p class="text-gray-400 text-sm leading-relaxed"><?= t('about.values_grid.items.' . $value['key'] . '.body') ?></p>
+                            <h3 class="text-2xl font-bold text-white mb-4"><?= t('about.values_grid.items.' . $value['key'] . '.title') ?></h3>
+                            <p class="text-gray-300 text-base leading-relaxed flex-1"><?= t('about.values_grid.items.' . $value['key'] . '.body') ?></p>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -546,18 +537,18 @@ include 'includes/site-header.php';
                     <span>Tillidsvurderet af 500+ virksomheder globalt</span>
                 </div>
 
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <a href="contact.php" class="group inline-flex items-center gap-3 bg-gradient-to-r from-amber-400 to-amber-500 text-black font-bold py-4 px-10 rounded-xl hover:from-amber-500 hover:to-amber-600 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/50 focus:outline-none focus:ring-4 focus:ring-amber-400/50 motion-reduce:hover:scale-100" aria-label="Kontakt os for at komme i gang">
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+                    <a href="contact.php" class="group inline-flex items-center gap-3 bg-gradient-to-r from-amber-400 to-amber-500 text-black font-bold py-5 px-12 rounded-2xl hover:from-amber-500 hover:to-amber-600 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/50 focus:outline-none focus:ring-4 focus:ring-amber-400/50 motion-reduce:hover:scale-100 text-lg" aria-label="Kontakt os for at komme i gang">
                         <?= t('about.cta.button') ?>
-                        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform motion-reduce:transform-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        <svg class="w-6 h-6 group-hover:translate-x-1 transition-transform motion-reduce:transform-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                         </svg>
                     </a>
-                    <a href="demo.php" class="inline-flex items-center gap-3 border-2 border-gray-700 text-white font-semibold py-4 px-10 rounded-xl hover:border-amber-400 hover:text-amber-400 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-gray-600" aria-label="Book en demo af vores produkter">
-                        Book en demo
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <a href="demo.php" class="group inline-flex items-center gap-3 bg-gray-800/80 border-2 border-gray-600 text-white font-bold py-5 px-12 rounded-2xl hover:bg-gray-700 hover:border-amber-400/50 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-gray-600 text-lg" aria-label="Book en demo af vores produkter">
+                        <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                         </svg>
+                        Book en demo
                     </a>
                 </div>
             </div>

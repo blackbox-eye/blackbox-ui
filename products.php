@@ -50,10 +50,7 @@ include 'includes/site-header.php';
                 <div class="lg:order-last">
                     <h2 class="text-2xl sm:text-3xl font-bold text-amber-400 mb-4 flex items-center gap-3">
                         <span class="product-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" />
-                                <circle cx="12" cy="12" r="3" />
-                            </svg>
+                            <img src="assets/greyeeye_logo_transparent.png" alt="" class="product-icon-img">
                         </span>
                         <?= t('products.greyeye.title') ?>
                     </h2>

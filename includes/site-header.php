@@ -244,6 +244,11 @@ if (!empty($disable_alphabot)) {
     <meta name="twitter:description" content="<?= htmlspecialchars($meta_og_description) ?>">
     <meta name="twitter:image" content="<?= htmlspecialchars($meta_og_image) ?>">
 
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logo%20pakker%20BlackboxEYE/blackboxeye_logo_package_full/BlackboxEYE_white_32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/logo%20pakker%20BlackboxEYE/blackboxeye_logo_package_full/BlackboxEYE_white_256x256.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/logo%20pakker%20BlackboxEYE/blackboxeye_logo_package_full/BlackboxEYE_white_256x256.png">
+    <link rel="shortcut icon" href="/assets/logo%20pakker%20BlackboxEYE/blackboxeye_logo_package_full/BlackboxEYE_white.ico">
+
     <!-- Local compiled Tailwind CSS (v3 build) -->
     <link rel="stylesheet" href="/assets/css/tailwind.full.css">
     <!-- Custom UI components extracted from previous inline styles -->
@@ -302,15 +307,15 @@ if (!empty($disable_alphabot)) {
                                 alt="BLACKBOX EYE™"
                                 class="header-logo header-logo--white"
                                 loading="lazy"
-                                width="260"
-                                height="76">
+                                width="360"
+                                height="112">
                             <!-- Black logo - visible on light backgrounds (light theme) -->
                             <img src="/assets/blackbox_logo_black.png"
                                 alt="BLACKBOX EYE™"
                                 class="header-logo header-logo--black"
                                 loading="lazy"
-                                width="260"
-                                height="76">
+                                width="360"
+                                height="112">
                         </a>
                     </div>
                     <nav class="main-nav header-nav hidden lg:block" aria-label="<?= htmlspecialchars(t('header.desktop.primary_navigation', 'Primær navigation')) ?>">

@@ -298,14 +298,14 @@ if (!empty($disable_alphabot)) {
                     <div class="header-brand">
                         <a href="/" class="header-logo-link" aria-label="<?= htmlspecialchars(t('header.menu.home')) ?>">
                             <!-- White logo - visible on dark backgrounds (dark theme) -->
-                            <img src="/assets/Logo_for BlackboxEYE™ (HVID).png"
+                            <img src="/assets/logo-white.png"
                                 alt="BLACKBOX EYE™"
                                 class="header-logo header-logo--white"
                                 loading="lazy"
                                 width="180"
                                 height="40">
                             <!-- Black logo - visible on light backgrounds (light theme) -->
-                            <img src="/assets/Logo_BlackboxEYE™ (sort).png"
+                            <img src="/assets/logo-black.png"
                                 alt="BLACKBOX EYE™"
                                 class="header-logo header-logo--black"
                                 loading="lazy"

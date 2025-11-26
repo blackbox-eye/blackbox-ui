@@ -212,6 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mobileMenuOverlay.classList.add('active');
             mobileMenuOverlay.setAttribute('aria-hidden', 'false');
             document.body.style.overflow = 'hidden';
+            document.body.classList.add('mobile-menu-open');
 
             enableFocusTrap();
 
@@ -229,6 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mobileMenuOverlay.classList.remove('active');
             mobileMenuOverlay.setAttribute('aria-hidden', 'true');
             document.body.style.overflow = '';
+            document.body.classList.remove('mobile-menu-open');
 
             if (lastFocusedElement) {
                 lastFocusedElement.focus();
@@ -890,7 +892,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const validateUsersField = () => {
             const usersValue = parseNumericInput(usersInput?.value);
             clearFieldError(usersInput);
-            
+
             if (Number.isNaN(usersValue) || usersValue < 1) {
                 const message = usersInput?.dataset.minMessage || usersInput?.dataset.requiredMessage || i18n.t('pricing.calculator.validation.users_min', 'Der skal være mindst 1 bruger.');
                 showFieldError(usersInput, message);
@@ -905,7 +907,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const validateEndpointsField = () => {
             const endpointsValue = parseNumericInput(endpointsInput?.value);
             clearFieldError(endpointsInput);
-            
+
             if (Number.isNaN(endpointsValue) || endpointsValue < 0) {
                 const message = endpointsInput?.dataset.requiredMessage || i18n.t('pricing.calculator.validation.endpoints_required', 'Angiv antal aktive endpoints.');
                 showFieldError(endpointsInput, message);

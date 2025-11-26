@@ -137,7 +137,7 @@ include 'includes/site-header.php';
                         <h2 class="text-2xl sm:text-3xl font-bold text-amber-400 mb-4"><?= t('about.pillars.vision_title') ?></h2>
                         <p class="text-gray-300 leading-relaxed"><?= t('about.pillars.vision_body') ?></p>
                     </div>
-                </div>
+                </article>
 
                 <article class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-500/20 p-10 hover:border-blue-500/40 transition-all duration-500 focus-within:ring-2 focus-within:ring-blue-400">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl group-hover:bg-blue-500/10 transition-all duration-500 motion-reduce:transition-none" aria-hidden="true"></div>
@@ -208,31 +208,31 @@ include 'includes/site-header.php';
             <!-- Timeline connector -->
             <div class="max-w-5xl mx-auto relative">
                 <div class="absolute left-8 top-12 bottom-12 w-0.5 bg-gradient-to-b from-amber-400/20 via-amber-400/40 to-amber-400/20 hidden lg:block" aria-hidden="true"></div>
-                
-                <div class="space-y-6">
-                <?php
-                $team_blocks = [
-                    ['key' => 'recon', 'colorClass' => 'blue', 'bgClass' => 'bg-blue-500/20', 'hoverBgClass' => 'group-hover:bg-blue-500/30', 'textClass' => 'text-blue-400', 'borderClass' => 'hover:border-blue-500/40', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>'],
-                    ['key' => 'red', 'colorClass' => 'red', 'bgClass' => 'bg-red-500/20', 'hoverBgClass' => 'group-hover:bg-red-500/30', 'textClass' => 'text-red-400', 'borderClass' => 'hover:border-red-500/40', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"></path>'],
-                    ['key' => 'stealth', 'colorClass' => 'purple', 'bgClass' => 'bg-purple-500/20', 'hoverBgClass' => 'group-hover:bg-purple-500/30', 'textClass' => 'text-purple-400', 'borderClass' => 'hover:border-purple-500/40', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>'],
-                    ['key' => 'blue', 'colorClass' => 'cyan', 'bgClass' => 'bg-cyan-500/20', 'hoverBgClass' => 'group-hover:bg-cyan-500/30', 'textClass' => 'text-cyan-400', 'borderClass' => 'hover:border-cyan-500/40', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>']
-                ];
 
-                foreach ($team_blocks as $index => $unit):
-                    $isEven = $index % 2 === 0;
-                ?>
-                    <article class="group relative flex flex-col sm:flex-row items-start sm:items-center gap-6 <?= $isEven ? 'sm:flex-row' : 'sm:flex-row-reverse' ?>">
-                        <div class="w-16 h-16 rounded-2xl <?= $unit['bgClass'] ?> flex items-center justify-center flex-shrink-0 group-hover:scale-110 <?= $unit['hoverBgClass'] ?> transition-all duration-300 motion-reduce:transform-none relative z-10">
-                            <svg class="w-8 h-8 <?= $unit['textClass'] ?>" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <?= $unit['icon'] ?>
-                            </svg>
-                        </div>
-                        <div class="flex-1 bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-2xl p-6 <?= $unit['borderClass'] ?> transition-all duration-300 motion-reduce:transition-none text-left">
-                            <h3 class="text-xl font-bold <?= $unit['textClass'] ?> mb-2"><?= t('about.teams.units.' . $unit['key'] . '.title') ?></h3>
-                            <p class="text-gray-300 leading-relaxed"><?= t('about.teams.units.' . $unit['key'] . '.body') ?></p>
-                        </div>
-                    </article>
-                <?php endforeach; ?>
+                <div class="space-y-6">
+                    <?php
+                    $team_blocks = [
+                        ['key' => 'recon', 'colorClass' => 'blue', 'bgClass' => 'bg-blue-500/20', 'hoverBgClass' => 'group-hover:bg-blue-500/30', 'textClass' => 'text-blue-400', 'borderClass' => 'hover:border-blue-500/40', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>'],
+                        ['key' => 'red', 'colorClass' => 'red', 'bgClass' => 'bg-red-500/20', 'hoverBgClass' => 'group-hover:bg-red-500/30', 'textClass' => 'text-red-400', 'borderClass' => 'hover:border-red-500/40', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"></path>'],
+                        ['key' => 'stealth', 'colorClass' => 'purple', 'bgClass' => 'bg-purple-500/20', 'hoverBgClass' => 'group-hover:bg-purple-500/30', 'textClass' => 'text-purple-400', 'borderClass' => 'hover:border-purple-500/40', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>'],
+                        ['key' => 'blue', 'colorClass' => 'cyan', 'bgClass' => 'bg-cyan-500/20', 'hoverBgClass' => 'group-hover:bg-cyan-500/30', 'textClass' => 'text-cyan-400', 'borderClass' => 'hover:border-cyan-500/40', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>']
+                    ];
+
+                    foreach ($team_blocks as $index => $unit):
+                        $isEven = $index % 2 === 0;
+                    ?>
+                        <article class="group relative flex flex-col sm:flex-row items-start sm:items-center gap-6 <?= $isEven ? 'sm:flex-row' : 'sm:flex-row-reverse' ?>">
+                            <div class="w-16 h-16 rounded-2xl <?= $unit['bgClass'] ?> flex items-center justify-center flex-shrink-0 group-hover:scale-110 <?= $unit['hoverBgClass'] ?> transition-all duration-300 motion-reduce:transform-none relative z-10">
+                                <svg class="w-8 h-8 <?= $unit['textClass'] ?>" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <?= $unit['icon'] ?>
+                                </svg>
+                            </div>
+                            <div class="flex-1 bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-2xl p-6 <?= $unit['borderClass'] ?> transition-all duration-300 motion-reduce:transition-none text-left">
+                                <h3 class="text-xl font-bold <?= $unit['textClass'] ?> mb-2"><?= t('about.teams.units.' . $unit['key'] . '.title') ?></h3>
+                                <p class="text-gray-300 leading-relaxed"><?= t('about.teams.units.' . $unit['key'] . '.body') ?></p>
+                            </div>
+                        </article>
+                    <?php endforeach; ?>
                 </div>
             </div>
 
@@ -269,15 +269,15 @@ include 'includes/site-header.php';
                 <p class="text-lg text-gray-300 mb-6 max-w-2xl mx-auto leading-relaxed">
                     <?= t('about.cta.description') ?>
                 </p>
-                
+
                 <!-- Social proof -->
                 <div class="flex items-center justify-center gap-2 mb-10 text-sm text-gray-400">
                     <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                        <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
+                        <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
                     </svg>
                     <span>Tillidsvurderet af 500+ virksomheder globalt</span>
                 </div>
-                
+
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                     <a href="contact.php" class="group inline-flex items-center gap-3 bg-gradient-to-r from-amber-400 to-amber-500 text-black font-bold py-4 px-10 rounded-xl hover:from-amber-500 hover:to-amber-600 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/50 focus:outline-none focus:ring-4 focus:ring-amber-400/50 motion-reduce:hover:scale-100" aria-label="Kontakt os for at komme i gang">
                         <?= t('about.cta.button') ?>

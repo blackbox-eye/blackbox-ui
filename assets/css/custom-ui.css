@@ -31,6 +31,13 @@
   --primary-accent: #FFC700;
   --primary-accent-soft: rgba(255, 199, 0, 0.15);
   --primary-accent-strong: rgba(255, 199, 0, 0.85);
+  /* Premium Gold Metal palette for dark theme */
+  --gold-gradient-start: #D4AF37;
+  --gold-gradient-mid: #B8860B;
+  --gold-gradient-end: #8B6914;
+  --gold-shine: #F4D03F;
+  --gold-shadow: #5C4800;
+  --gold-highlight: #FFE066;
   --glitch-dark-green: #003d00;
   --glitch-fire: #ffac00;
   --toggle-track: rgba(148, 163, 184, 0.15);
@@ -244,6 +251,133 @@
 }
 
 :root[data-theme="light"] .sticky-cta:hover {
+  background: linear-gradient(145deg, #F4D03F 0%, #D4AF37 50%, #B8860B 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 150, 0.6),
+    0 12px 35px rgba(184, 134, 11, 0.5),
+    0 0 40px rgba(212, 175, 55, 0.4);
+}
+
+/* ============================================
+   PREMIUM GOLD METAL BUTTONS - Dark Theme
+   Same gold coin/metal aesthetic as light theme
+   ============================================ */
+
+/* Primary CTA Buttons - Gold Metal Effect (Dark Theme) */
+:root[data-theme="dark"] .bg-amber-400,
+:root[data-theme="dark"] .bg-yellow-400,
+:root[data-theme="dark"] [class*="bg-amber-400"],
+:root:not([data-theme]) .bg-amber-400,
+:root:not([data-theme]) .bg-yellow-400 {
+  background: linear-gradient(145deg, #D4AF37 0%, #B8860B 40%, #8B6914 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 224, 102, 0.5),
+    inset 0 -2px 4px rgba(92, 72, 0, 0.3),
+    0 4px 12px rgba(184, 134, 11, 0.35),
+    0 2px 4px rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(139, 105, 20, 0.4) !important;
+  color: #1a1a1a !important;
+  text-shadow: 0 1px 0 rgba(255, 224, 102, 0.3);
+  transition: all 0.3s ease !important;
+}
+
+:root[data-theme="dark"] .bg-amber-400:hover,
+:root[data-theme="dark"] .bg-yellow-400:hover,
+:root[data-theme="dark"] [class*="bg-amber-400"]:hover,
+:root[data-theme="dark"] .hover\:bg-amber-500:hover,
+:root[data-theme="dark"] .hover\:bg-yellow-500:hover,
+:root:not([data-theme]) .bg-amber-400:hover,
+:root:not([data-theme]) .bg-yellow-400:hover,
+:root:not([data-theme]) .hover\:bg-amber-500:hover {
+  background: linear-gradient(145deg, #F4D03F 0%, #D4AF37 40%, #B8860B 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 150, 0.6),
+    inset 0 -2px 4px rgba(92, 72, 0, 0.25),
+    0 6px 20px rgba(184, 134, 11, 0.45),
+    0 3px 6px rgba(0, 0, 0, 0.2) !important;
+  transform: translateY(-2px);
+}
+
+:root[data-theme="dark"] .bg-amber-400:active,
+:root[data-theme="dark"] .bg-yellow-400:active,
+:root:not([data-theme]) .bg-amber-400:active {
+  background: linear-gradient(145deg, #B8860B 0%, #8B6914 50%, #6B5200 100%) !important;
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.3),
+    0 1px 2px rgba(0, 0, 0, 0.2) !important;
+  transform: translateY(0);
+}
+
+/* Secondary Outline Buttons - Gold Border (Dark Theme) */
+:root[data-theme="dark"] .border-amber-400,
+:root[data-theme="dark"] .border-yellow-400,
+:root[data-theme="dark"] [class*="border-amber-400"],
+:root:not([data-theme]) .border-amber-400,
+:root:not([data-theme]) .border-yellow-400 {
+  border-color: #D4AF37 !important;
+  border-width: 2px !important;
+  background: transparent !important;
+  color: #D4AF37 !important;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.2) !important;
+  transition: all 0.3s ease !important;
+}
+
+:root[data-theme="dark"] .border-amber-400:hover,
+:root[data-theme="dark"] .border-yellow-400:hover,
+:root[data-theme="dark"] [class*="border-amber-400"]:hover,
+:root:not([data-theme]) .border-amber-400:hover,
+:root:not([data-theme]) .border-yellow-400:hover {
+  background: linear-gradient(145deg, #D4AF37 0%, #B8860B 40%, #8B6914 100%) !important;
+  color: #1a1a1a !important;
+  border-color: #8B6914 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 224, 102, 0.5),
+    0 4px 12px rgba(184, 134, 11, 0.35) !important;
+}
+
+/* Header CTA in dark mode - Gold Metal */
+:root[data-theme="dark"] .header-cta,
+:root:not([data-theme]) .header-cta {
+  background: linear-gradient(145deg, #D4AF37 0%, #B8860B 50%, #8B6914 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 224, 102, 0.4),
+    0 3px 10px rgba(184, 134, 11, 0.3);
+  border: 1px solid rgba(139, 105, 20, 0.3);
+  color: #1a1a1a;
+}
+
+:root[data-theme="dark"] .header-cta:hover,
+:root:not([data-theme]) .header-cta:hover {
+  background: linear-gradient(145deg, #F4D03F 0%, #D4AF37 50%, #B8860B 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 150, 0.5),
+    0 5px 15px rgba(184, 134, 11, 0.4);
+}
+
+/* Nav chips active state - gold (Dark Theme) */
+:root[data-theme="dark"] .nav-chip.nav-link-active,
+:root:not([data-theme]) .nav-chip.nav-link-active {
+  background: linear-gradient(145deg, #D4AF37 0%, #B8860B 50%, #8B6914 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 224, 102, 0.4),
+    0 3px 12px rgba(184, 134, 11, 0.35);
+  border: 1px solid rgba(139, 105, 20, 0.3);
+  color: #1a1a1a;
+}
+
+/* Sticky CTA gold metal (Dark Theme) */
+:root[data-theme="dark"] .sticky-cta,
+:root:not([data-theme]) .sticky-cta {
+  background: linear-gradient(145deg, #D4AF37 0%, #B8860B 50%, #8B6914 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 224, 102, 0.5),
+    0 8px 25px rgba(184, 134, 11, 0.4),
+    0 0 30px rgba(212, 175, 55, 0.3);
+  color: #1a1a1a;
+}
+
+:root[data-theme="dark"] .sticky-cta:hover,
+:root:not([data-theme]) .sticky-cta:hover {
   background: linear-gradient(145deg, #F4D03F 0%, #D4AF37 50%, #B8860B 100%);
   box-shadow:
     inset 0 1px 0 rgba(255, 240, 150, 0.6),

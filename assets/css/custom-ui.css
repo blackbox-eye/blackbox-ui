@@ -724,6 +724,26 @@ textarea.field-error:focus {
 .chat-message.bot .message-text { background:rgba(255,255,255,.04); }
 .chat-message.user { justify-content:flex-end; }
 .chat-message.user .message-text { background:rgba(255,199,0,.15); color:var(--text-high-emphasis); }
+/* AlphaBot input styling */
+.alphabot-input-group { display:flex; gap:0.5rem; margin-top:auto; }
+.alphabot-input-group textarea,
+#alphabot-input { width:100%; resize:none; background:var(--form-field-bg); border:1px solid var(--form-field-border); border-radius:0.75rem; padding:0.75rem 1rem; color:var(--form-field-text); font-size:0.875rem; line-height:1.5; transition:border-color 0.2s ease, box-shadow 0.2s ease; }
+#alphabot-input::placeholder { color:var(--form-field-placeholder); }
+#alphabot-input:focus { border-color:var(--primary-accent); box-shadow:0 0 0 2px var(--primary-accent-soft); outline:none; }
+.alphabot-panel-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem; }
+.alphabot-panel-title { font-weight:700; font-size:1rem; color:var(--text-high-emphasis); }
+.alphabot-panel-subtitle { font-size:0.75rem; color:var(--muted); margin-top:0.15rem; }
+.alphabot-close-btn { background:transparent; border:none; color:var(--muted); font-size:1.5rem; line-height:1; padding:0.25rem; cursor:pointer; transition:color 0.2s ease; }
+.alphabot-close-btn:hover { color:var(--text-high-emphasis); }
+.alphabot-messages { flex:1; overflow-y:auto; margin-bottom:1rem; display:flex; flex-direction:column; gap:0.75rem; max-height:40vh; }
+.alphabot-send-btn { flex-shrink:0; background:var(--cta-background); color:var(--cta-contrast); border:none; border-radius:0.75rem; padding:0.75rem 1.25rem; font-weight:600; font-size:0.875rem; cursor:pointer; transition:background 0.2s ease, opacity 0.2s ease; }
+.alphabot-send-btn:hover:not(:disabled) { background:var(--cta-background-hover); }
+.alphabot-send-btn:disabled { opacity:0.5; cursor:not-allowed; }
+.alphabot-label { font-size:0.875rem; }
+/* Light mode AlphaBot adjustments */
+:root[data-theme="light"] .alphabot-panel { background:rgba(255,255,255,.98); border-color:rgba(15,23,42,.1); box-shadow:0 25px 55px rgba(15,23,42,.2); }
+:root[data-theme="light"] .alphabot-toggle { background:rgba(255,255,255,.95); border-color:rgba(15,23,42,.1); box-shadow:0 12px 30px rgba(15,23,42,.15); }
+:root[data-theme="light"] .chat-message.bot .message-text { background:rgba(15,23,42,.04); }
 /* Accessibility */
 .skip-link { position:absolute; top:-100px; left:0; background:var(--cta-background); color:var(--cta-contrast); padding:8px 16px; text-decoration:none; font-weight:bold; z-index:100; transition:top .2s ease, background .2s ease; }
 .skip-link:focus { top:0; }

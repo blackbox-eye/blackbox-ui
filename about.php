@@ -7,71 +7,213 @@ include 'includes/site-header.php';
 ?>
 
 <main class="pt-16">
-    <section class="py-20 sm:py-24">
-        <div class="container mx-auto px-4">
-            <div class="glass-effect rounded-3xl p-8 sm:p-12 mb-16 text-center section-fade-in">
-                <p class="text-amber-400 uppercase tracking-widest text-sm font-semibold mb-4"><?= t('about.hero_section.tagline') ?></p>
-                <h1 class="text-3xl sm:text-5xl font-bold mb-6"><?= t('about.hero_section.title') ?></h1>
-                <p class="text-gray-300 text-base sm:text-lg max-w-3xl mx-auto">
+    <!-- Hero Section - Immersive with animated background -->
+    <section class="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
+        <!-- Animated gradient background -->
+        <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900">
+            <div class="absolute inset-0 opacity-30">
+                <div class="absolute top-0 left-1/4 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl animate-pulse"></div>
+                <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+            </div>
+        </div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-400/10 border border-amber-400/30 mb-6 backdrop-blur-sm">
+                    <div class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></div>
+                    <span class="text-xs uppercase tracking-widest text-amber-400 font-bold"><?= t('about.hero_section.tagline') ?></span>
+                </div>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black mb-6 leading-tight">
+                    <span class="bg-gradient-to-r from-white via-amber-200 to-amber-400 bg-clip-text text-transparent">
+                        <?= t('about.hero_section.title') ?>
+                    </span>
+                </h1>
+                <p class="text-lg sm:text-xl text-gray-300 mb-12 leading-relaxed max-w-3xl mx-auto">
                     <?= t('about.hero_section.description') ?>
                 </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 mb-16 section-fade-in">
-                <div class="glass-effect rounded-2xl p-8">
-                    <h2 class="text-2xl font-bold text-amber-400 mb-4"><?= t('about.pillars.vision_title') ?></h2>
-                    <p class="text-gray-300"><?= t('about.pillars.vision_body') ?></p>
-                </div>
-                <div class="glass-effect rounded-2xl p-8">
-                    <h2 class="text-2xl font-bold text-amber-400 mb-4"><?= t('about.pillars.mission_title') ?></h2>
-                    <p class="text-gray-300"><?= t('about.pillars.mission_body') ?></p>
-                </div>
-            </div>
-
-            <section class="text-center mb-20 section-fade-in">
-                <h2 class="text-3xl sm:text-4xl font-bold mb-10"><?= t('about.values_grid.title') ?></h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <?php foreach (['discretion', 'innovation', 'integrity', 'perfection'] as $value): ?>
-                        <div class="glass-effect rounded-2xl p-6">
-                            <h3 class="text-xl font-bold text-amber-400 mb-2"><?= t('about.values_grid.items.' . $value . '.title') ?></h3>
-                            <p class="text-gray-400"><?= t('about.values_grid.items.' . $value . '.body') ?></p>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            </section>
-
-            <section class="glass-effect rounded-3xl p-8 sm:p-12 section-fade-in">
-                <h2 class="text-3xl sm:text-4xl font-bold text-center mb-6"><?= t('about.teams.title') ?></h2>
-                <p class="text-center text-gray-400 max-w-3xl mx-auto mb-10">
-                    <?= t('about.teams.description') ?>
-                </p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-                    <?php
-                    $team_blocks = ['recon', 'red', 'stealth', 'blue'];
-                    foreach ($team_blocks as $unit): ?>
-                        <div class="glass-effect rounded-2xl p-6">
-                            <h3 class="text-xl font-semibold text-amber-400 mb-2"><?= t('about.teams.units.' . $unit . '.title') ?></h3>
-                            <p class="text-gray-300"><?= t('about.teams.units.' . $unit . '.body') ?></p>
-                        </div>
-                    <?php endforeach; ?>
-                    <div class="md:col-span-2 glass-effect rounded-2xl p-6">
-                        <h3 class="text-xl font-semibold text-amber-400 mb-2"><?= t('about.teams.units.custom.title') ?></h3>
-                        <p class="text-gray-300"><?= t('about.teams.units.custom.body') ?></p>
+                
+                <!-- Quick stats -->
+                <div class="grid grid-cols-3 gap-6 max-w-2xl mx-auto">
+                    <div class="text-center">
+                        <div class="text-3xl sm:text-4xl font-black text-amber-400 mb-2">24/7</div>
+                        <div class="text-xs sm:text-sm text-gray-400 uppercase tracking-wide">Operations</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl sm:text-4xl font-black text-amber-400 mb-2">3</div>
+                        <div class="text-xs sm:text-sm text-gray-400 uppercase tracking-wide">Kontinenter</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl sm:text-4xl font-black text-amber-400 mb-2">∞</div>
+                        <div class="text-xs sm:text-sm text-gray-400 uppercase tracking-wide">Dedikation</div>
                     </div>
                 </div>
-            </section>
+            </div>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
         </div>
     </section>
 
-    <section class="py-16 sm:py-20 bg-gray-900/40 section-fade-in">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-3xl sm:text-4xl font-bold mb-4"><?= t('about.cta.title') ?></h2>
-            <p class="text-gray-400 max-w-2xl mx-auto mb-8">
-                <?= t('about.cta.description') ?>
-            </p>
-            <a href="contact.php" class="inline-flex items-center justify-center bg-amber-400 text-black font-semibold py-3 px-8 rounded-lg hover:bg-amber-500 transition-colors">
-                <?= t('about.cta.button') ?>
-            </a>
+    <!-- Vision & Mission - Side-by-side cards with icons -->
+    <section class="py-20 sm:py-28 bg-gradient-to-b from-black to-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <div class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-500/10 to-transparent border border-amber-500/20 p-10 hover:border-amber-500/40 transition-all duration-500">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-3xl group-hover:bg-amber-500/10 transition-all duration-500"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 rounded-2xl bg-amber-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-7 h-7 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-amber-400 mb-4"><?= t('about.pillars.vision_title') ?></h2>
+                        <p class="text-gray-300 leading-relaxed"><?= t('about.pillars.vision_body') ?></p>
+                    </div>
+                </div>
+                
+                <div class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-500/20 p-10 hover:border-blue-500/40 transition-all duration-500">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl group-hover:bg-blue-500/10 transition-all duration-500"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 rounded-2xl bg-blue-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-amber-400 mb-4"><?= t('about.pillars.mission_title') ?></h2>
+                        <p class="text-gray-300 leading-relaxed"><?= t('about.pillars.mission_body') ?></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Values - Interactive grid -->
+    <section class="py-20 sm:py-28 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-gray-900 via-black to-gray-900"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-5xl font-black mb-4"><?= t('about.values_grid.title') ?></h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent mx-auto"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+                <?php 
+                $values_data = [
+                    ['key' => 'discretion', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>'],
+                    ['key' => 'innovation', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>'],
+                    ['key' => 'integrity', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>'],
+                    ['key' => 'perfection', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>']
+                ];
+                
+                foreach ($values_data as $value): ?>
+                    <div class="group relative">
+                        <div class="absolute inset-0 bg-gradient-to-br from-amber-500/20 to-transparent rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
+                        <div class="relative bg-gray-900/60 backdrop-blur-sm border border-gray-800 rounded-2xl p-8 hover:border-amber-500/50 transition-all duration-300">
+                            <div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center mb-4 group-hover:bg-amber-500/20 transition-colors duration-300">
+                                <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <?= $value['icon'] ?>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-3"><?= t('about.values_grid.items.' . $value['key'] . '.title') ?></h3>
+                            <p class="text-gray-400 text-sm leading-relaxed"><?= t('about.values_grid.items.' . $value['key'] . '.body') ?></p>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+
+    <!-- Specialized Teams - Timeline style -->
+    <section class="py-20 sm:py-28 bg-gradient-to-b from-gray-900 to-black relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,199,0,0.15) 1px, transparent 1px); background-size: 40px 40px;"></div>
+        </div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16 max-w-3xl mx-auto">
+                <h2 class="text-3xl sm:text-5xl font-black mb-6"><?= t('about.teams.title') ?></h2>
+                <p class="text-lg text-gray-300 leading-relaxed">
+                    <?= t('about.teams.description') ?>
+                </p>
+            </div>
+            
+            <div class="max-w-5xl mx-auto space-y-6">
+                <?php
+                $team_blocks = [
+                    ['key' => 'recon', 'color' => 'blue', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>'],
+                    ['key' => 'red', 'color' => 'red', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"></path>'],
+                    ['key' => 'stealth', 'color' => 'purple', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>'],
+                    ['key' => 'blue', 'color' => 'cyan', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>']
+                ];
+                
+                foreach ($team_blocks as $index => $unit): 
+                    $isEven = $index % 2 === 0;
+                ?>
+                    <div class="group flex items-center gap-6 <?= $isEven ? 'flex-row' : 'flex-row-reverse' ?>">
+                        <div class="w-16 h-16 rounded-2xl bg-<?= $unit['color'] ?>-500/20 flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:bg-<?= $unit['color'] ?>-500/30 transition-all duration-300">
+                            <svg class="w-8 h-8 text-<?= $unit['color'] ?>-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <?= $unit['icon'] ?>
+                            </svg>
+                        </div>
+                        <div class="flex-1 bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-2xl p-6 hover:border-<?= $unit['color'] ?>-500/40 transition-all duration-300 <?= $isEven ? 'text-left' : 'text-right' ?>">
+                            <h3 class="text-xl font-bold text-<?= $unit['color'] ?>-400 mb-2"><?= t('about.teams.units.' . $unit['key'] . '.title') ?></h3>
+                            <p class="text-gray-300 leading-relaxed"><?= t('about.teams.units.' . $unit['key'] . '.body') ?></p>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+                
+                <!-- Custom Solutions - Full width card -->
+                <div class="relative mt-12 group">
+                    <div class="absolute inset-0 bg-gradient-to-r from-amber-500/20 via-purple-500/20 to-blue-500/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500 opacity-50"></div>
+                    <div class="relative bg-gray-900/90 backdrop-blur-sm border border-amber-500/30 rounded-3xl p-10 text-center">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500/20 to-purple-500/20 flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-amber-400 mb-4"><?= t('about.teams.units.custom.title') ?></h3>
+                        <p class="text-gray-300 leading-relaxed max-w-3xl mx-auto"><?= t('about.teams.units.custom.body') ?></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section - Bold and action-oriented -->
+    <section class="py-20 sm:py-28 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-blue-500/10"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-400/10 border border-amber-400/30 mb-8 backdrop-blur-sm">
+                    <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                    <span class="text-xs uppercase tracking-widest text-amber-400 font-bold">Klar til handling</span>
+                </div>
+                <h2 class="text-4xl sm:text-5xl font-black mb-6 leading-tight"><?= t('about.cta.title') ?></h2>
+                <p class="text-lg text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+                    <?= t('about.cta.description') ?>
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="contact.php" class="group inline-flex items-center gap-3 bg-gradient-to-r from-amber-400 to-amber-500 text-black font-bold py-4 px-10 rounded-xl hover:from-amber-500 hover:to-amber-600 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/50">
+                        <?= t('about.cta.button') ?>
+                        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                    </a>
+                    <a href="demo.php" class="inline-flex items-center gap-3 border-2 border-gray-700 text-white font-semibold py-4 px-10 rounded-xl hover:border-amber-400 hover:text-amber-400 transition-all duration-300">
+                        Book en demo
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
 </main>

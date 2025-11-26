@@ -292,9 +292,9 @@ include 'includes/site-header.php';
         <div class="flex flex-col gap-3 py-3">
           <!-- Top row: Category filter -->
           <?php if (!empty($categories)): ?>
-            <div class="flex items-center gap-2">
-              <span class="text-xs text-gray-500 flex-shrink-0 hidden sm:inline"><?= t('blog.filter.label', 'Filter:') ?></span>
-              <div class="flex items-center gap-2 overflow-x-auto scrollbar-hide flex-1">
+            <div class="flex items-start gap-2">
+              <span class="text-xs text-gray-500 flex-shrink-0 hidden sm:inline pt-2.5"><?= t('blog.filter.label', 'Filter:') ?></span>
+              <div class="flex items-center gap-2 flex-wrap flex-1 min-w-0">
                 <a href="blog.php"
                   class="blog-filter-pill <?= $category_filter === null ? 'is-active' : '' ?>">
                   <?= t('blog.filter.all') ?>
@@ -310,9 +310,9 @@ include 'includes/site-header.php';
           <?php endif; ?>
 
           <!-- Bottom row: Region tabs with label -->
-          <div class="flex items-center gap-2">
-            <span class="text-xs text-gray-500 flex-shrink-0 hidden sm:inline"><?= t('blog.news.title', 'Nyheder') ?>:</span>
-            <div class="flex items-center gap-1.5 flex-wrap">
+          <div class="flex items-start gap-2">
+            <span class="text-xs text-gray-500 flex-shrink-0 hidden sm:inline pt-2.5"><?= t('blog.news.title', 'Nyheder') ?>:</span>
+            <div class="flex items-center gap-1.5 flex-wrap flex-1 min-w-0">
               <?php $first = true;
               foreach ($news_items as $region_key => $region): ?>
                 <button

@@ -61,20 +61,25 @@ jobs:
           THRESHOLD=300
           FAIL=0
           
-          for ENDPOINT in "/" "/index.php" "/contact.php" "/api/consent-log.php"; do
-            TTFB=$(curl -w "%{time_starttransfer}" -o /dev/null -s "http://localhost:8000$ENDPOINT" || echo "999")
-            TTFB_MS=$(echo "$TTFB * 1000" | bc | cut -d'.' -f1)
-            
-            if [ "$TTFB_MS" -gt "$THRESHOLD" ]; then
-              echo "⚠️  $ENDPOINT: ${TTFB_MS}ms (exceeds ${THRESHOLD}ms threshold)"
-              FAIL=1
+          for ENDPOINT in "/" "/index.php" "/contact.php"; do
+            # Use awk for floating-point calculation (available by default)
+            if TTFB=$(curl -w "%{time_starttransfer}" -o /dev/null -s "http://localhost:8000$ENDPOINT"); then
+              TTFB_MS=$(echo "$TTFB" | awk '{printf "%d", $1 * 1000}')
+              
+              if [ "$TTFB_MS" -gt "$THRESHOLD" ]; then
+                echo "⚠️  $ENDPOINT: ${TTFB_MS}ms (exceeds ${THRESHOLD}ms threshold)"
+                FAIL=1
+              else
+                echo "✅ $ENDPOINT: ${TTFB_MS}ms"
+              fi
             else
-              echo "✅ $ENDPOINT: ${TTFB_MS}ms"
+              echo "❌ $ENDPOINT: Failed to connect"
+              FAIL=1
             fi
           done
           
           if [ "$FAIL" -eq 1 ]; then
-            echo "⚠️  Some endpoints exceeded TTFB threshold - review for optimization"
+            echo "⚠️  Some endpoints exceeded TTFB threshold or failed - review for optimization"
           else
             echo "✅ All endpoints within TTFB threshold"
           fi

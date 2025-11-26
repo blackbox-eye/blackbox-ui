@@ -114,13 +114,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     .logo-section {
       text-align: center;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
 
     .logo-img {
-      width: 72px;
+      width: 160px;
       height: auto;
-      margin-bottom: 0.75rem;
+      margin-bottom: 1rem;
       filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.3));
     }
 
@@ -269,7 +269,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <main class="login-card">
     <div class="logo-section">
-      <img src="assets/Logo_BlackboxEYE™ (sort).png" alt="BLACKBOX EYE™" class="logo-img" loading="lazy">
+      <img src="assets/Logo_for BlackboxEYE_SORT.png" alt="BLACKBOX EYE™" class="logo-img" loading="lazy">
       <h1 class="title">Sikker adgang</h1>
       <p class="subtitle">BLACKBOX EYE™ operatør-portal</p>
     </div> <?php if ($error): ?>

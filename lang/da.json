@@ -15,6 +15,7 @@
       "cases_results": "Cases & Resultater",
       "pricing_demo": "Priser & Demo",
       "resources": "Ressourcer / FAQ",
+      "faq": "FAQ",
       "blog": "Blog",
       "about_contact": "Om & Kontakt",
       "demo": "Book demo",
@@ -764,10 +765,11 @@
       "next": "Næste"
     },
     "newsletter": {
-      "title": "Få de seneste cybersikkerhedsnyheder",
-      "description": "Tilmeld dig vores nyhedsbrev og modtag artikler direkte i din indbakke.",
-      "placeholder": "Din e-mail adresse",
-      "button": "Tilmeld"
+      "title": "Trusselsbrief direkte i indbakken",
+      "description": "Modtag ugentlige sikkerhedsopdateringer, trusselsvarsler og indsigt fra vores analytikere.",
+      "placeholder": "Virksomheds-e-mail",
+      "button": "Tilmeld",
+      "privacy": "Dine data behandles fortroligt. Afmeld når som helst."
     },
     "post": {
       "not_found": "Artikel ikke fundet",

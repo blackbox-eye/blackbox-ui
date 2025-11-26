@@ -51,7 +51,7 @@ $structured_data = [
 // Curated News Data - organized by region with full details
 $news_items = [
   'denmark' => [
-    'flag' => '🇩🇰',
+    'flag' => 'DK',
     'title' => t('blog.news.denmark', 'Danmark'),
     'items' => [
       [
@@ -73,7 +73,7 @@ $news_items = [
     ]
   ],
   'europe' => [
-    'flag' => '🇪🇺',
+    'flag' => 'EU',
     'title' => t('blog.news.europe', 'Europa'),
     'items' => [
       [
@@ -111,7 +111,7 @@ $news_items = [
     ]
   ],
   'middle_east' => [
-    'flag' => '🌍',
+    'flag' => 'ME',
     'title' => t('blog.news.middle_east', 'Mellemøsten'),
     'items' => [
       [
@@ -141,8 +141,8 @@ $news_items = [
     ]
   ],
   'americas' => [
-    'flag' => '🌎',
-    'title' => t('blog.news.americas', 'Nord- og Sydamerika'),
+    'flag' => 'AM',
+    'title' => t('blog.news.americas', 'Amerika'),
     'items' => [
       [
         'date' => '11. sep 2025',
@@ -171,7 +171,7 @@ $news_items = [
     ]
   ],
   'asia' => [
-    'flag' => '🌏',
+    'flag' => 'AS',
     'title' => t('blog.news.asia', 'Asien'),
     'items' => [
       [
@@ -303,7 +303,7 @@ include 'includes/site-header.php';
                 data-region="<?= $region_key ?>"
                 aria-selected="<?= $first ? 'true' : 'false' ?>"
                 title="<?= $region['title'] ?>">
-                <span class="text-base"><?= $region['flag'] ?></span>
+                <span class="text-xs font-bold"><?= $region['flag'] ?></span>
                 <span class="hidden lg:inline text-xs"><?= $region['title'] ?></span>
               </button>
             <?php $first = false;
@@ -437,7 +437,7 @@ include 'includes/site-header.php';
             <div class="news-panel <?= $first ? 'is-visible' : '' ?>" data-panel="<?= $region_key ?>">
               <!-- Region Header -->
               <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-800/50">
-                <span class="text-2xl"><?= $region['flag'] ?></span>
+                <span class="text-sm font-bold px-2 py-1 bg-gray-800 rounded"><?= $region['flag'] ?></span>
                 <h3 class="text-base font-semibold text-white"><?= $region['title'] ?></h3>
                 <span class="ml-auto text-xs text-gray-500 bg-gray-800/50 px-2 py-0.5 rounded"><?= count($region['items']) ?> <?= t('blog.news.alerts', 'alerts') ?></span>
               </div>

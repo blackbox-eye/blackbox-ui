@@ -139,7 +139,7 @@ if (!function_exists('aig_nav_class')) {
 }
 
 // Navigation links - Optimized for Sprint 5 UX improvements
-// Reduced to essential items for better mobile experience
+// Reduced to 5 essential items for professional desktop layout
 $nav_links = [
     [
         'slug' => 'about',
@@ -153,23 +153,13 @@ $nav_links = [
     ],
     [
         'slug' => 'cases',
-        'label' => t('header.menu.cases_results'),
+        'label' => t('header.menu.cases'),
         'href' => 'cases.php',
     ],
     [
         'slug' => 'pricing',
-        'label' => t('header.menu.pricing_demo'),
+        'label' => t('header.menu.pricing'),
         'href' => 'pricing.php',
-    ],
-    [
-        'slug' => 'faq',
-        'label' => t('header.menu.resources'),
-        'href' => 'faq.php',
-    ],
-    [
-        'slug' => 'blog',
-        'label' => t('header.menu.blog'),
-        'href' => 'blog.php',
     ],
     [
         'slug' => 'contact',
@@ -178,12 +168,12 @@ $nav_links = [
     ],
 ];
 
-// Secondary navigation items for quick access in mobile drawer
+// Secondary navigation items for mobile drawer (additional pages)
 $secondary_nav_links = [
-    ['slug' => 'demo', 'label' => t('header.menu.demo'), 'href' => 'demo.php'],
-    ['slug' => 'pricing', 'label' => t('header.menu.pricing'), 'href' => 'pricing.php'],
-    ['slug' => 'free-scan', 'label' => t('header.menu.free_scan'), 'href' => 'free-scan.php'],
+    ['slug' => 'faq', 'label' => t('header.menu.faq'), 'href' => 'faq.php'],
     ['slug' => 'blog', 'label' => t('header.menu.blog'), 'href' => 'blog.php'],
+    ['slug' => 'demo', 'label' => t('header.menu.demo'), 'href' => 'demo.php'],
+    ['slug' => 'free-scan', 'label' => t('header.menu.free_scan'), 'href' => 'free-scan.php'],
 ];
 
 $alphabot_enabled_pages = ['home', 'index', 'about', 'products', 'cases', 'pricing', 'contact', 'demo', 'free-scan', 'faq'];

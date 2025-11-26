@@ -307,13 +307,13 @@ include 'includes/site-header.php';
 </script>
 
 <main class="pt-16">
-    <!-- Hero Section - Immersive with animated background -->
+    <!-- Hero Section - Clean professional design -->
     <section class="relative min-h-[70vh] flex items-center justify-center overflow-hidden" role="banner">
-        <!-- Animated gradient background -->
+        <!-- Subtle gradient background -->
         <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900" aria-hidden="true">
-            <div class="absolute inset-0 opacity-30">
-                <div class="absolute top-0 left-1/4 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl animate-pulse motion-reduce:animate-none"></div>
-                <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse motion-reduce:animate-none" style="animation-delay: 1s;"></div>
+            <div class="absolute inset-0 opacity-20">
+                <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-amber-500/10 rounded-full blur-[100px]"></div>
+                <div class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-blue-500/5 rounded-full blur-[100px]"></div>
             </div>
         </div>
 

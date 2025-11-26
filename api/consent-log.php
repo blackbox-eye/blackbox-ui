@@ -48,6 +48,12 @@ echo json_encode(['success' => true]);
 // Flush output to client before logging (non-blocking)
 if (function_exists('fastcgi_finish_request')) {
   fastcgi_finish_request();
+} else {
+  // Fallback for non-FastCGI environments (mod_php, etc.)
+  if (ob_get_level() > 0) {
+    ob_end_flush();
+  }
+  flush();
 }
 ignore_user_abort(true);
 

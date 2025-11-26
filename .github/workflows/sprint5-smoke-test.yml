@@ -62,9 +62,11 @@ jobs:
           FAIL=0
           
           for ENDPOINT in "/" "/index.php" "/contact.php"; do
-            # Use awk for floating-point calculation (available by default)
-            if TTFB=$(curl -w "%{time_starttransfer}" -o /dev/null -s "http://localhost:8000$ENDPOINT"); then
-              TTFB_MS=$(echo "$TTFB" | awk '{printf "%d", $1 * 1000}')
+            TTFB_RAW=$(curl -w "%{time_starttransfer}" -o /dev/null -s "http://localhost:8000$ENDPOINT" 2>/dev/null)
+            CURL_EXIT=$?
+            
+            if [ "$CURL_EXIT" -eq 0 ] && [ -n "$TTFB_RAW" ]; then
+              TTFB_MS=$(echo "$TTFB_RAW" | awk '{printf "%d", $1 * 1000}')
               
               if [ "$TTFB_MS" -gt "$THRESHOLD" ]; then
                 echo "⚠️  $ENDPOINT: ${TTFB_MS}ms (exceeds ${THRESHOLD}ms threshold)"
@@ -73,7 +75,7 @@ jobs:
                 echo "✅ $ENDPOINT: ${TTFB_MS}ms"
               fi
             else
-              echo "❌ $ENDPOINT: Failed to connect"
+              echo "❌ $ENDPOINT: Failed to connect (exit code: $CURL_EXIT)"
               FAIL=1
             fi
           done

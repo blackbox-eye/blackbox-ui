@@ -141,30 +141,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     .card-meta {
+      position: absolute;
+      top: 1rem;
+      right: 1.1rem;
       display: flex;
-      justify-content: flex-end;
       align-items: center;
-      gap: 0.45rem;
-      margin-bottom: 0.75rem;
+      gap: 0.35rem;
+      padding: 0.35rem 0.5rem;
+      background: rgba(12, 12, 14, 0.65);
+      border-radius: 999px;
+      border: 1px solid rgba(212, 175, 55, 0.15);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
     }
 
     .powered-label {
-      font-size: 0.58rem;
+      font-size: 0.6rem;
       font-style: italic;
-      letter-spacing: 0.05em;
-      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 0.12em;
+      color: rgba(255, 255, 255, 0.7);
       text-transform: uppercase;
+      white-space: nowrap;
     }
 
     .powered-logo {
-      width: 104px;
+      width: 68px;
       height: auto;
-      filter: drop-shadow(0 1px 6px rgba(212, 175, 55, 0.3));
+      filter: drop-shadow(0 1px 6px rgba(212, 175, 55, 0.25));
     }
 
     .logo-section {
       text-align: center;
-      margin-bottom: 1.25rem;
+      margin: 2.6rem auto 1.25rem;
+      max-width: 260px;
     }
 
     .logo-img {
@@ -173,23 +181,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     .logo-img--primary {
-      width: 220px;
-      max-width: 90%;
-      margin: 0 auto 0.85rem;
-      filter: drop-shadow(0 4px 16px rgba(18, 20, 32, 0.45));
+      width: 240px;
+      max-width: 100%;
+      margin: 0 auto 0.6rem;
+      filter: drop-shadow(0 6px 22px rgba(18, 20, 32, 0.5));
     }
 
     .title {
-      font-size: 1.05rem;
+      font-size: 1.08rem;
       font-weight: 600;
       color: #fff;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.3rem;
     }
 
     .subtitle {
-      font-size: 0.68rem;
-      color: rgba(255, 255, 255, 0.58);
-      letter-spacing: 0.01em;
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.62);
+      letter-spacing: 0.025em;
     }
 
     .error-box {
@@ -327,7 +335,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <main class="login-card">
     <div class="card-meta">
       <span class="powered-label">… Powered by</span>
-      <img src="assets/blackbox_logo_black.png" alt="Powered by BLACKBOX EYE™" class="powered-logo" loading="lazy">
+      <img src="assets/Logo-blackbox-hvid.png" alt="Powered by BLACKBOX EYE™" class="powered-logo" loading="lazy">
     </div>
     <div class="logo-section">
       <img src="assets/greyeeye_logo_transparent.png" alt="GreyEYE Data Intelligence" class="logo-img logo-img--primary" loading="lazy">

@@ -364,17 +364,17 @@ if (!empty($disable_alphabot)) {
     <div id="mobile-menu-overlay" class="md:hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-39" aria-hidden="true"></div>
 
     <!-- Mobile menu -->
-    <div id="mobile-menu" class="md:hidden fixed top-0 right-0 bottom-0 w-4/5 max-w-sm bg-gray-900/95 backdrop-blur-md z-40 p-8 shadow-2xl border-l border-gray-800" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-heading" aria-hidden="true">
-        <div class="flex justify-between items-center mb-6">
-            <span id="mobile-menu-heading" class="text-lg font-semibold text-white"><?= t('header.mobile.navigation') ?></span>
+    <div id="mobile-menu" class="md:hidden fixed top-0 right-0 bottom-0 w-72 max-w-[75vw] bg-gray-900/95 backdrop-blur-md z-40 p-6 shadow-2xl border-l border-gray-800" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-heading" aria-hidden="true">
+        <div class="flex justify-between items-center mb-4">
+            <span id="mobile-menu-heading" class="text-base font-semibold text-white"><?= t('header.mobile.navigation') ?></span>
             <button id="mobile-menu-close" class="text-white p-2 -mr-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400" aria-label="<?= htmlspecialchars(t('header.mobile.close_menu')) ?>">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
             </button>
         </div>
-        <nav class="mt-6" aria-label="<?= htmlspecialchars(t('header.mobile.primary_navigation')) ?>">
-            <ul class="flex flex-col space-y-6 text-center" role="list">
+        <nav class="mt-4" aria-label="<?= htmlspecialchars(t('header.mobile.primary_navigation')) ?>">
+            <ul class="flex flex-col space-y-3 text-center" role="list">
                 <?php foreach ($nav_links as $index => $link): ?>
                     <li>
                         <a href="<?= $link['href'] ?>"
@@ -388,8 +388,8 @@ if (!empty($disable_alphabot)) {
             </ul>
 
             <!-- Secondary navigation in mobile menu -->
-            <div class="border-t border-gray-700 pt-6 mt-6" aria-label="<?= htmlspecialchars(t('header.mobile.secondary_navigation')) ?>">
-                <ul class="flex flex-col space-y-4 text-center" role="list">
+            <div class="border-t border-gray-700 pt-4 mt-4" aria-label="<?= htmlspecialchars(t('header.mobile.secondary_navigation')) ?>">
+                <ul class="flex flex-col space-y-2 text-center" role="list">
                     <?php foreach ($secondary_nav_links as $offset => $link): ?>
                         <li>
                             <a href="<?= $link['href'] ?>"
@@ -403,7 +403,7 @@ if (!empty($disable_alphabot)) {
                 </ul>
             </div>
 
-            <div class="mobile-theme-toggle border border-gray-700 rounded-xl px-5 py-4 mt-8 text-left flex items-center justify-between gap-4">
+            <div class="mobile-theme-toggle border border-gray-700 rounded-lg px-4 py-3 mt-6 text-left flex items-center justify-between gap-3">
                 <div>
                     <p class="text-sm font-semibold text-white mb-1"><?= t('header.theme.mobile_title', 'Farvetema') ?></p>
                     <p class="text-xs text-gray-400"><?= t('header.theme.mobile_description', 'Skift mellem mørk og lys oplevelse') ?></p>
@@ -421,10 +421,10 @@ if (!empty($disable_alphabot)) {
                 </button>
             </div>
 
-            <a href="agent-login.php" class="mt-8 header-cta header-cta--wide">
+            <a href="agent-login.php" class="mt-5 header-cta header-cta--wide text-sm">
                 <?= t('header.cta.agent_login') ?>
             </a>
-            <div class="flex items-center justify-center gap-3 pt-6">
+            <div class="flex items-center justify-center gap-2 pt-4">
                 <a href="?lang=da"
                     class="language-switch language-switch--drawer <?= $current_language === 'da' ? 'is-active' : '' ?>"
                     aria-label="<?= htmlspecialchars(t('header.language.switch_da')) ?>"

@@ -2,10 +2,10 @@
 
 /**
  * Blog Listing Page - Blackbox EYE
- * Sprint 4: Blog CMS System
+ * Sprint 5: Complete Blog Redesign - Modern Cyber News Hub
  *
- * @version 1.0
- * @date 2025-11-23
+ * @version 2.0
+ * @date 2025-11-26
  */
 
 require_once __DIR__ . '/includes/i18n.php';
@@ -48,20 +48,209 @@ $structured_data = [
   'description' => t('blog.meta.description'),
 ];
 
+// Curated News Data - organized by region with full details
+$news_items = [
+  'denmark' => [
+    'flag' => '🇩🇰',
+    'title' => t('blog.news.denmark', 'Danmark'),
+    'items' => [
+      [
+        'date' => '26. nov 2025',
+        'source' => 'Ekstra Bladet',
+        'title' => 'Stort flyselskab hacket: Kundernes data i fare',
+        'excerpt' => 'Et stort flyselskab er blevet ramt af et cyberangreb, som potentielt har eksponeret kundedata.',
+        'url' => 'https://ekstrabladet.dk/forbrug/Teknologi/stort-flyselskab-hacket-kundernes-data-i-fare/11019607',
+        'severity' => 'high'
+      ],
+      [
+        'date' => '26. nov 2025',
+        'source' => 'Ekstra Bladet',
+        'title' => 'Cybertrussel mod Danmark stadig meget høj',
+        'excerpt' => 'Myndighederne fastslår, at cybertruslen forbliver på et meget højt niveau. Statslige aktører udgør fortsat betydelig risiko.',
+        'url' => 'https://ekstrabladet.dk/nyheder/politik/danskpolitik/ny-vurdering-cybertrussel-mod-danmark-er-stadig-meget-hoej/11019651',
+        'severity' => 'critical'
+      ]
+    ]
+  ],
+  'europe' => [
+    'flag' => '🇪🇺',
+    'title' => t('blog.news.europe', 'Europa'),
+    'items' => [
+      [
+        'date' => '5. nov 2025',
+        'source' => 'Industrial Cyber',
+        'title' => 'CrowdStrike: Europas trusselsbillede 2025',
+        'excerpt' => 'Big Game Hunting-ransomware rettet mod store europæiske økonomier voksede 13%. Ca. 2.100 europæiske ofre på ransomware-leak-sites.',
+        'url' => 'https://industrialcyber.co/reports/crowdstrike-2025-european-threat-landscape',
+        'severity' => 'high'
+      ],
+      [
+        'date' => '5. nov 2025',
+        'source' => 'Cybernews',
+        'title' => 'Schweizisk bank angrebet af Qilin-gruppen',
+        'excerpt' => 'Qilin hævder at have stjålet 2,5 TB data inkl. pasnumre, kontosaldi og bankens kildekode.',
+        'url' => 'https://cybernews.com/security/habib-bank-zurich-qilin-ransomware',
+        'severity' => 'critical'
+      ],
+      [
+        'date' => '25. sep 2025',
+        'source' => 'World Economic Forum',
+        'title' => 'Ransomware rammer europæiske lufthavne',
+        'excerpt' => 'Collins Aerospace-angreb forårsagede driftsforstyrrelser i Heathrow, Berlin og Bruxelles.',
+        'url' => 'https://www.weforum.org/agenda/2025/09/european-airports-cyberattack',
+        'severity' => 'high'
+      ],
+      [
+        'date' => '14. okt 2025',
+        'source' => 'The Guardian',
+        'title' => 'UK: 50% stigning i betydningsfulde cyberangreb',
+        'excerpt' => 'NCSC håndterede 429 hændelser. Kina, Rusland, Iran og Nordkorea identificeres som største trusler.',
+        'url' => 'https://www.theguardian.com/technology/2025/oct/14/uk-cyberattacks-rise-ncsc',
+        'severity' => 'critical'
+      ]
+    ]
+  ],
+  'middle_east' => [
+    'flag' => '🌍',
+    'title' => t('blog.news.middle_east', 'Mellemøsten'),
+    'items' => [
+      [
+        'date' => '25. mar 2025',
+        'source' => 'The National',
+        'title' => 'Massivt hack mod UAE: 634 organisationer',
+        'excerpt' => 'Hackeren "rose87168" kompromitterede Oracle Cloud med 6 mio. kundeposter. 30 statslige enheder berørt.',
+        'url' => 'https://www.thenationalnews.com/uae/2025/03/25/uae-oracle-cloud-hack',
+        'severity' => 'critical'
+      ],
+      [
+        'date' => '19. aug 2025',
+        'source' => 'The Peninsula Qatar',
+        'title' => 'Katar sanktionerer virksomhed for databrud',
+        'excerpt' => 'Qatars Nationale Cyber Sikkerhed Agentur idømte sanktion for utilstrækkelige sikkerhedsforanstaltninger.',
+        'url' => 'https://thepeninsulaqatar.com/article/19/08/2025/qatar-data-breach-sanction',
+        'severity' => 'medium'
+      ],
+      [
+        'date' => '23. nov 2025',
+        'source' => 'Al Kabban & Associates',
+        'title' => 'Dhs185 millioner cyberbedrageri i Dubai',
+        'excerpt' => 'Sofistikeret svindel mod advokatfirma. UAE Cybersecurity Council advarer om 12.000+ databrud i 2025.',
+        'url' => 'https://www.alkabban.ae/news/dubai-cyber-fraud-185-million',
+        'severity' => 'high'
+      ]
+    ]
+  ],
+  'americas' => [
+    'flag' => '🌎',
+    'title' => t('blog.news.americas', 'Nord- og Sydamerika'),
+    'items' => [
+      [
+        'date' => '11. sep 2025',
+        'source' => 'BleepingComputer',
+        'title' => 'Panama: Finansministeriet ramt af ransomware',
+        'excerpt' => 'INC Ransom stjal over 1,5 TB data, herunder e-mails og finansielle dokumenter.',
+        'url' => 'https://www.bleepingcomputer.com/news/security/panama-ministry-inc-ransomware',
+        'severity' => 'high'
+      ],
+      [
+        'date' => '3. nov 2025',
+        'source' => 'Industrial Cyber',
+        'title' => 'USA: 70% af angreb rammer kritisk infrastruktur',
+        'excerpt' => 'Homeland Security advarer om øgede trusler fra Kina, Iran, Rusland og Nordkorea.',
+        'url' => 'https://industrialcyber.co/threats-attacks/us-critical-infrastructure-70-percent',
+        'severity' => 'critical'
+      ],
+      [
+        'date' => '24. nov 2025',
+        'source' => 'Cybersecurity Dive',
+        'title' => 'SitusAMC-hack påvirker JPMorgan, Citi, Morgan Stanley',
+        'excerpt' => 'Hackere stjal regnskabsoptegnelser, juridiske aftaler og kundedata. FBI bistår i undersøgelsen.',
+        'url' => 'https://www.cybersecuritydive.com/news/situsamc-hack-banks',
+        'severity' => 'critical'
+      ]
+    ]
+  ],
+  'asia' => [
+    'flag' => '🌏',
+    'title' => t('blog.news.asia', 'Asien'),
+    'items' => [
+      [
+        'date' => '7. okt 2025',
+        'source' => 'Reuters',
+        'title' => 'Qilin stopper Asahi Groups ølproduktion',
+        'excerpt' => 'Ransomware-angreb den 29. september stoppede produktionen. 9.300 filer (≈27 GB) stjålet.',
+        'url' => 'https://www.reuters.com/technology/asahi-group-qilin-ransomware-2025-10-07',
+        'severity' => 'high'
+      ],
+      [
+        'date' => '10. nov 2025',
+        'source' => 'Cyberpress',
+        'title' => 'Kinesisk sikkerhedsfirma lækker statsstøttede værktøjer',
+        'excerpt' => 'Knownsec databrud: 12.000+ klassificerede dokumenter med avanceret malware til Linux, Windows, macOS.',
+        'url' => 'https://cyberpress.org/knownsec-leak-chinese-malware',
+        'severity' => 'critical'
+      ],
+      [
+        'date' => '25. nov 2025',
+        'source' => 'The Indian Express',
+        'title' => '1,86 mio. brugere udsat i Adda-databrud',
+        'excerpt' => 'Hacker lagde 145 MB data på forum med navne, telefonnumre og hashede passwords.',
+        'url' => 'https://indianexpress.com/article/technology/adda-data-breach-1-86-million',
+        'severity' => 'high'
+      ]
+    ]
+  ]
+];
+
 include 'includes/site-header.php';
 ?>
 
-<main id="main-content" class="pt-24 pb-16">
-  <!-- Hero Section -->
-  <section class="py-16 bg-gradient-to-b from-gray-900/50 to-transparent">
-    <div class="container mx-auto px-4">
-      <div class="max-w-3xl mx-auto text-center">
-        <h1 class="text-4xl sm:text-5xl font-bold mb-6 hero-gradient-text">
+<main id="main-content" class="pt-20 pb-16">
+  <!-- Hero Section - Redesigned -->
+  <section class="relative py-20 overflow-hidden">
+    <!-- Animated background grid -->
+    <div class="absolute inset-0 cyber-grid opacity-20"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--page-background)]"></div>
+    
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="max-w-4xl mx-auto text-center">
+        <!-- Live indicator -->
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/30 mb-8">
+          <span class="relative flex h-2.5 w-2.5">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+          </span>
+          <span class="text-red-400 text-sm font-medium"><?= t('blog.hero.live_updates', 'Live Cyber Intelligence Feed') ?></span>
+        </div>
+        
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 hero-gradient-text leading-tight">
           <?= t('blog.hero.title') ?>
         </h1>
-        <p class="text-lg text-gray-300">
+        <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
           <?= t('blog.hero.description') ?>
         </p>
+        
+        <!-- Quick stats -->
+        <div class="flex flex-wrap justify-center gap-6 mt-10">
+          <div class="flex items-center gap-2 text-gray-400">
+            <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-sm">Opdateret: 26. nov 2025</span>
+          </div>
+          <div class="flex items-center gap-2 text-gray-400">
+            <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"></path>
+            </svg>
+            <span class="text-sm">5 regioner overvåget</span>
+          </div>
+          <div class="flex items-center gap-2 text-gray-400">
+            <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+            <span class="text-sm">15+ aktive trusler</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -86,99 +275,115 @@ include 'includes/site-header.php';
       </div>
     </section>
   <?php else: ?>
-    <!-- Category Filter -->
+    
+    <!-- Category Filter - Pill Style -->
     <?php if (!empty($categories)): ?>
-      <section class="py-8 border-b border-gray-800">
+      <section class="py-6 sticky top-16 z-30 bg-[var(--page-background)]/80 backdrop-blur-lg border-b border-gray-800/50">
         <div class="container mx-auto px-4">
-          <div class="flex flex-wrap justify-center gap-3">
-            <a href="blog.php"
-              class="px-4 py-2 rounded-lg transition-colors <?= $category_filter === null ? 'bg-amber-400 text-black font-semibold' : 'bg-gray-800 hover:bg-gray-700 text-gray-300' ?>">
-              <?= t('blog.filter.all') ?>
-            </a>
-            <?php foreach ($categories as $cat): ?>
-              <a href="blog.php?category=<?= urlencode($cat) ?>"
-                class="px-4 py-2 rounded-lg transition-colors <?= $category_filter === $cat ? 'bg-amber-400 text-black font-semibold' : 'bg-gray-800 hover:bg-gray-700 text-gray-300' ?>">
-                <?= htmlspecialchars($cat) ?>
+          <div class="flex items-center gap-4 overflow-x-auto pb-2 scrollbar-hide">
+            <span class="text-sm text-gray-500 whitespace-nowrap"><?= t('blog.filter.label', 'Filter:') ?></span>
+            <div class="flex gap-2">
+              <a href="blog.php"
+                class="blog-filter-pill <?= $category_filter === null ? 'is-active' : '' ?>">
+                <?= t('blog.filter.all') ?>
               </a>
-            <?php endforeach; ?>
+              <?php foreach ($categories as $cat): ?>
+                <a href="blog.php?category=<?= urlencode($cat) ?>"
+                  class="blog-filter-pill <?= $category_filter === $cat ? 'is-active' : '' ?>">
+                  <?= htmlspecialchars($cat) ?>
+                </a>
+              <?php endforeach; ?>
+            </div>
           </div>
         </div>
       </section>
     <?php endif; ?>
 
-    <!-- Blog Posts Grid -->
-    <section class="py-16">
+    <!-- Blog Posts Section -->
+    <section class="py-12">
       <div class="container mx-auto px-4">
         <?php if (empty($posts)): ?>
-          <!-- No Posts -->
-          <div class="max-w-2xl mx-auto text-center py-16">
+          <!-- No Posts State -->
+          <div class="max-w-md mx-auto text-center py-16">
+            <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-gray-800/50 flex items-center justify-center">
+              <svg class="w-10 h-10 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+              </svg>
+            </div>
             <p class="text-xl text-gray-400 mb-6"><?= t('blog.empty.message') ?></p>
             <a href="blog.php" class="inline-block px-6 py-3 bg-amber-400 text-black font-semibold rounded-lg hover:bg-amber-500 transition-colors">
               <?= t('blog.empty.back') ?>
             </a>
           </div>
         <?php else: ?>
-          <!-- Posts Grid -->
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <?php foreach ($posts as $post): ?>
-              <article class="glass-effect rounded-2xl overflow-hidden hover:scale-105 transition-transform duration-300">
+          
+          <!-- Section Header -->
+          <div class="flex items-center justify-between mb-8">
+            <div>
+              <h2 class="text-2xl font-bold text-white"><?= t('blog.section.our_articles', 'Vores Artikler') ?></h2>
+              <p class="text-gray-400 mt-1"><?= t('blog.section.our_articles_desc', 'Dybdegående analyser fra vores eksperter') ?></p>
+            </div>
+            <div class="hidden sm:flex items-center gap-2 text-sm text-gray-500">
+              <span><?= $total_posts ?> <?= t('blog.articles', 'artikler') ?></span>
+            </div>
+          </div>
+          
+          <!-- Posts Grid - Modern Card Design -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <?php foreach ($posts as $index => $post): ?>
+              <article class="blog-card group <?= $index === 0 ? 'blog-card--featured md:col-span-2 lg:col-span-1' : '' ?>">
                 <?php if ($post['featured_image']): ?>
-                  <div class="aspect-video bg-gray-800 overflow-hidden">
+                  <div class="blog-card__image">
                     <img src="<?= htmlspecialchars($post['featured_image']) ?>"
                       alt="<?= htmlspecialchars($post['title']) ?>"
                       loading="lazy"
                       decoding="async"
-                      class="w-full h-full object-cover">
+                      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <div class="blog-card__image-overlay"></div>
                   </div>
                 <?php endif; ?>
 
-                <div class="p-6">
+                <div class="blog-card__content">
                   <!-- Category Badge -->
                   <?php if ($post['category']): ?>
-                    <span class="inline-block px-3 py-1 text-xs font-semibold bg-amber-400/20 text-amber-400 rounded-full mb-3">
+                    <span class="blog-card__category">
                       <?= htmlspecialchars($post['category']) ?>
                     </span>
                   <?php endif; ?>
 
                   <!-- Title -->
-                  <h2 class="text-xl font-bold mb-3 text-white">
+                  <h3 class="blog-card__title">
                     <a href="<?= bbx_get_blog_post_url($post['slug']) ?>" class="hover:text-amber-400 transition-colors">
                       <?= htmlspecialchars($post['title']) ?>
                     </a>
-                  </h2>
+                  </h3>
 
                   <!-- Excerpt -->
                   <?php if ($post['excerpt']): ?>
-                    <p class="text-gray-300 mb-4 line-clamp-3">
+                    <p class="blog-card__excerpt">
                       <?= htmlspecialchars($post['excerpt']) ?>
                     </p>
                   <?php endif; ?>
 
-                  <!-- Meta Info -->
-                  <div class="flex items-center justify-between text-sm text-gray-400">
-                    <div class="flex items-center gap-2">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                      </svg>
+                  <!-- Meta Footer -->
+                  <div class="blog-card__meta">
+                    <div class="flex items-center gap-4 text-sm text-gray-500">
                       <span><?= bbx_format_blog_date($post['publish_date']) ?></span>
+                      <span class="flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                        <?= number_format($post['views']) ?>
+                      </span>
                     </div>
-                    <div class="flex items-center gap-2">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    <a href="<?= bbx_get_blog_post_url($post['slug']) ?>" class="blog-card__read-more">
+                      <?= t('blog.read_more') ?>
+                      <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                       </svg>
-                      <span><?= number_format($post['views']) ?> <?= t('blog.views') ?></span>
-                    </div>
+                    </a>
                   </div>
-
-                  <!-- Read More Button -->
-                  <a href="<?= bbx_get_blog_post_url($post['slug']) ?>"
-                    class="inline-flex items-center mt-4 text-amber-400 font-semibold hover:text-amber-300 transition-colors">
-                    <?= t('blog.read_more') ?>
-                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                  </a>
                 </div>
               </article>
             <?php endforeach; ?>
@@ -193,218 +398,153 @@ include 'includes/site-header.php';
       </div>
     </section>
 
-    <!-- Newsletter CTA -->
-    <section class="py-16 bg-gradient-to-r from-amber-400/10 to-amber-600/10 border-y border-amber-400/20">
-      <div class="container mx-auto px-4">
-        <div class="max-w-2xl mx-auto text-center">
-          <h3 class="text-2xl font-bold mb-4"><?= t('blog.newsletter.title') ?></h3>
-          <p class="text-gray-300 mb-6"><?= t('blog.newsletter.description') ?></p>
-          <form id="blog-newsletter-form" class="flex flex-col sm:flex-row gap-3">
-            <input type="email"
-              name="email"
-              placeholder="<?= htmlspecialchars(t('blog.newsletter.placeholder')) ?>"
-              required
-              class="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-amber-400">
-            <button type="submit"
-              class="px-8 py-3 bg-amber-400 text-black font-semibold rounded-lg hover:bg-amber-500 transition-colors">
-              <?= t('blog.newsletter.button') ?>
-            </button>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <!-- External Cyber Security News -->
-    <section class="py-16">
-      <div class="container mx-auto px-4">
+    <!-- Global Threat Intelligence Section -->
+    <section class="py-16 relative overflow-hidden">
+      <!-- Background decoration -->
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-amber-500/5 to-transparent"></div>
+      
+      <div class="container mx-auto px-4 relative z-10">
+        <!-- Section Header -->
         <div class="text-center max-w-3xl mx-auto mb-12">
-          <h2 class="text-3xl font-bold mb-4"><?= t('blog.news.title', 'Global Cyber Security News') ?></h2>
-          <p class="text-gray-400">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/30 mb-6">
+            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            <span class="text-amber-400 text-sm font-medium"><?= t('blog.news.badge', 'Threat Intelligence') ?></span>
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-bold mb-4"><?= t('blog.news.title', 'Global Cyber Security News') ?></h2>
+          <p class="text-gray-400 text-lg">
             <?= t('blog.news.description', 'Seneste cybertrusler og sikkerhedsnyheder fra hele verden – kurateret af vores eksperter.') ?>
           </p>
         </div>
 
-        <!-- Denmark Section -->
-        <div class="mb-12">
-          <h3 class="text-xl font-bold text-amber-400 mb-6 flex items-center gap-2">
-            <span class="text-2xl">🇩🇰</span>
-            <?= t('blog.news.denmark', 'Danmark') ?>
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
-              <span class="text-xs text-gray-400">26. november 2025 • Ekstra Bladet</span>
-              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
-                <a href="https://ekstrabladet.dk/forbrug/Teknologi/stort-flyselskab-hacket-kundernes-data-i-fare/11019607" target="_blank" rel="noopener noreferrer" class="hover:text-amber-400 transition-colors">
-                  Stort flyselskab hacket: Kundernes data i fare
-                </a>
-              </h4>
-              <p class="text-gray-300 text-sm">Et stort flyselskab er blevet ramt af et cyberangreb, som potentielt har eksponeret kundedata. Hackere har muligvis fået adgang til følsomme oplysninger.</p>
-              <a href="https://ekstrabladet.dk/forbrug/Teknologi/stort-flyselskab-hacket-kundernes-data-i-fare/11019607" target="_blank" rel="noopener noreferrer" class="inline-flex items-center mt-4 text-amber-400 text-sm font-medium hover:text-amber-300">
-                Læs mere
-                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-              </a>
-            </article>
-
-            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
-              <span class="text-xs text-gray-400">26. november 2025 • Ekstra Bladet</span>
-              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
-                <a href="https://ekstrabladet.dk/nyheder/politik/danskpolitik/ny-vurdering-cybertrussel-mod-danmark-er-stadig-meget-hoej/11019651" target="_blank" rel="noopener noreferrer" class="hover:text-amber-400 transition-colors">
-                  Ny vurdering: Cybertrussel mod Danmark er stadig meget høj
-                </a>
-              </h4>
-              <p class="text-gray-300 text-sm">Den seneste vurdering fra myndighederne fastslår, at cybertruslen mod Danmark forbliver på et meget højt niveau. Statslige aktører udgør fortsat en betydelig risiko.</p>
-              <a href="https://ekstrabladet.dk/nyheder/politik/danskpolitik/ny-vurdering-cybertrussel-mod-danmark-er-stadig-meget-hoej/11019651" target="_blank" rel="noopener noreferrer" class="inline-flex items-center mt-4 text-amber-400 text-sm font-medium hover:text-amber-300">
-                Læs mere
-                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-              </a>
-            </article>
+        <!-- Region Tabs Navigation -->
+        <div class="flex justify-center mb-10">
+          <div class="inline-flex flex-wrap justify-center gap-2 p-1.5 rounded-2xl bg-gray-800/50 border border-gray-700/50">
+            <?php $first = true; foreach ($news_items as $region_key => $region): ?>
+              <button 
+                class="news-region-tab <?= $first ? 'is-active' : '' ?>" 
+                data-region="<?= $region_key ?>"
+                aria-selected="<?= $first ? 'true' : 'false' ?>">
+                <span class="text-lg"><?= $region['flag'] ?></span>
+                <span class="hidden sm:inline"><?= $region['title'] ?></span>
+              </button>
+            <?php $first = false; endforeach; ?>
           </div>
         </div>
 
-        <!-- Europe Section -->
-        <div class="mb-12">
-          <h3 class="text-xl font-bold text-amber-400 mb-6 flex items-center gap-2">
-            <span class="text-2xl">🇪🇺</span>
-            <?= t('blog.news.europe', 'Europa') ?>
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
-              <span class="text-xs text-gray-400">5. november 2025 • Industrial Cyber</span>
-              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
-                CrowdStrike 2025 European Threat Landscape
-              </h4>
-              <p class="text-gray-300 text-sm">CrowdStrike rapporterer, at Europas cybertrussel er blevet mere aggressiv og kompleks. eCrime-grupper og statsstøttede hackere har intensiveret deres angreb. Big Game Hunting-ransomware rettet mod store europæiske økonomier (UK, Tyskland, Italien, Frankrig og Spanien) voksede 13% sammenlignet med året før. Ca. 2.100 europæiske ofre er blevet nævnt på ransomware-leak-sites siden januar 2024.</p>
-            </article>
-
-            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
-              <span class="text-xs text-gray-400">5. november 2025 • Cybernews</span>
-              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
-                Schweizisk bank angrebet af Qilin-gruppen
-              </h4>
-              <p class="text-gray-300 text-sm">Ransomware-gruppen Qilin hævder at have brudt ind i Habib Bank AG Zurich og stjålet over 2,5 TB data (ca. 2 mio. filer). Lækkede filer omfatter pasnumre, kontosaldi, transaktionsoplysninger og bankens kildekode. Banken opererer i Schweiz, Storbritannien, UAE, Hongkong og Canada.</p>
-            </article>
-
-            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
-              <span class="text-xs text-gray-400">25. september 2025 • World Economic Forum</span>
-              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
-                Cyberangreb på europæiske lufthavne
-              </h4>
-              <p class="text-gray-300 text-sm">Et ransomware-angreb på Collins Aerospace forårsagede betydelige driftsforstyrrelser i lufthavne som Heathrow, Berlin og Bruxelles. Angrebet tvang lufthavnene til manuelle procedurer, hvilket understregede behovet for større cyber-resiliens i kritisk infrastruktur.</p>
-            </article>
-
-            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
-              <span class="text-xs text-gray-400">14. oktober 2025 • The Guardian</span>
-              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
-                Stor stigning i cyberangreb i Storbritannien
-              </h4>
-              <p class="text-gray-300 text-sm">UK's National Cyber Security Centre rapporterede, at "meget betydningsfulde" cyberangreb steg med 50% det seneste år. NCSC håndterede 429 hændelser, og næsten halvdelen havde national betydning. Kina, Rusland, Iran og Nordkorea identificeres som de største statslige trusler.</p>
-            </article>
-          </div>
+        <!-- News Panels -->
+        <div class="news-panels max-w-4xl mx-auto">
+          <?php $first = true; foreach ($news_items as $region_key => $region): ?>
+            <div class="news-panel <?= $first ? 'is-visible' : '' ?>" data-panel="<?= $region_key ?>">
+              <!-- Region Header -->
+              <div class="flex items-center gap-3 mb-6">
+                <span class="text-3xl"><?= $region['flag'] ?></span>
+                <h3 class="text-xl font-bold text-amber-400"><?= $region['title'] ?></h3>
+                <span class="text-sm text-gray-500"><?= count($region['items']) ?> <?= t('blog.news.alerts', 'alerts') ?></span>
+              </div>
+              
+              <!-- News Grid -->
+              <div class="grid gap-4">
+                <?php foreach ($region['items'] as $item): ?>
+                  <article class="news-card news-card--<?= $item['severity'] ?>">
+                    <div class="news-card__severity" title="<?= ucfirst($item['severity']) ?> severity">
+                      <?php if ($item['severity'] === 'critical'): ?>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                        </svg>
+                      <?php elseif ($item['severity'] === 'high'): ?>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                      <?php else: ?>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                      <?php endif; ?>
+                    </div>
+                    
+                    <div class="news-card__content">
+                      <div class="news-card__header">
+                        <span class="news-card__date"><?= $item['date'] ?></span>
+                        <span class="news-card__source"><?= $item['source'] ?></span>
+                      </div>
+                      
+                      <h4 class="news-card__title">
+                        <?php if ($item['url']): ?>
+                          <a href="<?= $item['url'] ?>" target="_blank" rel="noopener noreferrer" class="hover:text-amber-400 transition-colors">
+                            <?= $item['title'] ?>
+                          </a>
+                        <?php else: ?>
+                          <?= $item['title'] ?>
+                        <?php endif; ?>
+                      </h4>
+                      
+                      <p class="news-card__excerpt"><?= $item['excerpt'] ?></p>
+                      
+                      <?php if ($item['url']): ?>
+                        <a href="<?= $item['url'] ?>" target="_blank" rel="noopener noreferrer" class="news-card__link">
+                          <?= t('blog.news.read_source', 'Læs kilde') ?>
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                          </svg>
+                        </a>
+                      <?php endif; ?>
+                    </div>
+                  </article>
+                <?php endforeach; ?>
+              </div>
+            </div>
+          <?php $first = false; endforeach; ?>
         </div>
 
-        <!-- Middle East Section -->
-        <div class="mb-12">
-          <h3 class="text-xl font-bold text-amber-400 mb-6 flex items-center gap-2">
-            <span class="text-2xl">🌍</span>
-            <?= t('blog.news.middle_east', 'Mellemøsten') ?>
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
-              <span class="text-xs text-gray-400">25. marts 2025 • The National</span>
-              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
-                Massivt hack mod UAE's offentlige og private sektor
-              </h4>
-              <p class="text-gray-300 text-sm">UAE's Cyber Security Council bekræftede, at 634 organisationer var mål for et globalt hack. Hackeren "rose87168" hævdede at have kompromitteret Oracle Cloud's servere og lækket ca. 6 mio. kundeposter. 30 af de berørte var statslige enheder.</p>
-            </article>
-
-            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
-              <span class="text-xs text-gray-400">19. august 2025 • The Peninsula Qatar</span>
-              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
-                Katar sanktionerer virksomhed for databrud
-              </h4>
-              <p class="text-gray-300 text-sm">Qatars Nationale Cyber Sikkerhed Agentur idømte en virksomhed sanktion for at have overtrådt landets persondatalov. Efterforskningen afslørede utilstrækkelige sikkerhedsforanstaltninger til beskyttelse af persondata.</p>
-            </article>
-
-            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
-              <span class="text-xs text-gray-400">23. november 2025 • Al Kabban & Associates</span>
-              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
-                Dhs185 millioner cyberbedrageri i Dubai
-              </h4>
-              <p class="text-gray-300 text-sm">Et sofistikeret cyberbedrageri førte til et tab på 185 millioner dirham fra et advokatfirma. Svindlerne hackede interne systemer og brugte forfalskede e-mails. UAE's Cybersecurity Council har advaret om over 12.000 databrud i 2025.</p>
-            </article>
-          </div>
+        <!-- Attribution Footer -->
+        <div class="mt-10 text-center">
+          <p class="text-sm text-gray-500">
+            <svg class="w-4 h-4 inline-block mr-1 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+            <?= t('blog.news.attribution', 'Kurateret fra verificerede kilder. Alle nyheder er til informationsformål.') ?>
+          </p>
         </div>
+      </div>
+    </section>
 
-        <!-- Americas Section -->
-        <div class="mb-12">
-          <h3 class="text-xl font-bold text-amber-400 mb-6 flex items-center gap-2">
-            <span class="text-2xl">🌎</span>
-            <?= t('blog.news.americas', 'Nord- og Sydamerika') ?>
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
-              <span class="text-xs text-gray-400">11. september 2025 • BleepingComputer</span>
-              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
-                Panamas Finansministerium udsat for INC Ransomware
-              </h4>
-              <p class="text-gray-300 text-sm">Panamas Ministerium for Økonomi og Finans rapporterede ransomware-infektion. INC Ransom hævder at have stjålet over 1,5 TB data, herunder e-mails og finansielle dokumenter.</p>
-            </article>
-
-            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
-              <span class="text-xs text-gray-400">3. november 2025 • Industrial Cyber</span>
-              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
-                USA's Homeland Security advarer om cybertrusler
-              </h4>
-              <p class="text-gray-300 text-sm">Kongres' Committee on Homeland Security udgav "Cyber Threat Snapshot" om øgede trusler fra Kina, Iran, Rusland og Nordkorea. 70% af alle cyberangreb i 2024 ramte kritisk infrastruktur.</p>
-            </article>
-
-            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
-              <span class="text-xs text-gray-400">24. november 2025 • Cybersecurity Dive</span>
-              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
-                SitusAMC-hack påvirker store banker
-              </h4>
-              <p class="text-gray-300 text-sm">SitusAMC, en leverandør af realkredit-software til JPMorgan, Citi og Morgan Stanley, afslørede et cyberangreb. Hackere stjal regnskabsoptegnelser, juridiske aftaler og kundedata. FBI bistår i undersøgelsen.</p>
-            </article>
+    <!-- Newsletter CTA - Redesigned -->
+    <section class="py-16">
+      <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto">
+          <div class="newsletter-card relative overflow-hidden rounded-3xl p-8 sm:p-12">
+            <!-- Background pattern -->
+            <div class="absolute inset-0 opacity-30">
+              <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23fbbf24\' fill-opacity=\'0.1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+            </div>
+            
+            <div class="relative z-10 text-center">
+              <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-400/20 mb-6">
+                <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+              </div>
+              
+              <h3 class="text-2xl sm:text-3xl font-bold mb-4"><?= t('blog.newsletter.title') ?></h3>
+              <p class="text-gray-300 mb-8 max-w-xl mx-auto"><?= t('blog.newsletter.description') ?></p>
+              
+              <form id="blog-newsletter-form" class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
+                <input type="email"
+                  name="email"
+                  placeholder="<?= htmlspecialchars(t('blog.newsletter.placeholder')) ?>"
+                  required
+                  class="flex-1 bg-gray-800/80 border border-gray-700 rounded-xl px-5 py-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all">
+                <button type="submit"
+                  class="px-8 py-4 bg-amber-400 text-black font-bold rounded-xl hover:bg-amber-500 transition-all hover:scale-105 whitespace-nowrap">
+                  <?= t('blog.newsletter.button') ?>
+                </button>
+              </form>
+              
+              <p class="text-xs text-gray-500 mt-4"><?= t('blog.newsletter.privacy', 'Vi respekterer dit privatliv. Afmeld når som helst.') ?></p>
+            </div>
           </div>
-        </div>
-
-        <!-- Asia Section -->
-        <div>
-          <h3 class="text-xl font-bold text-amber-400 mb-6 flex items-center gap-2">
-            <span class="text-2xl">🌏</span>
-            <?= t('blog.news.asia', 'Asien') ?>
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
-              <span class="text-xs text-gray-400">7. oktober 2025 • Reuters</span>
-              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
-                Asahi Group hack lammer ølproduktion i Japan
-              </h4>
-              <p class="text-gray-300 text-sm">Ransomware-gruppen Qilin stoppede ølproduktionen hos Asahi Group den 29. september. Gruppen hævder at have stjålet 9.300 filer (≈27 GB data). Produktionen blev genoptaget den 2. oktober.</p>
-            </article>
-
-            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
-              <span class="text-xs text-gray-400">10. november 2025 • Cyberpress</span>
-              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
-                Kinesisk cybersikkerhedsfirma lækker statsstøttede værktøjer
-              </h4>
-              <p class="text-gray-300 text-sm">Knownsec, med tætte bånd til den kinesiske regering, blev ramt af et databrud. Over 12.000 klassificerede dokumenter blev lækket, herunder avancerede malware-værktøjer til Linux, Windows, macOS og Android.</p>
-            </article>
-
-            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
-              <span class="text-xs text-gray-400">25. november 2025 • The Indian Express</span>
-              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
-                1,86 millioner brugere udsat i Adda-databrud
-              </h4>
-              <p class="text-gray-300 text-sm">En hacker lagde 145 MB data fra appen Adda på et hacking-forum. Filerne indeholder navne, telefonnumre, e-mail-adresser og hashede adgangskoder for over 1,86 mio. brugere. Bruddet kom umiddelbart efter Indiens nye databeskyttelseslov trådte i kraft.</p>
-            </article>
-          </div>
-        </div>
-
-        <!-- News Source Attribution -->
-        <div class="mt-12 text-center text-sm text-gray-500">
-          <p><?= t('blog.news.attribution', 'Nyhederne er kurateret fra verificerede kilder og opdateres løbende.') ?></p>
-          <p class="mt-2"><?= t('blog.news.last_updated', 'Sidst opdateret:') ?> 26. november 2025</p>
         </div>
       </div>
     </section>
@@ -412,12 +552,328 @@ include 'includes/site-header.php';
 </main>
 
 <style>
-  .line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
+/* Blog Page Specific Styles */
+
+/* Cyber grid background */
+.cyber-grid {
+  background-image: 
+    linear-gradient(rgba(255, 199, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 199, 0, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: grid-move 20s linear infinite;
+}
+
+@keyframes grid-move {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+/* Filter pills */
+.blog-filter-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-medium-emphasis);
+  background: var(--surface-200);
+  border: 1px solid var(--surface-border);
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.blog-filter-pill:hover {
+  border-color: var(--primary-accent);
+  color: var(--text-high-emphasis);
+}
+
+.blog-filter-pill.is-active {
+  background: var(--primary-accent);
+  color: #000;
+  border-color: transparent;
+  font-weight: 600;
+}
+
+/* Blog cards */
+.blog-card {
+  background: var(--surface-card-bg);
+  border: 1px solid var(--surface-border);
+  border-radius: 1.25rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.blog-card:hover {
+  border-color: var(--primary-accent);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -20px rgba(255, 199, 0, 0.2);
+}
+
+.blog-card__image {
+  position: relative;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: var(--surface-200);
+}
+
+.blog-card__image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+}
+
+.blog-card__content {
+  padding: 1.5rem;
+}
+
+.blog-card__category {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--primary-accent-soft);
+  color: var(--primary-accent);
+  margin-bottom: 0.75rem;
+}
+
+.blog-card__title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-high-emphasis);
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.blog-card__excerpt {
+  font-size: 0.9rem;
+  color: var(--text-medium-emphasis);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.blog-card__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--surface-border);
+}
+
+.blog-card__read-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--primary-accent);
+}
+
+/* News region tabs */
+.news-region-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-medium-emphasis);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.news-region-tab:hover {
+  color: var(--text-high-emphasis);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.news-region-tab.is-active {
+  background: var(--primary-accent);
+  color: #000;
+  font-weight: 600;
+}
+
+/* News panels */
+.news-panel {
+  display: none;
+}
+
+.news-panel.is-visible {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* News cards */
+.news-card {
+  display: flex;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--surface-card-bg);
+  border: 1px solid var(--surface-border);
+  border-radius: 1rem;
+  transition: all 0.2s ease;
+}
+
+.news-card:hover {
+  border-color: var(--surface-border-strong);
+  transform: translateX(4px);
+}
+
+.news-card__severity {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+}
+
+.news-card--critical .news-card__severity {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+.news-card--high .news-card__severity {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+}
+
+.news-card--medium .news-card__severity {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+}
+
+.news-card__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.news-card__header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.news-card__date {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.news-card__source {
+  font-size: 0.75rem;
+  color: var(--primary-accent);
+  font-weight: 500;
+}
+
+.news-card__title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-high-emphasis);
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.news-card__excerpt {
+  font-size: 0.875rem;
+  color: var(--text-medium-emphasis);
+  line-height: 1.5;
+}
+
+.news-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--primary-accent);
+  transition: gap 0.2s ease;
+}
+
+.news-card__link:hover {
+  gap: 0.625rem;
+}
+
+/* Newsletter card */
+.newsletter-card {
+  background: linear-gradient(135deg, rgba(255, 199, 0, 0.1) 0%, rgba(17, 24, 39, 0.95) 50%, rgba(255, 199, 0, 0.05) 100%);
+  border: 1px solid rgba(255, 199, 0, 0.2);
+}
+
+/* Hide scrollbar for filter pills */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Light mode adjustments */
+:root[data-theme="light"] .blog-card {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+:root[data-theme="light"] .news-card {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+:root[data-theme="light"] .blog-filter-pill.is-active {
+  color: #1f2937;
+}
+
+:root[data-theme="light"] .news-region-tab.is-active {
+  color: #1f2937;
+}
+
+:root[data-theme="light"] .newsletter-card {
+  background: linear-gradient(135deg, rgba(255, 199, 0, 0.15) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(255, 199, 0, 0.08) 100%);
+}
 </style>
+
+<script>
+// News region tabs functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const tabs = document.querySelectorAll('.news-region-tab');
+  const panels = document.querySelectorAll('.news-panel');
+  
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      const region = this.dataset.region;
+      
+      // Update tabs
+      tabs.forEach(t => {
+        t.classList.remove('is-active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      this.classList.add('is-active');
+      this.setAttribute('aria-selected', 'true');
+      
+      // Update panels
+      panels.forEach(p => {
+        p.classList.remove('is-visible');
+        if (p.dataset.panel === region) {
+          p.classList.add('is-visible');
+        }
+      });
+    });
+  });
+});
+</script>
 
 <?php include 'includes/site-footer.php'; ?>

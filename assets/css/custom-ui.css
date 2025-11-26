@@ -516,12 +516,15 @@ body.alphabot-locked {
   width: auto;
   max-width: 180px;
   object-fit: contain;
-  display: none; /* Hidden by default, theme rules show correct one */
 }
 
-.header-logo--white,
-.header-logo--black {
-  display: none; /* Ensure both hidden by default */
+/* Default state (no JS or data-theme="dark"): show white logo only */
+.header-logo.header-logo--white {
+  display: block;
+}
+
+.header-logo.header-logo--black {
+  display: none;
 }
 
 @media (min-width: 640px) {
@@ -537,22 +540,20 @@ body.alphabot-locked {
 }
 
 /* Dark theme: show WHITE logo, hide black logo */
-:root[data-theme="dark"] .header-logo--white,
-:root:not([data-theme]) .header-logo--white {
+:root[data-theme="dark"] .header-logo.header-logo--white {
   display: block;
 }
 
-:root[data-theme="dark"] .header-logo--black,
-:root:not([data-theme]) .header-logo--black {
+:root[data-theme="dark"] .header-logo.header-logo--black {
   display: none;
 }
 
 /* Light theme: show BLACK logo, hide white logo */
-:root[data-theme="light"] .header-logo--black {
+:root[data-theme="light"] .header-logo.header-logo--black {
   display: block;
 }
 
-:root[data-theme="light"] .header-logo--white {
+:root[data-theme="light"] .header-logo.header-logo--white {
   display: none;
 }
 

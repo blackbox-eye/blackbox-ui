@@ -41,11 +41,18 @@ if (!in_array($action, $validActions, true)) {
   exit;
 }
 
-// Log consent event (no personal data)
+// Return response immediately for fast TTFB (sub-1ms target)
+http_response_code(200);
+echo json_encode(['success' => true]);
+
+// Flush output to client before logging (non-blocking)
+if (function_exists('fastcgi_finish_request')) {
+  fastcgi_finish_request();
+}
+ignore_user_abort(true);
+
+// Log consent event (no personal data) - runs after response sent
 bbx_log_consent($action, [
   'consent_type' => $level,
   'categories' => $level === 'all' ? ['essential', 'analytics', 'marketing'] : ['essential'],
 ]);
-
-http_response_code(200);
-echo json_encode(['success' => true]);

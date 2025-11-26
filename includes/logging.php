@@ -151,6 +151,8 @@ function bbx_log(string $channel, int $level, string $event, array $context = []
         return;
     }
 
+    // Non-blocking write - continue even if client disconnects
+    ignore_user_abort(true);
     @file_put_contents($logFile, $jsonLine . PHP_EOL, FILE_APPEND | LOCK_EX);
 }
 

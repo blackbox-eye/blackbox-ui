@@ -232,11 +232,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     .logo-image {
-      width: 100px;
-      height: 100px;
-      margin: 0 auto 1.25rem;
+      width: 140px;
+      height: auto;
+      margin: 0 auto 1.5rem;
       object-fit: contain;
-      filter: drop-shadow(0 4px 12px rgba(212, 175, 55, 0.2));
+      filter: drop-shadow(0 4px 20px rgba(212, 175, 55, 0.25));
     }
 
     .login-title {
@@ -430,7 +430,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="login-card">
       <!-- Logo & Header -->
       <div class="logo-section">
-        <img src="assets/logo.png" alt="Blackbox EYE" class="logo-image">
+        <img src="assets/greyeeye_logo_transparent.png" alt="GreyEYE Intelligence" class="logo-image">
         <div class="status-badge">
           <span class="status-dot"></span>
           <span>Sikker forbindelse</span>

@@ -516,6 +516,12 @@ body.alphabot-locked {
   width: auto;
   max-width: 180px;
   object-fit: contain;
+  display: none; /* Hidden by default, theme rules show correct one */
+}
+
+.header-logo--white,
+.header-logo--black {
+  display: none; /* Ensure both hidden by default */
 }
 
 @media (min-width: 640px) {

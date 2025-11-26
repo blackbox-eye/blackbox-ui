@@ -322,7 +322,7 @@ if (!empty($disable_alphabot)) {
                     </nav>
                     <div class="header-actions">
                         <button type="button"
-                            class="theme-toggle"
+                            class="theme-toggle hidden lg:inline-flex"
                             data-theme-toggle
                             data-theme-label-dark="<?= htmlspecialchars(t('header.theme.label_dark', 'Skift til mørkt tema')) ?>"
                             data-theme-label-light="<?= htmlspecialchars(t('header.theme.label_light', 'Skift til lyst tema')) ?>"

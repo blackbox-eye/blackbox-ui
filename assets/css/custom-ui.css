@@ -777,9 +777,9 @@ textarea.field-error:focus {
 #mobile-menu-overlay { opacity:0; transition:opacity .3s ease-out; pointer-events:none; }
 #mobile-menu-overlay.active { opacity:1; pointer-events:auto; }
 
-/* Hide header theme toggle when mobile menu is open (smaller screens) */
+/* Hide header theme toggle on mobile/tablet - only show in burger menu */
 @media (max-width: 1023px) {
-  body.mobile-menu-open .header-actions > .theme-toggle:not(.theme-toggle--mobile) {
+  .header-actions > .theme-toggle:not(.theme-toggle--mobile) {
     display: none !important;
   }
 }

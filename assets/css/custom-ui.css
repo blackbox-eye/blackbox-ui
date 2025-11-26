@@ -530,23 +530,23 @@ body.alphabot-locked {
   }
 }
 
-/* Dark theme: show white logo (--light class), hide black logo (--dark class) */
-:root[data-theme="dark"] .header-logo--light,
-:root:not([data-theme]) .header-logo--light {
+/* Dark theme: show WHITE logo, hide black logo */
+:root[data-theme="dark"] .header-logo--white,
+:root:not([data-theme]) .header-logo--white {
   display: block;
 }
 
-:root[data-theme="dark"] .header-logo--dark,
-:root:not([data-theme]) .header-logo--dark {
+:root[data-theme="dark"] .header-logo--black,
+:root:not([data-theme]) .header-logo--black {
   display: none;
 }
 
-/* Light theme: show black logo (--dark class), hide white logo (--light class) */
-:root[data-theme="light"] .header-logo--dark {
+/* Light theme: show BLACK logo, hide white logo */
+:root[data-theme="light"] .header-logo--black {
   display: block;
 }
 
-:root[data-theme="light"] .header-logo--light {
+:root[data-theme="light"] .header-logo--white {
   display: none;
 }
 

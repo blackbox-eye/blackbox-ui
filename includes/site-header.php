@@ -298,19 +298,15 @@ if (!empty($disable_alphabot)) {
                     <div class="header-brand">
                         <a href="/" class="header-logo-link" aria-label="<?= htmlspecialchars(t('header.menu.home')) ?>">
                             <!-- White logo - visible on dark backgrounds (dark theme) -->
-                            <img src="/assets/Logo_BlackboxEYE_HVID.png"
+                            <img src="/assets/Logo-blackbox-hvid.png"
                                 alt="BLACKBOX EYE™"
                                 class="header-logo header-logo--white"
-                                loading="lazy"
-                                width="220"
-                                height="50">
+                                loading="lazy">
                             <!-- Black logo - visible on light backgrounds (light theme) -->
-                            <img src="/assets/Logo_for BlackboxEYE_SORT.png"
+                            <img src="/assets/blackbox_logo_black.png"
                                 alt="BLACKBOX EYE™"
                                 class="header-logo header-logo--black"
-                                loading="lazy"
-                                width="220"
-                                height="50">
+                                loading="lazy">
                         </a>
                     </div>
                     <nav class="main-nav header-nav hidden lg:block" aria-label="<?= htmlspecialchars(t('header.desktop.primary_navigation', 'Primær navigation')) ?>">

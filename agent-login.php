@@ -269,7 +269,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <main class="login-card">
     <div class="logo-section">
-      <img src="assets/Logo_for BlackboxEYE_SORT.png" alt="BLACKBOX EYE™" class="logo-img" loading="lazy">
+      <img src="assets/Logo-blackbox-hvid.png" alt="BLACKBOX EYE™" class="logo-img" loading="lazy">
       <h1 class="title">Sikker adgang</h1>
       <p class="subtitle">BLACKBOX EYE™ operatør-portal</p>
     </div> <?php if ($error): ?>

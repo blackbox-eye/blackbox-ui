@@ -213,6 +213,201 @@ include 'includes/site-header.php';
         </div>
       </div>
     </section>
+
+    <!-- External Cyber Security News -->
+    <section class="py-16">
+      <div class="container mx-auto px-4">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+          <h2 class="text-3xl font-bold mb-4"><?= t('blog.news.title', 'Global Cyber Security News') ?></h2>
+          <p class="text-gray-400">
+            <?= t('blog.news.description', 'Seneste cybertrusler og sikkerhedsnyheder fra hele verden – kurateret af vores eksperter.') ?>
+          </p>
+        </div>
+
+        <!-- Denmark Section -->
+        <div class="mb-12">
+          <h3 class="text-xl font-bold text-amber-400 mb-6 flex items-center gap-2">
+            <span class="text-2xl">🇩🇰</span>
+            <?= t('blog.news.denmark', 'Danmark') ?>
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
+              <span class="text-xs text-gray-400">26. november 2025 • Ekstra Bladet</span>
+              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
+                <a href="https://ekstrabladet.dk/forbrug/Teknologi/stort-flyselskab-hacket-kundernes-data-i-fare/11019607" target="_blank" rel="noopener noreferrer" class="hover:text-amber-400 transition-colors">
+                  Stort flyselskab hacket: Kundernes data i fare
+                </a>
+              </h4>
+              <p class="text-gray-300 text-sm">Et stort flyselskab er blevet ramt af et cyberangreb, som potentielt har eksponeret kundedata. Hackere har muligvis fået adgang til følsomme oplysninger.</p>
+              <a href="https://ekstrabladet.dk/forbrug/Teknologi/stort-flyselskab-hacket-kundernes-data-i-fare/11019607" target="_blank" rel="noopener noreferrer" class="inline-flex items-center mt-4 text-amber-400 text-sm font-medium hover:text-amber-300">
+                Læs mere
+                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+              </a>
+            </article>
+
+            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
+              <span class="text-xs text-gray-400">26. november 2025 • Ekstra Bladet</span>
+              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
+                <a href="https://ekstrabladet.dk/nyheder/politik/danskpolitik/ny-vurdering-cybertrussel-mod-danmark-er-stadig-meget-hoej/11019651" target="_blank" rel="noopener noreferrer" class="hover:text-amber-400 transition-colors">
+                  Ny vurdering: Cybertrussel mod Danmark er stadig meget høj
+                </a>
+              </h4>
+              <p class="text-gray-300 text-sm">Den seneste vurdering fra myndighederne fastslår, at cybertruslen mod Danmark forbliver på et meget højt niveau. Statslige aktører udgør fortsat en betydelig risiko.</p>
+              <a href="https://ekstrabladet.dk/nyheder/politik/danskpolitik/ny-vurdering-cybertrussel-mod-danmark-er-stadig-meget-hoej/11019651" target="_blank" rel="noopener noreferrer" class="inline-flex items-center mt-4 text-amber-400 text-sm font-medium hover:text-amber-300">
+                Læs mere
+                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+              </a>
+            </article>
+          </div>
+        </div>
+
+        <!-- Europe Section -->
+        <div class="mb-12">
+          <h3 class="text-xl font-bold text-amber-400 mb-6 flex items-center gap-2">
+            <span class="text-2xl">🇪🇺</span>
+            <?= t('blog.news.europe', 'Europa') ?>
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
+              <span class="text-xs text-gray-400">5. november 2025 • Industrial Cyber</span>
+              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
+                CrowdStrike 2025 European Threat Landscape
+              </h4>
+              <p class="text-gray-300 text-sm">CrowdStrike rapporterer, at Europas cybertrussel er blevet mere aggressiv og kompleks. eCrime-grupper og statsstøttede hackere har intensiveret deres angreb. Big Game Hunting-ransomware rettet mod store europæiske økonomier (UK, Tyskland, Italien, Frankrig og Spanien) voksede 13% sammenlignet med året før. Ca. 2.100 europæiske ofre er blevet nævnt på ransomware-leak-sites siden januar 2024.</p>
+            </article>
+
+            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
+              <span class="text-xs text-gray-400">5. november 2025 • Cybernews</span>
+              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
+                Schweizisk bank angrebet af Qilin-gruppen
+              </h4>
+              <p class="text-gray-300 text-sm">Ransomware-gruppen Qilin hævder at have brudt ind i Habib Bank AG Zurich og stjålet over 2,5 TB data (ca. 2 mio. filer). Lækkede filer omfatter pasnumre, kontosaldi, transaktionsoplysninger og bankens kildekode. Banken opererer i Schweiz, Storbritannien, UAE, Hongkong og Canada.</p>
+            </article>
+
+            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
+              <span class="text-xs text-gray-400">25. september 2025 • World Economic Forum</span>
+              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
+                Cyberangreb på europæiske lufthavne
+              </h4>
+              <p class="text-gray-300 text-sm">Et ransomware-angreb på Collins Aerospace forårsagede betydelige driftsforstyrrelser i lufthavne som Heathrow, Berlin og Bruxelles. Angrebet tvang lufthavnene til manuelle procedurer, hvilket understregede behovet for større cyber-resiliens i kritisk infrastruktur.</p>
+            </article>
+
+            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
+              <span class="text-xs text-gray-400">14. oktober 2025 • The Guardian</span>
+              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
+                Stor stigning i cyberangreb i Storbritannien
+              </h4>
+              <p class="text-gray-300 text-sm">UK's National Cyber Security Centre rapporterede, at "meget betydningsfulde" cyberangreb steg med 50% det seneste år. NCSC håndterede 429 hændelser, og næsten halvdelen havde national betydning. Kina, Rusland, Iran og Nordkorea identificeres som de største statslige trusler.</p>
+            </article>
+          </div>
+        </div>
+
+        <!-- Middle East Section -->
+        <div class="mb-12">
+          <h3 class="text-xl font-bold text-amber-400 mb-6 flex items-center gap-2">
+            <span class="text-2xl">🌍</span>
+            <?= t('blog.news.middle_east', 'Mellemøsten') ?>
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
+              <span class="text-xs text-gray-400">25. marts 2025 • The National</span>
+              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
+                Massivt hack mod UAE's offentlige og private sektor
+              </h4>
+              <p class="text-gray-300 text-sm">UAE's Cyber Security Council bekræftede, at 634 organisationer var mål for et globalt hack. Hackeren "rose87168" hævdede at have kompromitteret Oracle Cloud's servere og lækket ca. 6 mio. kundeposter. 30 af de berørte var statslige enheder.</p>
+            </article>
+
+            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
+              <span class="text-xs text-gray-400">19. august 2025 • The Peninsula Qatar</span>
+              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
+                Katar sanktionerer virksomhed for databrud
+              </h4>
+              <p class="text-gray-300 text-sm">Qatars Nationale Cyber Sikkerhed Agentur idømte en virksomhed sanktion for at have overtrådt landets persondatalov. Efterforskningen afslørede utilstrækkelige sikkerhedsforanstaltninger til beskyttelse af persondata.</p>
+            </article>
+
+            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
+              <span class="text-xs text-gray-400">23. november 2025 • Al Kabban & Associates</span>
+              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
+                Dhs185 millioner cyberbedrageri i Dubai
+              </h4>
+              <p class="text-gray-300 text-sm">Et sofistikeret cyberbedrageri førte til et tab på 185 millioner dirham fra et advokatfirma. Svindlerne hackede interne systemer og brugte forfalskede e-mails. UAE's Cybersecurity Council har advaret om over 12.000 databrud i 2025.</p>
+            </article>
+          </div>
+        </div>
+
+        <!-- Americas Section -->
+        <div class="mb-12">
+          <h3 class="text-xl font-bold text-amber-400 mb-6 flex items-center gap-2">
+            <span class="text-2xl">🌎</span>
+            <?= t('blog.news.americas', 'Nord- og Sydamerika') ?>
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
+              <span class="text-xs text-gray-400">11. september 2025 • BleepingComputer</span>
+              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
+                Panamas Finansministerium udsat for INC Ransomware
+              </h4>
+              <p class="text-gray-300 text-sm">Panamas Ministerium for Økonomi og Finans rapporterede ransomware-infektion. INC Ransom hævder at have stjålet over 1,5 TB data, herunder e-mails og finansielle dokumenter.</p>
+            </article>
+
+            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
+              <span class="text-xs text-gray-400">3. november 2025 • Industrial Cyber</span>
+              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
+                USA's Homeland Security advarer om cybertrusler
+              </h4>
+              <p class="text-gray-300 text-sm">Kongres' Committee on Homeland Security udgav "Cyber Threat Snapshot" om øgede trusler fra Kina, Iran, Rusland og Nordkorea. 70% af alle cyberangreb i 2024 ramte kritisk infrastruktur.</p>
+            </article>
+
+            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
+              <span class="text-xs text-gray-400">24. november 2025 • Cybersecurity Dive</span>
+              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
+                SitusAMC-hack påvirker store banker
+              </h4>
+              <p class="text-gray-300 text-sm">SitusAMC, en leverandør af realkredit-software til JPMorgan, Citi og Morgan Stanley, afslørede et cyberangreb. Hackere stjal regnskabsoptegnelser, juridiske aftaler og kundedata. FBI bistår i undersøgelsen.</p>
+            </article>
+          </div>
+        </div>
+
+        <!-- Asia Section -->
+        <div>
+          <h3 class="text-xl font-bold text-amber-400 mb-6 flex items-center gap-2">
+            <span class="text-2xl">🌏</span>
+            <?= t('blog.news.asia', 'Asien') ?>
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
+              <span class="text-xs text-gray-400">7. oktober 2025 • Reuters</span>
+              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
+                Asahi Group hack lammer ølproduktion i Japan
+              </h4>
+              <p class="text-gray-300 text-sm">Ransomware-gruppen Qilin stoppede ølproduktionen hos Asahi Group den 29. september. Gruppen hævder at have stjålet 9.300 filer (≈27 GB data). Produktionen blev genoptaget den 2. oktober.</p>
+            </article>
+
+            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
+              <span class="text-xs text-gray-400">10. november 2025 • Cyberpress</span>
+              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
+                Kinesisk cybersikkerhedsfirma lækker statsstøttede værktøjer
+              </h4>
+              <p class="text-gray-300 text-sm">Knownsec, med tætte bånd til den kinesiske regering, blev ramt af et databrud. Over 12.000 klassificerede dokumenter blev lækket, herunder avancerede malware-værktøjer til Linux, Windows, macOS og Android.</p>
+            </article>
+
+            <article class="glass-effect rounded-xl p-6 hover:scale-[1.02] transition-transform">
+              <span class="text-xs text-gray-400">25. november 2025 • The Indian Express</span>
+              <h4 class="text-lg font-semibold text-white mt-2 mb-3">
+                1,86 millioner brugere udsat i Adda-databrud
+              </h4>
+              <p class="text-gray-300 text-sm">En hacker lagde 145 MB data fra appen Adda på et hacking-forum. Filerne indeholder navne, telefonnumre, e-mail-adresser og hashede adgangskoder for over 1,86 mio. brugere. Bruddet kom umiddelbart efter Indiens nye databeskyttelseslov trådte i kraft.</p>
+            </article>
+          </div>
+        </div>
+
+        <!-- News Source Attribution -->
+        <div class="mt-12 text-center text-sm text-gray-500">
+          <p><?= t('blog.news.attribution', 'Nyhederne er kurateret fra verificerede kilder og opdateres løbende.') ?></p>
+          <p class="mt-2"><?= t('blog.news.last_updated', 'Sidst opdateret:') ?> 26. november 2025</p>
+        </div>
+      </div>
+    </section>
   <?php endif; ?>
 </main>
 

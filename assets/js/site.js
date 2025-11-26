@@ -879,36 +879,55 @@ document.addEventListener('DOMContentLoaded', () => {
                 return titleEl ? titleEl.textContent.trim() : input.value;
             });
 
-        const validateCalculator = () => {
-            let valid = true;
-            const usersValue = Number.parseInt(usersInput?.value, 10);
-            const endpointsValue = Number.parseInt(endpointsInput?.value, 10);
+        // Parse numeric input, handling spaces and thousand separators
+        const parseNumericInput = (value) => {
+            if (!value || typeof value !== 'string') return NaN;
+            // Remove spaces, dots as thousand separators, keep only digits
+            const cleaned = value.replace(/[\s.]/g, '').replace(/,/g, '');
+            return Number.parseInt(cleaned, 10);
+        };
 
-            // Users validation
+        const validateUsersField = () => {
+            const usersValue = parseNumericInput(usersInput?.value);
+            clearFieldError(usersInput);
+            
             if (Number.isNaN(usersValue) || usersValue < 1) {
                 const message = usersInput?.dataset.minMessage || usersInput?.dataset.requiredMessage || i18n.t('pricing.calculator.validation.users_min', 'Der skal være mindst 1 bruger.');
                 showFieldError(usersInput, message);
-                valid = false;
+                return false;
             } else if (usersValue > 10000) {
                 showFieldError(usersInput, i18n.t('pricing.calculator.validation.users_max', 'Kontakt os direkte for over 10.000 brugere.'));
-                valid = false;
+                return false;
             }
+            return true;
+        };
 
-            // Endpoints validation
+        const validateEndpointsField = () => {
+            const endpointsValue = parseNumericInput(endpointsInput?.value);
+            clearFieldError(endpointsInput);
+            
             if (Number.isNaN(endpointsValue) || endpointsValue < 0) {
                 const message = endpointsInput?.dataset.requiredMessage || i18n.t('pricing.calculator.validation.endpoints_required', 'Angiv antal aktive endpoints.');
                 showFieldError(endpointsInput, message);
-                valid = false;
+                return false;
             } else if (endpointsValue > 50000) {
                 showFieldError(endpointsInput, i18n.t('pricing.calculator.validation.endpoints_max', 'Kontakt os direkte for over 50.000 endpoints.'));
-                valid = false;
+                return false;
             }
-
-            return valid;
+            return true;
         };
 
+        const validateCalculator = () => {
+            const usersValid = validateUsersField();
+            const endpointsValid = validateEndpointsField();
+            return usersValid && endpointsValid;
+        };
+
+        // Clear errors on input, validate on blur
         usersInput?.addEventListener('input', () => clearFieldError(usersInput));
+        usersInput?.addEventListener('blur', validateUsersField);
         endpointsInput?.addEventListener('input', () => clearFieldError(endpointsInput));
+        endpointsInput?.addEventListener('blur', validateEndpointsField);
 
         pricingCalculatorForm.addEventListener('reset', () => {
             window.setTimeout(resetCalculator, 0);
@@ -933,8 +952,8 @@ document.addEventListener('DOMContentLoaded', () => {
             setCalculatorSubmitting(true);
 
             try {
-                const users = Number.parseInt(usersInput?.value, 10) || 0;
-                const endpoints = Number.parseInt(endpointsInput?.value, 10) || 0;
+                const users = parseNumericInput(usersInput?.value) || 0;
+                const endpoints = parseNumericInput(endpointsInput?.value) || 0;
                 const selectedAddons = addonInputs.filter(input => input.checked).map(input => input.value);
 
                 const selectedPlan = planMatrix.find(plan => users <= plan.maxUsers) || planMatrix[planMatrix.length - 1];

@@ -37,15 +37,15 @@ Forbedre ALPHA Interface GUI's udseende, brugeroplevelse (UX), tilgængelighed o
 
 ---
 
-### ⏳ Sprint 2: UX-forbedringer (P1) – **PLANNED**
+### ✅ Sprint 2: UX-forbedringer (P1) – **COMPLETED**
 **Varighed:** 1 uge
-**Status:** Not started
+**Status:** Completed
 
 **Planned Deliverables:**
-- [ ] Breadcrumb navigation
-- [ ] Forbedret mobile menu UX
-- [ ] AI loading states
-- [ ] Sticky CTA button
+- [x] Breadcrumb navigation
+- [x] Forbedret mobile menu UX
+- [x] AI loading states
+- [x] Sticky CTA button
 
 **Estimat:** ~7.5 timer
 

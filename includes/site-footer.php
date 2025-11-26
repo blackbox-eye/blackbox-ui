@@ -129,18 +129,6 @@
                 </section>
             </div>
         <?php endif; ?>
-
-        <!-- Sticky CTA Button -->
-        <a href="demo.php"
-            id="sticky-cta"
-            class="sticky-cta"
-            aria-label="<?= htmlspecialchars(t('footer.cta.aria_label')) ?>">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-            </svg>
-            <span class="hidden sm:inline"><?= t('footer.cta.book_meeting') ?></span>
-            <span class="sm:hidden"><?= t('footer.cta.contact') ?></span>
-        </a>
     </div>
 
     <script src="assets/js/site.min.js" defer></script>

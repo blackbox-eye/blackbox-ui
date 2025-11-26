@@ -50,10 +50,11 @@ if (function_exists('fastcgi_finish_request')) {
   fastcgi_finish_request();
 } else {
   // Fallback for non-FastCGI environments (mod_php, etc.)
+  // Use @ to suppress any warnings from edge cases
   if (ob_get_level() > 0) {
-    ob_end_flush();
+    @ob_end_flush();
   }
-  flush();
+  @flush();
 }
 ignore_user_abort(true);
 

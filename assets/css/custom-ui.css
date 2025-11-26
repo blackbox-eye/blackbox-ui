@@ -512,9 +512,9 @@ body.alphabot-locked {
 }
 
 .header-logo {
-  height: 44px;
+  height: 56px;
   width: auto;
-  max-width: 220px;
+  max-width: 260px;
   object-fit: contain;
   display: none; /* Hidden by default, theme rules show correct one */
 }
@@ -526,13 +526,13 @@ body.alphabot-locked {
 
 @media (min-width: 640px) {
   .header-logo {
-    height: 48px;
+    height: 64px;
   }
 }
 
 @media (min-width: 1024px) {
   .header-logo {
-    height: 54px;
+    height: 76px;
   }
 }
 

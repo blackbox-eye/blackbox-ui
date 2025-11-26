@@ -99,41 +99,97 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       justify-content: center;
       background: #050505 url('assets/agent_login_baggrund.png') center/cover no-repeat fixed;
       color: #fff;
+      position: relative;
+      z-index: 0;
+      transition: background 0.3s ease;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: rgba(5, 5, 15, 0);
+      backdrop-filter: blur(0px);
+      transition: background 0.4s ease, backdrop-filter 0.4s ease;
+      z-index: 0;
+    }
+
+    body.interaction-active::after {
+      background: rgba(5, 5, 15, 0.55);
+      backdrop-filter: blur(12px);
     }
 
     .login-card {
-      width: 280px;
+      width: 320px;
       background: rgba(12, 12, 14, 0.92);
       border: 1px solid rgba(212, 175, 55, 0.12);
       border-radius: 12px;
-      padding: 1.5rem 1.25rem;
+      padding: 1.75rem 1.5rem 1.5rem;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+      position: relative;
+      z-index: 1;
+      transition: background 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    }
+
+    body.interaction-active .login-card {
+      background: rgba(12, 12, 14, 0.82);
+      box-shadow: 0 22px 54px rgba(0, 0, 0, 0.7);
+      border-color: rgba(212, 175, 55, 0.2);
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.45rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .powered-label {
+      font-size: 0.58rem;
+      font-style: italic;
+      letter-spacing: 0.05em;
+      color: rgba(255, 255, 255, 0.6);
+      text-transform: uppercase;
+    }
+
+    .powered-logo {
+      width: 104px;
+      height: auto;
+      filter: drop-shadow(0 1px 6px rgba(212, 175, 55, 0.3));
     }
 
     .logo-section {
       text-align: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
     }
 
     .logo-img {
-      width: 160px;
+      display: block;
       height: auto;
-      margin-bottom: 1rem;
-      filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.3));
+    }
+
+    .logo-img--primary {
+      width: 220px;
+      max-width: 90%;
+      margin: 0 auto 0.85rem;
+      filter: drop-shadow(0 4px 16px rgba(18, 20, 32, 0.45));
     }
 
     .title {
-      font-size: 1rem;
+      font-size: 1.05rem;
       font-weight: 600;
       color: #fff;
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.4rem;
     }
 
     .subtitle {
-      font-size: 0.65rem;
-      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.68rem;
+      color: rgba(255, 255, 255, 0.58);
+      letter-spacing: 0.01em;
     }
 
     .error-box {
@@ -238,6 +294,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       background: rgba(0, 0, 0, 0.3);
       backdrop-filter: blur(8px);
       border: 1px solid rgba(255, 255, 255, 0.1);
+      z-index: 1;
     }
 
     .back-link:hover {
@@ -268,10 +325,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </a>
 
   <main class="login-card">
+    <div class="card-meta">
+      <span class="powered-label">… Powered by</span>
+      <img src="assets/blackbox_logo_black.png" alt="Powered by BLACKBOX EYE™" class="powered-logo" loading="lazy">
+    </div>
     <div class="logo-section">
-      <img src="assets/Logo-blackbox-hvid.png" alt="BLACKBOX EYE™" class="logo-img" loading="lazy">
+      <img src="assets/greyeeye_logo_transparent.png" alt="GreyEYE Data Intelligence" class="logo-img logo-img--primary" loading="lazy">
       <h1 class="title">Sikker adgang</h1>
-      <p class="subtitle">BLACKBOX EYE™ operatør-portal</p>
+      <p class="subtitle">GreyEYE Data Intelligence (GDI) operatør-portal</p>
     </div> <?php if ($error): ?>
       <div class="error-box"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
@@ -300,6 +361,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <p>Adgang kræver autoriseret hardware-nøgle.<br>Alle forsøg logges.</p>
     </div>
   </main>
+  <script>
+    (function() {
+      const body = document.body;
+      const card = document.querySelector('.login-card');
+      if (!body || !card) {
+        return;
+      }
+
+      const interactiveElements = card.querySelectorAll('input, button');
+
+      const activate = () => body.classList.add('interaction-active');
+
+      const maybeDeactivate = () => {
+        setTimeout(() => {
+          const activeElement = document.activeElement;
+          if (activeElement && card.contains(activeElement)) {
+            return;
+          }
+          body.classList.remove('interaction-active');
+        }, 60);
+      };
+
+      interactiveElements.forEach((el) => {
+        el.addEventListener('focus', activate);
+        el.addEventListener('blur', maybeDeactivate);
+        el.addEventListener('click', activate);
+      });
+
+      card.addEventListener('mouseenter', activate);
+      card.addEventListener('mouseleave', maybeDeactivate);
+
+      document.addEventListener('click', (event) => {
+        if (!card.contains(event.target)) {
+          body.classList.remove('interaction-active');
+        }
+      });
+    })();
+  </script>
 </body>
 
 </html>

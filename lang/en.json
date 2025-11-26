@@ -50,7 +50,8 @@
       "close_menu": "Close navigation menu",
       "primary_navigation": "Primary navigation",
       "secondary_navigation": "More options"
-    }
+    },
+    "more": "More"
   },
   "footer": {
     "tagline": "Intelligent Security. Ready to Act.",

@@ -34,6 +34,21 @@ try {
   $total_posts = bbx_get_blog_posts_count($category_filter);
   $total_pages = $total_posts > 0 ? (int) ceil($total_posts / $posts_per_page) : 0;
   $categories = bbx_get_blog_categories();
+
+  // Ensure we have a good set of categories - add fallbacks if database has few
+  $default_categories = [
+    'Cybersecurity',
+    'Ransomware',
+    'AI & Machine Learning',
+    'Threat Intelligence',
+    'Compliance & GDPR',
+    'Cloud Security'
+  ];
+
+  // Merge existing categories with defaults, keeping unique values
+  if (count($categories) < 3) {
+    $categories = array_unique(array_merge($categories, $default_categories));
+  }
 } catch (Throwable $e) {
   $blog_data_error = true;
   $blog_error_message = t('common.form_error_default', 'Vi kunne ikke hente blogindholdet lige nu. Prøv igen senere eller kontakt support.');
@@ -51,7 +66,8 @@ $structured_data = [
 // Curated News Data - organized by region with full details
 $news_items = [
   'denmark' => [
-    'flag' => 'DK',
+    'flag' => '🇩🇰',
+    'short' => 'DK',
     'title' => t('blog.news.denmark', 'Danmark'),
     'items' => [
       [
@@ -73,7 +89,8 @@ $news_items = [
     ]
   ],
   'europe' => [
-    'flag' => 'EU',
+    'flag' => '🇪🇺',
+    'short' => 'EU',
     'title' => t('blog.news.europe', 'Europa'),
     'items' => [
       [
@@ -111,7 +128,8 @@ $news_items = [
     ]
   ],
   'middle_east' => [
-    'flag' => 'ME',
+    'flag' => '🌍',
+    'short' => 'ME',
     'title' => t('blog.news.middle_east', 'Mellemøsten'),
     'items' => [
       [
@@ -141,7 +159,8 @@ $news_items = [
     ]
   ],
   'americas' => [
-    'flag' => 'AM',
+    'flag' => '🌎',
+    'short' => 'AM',
     'title' => t('blog.news.americas', 'Amerika'),
     'items' => [
       [
@@ -171,7 +190,8 @@ $news_items = [
     ]
   ],
   'asia' => [
-    'flag' => 'AS',
+    'flag' => '🌏',
+    'short' => 'AS',
     'title' => t('blog.news.asia', 'Asien'),
     'items' => [
       [
@@ -303,8 +323,8 @@ include 'includes/site-header.php';
                 data-region="<?= $region_key ?>"
                 aria-selected="<?= $first ? 'true' : 'false' ?>"
                 title="<?= $region['title'] ?>">
-                <span class="text-xs font-bold"><?= $region['flag'] ?></span>
-                <span class="hidden lg:inline text-xs"><?= $region['title'] ?></span>
+                <span class="text-sm"><?= $region['flag'] ?></span>
+                <span class="hidden xl:inline text-xs"><?= $region['title'] ?></span>
               </button>
             <?php $first = false;
             endforeach; ?>
@@ -437,7 +457,7 @@ include 'includes/site-header.php';
             <div class="news-panel <?= $first ? 'is-visible' : '' ?>" data-panel="<?= $region_key ?>">
               <!-- Region Header -->
               <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-800/50">
-                <span class="text-sm font-bold px-2 py-1 bg-gray-800 rounded"><?= $region['flag'] ?></span>
+                <span class="text-lg px-2 py-1 bg-gray-800 rounded"><?= $region['flag'] ?></span>
                 <h3 class="text-base font-semibold text-white"><?= $region['title'] ?></h3>
                 <span class="ml-auto text-xs text-gray-500 bg-gray-800/50 px-2 py-0.5 rounded"><?= count($region['items']) ?> <?= t('blog.news.alerts', 'alerts') ?></span>
               </div>

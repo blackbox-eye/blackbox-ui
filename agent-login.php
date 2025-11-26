@@ -142,31 +142,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     .card-meta {
       position: absolute;
-      top: 1rem;
-      right: 1.1rem;
+      top: 0.85rem;
+      right: 0.95rem;
       display: flex;
       align-items: center;
-      gap: 0.35rem;
-      padding: 0.35rem 0.5rem;
-      background: rgba(12, 12, 14, 0.65);
-      border-radius: 999px;
-      border: 1px solid rgba(212, 175, 55, 0.15);
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+      gap: 0.25rem;
+      padding: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
     }
 
     .powered-label {
-      font-size: 0.6rem;
+      font-size: 0.52rem;
       font-style: italic;
-      letter-spacing: 0.12em;
-      color: rgba(255, 255, 255, 0.7);
+      letter-spacing: 0.14em;
+      color: rgba(255, 255, 255, 0.68);
       text-transform: uppercase;
       white-space: nowrap;
     }
 
     .powered-logo {
-      width: 68px;
+      width: 56px;
       height: auto;
-      filter: drop-shadow(0 1px 6px rgba(212, 175, 55, 0.25));
+      filter: drop-shadow(0 1px 5px rgba(212, 175, 55, 0.2));
     }
 
     .logo-section {

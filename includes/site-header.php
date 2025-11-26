@@ -313,44 +313,46 @@ if (!empty($disable_alphabot)) {
                                     </a>
                                 </li>
                             <?php endforeach; ?>
+                            <li class="main-nav-more more-dropdown-wrapper hidden lg:list-item" data-dropdown>
+                                <button type="button"
+                                    class="nav-chip nav-chip--more more-dropdown-trigger"
+                                    aria-haspopup="true"
+                                    aria-expanded="false">
+                                    <span><?= t('header.menu.more', 'Mere') ?></span>
+                                    <svg class="more-dropdown-chevron" width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                <div class="more-dropdown-menu" role="menu">
+                                    <a href="faq.php" class="more-dropdown-item <?= $current_page === 'faq' ? 'is-active' : '' ?>" role="menuitem">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <?= t('header.menu.faq') ?>
+                                    </a>
+                                    <a href="blog.php" class="more-dropdown-item <?= $current_page === 'blog' ? 'is-active' : '' ?>" role="menuitem">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                                        </svg>
+                                        <?= t('header.menu.blog') ?>
+                                    </a>
+                                    <a href="demo.php" class="more-dropdown-item <?= $current_page === 'demo' ? 'is-active' : '' ?>" role="menuitem">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        <?= t('header.menu.demo') ?>
+                                    </a>
+                                    <a href="free-scan.php" class="more-dropdown-item <?= $current_page === 'free-scan' ? 'is-active' : '' ?>" role="menuitem">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                        </svg>
+                                        <?= t('header.menu.free_scan') ?>
+                                    </a>
+                                </div>
+                            </li>
                         </ul>
                     </nav>
                     <div class="header-actions">
-                        <!-- Mere dropdown menu for desktop -->
-                        <div class="more-dropdown-wrapper hidden lg:block relative" data-dropdown>
-                            <button type="button" class="more-dropdown-trigger" aria-expanded="false" aria-haspopup="true">
-                                <span><?= t('header.menu.more', 'Mere') ?></span>
-                                <svg class="more-dropdown-chevron" width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </button>
-                            <div class="more-dropdown-menu" role="menu">
-                                <a href="faq.php" class="more-dropdown-item <?= $current_page === 'faq' ? 'is-active' : '' ?>" role="menuitem">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <?= t('header.menu.faq') ?>
-                                </a>
-                                <a href="blog.php" class="more-dropdown-item <?= $current_page === 'blog' ? 'is-active' : '' ?>" role="menuitem">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                                    </svg>
-                                    <?= t('header.menu.blog') ?>
-                                </a>
-                                <a href="demo.php" class="more-dropdown-item <?= $current_page === 'demo' ? 'is-active' : '' ?>" role="menuitem">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                    <?= t('header.menu.demo') ?>
-                                </a>
-                                <a href="free-scan.php" class="more-dropdown-item <?= $current_page === 'free-scan' ? 'is-active' : '' ?>" role="menuitem">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                    </svg>
-                                    <?= t('header.menu.free_scan') ?>
-                                </a>
-                            </div>
-                        </div>
                         <a href="agent-login.php" class="header-cta agent-login-cta">
                             <?= t('header.cta.agent_login') ?>
                         </a>

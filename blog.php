@@ -271,47 +271,47 @@ include 'includes/site-header.php';
   <?php else: ?>
 
     <!-- Unified Sticky Navigation: Filter + Region Tabs -->
-  <nav class="sticky top-16 z-30 bg-[var(--page-background)]/95 backdrop-blur-lg border-b border-gray-800/50" aria-label="Blog navigation">
-    <div class="container mx-auto px-4">
-      <div class="flex items-center justify-between gap-4 py-3">
-        <!-- Left: Category filter (if available) -->
-        <?php if (!empty($categories)): ?>
-          <div class="flex items-center gap-2 overflow-x-auto scrollbar-hide">
-            <span class="text-xs text-gray-500 hidden sm:inline"><?= t('blog.filter.label', 'Filter:') ?></span>
-            <a href="blog.php"
-              class="blog-filter-pill <?= $category_filter === null ? 'is-active' : '' ?>">
-              <?= t('blog.filter.all') ?>
-            </a>
-            <?php foreach ($categories as $cat): ?>
-              <a href="blog.php?category=<?= urlencode($cat) ?>"
-                class="blog-filter-pill <?= $category_filter === $cat ? 'is-active' : '' ?>">
-                <?= htmlspecialchars($cat) ?>
+    <nav class="sticky top-16 z-30 bg-[var(--page-background)]/95 backdrop-blur-lg border-b border-gray-800/50" aria-label="Blog navigation">
+      <div class="container mx-auto px-4">
+        <div class="flex items-center justify-between gap-4 py-3">
+          <!-- Left: Category filter (if available) -->
+          <?php if (!empty($categories)): ?>
+            <div class="flex items-center gap-2 overflow-x-auto scrollbar-hide">
+              <span class="text-xs text-gray-500 hidden sm:inline"><?= t('blog.filter.label', 'Filter:') ?></span>
+              <a href="blog.php"
+                class="blog-filter-pill <?= $category_filter === null ? 'is-active' : '' ?>">
+                <?= t('blog.filter.all') ?>
               </a>
-            <?php endforeach; ?>
-          </div>
-        <?php else: ?>
-          <div></div>
-        <?php endif; ?>
+              <?php foreach ($categories as $cat): ?>
+                <a href="blog.php?category=<?= urlencode($cat) ?>"
+                  class="blog-filter-pill <?= $category_filter === $cat ? 'is-active' : '' ?>">
+                  <?= htmlspecialchars($cat) ?>
+                </a>
+              <?php endforeach; ?>
+            </div>
+          <?php else: ?>
+            <div></div>
+          <?php endif; ?>
 
-        <!-- Right: Region tabs (compact) -->
-        <div class="flex items-center gap-1 flex-shrink-0">
-          <span class="text-xs text-gray-500 mr-1 hidden md:inline">Nyheder:</span>
-          <?php $first = true;
-          foreach ($news_items as $region_key => $region): ?>
-            <button
-              class="news-region-tab <?= $first ? 'is-active' : '' ?>"
-              data-region="<?= $region_key ?>"
-              aria-selected="<?= $first ? 'true' : 'false' ?>"
-              title="<?= $region['title'] ?>">
-              <span class="text-base"><?= $region['flag'] ?></span>
-              <span class="hidden lg:inline text-xs"><?= $region['title'] ?></span>
-            </button>
-          <?php $first = false;
-          endforeach; ?>
+          <!-- Right: Region tabs (compact) -->
+          <div class="flex items-center gap-1 flex-shrink-0">
+            <span class="text-xs text-gray-500 mr-1 hidden md:inline">Nyheder:</span>
+            <?php $first = true;
+            foreach ($news_items as $region_key => $region): ?>
+              <button
+                class="news-region-tab <?= $first ? 'is-active' : '' ?>"
+                data-region="<?= $region_key ?>"
+                aria-selected="<?= $first ? 'true' : 'false' ?>"
+                title="<?= $region['title'] ?>">
+                <span class="text-base"><?= $region['flag'] ?></span>
+                <span class="hidden lg:inline text-xs"><?= $region['title'] ?></span>
+              </button>
+            <?php $first = false;
+            endforeach; ?>
+          </div>
         </div>
       </div>
-    </div>
-  </nav>
+    </nav>
 
     <!-- Blog Posts Section -->
     <section class="py-12">

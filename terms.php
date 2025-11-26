@@ -7,10 +7,9 @@
 require_once __DIR__ . '/includes/env.php';
 require_once __DIR__ . '/includes/i18n.php';
 
+$current_page = 'terms';
 $page_title = t('terms.title', 'Vilkår og betingelser');
 $meta_description = t('terms.meta_description', 'Vilkår og betingelser for brug af Blackbox EYE cybersikkerhedsplatformen.');
-$show_alphabot = false;
-
 include __DIR__ . '/includes/site-header.php';
 ?>
 

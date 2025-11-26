@@ -176,7 +176,7 @@ $secondary_nav_links = [
     ['slug' => 'free-scan', 'label' => t('header.menu.free_scan'), 'href' => 'free-scan.php'],
 ];
 
-$alphabot_enabled_pages = ['home', 'index', 'about', 'products', 'cases', 'pricing', 'contact', 'demo', 'free-scan', 'faq'];
+$alphabot_enabled_pages = ['home', 'index', 'about', 'products', 'cases', 'pricing', 'contact', 'demo', 'free-scan', 'faq', 'blog', 'privacy', 'terms'];
 $show_alphabot = $show_alphabot ?? in_array($current_page, $alphabot_enabled_pages, true);
 if (!empty($disable_alphabot)) {
     $show_alphabot = false;

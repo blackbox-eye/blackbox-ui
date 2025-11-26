@@ -1192,7 +1192,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const hasAIConfig = typeof window.AI_CONFIG !== 'undefined';
-    const geminiReady = hasAIConfig && Boolean(AI_CONFIG.GEMINI_API_KEY && AI_CONFIG.GEMINI_MODEL && AI_CONFIG.API_BASE_URL);
+    const sanitizedApiKey = hasAIConfig ? String(AI_CONFIG.GEMINI_API_KEY || '').trim() : '';
+    const isPlaceholderApiKey = sanitizedApiKey.length === 0 || /REPLACE|FAKE|DEMO|TEST/i.test(sanitizedApiKey);
+    const geminiReady = hasAIConfig
+        && Boolean(String(AI_CONFIG.GEMINI_MODEL || '').trim())
+        && Boolean(String(AI_CONFIG.API_BASE_URL || '').trim())
+        && !isPlaceholderApiKey;
 
     const convertMarkdownToHtml = (text) => {
         let html = text
@@ -1483,6 +1488,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const alphaCloseBtn = document.getElementById('alphabot-close-btn');
     const alphaOverlay = document.getElementById('alphabot-overlay');
     const alphaPanel = document.getElementById('alphabot-panel');
+    const alphaStatusDot = alphaContainer?.querySelector('.alphabot-status-dot') ?? null;
     const alphaRail = alphaContainer?.closest('.bbx-command-rail') ?? null;
     if (alphaOverlay) {
         alphaOverlay.setAttribute('aria-hidden', 'true');
@@ -1550,6 +1556,27 @@ document.addEventListener('DOMContentLoaded', () => {
             alphaInertState.clear();
         }
     };
+
+    const markAlphaBotUnavailable = (tooltipMessage) => {
+        if (!alphaContainer) {
+            return;
+        }
+        alphaContainer.classList.add('alphabot-offline');
+        if (alphaToggleBtn) {
+            alphaToggleBtn.setAttribute('aria-disabled', 'true');
+            alphaToggleBtn.setAttribute('disabled', 'true');
+            if (tooltipMessage) {
+                alphaToggleBtn.setAttribute('title', tooltipMessage);
+            }
+        }
+        if (alphaStatusDot) {
+            alphaStatusDot.setAttribute('data-status', 'offline');
+        }
+    };
+
+    if (alphaContainer && (!geminiReady || !hasAIConfig)) {
+        markAlphaBotUnavailable(i18n.t('alphabot.offline_tooltip', 'AlphaBot er offline. Kontakt support for at aktivere integrationen.'));
+    }
 
     if (alphaContainer && alphaToggleBtn && alphaPanel && hasAIConfig && geminiReady) {
         const messagesDiv = document.getElementById('alphabot-messages');
@@ -1698,6 +1725,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         ? i18n.t('common.ai_timeout', 'Foresp\u00f8rgslen tog for lang tid \u2013 pr\u00f8v igen.')
                         : i18n.t('common.alphabot_connection_error', 'Der opstod en fejl under forbindelsen til AlphaBot. Pr\u00f8v igen senere.');
                     appendMessage('bot', fallback);
+                    if (error && error.name !== 'AbortError') {
+                        markAlphaBotUnavailable(i18n.t('alphabot.offline_tooltip', 'AlphaBot er offline. Kontakt support for at aktivere integrationen.'));
+                    }
                 } finally {
                     setProcessing(false);
                 }

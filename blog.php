@@ -66,7 +66,6 @@ $structured_data = [
 // Curated News Data - organized by region with full details
 $news_items = [
   'denmark' => [
-    'flag' => '🇩🇰',
     'short' => 'DK',
     'title' => t('blog.news.denmark', 'Danmark'),
     'items' => [
@@ -89,7 +88,6 @@ $news_items = [
     ]
   ],
   'europe' => [
-    'flag' => '🇪🇺',
     'short' => 'EU',
     'title' => t('blog.news.europe', 'Europa'),
     'items' => [
@@ -128,7 +126,6 @@ $news_items = [
     ]
   ],
   'middle_east' => [
-    'flag' => '🌍',
     'short' => 'ME',
     'title' => t('blog.news.middle_east', 'Mellemøsten'),
     'items' => [
@@ -159,7 +156,6 @@ $news_items = [
     ]
   ],
   'americas' => [
-    'flag' => '🌎',
     'short' => 'AM',
     'title' => t('blog.news.americas', 'Amerika'),
     'items' => [
@@ -190,7 +186,6 @@ $news_items = [
     ]
   ],
   'asia' => [
-    'flag' => '🌏',
     'short' => 'AS',
     'title' => t('blog.news.asia', 'Asien'),
     'items' => [
@@ -322,8 +317,9 @@ include 'includes/site-header.php';
                 class="news-region-tab <?= $first ? 'is-active' : '' ?>"
                 data-region="<?= $region_key ?>"
                 aria-selected="<?= $first ? 'true' : 'false' ?>"
-                title="<?= $region['title'] ?>">
-                <span class="text-sm"><?= $region['flag'] ?></span>
+                title="<?= $region['title'] ?>"
+                aria-label="<?= $region['title'] ?>">
+                <span class="region-badge region-badge--tab" aria-hidden="true"><?= htmlspecialchars($region['short']) ?></span>
                 <span class="hidden xl:inline text-xs"><?= $region['title'] ?></span>
               </button>
             <?php $first = false;
@@ -457,7 +453,7 @@ include 'includes/site-header.php';
             <div class="news-panel <?= $first ? 'is-visible' : '' ?>" data-panel="<?= $region_key ?>">
               <!-- Region Header -->
               <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-800/50">
-                <span class="text-lg px-2 py-1 bg-gray-800 rounded"><?= $region['flag'] ?></span>
+                <span class="region-badge region-badge--panel" aria-hidden="true"><?= htmlspecialchars($region['short']) ?></span>
                 <h3 class="text-base font-semibold text-white"><?= $region['title'] ?></h3>
                 <span class="ml-auto text-xs text-gray-500 bg-gray-800/50 px-2 py-0.5 rounded"><?= count($region['items']) ?> <?= t('blog.news.alerts', 'alerts') ?></span>
               </div>
@@ -661,6 +657,7 @@ include 'includes/site-header.php';
     line-height: 1.6;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     margin-bottom: 1rem;
@@ -681,6 +678,36 @@ include 'includes/site-header.php';
     font-size: 0.875rem;
     font-weight: 600;
     color: var(--primary-accent);
+  }
+
+  .region-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.4rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 0.65rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: rgba(255, 199, 0, 0.12);
+    color: var(--primary-accent);
+    border: 1px solid rgba(255, 199, 0, 0.32);
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .region-badge--tab {
+    min-width: 2.1rem;
+    font-size: 0.625rem;
+    padding: 0.18rem 0.5rem;
+  }
+
+  .region-badge--panel {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.65rem;
+    border-radius: 0.75rem;
+    background: rgba(255, 199, 0, 0.16);
   }
 
   /* News region tabs - compact for sticky nav */
@@ -704,10 +731,21 @@ include 'includes/site-header.php';
     background: rgba(255, 255, 255, 0.05);
   }
 
+  .news-region-tab:hover .region-badge {
+    border-color: rgba(255, 199, 0, 0.48);
+  }
+
   .news-region-tab.is-active {
-    background: var(--primary-accent);
-    color: #000;
+    background: rgba(255, 199, 0, 0.12);
+    border-color: rgba(255, 199, 0, 0.45);
+    color: var(--primary-accent);
     font-weight: 600;
+  }
+
+  .news-region-tab.is-active .region-badge {
+    background: var(--primary-accent);
+    color: var(--cta-contrast);
+    border-color: transparent;
   }
 
   /* News panels */
@@ -821,6 +859,7 @@ include 'includes/site-header.php';
     line-height: 1.5;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -915,6 +954,23 @@ include 'includes/site-header.php';
   }
 
   /* Light mode adjustments */
+  :root[data-theme="light"] .region-badge {
+    background: rgba(255, 180, 0, 0.18);
+    border-color: rgba(255, 180, 0, 0.28);
+  }
+
+  :root[data-theme="light"] .region-badge--panel {
+    background: rgba(255, 180, 0, 0.24);
+  }
+
+  :root[data-theme="light"] .news-region-tab:hover {
+    background: rgba(17, 24, 39, 0.06);
+  }
+
+  :root[data-theme="light"] .news-region-tab.is-active .region-badge {
+    color: #111827;
+  }
+
   :root[data-theme="light"] .blog-card {
     background: rgba(255, 255, 255, 0.9);
   }

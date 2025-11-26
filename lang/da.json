@@ -715,7 +715,8 @@
     "error": "Beklager, jeg kunne ikke behandle din forespørgsel. Prøv igen.",
     "panel_tagline": "AI-sikkerhedsrådgiver 24/7",
     "hint": "Enter sender beskeden. Shift + Enter giver linjeskift.",
-    "aria_toggle": "Åbn AlphaBot sikkerhedsassistent"
+    "aria_toggle": "Åbn AlphaBot sikkerhedsassistent",
+    "offline_tooltip": "AlphaBot er offline. Kontakt support for at aktivere integrationen."
   },
   "common": {
     "loading": "Indlæser...",

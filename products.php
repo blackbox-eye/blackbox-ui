@@ -19,7 +19,15 @@ include 'includes/site-header.php';
 
             <article class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center section-fade-in mb-16">
                 <div>
-                    <h2 class="text-2xl sm:text-3xl font-bold text-amber-400 mb-4">🛡️ <?= t('products.pve.subtitle') ?> (<?= t('products.pve.title') ?>)</h2>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-amber-400 mb-4 flex items-center gap-3">
+                        <span class="product-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 3.25 19 6v6.36c0 5.07-5 8.89-6.87 9.94a1 1 0 0 1-.98 0C9.3 21.22 4.5 17.61 4.5 12.36V6l7.5-2.75z" />
+                                <path d="M9.5 12.25 11 13.75l3.5-3.5" />
+                            </svg>
+                        </span>
+                        <?= t('products.pve.subtitle') ?> (<?= t('products.pve.title') ?>)
+                    </h2>
                     <p class="text-gray-300 mb-6"><?= t('products.pve.description') ?></p>
                     <button class="gemini-trigger-btn bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
                         data-module="PVE"
@@ -40,7 +48,15 @@ include 'includes/site-header.php';
 
             <article class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center section-fade-in">
                 <div class="lg:order-last">
-                    <h2 class="text-2xl sm:text-3xl font-bold text-amber-400 mb-4">👁️ <?= t('products.greyeye.title') ?></h2>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-amber-400 mb-4 flex items-center gap-3">
+                        <span class="product-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </span>
+                        <?= t('products.greyeye.title') ?>
+                    </h2>
                     <p class="text-gray-300 mb-6"><?= t('products.greyeye.description') ?></p>
                     <button class="gemini-trigger-btn bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
                         data-module="GreyEYE"

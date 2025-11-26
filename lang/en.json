@@ -755,7 +755,8 @@
     "error": "Sorry, I couldn't process your request. Please try again.",
     "panel_tagline": "AI security advisor 24/7",
     "hint": "Press Enter to send. Shift + Enter adds a new line.",
-    "aria_toggle": "Open AlphaBot security assistant"
+    "aria_toggle": "Open AlphaBot security assistant",
+    "offline_tooltip": "AlphaBot is offline. Contact support to activate the integration."
   },
   "common": {
     "loading": "Loading...",

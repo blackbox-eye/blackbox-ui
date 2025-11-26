@@ -300,14 +300,14 @@ if (!empty($disable_alphabot)) {
                             <!-- White logo for dark theme -->
                             <img src="/assets/Logo_for BlackboxEYE™ (HVID).png"
                                 alt="BLACKBOX EYE™"
-                                class="header-logo header-logo--dark"
+                                class="header-logo header-logo--light"
                                 loading="lazy"
                                 width="180"
                                 height="40">
                             <!-- Black logo for light theme -->
                             <img src="/assets/Logo_BlackboxEYE™ (sort).png"
                                 alt="BLACKBOX EYE™"
-                                class="header-logo header-logo--light"
+                                class="header-logo header-logo--dark"
                                 loading="lazy"
                                 width="180"
                                 height="40">

@@ -12,12 +12,10 @@ name: Sprint 5 Smoke Test
 on:
   pull_request:
     branches: [main]
-    paths:
-      - 'assets/js/site.js'
-      - 'assets/js/site.min.js'
-      - '*.php'
-      - 'lang/*.json'
-      - 'includes/*.php'
+    paths-ignore:
+      - '.github/agents/**'
+      - 'docs/**'
+      - '**/*.md'
 
 # Prevent multiple runs on same PR - auto-cancel old runs
 concurrency:
@@ -56,6 +54,30 @@ jobs:
           curl -f http://localhost:8000/pricing.php || exit 1
           curl -f http://localhost:8000/free-scan.php || exit 1
           echo "✅ All pages load successfully"
+
+      - name: Measure TTFB (performance threshold 300ms)
+        run: |
+          echo "📊 Measuring Time To First Byte (TTFB)..."
+          THRESHOLD=300
+          FAIL=0
+          
+          for ENDPOINT in "/" "/index.php" "/contact.php" "/api/consent-log.php"; do
+            TTFB=$(curl -w "%{time_starttransfer}" -o /dev/null -s "http://localhost:8000$ENDPOINT" || echo "999")
+            TTFB_MS=$(echo "$TTFB * 1000" | bc | cut -d'.' -f1)
+            
+            if [ "$TTFB_MS" -gt "$THRESHOLD" ]; then
+              echo "⚠️  $ENDPOINT: ${TTFB_MS}ms (exceeds ${THRESHOLD}ms threshold)"
+              FAIL=1
+            else
+              echo "✅ $ENDPOINT: ${TTFB_MS}ms"
+            fi
+          done
+          
+          if [ "$FAIL" -eq 1 ]; then
+            echo "⚠️  Some endpoints exceeded TTFB threshold - review for optimization"
+          else
+            echo "✅ All endpoints within TTFB threshold"
+          fi
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

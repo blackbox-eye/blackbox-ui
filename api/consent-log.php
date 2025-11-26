@@ -5,11 +5,14 @@
  *
  * Receives cookie consent events via sendBeacon
  * Logs aggregated consent data without personal identifiers
+ *
+ * Uses non-blocking response pattern to avoid holding client connections
  */
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/../includes/logging.php';
+// Allow script to continue after client disconnect
+ignore_user_abort(true);
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -41,11 +44,32 @@ if (!in_array($action, $validActions, true)) {
   exit;
 }
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// NON-BLOCKING RESPONSE: Send response to client immediately, then log
+// This prevents logging operations from blocking the HTTP response
+// ═══════════════════════════════════════════════════════════════════════════════
+http_response_code(200);
+echo json_encode(['success' => true, 'status' => 'accepted']);
+
+// Flush response to client before logging
+if (function_exists('fastcgi_finish_request')) {
+    // FastCGI (nginx + php-fpm): finish request and continue in background
+    fastcgi_finish_request();
+} else {
+    // Apache/mod_php fallback: flush output buffers
+    if (ob_get_level() > 0) {
+        @ob_end_flush();
+    }
+    @flush();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// BACKGROUND LOGGING: Client has already received response
+// ═══════════════════════════════════════════════════════════════════════════════
+require_once __DIR__ . '/../includes/logging.php';
+
 // Log consent event (no personal data)
 bbx_log_consent($action, [
   'consent_type' => $level,
   'categories' => $level === 'all' ? ['essential', 'analytics', 'marketing'] : ['essential'],
 ]);
-
-http_response_code(200);
-echo json_encode(['success' => true]);

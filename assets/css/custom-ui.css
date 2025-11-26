@@ -937,6 +937,16 @@ body.mobile-menu-open .alphabot-overlay {
   display: none;
 }
 
+.main-nav-more {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .main-nav-more {
+    display: list-item;
+  }
+}
+
 .nav-chip {
   display: inline-flex;
   align-items: center;

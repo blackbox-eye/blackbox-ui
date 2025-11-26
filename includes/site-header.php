@@ -313,7 +313,7 @@ if (!empty($disable_alphabot)) {
                                     </a>
                                 </li>
                             <?php endforeach; ?>
-                            <li class="main-nav-more more-dropdown-wrapper hidden lg:list-item" data-dropdown>
+                            <li class="main-nav-more more-dropdown-wrapper" data-dropdown>
                                 <button type="button"
                                     class="nav-chip nav-chip--more more-dropdown-trigger"
                                     aria-haspopup="true"

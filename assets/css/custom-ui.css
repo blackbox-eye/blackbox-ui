@@ -355,29 +355,34 @@ body.alphabot-locked {
   background: var(--surface-200);
 }
 
-/* Mobile menu nav links - compact styling */
+/* Mobile menu nav links - compact left-aligned styling */
 .nav-link-mobile {
   display: block;
-  font-size: 1rem;
+  font-size: 0.875rem;
   font-weight: 500;
   color: var(--text-medium-emphasis);
-  padding: 0.5rem 0;
-  transition: color 0.2s ease;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  text-align: left;
+  transition: color 0.15s ease, background-color 0.15s ease;
 }
 
 .nav-link-mobile:hover,
 .nav-link-mobile:focus-visible {
   color: var(--text-high-emphasis);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .nav-link-mobile.is-active {
   color: var(--primary-accent);
   font-weight: 600;
+  background: var(--primary-accent-soft);
 }
 
 .nav-link-mobile--secondary {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: var(--muted);
+  padding: 0.375rem 0.75rem;
 }
 
 .nav-link-mobile--secondary:hover {

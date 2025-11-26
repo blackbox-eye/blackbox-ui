@@ -360,21 +360,23 @@ if (!empty($disable_alphabot)) {
         </div>
     </header>
 
-    <!-- Mobile menu overlay -->
-    <div id="mobile-menu-overlay" class="md:hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-39" aria-hidden="true"></div>
+    <!-- Mobile menu overlay (hidden by default, JS toggles via class) -->
+    <div id="mobile-menu-overlay" class="md:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[39] opacity-0 pointer-events-none transition-opacity duration-200" data-menu-overlay></div>
 
-    <!-- Mobile menu -->
-    <div id="mobile-menu" class="md:hidden fixed top-0 right-0 bottom-0 w-72 max-w-[75vw] bg-gray-900/95 backdrop-blur-md z-40 p-6 shadow-2xl border-l border-gray-800" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-heading" aria-hidden="true">
-        <div class="flex justify-between items-center mb-4">
-            <span id="mobile-menu-heading" class="text-base font-semibold text-white"><?= t('header.mobile.navigation') ?></span>
-            <button id="mobile-menu-close" class="text-white p-2 -mr-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400" aria-label="<?= htmlspecialchars(t('header.mobile.close_menu')) ?>">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <!-- Mobile menu drawer (compact design) -->
+    <div id="mobile-menu" class="md:hidden fixed top-0 right-0 bottom-0 w-64 max-w-[70vw] bg-gray-900/98 backdrop-blur-md z-40 shadow-2xl border-l border-gray-800/50 translate-x-full transition-transform duration-200" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-heading" aria-hidden="true">
+        <!-- Compact header -->
+        <div class="flex justify-between items-center px-4 py-3 border-b border-gray-800/50">
+            <span id="mobile-menu-heading" class="text-sm font-semibold text-gray-400 uppercase tracking-wider"><?= t('header.mobile.navigation') ?></span>
+            <button id="mobile-menu-close" class="text-gray-400 hover:text-white p-1.5 -mr-1 rounded-lg hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400 transition-colors" aria-label="<?= htmlspecialchars(t('header.mobile.close_menu')) ?>">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
             </button>
         </div>
-        <nav class="mt-4" aria-label="<?= htmlspecialchars(t('header.mobile.primary_navigation')) ?>">
-            <ul class="flex flex-col space-y-3 text-center" role="list">
+        <!-- Navigation links (left-aligned, compact) -->
+        <nav class="px-3 py-3 overflow-y-auto" style="max-height: calc(100vh - 180px);" aria-label="<?= htmlspecialchars(t('header.mobile.primary_navigation')) ?>">
+            <ul class="flex flex-col space-y-0.5" role="list">
                 <?php foreach ($nav_links as $index => $link): ?>
                     <li>
                         <a href="<?= $link['href'] ?>"
@@ -387,9 +389,9 @@ if (!empty($disable_alphabot)) {
                 <?php endforeach; ?>
             </ul>
 
-            <!-- Secondary navigation in mobile menu -->
-            <div class="border-t border-gray-700 pt-4 mt-4" aria-label="<?= htmlspecialchars(t('header.mobile.secondary_navigation')) ?>">
-                <ul class="flex flex-col space-y-2 text-center" role="list">
+            <!-- Secondary links (smaller, muted) -->
+            <div class="border-t border-gray-800/50 pt-2 mt-2" aria-label="<?= htmlspecialchars(t('header.mobile.secondary_navigation')) ?>">
+                <ul class="flex flex-col space-y-0.5" role="list">
                     <?php foreach ($secondary_nav_links as $offset => $link): ?>
                         <li>
                             <a href="<?= $link['href'] ?>"
@@ -402,43 +404,40 @@ if (!empty($disable_alphabot)) {
                     <?php endforeach; ?>
                 </ul>
             </div>
-
-            <div class="mobile-theme-toggle border border-gray-700 rounded-lg px-4 py-3 mt-6 text-left flex items-center justify-between gap-3">
-                <div>
-                    <p class="text-sm font-semibold text-white mb-1"><?= t('header.theme.mobile_title', 'Farvetema') ?></p>
-                    <p class="text-xs text-gray-400"><?= t('header.theme.mobile_description', 'Skift mellem mørk og lys oplevelse') ?></p>
+        </nav>
+        <!-- Footer actions (compact) -->
+        <div class="absolute bottom-0 left-0 right-0 px-3 py-3 border-t border-gray-800/50 bg-gray-900/95">
+            <!-- Theme + Language row -->
+            <div class="flex items-center justify-between gap-2 mb-2">
+                <div class="flex items-center gap-1">
+                    <a href="?lang=da"
+                        class="language-switch language-switch--drawer <?= $current_language === 'da' ? 'is-active' : '' ?>"
+                        aria-label="<?= htmlspecialchars(t('header.language.switch_da')) ?>"
+                        <?= $current_language === 'da' ? 'aria-current="true"' : '' ?>>
+                        <?= t('header.language.da') ?>
+                    </a>
+                    <a href="?lang=en"
+                        class="language-switch language-switch--drawer <?= $current_language === 'en' ? 'is-active' : '' ?>"
+                        aria-label="<?= htmlspecialchars(t('header.language.switch_en')) ?>"
+                        <?= $current_language === 'en' ? 'aria-current="true"' : '' ?>>
+                        <?= t('header.language.en') ?>
+                    </a>
                 </div>
                 <button type="button"
                     class="theme-toggle theme-toggle--mobile"
                     data-theme-toggle
                     data-theme-label-dark="<?= htmlspecialchars(t('header.theme.label_dark', 'Skift til mørkt tema')) ?>"
                     data-theme-label-light="<?= htmlspecialchars(t('header.theme.label_light', 'Skift til lyst tema')) ?>"
-                    data-theme-text-dark="<?= htmlspecialchars(t('header.theme.text_dark', 'Mørkt')) ?>"
-                    data-theme-text-light="<?= htmlspecialchars(t('header.theme.text_light', 'Lyst')) ?>"
                     aria-pressed="false"
                     aria-label="<?= htmlspecialchars(t('header.theme.toggle_label', 'Skift farvetema')) ?>">
                     <span class="theme-toggle__icon" aria-hidden="true"></span>
                 </button>
             </div>
-
-            <a href="agent-login.php" class="mt-5 header-cta header-cta--wide text-sm">
+            <!-- Agent login CTA -->
+            <a href="agent-login.php" class="header-cta header-cta--wide text-xs py-2">
                 <?= t('header.cta.agent_login') ?>
             </a>
-            <div class="flex items-center justify-center gap-2 pt-4">
-                <a href="?lang=da"
-                    class="language-switch language-switch--drawer <?= $current_language === 'da' ? 'is-active' : '' ?>"
-                    aria-label="<?= htmlspecialchars(t('header.language.switch_da')) ?>"
-                    <?= $current_language === 'da' ? 'aria-current="true"' : '' ?>>
-                    <?= t('header.language.da') ?>
-                </a>
-                <a href="?lang=en"
-                    class="language-switch language-switch--drawer <?= $current_language === 'en' ? 'is-active' : '' ?>"
-                    aria-label="<?= htmlspecialchars(t('header.language.switch_en')) ?>"
-                    <?= $current_language === 'en' ? 'aria-current="true"' : '' ?>>
-                    <?= t('header.language.en') ?>
-                </a>
-            </div>
-        </nav>
+        </div>
     </div>
 
     <?php

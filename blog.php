@@ -206,50 +206,44 @@ include 'includes/site-header.php';
 ?>
 
 <main id="main-content" class="pt-20 pb-16">
-  <!-- Hero Section - Redesigned -->
-  <section class="relative py-20 overflow-hidden">
-    <!-- Animated background grid -->
-    <div class="absolute inset-0 cyber-grid opacity-20"></div>
-    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--page-background)]"></div>
-    
+  <!-- Compact Hero + Status Bar -->
+  <section class="relative py-8 sm:py-10 overflow-hidden border-b border-gray-800/50">
+    <div class="absolute inset-0 cyber-grid opacity-10"></div>
     <div class="container mx-auto px-4 relative z-10">
-      <div class="max-w-4xl mx-auto text-center">
-        <!-- Live indicator -->
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/30 mb-8">
-          <span class="relative flex h-2.5 w-2.5">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
-          </span>
-          <span class="text-red-400 text-sm font-medium"><?= t('blog.hero.live_updates', 'Live Cyber Intelligence Feed') ?></span>
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <!-- Left: Title + live badge -->
+        <div class="flex items-center gap-4">
+          <h1 class="text-2xl sm:text-3xl font-bold hero-gradient-text">
+            <?= t('blog.hero.title') ?>
+          </h1>
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-500/10 border border-red-500/30">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+            </span>
+            <span class="text-red-400 text-xs font-medium"><?= t('blog.hero.live', 'LIVE') ?></span>
+          </div>
         </div>
-        
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 hero-gradient-text leading-tight">
-          <?= t('blog.hero.title') ?>
-        </h1>
-        <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
-          <?= t('blog.hero.description') ?>
-        </p>
-        
-        <!-- Quick stats -->
-        <div class="flex flex-wrap justify-center gap-6 mt-10">
-          <div class="flex items-center gap-2 text-gray-400">
-            <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- Right: Quick stats (compact pills) -->
+        <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500">
+          <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-gray-800/50">
+            <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
-            <span class="text-sm">Opdateret: 26. nov 2025</span>
-          </div>
-          <div class="flex items-center gap-2 text-gray-400">
-            <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            26. nov 2025
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-gray-800/50">
+            <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"></path>
             </svg>
-            <span class="text-sm">5 regioner overvåget</span>
-          </div>
-          <div class="flex items-center gap-2 text-gray-400">
-            <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            5 regioner
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-gray-800/50">
+            <svg class="w-3.5 h-3.5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
             </svg>
-            <span class="text-sm">15+ aktive trusler</span>
-          </div>
+            15+ trusler
+          </span>
         </div>
       </div>
     </div>
@@ -275,29 +269,49 @@ include 'includes/site-header.php';
       </div>
     </section>
   <?php else: ?>
-    
-    <!-- Category Filter - Pill Style -->
-    <?php if (!empty($categories)): ?>
-      <section class="py-6 sticky top-16 z-30 bg-[var(--page-background)]/80 backdrop-blur-lg border-b border-gray-800/50">
-        <div class="container mx-auto px-4">
-          <div class="flex items-center gap-4 overflow-x-auto pb-2 scrollbar-hide">
-            <span class="text-sm text-gray-500 whitespace-nowrap"><?= t('blog.filter.label', 'Filter:') ?></span>
-            <div class="flex gap-2">
-              <a href="blog.php"
-                class="blog-filter-pill <?= $category_filter === null ? 'is-active' : '' ?>">
-                <?= t('blog.filter.all') ?>
+
+    <!-- Unified Sticky Navigation: Filter + Region Tabs -->
+  <nav class="sticky top-16 z-30 bg-[var(--page-background)]/95 backdrop-blur-lg border-b border-gray-800/50" aria-label="Blog navigation">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between gap-4 py-3">
+        <!-- Left: Category filter (if available) -->
+        <?php if (!empty($categories)): ?>
+          <div class="flex items-center gap-2 overflow-x-auto scrollbar-hide">
+            <span class="text-xs text-gray-500 hidden sm:inline"><?= t('blog.filter.label', 'Filter:') ?></span>
+            <a href="blog.php"
+              class="blog-filter-pill <?= $category_filter === null ? 'is-active' : '' ?>">
+              <?= t('blog.filter.all') ?>
+            </a>
+            <?php foreach ($categories as $cat): ?>
+              <a href="blog.php?category=<?= urlencode($cat) ?>"
+                class="blog-filter-pill <?= $category_filter === $cat ? 'is-active' : '' ?>">
+                <?= htmlspecialchars($cat) ?>
               </a>
-              <?php foreach ($categories as $cat): ?>
-                <a href="blog.php?category=<?= urlencode($cat) ?>"
-                  class="blog-filter-pill <?= $category_filter === $cat ? 'is-active' : '' ?>">
-                  <?= htmlspecialchars($cat) ?>
-                </a>
-              <?php endforeach; ?>
-            </div>
+            <?php endforeach; ?>
           </div>
+        <?php else: ?>
+          <div></div>
+        <?php endif; ?>
+
+        <!-- Right: Region tabs (compact) -->
+        <div class="flex items-center gap-1 flex-shrink-0">
+          <span class="text-xs text-gray-500 mr-1 hidden md:inline">Nyheder:</span>
+          <?php $first = true;
+          foreach ($news_items as $region_key => $region): ?>
+            <button
+              class="news-region-tab <?= $first ? 'is-active' : '' ?>"
+              data-region="<?= $region_key ?>"
+              aria-selected="<?= $first ? 'true' : 'false' ?>"
+              title="<?= $region['title'] ?>">
+              <span class="text-base"><?= $region['flag'] ?></span>
+              <span class="hidden lg:inline text-xs"><?= $region['title'] ?></span>
+            </button>
+          <?php $first = false;
+          endforeach; ?>
         </div>
-      </section>
-    <?php endif; ?>
+      </div>
+    </div>
+  </nav>
 
     <!-- Blog Posts Section -->
     <section class="py-12">
@@ -316,7 +330,7 @@ include 'includes/site-header.php';
             </a>
           </div>
         <?php else: ?>
-          
+
           <!-- Section Header -->
           <div class="flex items-center justify-between mb-8">
             <div>
@@ -327,7 +341,7 @@ include 'includes/site-header.php';
               <span><?= $total_posts ?> <?= t('blog.articles', 'artikler') ?></span>
             </div>
           </div>
-          
+
           <!-- Posts Grid - Modern Card Design -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <?php foreach ($posts as $index => $post): ?>
@@ -399,95 +413,66 @@ include 'includes/site-header.php';
     </section>
 
     <!-- Global Threat Intelligence Section -->
-    <section class="py-16 relative overflow-hidden">
-      <!-- Background decoration -->
-      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-amber-500/5 to-transparent"></div>
-      
+    <section class="py-10 relative overflow-hidden">
       <div class="container mx-auto px-4 relative z-10">
-        <!-- Section Header -->
-        <div class="text-center max-w-3xl mx-auto mb-12">
-          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/30 mb-6">
-            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-            </svg>
-            <span class="text-amber-400 text-sm font-medium"><?= t('blog.news.badge', 'Threat Intelligence') ?></span>
-          </div>
-          <h2 class="text-3xl sm:text-4xl font-bold mb-4"><?= t('blog.news.title', 'Global Cyber Security News') ?></h2>
-          <p class="text-gray-400 text-lg">
-            <?= t('blog.news.description', 'Seneste cybertrusler og sikkerhedsnyheder fra hele verden – kurateret af vores eksperter.') ?>
-          </p>
-        </div>
-
-        <!-- Region Tabs Navigation -->
-        <div class="flex justify-center mb-10">
-          <div class="inline-flex flex-wrap justify-center gap-2 p-1.5 rounded-2xl bg-gray-800/50 border border-gray-700/50">
-            <?php $first = true; foreach ($news_items as $region_key => $region): ?>
-              <button 
-                class="news-region-tab <?= $first ? 'is-active' : '' ?>" 
-                data-region="<?= $region_key ?>"
-                aria-selected="<?= $first ? 'true' : 'false' ?>">
-                <span class="text-lg"><?= $region['flag'] ?></span>
-                <span class="hidden sm:inline"><?= $region['title'] ?></span>
-              </button>
-            <?php $first = false; endforeach; ?>
+        <!-- Section Header (compact) -->
+        <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
+              <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+            </div>
+            <div>
+              <h2 class="text-lg font-bold text-white"><?= t('blog.news.title', 'Global Cyber Security News') ?></h2>
+              <p class="text-xs text-gray-500"><?= t('blog.news.subtitle', 'Kurateret af vores eksperter') ?></p>
+            </div>
           </div>
         </div>
 
-        <!-- News Panels -->
-        <div class="news-panels max-w-4xl mx-auto">
-          <?php $first = true; foreach ($news_items as $region_key => $region): ?>
+        <!-- News Panels (no tabs here - controlled by sticky nav) -->
+        <div class="news-panels">
+          <?php $first = true;
+          foreach ($news_items as $region_key => $region): ?>
             <div class="news-panel <?= $first ? 'is-visible' : '' ?>" data-panel="<?= $region_key ?>">
               <!-- Region Header -->
-              <div class="flex items-center gap-3 mb-6">
-                <span class="text-3xl"><?= $region['flag'] ?></span>
-                <h3 class="text-xl font-bold text-amber-400"><?= $region['title'] ?></h3>
-                <span class="text-sm text-gray-500"><?= count($region['items']) ?> <?= t('blog.news.alerts', 'alerts') ?></span>
+              <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-800/50">
+                <span class="text-2xl"><?= $region['flag'] ?></span>
+                <h3 class="text-base font-semibold text-white"><?= $region['title'] ?></h3>
+                <span class="ml-auto text-xs text-gray-500 bg-gray-800/50 px-2 py-0.5 rounded"><?= count($region['items']) ?> <?= t('blog.news.alerts', 'alerts') ?></span>
               </div>
-              
-              <!-- News Grid -->
-              <div class="grid gap-4">
+
+              <!-- News Grid (compact cards) -->
+              <div class="grid gap-3">
                 <?php foreach ($region['items'] as $item): ?>
                   <article class="news-card news-card--<?= $item['severity'] ?>">
-                    <div class="news-card__severity" title="<?= ucfirst($item['severity']) ?> severity">
-                      <?php if ($item['severity'] === 'critical'): ?>
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                          <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                        </svg>
-                      <?php elseif ($item['severity'] === 'high'): ?>
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                        </svg>
-                      <?php else: ?>
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                      <?php endif; ?>
+                    <!-- Severity indicator -->
+                    <div class="news-card__severity-badge" data-severity="<?= $item['severity'] ?>">
+                      <?= strtoupper($item['severity']) ?>
                     </div>
-                    
-                    <div class="news-card__content">
-                      <div class="news-card__header">
-                        <span class="news-card__date"><?= $item['date'] ?></span>
+
+                    <div class="news-card__body">
+                      <!-- Meta row -->
+                      <div class="news-card__meta">
                         <span class="news-card__source"><?= $item['source'] ?></span>
+                        <span class="news-card__date"><?= $item['date'] ?></span>
                       </div>
-                      
+
+                      <!-- Title -->
                       <h4 class="news-card__title">
-                        <?php if ($item['url']): ?>
-                          <a href="<?= $item['url'] ?>" target="_blank" rel="noopener noreferrer" class="hover:text-amber-400 transition-colors">
-                            <?= $item['title'] ?>
-                          </a>
-                        <?php else: ?>
-                          <?= $item['title'] ?>
-                        <?php endif; ?>
+                        <?= $item['title'] ?>
                       </h4>
-                      
+
+                      <!-- Excerpt -->
                       <p class="news-card__excerpt"><?= $item['excerpt'] ?></p>
-                      
+
+                      <!-- Source link CTA (unified) -->
                       <?php if ($item['url']): ?>
-                        <a href="<?= $item['url'] ?>" target="_blank" rel="noopener noreferrer" class="news-card__link">
-                          <?= t('blog.news.read_source', 'Læs kilde') ?>
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <a href="<?= $item['url'] ?>" target="_blank" rel="noopener noreferrer" class="news-card__source-link">
+                          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
                           </svg>
+                          <?= t('blog.news.read_source', 'Læs kilde') ?>
                         </a>
                       <?php endif; ?>
                     </div>
@@ -495,18 +480,17 @@ include 'includes/site-header.php';
                 <?php endforeach; ?>
               </div>
             </div>
-          <?php $first = false; endforeach; ?>
+          <?php $first = false;
+          endforeach; ?>
         </div>
 
-        <!-- Attribution Footer -->
-        <div class="mt-10 text-center">
-          <p class="text-sm text-gray-500">
-            <svg class="w-4 h-4 inline-block mr-1 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-            </svg>
-            <?= t('blog.news.attribution', 'Kurateret fra verificerede kilder. Alle nyheder er til informationsformål.') ?>
-          </p>
-        </div>
+        <!-- Attribution -->
+        <p class="text-xs text-gray-500 mt-6 text-center">
+          <svg class="w-3 h-3 inline-block mr-1 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+          </svg>
+          <?= t('blog.news.attribution', 'Kurateret fra verificerede kilder. Alle nyheder er til informationsformål.') ?>
+        </p>
       </div>
     </section>
 
@@ -519,17 +503,17 @@ include 'includes/site-header.php';
             <div class="absolute inset-0 opacity-30">
               <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23fbbf24\' fill-opacity=\'0.1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
             </div>
-            
+
             <div class="relative z-10 text-center">
               <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-400/20 mb-6">
                 <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                 </svg>
               </div>
-              
+
               <h3 class="text-2xl sm:text-3xl font-bold mb-4"><?= t('blog.newsletter.title') ?></h3>
               <p class="text-gray-300 mb-8 max-w-xl mx-auto"><?= t('blog.newsletter.description') ?></p>
-              
+
               <form id="blog-newsletter-form" class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
                 <input type="email"
                   name="email"
@@ -541,7 +525,7 @@ include 'includes/site-header.php';
                   <?= t('blog.newsletter.button') ?>
                 </button>
               </form>
-              
+
               <p class="text-xs text-gray-500 mt-4"><?= t('blog.newsletter.privacy', 'Vi respekterer dit privatliv. Afmeld når som helst.') ?></p>
             </div>
           </div>
@@ -552,328 +536,414 @@ include 'includes/site-header.php';
 </main>
 
 <style>
-/* Blog Page Specific Styles */
+  /* Blog Page Specific Styles */
 
-/* Cyber grid background */
-.cyber-grid {
-  background-image: 
-    linear-gradient(rgba(255, 199, 0, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 199, 0, 0.03) 1px, transparent 1px);
-  background-size: 50px 50px;
-  animation: grid-move 20s linear infinite;
-}
+  /* Cyber grid background */
+  .cyber-grid {
+    background-image:
+      linear-gradient(rgba(255, 199, 0, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 199, 0, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: grid-move 20s linear infinite;
+  }
 
-@keyframes grid-move {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(50px, 50px); }
-}
+  @keyframes grid-move {
+    0% {
+      transform: translate(0, 0);
+    }
 
-/* Filter pills */
-.blog-filter-pill {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  border-radius: 999px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-medium-emphasis);
-  background: var(--surface-200);
-  border: 1px solid var(--surface-border);
-  white-space: nowrap;
-  transition: all 0.2s ease;
-}
+    100% {
+      transform: translate(50px, 50px);
+    }
+  }
 
-.blog-filter-pill:hover {
-  border-color: var(--primary-accent);
-  color: var(--text-high-emphasis);
-}
+  /* Filter pills */
+  .blog-filter-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-medium-emphasis);
+    background: var(--surface-200);
+    border: 1px solid var(--surface-border);
+    white-space: nowrap;
+    transition: all 0.2s ease;
+  }
 
-.blog-filter-pill.is-active {
-  background: var(--primary-accent);
-  color: #000;
-  border-color: transparent;
-  font-weight: 600;
-}
+  .blog-filter-pill:hover {
+    border-color: var(--primary-accent);
+    color: var(--text-high-emphasis);
+  }
 
-/* Blog cards */
-.blog-card {
-  background: var(--surface-card-bg);
-  border: 1px solid var(--surface-border);
-  border-radius: 1.25rem;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
+  .blog-filter-pill.is-active {
+    background: var(--primary-accent);
+    color: #000;
+    border-color: transparent;
+    font-weight: 600;
+  }
 
-.blog-card:hover {
-  border-color: var(--primary-accent);
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px -20px rgba(255, 199, 0, 0.2);
-}
+  /* Blog cards */
+  .blog-card {
+    background: var(--surface-card-bg);
+    border: 1px solid var(--surface-border);
+    border-radius: 1.25rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
 
-.blog-card__image {
-  position: relative;
-  aspect-ratio: 16/9;
-  overflow: hidden;
-  background: var(--surface-200);
-}
+  .blog-card:hover {
+    border-color: var(--primary-accent);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -20px rgba(255, 199, 0, 0.2);
+  }
 
-.blog-card__image-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
-}
+  .blog-card__image {
+    position: relative;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    background: var(--surface-200);
+  }
 
-.blog-card__content {
-  padding: 1.5rem;
-}
+  .blog-card__image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+  }
 
-.blog-card__category {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  background: var(--primary-accent-soft);
-  color: var(--primary-accent);
-  margin-bottom: 0.75rem;
-}
+  .blog-card__content {
+    padding: 1.5rem;
+  }
 
-.blog-card__title {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: var(--text-high-emphasis);
-  margin-bottom: 0.75rem;
-  line-height: 1.4;
-}
+  .blog-card__category {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: var(--primary-accent-soft);
+    color: var(--primary-accent);
+    margin-bottom: 0.75rem;
+  }
 
-.blog-card__excerpt {
-  font-size: 0.9rem;
-  color: var(--text-medium-emphasis);
-  line-height: 1.6;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  margin-bottom: 1rem;
-}
+  .blog-card__title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-high-emphasis);
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+  }
 
-.blog-card__meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 1rem;
-  border-top: 1px solid var(--surface-border);
-}
+  .blog-card__excerpt {
+    font-size: 0.9rem;
+    color: var(--text-medium-emphasis);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
 
-.blog-card__read-more {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--primary-accent);
-}
+  .blog-card__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--surface-border);
+  }
 
-/* News region tabs */
-.news-region-tab {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.625rem 1rem;
-  border-radius: 0.75rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-medium-emphasis);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
+  .blog-card__read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--primary-accent);
+  }
 
-.news-region-tab:hover {
-  color: var(--text-high-emphasis);
-  background: rgba(255, 255, 255, 0.05);
-}
+  /* News region tabs - compact for sticky nav */
+  .news-region-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.625rem;
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-medium-emphasis);
+    background: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
 
-.news-region-tab.is-active {
-  background: var(--primary-accent);
-  color: #000;
-  font-weight: 600;
-}
+  .news-region-tab:hover {
+    color: var(--text-high-emphasis);
+    background: rgba(255, 255, 255, 0.05);
+  }
 
-/* News panels */
-.news-panel {
-  display: none;
-}
+  .news-region-tab.is-active {
+    background: var(--primary-accent);
+    color: #000;
+    font-weight: 600;
+  }
 
-.news-panel.is-visible {
-  display: block;
-  animation: fadeIn 0.3s ease;
-}
+  /* News panels */
+  .news-panel {
+    display: none;
+  }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+  .news-panel.is-visible {
+    display: block;
+    animation: fadeIn 0.2s ease;
+  }
 
-/* News cards */
-.news-card {
-  display: flex;
-  gap: 1rem;
-  padding: 1.25rem;
-  background: var(--surface-card-bg);
-  border: 1px solid var(--surface-border);
-  border-radius: 1rem;
-  transition: all 0.2s ease;
-}
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
 
-.news-card:hover {
-  border-color: var(--surface-border-strong);
-  transform: translateX(4px);
-}
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-.news-card__severity {
-  flex-shrink: 0;
-  width: 2.5rem;
-  height: 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.75rem;
-}
+  /* News cards - compact redesign */
+  .news-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+    padding: 1rem;
+    background: var(--surface-card-bg);
+    border: 1px solid var(--surface-border);
+    border-radius: 0.75rem;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
 
-.news-card--critical .news-card__severity {
-  background: rgba(239, 68, 68, 0.15);
-  color: #f87171;
-}
+  .news-card:hover {
+    border-color: var(--surface-border-strong);
+    transform: translateX(2px);
+  }
 
-.news-card--high .news-card__severity {
-  background: rgba(251, 191, 36, 0.15);
-  color: #fbbf24;
-}
+  /* Severity badge (compact pill) */
+  .news-card__severity-badge {
+    flex-shrink: 0;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
 
-.news-card--medium .news-card__severity {
-  background: rgba(59, 130, 246, 0.15);
-  color: #60a5fa;
-}
+  .news-card__severity-badge[data-severity="critical"] {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+  }
 
-.news-card__content {
-  flex: 1;
-  min-width: 0;
-}
+  .news-card__severity-badge[data-severity="high"] {
+    background: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(251, 191, 36, 0.3);
+  }
 
-.news-card__header {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-}
+  .news-card__severity-badge[data-severity="medium"] {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+  }
 
-.news-card__date {
-  font-size: 0.75rem;
-  color: var(--muted);
-}
+  .news-card__body {
+    flex: 1;
+    min-width: 0;
+  }
 
-.news-card__source {
-  font-size: 0.75rem;
-  color: var(--primary-accent);
-  font-weight: 500;
-}
+  .news-card__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.375rem;
+  }
 
-.news-card__title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-high-emphasis);
-  margin-bottom: 0.5rem;
-  line-height: 1.4;
-}
+  .news-card__source {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--primary-accent);
+  }
 
-.news-card__excerpt {
-  font-size: 0.875rem;
-  color: var(--text-medium-emphasis);
-  line-height: 1.5;
-}
+  .news-card__date {
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
 
-.news-card__link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  margin-top: 0.75rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--primary-accent);
-  transition: gap 0.2s ease;
-}
+  .news-card__date::before {
+    content: "•";
+    margin-right: 0.5rem;
+    color: var(--muted);
+  }
 
-.news-card__link:hover {
-  gap: 0.625rem;
-}
+  .news-card__title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-high-emphasis);
+    line-height: 1.4;
+    margin-bottom: 0.375rem;
+  }
 
-/* Newsletter card */
-.newsletter-card {
-  background: linear-gradient(135deg, rgba(255, 199, 0, 0.1) 0%, rgba(17, 24, 39, 0.95) 50%, rgba(255, 199, 0, 0.05) 100%);
-  border: 1px solid rgba(255, 199, 0, 0.2);
-}
+  .news-card__excerpt {
+    font-size: 0.8rem;
+    color: var(--text-medium-emphasis);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 
-/* Hide scrollbar for filter pills */
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+  /* Unified source link CTA */
+  .news-card__source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    margin-top: 0.625rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--primary-accent);
+    background: var(--primary-accent-soft);
+    transition: background-color 0.15s ease, gap 0.15s ease;
+  }
 
-/* Light mode adjustments */
-:root[data-theme="light"] .blog-card {
-  background: rgba(255, 255, 255, 0.9);
-}
+  .news-card__source-link:hover {
+    background: rgba(255, 199, 0, 0.25);
+    gap: 0.5rem;
+  }
 
-:root[data-theme="light"] .news-card {
-  background: rgba(255, 255, 255, 0.9);
-}
+  /* Legacy styles for backwards compat */
+  .news-card__severity {
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.75rem;
+  }
 
-:root[data-theme="light"] .blog-filter-pill.is-active {
-  color: #1f2937;
-}
+  .news-card--critical .news-card__severity {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+  }
 
-:root[data-theme="light"] .news-region-tab.is-active {
-  color: #1f2937;
-}
+  .news-card--high .news-card__severity {
+    background: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
+  }
 
-:root[data-theme="light"] .newsletter-card {
-  background: linear-gradient(135deg, rgba(255, 199, 0, 0.15) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(255, 199, 0, 0.08) 100%);
-}
+  .news-card--medium .news-card__severity {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+  }
+
+  .news-card__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .news-card__header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .news-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary-accent);
+    transition: gap 0.2s ease;
+  }
+
+  .news-card__link:hover {
+    gap: 0.625rem;
+  }
+
+  /* Newsletter card */
+  .newsletter-card {
+    background: linear-gradient(135deg, rgba(255, 199, 0, 0.1) 0%, rgba(17, 24, 39, 0.95) 50%, rgba(255, 199, 0, 0.05) 100%);
+    border: 1px solid rgba(255, 199, 0, 0.2);
+  }
+
+  /* Hide scrollbar for filter pills */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Light mode adjustments */
+  :root[data-theme="light"] .blog-card {
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  :root[data-theme="light"] .news-card {
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  :root[data-theme="light"] .blog-filter-pill.is-active {
+    color: #1f2937;
+  }
+
+  :root[data-theme="light"] .news-region-tab.is-active {
+    color: #1f2937;
+  }
+
+  :root[data-theme="light"] .newsletter-card {
+    background: linear-gradient(135deg, rgba(255, 199, 0, 0.15) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(255, 199, 0, 0.08) 100%);
+  }
 </style>
 
 <script>
-// News region tabs functionality
-document.addEventListener('DOMContentLoaded', function() {
-  const tabs = document.querySelectorAll('.news-region-tab');
-  const panels = document.querySelectorAll('.news-panel');
-  
-  tabs.forEach(tab => {
-    tab.addEventListener('click', function() {
-      const region = this.dataset.region;
-      
-      // Update tabs
-      tabs.forEach(t => {
-        t.classList.remove('is-active');
-        t.setAttribute('aria-selected', 'false');
-      });
-      this.classList.add('is-active');
-      this.setAttribute('aria-selected', 'true');
-      
-      // Update panels
-      panels.forEach(p => {
-        p.classList.remove('is-visible');
-        if (p.dataset.panel === region) {
-          p.classList.add('is-visible');
-        }
+  // News region tabs functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.news-region-tab');
+    const panels = document.querySelectorAll('.news-panel');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        const region = this.dataset.region;
+
+        // Update tabs
+        tabs.forEach(t => {
+          t.classList.remove('is-active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        this.classList.add('is-active');
+        this.setAttribute('aria-selected', 'true');
+
+        // Update panels
+        panels.forEach(p => {
+          p.classList.remove('is-visible');
+          if (p.dataset.panel === region) {
+            p.classList.add('is-visible');
+          }
+        });
       });
     });
   });
-});
 </script>
 
 <?php include 'includes/site-footer.php'; ?>

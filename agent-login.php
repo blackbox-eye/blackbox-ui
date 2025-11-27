@@ -125,7 +125,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     .login-card {
-      width: min(90vw, 320px);
+      width: 340px;
+      max-width: 92vw;
+      margin: 0 auto;
       background: rgba(12, 12, 14, 0.92);
       border: 1px solid rgba(212, 175, 55, 0.12);
       border-radius: 12px;
@@ -490,23 +492,123 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       transform: translateX(-2px);
     }
 
-    .interface-menu {
+    /* Menu launcher trigger */
+    .menu-launcher {
       position: fixed;
       top: 50%;
-      right: clamp(1.5rem, 4vw, 3.5rem);
+      right: 0;
       transform: translateY(-50%);
       display: flex;
       flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 0.55rem;
+      background: rgba(10, 10, 16, 0.85);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-right: none;
+      border-radius: 12px 0 0 12px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      cursor: pointer;
+      z-index: 3;
+      transition: all 0.3s ease;
+    }
+
+    .menu-launcher:hover {
+      background: rgba(15, 15, 22, 0.92);
+      border-color: rgba(255, 209, 92, 0.4);
+      padding-right: 0.75rem;
+    }
+
+    .menu-launcher__icon {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(255, 209, 92, 0.18);
+      border: 1px solid rgba(255, 209, 92, 0.35);
+      color: #ffe8a3;
+      filter: drop-shadow(0 4px 12px rgba(255, 209, 92, 0.3));
+      transition: all 0.25s ease;
+    }
+
+    .menu-launcher:hover .menu-launcher__icon {
+      background: rgba(255, 209, 92, 0.28);
+      transform: scale(1.08);
+    }
+
+    .menu-launcher__icon svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .menu-launcher__label {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      font-size: 0.55rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.6);
+      transition: color 0.25s ease;
+    }
+
+    .menu-launcher:hover .menu-launcher__label {
+      color: #ffe8a3;
+    }
+
+    /* Slide-in menu panel */
+    .interface-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      width: 260px;
+      max-width: 85vw;
+      display: flex;
+      flex-direction: column;
       gap: 1rem;
-      padding: 1.25rem 1.1rem;
-      min-width: 168px;
-      border-radius: 18px;
-      background: rgba(10, 10, 16, 0.88);
-      border: 1px solid rgba(212, 175, 55, 0.16);
-      box-shadow: 0 24px 46px rgba(0, 0, 0, 0.55);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      z-index: 2;
+      padding: 1.5rem 1.25rem;
+      background: rgba(8, 8, 14, 0.96);
+      border-left: 1px solid rgba(212, 175, 55, 0.2);
+      box-shadow: -12px 0 48px rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      z-index: 4;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-y: auto;
+    }
+
+    .interface-menu.is-open {
+      transform: translateX(0);
+    }
+
+    .interface-menu__close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .interface-menu__close:hover {
+      background: rgba(255, 209, 92, 0.2);
+      border-color: rgba(255, 209, 92, 0.4);
+      color: #ffe8a3;
+    }
+
+    .interface-menu__close svg {
+      width: 12px;
+      height: 12px;
     }
 
     .interface-menu__brand {
@@ -539,8 +641,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     .interface-menu__brand-label strong {
       font-size: 0.92rem;
-      color: #ffd15c;
+      color: #ffe8a3;
       letter-spacing: 0.04em;
+      text-shadow: 0 2px 8px rgba(255, 209, 92, 0.35);
     }
 
     .interface-menu__heading {
@@ -559,39 +662,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     .interface-menu__item {
       display: flex;
       align-items: center;
-      gap: 0.65rem;
+      gap: 0.75rem;
       width: 100%;
-      padding: 0.55rem 0.75rem;
+      padding: 0.6rem 0.85rem;
       border-radius: 12px;
       border: 1px solid rgba(255, 255, 255, 0.08);
       background: linear-gradient(135deg, rgba(18, 18, 24, 0.75), rgba(12, 12, 18, 0.6));
-      color: rgba(255, 255, 255, 0.85);
-      font-size: 0.7rem;
+      color: #ffe8a3;
+      font-size: 0.72rem;
       letter-spacing: 0.02em;
       text-decoration: none;
+      text-shadow: 0 1px 6px rgba(255, 209, 92, 0.25);
       transition: all 0.25s ease;
       cursor: pointer;
     }
 
+    .interface-menu__item[aria-current="page"],
+    .interface-menu__item.is-active {
+      border-color: rgba(255, 209, 92, 0.5);
+      background: linear-gradient(135deg, rgba(255, 209, 92, 0.15), rgba(212, 175, 55, 0.1));
+      box-shadow: inset 0 0 0 1px rgba(255, 209, 92, 0.15);
+    }
+
     .interface-menu__item:hover,
     .interface-menu__item:focus {
-      border-color: rgba(255, 209, 92, 0.35);
-      color: #fff7db;
-      transform: translateX(-2px);
-      box-shadow: 0 14px 32px rgba(212, 175, 55, 0.25);
+      border-color: rgba(255, 209, 92, 0.5);
+      color: #fff;
+      text-shadow: 0 2px 10px rgba(255, 232, 163, 0.4);
+      transform: translateX(-3px);
+      box-shadow: 0 14px 32px rgba(212, 175, 55, 0.3);
       outline: none;
     }
 
     .interface-menu__icon {
       flex: none;
-      width: 1.35rem;
-      height: 1.35rem;
+      width: 1.5rem;
+      height: 1.5rem;
       display: grid;
       place-items: center;
       border-radius: 50%;
-      background: rgba(255, 209, 92, 0.16);
-      border: 1px solid rgba(255, 209, 92, 0.25);
-      color: #ffd15c;
+      background: rgba(255, 209, 92, 0.2);
+      border: 1px solid rgba(255, 209, 92, 0.35);
+      color: #ffe8a3;
+      filter: drop-shadow(0 2px 6px rgba(255, 209, 92, 0.3));
     }
 
     .interface-menu__icon svg {
@@ -600,57 +713,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     .interface-menu__footer {
-      margin-top: 0.5rem;
-      padding: 0.75rem 0.65rem 0.25rem;
+      margin-top: auto;
+      padding: 1rem 0.5rem 0.5rem;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
-      flex-direction: column;
-      gap: 0.55rem;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .interface-menu__status {
       font-size: 0.6rem;
-      color: rgba(255, 255, 255, 0.55);
+      color: rgba(255, 232, 163, 0.7);
       letter-spacing: 0.04em;
       text-transform: uppercase;
     }
 
-    .interface-menu__cta {
-      padding: 0.55rem 0.75rem;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 209, 92, 0.35);
-      background: linear-gradient(135deg, rgba(255, 209, 92, 0.25), rgba(212, 175, 55, 0.35));
-      color: #1a1100;
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      text-decoration: none;
-      display: inline-flex;
-      justify-content: center;
-      transition: all 0.25s ease;
-      cursor: pointer;
+    .interface-menu__status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+      animation: pulse-dot 2s ease-in-out infinite;
     }
 
-    .interface-menu__cta:hover,
-    .interface-menu__cta:focus {
-      color: #fff9e1;
-      background: linear-gradient(135deg, rgba(255, 209, 92, 0.45), rgba(212, 175, 55, 0.55));
-      box-shadow: 0 14px 28px rgba(212, 175, 55, 0.28);
-      outline: none;
-    }
-
-    @media (max-width: 1024px) {
-      .interface-menu {
-        right: 1.25rem;
-        padding: 1rem 0.9rem;
-        min-width: 150px;
-        gap: 0.6rem;
-      }
-
-      .interface-menu__item {
-        font-size: 0.66rem;
-      }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
     }
 
     @media (max-width: 768px) {
@@ -659,47 +748,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         align-items: center;
         justify-content: flex-start;
         gap: 2rem;
-        padding: 3.5rem 1.4rem 2.5rem;
+        padding: 3.5rem 1.25rem 2.5rem;
       }
 
-      .interface-menu {
+      .menu-launcher {
+        top: 1rem;
+        right: 0;
+        transform: none;
+        padding: 0.5rem 0.4rem;
+        border-radius: 8px 0 0 8px;
+      }
+
+      .menu-launcher__label {
         display: none;
       }
 
       .login-card {
-        width: min(92vw, 310px);
-        padding: 1.45rem 1.35rem 1.3rem;
+        width: 92vw;
+        max-width: 340px;
+        padding: 1.5rem 1.35rem 1.35rem;
       }
 
       .logo-section {
-        margin: 2rem auto 1rem;
+        margin: 1.75rem auto 1rem;
         max-width: 200px;
       }
 
       .logo-img--primary {
-        width: 180px;
+        width: 170px;
       }
 
       .title {
-        font-size: 0.92rem;
+        font-size: 0.88rem;
       }
 
       .subtitle {
-        font-size: 0.6rem;
+        font-size: 0.58rem;
       }
 
       .form-input {
-        font-size: 0.7rem;
-        padding: 0.5rem 0.65rem;
+        font-size: 0.78rem;
+        padding: 0.65rem 0.75rem;
+        min-height: 44px;
       }
 
       .submit-btn {
-        font-size: 0.66rem;
-        padding: 0.55rem;
+        font-size: 0.72rem;
+        padding: 0.7rem;
+        min-height: 44px;
       }
 
       .request-access {
-        max-width: 90vw;
+        max-width: 92vw;
         margin-left: 0;
         text-align: center;
       }
@@ -714,37 +814,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     @media (max-width: 420px) {
+      body {
+        padding: 3rem 1rem 2rem;
+      }
+
       .login-card {
         width: 100%;
-        padding: 1.35rem 1.1rem 1.2rem;
+        padding: 1.35rem 1.1rem 1.25rem;
       }
 
       .logo-img--primary {
-        width: 160px;
+        width: 150px;
       }
 
       .title {
-        font-size: 0.88rem;
+        font-size: 0.82rem;
       }
 
       .subtitle {
-        font-size: 0.58rem;
+        font-size: 0.54rem;
       }
 
       .request-access {
-        font-size: 0.64rem;
+        font-size: 0.62rem;
       }
 
       .request-access button,
       .request-access a {
         font-size: 0.64rem;
-        padding: 0.5rem 1.2rem;
-      }
-    }
-
-    @media (min-width: 1200px) {
-      .request-access {
-        margin-right: 220px;
+        padding: 0.55rem 1.25rem;
+        min-height: 40px;
       }
     }
   </style>
@@ -758,7 +857,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <span>Tilbage</span>
   </a>
 
-  <nav class="interface-menu" aria-label="GreyEYE kontrolpanel genveje">
+  <!-- Menu Launcher Trigger -->
+  <button type="button" class="menu-launcher" id="menuLauncher" aria-label="Åbn kommandopanel" aria-expanded="false" aria-controls="commandDeckMenu">
+    <span class="menu-launcher__icon" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </span>
+    <span class="menu-launcher__label">Menu</span>
+  </button>
+
+  <!-- Slide-in Command Deck Panel -->
+  <nav class="interface-menu" id="commandDeckMenu" aria-label="GreyEYE kontrolpanel genveje" aria-hidden="true">
+    <!-- Close button -->
+    <button type="button" class="interface-menu__close" id="menuClose" aria-label="Luk menu">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+
     <div class="interface-menu__brand">
       <img src="assets/greyeeye_logo_transparent.png" alt="GreyEYE logo">
       <div class="interface-menu__brand-label">
@@ -768,7 +888,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <p class="interface-menu__heading">Navigator</p>
     <div class="interface-menu__list">
-      <button type="button" class="interface-menu__item" data-destination="overview">
+      <button type="button" class="interface-menu__item is-active" data-destination="overview" aria-current="page">
         <span class="interface-menu__icon" aria-hidden="true">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
             <path d="M3 12l9-9 9 9" />
@@ -827,8 +947,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </button>
     </div>
     <div class="interface-menu__footer">
-      <p class="interface-menu__status">Live ops status: stabil</p>
-      <button type="button" class="interface-menu__cta" data-destination="ops-center">Åbn kontrolrum</button>
+      <span class="interface-menu__status-dot"></span>
+      <span class="interface-menu__status">System online</span>
     </div>
   </nav>
 
@@ -1005,6 +1125,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && overlay?.classList.contains('is-visible')) {
           closeModal();
+        }
+      });
+
+      // =========================================
+      // Command Deck Slide-In Menu
+      // =========================================
+      const menuLauncher = document.getElementById('menuLauncher');
+      const menuPanel = document.getElementById('commandDeckMenu');
+      const menuClose = document.getElementById('menuClose');
+
+      const openMenu = () => {
+        if (!menuPanel) return;
+        menuPanel.classList.add('is-open');
+        menuPanel.setAttribute('aria-hidden', 'false');
+        menuLauncher?.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+        requestAnimationFrame(() => {
+          menuClose?.focus();
+        });
+      };
+
+      const closeMenu = () => {
+        if (!menuPanel) return;
+        menuPanel.classList.remove('is-open');
+        menuPanel.setAttribute('aria-hidden', 'true');
+        menuLauncher?.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+        menuLauncher?.focus();
+      };
+
+      menuLauncher?.addEventListener('click', openMenu);
+      menuClose?.addEventListener('click', closeMenu);
+
+      // Click outside menu to close
+      document.addEventListener('click', (event) => {
+        if (menuPanel?.classList.contains('is-open') &&
+            !menuPanel.contains(event.target) &&
+            !menuLauncher?.contains(event.target)) {
+          closeMenu();
+        }
+      });
+
+      // ESC key to close menu
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && menuPanel?.classList.contains('is-open')) {
+          closeMenu();
+        }
+      });
+
+      // Trap focus inside menu when open
+      menuPanel?.addEventListener('keydown', (event) => {
+        if (event.key === 'Tab') {
+          const focusableElements = menuPanel.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+          const firstElement = focusableElements[0];
+          const lastElement = focusableElements[focusableElements.length - 1];
+
+          if (event.shiftKey && document.activeElement === firstElement) {
+            event.preventDefault();
+            lastElement?.focus();
+          } else if (!event.shiftKey && document.activeElement === lastElement) {
+            event.preventDefault();
+            firstElement?.focus();
+          }
         }
       });
     })();

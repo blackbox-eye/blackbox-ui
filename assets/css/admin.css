@@ -2491,3 +2491,402 @@ body {
   gap: 0.3rem;
 }
 
+
+/* ==========================================
+   INTEL VAULT EXTENDED STYLES
+   ========================================== */
+
+.intel-vault__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--admin-spacing-md);
+  margin-bottom: var(--admin-spacing-lg);
+}
+
+.intel-vault__stat {
+  background: var(--admin-bg-secondary);
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: var(--admin-border-radius);
+  padding: var(--admin-spacing-md);
+  text-align: center;
+}
+
+.intel-vault__stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--admin-text-gold);
+  margin-bottom: 0.25rem;
+}
+
+.intel-vault__stat-label {
+  font-size: 0.7rem;
+  color: var(--admin-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.intel-vault__error {
+  display: flex;
+  align-items: center;
+  gap: var(--admin-spacing-sm);
+  padding: var(--admin-spacing-md);
+  background: rgba(231, 76, 60, 0.1);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  border-radius: var(--admin-border-radius);
+  color: #e74c3c;
+  margin-bottom: var(--admin-spacing-lg);
+}
+
+/* Upload Modal */
+.intel-vault__modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+}
+
+.intel-vault__modal.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.intel-vault__modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.intel-vault__modal-content {
+  position: relative;
+  background: var(--admin-bg-secondary);
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: var(--admin-border-radius);
+  padding: var(--admin-spacing-lg);
+  max-width: 480px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.6);
+}
+
+.intel-vault__modal-close {
+  position: absolute;
+  top: var(--admin-spacing-md);
+  right: var(--admin-spacing-md);
+  background: none;
+  border: none;
+  color: var(--admin-text-muted);
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: color 0.2s;
+}
+
+.intel-vault__modal-close:hover {
+  color: var(--admin-text-primary);
+}
+
+.intel-vault__modal-title {
+  font-size: 1.1rem;
+  color: var(--admin-text-gold);
+  margin: 0 0 var(--admin-spacing-sm);
+}
+
+.intel-vault__modal-description {
+  font-size: 0.75rem;
+  color: var(--admin-text-secondary);
+  margin: 0 0 var(--admin-spacing-lg);
+  line-height: 1.5;
+}
+
+.intel-vault__modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--admin-spacing-sm);
+  margin-top: var(--admin-spacing-lg);
+}
+
+/* Dropzone */
+.intel-vault__dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--admin-spacing-xl);
+  border: 2px dashed var(--admin-border-subtle);
+  border-radius: var(--admin-border-radius);
+  background: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.intel-vault__dropzone:hover,
+.intel-vault__dropzone.dragover {
+  border-color: var(--admin-border-gold);
+  background: rgba(212, 175, 55, 0.05);
+}
+
+.intel-vault__dropzone.has-file {
+  border-color: rgba(46, 204, 113, 0.5);
+  background: rgba(46, 204, 113, 0.05);
+}
+
+.intel-vault__dropzone svg {
+  color: var(--admin-text-muted);
+  margin-bottom: var(--admin-spacing-md);
+}
+
+.intel-vault__dropzone-text {
+  font-size: 0.85rem;
+  color: var(--admin-text-secondary);
+  margin: 0 0 var(--admin-spacing-sm);
+}
+
+.intel-vault__dropzone-btn {
+  background: none;
+  border: none;
+  color: var(--admin-text-gold);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+}
+
+.intel-vault__dropzone-hint {
+  font-size: 0.7rem;
+  color: var(--admin-text-muted);
+  margin: 0;
+}
+
+.intel-vault__file-input {
+  display: none;
+}
+
+/* Selected File */
+.intel-vault__selected-file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--admin-spacing-md);
+  padding: var(--admin-spacing-sm) var(--admin-spacing-md);
+  background: rgba(46, 204, 113, 0.1);
+  border: 1px solid rgba(46, 204, 113, 0.3);
+  border-radius: var(--admin-border-radius);
+  margin-top: var(--admin-spacing-md);
+}
+
+.intel-vault__selected-file-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  overflow: hidden;
+}
+
+.intel-vault__selected-file-name {
+  font-size: 0.8rem;
+  color: var(--admin-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.intel-vault__selected-file-size {
+  font-size: 0.7rem;
+  color: var(--admin-text-muted);
+}
+
+.intel-vault__selected-file-remove {
+  background: none;
+  border: none;
+  color: var(--admin-text-muted);
+  cursor: pointer;
+  padding: 0.25rem;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+
+.intel-vault__selected-file-remove:hover {
+  color: #e74c3c;
+}
+
+/* Form elements */
+.intel-vault__form-group {
+  margin-top: var(--admin-spacing-md);
+}
+
+.intel-vault__label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--admin-text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.intel-vault__label .optional {
+  color: var(--admin-text-muted);
+  font-weight: normal;
+}
+
+.intel-vault__select,
+.intel-vault__textarea {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  background: var(--admin-bg-primary);
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: var(--admin-border-radius);
+  color: var(--admin-text-primary);
+  font-size: 0.8rem;
+  transition: border-color 0.2s;
+}
+
+.intel-vault__select:focus,
+.intel-vault__textarea:focus {
+  outline: none;
+  border-color: var(--admin-border-gold);
+}
+
+.intel-vault__textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Progress */
+.intel-vault__progress {
+  margin-top: var(--admin-spacing-md);
+  padding: var(--admin-spacing-sm);
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--admin-border-radius);
+}
+
+.intel-vault__progress-bar {
+  height: 4px;
+  background: var(--admin-gold);
+  border-radius: 2px;
+  width: 0;
+  transition: width 0.3s;
+}
+
+.intel-vault__progress-text {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--admin-text-muted);
+  text-align: center;
+  margin-top: var(--admin-spacing-sm);
+}
+
+/* Document List */
+.intel-vault__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--admin-spacing-sm);
+}
+
+.intel-vault__item {
+  display: flex;
+  align-items: center;
+  gap: var(--admin-spacing-md);
+  padding: var(--admin-spacing-md);
+  background: var(--admin-bg-secondary);
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: var(--admin-border-radius);
+  transition: border-color 0.2s;
+}
+
+.intel-vault__item:hover {
+  border-color: var(--admin-border-gold);
+}
+
+.intel-vault__item-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(212, 175, 55, 0.1);
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.intel-vault__item-icon svg {
+  width: 20px;
+  height: 20px;
+  color: var(--admin-gold);
+}
+
+.intel-vault__item-icon--pdf svg { color: #e74c3c; }
+.intel-vault__item-icon--word svg { color: #2980b9; }
+.intel-vault__item-icon--excel svg { color: #27ae60; }
+.intel-vault__item-icon--image svg { color: #9b59b6; }
+.intel-vault__item-icon--archive svg { color: #f39c12; }
+
+.intel-vault__item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.intel-vault__item-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--admin-text-primary);
+  margin: 0 0 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.intel-vault__item-meta {
+  display: flex;
+  gap: var(--admin-spacing-md);
+  font-size: 0.7rem;
+  color: var(--admin-text-muted);
+}
+
+.intel-vault__item-badge {
+  padding: 0.2rem 0.5rem;
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 4px;
+  background: rgba(100, 100, 100, 0.15);
+  color: var(--badge-color);
+  border: 1px solid var(--badge-color);
+  border-color: var(--badge-color);
+  opacity: 0.9;
+  white-space: nowrap;
+}
+
+.intel-vault__item-actions {
+  display: flex;
+  gap: var(--admin-spacing-sm);
+}
+
+.intel-vault__item-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: 6px;
+  color: var(--admin-text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.intel-vault__item-btn:hover {
+  border-color: var(--admin-gold);
+  color: var(--admin-gold);
+}
+
+.intel-vault__item-btn--danger:hover {
+  border-color: #e74c3c;
+  color: #e74c3c;
+}
+

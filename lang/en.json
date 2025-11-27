@@ -100,11 +100,17 @@
       "secondary_cta": "Explore Platform",
       "secondary_cta_aria": "Explore the Blackbox EYE platform features",
       "live_feed_title": "Live Threat Intelligence",
+      "live_feed_subtitle": "Real-time security events",
+      "live_badge": "LIVE",
       "stats_aria": "Platform statistics showing threats neutralized, uptime, and response time",
       "feed": {
         "malware": "Ransomware payload blocked – endpoint isolated",
         "login": "Lateral movement detected – credentials rotated",
-        "scan": "Shadow IT discovery – 23 new assets catalogued"
+        "scan": "Shadow IT discovery – 23 new assets catalogued",
+        "status_quarantined": "Quarantined",
+        "status_resolved": "Resolved",
+        "status_pending": "Pending",
+        "view_all": "View all events"
       },
       "stats": {
         "threats": "Threats Neutralized",

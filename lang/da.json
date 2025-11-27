@@ -100,11 +100,17 @@
       "secondary_cta": "Udforsk platformen",
       "secondary_cta_aria": "Udforsk Blackbox EYE platformens funktioner",
       "live_feed_title": "Live Trusselsefterretning",
+      "live_feed_subtitle": "Sikkerhedshændelser i realtid",
+      "live_badge": "LIVE",
       "stats_aria": "Platformstatistik der viser neutraliserede trusler, oppetid og responstid",
       "feed": {
         "malware": "Ransomware payload blokeret – endpoint isoleret",
         "login": "Lateral bevægelse opdaget – legitimationsoplysninger roteret",
-        "scan": "Shadow IT opdagelse – 23 nye aktiver katalogiseret"
+        "scan": "Shadow IT opdagelse – 23 nye aktiver katalogiseret",
+        "status_quarantined": "Karantæne",
+        "status_resolved": "Løst",
+        "status_pending": "Afventer",
+        "view_all": "Se alle hændelser"
       },
       "stats": {
         "threats": "Trusler neutraliseret",

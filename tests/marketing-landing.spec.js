@@ -371,9 +371,12 @@ test.describe('Graphene CSS Variables', () => {
     const badge = page.locator('.graphene-badge, .blackbox-badge').first();
     await expect(badge).toBeVisible();
 
-    // Should contain icon
+    // Should contain either icon (legacy) or pulse indicator (new design)
     const icon = badge.locator('.graphene-badge__icon, .blackbox-badge__icon, svg');
+    const pulse = badge.locator('.graphene-badge__pulse');
     const iconCount = await icon.count();
-    expect(iconCount).toBeGreaterThan(0);
+    const pulseCount = await pulse.count();
+    // Either old icon or new pulse should be present
+    expect(iconCount + pulseCount).toBeGreaterThan(0);
   });
 });

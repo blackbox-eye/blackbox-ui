@@ -535,3 +535,177 @@ Nye styles i `assets/css/admin.css`:
 | Passed | 208 | ✅ |
 | Skipped | 340 | ⏭️ (kræver login) |
 | Failed | 0 | ✅ |
+
+---
+
+## 14. Sprint Afrunding – Nye Features (November 2025)
+
+### Password Show/Hide Toggle
+
+**Beskrivelse:** Global komponent til at vise/skjule password og PIN felter med øje-ikon.
+
+**Implementerede filer:**
+| Fil | Beskrivelse |
+|-----|-------------|
+| `assets/js/password-toggle.js` | Auto-initialiserende JS-modul |
+| `assets/css/admin.css` | CSS for toggle-knap og states |
+| `includes/admin-footer.php` | Script inclusion |
+| `agent-login.php` | Script inclusion |
+
+**Funktionalitet:**
+- Automatisk initialisering på alle `input[type="password"]` felter
+- Keyboard support: Enter og Space til toggle
+- Opdaterede aria-labels ved state-skift
+- MutationObserver til dynamisk tilføjede felter
+- Light/dark theme support
+
+**CSS-klasser:**
+```css
+.password-field          /* Wrapper container */
+.password-toggle         /* Knap-element */
+.password-toggle--visible /* Når password er synligt */
+```
+
+### Ghost Mode Admin-Only
+
+**Beskrivelse:** Ghost mode panel er nu kun synligt for admin-brugere.
+
+**Ændring:**
+```php
+<!-- settings.php -->
+<?php if (!empty($_SESSION['is_admin'])): ?>
+  <!-- Ghost Mode Panel -->
+  ...
+<?php endif; ?>
+```
+
+**Sikkerhed:**
+- Panel er helt fjernet fra HTML for non-admins
+- `admin.php` kræver allerede admin-session (redirect til dashboard)
+
+### IP-baserede Dashboard Feeds
+
+**Beskrivelse:** Realistiske mock feeds baseret på agentens IP-adresse.
+
+**Session data gemt ved login:**
+```php
+// agent-login.php
+$_SESSION['agent_ip'] = $clientIp;
+$_SESSION['agent_user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+```
+
+**API response (`/api/dashboard-stats.php`):**
+```json
+{
+  "success": true,
+  "data": {
+    "alerts_count": 5,
+    "agent_region": "Copenhagen, DK",
+    "feeds": [
+      {
+        "title": "Suspicious login attempt blocked",
+        "severity": "warning",
+        "source_ip": "192.168.1.42",
+        "region": "Copenhagen, DK",
+        "timestamp": "2025-11-27T10:30:00+00:00",
+        "detail": "Observed from 192.168.1.42; matched pattern #4523"
+      }
+    ]
+  }
+}
+```
+
+**Feed typer:**
+| Title | Severity |
+|-------|----------|
+| Suspicious login attempt blocked | warning |
+| Port scanning activity detected | warning |
+| Malware signature matched (sandbox) | critical |
+| Abnormal API usage spike | warning |
+| New vulnerability observed in third-party service | info |
+
+**Regioner:** Copenhagen, Aarhus, London, New York, Berlin, Stockholm, Oslo, Amsterdam
+
+### Light Theme Command Deck Finjustering
+
+**Nye CSS regler tilføjet:**
+
+| Selector | Ændring |
+|----------|---------|
+| `[data-theme="light"] .command-deck__item` | Lys gradient baggrund, mørkere tekst |
+| `[data-theme="light"] .command-deck__item:hover` | Varm guld hover effekt |
+| `[data-theme="light"] .command-deck__item.is-active` | Fremhævet aktiv state |
+| `[data-theme="light"] .command-deck__item-icon` | Reduceret kontrast til light mode |
+| `[data-theme="light"] .command-deck__action` | Subtile baggrund og borders |
+| `[data-theme="light"] .command-deck__agent-badge` | Justeret baggrund |
+| `[data-theme="light"] .command-deck__divider` | Lettere separator |
+
+### Nye Playwright Tests
+
+**Tilføjet til `tests/admin-features.spec.js`:**
+
+| Test Suite | Antal Tests |
+|------------|-------------|
+| Password Toggle Component | 8 tests |
+| Ghost Mode Admin-Only Visibility | 2 tests |
+| Dashboard Feeds API | 6 tests |
+| Light Theme Support | 3 tests |
+
+**Password Toggle Tests:**
+- Eye icon display
+- Click toggle functionality
+- Keyboard activation (Enter/Space)
+- Accessible aria-labels
+- Label update on toggle
+- PIN field support
+- Focus indicator visibility
+
+**API Tests:**
+- 401 on unauthenticated request
+- Valid JSON response structure
+- `feeds` array presence
+- Feed item required properties
+- Valid severity levels
+- ISO 8601 timestamp validation
+
+---
+
+## Lokal Verificering
+
+### Test Dashboard API
+
+**PowerShell:**
+```powershell
+# Start PHP server
+php -S localhost:8000
+
+# Test uden auth (forventet 401)
+Invoke-RestMethod -Uri 'http://localhost:8000/api/dashboard-stats.php' -Method GET
+```
+
+**Browser DevTools:**
+1. Log ind på `/agent-login.php`
+2. Åbn Network-fanen
+3. Naviger til dashboard
+4. Find `dashboard-stats.php` request
+5. Verificer `feeds` og `agent_region` i response
+
+### Test Password Toggle
+
+1. Gå til `/agent-login.php`
+2. Verificer øje-ikoner ved password og PIN felter
+3. Klik på ikon – password bør blive synligt
+4. Tryk Tab til ikon, derefter Enter – bør toggle
+5. Skift til light theme og verificer synlighed
+
+### Test Ghost Mode
+
+**Som admin:**
+1. Log ind med admin-konto
+2. Gå til `/settings.php`
+3. Verificer "Ghost-mode" panel er synligt
+
+**Som non-admin:**
+1. Log ind med standard agent
+2. Gå til `/settings.php`
+3. Verificer "Ghost-mode" panel IKKE er synligt

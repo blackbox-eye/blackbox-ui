@@ -71,6 +71,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 session_regenerate_id(true);
                 $_SESSION['agent_id'] = $agent['agent_id'];
                 $_SESSION['is_admin'] = (bool)$agent['is_admin'];
+                // Capture basic client metadata for personalised dashboard feeds
+                $clientIp = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+                // If X-Forwarded-For contains multiple IPs, take the first
+                if (strpos($clientIp, ',') !== false) {
+                    $clientIp = trim(explode(',', $clientIp)[0]);
+                }
+                $_SESSION['agent_ip'] = $clientIp;
+                $_SESSION['agent_user_agent'] = $_SERVER['HTTP_USER_AGENT'] ?? '';
                 log_agent_event($agent['agent_id'], 'LOGIN_SUCCESS');
                 header("Location: dashboard.php");
                 exit;
@@ -138,6 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Scripts -->
     <script src="/assets/js/interface-menu.js"></script>
+    <script src="/assets/js/password-toggle.js"></script>
 </body>
 
 </html>

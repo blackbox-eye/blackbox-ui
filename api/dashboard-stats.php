@@ -126,6 +126,60 @@ try {
   // Calculate uptime (mock for now - would connect to monitoring service)
   $stats['uptime']['percentage'] = round(99.5 + (rand(0, 5) / 10), 1);
 
+  // Build realistic (mocked) recent feed items tailored to agent metadata (IP/user-agent)
+  $agentIp = $_SESSION['agent_ip'] ?? ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
+  // Simple deterministic seed based on IP string so the same agent sees consistent variations
+  $seed = 0;
+  for ($i = 0; $i < strlen($agentIp); $i++) {
+    $seed += ord($agentIp[$i]);
+  }
+
+  $regions = [
+    'Copenhagen, DK',
+    'Aarhus, DK',
+    'London, UK',
+    'New York, US',
+    'Berlin, DE',
+    'Stockholm, SE',
+    'Oslo, NO',
+    'Amsterdam, NL'
+  ];
+  $region = $regions[$seed % count($regions)];
+
+  $feedTemplates = [
+    ['title' => 'Suspicious login attempt blocked', 'severity' => 'warning'],
+    ['title' => 'Port scanning activity detected', 'severity' => 'warning'],
+    ['title' => 'Malware signature matched (sandbox)', 'severity' => 'critical'],
+    ['title' => 'Abnormal API usage spike', 'severity' => 'warning'],
+    ['title' => 'New vulnerability observed in third-party service', 'severity' => 'info']
+  ];
+
+  $feeds = [];
+  $now = time();
+  $countFeeds = 5;
+  for ($i = 0; $i < $countFeeds; $i++) {
+    $tmpl = $feedTemplates[($seed + $i) % count($feedTemplates)];
+    // Create a pseudo-random source IP near the agent IP for realism
+    $octets = explode('.', $agentIp);
+    if (count($octets) === 4) {
+      $last = (int)$octets[3];
+      $srcLast = ($last + (($seed + $i) % 50) + 1) % 254 + 1;
+      $sourceIp = "$octets[0].$octets[1].$octets[2].$srcLast";
+    } else {
+      $sourceIp = '203.0.113.' . (($seed + $i) % 250 + 1);
+    }
+
+    $minutesAgo = ($i === 0) ? rand(1, 5) : rand(5, 60);
+    $feeds[] = [
+      'title' => $tmpl['title'],
+      'severity' => $tmpl['severity'],
+      'source_ip' => $sourceIp,
+      'region' => $region,
+      'timestamp' => date('c', $now - ($minutesAgo * 60)),
+      'detail' => "Observed from $sourceIp; matched pattern #" . (($seed + $i) % 9000 + 100)
+    ];
+  }
+
   // Format response for frontend compatibility
   echo json_encode([
     'success' => true,
@@ -137,7 +191,9 @@ try {
       'critical_count' => $stats['alerts']['critical'],
       'warning_count' => $stats['alerts']['warning'],
       'blocked_count' => rand(15, 45), // Mock blocked attacks
-      'last_threat_time' => date('c', strtotime('-' . rand(1, 60) . ' minutes'))
+      'last_threat_time' => date('c', strtotime('-' . rand(1, 60) . ' minutes')),
+      'agent_region' => $region,
+      'feeds' => $feeds
     ],
     'timestamp' => date('c')
   ], JSON_PRETTY_PRINT);

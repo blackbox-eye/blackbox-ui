@@ -92,10 +92,11 @@
       "description": "Den komplette AI-drevne sikkerhedsplatform, der beskytter din virksomhed 24/7 – og gør medarbejdere til jeres stærkeste forsvarslinje."
     },
     "hero": {
-      "headline": "Stop avancerede angreb, før de rammer.",
-      "subheadline": "Blackbox EYE™ samler efterretninger, AI og operativ respons i én platform, så I blokerer zero-day trusler, før de bliver til hændelser.",
+      "headline": "Intelligent sikkerhed. Drevet af GreyEYE™.",
+      "subheadline": "Blackbox EYE™ leverer samlet trusselsefterretning, AI-drevet respons og operationel opmærksomhed i realtid – så I neutraliserer angreb, før de eskalerer.",
       "primary_cta": "Book en uforpligtende demo",
-      "secondary_cta": "Udforsk platformen"
+      "secondary_cta": "Udforsk platformen",
+      "live_feed_title": "Live Trusselfeed"
     },
     "tactical": {
       "tagline": "Den taktiske oversigt",

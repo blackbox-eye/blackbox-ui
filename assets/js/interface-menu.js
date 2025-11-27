@@ -295,3 +295,99 @@
   });
 
 })();
+
+/**
+ * Theme Toggle Controller
+ *
+ * Handles dark/light theme switching with localStorage persistence.
+ * Features:
+ * - Toggle between dark and light themes
+ * - Persists user preference in localStorage
+ * - Respects system preference as fallback
+ * - Updates ARIA attributes and visual indicators
+ */
+(function() {
+  'use strict';
+
+  const STORAGE_KEY = 'greyeye-theme';
+  const themeToggle = document.getElementById('themeToggle');
+
+  // Exit if no toggle button
+  if (!themeToggle) {
+    return;
+  }
+
+  /**
+   * Get the current theme from localStorage or system preference
+   */
+  function getStoredTheme() {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      return stored;
+    }
+
+    // Check system preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+      return 'light';
+    }
+
+    return 'dark';
+  }
+
+  /**
+   * Apply the theme to the document
+   */
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+
+    // Update toggle button label
+    const label = themeToggle.querySelector('.theme-toggle-label');
+    if (label) {
+      label.textContent = theme === 'dark' ? 'Lyst tema' : 'Mørkt tema';
+    }
+
+    // Update ARIA
+    themeToggle.setAttribute('aria-pressed', theme === 'light');
+  }
+
+  /**
+   * Toggle between dark and light themes
+   */
+  function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+    applyTheme(newTheme);
+    localStorage.setItem(STORAGE_KEY, newTheme);
+
+    // Dispatch custom event for other components that might need to know
+    document.dispatchEvent(new CustomEvent('themechange', { detail: { theme: newTheme } }));
+  }
+
+  // Initialize theme on page load
+  function initTheme() {
+    const theme = getStoredTheme();
+    applyTheme(theme);
+  }
+
+  // Event listener for toggle click
+  themeToggle.addEventListener('click', toggleTheme);
+
+  // Listen for system preference changes
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+      // Only auto-switch if user hasn't explicitly set a preference
+      if (!localStorage.getItem(STORAGE_KEY)) {
+        applyTheme(e.matches ? 'light' : 'dark');
+      }
+    });
+  }
+
+  // Initialize on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTheme);
+  } else {
+    initTheme();
+  }
+
+})();

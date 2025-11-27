@@ -284,3 +284,83 @@ test.describe('Responsive Hero Layout', () => {
     });
   }
 });
+
+// =====================================================
+// BLACKBOX EYE BRANDING TESTS
+// =====================================================
+test.describe('Blackbox EYE Branding', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('should display Blackbox EYE badge in hero', async ({ page }) => {
+    const badge = page.locator('.blackbox-badge');
+    await expect(badge).toBeVisible();
+
+    const badgeText = await badge.textContent();
+    expect(badgeText.toLowerCase()).toContain('blackbox eye');
+  });
+
+  test('hero section should have blackbox-section class', async ({ page }) => {
+    const heroSection = page.locator('#home');
+    const hasClass = await heroSection.evaluate(el =>
+      el.classList.contains('blackbox-section')
+    );
+    expect(hasClass).toBeTruthy();
+  });
+
+  test('should display stats counter with three items', async ({ page }) => {
+    const statsCounter = page.locator('.stats-counter');
+    await expect(statsCounter).toBeVisible();
+
+    const statsItems = page.locator('.stats-counter__item');
+    await expect(statsItems).toHaveCount(3);
+  });
+
+  test('stats should show threats, uptime and response time', async ({ page }) => {
+    // Check values are displayed
+    const threatsValue = page.locator('.stats-counter__value').first();
+    await expect(threatsValue).toBeVisible();
+
+    // Check labels exist
+    const labels = page.locator('.stats-counter__label');
+    await expect(labels).toHaveCount(3);
+  });
+
+  test('GreyEYE should only be mentioned as product in headline', async ({ page }) => {
+    const headline = page.locator('h1.hero-gradient-text');
+    const headlineText = await headline.textContent();
+
+    // GreyEYE should be in headline as product name
+    expect(headlineText).toContain('GreyEYE');
+
+    // Blackbox badge should be separate branding
+    const badge = page.locator('.blackbox-badge');
+    const badgeText = await badge.textContent();
+    expect(badgeText).toContain('Blackbox EYE');
+  });
+});
+
+// =====================================================
+// BLACKBOX CSS VARIABLES TESTS
+// =====================================================
+test.describe('Blackbox CSS Variables', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('blackbox-section should exist on hero', async ({ page }) => {
+    const section = page.locator('.blackbox-section');
+    await expect(section).toBeVisible();
+  });
+
+  test('blackbox-badge should have correct structure', async ({ page }) => {
+    const badge = page.locator('.blackbox-badge');
+    await expect(badge).toBeVisible();
+
+    // Should contain icon
+    const icon = badge.locator('.blackbox-badge__icon, svg');
+    const iconCount = await icon.count();
+    expect(iconCount).toBeGreaterThan(0);
+  });
+});

@@ -12,6 +12,15 @@
   --bbx-gold-hover: #e5c04a;
   --bbx-gold-transparent: rgba(212, 175, 55, 0.15);
 
+  /* Blackbox EYE brand colors (parent company identity) */
+  --blackbox-primary: #1a1a2e;
+  --blackbox-secondary: #0f0f1a;
+  --blackbox-accent: #16213e;
+  --blackbox-highlight: #e94560;
+  --blackbox-text: #eaeaea;
+  --blackbox-border: rgba(233, 69, 96, 0.3);
+  --blackbox-glow: 0 0 20px rgba(233, 69, 96, 0.2);
+
   /* Background colors */
   --bbx-bg-primary: #0a0a0f;
   --bbx-bg-secondary: #111118;
@@ -377,12 +386,109 @@ body.js-enabled .section-fade-in.visible {
 .glass-effect {
   background: var(--bbx-bg-card);
   border: 1px solid var(--bbx-border-subtle);
-  backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .glass-effect:hover {
   border-color: var(--bbx-border-gold);
   box-shadow: var(--bbx-shadow-card);
+}
+
+/* --------------------------------------------------------
+   Blackbox EYE Brand Components
+   -------------------------------------------------------- */
+
+/* Blackbox branded section (hero, footer) */
+.blackbox-section {
+  background: linear-gradient(135deg, var(--blackbox-primary) 0%, var(--blackbox-secondary) 100%);
+  position: relative;
+}
+
+.blackbox-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 30% 20%, rgba(233, 69, 96, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Blackbox brand badge */
+.blackbox-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--blackbox-accent);
+  border: 1px solid var(--blackbox-border);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--blackbox-text);
+}
+
+.blackbox-badge__icon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--blackbox-highlight);
+}
+
+/* Blackbox highlight text */
+.blackbox-highlight {
+  color: var(--blackbox-highlight);
+}
+
+/* Blackbox card variant */
+.glass-effect--blackbox {
+  background: linear-gradient(135deg, rgba(26, 26, 46, 0.8) 0%, rgba(15, 15, 26, 0.9) 100%);
+  border-color: var(--blackbox-border);
+}
+
+.glass-effect--blackbox:hover {
+  border-color: var(--blackbox-highlight);
+  box-shadow: var(--blackbox-glow);
+}
+
+/* Stats counter for live feed */
+.stats-counter {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.stats-counter__item {
+  text-align: center;
+}
+
+.stats-counter__value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--bbx-gold);
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-counter__label {
+  font-size: 0.75rem;
+  color: var(--bbx-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Live feed enhanced animation */
+@keyframes feed-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.live-feed-item--new {
+  animation: feed-slide-in 0.3s ease-out;
 }

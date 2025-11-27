@@ -1,10 +1,19 @@
 <?php
+/**
+ * Dashboard - Aura Control Panel
+ * 
+ * Main dashboard interface with threat visualization, alerts,
+ * system status, and AI command interface.
+ * Includes the new Command Deck menu for consistent navigation.
+ */
+
 session_start();
 if (empty($_SESSION['agent_id'])) {
     header('Location: agent-login.php');
     exit;
 }
 $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
+$current_admin_page = 'dashboard';
 ?>
 <!DOCTYPE html>
 <html lang="da">
@@ -12,16 +21,6 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Chosen Palette: Aura Gold & Deep Space -->
-    <!-- Application Structure Plan: Applikationen benytter en avanceret CSS Grid-struktur låst til 100% af skærmhøjden for at eliminere vertikal scrolling. Layoutet er defineret via 'grid-template-areas', som intelligent omstrukturerer modulernes placering ved forskellige skærmstørrelser (breakpoints) for optimal pladsudnyttelse. Dette skaber en fast, men fuldt responsiv oplevelse. Kerneinteraktionen er centreret omkring 'progressive disclosure' (faneblade, modaler) for at håndtere høj informations-tæthed inden for den faste ramme. -->
-    <!-- Visualization & Content Choices:
-        - Rapport Info: Global trusselsvisualisering -> Mål: Skabe et "wow-faktor" kommandocenter -> Metode: Animeret HTML Canvas -> Interaktion: Passiv realtidsfølelse -> Begrundelse: Central, visuelt engagerende komponent.
-        - Rapport Info: Serverbelastning over tid -> Mål: Vise trends -> Metode: Chart.js linjegraf -> Interaktion: Hover for tooltips -> Begrundelse: Standard, klar visualisering af tidsseriedata.
-        - Rapport Info: Aktive alarmer -> Mål: Præsentere handlingsorienterede events -> Metode: Dynamisk genereret liste af "glas"-kort -> Interaktion: Klik på 'Undersøg' åbner en modal -> Begrundelse: Isolerer detaljer og holder brugeren i kontekst.
-        - Rapport Info: Systemstatus/Netværk -> Mål: Give hurtigt overblik -> Metode: Statiske informationsmoduler med ikoner og farvekodning -> Begrundelse: Hurtig aflæsning af status.
-        - Bibliotek: Chart.js til grafer, ren JS/CSS til alt andet.
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <title>Blackbox EYE // Aura Kontrolpanel</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"
@@ -31,6 +30,7 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/admin.css">
     <style>
         :root {
             --brand-gold: #D4AF35;
@@ -76,7 +76,6 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
             width: 80vh;
             height: 80vh;
             background: url('https://i.imgur.com/uF6X2xH.png') no-repeat center center;
-            /* Placeholder for logo emblem */
             background-size: contain;
             opacity: 0.02;
         }
@@ -104,15 +103,8 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
         }
 
         @keyframes pulse-critical {
-
-            0%,
-            100% {
-                box-shadow: 0 0 0 0 rgba(248, 81, 73, 0.4);
-            }
-
-            70% {
-                box-shadow: 0 0 10px 15px rgba(248, 81, 73, 0);
-            }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(248, 81, 73, 0.4); }
+            70% { box-shadow: 0 0 10px 15px rgba(248, 81, 73, 0); }
         }
 
         .pulse-critical {
@@ -142,29 +134,12 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
                 "nav status status status net net net net ai ai ai";
         }
 
-        #nav-menu {
-            grid-area: nav;
-        }
-
-        #threat-module {
-            grid-area: map;
-        }
-
-        #alerts-module {
-            grid-area: alerts;
-        }
-
-        #status-module {
-            grid-area: status;
-        }
-
-        #net-module {
-            grid-area: net;
-        }
-
-        #ai-module {
-            grid-area: ai;
-        }
+        #nav-menu { grid-area: nav; }
+        #threat-module { grid-area: map; }
+        #alerts-module { grid-area: alerts; }
+        #status-module { grid-area: status; }
+        #net-module { grid-area: net; }
+        #ai-module { grid-area: ai; }
 
         @media (max-width: 1440px) {
             #main-grid {
@@ -183,8 +158,6 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
                     "nav net-spare net-spare net-spare net-spare net-spare net net net net net"
                     "nav net-spare net-spare net-spare net-spare net-spare net net net net net";
             }
-
-            /* Adjust module visibility or content for this breakpoint if needed */
         }
 
         @media (max-width: 1024px) {
@@ -200,7 +173,6 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
                     "status status status status status status net net net net net net"
                     "ai ai ai ai ai ai ai ai ai ai ai ai";
                 overflow-y: auto;
-                /* Allow scroll only on smallest screens */
             }
 
             #nav-menu {
@@ -331,6 +303,70 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
 
     </div>
 
+    <!-- Command Deck Menu Integration -->
+    <button 
+        id="commandDeckLauncher" 
+        class="command-deck-launcher"
+        aria-label="Åbn Command Deck menu"
+        aria-expanded="false"
+        aria-controls="commandDeckMenu"
+        title="Command Deck"
+    >
+        <span class="launcher-icon">◉</span>
+    </button>
+
+    <div id="commandDeckOverlay" class="command-deck-overlay" aria-hidden="true"></div>
+
+    <nav 
+        id="commandDeckMenu" 
+        class="interface-menu" 
+        role="navigation" 
+        aria-label="Command Deck navigation"
+    >
+        <div class="menu-header">
+            <span class="menu-brand">COMMAND DECK</span>
+            <button 
+                id="commandDeckClose" 
+                class="menu-close-btn"
+                aria-label="Luk menu"
+            >×</button>
+        </div>
+        
+        <ul class="menu-items">
+            <li>
+                <a href="dashboard.php" class="menu-item is-active" aria-current="page">
+                    <span class="menu-icon">📊</span>
+                    <span class="menu-label">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="admin.php" class="menu-item">
+                    <span class="menu-icon">👥</span>
+                    <span class="menu-label">Brugerstyring</span>
+                </a>
+            </li>
+            <li>
+                <a href="settings.php" class="menu-item">
+                    <span class="menu-icon">⚙️</span>
+                    <span class="menu-label">Indstillinger</span>
+                </a>
+            </li>
+            <li>
+                <a href="download-logs.php" class="menu-item">
+                    <span class="menu-icon">📋</span>
+                    <span class="menu-label">Systemlogs</span>
+                </a>
+            </li>
+        </ul>
+        
+        <div class="menu-footer">
+            <a href="logout.php" class="menu-item menu-logout">
+                <span class="menu-icon">🚪</span>
+                <span class="menu-label">Log ud</span>
+            </a>
+        </div>
+    </nav>
+
     <!-- Modal Structure -->
     <div id="alertModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 hidden">
         <div class="glass-module w-full max-w-2xl p-6 relative">
@@ -342,6 +378,7 @@ $currentScript = basename($_SERVER['PHP_SELF'] ?? '');
         </div>
     </div>
 
+    <script src="assets/js/interface-menu.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const mockAlerts = [{

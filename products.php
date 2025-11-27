@@ -50,7 +50,7 @@ include 'includes/site-header.php';
                 <div class="lg:order-last">
                     <h2 class="text-2xl sm:text-3xl font-bold text-amber-400 mb-4 flex items-center gap-3">
                         <span class="product-icon" aria-hidden="true">
-                            <img src="assets/greyeeye_logo_transparent.png" alt="" class="product-icon-img">
+                            <img src="assets/greyeeye_logo_transparent.png" alt="" class="product-icon-img" loading="lazy">
                         </span>
                         <?= t('products.greyeye.title') ?>
                     </h2>

@@ -28,7 +28,7 @@ test.describe('Graphene Premium Hero', () => {
   test('should display premium headline with gradient text', async ({ page }) => {
     const headline = page.locator('.graphene-headline');
     await expect(headline).toBeVisible();
-    
+
     // Verify headline exists and contains text
     const text = await headline.textContent();
     expect(text).toBeTruthy();
@@ -119,16 +119,16 @@ test.describe('Skip Link Accessibility', () => {
   test('skip link should appear on focus', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
-    
+
     // Tab to focus the skip link
     await page.keyboard.press('Tab');
-    
+
     const skipLink = page.locator('.skip-link');
-    
+
     // Check that skip link has proper focus styles by checking focus state
     await page.waitForTimeout(100);
     const isFocused = await skipLink.evaluate(el => el === document.activeElement);
-    
+
     // Skip link should be focusable - in some browsers it may take time
     // Just verify it's attached and has correct href
     await expect(skipLink).toBeAttached();

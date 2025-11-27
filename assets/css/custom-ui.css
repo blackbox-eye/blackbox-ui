@@ -505,18 +505,22 @@ body.alphabot-locked {
   min-width: 0;
 }
 
-/* Header Logo - Theme-aware image switching */
+/* Header Logo - Theme-aware image switching with consistent sizing */
 .header-logo-link {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .header-logo {
-  height: 84px;
-  width: auto;
-  max-width: 360px;
+  /* Consistent base sizing for both logos */
+  height: auto;
+  width: clamp(140px, 22vw, 200px);
+  max-height: 48px;
   object-fit: contain;
+  object-position: left center;
   display: none; /* Hidden by default, theme rules show correct one */
+  transition: opacity 0.2s ease;
 }
 
 .header-logo--white,
@@ -524,15 +528,43 @@ body.alphabot-locked {
   display: none; /* Ensure both hidden by default */
 }
 
-@media (min-width: 640px) {
+/* Mobile: compact logo */
+@media (max-width: 479px) {
   .header-logo {
-    height: 96px;
+    width: clamp(120px, 32vw, 160px);
+    max-height: 40px;
   }
 }
 
+/* Tablet: medium logo */
+@media (min-width: 480px) and (max-width: 767px) {
+  .header-logo {
+    width: clamp(150px, 24vw, 180px);
+    max-height: 44px;
+  }
+}
+
+/* iPad / Small desktop: balanced logo */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .header-logo {
+    width: clamp(160px, 20vw, 200px);
+    max-height: 48px;
+  }
+}
+
+/* Desktop: full logo */
 @media (min-width: 1024px) {
   .header-logo {
-    height: 112px;
+    width: clamp(180px, 16vw, 220px);
+    max-height: 52px;
+  }
+}
+
+/* Large desktop: optimized logo */
+@media (min-width: 1280px) {
+  .header-logo {
+    width: clamp(200px, 14vw, 240px);
+    max-height: 56px;
   }
 }
 

@@ -306,16 +306,12 @@ if (!empty($disable_alphabot)) {
                             <img src="/assets/Logo-blackbox-hvid.png"
                                 alt="BLACKBOX EYE™"
                                 class="header-logo header-logo--white"
-                                loading="lazy"
-                                width="360"
-                                height="112">
+                                loading="lazy">
                             <!-- Black logo - visible on light backgrounds (light theme) -->
                             <img src="/assets/blackbox_logo_black.png"
                                 alt="BLACKBOX EYE™"
                                 class="header-logo header-logo--black"
-                                loading="lazy"
-                                width="360"
-                                height="112">
+                                loading="lazy">
                         </a>
                     </div>
                     <nav class="main-nav header-nav hidden lg:block" aria-label="<?= htmlspecialchars(t('header.desktop.primary_navigation', 'Primær navigation')) ?>">

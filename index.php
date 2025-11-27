@@ -24,7 +24,7 @@ include 'includes/site-header.php';
                     <span class="graphene-premium-badge__text"><?= t('home.hero.badge') ?></span>
                 </div>
 
-                <h1 class="graphene-headline text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.1] tracking-tight mb-8">
+                <h1 class="graphene-headline text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-tight tracking-tight mb-8">
                     <?= t('home.hero.headline') ?>
                 </h1>
 

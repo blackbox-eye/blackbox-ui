@@ -3442,7 +3442,13 @@ button:focus-visible {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: headline-gradient 8s ease-in-out infinite;
-  text-shadow: 0 0 80px rgba(212, 175, 55, 0.2);
+  /* Fix: Ensure text is not clipped */
+  overflow: visible;
+  padding-bottom: 0.1em;
+  line-height: 1.15;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 @keyframes headline-gradient {

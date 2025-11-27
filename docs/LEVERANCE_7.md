@@ -457,3 +457,81 @@ Nye styles i `assets/css/admin.css`:
 ---
 
 *Dokumentation oprettet: 9. januar 2025*
+*Sidst opdateret: 27. november 2025*
+
+---
+
+## 12. Visual QA & Light Theme Forbedringer (November 2025)
+
+### Light Theme Kontrastforbedringer
+
+| Element | Ændring | CSS-værdi |
+|---------|---------|-----------|
+| Threat score label | Bedre læsbarhed | `color: var(--admin-text-secondary)` |
+| Kritiske værdier | Mørkere rød | `#c41e16` |
+| Advarsel-værdier | Mørkere guld | `#b8860b` |
+| Stat values | Mørkere guld | `#6b5712` |
+| Stat labels | Forbedret kontrast | `var(--admin-text-secondary)` |
+| Card titles | Justeret farve | `#5a4a10` |
+| Card icons | Justeret guld | `#8b6914` |
+
+### Dashboard Bugfixes
+
+- **NaN-dato bug:** `timeAgo()` funktionen håndterer nu `undefined` og invalide datoer korrekt
+- **Alert rendering:** Bruger nu `created_at` eller `time_ago` property i stedet for `timestamp`
+- **Stavefejl:** "Usædvanlig Port Scanning" → "Usædvanlig portscanning"
+
+### Responsivitet
+
+**Brugerstyringstabel (admin.php):**
+
+| Skærmbredde | Skjulte kolonner |
+|-------------|------------------|
+| < 900px | PIN, Token, Ghost |
+| < 640px | ID, Sidste login (ekstra) |
+
+### Command Deck Forbedringer
+
+- Farvet scrollbar med thin styling
+- MENU-tekst lysere i light theme (`rgba(0,0,0,0.45)`)
+- Forbedret form-label kontrast
+- Tabel-header styling i light theme
+
+---
+
+## 13. Testudvidelser (November 2025)
+
+### Nye Test Suites (`dashboard-accessibility.spec.js`)
+
+**API Negative Tests (7 tests):**
+- Invalid severity filter håndtering
+- Excessively large limit parameter
+- Empty/missing command body
+- Malformed JSON input
+- Invalid HTTP methods
+- Non-existent endpoint 404
+
+**Theme Toggle with Data (3 tests):**
+- Data persisterer efter tema-skift
+- Theme preference applied til alle elementer
+- Alert badges farver i begge temaer
+
+**ARIA Labels Comprehensive (3 tests):**
+- Alle interaktive elementer har accessible names
+- Dashboard cards har proper heading struktur
+- Command Deck links har descriptive text
+
+### Bugfixes i Tests
+
+**`dashboard-dynamic.spec.js`:**
+- Erstattet `toBeOneOf()` (ikke en standard Playwright-matcher) med `expect([values]).toContain()`
+- Tilføjet 500ms wait for localStorage update i theme persistence test
+
+### Test Status
+
+| Kategori | Antal | Status |
+|----------|-------|--------|
+| Total tests | 548 | — |
+| Passed | 208 | ✅ |
+| Skipped | 340 | ⏭️ (kræver login) |
+| Failed | 0 | ✅ |

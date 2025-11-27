@@ -177,6 +177,38 @@
   background: rgba(0, 0, 0, 0.04);
 }
 
+[data-theme="light"] .dashboard__threat-score-label {
+  color: var(--admin-text-secondary);
+}
+
+[data-theme="light"] .dashboard__threat-detail-value {
+  color: #5a4a10;
+}
+
+[data-theme="light"] .dashboard__threat-detail-value--critical {
+  color: #c41e16;
+}
+
+[data-theme="light"] .dashboard__threat-detail-value--warning {
+  color: #b8860b;
+}
+
+[data-theme="light"] .dashboard__stat-value {
+  color: #6b5712;
+}
+
+[data-theme="light"] .dashboard__stat-label {
+  color: var(--admin-text-secondary);
+}
+
+[data-theme="light"] .dashboard__card-title {
+  color: #5a4a10;
+}
+
+[data-theme="light"] .dashboard__card-title svg {
+  color: #8b6914;
+}
+
 [data-theme="light"] .dashboard__alert {
   background: rgba(0, 0, 0, 0.03);
 }

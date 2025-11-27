@@ -224,6 +224,9 @@ test.describe('Theme Toggle', () => {
     await page.waitForSelector('.command-deck.is-open');
     await page.locator('#themeToggle').click();
 
+    // Wait a moment for localStorage to be updated
+    await page.waitForTimeout(500);
+
     // Check localStorage
     const storedTheme = await page.evaluate(() =>
       localStorage.getItem('greyeye-theme')
@@ -272,7 +275,7 @@ test.describe('API Endpoints', () => {
 
     // If not logged in, expect 401 or redirect
     if (response.status() === 401 || response.status() === 302) {
-      expect(response.status()).toBeOneOf([401, 302]);
+      expect([401, 302]).toContain(response.status());
       return;
     }
 
@@ -288,7 +291,7 @@ test.describe('API Endpoints', () => {
     const response = await request.get(`${BASE_URL}/api/alerts.php`);
 
     if (response.status() === 401 || response.status() === 302) {
-      expect(response.status()).toBeOneOf([401, 302]);
+      expect([401, 302]).toContain(response.status());
       return;
     }
 
@@ -307,7 +310,7 @@ test.describe('API Endpoints', () => {
     const response = await request.get(`${BASE_URL}/api/system-status.php`);
 
     if (response.status() === 401 || response.status() === 302) {
-      expect(response.status()).toBeOneOf([401, 302]);
+      expect([401, 302]).toContain(response.status());
       return;
     }
 
@@ -322,7 +325,7 @@ test.describe('API Endpoints', () => {
     const response = await request.get(`${BASE_URL}/api/network-stats.php`);
 
     if (response.status() === 401 || response.status() === 302) {
-      expect(response.status()).toBeOneOf([401, 302]);
+      expect([401, 302]).toContain(response.status());
       return;
     }
 
@@ -337,7 +340,7 @@ test.describe('API Endpoints', () => {
     const response = await request.get(`${BASE_URL}/api/ai-command.php`);
 
     if (response.status() === 401 || response.status() === 302) {
-      expect(response.status()).toBeOneOf([401, 302]);
+      expect([401, 302]).toContain(response.status());
       return;
     }
 

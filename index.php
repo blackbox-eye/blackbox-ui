@@ -7,109 +7,116 @@ include 'includes/site-header.php';
 ?>
 
 <main id="main-content" class="pt-0">
-    <!-- Hero Section: Blackbox EYE branded with Matrix rain -->
-    <section id="home" class="blackbox-section relative min-h-screen w-full flex items-center justify-center text-center overflow-hidden page-section">
-        <canvas id="hero-canvas" class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: -10;"></canvas>
-
-        <!-- Content overlay with subtle gradient - adapts to theme -->
-        <div class="hero-overlay absolute inset-0 pointer-events-none" style="z-index: 1;"></div>
-
-        <div class="relative px-4 py-28 sm:py-36 max-w-5xl mx-auto" style="z-index: 10;">
-            <!-- Blackbox EYE Brand Badge -->
-            <div class="flex justify-center lg:justify-start mb-6">
-                <span class="blackbox-badge">
-                    <svg class="blackbox-badge__icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-                    </svg>
-                    Blackbox EYE™ Security Platform
-                </span>
-            </div>
-
+    <!-- Hero Section: Graphene Theme with honeycomb pattern -->
+    <section id="home" class="graphene-hero relative min-h-screen w-full flex items-center justify-center overflow-hidden page-section">
+        <div class="graphene-hero__content relative px-4 py-28 sm:py-36 max-w-6xl mx-auto w-full">
             <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-center">
                 <!-- Hero Text Content -->
                 <div class="lg:col-span-3 text-center lg:text-left">
-                    <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black hero-gradient-text leading-tight tracking-tight mb-6">
+                    <!-- Graphene Brand Badge -->
+                    <div class="graphene-badge" role="banner">
+                        <svg class="graphene-badge__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9z" />
+                        </svg>
+                        <span class="graphene-badge__text"><?= t('home.hero.badge') ?></span>
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black graphene-gradient-text leading-tight tracking-tight mb-6">
                         <?= t('home.hero.headline') ?>
                     </h1>
-                    <p class="text-lg sm:text-xl md:text-2xl text-gray-300 mb-10 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                    <p class="text-lg sm:text-xl md:text-2xl text-[var(--graphene-text)] mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
                         <?= t('home.hero.subheadline') ?>
                     </p>
-                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                        <a href="demo.php" class="btn-primary btn-primary--lg">
+
+                    <!-- CTA Buttons with Graphene styling -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-8">
+                        <a href="demo.php"
+                            class="btn-graphene-primary"
+                            aria-label="<?= t('home.hero.primary_cta_aria') ?>"
+                            title="<?= t('home.hero.primary_cta') ?>">
                             <?= t('home.hero.primary_cta') ?>
                         </a>
-                        <a href="products.php" class="btn-secondary btn-secondary--lg">
+                        <a href="products.php"
+                            class="btn-graphene-secondary"
+                            aria-label="<?= t('home.hero.secondary_cta_aria') ?>"
+                            title="<?= t('home.hero.secondary_cta') ?>">
                             <?= t('home.hero.secondary_cta') ?>
                         </a>
                     </div>
 
-                    <!-- Stats Counter -->
-                    <div class="stats-counter mt-10">
-                        <div class="stats-counter__item">
-                            <div class="stats-counter__value" id="threatsBlocked">847K</div>
-                            <div class="stats-counter__label"><?= t('home.hero.stats.threats') ?></div>
+                    <!-- Graphene Stats Counter -->
+                    <div class="graphene-stats" role="list" aria-label="<?= t('home.hero.stats_aria') ?>">
+                        <div class="graphene-stats__item" role="listitem">
+                            <div class="graphene-stats__icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                </svg>
+                            </div>
+                            <div class="graphene-stats__content">
+                                <div class="graphene-stats__value" id="threatsBlocked">847K</div>
+                                <div class="graphene-stats__label"><?= t('home.hero.stats.threats') ?></div>
+                            </div>
                         </div>
-                        <div class="stats-counter__item">
-                            <div class="stats-counter__value">99.9%</div>
-                            <div class="stats-counter__label"><?= t('home.hero.stats.uptime') ?></div>
+                        <div class="graphene-stats__item" role="listitem">
+                            <div class="graphene-stats__icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                </svg>
+                            </div>
+                            <div class="graphene-stats__content">
+                                <div class="graphene-stats__value">99.9%</div>
+                                <div class="graphene-stats__label"><?= t('home.hero.stats.uptime') ?></div>
+                            </div>
                         </div>
-                        <div class="stats-counter__item">
-                            <div class="stats-counter__value">&lt;50ms</div>
-                            <div class="stats-counter__label"><?= t('home.hero.stats.response') ?></div>
+                        <div class="graphene-stats__item" role="listitem">
+                            <div class="graphene-stats__icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                                </svg>
+                            </div>
+                            <div class="graphene-stats__content">
+                                <div class="graphene-stats__value">&lt;50ms</div>
+                                <div class="graphene-stats__label"><?= t('home.hero.stats.response') ?></div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Live Feed Widget -->
+                <!-- Live Feed Widget 2.0 -->
                 <div class="lg:col-span-2 mt-8 lg:mt-0">
-                    <div class="live-feed-widget" id="heroLiveFeed">
-                        <div class="live-feed-widget__header">
-                            <span class="live-feed-widget__indicator" aria-hidden="true"></span>
-                            <span class="live-feed-widget__title"><?= t('home.hero.live_feed_title') ?></span>
+                    <div class="live-feed-2" id="heroLiveFeed" aria-live="polite" aria-atomic="false">
+                        <div class="live-feed-2__badge">
+                            <span class="live-feed-2__pulse" aria-hidden="true"></span>
+                            <span>LIVE</span>
                         </div>
-                        <div class="live-feed-widget__items" id="liveFeedItems">
-                            <!-- Feed items populated by JS -->
-                            <div class="live-feed-item live-feed-item--warning">
-                                <span class="live-feed-item__icon" aria-hidden="true">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                                        <line x1="12" y1="9" x2="12" y2="13" />
-                                        <line x1="12" y1="17" x2="12.01" y2="17" />
-                                    </svg>
-                                </span>
-                                <div class="live-feed-item__content">
-                                    <div class="live-feed-item__title">Suspicious login attempt blocked</div>
-                                    <div class="live-feed-item__meta">Source: 203.0.113.42 • Copenhagen, DK</div>
+                        <div class="live-feed-2__header">
+                            <span class="live-feed-2__title"><?= t('home.hero.live_feed_title') ?></span>
+                        </div>
+                        <div class="live-feed-2__items" id="liveFeedItems">
+                            <div class="live-feed-2__item live-feed-2__item--critical">
+                                <span class="severity-tag severity-tag--critical" role="status" aria-label="Critical severity">CRITICAL</span>
+                                <div class="live-feed-2__content">
+                                    <div class="live-feed-2__event"><?= t('home.hero.feed.malware') ?></div>
+                                    <div class="live-feed-2__meta">Quarantined • Pattern #4821</div>
                                 </div>
-                                <span class="live-feed-item__time">2m ago</span>
+                                <span class="live-feed-2__time">2m</span>
                             </div>
-                            <div class="live-feed-item live-feed-item--critical">
-                                <span class="live-feed-item__icon" aria-hidden="true">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="12" cy="12" r="10" />
-                                        <line x1="12" y1="8" x2="12" y2="12" />
-                                        <line x1="12" y1="16" x2="12.01" y2="16" />
-                                    </svg>
-                                </span>
-                                <div class="live-feed-item__content">
-                                    <div class="live-feed-item__title">Malware signature matched</div>
-                                    <div class="live-feed-item__meta">Quarantined • Pattern #4821</div>
+                            <div class="live-feed-2__item live-feed-2__item--warning">
+                                <span class="severity-tag severity-tag--warning" role="status" aria-label="Warning severity">WARNING</span>
+                                <div class="live-feed-2__content">
+                                    <div class="live-feed-2__event"><?= t('home.hero.feed.login') ?></div>
+                                    <div class="live-feed-2__meta">203.0.113.42 • Copenhagen, DK</div>
                                 </div>
-                                <span class="live-feed-item__time">5m ago</span>
+                                <span class="live-feed-2__time">5m</span>
                             </div>
-                            <div class="live-feed-item live-feed-item--info">
-                                <span class="live-feed-item__icon" aria-hidden="true">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="12" cy="12" r="10" />
-                                        <line x1="12" y1="16" x2="12" y2="12" />
-                                        <line x1="12" y1="8" x2="12.01" y2="8" />
-                                    </svg>
-                                </span>
-                                <div class="live-feed-item__content">
-                                    <div class="live-feed-item__title">Port scan activity detected</div>
-                                    <div class="live-feed-item__meta">Ports 22, 443, 3306 • Berlin, DE</div>
+                            <div class="live-feed-2__item live-feed-2__item--info">
+                                <span class="severity-tag severity-tag--info" role="status" aria-label="Info severity">INFO</span>
+                                <div class="live-feed-2__content">
+                                    <div class="live-feed-2__event"><?= t('home.hero.feed.scan') ?></div>
+                                    <div class="live-feed-2__meta">Ports 22, 443, 3306 • Berlin, DE</div>
                                 </div>
-                                <span class="live-feed-item__time">12m ago</span>
+                                <span class="live-feed-2__time">12m</span>
                             </div>
                         </div>
                     </div>

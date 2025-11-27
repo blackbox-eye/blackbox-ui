@@ -1,6 +1,6 @@
 /**
  * interface-menu.js — Command Deck Menu Controller
- * 
+ *
  * Handles the collapsible right-side Command Deck menu for admin pages.
  * Features:
  * - Slide-in/slide-out animation
@@ -31,7 +31,7 @@
     menu.classList.add('is-open');
     menu.setAttribute('aria-hidden', 'false');
     launcher.setAttribute('aria-expanded', 'true');
-    
+
     if (overlay) {
       overlay.classList.add('is-open');
     }
@@ -54,7 +54,7 @@
     menu.classList.remove('is-open');
     menu.setAttribute('aria-hidden', 'true');
     launcher.setAttribute('aria-expanded', 'false');
-    
+
     if (overlay) {
       overlay.classList.remove('is-open');
     }
@@ -160,7 +160,7 @@
 
 /**
  * Login Page Interactions
- * 
+ *
  * Handles the interaction active state and request access modal
  * for the login page.
  */
@@ -168,19 +168,19 @@
   'use strict';
 
   const body = document.body;
-  
+
   // Only run on login pages
   if (!body.classList.contains('admin-body--login')) {
     return;
   }
 
   const loginCard = document.querySelector('.login-card');
-  
+
   if (loginCard) {
     const interactiveElements = loginCard.querySelectorAll('input, button');
 
     const activate = () => body.classList.add('interaction-active');
-    
+
     const maybeDeactivate = () => {
       setTimeout(() => {
         const activeElement = document.activeElement;
@@ -266,11 +266,11 @@
   if (requestForm) {
     requestForm.addEventListener('submit', (event) => {
       event.preventDefault();
-      
+
       if (!requestForm.reportValidity()) {
         return;
       }
-      
+
       if (requestStatus) {
         requestStatus.textContent = 'Sender krypteret anmodning...';
       }

@@ -1,7 +1,8 @@
 <?php
+
 /**
  * Dashboard - Aura Control Panel
- * 
+ *
  * Main dashboard interface with threat visualization, alerts,
  * system status, and AI command interface.
  * Includes the new Command Deck menu for consistent navigation.
@@ -103,8 +104,15 @@ $current_admin_page = 'dashboard';
         }
 
         @keyframes pulse-critical {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(248, 81, 73, 0.4); }
-            70% { box-shadow: 0 0 10px 15px rgba(248, 81, 73, 0); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(248, 81, 73, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 10px 15px rgba(248, 81, 73, 0);
+            }
         }
 
         .pulse-critical {
@@ -134,12 +142,29 @@ $current_admin_page = 'dashboard';
                 "nav status status status net net net net ai ai ai";
         }
 
-        #nav-menu { grid-area: nav; }
-        #threat-module { grid-area: map; }
-        #alerts-module { grid-area: alerts; }
-        #status-module { grid-area: status; }
-        #net-module { grid-area: net; }
-        #ai-module { grid-area: ai; }
+        #nav-menu {
+            grid-area: nav;
+        }
+
+        #threat-module {
+            grid-area: map;
+        }
+
+        #alerts-module {
+            grid-area: alerts;
+        }
+
+        #status-module {
+            grid-area: status;
+        }
+
+        #net-module {
+            grid-area: net;
+        }
+
+        #ai-module {
+            grid-area: ai;
+        }
 
         @media (max-width: 1440px) {
             #main-grid {
@@ -304,34 +329,31 @@ $current_admin_page = 'dashboard';
     </div>
 
     <!-- Command Deck Menu Integration -->
-    <button 
-        id="commandDeckLauncher" 
+    <button
+        id="commandDeckLauncher"
         class="command-deck-launcher"
         aria-label="Åbn Command Deck menu"
         aria-expanded="false"
         aria-controls="commandDeckMenu"
-        title="Command Deck"
-    >
+        title="Command Deck">
         <span class="launcher-icon">◉</span>
     </button>
 
     <div id="commandDeckOverlay" class="command-deck-overlay" aria-hidden="true"></div>
 
-    <nav 
-        id="commandDeckMenu" 
-        class="interface-menu" 
-        role="navigation" 
-        aria-label="Command Deck navigation"
-    >
+    <nav
+        id="commandDeckMenu"
+        class="interface-menu"
+        role="navigation"
+        aria-label="Command Deck navigation">
         <div class="menu-header">
             <span class="menu-brand">COMMAND DECK</span>
-            <button 
-                id="commandDeckClose" 
+            <button
+                id="commandDeckClose"
                 class="menu-close-btn"
-                aria-label="Luk menu"
-            >×</button>
+                aria-label="Luk menu">×</button>
         </div>
-        
+
         <ul class="menu-items">
             <li>
                 <a href="dashboard.php" class="menu-item is-active" aria-current="page">
@@ -358,7 +380,7 @@ $current_admin_page = 'dashboard';
                 </a>
             </li>
         </ul>
-        
+
         <div class="menu-footer">
             <a href="logout.php" class="menu-item menu-logout">
                 <span class="menu-icon">🚪</span>

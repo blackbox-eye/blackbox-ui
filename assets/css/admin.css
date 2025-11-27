@@ -1,6 +1,6 @@
 /* ========================================================
    admin.css — Styles for Admin Portal (GreyEYE Command Deck)
-   
+
    This stylesheet provides:
    - Admin layout structure
    - Login card component
@@ -19,30 +19,30 @@
   --admin-gold-light: #ffe8a3;
   --admin-gold-dark: #b8960f;
   --admin-gold-transparent: rgba(212, 175, 55, 0.2);
-  
+
   /* Background Colors */
   --admin-bg-primary: #050505;
   --admin-bg-secondary: rgba(12, 12, 14, 0.92);
   --admin-bg-glass: rgba(8, 8, 14, 0.96);
   --admin-bg-input: rgba(255, 255, 255, 0.04);
-  
+
   /* Text Colors */
   --admin-text-primary: #ffffff;
   --admin-text-secondary: rgba(255, 255, 255, 0.7);
   --admin-text-muted: rgba(255, 255, 255, 0.5);
   --admin-text-gold: #ffe8a3;
-  
+
   /* Border Colors */
   --admin-border-subtle: rgba(255, 255, 255, 0.08);
   --admin-border-gold: rgba(212, 175, 55, 0.2);
   --admin-border-gold-active: rgba(255, 209, 92, 0.5);
-  
+
   /* Status Colors */
   --admin-success: #4ade80;
   --admin-error: #f87171;
   --admin-error-bg: rgba(220, 38, 38, 0.15);
   --admin-warning: #fbbf24;
-  
+
   /* Legacy variables (for backward compatibility) */
   --bg-dark: #041004;
   --text-light: #cde;
@@ -51,30 +51,30 @@
   --gold-dark: #bfa650;
   --alert-bg: #800;
   --alert-text: #fee;
-  
+
   /* Shadows */
   --admin-shadow-card: 0 16px 48px rgba(0, 0, 0, 0.6);
   --admin-shadow-menu: -12px 0 48px rgba(0, 0, 0, 0.65);
   --admin-shadow-text: 0 2px 8px rgba(255, 209, 92, 0.35);
-  
+
   /* Spacing */
   --admin-spacing-xs: 0.25rem;
   --admin-spacing-sm: 0.5rem;
   --admin-spacing-md: 1rem;
   --admin-spacing-lg: 1.5rem;
   --admin-spacing-xl: 2rem;
-  
+
   /* Layout */
   --admin-menu-width: 260px;
   --admin-login-card-width: 340px;
   --admin-login-card-mobile: 92vw;
   --admin-border-radius: 12px;
   --admin-border-radius-sm: 6px;
-  
+
   /* Animation */
   --admin-transition-fast: 0.2s ease;
   --admin-transition-medium: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  
+
   /* Z-index layers */
   --z-backdrop: 10;
   --z-menu: 20;
@@ -204,8 +204,8 @@ body {
   box-shadow: var(--admin-shadow-card);
   position: relative;
   z-index: 1;
-  transition: background var(--admin-transition-medium), 
-              box-shadow var(--admin-transition-medium), 
+  transition: background var(--admin-transition-medium),
+              box-shadow var(--admin-transition-medium),
               border-color var(--admin-transition-medium);
 }
 
@@ -304,7 +304,7 @@ body {
   font-size: 0.78rem;
   font-family: inherit;
   min-height: 44px; /* Touch-friendly height */
-  transition: border-color var(--admin-transition-fast), 
+  transition: border-color var(--admin-transition-fast),
               box-shadow var(--admin-transition-fast);
 }
 
@@ -333,7 +333,7 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.04em;
   cursor: pointer;
-  transition: transform var(--admin-transition-fast), 
+  transition: transform var(--admin-transition-fast),
               box-shadow var(--admin-transition-fast);
   margin-top: var(--admin-spacing-xs);
 }
@@ -513,7 +513,7 @@ body {
   font-size: 0.7rem;
   font-family: inherit;
   min-height: 38px;
-  transition: border-color var(--admin-transition-fast), 
+  transition: border-color var(--admin-transition-fast),
               box-shadow var(--admin-transition-fast);
 }
 
@@ -651,7 +651,7 @@ body {
   z-index: var(--z-backdrop);
   opacity: 0;
   visibility: hidden;
-  transition: opacity var(--admin-transition-medium), 
+  transition: opacity var(--admin-transition-medium),
               visibility var(--admin-transition-medium);
 }
 
@@ -826,7 +826,7 @@ body {
 .command-deck__item[aria-current="page"] {
   border-color: var(--admin-border-gold-active);
   background: linear-gradient(135deg, rgba(255, 209, 92, 0.15), rgba(212, 175, 55, 0.1));
-  box-shadow: inset 0 0 0 1px rgba(255, 209, 92, 0.15), 
+  box-shadow: inset 0 0 0 1px rgba(255, 209, 92, 0.15),
               0 0 20px -10px rgba(255, 209, 92, 0.5);
 }
 
@@ -1128,7 +1128,7 @@ body {
   border-radius: 4px;
   color: var(--admin-text-primary);
   font-size: 1rem;
-  transition: border-color var(--admin-transition-fast), 
+  transition: border-color var(--admin-transition-fast),
               box-shadow var(--admin-transition-fast);
 }
 

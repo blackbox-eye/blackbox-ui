@@ -126,7 +126,7 @@ function getMockAlerts($severityFilter = null, $limit = 10)
     ],
     [
       'id' => 'ALR-004',
-      'title' => 'Usædvanlig Port Scanning',
+      'title' => 'Usædvanlig portscanning',
       'description' => 'Systematisk scanning af porte 1-1024',
       'severity' => 'warning',
       'target' => 'Firewall Gateway',

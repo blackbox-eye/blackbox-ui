@@ -987,10 +987,17 @@ include __DIR__ . '/includes/admin-layout.php';
 
         // Format time ago helper
         function timeAgo(timestamp) {
+            if (!timestamp) return 'Ukendt';
+
             const now = new Date();
             const date = new Date(timestamp);
+
+            // Check for invalid date
+            if (isNaN(date.getTime())) return 'Ukendt';
+
             const diff = Math.floor((now - date) / 1000);
 
+            if (diff < 0) return 'Lige nu';
             if (diff < 60) return `${diff} sek. siden`;
             if (diff < 3600) return `${Math.floor(diff / 60)} min. siden`;
             if (diff < 86400) return `${Math.floor(diff / 3600)} timer siden`;
@@ -1085,7 +1092,7 @@ include __DIR__ . '/includes/admin-layout.php';
                                 <span class="dashboard__card-badge dashboard__card-badge--${alert.severity === 'critical' ? 'critical' : 'warning'}" style="margin-right: 0.5rem; font-size: 0.6rem;">
                                     ${alert.severity.toUpperCase()}
                                 </span>
-                                ${timeAgo(alert.timestamp)} • ${escapeHtml(alert.target || 'System')}
+                                ${alert.time_ago || timeAgo(alert.created_at)} • ${escapeHtml(alert.target || 'System')}
                             </span>
                             <a href="#" class="dashboard__alert-action" data-alert-id="${alert.id}">Undersøg →</a>
                         </div>

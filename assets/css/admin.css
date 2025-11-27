@@ -137,10 +137,90 @@
 [data-theme="light"] .command-deck {
   background: linear-gradient(180deg, #ffffff 0%, #f8f8fa 100%);
   border-left-color: var(--admin-border-subtle);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
 }
 
 [data-theme="light"] .command-deck__item.is-active {
   background: linear-gradient(90deg, rgba(197, 155, 42, 0.15) 0%, transparent 100%);
+}
+
+/* Light theme Command Deck launcher */
+[data-theme="light"] .command-deck-launcher {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: var(--admin-border-subtle);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .command-deck-launcher__label {
+  color: var(--admin-text-secondary);
+}
+
+[data-theme="light"] .command-deck-launcher:hover {
+  border-color: var(--admin-gold);
+}
+
+[data-theme="light"] .command-deck-launcher:hover .command-deck-launcher__label {
+  color: var(--admin-gold);
+}
+
+/* Light theme dashboard adjustments */
+[data-theme="light"] .dashboard__threat-hero {
+  background: linear-gradient(135deg, rgba(248, 81, 73, 0.08) 0%, rgba(139, 105, 20, 0.04) 100%);
+  border-color: rgba(248, 81, 73, 0.25);
+}
+
+[data-theme="light"] .dashboard__threat-detail-label {
+  color: var(--admin-text-secondary);
+}
+
+[data-theme="light"] .dashboard__threat-detail {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .dashboard__alert {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* Light theme form improvements */
+[data-theme="light"] .user-mgmt__input {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.15);
+  color: var(--admin-text-primary);
+}
+
+[data-theme="light"] .user-mgmt__input::placeholder {
+  color: var(--admin-text-muted);
+}
+
+/* Light theme scrollbar */
+[data-theme="light"] .command-deck::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .command-deck::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* Light theme Command Deck heading (MENU text) - softer in light mode */
+[data-theme="light"] .command-deck__heading {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+/* Light theme form labels - better contrast */
+[data-theme="light"] .user-mgmt__label {
+  color: var(--admin-text-primary);
+  font-weight: 500;
+}
+
+/* Light theme table header */
+[data-theme="light"] .user-mgmt__table th {
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--admin-text-secondary);
+}
+
+/* Light theme table hover */
+[data-theme="light"] .user-mgmt__table tbody tr:hover {
+  background: rgba(0, 0, 0, 0.02);
 }
 
 *,
@@ -871,6 +951,27 @@ body {
   transform: translateX(100%);
   transition: transform var(--admin-transition-medium);
   overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--admin-border-gold) transparent;
+}
+
+/* Hide scrollbar when not needed */
+.command-deck::-webkit-scrollbar {
+  width: 4px;
+}
+
+.command-deck::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.command-deck::-webkit-scrollbar-thumb {
+  background: var(--admin-border-gold);
+  border-radius: 2px;
+}
+
+.command-deck::-webkit-scrollbar-thumb:hover {
+  background: var(--admin-gold);
 }
 
 .command-deck.is-open {

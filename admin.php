@@ -322,10 +322,12 @@ include __DIR__ . '/includes/admin-layout.php';
   .user-mgmt__table-wrapper {
     overflow-x: auto;
     border-radius: var(--admin-border-radius);
+    -webkit-overflow-scrolling: touch;
   }
 
   .user-mgmt__table {
     width: 100%;
+    min-width: 500px;
     border-collapse: collapse;
     font-size: 0.75rem;
   }
@@ -340,6 +342,29 @@ include __DIR__ . '/includes/admin-layout.php';
     text-transform: uppercase;
     letter-spacing: 0.05em;
     border-bottom: 1px solid var(--admin-border-subtle);
+    white-space: nowrap;
+  }
+
+  /* Hide less important columns on smaller screens */
+  @media (max-width: 900px) {
+
+    .user-mgmt__table .col-pin,
+    .user-mgmt__table .col-token,
+    .user-mgmt__table .col-ghost {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+
+    .user-mgmt__table .col-id,
+    .user-mgmt__table .col-last-login {
+      display: none;
+    }
+
+    .user-mgmt__table {
+      min-width: 350px;
+    }
   }
 
   .user-mgmt__table td {
@@ -555,35 +580,35 @@ include __DIR__ . '/includes/admin-layout.php';
       <table class="user-mgmt__table">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Agent ID</th>
-            <th>PIN</th>
-            <th>Status</th>
-            <th>Rolle</th>
-            <th>Ghost</th>
-            <th>Token</th>
-            <th>Sidste login</th>
-            <th>Handlinger</th>
+            <th class="col-id">ID</th>
+            <th class="col-agent-id">Agent ID</th>
+            <th class="col-pin">PIN</th>
+            <th class="col-status">Status</th>
+            <th class="col-role">Rolle</th>
+            <th class="col-ghost">Ghost</th>
+            <th class="col-token">Token</th>
+            <th class="col-last-login">Sidste login</th>
+            <th class="col-actions">Handlinger</th>
           </tr>
         </thead>
         <tbody>
           <?php foreach ($agents as $a): ?>
             <tr>
-              <td><?= htmlspecialchars($a['id']) ?></td>
-              <td><strong><?= htmlspecialchars($a['agent_id']) ?></strong></td>
-              <td><?= htmlspecialchars($a['pin']) ?></td>
-              <td>
+              <td class="col-id"><?= htmlspecialchars($a['id']) ?></td>
+              <td class="col-agent-id"><strong><?= htmlspecialchars($a['agent_id']) ?></strong></td>
+              <td class="col-pin"><?= htmlspecialchars($a['pin']) ?></td>
+              <td class="col-status">
                 <span class="user-mgmt__status <?= $a['status'] === 'active' ? 'user-mgmt__status--active' : 'user-mgmt__status--inactive' ?>">
                   <?= $a['status'] === 'active' ? 'Aktiv' : 'Deaktiveret' ?>
                 </span>
               </td>
-              <td>
+              <td class="col-role">
                 <span class="user-mgmt__badge"><?= $a['is_admin'] ? '👑' : '👤' ?></span>
               </td>
-              <td>
+              <td class="col-ghost">
                 <span class="user-mgmt__badge"><?= !empty($a['ghost']) ? '👻' : '—' ?></span>
               </td>
-              <td>
+              <td class="col-token">
                 <?php if ($a['token']): ?>
                   <span class="user-mgmt__token" title="<?= htmlspecialchars($a['token']) ?>">
                     <?= htmlspecialchars($a['token']) ?>
@@ -592,8 +617,8 @@ include __DIR__ . '/includes/admin-layout.php';
                   <span style="color: var(--admin-text-muted);">—</span>
                 <?php endif; ?>
               </td>
-              <td><?= htmlspecialchars(getLastLoginForAgent($a['agent_id'])) ?></td>
-              <td>
+              <td class="col-last-login"><?= htmlspecialchars(getLastLoginForAgent($a['agent_id'])) ?></td>
+              <td class="col-actions">
                 <div class="user-mgmt__actions">
                   <form method="post" style="display: contents;">
                     <input type="hidden" name="id" value="<?= htmlspecialchars($a['id']) ?>">

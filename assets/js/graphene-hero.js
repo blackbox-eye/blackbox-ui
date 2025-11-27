@@ -2,9 +2,9 @@
  * Graphene Hero - 3D Hexagonal Mesh Network
  * BlackboxEYE × GreyEYE Fusion
  *
- * Matching reference: Dark metallic hexagon lattice with subtle
- * gold accent spheres at vertices. Grey/silver structural tubes.
- * Perspective view looking down at tilted surface.
+ * Reference: Dark metallic hexagon lattice with thick cylindrical tubes,
+ * small dark metallic spheres at joints, warm golden ambient glow
+ * in the background/horizon. Industrial carbon fiber aesthetic.
  */
 
 (function () {
@@ -20,36 +20,41 @@
     let nodes = [];
     let connections = [];
 
-    // Config - matching dark metallic reference
+    // Config - matching reference: dark metallic with warm background glow
     const cfg = {
-        // Grid density
-        hexSize: 55,
+        // Grid - LARGER hexagons like reference
+        hexSize: 85,
 
-        // 3D perspective
-        perspective: 800,
-        tiltX: 0.45,
-        tiltY: 0.08,
+        // 3D perspective - looking down at surface
+        perspective: 900,
+        tiltX: 0.52,    // More tilt to match reference angle
+        tiltY: 0.05,
 
-        // Node sizes - MUCH smaller than before
-        nodeRadius: 3,
-        goldNodeRadius: 4,
+        // Node sizes - small dark metallic joints
+        nodeRadius: 5,
 
-        // Colors - subtle, metallic
+        // Tube thickness - MUCH thicker like reference
+        tubeWidth: 3.5,
+
+        // Colors - dark metallic, no gold nodes
         colors: {
-            background: '#0A0C0E',
-            tube: 'rgba(80, 90, 100, 0.6)',
-            tubeHighlight: 'rgba(140, 150, 160, 0.4)',
-            node: '#4A5568',
-            nodeHighlight: '#718096',
-            gold: '#C9A227',
-            goldGlow: 'rgba(201, 162, 39, 0.3)',
-            goldBright: '#E8D48B'
+            background: '#0A0B0D',
+            // Tubes - dark grey metallic
+            tubeBase: 'rgb(45, 50, 58)',
+            tubeHighlight: 'rgb(90, 100, 115)',
+            tubeShadow: 'rgb(20, 22, 28)',
+            // Nodes - dark metallic spheres
+            nodeBase: 'rgb(35, 40, 48)',
+            nodeHighlight: 'rgb(80, 90, 105)',
+            nodeShadow: 'rgb(15, 18, 22)',
+            // Warm ambient glow for background
+            warmGlow: 'rgb(180, 130, 60)',
+            warmGlowLight: 'rgb(220, 170, 90)'
         },
 
-
-        // Animation
-        waveSpeed: 0.004,
-        waveAmplitude: 25,
+        // Animation - subtle wave
+        waveSpeed: 0.003,
+        waveAmplitude: 20,
 
         reduceMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches
     };
@@ -93,15 +98,13 @@
         const hexW = cfg.hexSize * 1.5;
         const hexH = cfg.hexSize * Math.sqrt(3);
 
-        // Calculate grid size to cover viewport plus margin
-        const cols = Math.ceil(width / hexW) + 4;
-        const rows = Math.ceil(height / (hexH * 0.75)) + 4;
+        // Grid to cover viewport plus margin
+        const cols = Math.ceil(width / hexW) + 6;
+        const rows = Math.ceil(height / (hexH * 0.75)) + 6;
 
-        // Center offset
-        const offsetX = -hexW * 2;
-        const offsetY = -hexH;
+        const offsetX = -hexW * 3;
+        const offsetY = -hexH * 2;
 
-        // Create hex centers
         const centers = [];
         for (let row = 0; row < rows; row++) {
             for (let col = 0; col < cols; col++) {
@@ -122,19 +125,16 @@
                 const nx = center.x + Math.cos(angle) * cfg.hexSize * 0.58;
                 const ny = center.y + Math.sin(angle) * cfg.hexSize * 0.58;
 
-                // Round to avoid duplicates
                 const key = `${Math.round(nx)},${Math.round(ny)}`;
 
                 if (!nodeMap.has(key)) {
-                    const isGold = Math.random() < 0.12; // 12% gold nodes - subtle
                     const node = {
                         x: nx,
                         y: ny,
                         baseX: nx,
                         baseY: ny,
                         z: 0,
-                        isGold: isGold,
-                        phase: (center.row * 0.4 + center.col * 0.3 + i * 0.2)
+                        phase: (center.row * 0.3 + center.col * 0.25 + i * 0.15)
                     };
                     nodeMap.set(key, nodes.length);
                     nodes.push(node);
@@ -160,38 +160,31 @@
     }
 
     function project3D(node) {
-        // Wave animation on Z
         const wave = Math.sin(time * cfg.waveSpeed + node.phase) * cfg.waveAmplitude;
         const z = wave;
 
-        // Mouse influence
-        const mx = (mouseX - 0.5) * 0.15;
-        const my = (mouseY - 0.5) * 0.12;
+        const mx = (mouseX - 0.5) * 0.1;
+        const my = (mouseY - 0.5) * 0.08;
 
         const tiltX = cfg.tiltX + my;
         const tiltY = cfg.tiltY + mx;
 
-        // Center point
         const cx = width / 2;
         const cy = height / 2;
 
-        // Translate to origin
         let x = node.baseX - cx;
         let y = node.baseY - cy;
 
-        // Rotate around X (tilt forward)
         const cosX = Math.cos(tiltX);
         const sinX = Math.sin(tiltX);
         const y1 = y * cosX - z * sinX;
         const z1 = y * sinX + z * cosX;
 
-        // Rotate around Y (side tilt)
         const cosY = Math.cos(tiltY);
         const sinY = Math.sin(tiltY);
         const x1 = x * cosY + z1 * sinY;
         const z2 = -x * sinY + z1 * cosY;
 
-        // Perspective projection
         const scale = cfg.perspective / (cfg.perspective + z2);
 
         return {
@@ -203,19 +196,21 @@
     }
 
     function render() {
-        // Clear with dark background
+        // Dark background
         ctx.fillStyle = cfg.colors.background;
         ctx.fillRect(0, 0, width, height);
 
-        // Subtle gradient overlay
-        const grad = ctx.createRadialGradient(
-            width * 0.3, height * 0.3, 0,
-            width * 0.5, height * 0.5, Math.max(width, height) * 0.8
+        // Warm ambient glow in the distance (top/back of scene)
+        // This creates the golden/copper reflection seen in reference
+        const warmGlow = ctx.createRadialGradient(
+            width * 0.5, height * 0.15, 0,
+            width * 0.5, height * 0.3, height * 0.7
         );
-        grad.addColorStop(0, 'rgba(30, 35, 40, 0.4)');
-        grad.addColorStop(0.5, 'rgba(15, 18, 22, 0.2)');
-        grad.addColorStop(1, 'rgba(5, 6, 8, 0)');
-        ctx.fillStyle = grad;
+        warmGlow.addColorStop(0, 'rgba(200, 150, 70, 0.25)');
+        warmGlow.addColorStop(0.3, 'rgba(180, 120, 50, 0.15)');
+        warmGlow.addColorStop(0.6, 'rgba(100, 70, 30, 0.08)');
+        warmGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = warmGlow;
         ctx.fillRect(0, 0, width, height);
 
         // Project all nodes
@@ -225,125 +220,145 @@
             ...project3D(node)
         }));
 
-        // Sort by Z (back to front)
-        const sorted = [...projected].sort((a, b) => a.z - b.z);
+        // Sort connections by average Z (back to front)
+        const sortedConnections = [...connections].map(c => {
+            const a = projected[c.from];
+            const b = projected[c.to];
+            return { ...c, avgZ: (a.z + b.z) / 2, a, b };
+        }).sort((a, b) => a.avgZ - b.avgZ);
 
-        // Draw connections (metallic tubes) first
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
+        // Draw tubes (thick metallic cylinders)
+        for (const conn of sortedConnections) {
+            const { a, b, avgZ } = conn;
 
-        for (const conn of connections) {
-            const a = projected[conn.from];
-            const b = projected[conn.to];
+            if (a.x < -100 || a.x > width + 100 || b.x < -100 || b.x > width + 100) continue;
+            if (a.y < -100 || a.y > height + 100 || b.y < -100 || b.y > height + 100) continue;
 
-            // Skip if out of view
-            if (a.x < -50 || a.x > width + 50 || b.x < -50 || b.x > width + 50) continue;
-            if (a.y < -50 || a.y > height + 50 || b.y < -50 || b.y > height + 50) continue;
+            // Depth factor for visibility
+            const depthFactor = Math.max(0.15, Math.min(1, (avgZ + 100) / 200));
+            
+            // Distance-based blur effect (fog in background)
+            const fogFactor = Math.max(0, Math.min(1, (avgZ + 50) / 150));
+            
+            const baseWidth = cfg.tubeWidth * Math.min(a.scale, b.scale);
+            const tubeWidth = baseWidth * (0.7 + fogFactor * 0.3);
 
-            // Depth-based opacity
-            const avgZ = (a.z + b.z) / 2;
-            const depthFactor = Math.max(0.2, Math.min(1, (avgZ + 80) / 160));
+            // Calculate perpendicular for 3D tube effect
+            const dx = b.x - a.x;
+            const dy = b.y - a.y;
+            const len = Math.sqrt(dx * dx + dy * dy);
+            if (len < 1) continue;
+            
+            const nx = -dy / len;
+            const ny = dx / len;
 
-            // Metallic tube effect
-            const lineWidth = 1.5 * Math.min(a.scale, b.scale);
-
-            // Draw tube shadow
-            ctx.strokeStyle = `rgba(0, 0, 0, ${0.3 * depthFactor})`;
-            ctx.lineWidth = lineWidth + 1;
+            // Draw shadow first
+            ctx.strokeStyle = `rgba(0, 0, 0, ${0.5 * depthFactor})`;
+            ctx.lineWidth = tubeWidth + 2;
+            ctx.lineCap = 'round';
             ctx.beginPath();
-            ctx.moveTo(a.x + 1, a.y + 1);
-            ctx.lineTo(b.x + 1, b.y + 1);
+            ctx.moveTo(a.x + 1.5, a.y + 1.5);
+            ctx.lineTo(b.x + 1.5, b.y + 1.5);
             ctx.stroke();
 
-            // Draw main tube - grey metallic
-            const tubeGrad = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
-            tubeGrad.addColorStop(0, `rgba(70, 80, 90, ${0.5 * depthFactor})`);
-            tubeGrad.addColorStop(0.5, `rgba(100, 110, 120, ${0.6 * depthFactor})`);
-            tubeGrad.addColorStop(1, `rgba(70, 80, 90, ${0.5 * depthFactor})`);
+            // Main tube body - dark metallic grey
+            const tubeGrad = ctx.createLinearGradient(
+                a.x + nx * tubeWidth, a.y + ny * tubeWidth,
+                a.x - nx * tubeWidth, a.y - ny * tubeWidth
+            );
+            const r = Math.round(45 * depthFactor);
+            const g = Math.round(52 * depthFactor);
+            const bl = Math.round(62 * depthFactor);
+            const rH = Math.round(95 * depthFactor);
+            const gH = Math.round(108 * depthFactor);
+            const bH = Math.round(125 * depthFactor);
+            
+            tubeGrad.addColorStop(0, `rgb(${r - 15}, ${g - 15}, ${bl - 15})`);
+            tubeGrad.addColorStop(0.3, `rgb(${rH}, ${gH}, ${bH})`);
+            tubeGrad.addColorStop(0.5, `rgb(${r + 10}, ${g + 10}, ${bl + 10})`);
+            tubeGrad.addColorStop(0.7, `rgb(${r - 5}, ${g - 5}, ${bl - 5})`);
+            tubeGrad.addColorStop(1, `rgb(${r - 20}, ${g - 20}, ${bl - 20})`);
 
             ctx.strokeStyle = tubeGrad;
-            ctx.lineWidth = lineWidth;
+            ctx.lineWidth = tubeWidth;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
             ctx.stroke();
 
-            // Tube highlight (top edge)
-            ctx.strokeStyle = `rgba(150, 160, 170, ${0.2 * depthFactor})`;
-            ctx.lineWidth = lineWidth * 0.3;
+            // Specular highlight on top edge
+            ctx.strokeStyle = `rgba(140, 155, 175, ${0.35 * depthFactor})`;
+            ctx.lineWidth = tubeWidth * 0.25;
             ctx.beginPath();
-            ctx.moveTo(a.x, a.y - lineWidth * 0.3);
-            ctx.lineTo(b.x, b.y - lineWidth * 0.3);
+            ctx.moveTo(a.x + nx * tubeWidth * 0.35, a.y + ny * tubeWidth * 0.35);
+            ctx.lineTo(b.x + nx * tubeWidth * 0.35, b.y + ny * tubeWidth * 0.35);
             ctx.stroke();
         }
 
-        // Draw nodes (small spheres) - back to front
-        for (const node of sorted) {
-            // Skip if out of view
-            if (node.x < -20 || node.x > width + 20 || node.y < -20 || node.y > height + 20) continue;
+        // Sort nodes by Z for proper depth
+        const sortedNodes = [...projected].sort((a, b) => a.z - b.z);
 
-            const baseRadius = node.isGold ? cfg.goldNodeRadius : cfg.nodeRadius;
-            const radius = baseRadius * node.scale;
+        // Draw nodes (small dark metallic spheres)
+        for (const node of sortedNodes) {
+            if (node.x < -30 || node.x > width + 30 || node.y < -30 || node.y > height + 30) continue;
 
-            if (radius < 1.5) continue;
+            const radius = cfg.nodeRadius * node.scale;
+            if (radius < 2) continue;
 
-            // Depth factor for brightness
-            const depthFactor = Math.max(0.3, Math.min(1, (node.z + 60) / 120));
+            const depthFactor = Math.max(0.2, Math.min(1, (node.z + 80) / 160));
 
-            if (node.isGold) {
-                // Gold node - subtle glow only
-                const glowSize = radius * 2.5;
-                const glow = ctx.createRadialGradient(node.x, node.y, radius * 0.5, node.x, node.y, glowSize);
-                glow.addColorStop(0, `rgba(201, 162, 39, ${0.25 * depthFactor})`);
-                glow.addColorStop(0.5, `rgba(201, 162, 39, ${0.1 * depthFactor})`);
-                glow.addColorStop(1, 'rgba(201, 162, 39, 0)');
-                ctx.beginPath();
-                ctx.arc(node.x, node.y, glowSize, 0, Math.PI * 2);
-                ctx.fillStyle = glow;
-                ctx.fill();
-
-                // Gold sphere - small and subtle
-                const goldGrad = ctx.createRadialGradient(
-                    node.x - radius * 0.3, node.y - radius * 0.3, radius * 0.1,
-                    node.x, node.y, radius
-                );
-                goldGrad.addColorStop(0, cfg.colors.goldBright);
-                goldGrad.addColorStop(0.4, cfg.colors.gold);
-                goldGrad.addColorStop(1, '#8B7020');
-
-                ctx.beginPath();
-                ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
-                ctx.fillStyle = goldGrad;
-                ctx.fill();
-            } else {
-                // Grey metallic node
-                const greyGrad = ctx.createRadialGradient(
-                    node.x - radius * 0.3, node.y - radius * 0.3, radius * 0.1,
-                    node.x, node.y, radius
-                );
-                greyGrad.addColorStop(0, `rgba(160, 170, 180, ${depthFactor})`);
-                greyGrad.addColorStop(0.5, `rgba(90, 100, 110, ${depthFactor})`);
-                greyGrad.addColorStop(1, `rgba(50, 55, 65, ${depthFactor})`);
-
-                ctx.beginPath();
-                ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
-                ctx.fillStyle = greyGrad;
-                ctx.fill();
-            }
-
-            // Tiny highlight on all nodes
+            // Sphere shadow
             ctx.beginPath();
-            ctx.arc(node.x - radius * 0.25, node.y - radius * 0.25, radius * 0.35, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 255, 255, ${0.4 * depthFactor})`;
+            ctx.arc(node.x + 1.5, node.y + 1.5, radius * 1.1, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(0, 0, 0, ${0.4 * depthFactor})`;
+            ctx.fill();
+
+            // Main sphere - dark metallic
+            const sphereGrad = ctx.createRadialGradient(
+                node.x - radius * 0.35, node.y - radius * 0.35, radius * 0.1,
+                node.x, node.y, radius
+            );
+            
+            const baseR = Math.round(50 * depthFactor);
+            const baseG = Math.round(58 * depthFactor);
+            const baseB = Math.round(70 * depthFactor);
+            const hiR = Math.round(110 * depthFactor);
+            const hiG = Math.round(125 * depthFactor);
+            const hiB = Math.round(145 * depthFactor);
+
+            sphereGrad.addColorStop(0, `rgb(${hiR + 30}, ${hiG + 30}, ${hiB + 30})`);
+            sphereGrad.addColorStop(0.3, `rgb(${hiR}, ${hiG}, ${hiB})`);
+            sphereGrad.addColorStop(0.6, `rgb(${baseR}, ${baseG}, ${baseB})`);
+            sphereGrad.addColorStop(1, `rgb(${baseR - 20}, ${baseG - 20}, ${baseB - 20})`);
+
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
+            ctx.fillStyle = sphereGrad;
+            ctx.fill();
+
+            // Specular highlight
+            ctx.beginPath();
+            ctx.arc(node.x - radius * 0.3, node.y - radius * 0.3, radius * 0.4, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(180, 195, 215, ${0.5 * depthFactor})`;
             ctx.fill();
         }
 
-        // Top fade gradient (content blending)
-        const topFade = ctx.createLinearGradient(0, 0, 0, height * 0.15);
-        topFade.addColorStop(0, 'rgba(10, 12, 14, 0.6)');
-        topFade.addColorStop(1, 'rgba(10, 12, 14, 0)');
-        ctx.fillStyle = topFade;
-        ctx.fillRect(0, 0, width, height * 0.15);
+        // Depth fog effect - darker at bottom (foreground)
+        const fogBottom = ctx.createLinearGradient(0, height * 0.7, 0, height);
+        fogBottom.addColorStop(0, 'rgba(10, 11, 13, 0)');
+        fogBottom.addColorStop(1, 'rgba(10, 11, 13, 0.4)');
+        ctx.fillStyle = fogBottom;
+        ctx.fillRect(0, height * 0.7, width, height * 0.3);
+
+        // Subtle vignette
+        const vignette = ctx.createRadialGradient(
+            width / 2, height / 2, height * 0.3,
+            width / 2, height / 2, Math.max(width, height) * 0.8
+        );
+        vignette.addColorStop(0, 'rgba(0, 0, 0, 0)');
+        vignette.addColorStop(1, 'rgba(0, 0, 0, 0.3)');
+        ctx.fillStyle = vignette;
+        ctx.fillRect(0, 0, width, height);
     }
 
     function animate() {
@@ -366,7 +381,6 @@
         };
     }
 
-    // Initialize
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {

@@ -3233,3 +3233,81 @@ button:focus-visible {
   }
 }
 
+/* ========================================================
+   CRITICAL ICON SIZE FIX - Nov 2025
+   Forces all SVG icons to proper sizes
+   ======================================================== */
+
+/* Force graphene-stats icons to be small */
+.graphene-stats__icon {
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  min-width: 2.5rem !important;
+  max-width: 2.5rem !important;
+  flex-shrink: 0 !important;
+  overflow: hidden !important;
+}
+
+.graphene-stats__icon svg {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  max-width: 1.25rem !important;
+  max-height: 1.25rem !important;
+  flex-shrink: 0 !important;
+}
+
+/* Force severity tag icons to be tiny */
+.severity-tag {
+  gap: 0.25rem !important;
+}
+
+.severity-tag__icon,
+.severity-tag svg {
+  width: 0.75rem !important;
+  height: 0.75rem !important;
+  max-width: 0.75rem !important;
+  max-height: 0.75rem !important;
+  min-width: 0.75rem !important;
+  min-height: 0.75rem !important;
+  flex-shrink: 0 !important;
+}
+
+/* Force live-feed icons to correct size */
+.live-feed-2__meta svg,
+.live-feed-2__location svg {
+  width: 0.75rem !important;
+  height: 0.75rem !important;
+  max-width: 0.75rem !important;
+  max-height: 0.75rem !important;
+}
+
+/* Global SVG containment in icon containers */
+[class*="__icon"] svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+/* Ensure hero section SVGs don't overflow */
+.graphene-hero svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.graphene-hero .graphene-stats__icon svg {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+}
+
+.graphene-hero .severity-tag__icon,
+.graphene-hero .severity-tag svg {
+  width: 0.75rem !important;
+  height: 0.75rem !important;
+}
+
+/* CTA button icons - keep them small */
+.btn-graphene-primary svg,
+.btn-graphene-secondary svg {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  flex-shrink: 0 !important;
+}

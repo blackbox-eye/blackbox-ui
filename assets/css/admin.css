@@ -2890,3 +2890,216 @@ body {
   color: #e74c3c;
 }
 
+
+/* ==========================================
+   API KEYS EXTENDED STYLES
+   ========================================== */
+
+.api-keys__error {
+  display: flex;
+  align-items: center;
+  gap: var(--admin-spacing-sm);
+  padding: var(--admin-spacing-md);
+  background: rgba(231, 76, 60, 0.1);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  border-radius: var(--admin-border-radius);
+  color: #e74c3c;
+  margin-bottom: var(--admin-spacing-lg);
+}
+
+.api-keys__empty {
+  text-align: center;
+  padding: var(--admin-spacing-xl);
+  color: var(--admin-text-muted);
+}
+
+.api-keys__empty-icon {
+  margin-bottom: var(--admin-spacing-md);
+  opacity: 0.5;
+}
+
+.api-keys__cell-scopes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.api-keys__scope {
+  display: inline-block;
+  padding: 0.15rem 0.4rem;
+  font-size: 0.6rem;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 4px;
+  color: var(--admin-text-gold);
+}
+
+.api-keys__scope-more {
+  padding: 0.15rem 0.4rem;
+  font-size: 0.6rem;
+  color: var(--admin-text-muted);
+}
+
+.api-keys__no-scopes {
+  font-size: 0.7rem;
+  color: var(--admin-text-muted);
+  font-style: italic;
+}
+
+.api-keys__key-owner {
+  display: block;
+  font-size: 0.65rem;
+  color: var(--admin-text-muted);
+  font-weight: normal;
+  margin-top: 0.2rem;
+}
+
+/* Form elements in modal */
+.api-keys__form-group {
+  margin-bottom: var(--admin-spacing-md);
+}
+
+.api-keys__label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--admin-text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.api-keys__label .required {
+  color: #e74c3c;
+}
+
+.api-keys__input,
+.api-keys__textarea {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  background: var(--admin-bg-primary);
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: var(--admin-border-radius);
+  color: var(--admin-text-primary);
+  font-size: 0.8rem;
+  transition: border-color 0.2s;
+}
+
+.api-keys__input:focus,
+.api-keys__textarea:focus {
+  outline: none;
+  border-color: var(--admin-border-gold);
+}
+
+.api-keys__textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.api-keys__hint {
+  display: block;
+  font-size: 0.65rem;
+  color: var(--admin-text-muted);
+  margin-top: 0.3rem;
+}
+
+/* Scopes list in create modal */
+.api-keys__scopes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: var(--admin-spacing-sm);
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--admin-border-radius);
+}
+
+.api-keys__scope-checkbox {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.api-keys__scope-checkbox:hover {
+  background: rgba(212, 175, 55, 0.05);
+}
+
+.api-keys__scope-checkbox input {
+  accent-color: var(--admin-gold);
+}
+
+.api-keys__scope-name {
+  font-size: 0.8rem;
+  color: var(--admin-text-primary);
+}
+
+.api-keys__scope-desc {
+  width: 100%;
+  font-size: 0.65rem;
+  color: var(--admin-text-muted);
+  margin-left: 1.5rem;
+}
+
+/* Key created modal */
+.api-keys__modal--success .api-keys__modal-title {
+  display: flex;
+  align-items: center;
+  gap: var(--admin-spacing-sm);
+  color: #2ecc71;
+}
+
+.api-keys__modal-notice--warning {
+  background: rgba(241, 196, 15, 0.1);
+  border-color: rgba(241, 196, 15, 0.3);
+}
+
+.api-keys__modal-notice--warning svg {
+  color: #f1c40f;
+}
+
+.api-keys__new-key-display {
+  margin: var(--admin-spacing-lg) 0;
+}
+
+.api-keys__key-box {
+  display: flex;
+  align-items: center;
+  gap: var(--admin-spacing-sm);
+  padding: var(--admin-spacing-md);
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: var(--admin-border-radius);
+  margin-top: var(--admin-spacing-sm);
+}
+
+.api-keys__key-box code {
+  flex: 1;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.8rem;
+  color: var(--admin-text-gold);
+  word-break: break-all;
+}
+
+.api-keys__copy-key-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: var(--admin-border-radius);
+  color: var(--admin-gold);
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.api-keys__copy-key-btn:hover {
+  background: rgba(212, 175, 55, 0.2);
+  border-color: var(--admin-gold);
+}
+

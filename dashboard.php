@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Dashboard - Aura Control Panel
+ * Dashboard - GreyEYE Command Center
  *
- * Main dashboard interface with threat visualization, alerts,
- * system status, and AI command interface.
- * Includes the new Command Deck menu for consistent navigation.
+ * Modern dashboard interface with responsive card-based layout.
+ * Uses admin-layout.php for consistent navigation via Command Deck.
+ * Displays alerts, system status, network monitoring, and AI interface.
  */
 
 session_start();
@@ -13,627 +13,708 @@ if (empty($_SESSION['agent_id'])) {
     header('Location: agent-login.php');
     exit;
 }
-$currentScript = basename($_SERVER['PHP_SELF'] ?? '');
+
+// Set page variables for admin layout
+$page_title = 'Dashboard';
 $current_admin_page = 'dashboard';
+
+// Include admin layout header
+include __DIR__ . '/includes/admin-layout.php';
 ?>
-<!DOCTYPE html>
-<html lang="da">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blackbox EYE // Aura Kontrolpanel</title>
+<!-- Dashboard Page Styles -->
+<style>
+    /* Dashboard-specific variables */
+    .dashboard {
+        --dash-critical: #F85149;
+        --dash-warning: #fbbf24;
+        --dash-success: #4ade80;
+        --dash-info: #60a5fa;
+    }
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logo%20pakker%20BlackboxEYE/blackboxeye_logo_package_full/BlackboxEYE_white_32x32.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="/assets/logo%20pakker%20BlackboxEYE/blackboxeye_logo_package_full/BlackboxEYE_white_256x256.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/logo%20pakker%20BlackboxEYE/blackboxeye_logo_package_full/BlackboxEYE_white_256x256.png">
-    <link rel="shortcut icon" href="/assets/logo%20pakker%20BlackboxEYE/blackboxeye_logo_package_full/BlackboxEYE_white.ico">
+    /* Dashboard Grid Layout */
+    .dashboard__grid {
+        display: grid;
+        gap: var(--admin-spacing-md);
+        grid-template-columns: repeat(12, 1fr);
+        grid-template-rows: auto;
+    }
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"
-        integrity="sha256-s4B2di9zY7yekStouOA0gmeY213ya7YfAA7C56MTe8c="
-        crossorigin="anonymous">
-    </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet" crossorigin="anonymous">
-    <link rel="stylesheet" href="/assets/css/admin.css">
-    <style>
-        :root {
-            --brand-gold: #D4AF35;
-            --brand-gold-transparent-heavy: rgba(212, 175, 55, 0.2);
-            --brand-gold-transparent-light: rgba(212, 175, 55, 0.1);
-            --background-dark: #0D1117;
-            --glass-bg: rgba(30, 35, 42, 0.5);
-            --glass-blur: 12px;
-            --border-color: rgba(212, 175, 55, 0.2);
-            --text-primary: #E6EDF3;
-            --text-secondary: #8B949E;
-            --critical: #F85149;
+    /* Card base styles */
+    .dashboard__card {
+        background: var(--admin-bg-secondary);
+        border: 1px solid var(--admin-border-subtle);
+        border-radius: var(--admin-border-radius);
+        padding: var(--admin-spacing-lg);
+        transition: border-color 0.25s ease, transform 0.25s ease;
+    }
+
+    .dashboard__card:hover {
+        border-color: var(--admin-border-gold);
+    }
+
+    .dashboard__card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: var(--admin-spacing-md);
+        padding-bottom: var(--admin-spacing-sm);
+        border-bottom: 1px solid var(--admin-border-subtle);
+    }
+
+    .dashboard__card-title {
+        display: flex;
+        align-items: center;
+        gap: var(--admin-spacing-sm);
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--admin-text-gold);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin: 0;
+    }
+
+    .dashboard__card-title svg {
+        width: 18px;
+        height: 18px;
+        color: var(--admin-gold);
+    }
+
+    .dashboard__card-badge {
+        font-size: 0.6rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 999px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .dashboard__card-badge--critical {
+        background: rgba(248, 81, 73, 0.15);
+        color: var(--dash-critical);
+        border: 1px solid rgba(248, 81, 73, 0.3);
+    }
+
+    .dashboard__card-badge--warning {
+        background: rgba(251, 191, 36, 0.15);
+        color: var(--dash-warning);
+        border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+
+    .dashboard__card-badge--success {
+        background: rgba(74, 222, 128, 0.15);
+        color: var(--dash-success);
+        border: 1px solid rgba(74, 222, 128, 0.3);
+    }
+
+    /* Grid placement for different screen sizes */
+    .dashboard__card--alerts {
+        grid-column: span 12;
+    }
+
+    .dashboard__card--status {
+        grid-column: span 12;
+    }
+
+    .dashboard__card--network {
+        grid-column: span 12;
+    }
+
+    .dashboard__card--ai {
+        grid-column: span 12;
+    }
+
+    .dashboard__card--chart {
+        grid-column: span 12;
+    }
+
+    @media (min-width: 768px) {
+        .dashboard__card--alerts {
+            grid-column: span 6;
         }
 
-        body {
-            background-color: var(--background-dark);
-            font-family: 'Roboto Condensed', sans-serif;
-            color: var(--text-primary);
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
+        .dashboard__card--status {
+            grid-column: span 6;
         }
 
-        .font-brand {
-            font-family: 'Orbitron', sans-serif;
-            letter-spacing: 0.05em;
+        .dashboard__card--network {
+            grid-column: span 6;
         }
 
-        .background-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: -2;
+        .dashboard__card--ai {
+            grid-column: span 6;
         }
 
-        .watermark-logo {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80vh;
-            height: 80vh;
-            background: url('https://i.imgur.com/uF6X2xH.png') no-repeat center center;
-            background-size: contain;
-            opacity: 0.02;
+        .dashboard__card--chart {
+            grid-column: span 12;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .dashboard__card--alerts {
+            grid-column: span 4;
         }
 
-        .noise-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1000 1000' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            opacity: 0.04;
-            pointer-events: none;
+        .dashboard__card--status {
+            grid-column: span 4;
         }
 
-        .glass-module {
-            background: var(--glass-bg);
-            backdrop-filter: blur(var(--glass-blur));
-            -webkit-backdrop-filter: blur(var(--glass-blur));
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-            border: 1px solid transparent;
-            background-clip: padding-box;
-            border-image: linear-gradient(135deg, var(--brand-gold-transparent-heavy), var(--brand-gold-transparent-light)) 1;
+        .dashboard__card--network {
+            grid-column: span 4;
         }
 
-        @keyframes pulse-critical {
-
-            0%,
-            100% {
-                box-shadow: 0 0 0 0 rgba(248, 81, 73, 0.4);
-            }
-
-            70% {
-                box-shadow: 0 0 10px 15px rgba(248, 81, 73, 0);
-            }
+        .dashboard__card--ai {
+            grid-column: span 6;
         }
 
-        .pulse-critical {
-            animation: pulse-critical 2s infinite;
+        .dashboard__card--chart {
+            grid-column: span 6;
+        }
+    }
+
+    /* Alert item styles */
+    .dashboard__alert {
+        padding: var(--admin-spacing-sm) var(--admin-spacing-md);
+        margin-bottom: var(--admin-spacing-sm);
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: var(--admin-border-radius-sm);
+        border-left: 3px solid var(--dash-warning);
+    }
+
+    .dashboard__alert--critical {
+        border-left-color: var(--dash-critical);
+        animation: pulse-alert 2s infinite;
+    }
+
+    @keyframes pulse-alert {
+
+        0%,
+        100% {
+            box-shadow: 0 0 0 0 rgba(248, 81, 73, 0.2);
         }
 
-        /* --- Grid Layout Definitions --- */
-        #main-grid {
-            display: grid;
-            height: 100%;
-            padding: 1rem;
-            gap: 1rem;
-            grid-template-columns: 280px repeat(10, 1fr);
-            grid-template-rows: repeat(12, 1fr);
-            grid-template-areas:
-                "nav map map map map map map map alerts alerts alerts"
-                "nav map map map map map map map alerts alerts alerts"
-                "nav map map map map map map map alerts alerts alerts"
-                "nav map map map map map map map alerts alerts alerts"
-                "nav map map map map map map map alerts alerts alerts"
-                "nav map map map map map map map ai ai ai"
-                "nav map map map map map map map ai ai ai"
-                "nav map map map map map map map ai ai ai"
-                "nav status status status net net net net ai ai ai"
-                "nav status status status net net net net ai ai ai"
-                "nav status status status net net net net ai ai ai"
-                "nav status status status net net net net ai ai ai";
+        50% {
+            box-shadow: 0 0 8px 4px rgba(248, 81, 73, 0);
         }
+    }
 
-        #nav-menu {
-            grid-area: nav;
+    .dashboard__alert-title {
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--admin-text-primary);
+        margin: 0 0 0.25rem;
+    }
+
+    .dashboard__alert-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.65rem;
+        color: var(--admin-text-muted);
+    }
+
+    .dashboard__alert-action {
+        color: var(--admin-gold);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+
+    .dashboard__alert-action:hover {
+        color: var(--admin-gold-light);
+    }
+
+    /* Status list styles */
+    .dashboard__status-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .dashboard__status-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--admin-spacing-sm) 0;
+        border-bottom: 1px solid var(--admin-border-subtle);
+        font-size: 0.78rem;
+    }
+
+    .dashboard__status-item:last-child {
+        border-bottom: none;
+    }
+
+    .dashboard__status-label {
+        color: var(--admin-text-secondary);
+    }
+
+    .dashboard__status-badge {
+        font-size: 0.6rem;
+        font-weight: 600;
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .dashboard__status-badge--ok {
+        background: rgba(74, 222, 128, 0.15);
+        color: var(--dash-success);
+    }
+
+    .dashboard__status-badge--warning {
+        background: rgba(251, 191, 36, 0.15);
+        color: var(--dash-warning);
+    }
+
+    .dashboard__status-badge--critical {
+        background: rgba(248, 81, 73, 0.15);
+        color: var(--dash-critical);
+    }
+
+    /* Network progress bars */
+    .dashboard__network-item {
+        margin-bottom: var(--admin-spacing-md);
+    }
+
+    .dashboard__network-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .dashboard__network-header {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.72rem;
+        margin-bottom: 0.35rem;
+    }
+
+    .dashboard__network-label {
+        color: var(--admin-text-secondary);
+    }
+
+    .dashboard__network-value {
+        color: var(--admin-text-primary);
+        font-weight: 500;
+    }
+
+    .dashboard__network-bar {
+        height: 6px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .dashboard__network-fill {
+        height: 100%;
+        border-radius: 3px;
+        transition: width 0.5s ease;
+    }
+
+    .dashboard__network-fill--low {
+        background: var(--dash-info);
+    }
+
+    .dashboard__network-fill--medium {
+        background: var(--dash-warning);
+    }
+
+    .dashboard__network-fill--high {
+        background: var(--dash-critical);
+    }
+
+    /* AI Command Interface */
+    .dashboard__ai-input {
+        width: 100%;
+        min-height: 120px;
+        padding: var(--admin-spacing-md);
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid var(--admin-border-subtle);
+        border-radius: var(--admin-border-radius);
+        color: var(--admin-text-primary);
+        font-family: 'Fira Code', monospace;
+        font-size: 0.78rem;
+        resize: vertical;
+        transition: border-color 0.2s;
+    }
+
+    .dashboard__ai-input::placeholder {
+        color: var(--admin-text-muted);
+    }
+
+    .dashboard__ai-input:focus {
+        outline: none;
+        border-color: var(--admin-gold);
+    }
+
+    .dashboard__ai-hint {
+        font-size: 0.65rem;
+        color: var(--admin-text-muted);
+        margin-top: var(--admin-spacing-sm);
+    }
+
+    /* Chart container */
+    .dashboard__chart-container {
+        position: relative;
+        height: 220px;
+    }
+
+    /* Stats row */
+    .dashboard__stats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--admin-spacing-md);
+        margin-bottom: var(--admin-spacing-lg);
+    }
+
+    @media (min-width: 640px) {
+        .dashboard__stats {
+            grid-template-columns: repeat(4, 1fr);
         }
+    }
 
-        #threat-module {
-            grid-area: map;
-        }
+    .dashboard__stat {
+        background: var(--admin-bg-secondary);
+        border: 1px solid var(--admin-border-subtle);
+        border-radius: var(--admin-border-radius);
+        padding: var(--admin-spacing-md);
+        text-align: center;
+        transition: border-color 0.2s;
+    }
 
-        #alerts-module {
-            grid-area: alerts;
-        }
+    .dashboard__stat:hover {
+        border-color: var(--admin-border-gold);
+    }
 
-        #status-module {
-            grid-area: status;
-        }
+    .dashboard__stat-value {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: var(--admin-text-gold);
+        line-height: 1;
+    }
 
-        #net-module {
-            grid-area: net;
-        }
+    .dashboard__stat-label {
+        font-size: 0.68rem;
+        color: var(--admin-text-muted);
+        margin-top: 0.35rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+</style>
 
-        #ai-module {
-            grid-area: ai;
-        }
+<!-- Dashboard Content -->
+<div class="dashboard admin-page">
+    <!-- Page Header -->
+    <header class="admin-page__header">
+        <div>
+            <h1 class="admin-page__title">
+                <span class="admin-page__title-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1" />
+                        <rect x="14" y="3" width="7" height="7" rx="1" />
+                        <rect x="3" y="14" width="7" height="7" rx="1" />
+                        <rect x="14" y="14" width="7" height="7" rx="1" />
+                    </svg>
+                </span>
+                Dashboard
+            </h1>
+            <p class="admin-page__subtitle">
+                Velkommen, <strong><?= htmlspecialchars($_SESSION['agent_id']) ?></strong> — Systemstatus oversigt
+            </p>
+        </div>
+        <div>
+            <span class="dashboard__card-badge dashboard__card-badge--success">
+                System Online
+            </span>
+        </div>
+    </header>
 
-        @media (max-width: 1440px) {
-            #main-grid {
-                grid-template-columns: 250px repeat(10, 1fr);
-                grid-template-areas:
-                    "nav map map map map map alerts alerts alerts alerts alerts"
-                    "nav map map map map map alerts alerts alerts alerts alerts"
-                    "nav map map map map map alerts alerts alerts alerts alerts"
-                    "nav map map map map map alerts alerts alerts alerts alerts"
-                    "nav map map map map map ai ai ai ai ai"
-                    "nav map map map map map ai ai ai ai ai"
-                    "nav status status status status status ai ai ai ai ai"
-                    "nav status status status status status ai ai ai ai ai"
-                    "nav status status status status status net net net net net"
-                    "nav status status status status status net net net net net"
-                    "nav net-spare net-spare net-spare net-spare net-spare net net net net net"
-                    "nav net-spare net-spare net-spare net-spare net-spare net net net net net";
-            }
-        }
-
-        @media (max-width: 1024px) {
-            #main-grid {
-                grid-template-columns: repeat(12, 1fr);
-                grid-template-rows: auto;
-                grid-template-areas:
-                    "nav nav nav nav nav nav nav nav nav nav nav nav"
-                    "map map map map map map map map map map map map"
-                    "map map map map map map map map map map map map"
-                    "alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts"
-                    "alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts alerts"
-                    "status status status status status status net net net net net net"
-                    "ai ai ai ai ai ai ai ai ai ai ai ai";
-                overflow-y: auto;
-            }
-
-            #nav-menu {
-                flex-direction: row;
-                justify-content: space-around;
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <div class="background-container">
-        <div class="watermark-logo"></div>
-        <div class="noise-overlay"></div>
+    <!-- Stats Row -->
+    <div class="dashboard__stats">
+        <div class="dashboard__stat">
+            <div class="dashboard__stat-value" id="statAlerts">3</div>
+            <div class="dashboard__stat-label">Aktive Alarmer</div>
+        </div>
+        <div class="dashboard__stat">
+            <div class="dashboard__stat-value" id="statThreats">12</div>
+            <div class="dashboard__stat-label">Trusler i dag</div>
+        </div>
+        <div class="dashboard__stat">
+            <div class="dashboard__stat-value" id="statUptime">99.8%</div>
+            <div class="dashboard__stat-label">System Uptime</div>
+        </div>
+        <div class="dashboard__stat">
+            <div class="dashboard__stat-value" id="statRequests">1.2K</div>
+            <div class="dashboard__stat-label">API Requests</div>
+        </div>
     </div>
 
-    <div id="main-grid">
-        <nav id="nav-menu" class="glass-module flex flex-col p-4">
-            <div class="font-brand text-2xl mb-12 text-center">
-                <span class="text-white">BLACKBOX</span><span class="text-[var(--brand-gold)]">EYE™</span>
-                <p class="text-xs text-gray-400 font-sans tracking-widest mt-1">AURA C-PANEL</p>
+    <!-- Card Grid -->
+    <div class="dashboard__grid">
+
+        <!-- Active Alerts Card -->
+        <div class="dashboard__card dashboard__card--alerts">
+            <header class="dashboard__card-header">
+                <h2 class="dashboard__card-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                        <line x1="12" y1="9" x2="12" y2="13" />
+                        <line x1="12" y1="17" x2="12.01" y2="17" />
+                    </svg>
+                    Aktive Alarmer
+                </h2>
+                <span class="dashboard__card-badge dashboard__card-badge--critical">2 Kritiske</span>
+            </header>
+            <div id="alertsContainer">
+                <!-- Alerts populated by JS -->
             </div>
-            <div class="text-xs uppercase tracking-widest text-gray-400 mb-4 text-center">
-                Agent: <span class="text-white"><?php echo htmlspecialchars($_SESSION['agent_id']); ?></span>
-            </div>
-            <ul class="space-y-2 flex-grow">
-                <li>
-                    <a href="dashboard.php" class="flex items-center p-3 text-lg rounded-lg transition-colors <?php echo $currentScript === 'dashboard.php' ? 'text-[var(--brand-gold)] bg-white/5' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">
-                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                        </svg>
-                        Dashboard
-                    </a>
+        </div>
+
+        <!-- System Status Card -->
+        <div class="dashboard__card dashboard__card--status">
+            <header class="dashboard__card-header">
+                <h2 class="dashboard__card-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                    </svg>
+                    Systemstatus
+                </h2>
+            </header>
+            <ul class="dashboard__status-list">
+                <li class="dashboard__status-item">
+                    <span class="dashboard__status-label">Firewall Service</span>
+                    <span class="dashboard__status-badge dashboard__status-badge--ok">Operationel</span>
                 </li>
-                <li>
-                    <a href="admin.php" class="flex items-center p-3 text-lg rounded-lg transition-colors <?php echo $currentScript === 'admin.php' ? 'text-[var(--brand-gold)] bg-white/5' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">
-                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                        </svg>
-                        Brugerstyring
-                    </a>
+                <li class="dashboard__status-item">
+                    <span class="dashboard__status-label">Threat Intel DB</span>
+                    <span class="dashboard__status-badge dashboard__status-badge--ok">Stabil</span>
                 </li>
-                <li>
-                    <a href="download-logs.php" class="flex items-center p-3 text-lg rounded-lg transition-colors <?php echo $currentScript === 'download-logs.php' ? 'text-[var(--brand-gold)] bg-white/5' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">
-                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                        Systemlogs
-                    </a>
+                <li class="dashboard__status-item">
+                    <span class="dashboard__status-label">AI Core "GREY-E"</span>
+                    <span class="dashboard__status-badge dashboard__status-badge--ok">Aktiv</span>
                 </li>
-                <li>
-                    <a href="settings.php" class="flex items-center p-3 text-lg rounded-lg transition-colors <?php echo $currentScript === 'settings.php' ? 'text-[var(--brand-gold)] bg-white/5' : 'text-gray-300 hover:bg-white/5 hover:text-white'; ?>">
-                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7h2a2 2 0 012 2v10a2 2 0 01-2 2H7a2 2 0 01-2-2V9a2 2 0 012-2h2m4 0h-4m4 0v-2a2 2 0 00-2-2h-2a2 2 0 00-2 2v2m4 0h-4"></path>
-                        </svg>
-                        Indstillinger
-                    </a>
+                <li class="dashboard__status-item">
+                    <span class="dashboard__status-label">API Gateway</span>
+                    <span class="dashboard__status-badge dashboard__status-badge--warning">Høj Latens</span>
                 </li>
             </ul>
-            <div class="mt-6 pt-4 border-t border-white/10">
-                <a href="logout.php" class="block text-center px-4 py-2 text-sm font-semibold rounded-md bg-red-500/20 text-red-300 hover:bg-red-500/30">
-                    Log ud
-                </a>
-            </div>
-        </nav>
+        </div>
 
-        <div id="threat-module" class="glass-module flex flex-col">
-            <div class="flex border-b border-[var(--border-color)] px-4">
-                <button data-target="map-content" class="tab-button font-brand p-4 text-[var(--brand-gold)] border-b-2 border-[var(--brand-gold)]">GLOBAL TRUSSELSOVERSIGT</button>
-                <button data-target="load-content" class="tab-button font-brand p-4 text-gray-400 border-b-2 border-transparent hover:text-white">SERVERBELASTNING</button>
-            </div>
-            <div class="flex-grow relative overflow-hidden rounded-b-lg">
-                <div id="map-content" class="tab-content active absolute inset-0">
-                    <canvas id="threatMapCanvas" role="img" aria-label="Globalt trusselskort"></canvas>
+        <!-- Network Monitoring Card -->
+        <div class="dashboard__card dashboard__card--network">
+            <header class="dashboard__card-header">
+                <h2 class="dashboard__card-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12.55a11 11 0 0 1 14.08 0" />
+                        <path d="M1.42 9a16 16 0 0 1 21.16 0" />
+                        <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+                        <line x1="12" y1="20" x2="12.01" y2="20" />
+                    </svg>
+                    Netværksovervågning
+                </h2>
+            </header>
+            <div>
+                <div class="dashboard__network-item">
+                    <div class="dashboard__network-header">
+                        <span class="dashboard__network-label">Port 22 (SSH)</span>
+                        <span class="dashboard__network-value">45%</span>
+                    </div>
+                    <div class="dashboard__network-bar">
+                        <div class="dashboard__network-fill dashboard__network-fill--low" style="width: 45%"></div>
+                    </div>
                 </div>
-                <div id="load-content" class="tab-content absolute inset-0 p-4" style="display: none;">
-                    <canvas id="serverLoadChart" role="img" aria-label="Graf over serverbelastning"></canvas>
+                <div class="dashboard__network-item">
+                    <div class="dashboard__network-header">
+                        <span class="dashboard__network-label">Port 443 (HTTPS)</span>
+                        <span class="dashboard__network-value">88%</span>
+                    </div>
+                    <div class="dashboard__network-bar">
+                        <div class="dashboard__network-fill dashboard__network-fill--medium" style="width: 88%"></div>
+                    </div>
+                </div>
+                <div class="dashboard__network-item">
+                    <div class="dashboard__network-header">
+                        <span class="dashboard__network-label">Port 3306 (DB)</span>
+                        <span class="dashboard__network-value">95%</span>
+                    </div>
+                    <div class="dashboard__network-bar">
+                        <div class="dashboard__network-fill dashboard__network-fill--high" style="width: 95%"></div>
+                    </div>
+                </div>
+                <div class="dashboard__network-item">
+                    <div class="dashboard__network-header">
+                        <span class="dashboard__network-label">Port 9200 (ES)</span>
+                        <span class="dashboard__network-value">20%</span>
+                    </div>
+                    <div class="dashboard__network-bar">
+                        <div class="dashboard__network-fill dashboard__network-fill--low" style="width: 20%"></div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div id="alerts-module" class="glass-module flex flex-col p-4">
-            <h2 class="font-brand text-lg text-white mb-4">AKTIVE ALARMER</h2>
-            <div id="active-alerts-container" class="space-y-3 overflow-y-auto flex-grow pr-2"></div>
-        </div>
-
-        <div id="status-module" class="glass-module p-4 flex flex-col">
-            <h2 class="font-brand text-lg text-white mb-4">SYSTEMSTATUS</h2>
-            <ul class="space-y-4 text-sm flex-grow">
-                <li class="flex justify-between items-center"><span>Firewall Service</span><span class="text-xs font-bold py-1 px-3 rounded-full bg-green-500/20 text-green-400">OPERATIONEL</span></li>
-                <li class="flex justify-between items-center"><span>Threat Intel DB</span><span class="text-xs font-bold py-1 px-3 rounded-full bg-green-500/20 text-green-400">STABIL</span></li>
-                <li class="flex justify-between items-center"><span>AI Core "GREY-E"</span><span class="text-xs font-bold py-1 px-3 rounded-full bg-green-500/20 text-green-400">AKTIV</span></li>
-                <li class="flex justify-between items-center"><span>API Gateway</span><span class="text-xs font-bold py-1 px-3 rounded-full bg-yellow-500/20 text-yellow-400">HØJ LATENS</span></li>
-            </ul>
-        </div>
-
-        <div id="net-module" class="glass-module p-4 flex flex-col">
-            <h2 class="font-brand text-lg text-white mb-4">NETVÆRKSOVERVÅGNING</h2>
-            <ul class="space-y-4 text-sm flex-grow">
-                <li class="flex items-center"><span class="w-24">Port 22 (SSH)</span>
-                    <div class="flex-grow bg-black/30 rounded-full h-2">
-                        <div class="bg-blue-400 h-2 rounded-full" style="width: 45%"></div>
-                    </div>
-                </li>
-                <li class="flex items-center"><span class="w-24">Port 443 (HTTPS)</span>
-                    <div class="flex-grow bg-black/30 rounded-full h-2">
-                        <div class="bg-yellow-400 h-2 rounded-full" style="width: 88%"></div>
-                    </div>
-                </li>
-                <li class="flex items-center"><span class="w-24">Port 3306 (DB)</span>
-                    <div class="flex-grow bg-black/30 rounded-full h-2">
-                        <div class="bg-red-500 h-2 rounded-full" style="width: 95%"></div>
-                    </div>
-                </li>
-                <li class="flex items-center"><span class="w-24">Port 9200 (ES)</span>
-                    <div class="flex-grow bg-black/30 rounded-full h-2">
-                        <div class="bg-blue-400 h-2 rounded-full" style="width: 20%"></div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-
-        <div id="ai-module" class="glass-module p-4 flex flex-col justify-between">
-            <h2 class="font-brand text-lg text-white mb-2">AI KOMMANDO INTERFACE</h2>
-            <p class="text-sm text-[var(--text-secondary)] mb-4">Stil et spørgsmål eller giv en kommando til GREY-E.</p>
-            <textarea placeholder="> Analysér trafik fra IP 192.168.1.100..." class="flex-grow w-full bg-black/30 border-2 border-gray-600 rounded-md py-2 px-4 text-white placeholder-gray-500 focus:outline-none focus:border-[var(--brand-gold)] focus:ring-1 focus:ring-[var(--brand-gold)] resize-none"></textarea>
-        </div>
-
-    </div>
-
-    <!-- Command Deck Menu Integration -->
-    <button
-        id="commandDeckLauncher"
-        class="command-deck-launcher"
-        aria-label="Åbn Command Deck menu"
-        aria-expanded="false"
-        aria-controls="commandDeckMenu"
-        title="Command Deck">
-        <span class="launcher-icon">◉</span>
-    </button>
-
-    <div id="commandDeckOverlay" class="command-deck-overlay" aria-hidden="true"></div>
-
-    <nav
-        id="commandDeckMenu"
-        class="interface-menu"
-        role="navigation"
-        aria-label="Command Deck navigation">
-        <div class="menu-header">
-            <span class="menu-brand">COMMAND DECK</span>
-            <button
-                id="commandDeckClose"
-                class="menu-close-btn"
-                aria-label="Luk menu">×</button>
-        </div>
-
-        <ul class="menu-items">
-            <li>
-                <a href="dashboard.php" class="menu-item is-active" aria-current="page">
-                    <span class="menu-icon">📊</span>
-                    <span class="menu-label">Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a href="admin.php" class="menu-item">
-                    <span class="menu-icon">👥</span>
-                    <span class="menu-label">Brugerstyring</span>
-                </a>
-            </li>
-            <li>
-                <a href="settings.php" class="menu-item">
-                    <span class="menu-icon">⚙️</span>
-                    <span class="menu-label">Indstillinger</span>
-                </a>
-            </li>
-            <li>
-                <a href="download-logs.php" class="menu-item">
-                    <span class="menu-icon">📋</span>
-                    <span class="menu-label">Systemlogs</span>
-                </a>
-            </li>
-        </ul>
-
-        <div class="menu-footer">
-            <a href="logout.php" class="menu-item menu-logout">
-                <span class="menu-icon">🚪</span>
-                <span class="menu-label">Log ud</span>
-            </a>
-        </div>
-    </nav>
-
-    <!-- Modal Structure -->
-    <div id="alertModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 hidden">
-        <div class="glass-module w-full max-w-2xl p-6 relative">
-            <button id="closeModal" class="absolute top-4 right-4 text-gray-400 hover:text-white">&times;</button>
-            <h2 id="modalTitle" class="font-brand text-2xl text-[var(--brand-gold)] mb-4">Alarm Detaljer</h2>
-            <div id="modalBody" class="text-lg">
-                <p>Detaljeret information om alarmen vil blive vist her.</p>
+        <!-- Server Load Chart Card -->
+        <div class="dashboard__card dashboard__card--chart">
+            <header class="dashboard__card-header">
+                <h2 class="dashboard__card-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="20" x2="18" y2="10" />
+                        <line x1="12" y1="20" x2="12" y2="4" />
+                        <line x1="6" y1="20" x2="6" y2="14" />
+                    </svg>
+                    Serverbelastning
+                </h2>
+            </header>
+            <div class="dashboard__chart-container">
+                <canvas id="serverLoadChart" role="img" aria-label="Graf over serverbelastning"></canvas>
             </div>
         </div>
+
+        <!-- AI Command Interface Card -->
+        <div class="dashboard__card dashboard__card--ai">
+            <header class="dashboard__card-header">
+                <h2 class="dashboard__card-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="10" rx="2" />
+                        <circle cx="12" cy="5" r="2" />
+                        <path d="M12 7v4" />
+                        <line x1="8" y1="16" x2="8" y2="16" />
+                        <line x1="16" y1="16" x2="16" y2="16" />
+                    </svg>
+                    AI Kommando Interface
+                </h2>
+            </header>
+            <p style="font-size: 0.75rem; color: var(--admin-text-secondary); margin-bottom: var(--admin-spacing-md);">
+                Stil et spørgsmål eller giv en kommando til GREY-E AI assistenten.
+            </p>
+            <textarea
+                class="dashboard__ai-input"
+                placeholder="> Analysér trafik fra IP 192.168.1.100..."></textarea>
+            <p class="dashboard__ai-hint">
+                Tryk <kbd>Enter</kbd> for at sende kommando • <kbd>Shift+Enter</kbd> for ny linje
+            </p>
+        </div>
+
     </div>
+</div>
 
-    <script src="assets/js/interface-menu.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const mockAlerts = [{
-                    id: 'a1',
-                    severity: 'critical',
-                    title: 'Brute Force Angreb Opdaget',
-                    target: 'SSH på SRV-01',
-                    time: '2 min siden'
-                },
-                {
-                    id: 'a2',
-                    severity: 'critical',
-                    title: 'Anormal Udgående Trafik',
-                    target: 'DB-CLUSTER-03',
-                    time: '5 min siden'
-                },
-                {
-                    id: 'a3',
-                    severity: 'warning',
-                    title: 'Flere Fejlede Logins',
-                    target: 'Admin Portal',
-                    time: '12 min siden'
-                },
-            ];
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"
+    integrity="sha256-s4B2di9zY7yekStouOA0gmeY213ya7YfAA7C56MTe8c="
+    crossorigin="anonymous"></script>
 
-            const alertsContainer = document.getElementById('active-alerts-container');
-            if (alertsContainer) {
-                mockAlerts.forEach(alert => {
-                    const alertEl = document.createElement('div');
-                    alertEl.className = `p-3 rounded-md bg-black/30 border-l-4 ${alert.severity === 'critical' ? 'border-red-500' : 'border-yellow-500'} ${alert.severity === 'critical' ? 'pulse-critical' : ''}`;
-                    alertEl.innerHTML = `
-                        <h3 class="font-bold text-white">${alert.title}</h3>
-                        <div class="flex justify-between items-center mt-2">
-                            <span class="text-xs text-[var(--text-secondary)]">${alert.time}</span>
-                            <button data-alert-id="${alert.id}" class="open-modal-btn text-xs text-[var(--brand-gold)] font-bold">Undersøg &rarr;</button>
-                        </div>
-                    `;
-                    alertsContainer.appendChild(alertEl);
-                });
-            }
+<!-- Dashboard JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Mock alert data
+        const mockAlerts = [{
+                id: 'a1',
+                severity: 'critical',
+                title: 'Brute Force Angreb Opdaget',
+                target: 'SSH på SRV-01',
+                time: '2 min siden'
+            },
+            {
+                id: 'a2',
+                severity: 'critical',
+                title: 'Anormal Udgående Trafik',
+                target: 'DB-CLUSTER-03',
+                time: '5 min siden'
+            },
+            {
+                id: 'a3',
+                severity: 'warning',
+                title: 'Flere Fejlede Logins',
+                target: 'Admin Portal',
+                time: '12 min siden'
+            },
+        ];
 
-            const alertModal = document.getElementById('alertModal');
-            const closeModal = document.getElementById('closeModal');
-
-            document.querySelectorAll('.open-modal-btn').forEach(button => {
-                button.addEventListener('click', () => {
-                    alertModal.classList.remove('hidden');
-                });
+        // Populate alerts
+        const alertsContainer = document.getElementById('alertsContainer');
+        if (alertsContainer) {
+            mockAlerts.forEach(alert => {
+                const alertEl = document.createElement('div');
+                alertEl.className = `dashboard__alert ${alert.severity === 'critical' ? 'dashboard__alert--critical' : ''}`;
+                alertEl.innerHTML = `
+                <h3 class="dashboard__alert-title">${alert.title}</h3>
+                <div class="dashboard__alert-meta">
+                    <span>${alert.time} • ${alert.target}</span>
+                    <a href="#" class="dashboard__alert-action" data-alert-id="${alert.id}">Undersøg →</a>
+                </div>
+            `;
+                alertsContainer.appendChild(alertEl);
             });
+        }
 
-            closeModal.addEventListener('click', () => alertModal.classList.add('hidden'));
-            alertModal.addEventListener('click', (e) => {
-                if (e.target === alertModal) {
-                    alertModal.classList.add('hidden');
-                }
-            });
-
-
-            const tabButtons = document.querySelectorAll('.tab-button');
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const targetId = button.dataset.target;
-
-                    document.querySelectorAll('.tab-button').forEach(btn => {
-                        btn.classList.remove('text-[var(--brand-gold)]', 'border-[var(--brand-gold)]');
-                        btn.classList.add('text-gray-400', 'border-transparent');
-                    });
-                    button.classList.add('text-[var(--brand-gold)]', 'border-[var(--brand-gold)]');
-                    button.classList.remove('text-gray-400', 'border-transparent');
-
-                    document.querySelectorAll('.tab-content').forEach(content => {
-                        content.style.display = content.id === targetId ? 'block' : 'none';
-                    });
-                    window.dispatchEvent(new Event('resize'));
-                });
-            });
-
-            // Server Load Chart
-            const serverLoadCtx = document.getElementById('serverLoadChart');
-            if (serverLoadCtx) {
-                new Chart(serverLoadCtx, {
-                    type: 'line',
-                    data: {
-                        labels: Array.from({
-                            length: 12
-                        }, (_, i) => `${60 - i*5}m`),
-                        datasets: [{
-                                label: 'CPU Belastning',
-                                data: [22, 25, 30, 45, 50, 55, 60, 58, 52, 40, 35, 28].reverse(),
-                                borderColor: 'rgba(212, 175, 55, 1)',
-                                backgroundColor: 'rgba(212, 175, 55, 0.2)',
-                                borderWidth: 2,
-                                fill: true,
-                                tension: 0.4,
-                                pointRadius: 0
+        // Server Load Chart
+        const serverLoadCtx = document.getElementById('serverLoadChart');
+        if (serverLoadCtx) {
+            new Chart(serverLoadCtx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({
+                        length: 12
+                    }, (_, i) => `${60 - i * 5}m`),
+                    datasets: [{
+                            label: 'CPU Belastning',
+                            data: [22, 25, 30, 45, 50, 55, 60, 58, 52, 40, 35, 28].reverse(),
+                            borderColor: 'rgba(212, 175, 55, 1)',
+                            backgroundColor: 'rgba(212, 175, 55, 0.15)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'Hukommelsesbrug',
+                            data: [15, 18, 22, 20, 28, 35, 33, 40, 38, 30, 25, 20].reverse(),
+                            borderColor: 'rgba(96, 165, 250, 1)',
+                            backgroundColor: 'rgba(96, 165, 250, 0.1)',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.4,
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                color: 'rgba(255,255,255,0.5)',
+                                callback: (v) => v + '%'
                             },
-                            {
-                                label: 'Hukommelsesbrug',
-                                data: [15, 18, 22, 20, 28, 35, 33, 40, 38, 30, 25, 20].reverse(),
-                                borderColor: 'rgba(59, 130, 246, 1)',
-                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                                borderWidth: 2,
-                                fill: false,
-                                tension: 0.4,
-                                pointRadius: 0
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                max: 100,
-                                ticks: {
-                                    color: 'rgba(255,255,255,0.5)',
-                                    callback: (v) => v + '%'
-                                },
-                                grid: {
-                                    color: 'rgba(255,255,255,0.1)'
-                                }
-                            },
-                            x: {
-                                ticks: {
-                                    color: 'rgba(255,255,255,0.5)'
-                                },
-                                grid: {
-                                    display: false
-                                }
+                            grid: {
+                                color: 'rgba(255,255,255,0.08)'
                             }
                         },
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                                align: 'end',
-                                labels: {
-                                    color: 'rgba(255,255,255,0.8)'
-                                }
+                        x: {
+                            ticks: {
+                                color: 'rgba(255,255,255,0.5)'
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            align: 'end',
+                            labels: {
+                                color: 'rgba(255,255,255,0.7)',
+                                boxWidth: 12,
+                                padding: 15
                             }
                         }
                     }
-                });
-            }
-
-            // Threat Map Canvas
-            const threatMapCanvas = document.getElementById('threatMapCanvas');
-            if (threatMapCanvas) {
-                const ctx = threatMapCanvas.getContext('2d');
-                let width, height, animationFrameId;
-                const points = Array.from({
-                    length: 15
-                }, () => ({
-                    x: Math.random(),
-                    y: Math.random(),
-                    radius: Math.random() * 3 + 1,
-                    alpha: 0,
-                    alphaChange: Math.random() * 0.02 + 0.01
-                }));
-                const arcs = Array.from({
-                    length: 5
-                }, () => ({
-                    startX: Math.random(),
-                    startY: Math.random(),
-                    endX: Math.random(),
-                    endY: Math.random(),
-                    progress: Math.random(),
-                    speed: Math.random() * 0.005 + 0.002
-                }));
-
-                const resizeCanvas = () => {
-                    const container = threatMapCanvas.parentElement;
-                    if (!container) return;
-                    width = container.clientWidth;
-                    height = container.clientHeight;
-                    threatMapCanvas.width = width;
-                    threatMapCanvas.height = height;
-                };
-
-                function draw() {
-                    if (!ctx || !width || !height) return;
-                    ctx.clearRect(0, 0, width, height);
-                    points.forEach(p => {
-                        ctx.beginPath();
-                        ctx.arc(p.x * width, p.y * height, p.radius, 0, Math.PI * 2);
-                        ctx.fillStyle = `rgba(248, 81, 73, ${p.alpha})`;
-                        ctx.fill();
-                        p.alpha += p.alphaChange;
-                        if (p.alpha > 1 || p.alpha < 0) p.alphaChange *= -1;
-                    });
-                    arcs.forEach(a => {
-                        ctx.beginPath();
-                        const cpX = (a.startX + a.endX) / 2 + (a.startY - a.endY) * 0.4;
-                        const cpY = (a.startY + a.endY) / 2 + (a.endX - a.startX) * 0.4;
-                        ctx.moveTo(a.startX * width, a.startY * height);
-                        ctx.quadraticCurveTo(cpX * width, cpY * height, a.endX * width, a.endY * height);
-                        ctx.strokeStyle = `rgba(212, 175, 55, 0.4)`;
-                        ctx.lineWidth = 1;
-                        ctx.stroke();
-                        a.progress += a.speed;
-                        if (a.progress >= 1) {
-                            a.progress = 0;
-                            a.startX = Math.random();
-                            a.startY = Math.random();
-                            a.endX = Math.random();
-                            a.endY = Math.random();
-                        }
-                    });
-                    animationFrameId = requestAnimationFrame(draw);
                 }
+            });
+        }
+    });
+</script>
 
-                new IntersectionObserver((entries) => {
-                    const entry = entries[0];
-                    if (entry.isIntersecting) {
-                        resizeCanvas();
-                        if (!animationFrameId) draw();
-                    } else {
-                        cancelAnimationFrame(animationFrameId);
-                        animationFrameId = null;
-                    }
-                }).observe(threatMapCanvas);
-
-                window.addEventListener('resize', resizeCanvas);
-            }
-        });
-    </script>
-</body>
-
-</html>
+<?php include __DIR__ . '/includes/admin-footer.php'; ?>

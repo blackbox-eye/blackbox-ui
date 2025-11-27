@@ -140,6 +140,128 @@ Ny testfil: `tests/admin-features.spec.js`
 
 ---
 
+## 11. Admin UI Redesign (28. januar 2025)
+
+### Oversigt
+
+Komplet modernisering af alle admin-sider med ensartet design, forbedret responsivitet og GreyEYE-branding.
+
+### Opdaterede sider
+
+| Side | Ændringer |
+|------|-----------|
+| `dashboard.php` | Fuldstændig omskrivning med kortbaseret grid-layout |
+| `settings.php` | Panel-baseret design med sektionsopdeling |
+| `admin.php` | Moderniseret med `.admin-page` styling |
+
+### Dashboard-redesign
+
+**Før:** Standalone HTML med gammel `#nav-menu` sidebar
+
+**Efter:**
+- Bruger `admin-layout.php` som base
+- 4-kolonne responsivt grid (`auto-fit, minmax(300px, 1fr)`)
+- Kort-baserede sektioner:
+  - **Aktive Alarmer** – trusselsoversigt med badges
+  - **Systemstatus** – operationel status med indikatorer
+  - **AI Command** – hurtigkommandoer
+  - **Netværk** – forbindelsesstatus
+- GreyEYE-logo erstatter BLACKBOX EYE
+- Command Deck til navigation (ingen sidebar)
+
+### Settings-redesign
+
+**Før:** Blandet layout med lodret MENU-knap
+
+**Efter:**
+- 6 panel-baserede sektioner:
+  1. **Konto & Status** – agent-info og statistik
+  2. **Sikkerhed** – password og PIN-ændring
+  3. **Token** – API-token generering
+  4. **Login-logs** – seneste loginaktivitet
+  5. **Kontaktinformation** – email/telefon opdatering
+  6. **Konto Handlinger** – ghost mode, deaktivering
+- Responsivt 2-kolonne grid på desktop
+- Lodret MENU-knap fjernet
+
+### Admin-side modernisering
+
+- Bruger `.admin-page` CSS-klasser
+- Forbedret stats-kort for agentantal
+- Moderniseret tabel med `.admin-users__table`
+- Renere formular-layout til oprettelse af agenter
+
+### CSS-tilføjelser
+
+Nye klasser i `assets/css/admin.css`:
+
+```css
+/* Dashboard */
+.dashboard-grid { display: grid; gap: 1.5rem; }
+.dashboard-card { background: var(--admin-bg-secondary); border: 1px solid var(--admin-border-subtle); }
+.dashboard-card__header { border-bottom: 1px solid var(--admin-border-subtle); }
+.dashboard-stat { font-size: 2.5rem; color: var(--admin-text-gold); }
+
+/* Settings */
+.settings-grid { display: grid; gap: 1.5rem; }
+.settings-panel { background: var(--admin-bg-secondary); padding: 1.5rem; }
+.settings-form-row { display: flex; gap: 1rem; }
+
+/* Admin Users */
+.admin-users__stats { display: flex; gap: 1rem; }
+.admin-users__table { width: 100%; border-collapse: collapse; }
+```
+
+### Design Tokens
+
+Alle sider bruger konsistente CSS-variabler:
+
+| Token | Værdi | Brug |
+|-------|-------|------|
+| `--admin-gold` | `#d4af37` | Primær accent |
+| `--admin-text-gold` | `#FFE8A3` | Tekst med høj kontrast |
+| `--admin-bg-secondary` | `rgba(255,255,255,0.03)` | Kortbaggrund |
+| `--admin-border-subtle` | `rgba(212,175,55,0.2)` | Subtile kanter |
+
+### Nye Playwright Tests
+
+Testfil: `tests/admin-redesign.spec.js`
+
+**Test-kategorier:**
+
+1. **Dashboard Layout**
+   - Verificerer `admin-page` struktur
+   - Tjekker kortbaseret grid med min. 3 kort
+   - Bekræfter fjernelse af `#nav-menu`
+   - Responsiv test på mobil/tablet/desktop
+
+2. **Settings Layout**
+   - Verificerer panel-baserede sektioner
+   - Tjekker password/PIN og token sektioner
+   - Bekræfter ghost mode toggle
+   - Responsiv test
+
+3. **Admin Page**
+   - Verificerer brugertabel
+   - Tjekker stats-kort
+   - Bekræfter oprettelsesformular
+
+4. **Command Deck Integration**
+   - Tilgængelig fra alle admin-sider
+   - Korrekt aktiv-markering
+   - Tastatur-tilgængelighed (ESC lukker)
+
+5. **Design Token Konsistens**
+   - Verificerer CSS custom properties
+   - Tjekker kortbaggrunde
+
+6. **Accessibility**
+   - Heading-hierarki
+   - Labels på formularfelter
+   - Keyboard-navigation
+
+---
+
 ## 1. Request Access Workflow
 
 ### Komponenter

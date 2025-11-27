@@ -2,9 +2,9 @@
  * Graphene Hero - 3D Hexagonal Mesh Network
  * BlackboxEYE × GreyEYE Fusion
  *
- * Reference: 3D hexagon lattice with golden spheres at vertices,
- * grey structural lines, and depth perspective like looking at
- * a tilted honeycomb surface.
+ * Matching reference: Dark metallic hexagon lattice with subtle
+ * gold accent spheres at vertices. Grey/silver structural tubes.
+ * Perspective view looking down at tilted surface.
  */
 
 (function () {
@@ -16,48 +16,51 @@
     const ctx = canvas.getContext('2d');
     let width, height;
     let time = 0;
-    let mouseX = 0, mouseY = 0;
-    let vertices = [];
-    let edges = [];
+    let mouseX = 0.5, mouseY = 0.5;
+    let nodes = [];
+    let connections = [];
 
-    // Config matching reference images
+    // Config - matching dark metallic reference
     const cfg = {
-        // Grid
-        cols: 28,
-        rows: 16,
-        cellSize: 70,
+        // Grid density
+        hexSize: 55,
 
         // 3D perspective
-        tiltX: 0.5,        // Looking down at angle
-        tiltY: 0.1,
-        perspective: 1200,
+        perspective: 800,
+        tiltX: 0.45,
+        tiltY: 0.08,
 
-        // Spheres
-        sphereBaseSize: 12,
-        sphereMinSize: 4,
+        // Node sizes - MUCH smaller than before
+        nodeRadius: 3,
+        goldNodeRadius: 4,
 
-        // Colors from reference
-        gold: '#D4AF37',
-        goldBright: '#F5D742',
-        goldLight: '#FFE8A3',
-        grey: '#6B7280',
-        greyDark: '#374151',
-        lineGrey: 'rgba(75, 85, 99, 0.35)',
-        lineGold: 'rgba(212, 175, 55, 0.25)',
+        // Colors - subtle, metallic
+        colors: {
+            background: '#0A0C0E',
+            tube: 'rgba(80, 90, 100, 0.6)',
+            tubeHighlight: 'rgba(140, 150, 160, 0.4)',
+            node: '#4A5568',
+            nodeHighlight: '#718096',
+            gold: '#C9A227',
+            goldGlow: 'rgba(201, 162, 39, 0.3)',
+            goldBright: '#E8D48B'
+        },
+
 
         // Animation
-        waveSpeed: 0.008,
-        waveHeight: 40,
-        pulseSpeed: 0.02,
+        waveSpeed: 0.004,
+        waveAmplitude: 25,
 
         reduceMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches
     };
 
     function init() {
         resize();
-        createMesh();
+        buildHexGrid();
+
         window.addEventListener('resize', debounce(resize, 200));
         canvas.addEventListener('mousemove', onMouseMove);
+        canvas.addEventListener('mouseleave', () => { mouseX = 0.5; mouseY = 0.5; });
 
         if (!cfg.reduceMotion) {
             requestAnimationFrame(animate);
@@ -67,7 +70,9 @@
     }
 
     function resize() {
-        const rect = canvas.parentElement?.getBoundingClientRect() || { width: window.innerWidth, height: window.innerHeight };
+        const container = canvas.parentElement;
+        const rect = container ? container.getBoundingClientRect() : { width: window.innerWidth, height: window.innerHeight };
+
         width = rect.width;
         height = rect.height;
 
@@ -78,251 +83,267 @@
         canvas.style.height = height + 'px';
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-        createMesh();
+        buildHexGrid();
     }
 
-    function createMesh() {
-        vertices = [];
-        edges = [];
+    function buildHexGrid() {
+        nodes = [];
+        connections = [];
 
-        const hexWidth = cfg.cellSize * 1.5;
-        const hexHeight = cfg.cellSize * Math.sqrt(3);
+        const hexW = cfg.hexSize * 1.5;
+        const hexH = cfg.hexSize * Math.sqrt(3);
 
-        // Offset to center the grid
-        const gridWidth = cfg.cols * hexWidth;
-        const gridHeight = cfg.rows * hexHeight;
-        const offsetX = (width - gridWidth) / 2 + hexWidth;
-        const offsetY = (height - gridHeight) / 2 - 50;
+        // Calculate grid size to cover viewport plus margin
+        const cols = Math.ceil(width / hexW) + 4;
+        const rows = Math.ceil(height / (hexH * 0.75)) + 4;
 
-        // Create hexagonal grid vertices
-        for (let row = 0; row < cfg.rows; row++) {
-            for (let col = 0; col < cfg.cols; col++) {
-                // Hexagon center position
-                const x = col * hexWidth + (row % 2) * (hexWidth / 2) + offsetX;
-                const y = row * hexHeight * 0.75 + offsetY;
+        // Center offset
+        const offsetX = -hexW * 2;
+        const offsetY = -hexH;
 
-                // Add center vertex
-                const centerIdx = vertices.length;
-                vertices.push({
-                    x: x,
-                    y: y,
-                    z: 0,
-                    baseX: x,
-                    baseY: y,
-                    row: row,
-                    col: col,
-                    isGold: (row + col) % 4 === 0,
-                    phase: (row * 0.3 + col * 0.2),
-                    size: cfg.sphereBaseSize * (0.6 + Math.random() * 0.5)
-                });
-
-                // Create 6 hexagon corner vertices
-                for (let i = 0; i < 6; i++) {
-                    const angle = (Math.PI / 3) * i;
-                    const vx = x + Math.cos(angle) * cfg.cellSize * 0.5;
-                    const vy = y + Math.sin(angle) * cfg.cellSize * 0.5;
-
-                    // Check if vertex already exists nearby
-                    let existing = vertices.findIndex(v =>
-                        Math.abs(v.baseX - vx) < 5 && Math.abs(v.baseY - vy) < 5
-                    );
-
-                    if (existing === -1) {
-                        existing = vertices.length;
-                        vertices.push({
-                            x: vx,
-                            y: vy,
-                            z: 0,
-                            baseX: vx,
-                            baseY: vy,
-                            row: row,
-                            col: col,
-                            isGold: Math.random() > 0.65,
-                            phase: (row * 0.2 + col * 0.3 + i * 0.5),
-                            size: cfg.sphereBaseSize * (0.4 + Math.random() * 0.4)
-                        });
-                    }
-
-                    // Edge from center to corner
-                    edges.push({ from: centerIdx, to: existing });
-                }
+        // Create hex centers
+        const centers = [];
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                const x = col * hexW + (row % 2) * (hexW / 2) + offsetX;
+                const y = row * hexH * 0.75 + offsetY;
+                centers.push({ x, y, row, col });
             }
         }
 
-        // Connect adjacent vertices
-        for (let i = 0; i < vertices.length; i++) {
-            for (let j = i + 1; j < vertices.length; j++) {
-                const dx = vertices[i].baseX - vertices[j].baseX;
-                const dy = vertices[i].baseY - vertices[j].baseY;
-                const dist = Math.sqrt(dx * dx + dy * dy);
+        // Create nodes at hex vertices
+        const nodeMap = new Map();
 
-                if (dist > 5 && dist < cfg.cellSize * 0.7) {
-                    // Avoid duplicate edges
-                    const exists = edges.some(e =>
-                        (e.from === i && e.to === j) || (e.from === j && e.to === i)
-                    );
-                    if (!exists) {
-                        edges.push({ from: i, to: j });
+        for (const center of centers) {
+            const corners = [];
+
+            for (let i = 0; i < 6; i++) {
+                const angle = (Math.PI / 3) * i - Math.PI / 6;
+                const nx = center.x + Math.cos(angle) * cfg.hexSize * 0.58;
+                const ny = center.y + Math.sin(angle) * cfg.hexSize * 0.58;
+
+                // Round to avoid duplicates
+                const key = `${Math.round(nx)},${Math.round(ny)}`;
+
+                if (!nodeMap.has(key)) {
+                    const isGold = Math.random() < 0.12; // 12% gold nodes - subtle
+                    const node = {
+                        x: nx,
+                        y: ny,
+                        baseX: nx,
+                        baseY: ny,
+                        z: 0,
+                        isGold: isGold,
+                        phase: (center.row * 0.4 + center.col * 0.3 + i * 0.2)
+                    };
+                    nodeMap.set(key, nodes.length);
+                    nodes.push(node);
+                }
+                corners.push(nodeMap.get(key));
+            }
+
+            // Connect hex edges
+            for (let i = 0; i < 6; i++) {
+                const from = corners[i];
+                const to = corners[(i + 1) % 6];
+                if (from !== undefined && to !== undefined) {
+                    const connKey = from < to ? `${from}-${to}` : `${to}-${from}`;
+                    if (!connections.some(c => {
+                        const k = c.from < c.to ? `${c.from}-${c.to}` : `${c.to}-${c.from}`;
+                        return k === connKey;
+                    })) {
+                        connections.push({ from, to });
                     }
                 }
             }
         }
     }
 
-    function project(v) {
-        // Apply wave animation to Z
-        const wave = Math.sin(time * cfg.waveSpeed + v.phase) * cfg.waveHeight;
+    function project3D(node) {
+        // Wave animation on Z
+        const wave = Math.sin(time * cfg.waveSpeed + node.phase) * cfg.waveAmplitude;
         const z = wave;
 
         // Mouse influence
-        const mx = (mouseX - width / 2) / width;
-        const my = (mouseY - height / 2) / height;
+        const mx = (mouseX - 0.5) * 0.15;
+        const my = (mouseY - 0.5) * 0.12;
 
-        // 3D rotation
-        const tiltX = cfg.tiltX + my * 0.2;
-        const tiltY = cfg.tiltY + mx * 0.15;
+        const tiltX = cfg.tiltX + my;
+        const tiltY = cfg.tiltY + mx;
 
-        // Rotate around X axis
-        const y1 = v.y - height / 2;
-        const z1 = z;
+        // Center point
+        const cx = width / 2;
+        const cy = height / 2;
+
+        // Translate to origin
+        let x = node.baseX - cx;
+        let y = node.baseY - cy;
+
+        // Rotate around X (tilt forward)
         const cosX = Math.cos(tiltX);
         const sinX = Math.sin(tiltX);
-        const y2 = y1 * cosX - z1 * sinX;
-        const z2 = y1 * sinX + z1 * cosX;
+        const y1 = y * cosX - z * sinX;
+        const z1 = y * sinX + z * cosX;
 
-        // Rotate around Y axis
-        const x1 = v.x - width / 2;
+        // Rotate around Y (side tilt)
         const cosY = Math.cos(tiltY);
         const sinY = Math.sin(tiltY);
-        const x2 = x1 * cosY + z2 * sinY;
-        const z3 = -x1 * sinY + z2 * cosY;
+        const x1 = x * cosY + z1 * sinY;
+        const z2 = -x * sinY + z1 * cosY;
 
         // Perspective projection
-        const scale = cfg.perspective / (cfg.perspective + z3);
+        const scale = cfg.perspective / (cfg.perspective + z2);
 
         return {
-            x: width / 2 + x2 * scale,
-            y: height / 2 + y2 * scale,
-            z: z3,
+            x: cx + x1 * scale,
+            y: cy + y1 * scale,
+            z: z2,
             scale: scale
         };
     }
 
-    function drawSphere(x, y, radius, isGold, pulse) {
-        if (radius < 2) return;
-
-        const r = radius * (1 + pulse * 0.1);
-
-        // Glow
-        const glowRadius = r * 2.5;
-        const glow = ctx.createRadialGradient(x, y, r * 0.5, x, y, glowRadius);
-        if (isGold) {
-            glow.addColorStop(0, 'rgba(245, 215, 66, 0.5)');
-            glow.addColorStop(0.4, 'rgba(212, 175, 55, 0.2)');
-            glow.addColorStop(1, 'rgba(212, 175, 55, 0)');
-        } else {
-            glow.addColorStop(0, 'rgba(156, 163, 175, 0.3)');
-            glow.addColorStop(0.4, 'rgba(107, 114, 128, 0.1)');
-            glow.addColorStop(1, 'rgba(107, 114, 128, 0)');
-        }
-        ctx.beginPath();
-        ctx.arc(x, y, glowRadius, 0, Math.PI * 2);
-        ctx.fillStyle = glow;
-        ctx.fill();
-
-        // Main sphere gradient
-        const grad = ctx.createRadialGradient(
-            x - r * 0.3, y - r * 0.3, r * 0.1,
-            x, y, r
-        );
-        if (isGold) {
-            grad.addColorStop(0, '#FFFEF0');
-            grad.addColorStop(0.15, cfg.goldLight);
-            grad.addColorStop(0.4, cfg.goldBright);
-            grad.addColorStop(0.7, cfg.gold);
-            grad.addColorStop(1, '#7A6420');
-        } else {
-            grad.addColorStop(0, '#F3F4F6');
-            grad.addColorStop(0.3, '#D1D5DB');
-            grad.addColorStop(0.6, cfg.grey);
-            grad.addColorStop(1, cfg.greyDark);
-        }
-
-        ctx.beginPath();
-        ctx.arc(x, y, r, 0, Math.PI * 2);
-        ctx.fillStyle = grad;
-        ctx.fill();
-
-        // Highlight
-        const hl = ctx.createRadialGradient(
-            x - r * 0.35, y - r * 0.35, 0,
-            x - r * 0.35, y - r * 0.35, r * 0.45
-        );
-        hl.addColorStop(0, 'rgba(255,255,255,0.9)');
-        hl.addColorStop(0.5, 'rgba(255,255,255,0.3)');
-        hl.addColorStop(1, 'rgba(255,255,255,0)');
-        ctx.beginPath();
-        ctx.arc(x - r * 0.35, y - r * 0.35, r * 0.45, 0, Math.PI * 2);
-        ctx.fillStyle = hl;
-        ctx.fill();
-    }
-
     function render() {
-        // Dark background
-        ctx.fillStyle = '#080A0C';
+        // Clear with dark background
+        ctx.fillStyle = cfg.colors.background;
         ctx.fillRect(0, 0, width, height);
 
-        // Subtle radial gradient
-        const bg = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, Math.max(width, height) * 0.6);
-        bg.addColorStop(0, 'rgba(20, 24, 28, 0.5)');
-        bg.addColorStop(1, 'rgba(8, 10, 12, 0)');
-        ctx.fillStyle = bg;
+        // Subtle gradient overlay
+        const grad = ctx.createRadialGradient(
+            width * 0.3, height * 0.3, 0,
+            width * 0.5, height * 0.5, Math.max(width, height) * 0.8
+        );
+        grad.addColorStop(0, 'rgba(30, 35, 40, 0.4)');
+        grad.addColorStop(0.5, 'rgba(15, 18, 22, 0.2)');
+        grad.addColorStop(1, 'rgba(5, 6, 8, 0)');
+        ctx.fillStyle = grad;
         ctx.fillRect(0, 0, width, height);
 
-        // Project all vertices
-        const projected = vertices.map(v => ({
-            ...v,
-            ...project(v)
+        // Project all nodes
+        const projected = nodes.map((node, i) => ({
+            ...node,
+            idx: i,
+            ...project3D(node)
         }));
 
-        // Sort by Z for depth (back to front)
+        // Sort by Z (back to front)
         const sorted = [...projected].sort((a, b) => a.z - b.z);
 
-        // Draw edges first
+        // Draw connections (metallic tubes) first
         ctx.lineCap = 'round';
-        for (const edge of edges) {
-            const a = projected[edge.from];
-            const b = projected[edge.to];
+        ctx.lineJoin = 'round';
 
-            // Calculate average depth for edge opacity
+        for (const conn of connections) {
+            const a = projected[conn.from];
+            const b = projected[conn.to];
+
+            // Skip if out of view
+            if (a.x < -50 || a.x > width + 50 || b.x < -50 || b.x > width + 50) continue;
+            if (a.y < -50 || a.y > height + 50 || b.y < -50 || b.y > height + 50) continue;
+
+            // Depth-based opacity
             const avgZ = (a.z + b.z) / 2;
-            const depthFactor = Math.max(0.1, Math.min(1, (avgZ + 100) / 200));
+            const depthFactor = Math.max(0.2, Math.min(1, (avgZ + 80) / 160));
 
-            // Edge color based on connected vertices
-            const isGoldEdge = a.isGold || b.isGold;
-            const alpha = 0.15 + depthFactor * 0.2;
+            // Metallic tube effect
+            const lineWidth = 1.5 * Math.min(a.scale, b.scale);
 
-            ctx.strokeStyle = isGoldEdge
-                ? `rgba(212, 175, 55, ${alpha})`
-                : `rgba(75, 85, 99, ${alpha})`;
-            ctx.lineWidth = 0.5 + depthFactor * 0.5;
+            // Draw tube shadow
+            ctx.strokeStyle = `rgba(0, 0, 0, ${0.3 * depthFactor})`;
+            ctx.lineWidth = lineWidth + 1;
+            ctx.beginPath();
+            ctx.moveTo(a.x + 1, a.y + 1);
+            ctx.lineTo(b.x + 1, b.y + 1);
+            ctx.stroke();
 
+            // Draw main tube - grey metallic
+            const tubeGrad = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
+            tubeGrad.addColorStop(0, `rgba(70, 80, 90, ${0.5 * depthFactor})`);
+            tubeGrad.addColorStop(0.5, `rgba(100, 110, 120, ${0.6 * depthFactor})`);
+            tubeGrad.addColorStop(1, `rgba(70, 80, 90, ${0.5 * depthFactor})`);
+
+            ctx.strokeStyle = tubeGrad;
+            ctx.lineWidth = lineWidth;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
             ctx.stroke();
+
+            // Tube highlight (top edge)
+            ctx.strokeStyle = `rgba(150, 160, 170, ${0.2 * depthFactor})`;
+            ctx.lineWidth = lineWidth * 0.3;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y - lineWidth * 0.3);
+            ctx.lineTo(b.x, b.y - lineWidth * 0.3);
+            ctx.stroke();
         }
 
-        // Draw spheres (back to front)
-        for (const v of sorted) {
-            const pulse = Math.sin(time * cfg.pulseSpeed + v.phase);
-            const size = v.size * v.scale;
+        // Draw nodes (small spheres) - back to front
+        for (const node of sorted) {
+            // Skip if out of view
+            if (node.x < -20 || node.x > width + 20 || node.y < -20 || node.y > height + 20) continue;
 
-            // Only draw if visible and large enough
-            if (size > cfg.sphereMinSize && v.x > -50 && v.x < width + 50 && v.y > -50 && v.y < height + 50) {
-                drawSphere(v.x, v.y, size, v.isGold, pulse);
+            const baseRadius = node.isGold ? cfg.goldNodeRadius : cfg.nodeRadius;
+            const radius = baseRadius * node.scale;
+
+            if (radius < 1.5) continue;
+
+            // Depth factor for brightness
+            const depthFactor = Math.max(0.3, Math.min(1, (node.z + 60) / 120));
+
+            if (node.isGold) {
+                // Gold node - subtle glow only
+                const glowSize = radius * 2.5;
+                const glow = ctx.createRadialGradient(node.x, node.y, radius * 0.5, node.x, node.y, glowSize);
+                glow.addColorStop(0, `rgba(201, 162, 39, ${0.25 * depthFactor})`);
+                glow.addColorStop(0.5, `rgba(201, 162, 39, ${0.1 * depthFactor})`);
+                glow.addColorStop(1, 'rgba(201, 162, 39, 0)');
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, glowSize, 0, Math.PI * 2);
+                ctx.fillStyle = glow;
+                ctx.fill();
+
+                // Gold sphere - small and subtle
+                const goldGrad = ctx.createRadialGradient(
+                    node.x - radius * 0.3, node.y - radius * 0.3, radius * 0.1,
+                    node.x, node.y, radius
+                );
+                goldGrad.addColorStop(0, cfg.colors.goldBright);
+                goldGrad.addColorStop(0.4, cfg.colors.gold);
+                goldGrad.addColorStop(1, '#8B7020');
+
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
+                ctx.fillStyle = goldGrad;
+                ctx.fill();
+            } else {
+                // Grey metallic node
+                const greyGrad = ctx.createRadialGradient(
+                    node.x - radius * 0.3, node.y - radius * 0.3, radius * 0.1,
+                    node.x, node.y, radius
+                );
+                greyGrad.addColorStop(0, `rgba(160, 170, 180, ${depthFactor})`);
+                greyGrad.addColorStop(0.5, `rgba(90, 100, 110, ${depthFactor})`);
+                greyGrad.addColorStop(1, `rgba(50, 55, 65, ${depthFactor})`);
+
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
+                ctx.fillStyle = greyGrad;
+                ctx.fill();
             }
+
+            // Tiny highlight on all nodes
+            ctx.beginPath();
+            ctx.arc(node.x - radius * 0.25, node.y - radius * 0.25, radius * 0.35, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 255, 255, ${0.4 * depthFactor})`;
+            ctx.fill();
         }
+
+        // Top fade gradient (content blending)
+        const topFade = ctx.createLinearGradient(0, 0, 0, height * 0.15);
+        topFade.addColorStop(0, 'rgba(10, 12, 14, 0.6)');
+        topFade.addColorStop(1, 'rgba(10, 12, 14, 0)');
+        ctx.fillStyle = topFade;
+        ctx.fillRect(0, 0, width, height * 0.15);
     }
 
     function animate() {
@@ -333,8 +354,8 @@
 
     function onMouseMove(e) {
         const rect = canvas.getBoundingClientRect();
-        mouseX = e.clientX - rect.left;
-        mouseY = e.clientY - rect.top;
+        mouseX = (e.clientX - rect.left) / rect.width;
+        mouseY = (e.clientY - rect.top) / rect.height;
     }
 
     function debounce(fn, ms) {
@@ -345,7 +366,7 @@
         };
     }
 
-    // Start
+    // Initialize
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {

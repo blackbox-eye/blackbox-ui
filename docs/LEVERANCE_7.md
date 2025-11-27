@@ -709,3 +709,85 @@ Invoke-RestMethod -Uri 'http://localhost:8000/api/dashboard-stats.php' -Method G
 1. Log ind med standard agent
 2. Gå til `/settings.php`
 3. Verificer "Ghost-mode" panel IKKE er synligt
+
+---
+
+## Blackbox EYE Landing Update (27. november 2025)
+
+### Design Tokens
+
+Nye Blackbox-specifikke CSS-variabler tilføjet i `assets/css/marketing.css`:
+
+```css
+/* Blackbox EYE brand colors (parent company identity) */
+--blackbox-primary: #1a1a2e;
+--blackbox-secondary: #0f0f1a;
+--blackbox-accent: #16213e;
+--blackbox-highlight: #e94560;
+--blackbox-text: #eaeaea;
+--blackbox-border: rgba(233, 69, 96, 0.3);
+--blackbox-glow: 0 0 20px rgba(233, 69, 96, 0.2);
+```
+
+### Hero Section Updates
+
+| Komponent | Beskrivelse |
+|-----------|-------------|
+| `.blackbox-section` | Gradient baggrund med radial glow |
+| `.blackbox-badge` | Brand badge med ikon ("Blackbox EYE™ Security Platform") |
+| `.stats-counter` | Tre KPI'er: Threats Blocked, Uptime, Response Time |
+
+### Branding Strategi
+
+- **Hero + Footer:** Blackbox EYE branding (moderselskab)
+- **Produktsider:** GreyEYE som produktmodul
+- **Design ratio:** 80-90% fælles tokens, 10-20% Blackbox-specifikke
+
+### Nye CSS Komponenter
+
+| Klasse | Formål |
+|--------|--------|
+| `.blackbox-section` | Sektioner med Blackbox-baggrund |
+| `.blackbox-badge` | Brand badge med ikon |
+| `.blackbox-highlight` | Tekst i highlight-farve |
+| `.glass-effect--blackbox` | Kort med Blackbox-styling |
+| `.stats-counter` | KPI-visning med tre elementer |
+| `.live-feed-item--new` | Animation til nye feed-items |
+
+### i18n Opdateringer
+
+Nye oversættelsesnøgler tilføjet:
+
+```json
+// EN
+"stats": {
+  "threats": "Threats Blocked",
+  "uptime": "Uptime",
+  "response": "Response Time"
+}
+
+// DA
+"stats": {
+  "threats": "Trusler blokeret",
+  "uptime": "Oppetid",
+  "response": "Responstid"
+}
+```
+
+### Tests Tilføjet
+
+Nye test-grupper i `tests/marketing-landing.spec.js`:
+
+- **Blackbox EYE Branding:** Badge, section class, stats counter
+- **Blackbox CSS Variables:** Section existence, badge structure
+
+### Verificering
+
+```bash
+# Kør tests
+npm test
+
+# Tjek specifikke Blackbox tests
+npx playwright test tests/marketing-landing.spec.js --grep "Blackbox"
+```
+

@@ -96,7 +96,12 @@
       "subheadline": "Blackbox EYE™ leverer samlet trusselsefterretning, AI-drevet respons og operationel opmærksomhed i realtid – så I neutraliserer angreb, før de eskalerer.",
       "primary_cta": "Book en uforpligtende demo",
       "secondary_cta": "Udforsk platformen",
-      "live_feed_title": "Live Trusselfeed"
+      "live_feed_title": "Live Trusselfeed",
+      "stats": {
+        "threats": "Trusler blokeret",
+        "uptime": "Oppetid",
+        "response": "Responstid"
+      }
     },
     "tactical": {
       "tagline": "Den taktiske oversigt",

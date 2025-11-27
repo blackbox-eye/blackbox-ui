@@ -96,7 +96,12 @@
       "subheadline": "Blackbox EYE™ delivers unified threat intelligence, AI-driven response, and real-time operational awareness – so you neutralize attacks before they escalate.",
       "primary_cta": "Book a No-Obligation Demo",
       "secondary_cta": "Explore the Platform",
-      "live_feed_title": "Live Threat Feed"
+      "live_feed_title": "Live Threat Feed",
+      "stats": {
+        "threats": "Threats Blocked",
+        "uptime": "Uptime",
+        "response": "Response Time"
+      }
     },
     "tactical": {
       "tagline": "The Tactical Overview",

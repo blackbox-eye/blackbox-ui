@@ -7,14 +7,24 @@ include 'includes/site-header.php';
 ?>
 
 <main id="main-content" class="pt-0">
-    <!-- Hero Section: Transparent background to show Matrix rain -->
-    <section id="home" class="relative min-h-screen w-full flex items-center justify-center text-center overflow-hidden page-section">
+    <!-- Hero Section: Blackbox EYE branded with Matrix rain -->
+    <section id="home" class="blackbox-section relative min-h-screen w-full flex items-center justify-center text-center overflow-hidden page-section">
         <canvas id="hero-canvas" class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: -10;"></canvas>
 
         <!-- Content overlay with subtle gradient - adapts to theme -->
         <div class="hero-overlay absolute inset-0 pointer-events-none" style="z-index: 1;"></div>
 
         <div class="relative px-4 py-28 sm:py-36 max-w-5xl mx-auto" style="z-index: 10;">
+            <!-- Blackbox EYE Brand Badge -->
+            <div class="flex justify-center lg:justify-start mb-6">
+                <span class="blackbox-badge">
+                    <svg class="blackbox-badge__icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                    </svg>
+                    Blackbox EYE™ Security Platform
+                </span>
+            </div>
+
             <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-center">
                 <!-- Hero Text Content -->
                 <div class="lg:col-span-3 text-center lg:text-left">
@@ -32,6 +42,22 @@ include 'includes/site-header.php';
                             <?= t('home.hero.secondary_cta') ?>
                         </a>
                     </div>
+
+                    <!-- Stats Counter -->
+                    <div class="stats-counter mt-10">
+                        <div class="stats-counter__item">
+                            <div class="stats-counter__value" id="threatsBlocked">847K</div>
+                            <div class="stats-counter__label"><?= t('home.hero.stats.threats') ?></div>
+                        </div>
+                        <div class="stats-counter__item">
+                            <div class="stats-counter__value">99.9%</div>
+                            <div class="stats-counter__label"><?= t('home.hero.stats.uptime') ?></div>
+                        </div>
+                        <div class="stats-counter__item">
+                            <div class="stats-counter__value">&lt;50ms</div>
+                            <div class="stats-counter__label"><?= t('home.hero.stats.response') ?></div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Live Feed Widget -->
@@ -46,8 +72,9 @@ include 'includes/site-header.php';
                             <div class="live-feed-item live-feed-item--warning">
                                 <span class="live-feed-item__icon" aria-hidden="true">
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                                        <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                                        <line x1="12" y1="9" x2="12" y2="13" />
+                                        <line x1="12" y1="17" x2="12.01" y2="17" />
                                     </svg>
                                 </span>
                                 <div class="live-feed-item__content">
@@ -59,7 +86,9 @@ include 'includes/site-header.php';
                             <div class="live-feed-item live-feed-item--critical">
                                 <span class="live-feed-item__icon" aria-hidden="true">
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                                        <circle cx="12" cy="12" r="10" />
+                                        <line x1="12" y1="8" x2="12" y2="12" />
+                                        <line x1="12" y1="16" x2="12.01" y2="16" />
                                     </svg>
                                 </span>
                                 <div class="live-feed-item__content">
@@ -71,7 +100,9 @@ include 'includes/site-header.php';
                             <div class="live-feed-item live-feed-item--info">
                                 <span class="live-feed-item__icon" aria-hidden="true">
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                                        <circle cx="12" cy="12" r="10" />
+                                        <line x1="12" y1="16" x2="12" y2="12" />
+                                        <line x1="12" y1="8" x2="12.01" y2="8" />
                                     </svg>
                                 </span>
                                 <div class="live-feed-item__content">

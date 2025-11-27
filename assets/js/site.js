@@ -1086,110 +1086,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
-    // MATRIX RAIN ANIMATION - INFINITE LOOP
+    // MATRIX RAIN ANIMATION - REMOVED
     // ==========================================
-    const heroCanvas = document.getElementById('hero-canvas');
-    if (heroCanvas) {
-        // Hide canvas until fully initialized
-        heroCanvas.style.opacity = '0';
-        heroCanvas.style.transition = 'opacity 0.3s ease-in';
-
-        const ctx = heroCanvas.getContext('2d', { alpha: false });
-        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@#$%^&*()_+-=[]{}|;':,./<>?".split('');
-        let drops = [];
-        let lastFrameTime = 0;
-        const FPS = 30;
-        const frameInterval = 1000 / FPS;
-        let isInitialized = false;
-
-        // Respect accessibility preference
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-        if (prefersReducedMotion) {
-            heroCanvas.style.display = 'none';
-            console.log('Matrix animation disabled - user prefers reduced motion');
-        } else {
-            // Setup canvas dimensions
-            const setupCanvas = () => {
-                const dpr = window.devicePixelRatio || 1;
-                const w = window.innerWidth;
-                const h = window.innerHeight;
-
-                heroCanvas.width = w * dpr;
-                heroCanvas.height = h * dpr;
-                heroCanvas.style.width = w + 'px';
-                heroCanvas.style.height = h + 'px';
-                ctx.scale(dpr, dpr);
-
-                const columns = Math.floor(w / 20);
-                drops = Array.from({ length: columns }, () => Math.floor(Math.random() * (h / 20)));
-
-                // Show canvas after initialization
-                if (!isInitialized) {
-                    isInitialized = true;
-                    setTimeout(() => {
-                        heroCanvas.style.opacity = '1';
-                    }, 100);
-                }
-            };
-
-            // Main animation loop - NEVER STOPS
-            const animate = (timestamp) => {
-                // Schedule next frame FIRST - guarantees infinite loop
-                requestAnimationFrame(animate);
-
-                // FPS throttling
-                const elapsed = timestamp - lastFrameTime;
-                if (elapsed < frameInterval) return;
-
-                lastFrameTime = timestamp - (elapsed % frameInterval);
-
-                // Fade effect
-                ctx.fillStyle = 'rgba(16, 20, 25, 0.05)';
-                ctx.fillRect(0, 0, heroCanvas.width / (window.devicePixelRatio || 1), heroCanvas.height / (window.devicePixelRatio || 1));
-
-                // Rain color
-                const color = getComputedStyle(document.documentElement)
-                    .getPropertyValue('--digital-rain-color')
-                    .trim() || '#008000';
-
-                ctx.fillStyle = color;
-                ctx.font = '15px monospace';
-
-                // Draw all drops
-                for (let i = 0; i < drops.length; i++) {
-                    const char = chars[Math.floor(Math.random() * chars.length)];
-                    const x = i * 20;
-                    const y = drops[i] * 20;
-
-                    ctx.fillText(char, x, y);
-
-                    // Reset when off-screen
-                    const canvasHeight = heroCanvas.height / (window.devicePixelRatio || 1);
-                    if (y > canvasHeight && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    drops[i]++;
-                }
-            };
-
-            // Initialize
-            setupCanvas();
-            lastFrameTime = performance.now();
-            requestAnimationFrame(animate);
-
-            // Resize handler
-            let resizeTimer;
-            window.addEventListener('resize', () => {
-                clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(() => {
-                    setupCanvas();
-                }, 200);
-            });
-
-            console.log('✅ Matrix rain animation started - infinite loop active');
-        }
-    }
+    // The Matrix rain animation has been removed as part of the
+    // Graphene theme upgrade. The hero section now uses a static
+    // SVG hexagon background pattern instead.
+    // See PR #54 for details on the Graphene design system.
 
     const hasAIConfig = typeof window.AI_CONFIG !== 'undefined';
     const sanitizedApiKey = hasAIConfig ? String(AI_CONFIG.GEMINI_API_KEY || '').trim() : '';

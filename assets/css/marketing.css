@@ -46,6 +46,49 @@
   --muted: var(--bbx-text-muted);
 }
 
+/* ========================================================
+   Graphene Section - Reusable Background Component
+   ======================================================== */
+.graphene-section {
+  position: relative;
+  background: var(--graphene-bg-dark);
+  overflow: hidden;
+}
+
+.graphene-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/bg/graphene-dark.svg');
+  background-repeat: repeat;
+  background-size: 120px 104px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+[data-theme="light"] .graphene-section,
+.light .graphene-section {
+  background: var(--graphene-bg-light);
+}
+
+[data-theme="light"] .graphene-section::before,
+.light .graphene-section::before {
+  background-image: url('/assets/bg/graphene-light.svg');
+  opacity: 0.6;
+}
+
+/* Graphene page body defaults */
+.graphene-page {
+  background: var(--graphene-bg-dark);
+  color: var(--graphene-text);
+}
+
+[data-theme="light"] .graphene-page,
+.light .graphene-page {
+  background: var(--graphene-bg-light);
+  color: var(--graphene-text-light);
+}
+
 /* Desktop navigation links */
 .nav-link {
   color: var(--bbx-text-secondary);

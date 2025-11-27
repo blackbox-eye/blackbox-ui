@@ -152,6 +152,9 @@
     </div>
 
     <script src="assets/js/site.min.js" defer></script>
+    <?php if (isset($current_page) && $current_page === 'home'): ?>
+    <script src="assets/js/graphene-hero.js" defer></script>
+    <?php endif; ?>
     </body>
 
     </html>

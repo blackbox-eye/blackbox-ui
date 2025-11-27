@@ -7,97 +7,102 @@ include 'includes/site-header.php';
 ?>
 
 <main id="main-content" class="pt-0">
-    <!-- Hero Section: Graphene Premium Design - Gold/Grey Fusion -->
-    <section id="home" class="graphene-hero-premium relative min-h-screen w-full flex items-center overflow-hidden page-section">
-        <!-- Hexagon Pattern Background -->
-        <div class="graphene-hero-premium__bg" aria-hidden="true">
-            <div class="graphene-hexagon-pattern"></div>
-            <div class="graphene-gradient-overlay"></div>
-        </div>
+    <!-- Hero Section: Graphene 3D Network - BlackboxEYE × GreyEYE Fusion -->
+    <section id="home" class="graphene-hero-3d relative min-h-screen w-full flex items-center overflow-hidden">
+        <!-- 3D Hexagon Network Canvas -->
+        <canvas id="graphene-canvas" class="graphene-hero-3d__canvas" aria-hidden="true"></canvas>
+        
+        <!-- Gradient Overlays for depth -->
+        <div class="graphene-hero-3d__overlay" aria-hidden="true"></div>
+        <div class="graphene-hero-3d__vignette" aria-hidden="true"></div>
 
-        <div class="graphene-hero-premium__content relative px-6 sm:px-8 lg:px-12 py-32 sm:py-40 max-w-7xl mx-auto w-full">
-            <!-- Hero Text Content - Centered on mobile, left on desktop -->
+        <!-- Main Content -->
+        <div class="graphene-hero-3d__content relative z-20 px-6 sm:px-8 lg:px-16 py-32 sm:py-40 max-w-7xl mx-auto w-full">
             <div class="max-w-4xl">
-                <!-- Graphene Brand Badge -->
-                <div class="graphene-premium-badge" role="banner">
-                    <span class="graphene-premium-badge__glow" aria-hidden="true"></span>
-                    <span class="graphene-premium-badge__text"><?= t('home.hero.badge') ?></span>
+                <!-- Animated Brand Badge -->
+                <div class="graphene-floating-badge" role="banner">
+                    <div class="graphene-floating-badge__ring" aria-hidden="true"></div>
+                    <div class="graphene-floating-badge__inner">
+                        <span class="graphene-floating-badge__icon" aria-hidden="true">◈</span>
+                        <span class="graphene-floating-badge__text"><?= t('home.hero.badge') ?></span>
+                    </div>
                 </div>
 
-                <h1 class="graphene-headline text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-tight tracking-tight mb-8">
-                    <?= t('home.hero.headline') ?>
+                <!-- Headline with Typing Effect -->
+                <h1 class="graphene-hero-title">
+                    <span class="graphene-hero-title__line graphene-hero-title__line--1"><?= t('home.hero.headline_part1', 'Næste generations') ?></span>
+                    <span class="graphene-hero-title__line graphene-hero-title__line--2 graphene-text-shimmer"><?= t('home.hero.headline_part2', 'sikkerhedsinfrastruktur') ?></span>
                 </h1>
 
-                <p class="graphene-subheadline text-lg sm:text-xl md:text-2xl mb-12 leading-relaxed max-w-3xl">
+                <!-- Subheadline with fade-in -->
+                <p class="graphene-hero-subtitle">
                     <?= t('home.hero.subheadline') ?>
                 </p>
 
-                <!-- Premium CTA Buttons - Large and prominent -->
-                <div class="flex flex-col sm:flex-row items-start gap-5 mb-16">
-                    <a href="demo.php"
-                        class="graphene-cta-primary"
-                        aria-label="<?= t('home.hero.primary_cta_aria') ?>">
-                        <span class="graphene-cta-primary__glow" aria-hidden="true"></span>
-                        <svg class="graphene-cta-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <!-- Premium CTA Buttons with Glow Effects -->
+                <div class="graphene-cta-group">
+                    <a href="demo.php" class="graphene-btn-primary" aria-label="<?= t('home.hero.primary_cta_aria') ?>">
+                        <span class="graphene-btn-primary__bg"></span>
+                        <span class="graphene-btn-primary__glow"></span>
+                        <svg class="graphene-btn__icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
                         </svg>
-                        <span><?= t('home.hero.primary_cta') ?></span>
+                        <span class="graphene-btn__text"><?= t('home.hero.primary_cta') ?></span>
                     </a>
-                    <a href="products.php"
-                        class="graphene-cta-secondary"
-                        aria-label="<?= t('home.hero.secondary_cta_aria') ?>">
-                        <svg class="graphene-cta-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    <a href="products.php" class="graphene-btn-secondary" aria-label="<?= t('home.hero.secondary_cta_aria') ?>">
+                        <span class="graphene-btn-secondary__border"></span>
+                        <svg class="graphene-btn__icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 16v-4M12 8h.01"></path>
                         </svg>
-                        <span><?= t('home.hero.secondary_cta') ?></span>
+                        <span class="graphene-btn__text"><?= t('home.hero.secondary_cta') ?></span>
                     </a>
                 </div>
 
-                <!-- Graphene Stats - Premium styling -->
-                <div class="graphene-premium-stats" role="list" aria-label="<?= t('home.hero.stats_aria') ?>">
-                    <div class="graphene-premium-stats__item" role="listitem">
-                        <div class="graphene-premium-stats__icon" aria-hidden="true">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <!-- Stats with Glassmorphism -->
+                <div class="graphene-stats-glass" role="list" aria-label="<?= t('home.hero.stats_aria') ?>">
+                    <div class="graphene-stat-card" role="listitem">
+                        <div class="graphene-stat-card__icon graphene-stat-card__icon--shield">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                             </svg>
                         </div>
-                        <div class="graphene-premium-stats__content">
-                            <div class="graphene-premium-stats__value">847K+</div>
-                            <div class="graphene-premium-stats__label"><?= t('home.hero.stats.threats') ?></div>
-                        </div>
+                        <div class="graphene-stat-card__value" data-count="847000">847K+</div>
+                        <div class="graphene-stat-card__label"><?= t('home.hero.stats.threats') ?></div>
                     </div>
-                    <div class="graphene-premium-stats__divider" aria-hidden="true"></div>
-                    <div class="graphene-premium-stats__item" role="listitem">
-                        <div class="graphene-premium-stats__icon" aria-hidden="true">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <div class="graphene-stat-card" role="listitem">
+                        <div class="graphene-stat-card__icon graphene-stat-card__icon--uptime">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <circle cx="12" cy="12" r="10" />
                                 <polyline points="12 6 12 12 16 14" />
                             </svg>
                         </div>
-                        <div class="graphene-premium-stats__content">
-                            <div class="graphene-premium-stats__value">99.9%</div>
-                            <div class="graphene-premium-stats__label"><?= t('home.hero.stats.uptime') ?></div>
-                        </div>
+                        <div class="graphene-stat-card__value">99.9%</div>
+                        <div class="graphene-stat-card__label"><?= t('home.hero.stats.uptime') ?></div>
                     </div>
-                    <div class="graphene-premium-stats__divider" aria-hidden="true"></div>
-                    <div class="graphene-premium-stats__item" role="listitem">
-                        <div class="graphene-premium-stats__icon" aria-hidden="true">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <div class="graphene-stat-card" role="listitem">
+                        <div class="graphene-stat-card__icon graphene-stat-card__icon--speed">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
                             </svg>
                         </div>
-                        <div class="graphene-premium-stats__content">
-                            <div class="graphene-premium-stats__value">&lt;50ms</div>
-                            <div class="graphene-premium-stats__label"><?= t('home.hero.stats.response') ?></div>
-                        </div>
+                        <div class="graphene-stat-card__value">&lt;50ms</div>
+                        <div class="graphene-stat-card__label"><?= t('home.hero.stats.response') ?></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Decorative gold accent line -->
-        <div class="graphene-hero-premium__accent" aria-hidden="true"></div>
+        <!-- Scroll Indicator -->
+        <div class="graphene-scroll-indicator" aria-hidden="true">
+            <div class="graphene-scroll-indicator__mouse">
+                <div class="graphene-scroll-indicator__wheel"></div>
+            </div>
+            <span class="graphene-scroll-indicator__text">Scroll</span>
+        </div>
+
+        <!-- Bottom Gold Accent -->
+        <div class="graphene-hero-3d__accent" aria-hidden="true"></div>
     </section>
 
     <section class="py-16 sm:py-20 section-fade-in page-section">

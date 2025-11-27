@@ -101,6 +101,8 @@
     "hero": {
       "badge": "Blackbox EYE™ Sikkerhedsplatform",
       "headline": "Næste generations sikkerhedsinfrastruktur",
+      "headline_part1": "Næste generations",
+      "headline_part2": "sikkerhedsinfrastruktur",
       "subheadline": "Drevet af Graphene-arkitektur – samlet trusselsefterretning, AI-drevet respons og operationel opmærksomhed i realtid på tværs af hele din digitale overflade.",
       "primary_cta": "Anmod om demo",
       "primary_cta_aria": "Anmod om en demo af Blackbox EYE sikkerhedsplatform",

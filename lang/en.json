@@ -101,6 +101,8 @@
     "hero": {
       "badge": "Blackbox EYE™ Security Platform",
       "headline": "Next-gen Security Infrastructure",
+      "headline_part1": "Next generation",
+      "headline_part2": "security infrastructure",
       "subheadline": "Powered by Graphene architecture – unified threat intelligence, AI-driven response, and real-time operational awareness across your entire digital surface.",
       "primary_cta": "Request Demo",
       "primary_cta_aria": "Request a demo of Blackbox EYE security platform",

@@ -1,7 +1,7 @@
 # LEVERANCE 7 – Funktionalitetsudvidelse
 
-**Dato:** 9. januar 2025
-**Sprint:** 7 – Feature Expansion
+**Dato:** 9. januar 2025 (opdateret 27. januar 2025)
+**Sprint:** 7 – Feature Expansion + QA Audit
 **Status:** ✅ Gennemført
 
 ---
@@ -10,11 +10,133 @@
 
 Denne leverance udvider ALPHA Interface GUI med tre nye funktionelle områder:
 
-1. **Request Access Workflow** – Komplet formular til adgangsanmodninger
-2. **Intel Vault** – Placeholder-side til sikker dokumenthåndtering
-3. **API & Keys** – Administration af API-nøgler
+1. **Request Access Workflow** – Komplet formular til adgangsanmodninger (nu med database)
+2. **Intel Vault** – Sikker dokumenthåndtering med AES-256-GCM kryptering
+3. **API & Keys** – Administration af API-nøgler med fuld CRUD
 
 Alle nye sider bruger det fælles `admin-layout.php` og er integreret i Command Deck-navigationen.
+
+---
+
+## QA Audit (27. januar 2025)
+
+### Sikkerhedsrettelser
+
+| Problem | Løsning | Fil |
+|---------|---------|-----|
+| Command Deck synlig før login | Fjernet helt fra login-siden | `agent-login.php` |
+| Navigation tilgængelig uautentificeret | Menu-markup fjernet, kun efter session | `agent-login.php` |
+
+### Favicon-konsistens
+
+Alle sider har nu identisk favicon-konfiguration:
+
+```html
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/logo%20pakker%20BlackboxEYE/...">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/logo%20pakker%20BlackboxEYE/...">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/logo%20pakker%20BlackboxEYE/...">
+<link rel="shortcut icon" href="/assets/logo%20pakker%20BlackboxEYE/.../BlackboxEYE_white.ico">
+```
+
+**Opdaterede filer:**
+- `agent-login.php`
+- `dashboard.php`
+- `includes/header.php`
+- `includes/admin-layout.php`
+- `includes/site-header.php` (havde allerede)
+
+### CSS-konsistens
+
+- `dashboard.php` ændret fra relativ til absolut sti (`/assets/css/admin.css`)
+- Alle admin-sider bruger nu konsistent `/assets/css/admin.css` og `/assets/css/tailwind.full.css`
+
+### Alt-tekst og Lazy Loading Audit
+
+Alle billeder verificeret med:
+
+- Meningsfulde `alt`-tekster eller `alt=""` for dekorative (med `aria-hidden="true"`)
+- `loading="lazy"` på alle billeder
+
+---
+
+## Database-integration (27. januar 2025)
+
+### Request Access Database
+
+| Fil | Beskrivelse |
+|-----|-------------|
+| `db/schema/access_requests.sql` | Tabelskema for adgangsanmodninger |
+| `api/request-access.php` | Opdateret med PDO-indsættelse |
+| `access-requests.php` | Admin-side til visning/håndtering |
+
+**Tabel: `access_requests`**
+
+- `id`, `full_name`, `email`, `organization`, `role`, `reason`
+- `status` (pending/approved/rejected)
+- `created_at`, `reviewed_at`, `reviewed_by`
+
+### Intel Vault Database
+
+| Fil | Beskrivelse |
+|-----|-------------|
+| `db/schema/intel_vault.sql` | Tabelskema for krypterede filer |
+| `includes/vault-encryption.php` | AES-256-GCM kryptering/dekryptering |
+| `api/vault-upload.php` | Upload med kryptering |
+| `api/vault-download.php` | Download med dekryptering |
+| `api/vault-delete.php` | Sikker sletning |
+| `intel-vault.php` | Fuld UI med upload/download |
+
+**Sikkerhed:**
+
+- AES-256-GCM kryptering med passphrase-deriveret nøgle (PBKDF2)
+- Unique IV per fil
+- Auth tag verificering ved dekryptering
+- Filtype-validering (docx, pdf, txt, csv, json)
+- Maks. 50MB upload
+
+### API Keys Database
+
+| Fil | Beskrivelse |
+|-----|-------------|
+| `db/schema/api_keys.sql` | Tabelskema for API-nøgler |
+| `includes/apikey-helper.php` | Secure key generation (SHA-256) |
+| `api/api-keys.php` | Full CRUD API |
+| `api-keys.php` | Admin-side med live data |
+
+**Nøgleformat:** `bbx_[prefix]_[32-char-random]`
+**Storage:** Kun SHA-256 hash gemmes, original vises én gang ved oprettelse
+
+---
+
+## 10. Playwright Test Suite (27. januar 2025)
+
+Ny testfil: `tests/admin-features.spec.js`
+
+### Test-scenarier
+
+1. **Login Security Tests**
+   - Command Deck IKKE synlig på login-side
+   - Login-kort centreret og synlig
+   - Back-link navigerer til forside
+   - Request Access modal funktionel
+
+2. **Favicon Consistency Tests**
+   - Alle sider har favicon
+   - Korrekt BlackboxEYE-logo
+
+3. **Authenticated Admin Tests** (kræver session)
+   - Command Deck synlig efter login
+   - Request Access admin-side loader
+   - Intel Vault side loader
+   - API Keys side loader
+
+4. **Accessibility Tests**
+   - Skip-link tilgængelig
+   - Billeder har alt-attributter
+   - Formular-inputs har labels
+
+5. **Responsive Layout Tests**
+   - Login-kort på mobil, tablet, desktop
 
 ---
 

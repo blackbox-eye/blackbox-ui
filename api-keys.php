@@ -38,7 +38,7 @@ if (defined('BBX_DB_CONNECTED') && BBX_DB_CONNECTED && isset($pdo)) {
     // Fetch keys
     if ($isAdmin) {
       $stmt = $pdo->prepare("
-        SELECT 
+        SELECT
           k.*,
           a.name AS agent_name
         FROM api_keys k
@@ -55,9 +55,9 @@ if (defined('BBX_DB_CONNECTED') && BBX_DB_CONNECTED && isset($pdo)) {
       ");
       $stmt->execute([':agent_id' => $agentId]);
     }
-    
+
     $apiKeys = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
     // Calculate stats
     foreach ($apiKeys as $key) {
       if ($key['revoked_at']) {
@@ -68,11 +68,12 @@ if (defined('BBX_DB_CONNECTED') && BBX_DB_CONNECTED && isset($pdo)) {
         $stats['active']++;
       }
     }
-    
+
     // Get today's request count
-    $todayStmt = $pdo->prepare("
-      SELECT SUM(request_count) as total 
-      FROM api_keys 
+    $todayStmt = $pdo->prepare(
+      "
+      SELECT SUM(request_count) as total
+      FROM api_keys
       WHERE " . ($isAdmin ? "1=1" : "agent_id = :agent_id")
     );
     if (!$isAdmin) {
@@ -81,10 +82,9 @@ if (defined('BBX_DB_CONNECTED') && BBX_DB_CONNECTED && isset($pdo)) {
       $todayStmt->execute();
     }
     $stats['requests_today'] = (int) ($todayStmt->fetchColumn() ?? 0);
-    
+
     // Fetch available scopes
     $scopes = apikey_get_scopes($pdo, $isAdmin);
-    
   } catch (PDOException $e) {
     error_log('API Keys fetch error: ' . $e->getMessage());
     $dbError = 'Kunne ikke hente API-nøgler fra databasen';
@@ -203,17 +203,17 @@ require_once __DIR__ . '/includes/admin-layout.php';
             </tr>
           </thead>
           <tbody>
-            <?php foreach ($apiKeys as $key): 
+            <?php foreach ($apiKeys as $key):
               $keyScopes = !empty($key['scopes']) ? json_decode($key['scopes'], true) : [];
               $isRevoked = !empty($key['revoked_at']);
               $isExpired = !$isRevoked && $key['expires_at'] && strtotime($key['expires_at']) < time();
               $isActive = !$isRevoked && !$isExpired && $key['is_active'];
-              
+
               $status = 'active';
               if ($isRevoked) $status = 'revoked';
               elseif ($isExpired) $status = 'expired';
               elseif (!$key['is_active']) $status = 'inactive';
-              
+
               $maskedKey = apikey_mask($key['key_id'], $key['key_hint']);
             ?>
               <tr class="api-keys__row api-keys__row--<?php echo $status; ?>" data-status="<?php echo $status; ?>" data-id="<?php echo $key['id']; ?>">
@@ -260,10 +260,10 @@ require_once __DIR__ . '/includes/admin-layout.php';
                 </td>
                 <td class="api-keys__cell-actions">
                   <?php if ($isActive): ?>
-                    <button type="button" 
-                            class="api-keys__action-btn api-keys__action-btn--danger" 
-                            title="Tilbagekald nøgle" 
-                            data-revoke="<?php echo $key['id']; ?>">
+                    <button type="button"
+                      class="api-keys__action-btn api-keys__action-btn--danger"
+                      title="Tilbagekald nøgle"
+                      data-revoke="<?php echo $key['id']; ?>">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" width="16" height="16">
                         <circle cx="12" cy="12" r="10" />
                         <line x1="15" y1="9" x2="9" y2="15" />
@@ -330,12 +330,12 @@ require_once __DIR__ . '/includes/admin-layout.php';
         <label for="keyName" class="api-keys__label">Navn <span class="required">*</span></label>
         <input type="text" id="keyName" name="name" class="api-keys__input" required maxlength="100" placeholder="F.eks. Production API">
       </div>
-      
+
       <div class="api-keys__form-group">
         <label for="keyDescription" class="api-keys__label">Beskrivelse</label>
         <textarea id="keyDescription" name="description" class="api-keys__textarea" rows="2" placeholder="Valgfri beskrivelse..."></textarea>
       </div>
-      
+
       <div class="api-keys__form-group">
         <label class="api-keys__label">Scopes / Tilladelser</label>
         <div class="api-keys__scopes-list">
@@ -350,7 +350,7 @@ require_once __DIR__ . '/includes/admin-layout.php';
           <?php endforeach; ?>
         </div>
       </div>
-      
+
       <div class="api-keys__form-group">
         <label for="rateLimit" class="api-keys__label">Rate limit (requests/time)</label>
         <input type="number" id="rateLimit" name="rate_limit" class="api-keys__input" value="1000" min="0" max="100000">
@@ -412,190 +412,192 @@ require_once __DIR__ . '/includes/admin-layout.php';
 </div>
 
 <script>
-(function() {
-  'use strict';
-  
-  // DOM elements
-  const createKeyBtn = document.getElementById('createKeyBtn');
-  const createKeyModal = document.getElementById('createKeyModal');
-  const createKeyForm = document.getElementById('createKeyForm');
-  const keyCreatedModal = document.getElementById('keyCreatedModal');
-  const newKeyValue = document.getElementById('newKeyValue');
-  const copyNewKey = document.getElementById('copyNewKey');
-  const closeKeyCreatedModal = document.getElementById('closeKeyCreatedModal');
-  const statusFilter = document.getElementById('statusFilter');
-  const keysTable = document.getElementById('keysTable');
-  
-  // Open create modal
-  createKeyBtn?.addEventListener('click', () => {
-    createKeyModal.setAttribute('aria-hidden', 'false');
-    createKeyModal.classList.add('is-open');
-    document.body.style.overflow = 'hidden';
-    document.getElementById('keyName').focus();
-  });
-  
-  // Close modals
-  document.querySelectorAll('[data-close-modal]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      createKeyModal.setAttribute('aria-hidden', 'true');
-      createKeyModal.classList.remove('is-open');
-      document.body.style.overflow = '';
-      createKeyForm.reset();
+  (function() {
+    'use strict';
+
+    // DOM elements
+    const createKeyBtn = document.getElementById('createKeyBtn');
+    const createKeyModal = document.getElementById('createKeyModal');
+    const createKeyForm = document.getElementById('createKeyForm');
+    const keyCreatedModal = document.getElementById('keyCreatedModal');
+    const newKeyValue = document.getElementById('newKeyValue');
+    const copyNewKey = document.getElementById('copyNewKey');
+    const closeKeyCreatedModal = document.getElementById('closeKeyCreatedModal');
+    const statusFilter = document.getElementById('statusFilter');
+    const keysTable = document.getElementById('keysTable');
+
+    // Open create modal
+    createKeyBtn?.addEventListener('click', () => {
+      createKeyModal.setAttribute('aria-hidden', 'false');
+      createKeyModal.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      document.getElementById('keyName').focus();
     });
-  });
-  
-  // Close on backdrop click
-  createKeyModal?.addEventListener('click', (e) => {
-    if (e.target === createKeyModal) {
-      createKeyModal.setAttribute('aria-hidden', 'true');
-      createKeyModal.classList.remove('is-open');
-      document.body.style.overflow = '';
-    }
-  });
-  
-  // Close on Escape
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      if (createKeyModal?.classList.contains('is-open')) {
+
+    // Close modals
+    document.querySelectorAll('[data-close-modal]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        createKeyModal.setAttribute('aria-hidden', 'true');
+        createKeyModal.classList.remove('is-open');
+        document.body.style.overflow = '';
+        createKeyForm.reset();
+      });
+    });
+
+    // Close on backdrop click
+    createKeyModal?.addEventListener('click', (e) => {
+      if (e.target === createKeyModal) {
         createKeyModal.setAttribute('aria-hidden', 'true');
         createKeyModal.classList.remove('is-open');
         document.body.style.overflow = '';
       }
-    }
-  });
-  
-  // Create key form submit
-  createKeyForm?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const submitBtn = document.getElementById('submitKeyBtn');
-    submitBtn.disabled = true;
-    
-    const formData = new FormData(createKeyForm);
-    const data = {
-      name: formData.get('name'),
-      description: formData.get('description'),
-      scopes: formData.getAll('scopes[]'),
-      rate_limit: parseInt(formData.get('rate_limit')) || 0
-    };
-    
-    try {
-      const response = await fetch('api/api-keys.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
-      
-      const result = await response.json();
-      
-      if (result.success) {
-        // Close create modal
-        createKeyModal.setAttribute('aria-hidden', 'true');
-        createKeyModal.classList.remove('is-open');
-        createKeyForm.reset();
-        
-        // Show key created modal
-        newKeyValue.textContent = result.key.api_key;
-        keyCreatedModal.setAttribute('aria-hidden', 'false');
-        keyCreatedModal.classList.add('is-open');
-      } else {
-        alert('Fejl: ' + (result.error || 'Kunne ikke oprette API-nøgle'));
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (createKeyModal?.classList.contains('is-open')) {
+          createKeyModal.setAttribute('aria-hidden', 'true');
+          createKeyModal.classList.remove('is-open');
+          document.body.style.overflow = '';
+        }
       }
-    } catch (error) {
-      alert('Fejl: ' + error.message);
-    } finally {
-      submitBtn.disabled = false;
-    }
-  });
-  
-  // Copy new key
-  copyNewKey?.addEventListener('click', async () => {
-    const key = newKeyValue.textContent;
-    try {
-      await navigator.clipboard.writeText(key);
-      copyNewKey.innerHTML = `
+    });
+
+    // Create key form submit
+    createKeyForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const submitBtn = document.getElementById('submitKeyBtn');
+      submitBtn.disabled = true;
+
+      const formData = new FormData(createKeyForm);
+      const data = {
+        name: formData.get('name'),
+        description: formData.get('description'),
+        scopes: formData.getAll('scopes[]'),
+        rate_limit: parseInt(formData.get('rate_limit')) || 0
+      };
+
+      try {
+        const response = await fetch('api/api-keys.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          // Close create modal
+          createKeyModal.setAttribute('aria-hidden', 'true');
+          createKeyModal.classList.remove('is-open');
+          createKeyForm.reset();
+
+          // Show key created modal
+          newKeyValue.textContent = result.key.api_key;
+          keyCreatedModal.setAttribute('aria-hidden', 'false');
+          keyCreatedModal.classList.add('is-open');
+        } else {
+          alert('Fejl: ' + (result.error || 'Kunne ikke oprette API-nøgle'));
+        }
+      } catch (error) {
+        alert('Fejl: ' + error.message);
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+
+    // Copy new key
+    copyNewKey?.addEventListener('click', async () => {
+      const key = newKeyValue.textContent;
+      try {
+        await navigator.clipboard.writeText(key);
+        copyNewKey.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
           <polyline points="20 6 9 17 4 12" />
         </svg>
       `;
-      setTimeout(() => {
-        copyNewKey.innerHTML = `
+        setTimeout(() => {
+          copyNewKey.innerHTML = `
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" width="18" height="18">
             <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
           </svg>
         `;
-      }, 2000);
-    } catch (err) {
-      alert('Kunne ikke kopiere til udklipsholder');
-    }
-  });
-  
-  // Close key created modal
-  closeKeyCreatedModal?.addEventListener('click', () => {
-    keyCreatedModal.setAttribute('aria-hidden', 'true');
-    keyCreatedModal.classList.remove('is-open');
-    document.body.style.overflow = '';
-    window.location.reload();
-  });
-  
-  // Filter by status
-  statusFilter?.addEventListener('change', () => {
-    const status = statusFilter.value;
-    const rows = keysTable?.querySelectorAll('tbody tr');
-    
-    rows?.forEach(row => {
-      if (!status || row.dataset.status === status) {
-        row.style.display = '';
-      } else {
-        row.style.display = 'none';
+        }, 2000);
+      } catch (err) {
+        alert('Kunne ikke kopiere til udklipsholder');
       }
     });
-  });
-  
-  // Revoke key
-  document.querySelectorAll('[data-revoke]').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const keyId = btn.dataset.revoke;
-      
-      if (!confirm('Er du sikker på, at du vil tilbagekalde denne API-nøgle? Denne handling kan ikke fortrydes.')) {
-        return;
-      }
-      
-      try {
-        const response = await fetch('api/api-keys.php', {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ id: keyId })
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-          window.location.reload();
+
+    // Close key created modal
+    closeKeyCreatedModal?.addEventListener('click', () => {
+      keyCreatedModal.setAttribute('aria-hidden', 'true');
+      keyCreatedModal.classList.remove('is-open');
+      document.body.style.overflow = '';
+      window.location.reload();
+    });
+
+    // Filter by status
+    statusFilter?.addEventListener('change', () => {
+      const status = statusFilter.value;
+      const rows = keysTable?.querySelectorAll('tbody tr');
+
+      rows?.forEach(row => {
+        if (!status || row.dataset.status === status) {
+          row.style.display = '';
         } else {
-          alert('Fejl: ' + (result.error || 'Kunne ikke tilbagekalde API-nøgle'));
+          row.style.display = 'none';
         }
-      } catch (error) {
-        alert('Fejl: ' + error.message);
+      });
+    });
+
+    // Revoke key
+    document.querySelectorAll('[data-revoke]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const keyId = btn.dataset.revoke;
+
+        if (!confirm('Er du sikker på, at du vil tilbagekalde denne API-nøgle? Denne handling kan ikke fortrydes.')) {
+          return;
+        }
+
+        try {
+          const response = await fetch('api/api-keys.php', {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              id: keyId
+            })
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            window.location.reload();
+          } else {
+            alert('Fejl: ' + (result.error || 'Kunne ikke tilbagekalde API-nøgle'));
+          }
+        } catch (error) {
+          alert('Fejl: ' + error.message);
+        }
+      });
+    });
+
+    // Copy code example
+    document.getElementById('copyCodeBtn')?.addEventListener('click', async () => {
+      const code = document.getElementById('codeExample')?.textContent;
+      try {
+        await navigator.clipboard.writeText(code);
+      } catch (err) {
+        // Silent fail
       }
     });
-  });
-  
-  // Copy code example
-  document.getElementById('copyCodeBtn')?.addEventListener('click', async () => {
-    const code = document.getElementById('codeExample')?.textContent;
-    try {
-      await navigator.clipboard.writeText(code);
-    } catch (err) {
-      // Silent fail
-    }
-  });
-})();
+  })();
 </script>
 
 <?php require_once __DIR__ . '/includes/admin-footer.php'; ?>

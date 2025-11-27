@@ -95,8 +95,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       font-family: 'Inter', sans-serif;
       min-height: 100vh;
       display: flex;
+      flex-direction: row;
       align-items: center;
       justify-content: center;
+      flex-wrap: wrap;
+      gap: clamp(2rem, 6vw, 5rem);
+      padding: clamp(2rem, 5vw, 4rem) clamp(1.5rem, 5vw, 4.5rem);
       background: #050505 url('assets/agent_login_baggrund.png') center/cover no-repeat fixed;
       color: #fff;
       position: relative;
@@ -121,11 +125,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     .login-card {
-      width: 320px;
+      width: min(90vw, 320px);
       background: rgba(12, 12, 14, 0.92);
       border: 1px solid rgba(212, 175, 55, 0.12);
       border-radius: 12px;
-      padding: 1.75rem 1.5rem 1.5rem;
+      padding: 1.65rem 1.45rem 1.4rem;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
@@ -170,8 +174,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     .logo-section {
       text-align: center;
-      margin: 2.6rem auto 1.25rem;
-      max-width: 260px;
+      margin: 2.35rem auto 1.15rem;
+      max-width: 240px;
     }
 
     .logo-img {
@@ -187,14 +191,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     .title {
-      font-size: 1.08rem;
+      font-size: 1rem;
       font-weight: 600;
       color: #fff;
       margin-bottom: 0.3rem;
     }
 
     .subtitle {
-      font-size: 0.7rem;
+      font-size: 0.66rem;
       color: rgba(255, 255, 255, 0.62);
       letter-spacing: 0.025em;
     }
@@ -272,8 +276,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     .request-access {
-      margin-top: 1.75rem;
-      text-align: center;
+      margin-top: 1.5rem;
+      text-align: left;
+      max-width: 360px;
       color: rgba(255, 255, 255, 0.72);
       font-size: 0.68rem;
       line-height: 1.45;
@@ -288,7 +293,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
-      align-items: center;
+      align-items: flex-start;
     }
 
     .request-access button,
@@ -317,6 +322,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     .request-access-note {
       font-size: 0.6rem;
       color: rgba(255, 255, 255, 0.5);
+      text-align: left;
     }
 
     .request-modal-overlay {
@@ -483,6 +489,264 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     .back-link:hover svg {
       transform: translateX(-2px);
     }
+
+    .interface-menu {
+      position: fixed;
+      top: 50%;
+      right: clamp(1.5rem, 4vw, 3.5rem);
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1.25rem 1.1rem;
+      min-width: 168px;
+      border-radius: 18px;
+      background: rgba(10, 10, 16, 0.88);
+      border: 1px solid rgba(212, 175, 55, 0.16);
+      box-shadow: 0 24px 46px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      z-index: 2;
+    }
+
+    .interface-menu__brand {
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+      padding-bottom: 0.65rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .interface-menu__brand img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 16px rgba(255, 209, 92, 0.3));
+    }
+
+    .interface-menu__brand-label {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .interface-menu__brand-label span {
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.55);
+    }
+
+    .interface-menu__brand-label strong {
+      font-size: 0.92rem;
+      color: #ffd15c;
+      letter-spacing: 0.04em;
+    }
+
+    .interface-menu__heading {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.58);
+    }
+
+    .interface-menu__list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .interface-menu__item {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: linear-gradient(135deg, rgba(18, 18, 24, 0.75), rgba(12, 12, 18, 0.6));
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.7rem;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+
+    .interface-menu__item:hover,
+    .interface-menu__item:focus {
+      border-color: rgba(255, 209, 92, 0.35);
+      color: #fff7db;
+      transform: translateX(-2px);
+      box-shadow: 0 14px 32px rgba(212, 175, 55, 0.25);
+      outline: none;
+    }
+
+    .interface-menu__icon {
+      flex: none;
+      width: 1.35rem;
+      height: 1.35rem;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(255, 209, 92, 0.16);
+      border: 1px solid rgba(255, 209, 92, 0.25);
+      color: #ffd15c;
+    }
+
+    .interface-menu__icon svg {
+      width: 0.8rem;
+      height: 0.8rem;
+    }
+
+    .interface-menu__footer {
+      margin-top: 0.5rem;
+      padding: 0.75rem 0.65rem 0.25rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .interface-menu__status {
+      font-size: 0.6rem;
+      color: rgba(255, 255, 255, 0.55);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .interface-menu__cta {
+      padding: 0.55rem 0.75rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 209, 92, 0.35);
+      background: linear-gradient(135deg, rgba(255, 209, 92, 0.25), rgba(212, 175, 55, 0.35));
+      color: #1a1100;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      text-decoration: none;
+      display: inline-flex;
+      justify-content: center;
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+
+    .interface-menu__cta:hover,
+    .interface-menu__cta:focus {
+      color: #fff9e1;
+      background: linear-gradient(135deg, rgba(255, 209, 92, 0.45), rgba(212, 175, 55, 0.55));
+      box-shadow: 0 14px 28px rgba(212, 175, 55, 0.28);
+      outline: none;
+    }
+
+    @media (max-width: 1024px) {
+      .interface-menu {
+        right: 1.25rem;
+        padding: 1rem 0.9rem;
+        min-width: 150px;
+        gap: 0.6rem;
+      }
+
+      .interface-menu__item {
+        font-size: 0.66rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 2rem;
+        padding: 3.5rem 1.4rem 2.5rem;
+      }
+
+      .interface-menu {
+        display: none;
+      }
+
+      .login-card {
+        width: min(92vw, 310px);
+        padding: 1.45rem 1.35rem 1.3rem;
+      }
+
+      .logo-section {
+        margin: 2rem auto 1rem;
+        max-width: 200px;
+      }
+
+      .logo-img--primary {
+        width: 180px;
+      }
+
+      .title {
+        font-size: 0.92rem;
+      }
+
+      .subtitle {
+        font-size: 0.6rem;
+      }
+
+      .form-input {
+        font-size: 0.7rem;
+        padding: 0.5rem 0.65rem;
+      }
+
+      .submit-btn {
+        font-size: 0.66rem;
+        padding: 0.55rem;
+      }
+
+      .request-access {
+        max-width: 90vw;
+        margin-left: 0;
+        text-align: center;
+      }
+
+      .request-access-actions {
+        align-items: center;
+      }
+
+      .request-access-note {
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .login-card {
+        width: 100%;
+        padding: 1.35rem 1.1rem 1.2rem;
+      }
+
+      .logo-img--primary {
+        width: 160px;
+      }
+
+      .title {
+        font-size: 0.88rem;
+      }
+
+      .subtitle {
+        font-size: 0.58rem;
+      }
+
+      .request-access {
+        font-size: 0.64rem;
+      }
+
+      .request-access button,
+      .request-access a {
+        font-size: 0.64rem;
+        padding: 0.5rem 1.2rem;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .request-access {
+        margin-right: 220px;
+      }
+    }
   </style>
 </head>
 
@@ -493,6 +757,80 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </svg>
     <span>Tilbage</span>
   </a>
+
+  <nav class="interface-menu" aria-label="GreyEYE kontrolpanel genveje">
+    <div class="interface-menu__brand">
+      <img src="assets/greyeeye_logo_transparent.png" alt="GreyEYE logo">
+      <div class="interface-menu__brand-label">
+        <span>GreyEYE</span>
+        <strong>Command Deck</strong>
+      </div>
+    </div>
+    <p class="interface-menu__heading">Navigator</p>
+    <div class="interface-menu__list">
+      <button type="button" class="interface-menu__item" data-destination="overview">
+        <span class="interface-menu__icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12l9-9 9 9" />
+            <path d="M9 21V9h6v12" />
+          </svg>
+        </span>
+        Oversigt
+      </button>
+      <button type="button" class="interface-menu__item" data-destination="operations">
+        <span class="interface-menu__icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3" />
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V22a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H2a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H8a1.65 1.65 0 0 0 1-1.51V2a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V8a1.65 1.65 0 0 0 1.51 1H22a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
+        </span>
+        Operationer
+      </button>
+      <button type="button" class="interface-menu__item" data-destination="ide">
+        <span class="interface-menu__icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 7h-9" />
+            <path d="M14 17H5" />
+            <circle cx="7" cy="7" r="2" />
+            <circle cx="17" cy="17" r="2" />
+          </svg>
+        </span>
+        IDE Workspace
+      </button>
+      <button type="button" class="interface-menu__item" data-destination="api">
+        <span class="interface-menu__icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 9h16" />
+            <path d="M4 15h16" />
+            <path d="M10 3v18" />
+          </svg>
+        </span>
+        API & Keys
+      </button>
+      <button type="button" class="interface-menu__item" data-destination="intel">
+        <span class="interface-menu__icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
+        </span>
+        Intel Vault
+      </button>
+      <button type="button" class="interface-menu__item" data-destination="support">
+        <span class="interface-menu__icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2h-3l-4 4v-4H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z" />
+            <path d="M12 11v2" />
+            <path d="M12 7h.01" />
+          </svg>
+        </span>
+        Support Desk
+      </button>
+    </div>
+    <div class="interface-menu__footer">
+      <p class="interface-menu__status">Live ops status: stabil</p>
+      <button type="button" class="interface-menu__cta" data-destination="ops-center">Åbn kontrolrum</button>
+    </div>
+  </nav>
 
   <main class="login-card">
     <div class="card-meta">

@@ -92,15 +92,27 @@
       "description": "Den komplette AI-drevne sikkerhedsplatform, der beskytter din virksomhed 24/7 – og gør medarbejdere til jeres stærkeste forsvarslinje."
     },
     "hero": {
-      "headline": "Intelligent sikkerhed. Drevet af GreyEYE™.",
-      "subheadline": "Blackbox EYE™ leverer samlet trusselsefterretning, AI-drevet respons og operationel opmærksomhed i realtid – så I neutraliserer angreb, før de eskalerer.",
-      "primary_cta": "Book en uforpligtende demo",
+      "badge": "Blackbox EYE™ Sikkerhedsplatform",
+      "headline": "Næste generations sikkerhedsinfrastruktur",
+      "subheadline": "Drevet af Graphene-arkitektur – samlet trusselsefterretning, AI-drevet respons og operationel opmærksomhed i realtid på tværs af hele din digitale overflade.",
+      "primary_cta": "Anmod om demo",
+      "primary_cta_aria": "Anmod om en demo af Blackbox EYE sikkerhedsplatform",
       "secondary_cta": "Udforsk platformen",
-      "live_feed_title": "Live Trusselfeed",
+      "secondary_cta_aria": "Udforsk Blackbox EYE platformens funktioner",
+      "live_feed_title": "Live Trusselsefterretning",
+      "stats_aria": "Platformstatistik der viser neutraliserede trusler, oppetid og responstid",
+      "feed": {
+        "malware": "Ransomware payload blokeret – endpoint isoleret",
+        "login": "Lateral bevægelse opdaget – legitimationsoplysninger roteret",
+        "scan": "Shadow IT opdagelse – 23 nye aktiver katalogiseret"
+      },
       "stats": {
-        "threats": "Trusler blokeret",
-        "uptime": "Oppetid",
-        "response": "Responstid"
+        "threats": "Trusler neutraliseret",
+        "threats_value": "2,4M+",
+        "uptime": "Platform oppetid",
+        "uptime_value": "99,97%",
+        "response": "Gns. respons",
+        "response_value": "<50ms"
       }
     },
     "tactical": {

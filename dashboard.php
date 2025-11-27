@@ -377,11 +377,12 @@ include __DIR__ . '/includes/admin-layout.php';
         border-radius: var(--admin-border-radius);
         padding: var(--admin-spacing-md);
         text-align: center;
-        transition: border-color 0.2s;
+        transition: border-color 0.2s, transform 0.2s;
     }
 
     .dashboard__stat:hover {
         border-color: var(--admin-border-gold);
+        transform: translateY(-2px);
     }
 
     .dashboard__stat-value {
@@ -389,6 +390,11 @@ include __DIR__ . '/includes/admin-layout.php';
         font-weight: 600;
         color: var(--admin-text-gold);
         line-height: 1;
+        transition: color 0.3s;
+    }
+
+    .dashboard__stat-value.updating {
+        opacity: 0.5;
     }
 
     .dashboard__stat-label {
@@ -397,6 +403,203 @@ include __DIR__ . '/includes/admin-layout.php';
         margin-top: 0.35rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+    }
+
+    /* Threat Overview Hero Card */
+    .dashboard__threat-hero {
+        grid-column: span 12;
+        background: linear-gradient(135deg, rgba(248, 81, 73, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%);
+        border: 1px solid rgba(248, 81, 73, 0.3);
+        border-radius: var(--admin-border-radius);
+        padding: var(--admin-spacing-xl);
+        margin-bottom: var(--admin-spacing-lg);
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--admin-spacing-lg);
+    }
+
+    @media (min-width: 768px) {
+        .dashboard__threat-hero {
+            grid-template-columns: 1fr 2fr;
+        }
+    }
+
+    .dashboard__threat-score {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .dashboard__threat-score-value {
+        font-size: 4rem;
+        font-weight: 700;
+        line-height: 1;
+        background: linear-gradient(135deg, var(--dash-warning), var(--dash-critical));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .dashboard__threat-score-label {
+        font-size: 0.75rem;
+        color: var(--admin-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-top: 0.5rem;
+    }
+
+    .dashboard__threat-score-status {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 0.35rem 1rem;
+        border-radius: 999px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .dashboard__threat-score-status--elevated {
+        background: rgba(251, 191, 36, 0.2);
+        color: var(--dash-warning);
+        border: 1px solid rgba(251, 191, 36, 0.4);
+    }
+
+    .dashboard__threat-score-status--critical {
+        background: rgba(248, 81, 73, 0.2);
+        color: var(--dash-critical);
+        border: 1px solid rgba(248, 81, 73, 0.4);
+        animation: pulse-status 2s infinite;
+    }
+
+    .dashboard__threat-score-status--low {
+        background: rgba(74, 222, 128, 0.2);
+        color: var(--dash-success);
+        border: 1px solid rgba(74, 222, 128, 0.4);
+    }
+
+    @keyframes pulse-status {
+
+        0%,
+        100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.7;
+        }
+    }
+
+    .dashboard__threat-details {
+        display: flex;
+        flex-direction: column;
+        gap: var(--admin-spacing-md);
+    }
+
+    .dashboard__threat-detail {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--admin-spacing-sm) var(--admin-spacing-md);
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: var(--admin-border-radius-sm);
+    }
+
+    .dashboard__threat-detail-label {
+        font-size: 0.78rem;
+        color: var(--admin-text-secondary);
+    }
+
+    .dashboard__threat-detail-value {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--admin-text-gold);
+    }
+
+    .dashboard__threat-detail-value--critical {
+        color: var(--dash-critical);
+    }
+
+    .dashboard__threat-detail-value--warning {
+        color: var(--dash-warning);
+    }
+
+    /* AI Command Log */
+    .dashboard__ai-log {
+        max-height: 150px;
+        overflow-y: auto;
+        margin-top: var(--admin-spacing-md);
+        border-top: 1px solid var(--admin-border-subtle);
+        padding-top: var(--admin-spacing-md);
+    }
+
+    .dashboard__ai-log-item {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--admin-spacing-sm);
+        padding: var(--admin-spacing-xs) 0;
+        font-size: 0.72rem;
+        border-bottom: 1px solid var(--admin-border-subtle);
+    }
+
+    .dashboard__ai-log-item:last-child {
+        border-bottom: none;
+    }
+
+    .dashboard__ai-log-time {
+        color: var(--admin-text-muted);
+        white-space: nowrap;
+        min-width: 70px;
+    }
+
+    .dashboard__ai-log-command {
+        color: var(--admin-gold);
+        font-family: 'Fira Code', monospace;
+    }
+
+    .dashboard__ai-log-status {
+        margin-left: auto;
+        padding: 0.1rem 0.4rem;
+        border-radius: 4px;
+        font-size: 0.6rem;
+        text-transform: uppercase;
+    }
+
+    .dashboard__ai-log-status--completed {
+        background: rgba(74, 222, 128, 0.15);
+        color: var(--dash-success);
+    }
+
+    .dashboard__ai-log-status--pending {
+        background: rgba(251, 191, 36, 0.15);
+        color: var(--dash-warning);
+    }
+
+    /* Loading spinner */
+    .dashboard__loading {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border: 2px solid var(--admin-border-subtle);
+        border-top-color: var(--admin-gold);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Last updated indicator */
+    .dashboard__last-updated {
+        font-size: 0.65rem;
+        color: var(--admin-text-muted);
+        text-align: right;
+        margin-top: var(--admin-spacing-sm);
     }
 </style>
 
@@ -430,20 +633,49 @@ include __DIR__ . '/includes/admin-layout.php';
     <!-- Stats Row -->
     <div class="dashboard__stats">
         <div class="dashboard__stat">
-            <div class="dashboard__stat-value" id="statAlerts">3</div>
+            <div class="dashboard__stat-value" id="statAlerts">—</div>
             <div class="dashboard__stat-label">Aktive Alarmer</div>
         </div>
         <div class="dashboard__stat">
-            <div class="dashboard__stat-value" id="statThreats">12</div>
+            <div class="dashboard__stat-value" id="statThreats">—</div>
             <div class="dashboard__stat-label">Trusler i dag</div>
         </div>
         <div class="dashboard__stat">
-            <div class="dashboard__stat-value" id="statUptime">99.8%</div>
+            <div class="dashboard__stat-value" id="statUptime">—</div>
             <div class="dashboard__stat-label">System Uptime</div>
         </div>
         <div class="dashboard__stat">
-            <div class="dashboard__stat-value" id="statRequests">1.2K</div>
+            <div class="dashboard__stat-value" id="statRequests">—</div>
             <div class="dashboard__stat-label">API Requests</div>
+        </div>
+    </div>
+
+    <!-- Threat Overview Hero Card -->
+    <div class="dashboard__threat-hero" id="threatHero">
+        <div class="dashboard__threat-score">
+            <div class="dashboard__threat-score-value" id="threatScore">—</div>
+            <div class="dashboard__threat-score-label">Trusselsniveau</div>
+            <span class="dashboard__threat-score-status dashboard__threat-score-status--elevated" id="threatStatus">
+                Indlæser...
+            </span>
+        </div>
+        <div class="dashboard__threat-details">
+            <div class="dashboard__threat-detail">
+                <span class="dashboard__threat-detail-label">Kritiske hændelser (aktive)</span>
+                <span class="dashboard__threat-detail-value dashboard__threat-detail-value--critical" id="criticalCount">—</span>
+            </div>
+            <div class="dashboard__threat-detail">
+                <span class="dashboard__threat-detail-label">Advarsler under observation</span>
+                <span class="dashboard__threat-detail-value dashboard__threat-detail-value--warning" id="warningCount">—</span>
+            </div>
+            <div class="dashboard__threat-detail">
+                <span class="dashboard__threat-detail-label">Blokerede angreb i dag</span>
+                <span class="dashboard__threat-detail-value" id="blockedCount">—</span>
+            </div>
+            <div class="dashboard__threat-detail">
+                <span class="dashboard__threat-detail-label">Seneste trussel opdaget</span>
+                <span class="dashboard__threat-detail-value" id="lastThreatTime" style="font-size: 0.85rem;">—</span>
+            </div>
         </div>
     </div>
 
@@ -461,10 +693,15 @@ include __DIR__ . '/includes/admin-layout.php';
                     </svg>
                     Aktive Alarmer
                 </h2>
-                <span class="dashboard__card-badge dashboard__card-badge--critical">2 Kritiske</span>
+                <span class="dashboard__card-badge dashboard__card-badge--critical" id="alertsBadge">
+                    <span class="dashboard__loading"></span>
+                </span>
             </header>
             <div id="alertsContainer">
-                <!-- Alerts populated by JS -->
+                <div style="text-align: center; padding: 2rem; color: var(--admin-text-muted);">
+                    <span class="dashboard__loading"></span>
+                    <p style="margin-top: 0.5rem; font-size: 0.75rem;">Indlæser alarmer...</p>
+                </div>
             </div>
         </div>
 
@@ -477,23 +714,14 @@ include __DIR__ . '/includes/admin-layout.php';
                     </svg>
                     Systemstatus
                 </h2>
+                <span class="dashboard__card-badge dashboard__card-badge--success" id="systemHealthBadge">
+                    <span class="dashboard__loading"></span>
+                </span>
             </header>
-            <ul class="dashboard__status-list">
-                <li class="dashboard__status-item">
-                    <span class="dashboard__status-label">Firewall Service</span>
-                    <span class="dashboard__status-badge dashboard__status-badge--ok">Operationel</span>
-                </li>
-                <li class="dashboard__status-item">
-                    <span class="dashboard__status-label">Threat Intel DB</span>
-                    <span class="dashboard__status-badge dashboard__status-badge--ok">Stabil</span>
-                </li>
-                <li class="dashboard__status-item">
-                    <span class="dashboard__status-label">AI Core "GREY-E"</span>
-                    <span class="dashboard__status-badge dashboard__status-badge--ok">Aktiv</span>
-                </li>
-                <li class="dashboard__status-item">
-                    <span class="dashboard__status-label">API Gateway</span>
-                    <span class="dashboard__status-badge dashboard__status-badge--warning">Høj Latens</span>
+            <ul class="dashboard__status-list" id="systemStatusList">
+                <li style="text-align: center; padding: 2rem; color: var(--admin-text-muted);">
+                    <span class="dashboard__loading"></span>
+                    <p style="margin-top: 0.5rem; font-size: 0.75rem;">Tjekker services...</p>
                 </li>
             </ul>
         </div>
@@ -511,44 +739,13 @@ include __DIR__ . '/includes/admin-layout.php';
                     Netværksovervågning
                 </h2>
             </header>
-            <div>
-                <div class="dashboard__network-item">
-                    <div class="dashboard__network-header">
-                        <span class="dashboard__network-label">Port 22 (SSH)</span>
-                        <span class="dashboard__network-value">45%</span>
-                    </div>
-                    <div class="dashboard__network-bar">
-                        <div class="dashboard__network-fill dashboard__network-fill--low" style="width: 45%"></div>
-                    </div>
-                </div>
-                <div class="dashboard__network-item">
-                    <div class="dashboard__network-header">
-                        <span class="dashboard__network-label">Port 443 (HTTPS)</span>
-                        <span class="dashboard__network-value">88%</span>
-                    </div>
-                    <div class="dashboard__network-bar">
-                        <div class="dashboard__network-fill dashboard__network-fill--medium" style="width: 88%"></div>
-                    </div>
-                </div>
-                <div class="dashboard__network-item">
-                    <div class="dashboard__network-header">
-                        <span class="dashboard__network-label">Port 3306 (DB)</span>
-                        <span class="dashboard__network-value">95%</span>
-                    </div>
-                    <div class="dashboard__network-bar">
-                        <div class="dashboard__network-fill dashboard__network-fill--high" style="width: 95%"></div>
-                    </div>
-                </div>
-                <div class="dashboard__network-item">
-                    <div class="dashboard__network-header">
-                        <span class="dashboard__network-label">Port 9200 (ES)</span>
-                        <span class="dashboard__network-value">20%</span>
-                    </div>
-                    <div class="dashboard__network-bar">
-                        <div class="dashboard__network-fill dashboard__network-fill--low" style="width: 20%"></div>
-                    </div>
+            <div id="networkContainer">
+                <div style="text-align: center; padding: 2rem; color: var(--admin-text-muted);">
+                    <span class="dashboard__loading"></span>
+                    <p style="margin-top: 0.5rem; font-size: 0.75rem;">Henter netværksdata...</p>
                 </div>
             </div>
+            <div class="dashboard__last-updated" id="networkLastUpdated"></div>
         </div>
 
         <!-- Server Load Chart Card -->
@@ -585,12 +782,34 @@ include __DIR__ . '/includes/admin-layout.php';
             <p style="font-size: 0.75rem; color: var(--admin-text-secondary); margin-bottom: var(--admin-spacing-md);">
                 Stil et spørgsmål eller giv en kommando til GREY-E AI assistenten.
             </p>
-            <textarea
-                class="dashboard__ai-input"
-                placeholder="> Analysér trafik fra IP 192.168.1.100..."></textarea>
-            <p class="dashboard__ai-hint">
-                Tryk <kbd>Enter</kbd> for at sende kommando • <kbd>Shift+Enter</kbd> for ny linje
-            </p>
+            <form id="aiCommandForm">
+                <textarea
+                    id="aiCommandInput"
+                    class="dashboard__ai-input"
+                    placeholder="> Analysér trafik fra IP 192.168.1.100..."
+                    rows="3"></textarea>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--admin-spacing-sm);">
+                    <p class="dashboard__ai-hint">
+                        Tryk <kbd>Ctrl+Enter</kbd> for at sende kommando
+                    </p>
+                    <button type="submit" class="dashboard__card-badge dashboard__card-badge--success" style="cursor: pointer; border: none; padding: 0.4rem 1rem;">
+                        Send Kommando
+                    </button>
+                </div>
+            </form>
+
+            <!-- AI Response Area -->
+            <div id="aiResponseArea" style="display: none; margin-top: var(--admin-spacing-md); padding: var(--admin-spacing-md); background: rgba(0,0,0,0.3); border-radius: var(--admin-border-radius-sm); border-left: 3px solid var(--admin-gold);">
+                <div style="font-size: 0.7rem; color: var(--admin-text-muted); margin-bottom: 0.5rem;">GREY-E Response:</div>
+                <div id="aiResponseText" style="font-size: 0.8rem; color: var(--admin-text-primary); line-height: 1.5;"></div>
+            </div>
+
+            <!-- Command Log -->
+            <div class="dashboard__ai-log" id="aiCommandLog">
+                <div style="text-align: center; padding: 1rem; color: var(--admin-text-muted); font-size: 0.72rem;">
+                    Indlæser kommandohistorik...
+                </div>
+            </div>
         </div>
 
     </div>
@@ -604,77 +823,330 @@ include __DIR__ . '/includes/admin-layout.php';
 <!-- Dashboard JavaScript -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Mock alert data
-        const mockAlerts = [{
-                id: 'a1',
-                severity: 'critical',
-                title: 'Brute Force Angreb Opdaget',
-                target: 'SSH på SRV-01',
-                time: '2 min siden'
-            },
-            {
-                id: 'a2',
-                severity: 'critical',
-                title: 'Anormal Udgående Trafik',
-                target: 'DB-CLUSTER-03',
-                time: '5 min siden'
-            },
-            {
-                id: 'a3',
-                severity: 'warning',
-                title: 'Flere Fejlede Logins',
-                target: 'Admin Portal',
-                time: '12 min siden'
-            },
-        ];
-
-        // Populate alerts
-        const alertsContainer = document.getElementById('alertsContainer');
-        if (alertsContainer) {
-            mockAlerts.forEach(alert => {
-                const alertEl = document.createElement('div');
-                alertEl.className = `dashboard__alert ${alert.severity === 'critical' ? 'dashboard__alert--critical' : ''}`;
-                alertEl.innerHTML = `
-                <h3 class="dashboard__alert-title">${alert.title}</h3>
-                <div class="dashboard__alert-meta">
-                    <span>${alert.time} • ${alert.target}</span>
-                    <a href="#" class="dashboard__alert-action" data-alert-id="${alert.id}">Undersøg →</a>
-                </div>
-            `;
-                alertsContainer.appendChild(alertEl);
+        // ===== Dashboard API Integration =====
+        const API_BASE = 'api/';
+        const REFRESH_INTERVAL = 30000; // 30 seconds
+        
+        let serverLoadChart = null;
+        
+        // Format time ago helper
+        function timeAgo(timestamp) {
+            const now = new Date();
+            const date = new Date(timestamp);
+            const diff = Math.floor((now - date) / 1000);
+            
+            if (diff < 60) return `${diff} sek. siden`;
+            if (diff < 3600) return `${Math.floor(diff / 60)} min. siden`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)} timer siden`;
+            return `${Math.floor(diff / 86400)} dage siden`;
+        }
+        
+        // Fetch with error handling
+        async function apiFetch(endpoint) {
+            try {
+                const response = await fetch(API_BASE + endpoint, {
+                    credentials: 'same-origin'
+                });
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return await response.json();
+            } catch (error) {
+                console.error(`API Error (${endpoint}):`, error);
+                return null;
+            }
+        }
+        
+        // ===== Load Dashboard Stats =====
+        async function loadDashboardStats() {
+            const data = await apiFetch('dashboard-stats.php');
+            if (data && data.success) {
+                const stats = data.data;
+                document.getElementById('statAlerts').textContent = stats.alerts_count ?? '0';
+                document.getElementById('statThreats').textContent = stats.threats_today ?? '0';
+                document.getElementById('statUptime').textContent = `${stats.uptime_percent ?? 99.9}%`;
+                document.getElementById('statRequests').textContent = (stats.api_requests ?? 0).toLocaleString('da-DK');
+                
+                // Update threat hero
+                updateThreatHero(stats);
+            }
+        }
+        
+        // ===== Update Threat Hero Card =====
+        function updateThreatHero(stats) {
+            const criticalCount = stats.critical_count ?? 0;
+            const warningCount = stats.warning_count ?? 0;
+            const blockedCount = stats.blocked_count ?? 0;
+            const lastThreat = stats.last_threat_time ?? null;
+            
+            // Calculate threat score (0-100)
+            let score = Math.min(100, criticalCount * 25 + warningCount * 5);
+            let statusClass = 'low';
+            let statusText = 'Normalt';
+            
+            if (score >= 75) {
+                statusClass = 'critical';
+                statusText = 'Kritisk';
+            } else if (score >= 25) {
+                statusClass = 'elevated';
+                statusText = 'Forhøjet';
+            }
+            
+            document.getElementById('threatScore').textContent = score;
+            document.getElementById('criticalCount').textContent = criticalCount;
+            document.getElementById('warningCount').textContent = warningCount;
+            document.getElementById('blockedCount').textContent = blockedCount;
+            document.getElementById('lastThreatTime').textContent = lastThreat ? timeAgo(lastThreat) : 'Ingen nylige';
+            
+            const statusEl = document.getElementById('threatStatus');
+            statusEl.className = `dashboard__threat-score-status dashboard__threat-score-status--${statusClass}`;
+            statusEl.textContent = statusText;
+        }
+        
+        // ===== Load Alerts =====
+        async function loadAlerts() {
+            const data = await apiFetch('alerts.php?limit=5');
+            const container = document.getElementById('alertsContainer');
+            const badge = document.getElementById('alertsBadge');
+            
+            if (!container) return;
+            
+            if (data && data.success && data.data.length > 0) {
+                const alerts = data.data;
+                badge.innerHTML = `${alerts.length} aktive`;
+                
+                container.innerHTML = alerts.map(alert => `
+                    <div class="dashboard__alert ${alert.severity === 'critical' ? 'dashboard__alert--critical' : ''}">
+                        <h3 class="dashboard__alert-title">${escapeHtml(alert.title)}</h3>
+                        <div class="dashboard__alert-meta">
+                            <span>
+                                <span class="dashboard__card-badge dashboard__card-badge--${alert.severity === 'critical' ? 'critical' : 'warning'}" style="margin-right: 0.5rem; font-size: 0.6rem;">
+                                    ${alert.severity.toUpperCase()}
+                                </span>
+                                ${timeAgo(alert.timestamp)} • ${escapeHtml(alert.target || 'System')}
+                            </span>
+                            <a href="#" class="dashboard__alert-action" data-alert-id="${alert.id}">Undersøg →</a>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                badge.innerHTML = '0';
+                badge.className = 'dashboard__card-badge dashboard__card-badge--success';
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: var(--admin-text-muted);">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 48px; height: 48px; opacity: 0.3; margin-bottom: 1rem;">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        <p style="font-size: 0.8rem;">Ingen aktive alarmer</p>
+                        <p style="font-size: 0.7rem; margin-top: 0.5rem;">Alle systemer kører normalt</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // ===== Load System Status =====
+        async function loadSystemStatus() {
+            const data = await apiFetch('system-status.php');
+            const container = document.getElementById('systemStatusList');
+            const badge = document.getElementById('systemHealthBadge');
+            
+            if (!container) return;
+            
+            if (data && data.success && data.data.services) {
+                const services = data.data.services;
+                const allOperational = services.every(s => s.status === 'operational');
+                const hasWarnings = services.some(s => s.status === 'warning');
+                const hasDegraded = services.some(s => s.status === 'degraded' || s.status === 'offline');
+                
+                if (allOperational) {
+                    badge.innerHTML = 'Alle OK';
+                    badge.className = 'dashboard__card-badge dashboard__card-badge--success';
+                } else if (hasDegraded) {
+                    badge.innerHTML = 'Problemer';
+                    badge.className = 'dashboard__card-badge dashboard__card-badge--critical';
+                } else if (hasWarnings) {
+                    badge.innerHTML = 'Advarsler';
+                    badge.className = 'dashboard__card-badge dashboard__card-badge--warning';
+                }
+                
+                container.innerHTML = services.map(service => {
+                    const statusClass = {
+                        'operational': 'ok',
+                        'warning': 'warning',
+                        'degraded': 'warning',
+                        'offline': 'error'
+                    }[service.status] || 'ok';
+                    
+                    const statusText = {
+                        'operational': 'Operationel',
+                        'warning': 'Advarsel',
+                        'degraded': 'Degraderet',
+                        'offline': 'Offline'
+                    }[service.status] || service.status;
+                    
+                    return `
+                        <li class="dashboard__status-item dashboard__status-item--${statusClass}">
+                            <span class="dashboard__status-indicator"></span>
+                            <span class="dashboard__status-name">${escapeHtml(service.name)}</span>
+                            <span class="dashboard__status-info">${service.latency_ms}ms</span>
+                        </li>
+                    `;
+                }).join('');
+            } else {
+                badge.innerHTML = 'Fejl';
+                badge.className = 'dashboard__card-badge dashboard__card-badge--critical';
+                container.innerHTML = `
+                    <li style="text-align: center; padding: 1rem; color: var(--admin-text-muted);">
+                        Kunne ikke hente systemstatus
+                    </li>
+                `;
+            }
+        }
+        
+        // ===== Load Network Stats =====
+        async function loadNetworkStats() {
+            const data = await apiFetch('network-stats.php');
+            const container = document.getElementById('networkContainer');
+            const lastUpdated = document.getElementById('networkLastUpdated');
+            
+            if (!container) return;
+            
+            if (data && data.success && data.data.ports) {
+                const ports = data.data.ports;
+                
+                container.innerHTML = `
+                    <div class="dashboard__network-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--admin-spacing-sm);">
+                        ${ports.map(port => `
+                            <div class="dashboard__network-port" style="background: rgba(0,0,0,0.2); padding: var(--admin-spacing-sm); border-radius: var(--admin-border-radius-sm); border-left: 3px solid ${port.color};">
+                                <div style="font-size: 0.7rem; color: var(--admin-text-muted);">Port ${port.number}</div>
+                                <div style="font-size: 1.1rem; font-weight: 600; color: ${port.color};">${port.utilization}%</div>
+                                <div style="font-size: 0.65rem; color: var(--admin-text-secondary);">${escapeHtml(port.name)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                if (lastUpdated) {
+                    lastUpdated.textContent = `Sidst opdateret: ${new Date().toLocaleTimeString('da-DK')}`;
+                }
+            } else {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 1rem; color: var(--admin-text-muted);">
+                        Kunne ikke hente netværksdata
+                    </div>
+                `;
+            }
+        }
+        
+        // ===== Load AI Command History =====
+        async function loadAICommandHistory() {
+            const data = await apiFetch('ai-command.php?limit=5');
+            const container = document.getElementById('aiCommandLog');
+            
+            if (!container) return;
+            
+            if (data && data.success && data.data.length > 0) {
+                const commands = data.data;
+                
+                container.innerHTML = commands.map(cmd => `
+                    <div class="dashboard__ai-log-item">
+                        <span class="dashboard__ai-log-time">${timeAgo(cmd.timestamp)}</span>
+                        <span class="dashboard__ai-log-command">> ${escapeHtml(cmd.command.substring(0, 40))}${cmd.command.length > 40 ? '...' : ''}</span>
+                        <span class="dashboard__ai-log-status dashboard__ai-log-status--${cmd.status === 'completed' ? 'completed' : 'pending'}">
+                            ${cmd.status === 'completed' ? 'Fuldført' : 'Afventer'}
+                        </span>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 1rem; color: var(--admin-text-muted); font-size: 0.72rem;">
+                        Ingen tidligere kommandoer
+                    </div>
+                `;
+            }
+        }
+        
+        // ===== Submit AI Command =====
+        async function submitAICommand(command) {
+            const responseArea = document.getElementById('aiResponseArea');
+            const responseText = document.getElementById('aiResponseText');
+            
+            responseArea.style.display = 'block';
+            responseText.innerHTML = '<span class="dashboard__loading"></span> Behandler kommando...';
+            
+            try {
+                const response = await fetch(API_BASE + 'ai-command.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({ command })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    responseText.textContent = data.data.response || 'Kommando modtaget og behandles.';
+                    loadAICommandHistory(); // Refresh history
+                } else {
+                    responseText.innerHTML = `<span style="color: var(--dash-critical);">Fejl: ${escapeHtml(data.error || 'Ukendt fejl')}</span>`;
+                }
+            } catch (error) {
+                responseText.innerHTML = `<span style="color: var(--dash-critical);">Netværksfejl: ${escapeHtml(error.message)}</span>`;
+            }
+        }
+        
+        // ===== Setup AI Command Form =====
+        function setupAICommandForm() {
+            const form = document.getElementById('aiCommandForm');
+            const input = document.getElementById('aiCommandInput');
+            
+            if (!form || !input) return;
+            
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const command = input.value.trim();
+                if (command) {
+                    submitAICommand(command);
+                    input.value = '';
+                }
+            });
+            
+            // Ctrl+Enter to submit
+            input.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    e.preventDefault();
+                    form.dispatchEvent(new Event('submit'));
+                }
             });
         }
-
-        // Server Load Chart
-        const serverLoadCtx = document.getElementById('serverLoadChart');
-        if (serverLoadCtx) {
-            new Chart(serverLoadCtx, {
+        
+        // ===== Server Load Chart =====
+        function initServerLoadChart() {
+            const ctx = document.getElementById('serverLoadChart');
+            if (!ctx) return;
+            
+            serverLoadChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: Array.from({
-                        length: 12
-                    }, (_, i) => `${60 - i * 5}m`),
+                    labels: Array.from({ length: 12 }, (_, i) => `${60 - i * 5}m`),
                     datasets: [{
-                            label: 'CPU Belastning',
-                            data: [22, 25, 30, 45, 50, 55, 60, 58, 52, 40, 35, 28].reverse(),
-                            borderColor: 'rgba(212, 175, 55, 1)',
-                            backgroundColor: 'rgba(212, 175, 55, 0.15)',
-                            borderWidth: 2,
-                            fill: true,
-                            tension: 0.4,
-                            pointRadius: 0
-                        },
-                        {
-                            label: 'Hukommelsesbrug',
-                            data: [15, 18, 22, 20, 28, 35, 33, 40, 38, 30, 25, 20].reverse(),
-                            borderColor: 'rgba(96, 165, 250, 1)',
-                            backgroundColor: 'rgba(96, 165, 250, 0.1)',
-                            borderWidth: 2,
-                            fill: false,
-                            tension: 0.4,
-                            pointRadius: 0
-                        }
-                    ]
+                        label: 'CPU Belastning',
+                        data: Array(12).fill(0),
+                        borderColor: 'rgba(212, 175, 55, 1)',
+                        backgroundColor: 'rgba(212, 175, 55, 0.15)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }, {
+                        label: 'Hukommelsesbrug',
+                        data: Array(12).fill(0),
+                        borderColor: 'rgba(96, 165, 250, 1)',
+                        backgroundColor: 'rgba(96, 165, 250, 0.1)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }]
                 },
                 options: {
                     responsive: true,
@@ -687,17 +1159,11 @@ include __DIR__ . '/includes/admin-layout.php';
                                 color: 'rgba(255,255,255,0.5)',
                                 callback: (v) => v + '%'
                             },
-                            grid: {
-                                color: 'rgba(255,255,255,0.08)'
-                            }
+                            grid: { color: 'rgba(255,255,255,0.08)' }
                         },
                         x: {
-                            ticks: {
-                                color: 'rgba(255,255,255,0.5)'
-                            },
-                            grid: {
-                                display: false
-                            }
+                            ticks: { color: 'rgba(255,255,255,0.5)' },
+                            grid: { display: false }
                         }
                     },
                     plugins: {
@@ -713,7 +1179,63 @@ include __DIR__ . '/includes/admin-layout.php';
                     }
                 }
             });
+            
+            // Simulate chart data updates
+            updateChartData();
         }
+        
+        function updateChartData() {
+            if (!serverLoadChart) return;
+            
+            // Simulate CPU and memory data (in real app, fetch from API)
+            const cpuData = serverLoadChart.data.datasets[0].data;
+            const memData = serverLoadChart.data.datasets[1].data;
+            
+            cpuData.shift();
+            cpuData.push(Math.floor(Math.random() * 40) + 20);
+            
+            memData.shift();
+            memData.push(Math.floor(Math.random() * 30) + 15);
+            
+            serverLoadChart.update('none');
+        }
+        
+        // ===== Escape HTML Helper =====
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // ===== Initialize Dashboard =====
+        async function initDashboard() {
+            // Load all data
+            await Promise.all([
+                loadDashboardStats(),
+                loadAlerts(),
+                loadSystemStatus(),
+                loadNetworkStats(),
+                loadAICommandHistory()
+            ]);
+            
+            // Setup interactions
+            setupAICommandForm();
+            initServerLoadChart();
+            
+            // Setup auto-refresh
+            setInterval(() => {
+                loadDashboardStats();
+                loadAlerts();
+                loadSystemStatus();
+                loadNetworkStats();
+            }, REFRESH_INTERVAL);
+            
+            // Update chart more frequently
+            setInterval(updateChartData, 5000);
+        }
+        
+        // Start dashboard
+        initDashboard();
     });
 </script>
 

@@ -51,7 +51,7 @@ include 'includes/site-header.php';
                     <div class="graphene-stats" role="list" aria-label="<?= t('home.hero.stats_aria') ?>">
                         <div class="graphene-stats__item" role="listitem">
                             <div class="graphene-stats__icon graphene-stats__icon--shield" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                                 </svg>
                             </div>
@@ -63,7 +63,7 @@ include 'includes/site-header.php';
                         <div class="graphene-stats__divider" aria-hidden="true"></div>
                         <div class="graphene-stats__item" role="listitem">
                             <div class="graphene-stats__icon graphene-stats__icon--uptime" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <circle cx="12" cy="12" r="10" />
                                     <polyline points="12 6 12 12 16 14" />
                                 </svg>
@@ -76,7 +76,7 @@ include 'includes/site-header.php';
                         <div class="graphene-stats__divider" aria-hidden="true"></div>
                         <div class="graphene-stats__item" role="listitem">
                             <div class="graphene-stats__icon graphene-stats__icon--response" aria-hidden="true">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
                                 </svg>
                             </div>
@@ -103,7 +103,7 @@ include 'includes/site-header.php';
                             <div class="live-feed-2__item live-feed-2__item--critical">
                                 <div class="live-feed-2__severity">
                                     <span class="severity-tag severity-tag--critical" role="status" aria-label="Critical severity">
-                                        <svg class="severity-tag__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                        <svg class="severity-tag__icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                             <path d="M12 2L2 22h20L12 2zm0 3.83L19.13 20H4.87L12 5.83zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z" />
                                         </svg>
                                         CRITICAL
@@ -121,7 +121,7 @@ include 'includes/site-header.php';
                             <div class="live-feed-2__item live-feed-2__item--warning">
                                 <div class="live-feed-2__severity">
                                     <span class="severity-tag severity-tag--warning" role="status" aria-label="Warning severity">
-                                        <svg class="severity-tag__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                        <svg class="severity-tag__icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
                                         </svg>
                                         WARNING
@@ -131,7 +131,7 @@ include 'includes/site-header.php';
                                     <div class="live-feed-2__event"><?= t('home.hero.feed.login') ?></div>
                                     <div class="live-feed-2__meta">
                                         <span class="live-feed-2__location">
-                                            <svg class="w-3 h-3 inline" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
                                             </svg>
                                             Copenhagen, DK
@@ -144,7 +144,7 @@ include 'includes/site-header.php';
                             <div class="live-feed-2__item live-feed-2__item--info">
                                 <div class="live-feed-2__severity">
                                     <span class="severity-tag severity-tag--info" role="status" aria-label="Info severity">
-                                        <svg class="severity-tag__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                        <svg class="severity-tag__icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                             <path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
                                         </svg>
                                         INFO
@@ -154,7 +154,7 @@ include 'includes/site-header.php';
                                     <div class="live-feed-2__event"><?= t('home.hero.feed.scan') ?></div>
                                     <div class="live-feed-2__meta">
                                         <span class="live-feed-2__location">
-                                            <svg class="w-3 h-3 inline" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
                                             </svg>
                                             Berlin, DE

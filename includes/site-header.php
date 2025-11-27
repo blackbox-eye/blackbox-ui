@@ -318,9 +318,8 @@ if ($is_graphene_page) {
 
 <body class="<?= implode(' ', $body_classes) ?>" data-graphene-mode="<?= htmlspecialchars($graphene_mode) ?>">
 
-    <!-- Skip navigation for keyboard users (WCAG 2.1) -->
-    <!-- tabindex="1" ensures this is the first focusable element in all browsers including WebKit -->
-    <a href="#main-content" class="skip-link" tabindex="1"><?= t('common.skip_link') ?></a>
+    <!-- Skip navigation for keyboard users (WCAG 2.1) - Hidden by default, visible on focus -->
+    <a href="#main-content" class="skip-link"><?= t('common.skip_link') ?></a>
 
     <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
         <div class="container mx-auto px-4">

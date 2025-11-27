@@ -3311,3 +3311,483 @@ button:focus-visible {
   height: 1.25rem !important;
   flex-shrink: 0 !important;
 }
+
+
+/* ========================================================
+   GRAPHENE PREMIUM HERO — Gold/Grey Fusion Design
+   ======================================================== */
+
+/* Premium color tokens */
+:root {
+  --graphene-premium-gold: #D4AF37;
+  --graphene-premium-gold-light: #F5E6B8;
+  --graphene-premium-gold-dark: #B8960C;
+  --graphene-premium-grey: #2D3436;
+  --graphene-premium-grey-light: #636E72;
+  --graphene-premium-grey-dark: #1A1D1E;
+  --graphene-premium-bg: #0D1114;
+  --graphene-premium-surface: rgba(45, 52, 54, 0.4);
+  --graphene-premium-glow: 0 0 60px rgba(212, 175, 55, 0.15);
+  --graphene-premium-border: rgba(212, 175, 55, 0.25);
+}
+
+/* Hero container */
+.graphene-hero-premium {
+  position: relative;
+  min-height: 100vh;
+  background: var(--graphene-premium-bg);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Background layer with hexagon pattern */
+.graphene-hero-premium__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Hexagon SVG pattern */
+.graphene-hexagon-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23d4af37' fill-opacity='0.04'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-size: 56px 98px;
+  opacity: 1;
+}
+
+/* Gradient overlay */
+.graphene-gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 80%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(45, 52, 54, 0.3) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(13, 17, 20, 0.4) 0%, rgba(13, 17, 20, 0.95) 100%);
+}
+
+/* Content layer */
+.graphene-hero-premium__content {
+  position: relative;
+  z-index: 10;
+}
+
+/* Gold accent line at bottom */
+.graphene-hero-premium__accent {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--graphene-premium-gold-dark) 20%,
+    var(--graphene-premium-gold) 50%,
+    var(--graphene-premium-gold-dark) 80%,
+    transparent 100%
+  );
+  z-index: 20;
+}
+
+/* Premium badge */
+.graphene-premium-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--graphene-premium-surface);
+  border: 1px solid var(--graphene-premium-border);
+  border-radius: 2rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.graphene-premium-badge__glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+  animation: premium-badge-shimmer 3s ease-in-out infinite;
+}
+
+@keyframes premium-badge-shimmer {
+  0%, 100% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+}
+
+.graphene-premium-badge__text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--graphene-premium-gold);
+  position: relative;
+  z-index: 1;
+}
+
+/* Premium headline styling */
+.graphene-headline {
+  color: #ffffff;
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    var(--graphene-premium-gold-light) 25%,
+    var(--graphene-premium-gold) 50%,
+    var(--graphene-premium-gold-light) 75%,
+    #ffffff 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: headline-gradient 8s ease-in-out infinite;
+  text-shadow: 0 0 80px rgba(212, 175, 55, 0.2);
+}
+
+@keyframes headline-gradient {
+  0%, 100% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+}
+
+/* Subheadline */
+.graphene-subheadline {
+  color: rgba(255, 255, 255, 0.75);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* ========================================================
+   GRAPHENE CTA BUTTONS — Premium Gold Styling
+   ======================================================== */
+
+/* Primary CTA - Gold filled */
+.graphene-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.125rem 2.5rem;
+  background: linear-gradient(135deg, var(--graphene-premium-gold) 0%, var(--graphene-premium-gold-dark) 100%);
+  color: #0D1114;
+  font-weight: 700;
+  font-size: 1.125rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 4px 15px rgba(212, 175, 55, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.graphene-cta-primary__glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+
+.graphene-cta-primary:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 8px 25px rgba(212, 175, 55, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.graphene-cta-primary:hover .graphene-cta-primary__glow {
+  transform: translateX(100%);
+}
+
+.graphene-cta-primary:focus-visible {
+  outline: 2px solid var(--graphene-premium-gold);
+  outline-offset: 3px;
+}
+
+/* Secondary CTA - Gold outlined */
+.graphene-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.125rem 2.5rem;
+  background: transparent;
+  color: var(--graphene-premium-gold);
+  font-weight: 600;
+  font-size: 1.125rem;
+  border-radius: 0.5rem;
+  border: 2px solid var(--graphene-premium-border);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  position: relative;
+}
+
+.graphene-cta-secondary:hover {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: var(--graphene-premium-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
+}
+
+.graphene-cta-secondary:focus-visible {
+  outline: 2px solid var(--graphene-premium-gold);
+  outline-offset: 3px;
+}
+
+/* CTA icons */
+.graphene-cta-icon {
+  width: 24px !important;
+  height: 24px !important;
+  flex-shrink: 0;
+}
+
+/* ========================================================
+   GRAPHENE PREMIUM STATS
+   ======================================================== */
+
+.graphene-premium-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--graphene-premium-border);
+}
+
+.graphene-premium-stats__item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.graphene-premium-stats__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--graphene-premium-surface);
+  border: 1px solid var(--graphene-premium-border);
+  color: var(--graphene-premium-gold);
+}
+
+.graphene-premium-stats__icon svg {
+  width: 28px !important;
+  height: 28px !important;
+  flex-shrink: 0;
+}
+
+.graphene-premium-stats__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.graphene-premium-stats__value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.graphene-premium-stats__label {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.graphene-premium-stats__divider {
+  width: 1px;
+  height: 40px;
+  background: var(--graphene-premium-border);
+}
+
+/* ========================================================
+   LIGHT THEME OVERRIDES FOR PREMIUM HERO
+   ======================================================== */
+
+[data-theme="light"] .graphene-hero-premium,
+.light .graphene-hero-premium {
+  background: #F8F9FA;
+}
+
+[data-theme="light"] .graphene-hexagon-pattern,
+.light .graphene-hexagon-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23d4af37' fill-opacity='0.08'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+[data-theme="light"] .graphene-gradient-overlay,
+.light .graphene-gradient-overlay {
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(200, 200, 200, 0.2) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(248, 249, 250, 0.5) 0%, rgba(248, 249, 250, 0.98) 100%);
+}
+
+[data-theme="light"] .graphene-headline,
+.light .graphene-headline {
+  background: linear-gradient(
+    135deg,
+    #1A1D1E 0%,
+    var(--graphene-premium-gold-dark) 25%,
+    var(--graphene-premium-gold) 50%,
+    var(--graphene-premium-gold-dark) 75%,
+    #1A1D1E 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme="light"] .graphene-subheadline,
+.light .graphene-subheadline {
+  color: rgba(45, 52, 54, 0.8);
+}
+
+[data-theme="light"] .graphene-premium-badge,
+.light .graphene-premium-badge {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: rgba(212, 175, 55, 0.3);
+}
+
+[data-theme="light"] .graphene-premium-stats,
+.light .graphene-premium-stats {
+  border-top-color: rgba(212, 175, 55, 0.2);
+}
+
+[data-theme="light"] .graphene-premium-stats__icon,
+.light .graphene-premium-stats__icon {
+  background: rgba(212, 175, 55, 0.08);
+  border-color: rgba(212, 175, 55, 0.2);
+}
+
+[data-theme="light"] .graphene-premium-stats__value,
+.light .graphene-premium-stats__value {
+  color: #1A1D1E;
+}
+
+[data-theme="light"] .graphene-premium-stats__label,
+.light .graphene-premium-stats__label {
+  color: rgba(45, 52, 54, 0.7);
+}
+
+[data-theme="light"] .graphene-premium-stats__divider,
+.light .graphene-premium-stats__divider {
+  background: rgba(212, 175, 55, 0.2);
+}
+
+[data-theme="light"] .graphene-cta-secondary,
+.light .graphene-cta-secondary {
+  color: var(--graphene-premium-gold-dark);
+  border-color: rgba(184, 150, 12, 0.4);
+}
+
+[data-theme="light"] .graphene-cta-secondary:hover,
+.light .graphene-cta-secondary:hover {
+  background: rgba(212, 175, 55, 0.08);
+  border-color: var(--graphene-premium-gold-dark);
+}
+
+/* ========================================================
+   MOBILE RESPONSIVE — Premium Hero
+   ======================================================== */
+
+@media (max-width: 768px) {
+  .graphene-hero-premium__content {
+    padding-top: 7rem;
+    padding-bottom: 4rem;
+  }
+
+  .graphene-headline {
+    font-size: 2.5rem;
+    line-height: 1.15;
+  }
+
+  .graphene-subheadline {
+    font-size: 1.125rem;
+  }
+
+  .graphene-cta-primary,
+  .graphene-cta-secondary {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  .graphene-premium-stats {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .graphene-premium-stats__divider {
+    display: none;
+  }
+
+  .graphene-premium-stats__icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .graphene-premium-stats__icon svg {
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  .graphene-premium-stats__value {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .graphene-hero-premium__content {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .graphene-headline {
+    font-size: 2rem;
+  }
+
+  .graphene-premium-badge {
+    padding: 0.375rem 0.75rem;
+  }
+
+  .graphene-premium-badge__text {
+    font-size: 0.625rem;
+  }
+}
+
+/* ========================================================
+   SKIP LINK — Proper WCAG Implementation
+   ======================================================== */
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--graphene-premium-gold);
+  color: #0D1114;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-decoration: none;
+  border-radius: 0 0 0.5rem 0.5rem;
+  z-index: 10000;
+  transition: top 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  top: 0;
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}

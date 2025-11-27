@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/env.php';
 require_once __DIR__ . '/i18n.php';
+require_once __DIR__ . '/graphene-config.php';
 
 $current_language = bbx_get_language();
 
@@ -12,6 +13,10 @@ if (isset($_GET['lang']) && in_array($_GET['lang'], ['da', 'en'])) {
     header('Location: ' . $redirect_url);
     exit;
 }
+
+// Load Graphene theme settings
+$graphene_mode = bbx_graphene_get_mode();
+$graphene_body_class = bbx_graphene_body_class();
 
 $page_title = $page_title ?? 'Blackbox EYE™ - Intelligent Sikkerhed';
 $current_page = $current_page ?? basename($_SERVER['PHP_SELF'], '.php');

@@ -2,9 +2,44 @@
    marketing.css — Navigation og marketing-specific styles
    ======================================================== */
 
+/* --------------------------------------------------------
+   Design Tokens — Shared with admin.css for brand consistency
+   -------------------------------------------------------- */
+:root {
+  /* Primary brand colors (Blackbox EYE + GreyEYE unified) */
+  --bbx-gold: #d4af37;
+  --bbx-gold-light: #ffe8a3;
+  --bbx-gold-hover: #e5c04a;
+  --bbx-gold-transparent: rgba(212, 175, 55, 0.15);
+
+  /* Background colors */
+  --bbx-bg-primary: #0a0a0f;
+  --bbx-bg-secondary: #111118;
+  --bbx-bg-card: rgba(255, 255, 255, 0.03);
+
+  /* Text colors */
+  --bbx-text-primary: #ffffff;
+  --bbx-text-secondary: #d1d5db;
+  --bbx-text-muted: #9ca3af;
+
+  /* Borders */
+  --bbx-border-subtle: rgba(212, 175, 55, 0.2);
+  --bbx-border-gold: rgba(212, 175, 55, 0.4);
+
+  /* Shadows */
+  --bbx-shadow-gold: 0 4px 20px rgba(212, 175, 55, 0.15);
+  --bbx-shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+  /* Legacy fallback mappings */
+  --primary-accent: var(--bbx-gold);
+  --text-medium-emphasis: var(--bbx-text-secondary);
+  --text-high-emphasis: var(--bbx-text-primary);
+  --muted: var(--bbx-text-muted);
+}
+
 /* Desktop navigation links */
 .nav-link {
-  color: var(--text-medium-emphasis, #d1d5db);
+  color: var(--bbx-text-secondary);
   text-decoration: none;
   position: relative;
   display: inline-block;
@@ -14,33 +49,33 @@
 
 .nav-link:link,
 .nav-link:visited {
-  color: var(--text-medium-emphasis, #d1d5db);
+  color: var(--bbx-text-secondary);
 }
 
 .nav-link:hover {
-  color: var(--primary-accent, #fbbf24);
+  color: var(--bbx-gold);
 }
 
 .nav-link:active {
-  color: var(--text-high-emphasis, #ffffff);
+  color: var(--bbx-text-primary);
 }
 
 .nav-link:focus {
-  color: var(--primary-accent, #fbbf24);
-  outline: 2px solid var(--primary-accent, #fbbf24);
+  color: var(--bbx-gold);
+  outline: 2px solid var(--bbx-gold);
   outline-offset: 4px;
   border-radius: 4px;
 }
 
 /* Active page styling */
 .nav-link.nav-link-active {
-  color: var(--text-high-emphasis, #ffffff);
+  color: var(--bbx-text-primary);
   font-weight: 600;
-  border-bottom: 2px solid var(--primary-accent, #fbbf24);
+  border-bottom: 2px solid var(--bbx-gold);
 }
 
 .nav-link.nav-link-active:visited {
-  color: var(--text-high-emphasis, #ffffff);
+  color: var(--bbx-text-primary);
 }
 
 /* Underline animation for inactive nav links */
@@ -51,7 +86,7 @@
   height: 2px;
   bottom: 0;
   left: 0;
-  background-color: #fbbf24;
+  background-color: var(--bbx-gold);
   transition: width 0.3s ease;
 }
 
@@ -61,7 +96,7 @@
 
 /* Mobile navigation links */
 .nav-link-mobile {
-  color: var(--text-medium-emphasis, #d1d5db);
+  color: var(--bbx-text-secondary);
   text-decoration: none;
   display: block;
   transition: color 0.3s ease;
@@ -70,20 +105,20 @@
 
 .nav-link-mobile:link,
 .nav-link-mobile:visited {
-  color: var(--text-medium-emphasis, #d1d5db);
+  color: var(--bbx-text-secondary);
 }
 
 .nav-link-mobile:hover {
-  color: var(--primary-accent, #fbbf24);
+  color: var(--bbx-gold);
 }
 
 .nav-link-mobile:active {
-  color: var(--text-high-emphasis, #ffffff);
+  color: var(--bbx-text-primary);
 }
 
 .nav-link-mobile:focus {
-  color: var(--primary-accent, #fbbf24);
-  outline: 2px solid var(--primary-accent, #fbbf24);
+  color: var(--bbx-gold);
+  outline: 2px solid var(--bbx-gold);
   outline-offset: 4px;
   border-radius: 4px;
 }
@@ -92,31 +127,31 @@
 .nav-link-mobile--secondary {
   font-size: 1.125rem;
   font-weight: 500;
-  color: var(--muted, #9ca3af);
+  color: var(--bbx-text-muted);
 }
 
 .nav-link-mobile--secondary:link,
 .nav-link-mobile--secondary:visited {
-  color: var(--muted, #9ca3af);
+  color: var(--bbx-text-muted);
 }
 
 .nav-link-mobile--secondary:hover {
-  color: var(--primary-accent, #fbbf24);
+  color: var(--bbx-gold);
 }
 
 .nav-link-mobile--secondary.is-active,
 .nav-link-mobile--secondary.is-active:visited {
-  color: var(--text-high-emphasis, #ffffff);
+  color: var(--bbx-text-primary);
 }
 
 /* Mobile active page */
 .nav-link-mobile.is-active {
-  color: var(--text-high-emphasis, #ffffff);
+  color: var(--bbx-text-primary);
   font-weight: 600;
 }
 
 .nav-link-mobile.is-active:visited {
-  color: var(--text-high-emphasis, #ffffff);
+  color: var(--bbx-text-primary);
 }
 
 /* Force remove all default link styling */
@@ -142,4 +177,212 @@ body.js-enabled .section-fade-in {
 body.js-enabled .section-fade-in.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* --------------------------------------------------------
+   Hero Section Styles
+   -------------------------------------------------------- */
+.hero-gradient-text {
+  background: linear-gradient(135deg, var(--bbx-gold-light) 0%, var(--bbx-gold) 50%, var(--bbx-gold-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 15, 0.4) 0%,
+    rgba(10, 10, 15, 0.7) 50%,
+    rgba(10, 10, 15, 0.9) 100%
+  );
+}
+
+/* --------------------------------------------------------
+   CTA Button Styles (matching admin design)
+   -------------------------------------------------------- */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2rem;
+  background: var(--bbx-gold);
+  color: #000000;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  background: var(--bbx-gold-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--bbx-shadow-gold);
+}
+
+.btn-primary:focus {
+  outline: 2px solid var(--bbx-gold-light);
+  outline-offset: 2px;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2rem;
+  background: transparent;
+  color: var(--bbx-gold);
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  border: 2px solid var(--bbx-gold);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  background: var(--bbx-gold);
+  color: #000000;
+  transform: translateY(-2px);
+  box-shadow: var(--bbx-shadow-gold);
+}
+
+.btn-secondary:focus {
+  outline: 2px solid var(--bbx-gold-light);
+  outline-offset: 2px;
+}
+
+/* Larger CTA variants */
+.btn-primary--lg,
+.btn-secondary--lg {
+  padding: 1rem 2.5rem;
+  font-size: 1.125rem;
+}
+
+/* --------------------------------------------------------
+   Live Feed Showcase Widget
+   -------------------------------------------------------- */
+.live-feed-widget {
+  background: var(--bbx-bg-card);
+  border: 1px solid var(--bbx-border-subtle);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.live-feed-widget__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--bbx-border-subtle);
+}
+
+.live-feed-widget__indicator {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: #22c55e;
+  border-radius: 50%;
+  animation: pulse-live 2s ease-in-out infinite;
+}
+
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.1); }
+}
+
+.live-feed-widget__title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--bbx-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.live-feed-widget__items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.live-feed-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--bbx-border-subtle);
+  transition: border-color 0.2s;
+}
+
+.live-feed-item--warning {
+  border-left-color: var(--bbx-gold);
+}
+
+.live-feed-item--critical {
+  border-left-color: #ef4444;
+}
+
+.live-feed-item--info {
+  border-left-color: #3b82f6;
+}
+
+.live-feed-item__icon {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--bbx-gold-transparent);
+  color: var(--bbx-gold);
+}
+
+.live-feed-item__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.live-feed-item__title {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--bbx-text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.live-feed-item__meta {
+  font-size: 0.75rem;
+  color: var(--bbx-text-muted);
+}
+
+.live-feed-item__time {
+  font-size: 0.6875rem;
+  color: var(--bbx-text-muted);
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------
+   Glass Card Effect (unified)
+   -------------------------------------------------------- */
+.glass-effect {
+  background: var(--bbx-bg-card);
+  border: 1px solid var(--bbx-border-subtle);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.glass-effect:hover {
+  border-color: var(--bbx-border-gold);
+  box-shadow: var(--bbx-shadow-card);
 }

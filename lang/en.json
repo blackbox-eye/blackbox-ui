@@ -92,10 +92,11 @@
       "description": "The complete AI-driven security platform that protects your business 24/7 and turns employees into your strongest line of defense."
     },
     "hero": {
-      "headline": "Stop advanced attacks before they land.",
-      "subheadline": "Blackbox EYE™ unifies intelligence, AI, and operational response so you intercept zero-day threats before they become incidents.",
+      "headline": "Intelligent Security. Powered by GreyEYE™.",
+      "subheadline": "Blackbox EYE™ delivers unified threat intelligence, AI-driven response, and real-time operational awareness – so you neutralize attacks before they escalate.",
       "primary_cta": "Book a No-Obligation Demo",
-      "secondary_cta": "Explore the Platform"
+      "secondary_cta": "Explore the Platform",
+      "live_feed_title": "Live Threat Feed"
     },
     "tactical": {
       "tagline": "The Tactical Overview",

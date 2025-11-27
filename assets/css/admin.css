@@ -238,6 +238,71 @@
   color: rgba(0, 0, 0, 0.45);
 }
 
+/* Light theme Command Deck items - improved contrast */
+[data-theme="light"] .command-deck__item {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 248, 250, 0.9));
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #5a4a10;
+  text-shadow: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .command-deck__item:hover,
+[data-theme="light"] .command-deck__item:focus {
+  background: linear-gradient(135deg, rgba(255, 248, 230, 0.98), rgba(255, 243, 210, 0.95));
+  border-color: #a88a18;
+  color: #4a3a08;
+  box-shadow: 0 4px 12px rgba(139, 105, 20, 0.15);
+  transform: translateX(-3px);
+}
+
+[data-theme="light"] .command-deck__item.is-active,
+[data-theme="light"] .command-deck__item[aria-current="page"] {
+  background: linear-gradient(135deg, rgba(255, 243, 200, 0.95), rgba(255, 235, 175, 0.9));
+  border-color: #a88a18;
+  color: #4a3a08;
+  box-shadow: inset 0 0 0 1px rgba(139, 105, 20, 0.2),
+              0 2px 8px rgba(139, 105, 20, 0.12);
+}
+
+[data-theme="light"] .command-deck__item-icon {
+  background: rgba(139, 105, 20, 0.12);
+  border-color: rgba(139, 105, 20, 0.25);
+  color: #6b5712;
+  filter: none;
+}
+
+[data-theme="light"] .command-deck__item:hover .command-deck__item-icon,
+[data-theme="light"] .command-deck__item.is-active .command-deck__item-icon {
+  background: rgba(139, 105, 20, 0.2);
+  border-color: rgba(139, 105, 20, 0.35);
+  color: #4a3a08;
+}
+
+/* Light theme Command Deck actions */
+[data-theme="light"] .command-deck__action {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: var(--admin-text-secondary);
+}
+
+[data-theme="light"] .command-deck__action:hover {
+  background: rgba(139, 105, 20, 0.08);
+  border-color: rgba(139, 105, 20, 0.2);
+  color: #5a4a10;
+}
+
+/* Light theme Command Deck agent info */
+[data-theme="light"] .command-deck__agent-badge {
+  background: rgba(139, 105, 20, 0.12);
+  color: #6b5712;
+}
+
+/* Light theme Command Deck divider */
+[data-theme="light"] .command-deck__divider {
+  background: rgba(0, 0, 0, 0.1);
+}
+
 /* Light theme form labels - better contrast */
 [data-theme="light"] .user-mgmt__label {
   color: var(--admin-text-primary);
@@ -3332,4 +3397,94 @@ body {
   background: rgba(212, 175, 55, 0.2);
   border-color: var(--admin-gold);
 }
+
+/* —————————————————————————————————————————————————————
+   Password Toggle Component
+   Show/hide eye icon for password/PIN fields
+   ————————————————————————————————————————————————————— */
+.password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.password-field input {
+  padding-right: 2.8rem !important;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  color: var(--admin-text-muted);
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+  z-index: 2;
+}
+
+.password-toggle:hover,
+.password-toggle:focus {
+  color: var(--admin-gold);
+  background: rgba(212, 175, 55, 0.1);
+  outline: none;
+}
+
+.password-toggle:focus-visible {
+  box-shadow: 0 0 0 2px var(--admin-gold);
+}
+
+.password-toggle--visible {
+  color: var(--admin-gold);
+}
+
+.password-toggle svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  pointer-events: none;
+}
+
+/* Light theme password toggle */
+[data-theme="light"] .password-toggle {
+  color: var(--admin-text-muted);
+}
+
+[data-theme="light"] .password-toggle:hover,
+[data-theme="light"] .password-toggle:focus {
+  color: #6b5712;
+  background: rgba(139, 105, 20, 0.1);
+}
+
+[data-theme="light"] .password-toggle--visible {
+  color: #6b5712;
+}
+
+[data-theme="light"] .password-toggle:focus-visible {
+  box-shadow: 0 0 0 2px #a88a18;
+}
+
+/* Ensure login card inputs work with toggle */
+.login-card__field .password-field {
+  width: 100%;
+}
+
+.login-card__field .password-toggle {
+  right: 0.75rem;
+}
+
+/* Admin form password fields */
+.user-mgmt__form .password-field input {
+  width: 100%;
+}
+
 

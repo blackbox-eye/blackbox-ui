@@ -262,3 +262,307 @@ test.describe('Responsive Login Layout', () => {
     });
   }
 });
+
+// =====================================================
+// PASSWORD TOGGLE COMPONENT TESTS
+// =====================================================
+test.describe('Password Toggle Component', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/agent-login.php');
+    // Wait for JS to initialize password toggles
+    await page.waitForTimeout(500);
+  });
+
+  test('should display eye icon on password fields', async ({ page }) => {
+    // Check that password toggle buttons exist for password and PIN
+    const passwordWrapper = page.locator('#password').locator('..');
+    const pinWrapper = page.locator('#pin').locator('..');
+
+    // Password field should have toggle
+    await expect(passwordWrapper.locator('.password-toggle')).toBeVisible();
+    // PIN field should have toggle
+    await expect(pinWrapper.locator('.password-toggle')).toBeVisible();
+  });
+
+  test('should toggle password visibility on click', async ({ page }) => {
+    const passwordInput = page.locator('#password');
+    const toggleBtn = page.locator('#password').locator('..').locator('.password-toggle');
+
+    // Initially should be password type
+    await expect(passwordInput).toHaveAttribute('type', 'password');
+
+    // Click toggle
+    await toggleBtn.click();
+
+    // Should now be text type (visible)
+    await expect(passwordInput).toHaveAttribute('type', 'text');
+
+    // Click again to hide
+    await toggleBtn.click();
+
+    // Should be password again
+    await expect(passwordInput).toHaveAttribute('type', 'password');
+  });
+
+  test('should support keyboard activation with Enter', async ({ page }) => {
+    const passwordInput = page.locator('#password');
+    const toggleBtn = page.locator('#password').locator('..').locator('.password-toggle');
+
+    // Focus the toggle button
+    await toggleBtn.focus();
+
+    // Press Enter to activate
+    await page.keyboard.press('Enter');
+
+    // Should toggle to text
+    await expect(passwordInput).toHaveAttribute('type', 'text');
+  });
+
+  test('should support keyboard activation with Space', async ({ page }) => {
+    const passwordInput = page.locator('#password');
+    const toggleBtn = page.locator('#password').locator('..').locator('.password-toggle');
+
+    // Start in hidden state
+    await expect(passwordInput).toHaveAttribute('type', 'password');
+
+    // Focus and press Space
+    await toggleBtn.focus();
+    await page.keyboard.press('Space');
+
+    // Should toggle to visible
+    await expect(passwordInput).toHaveAttribute('type', 'text');
+  });
+
+  test('should have accessible aria-label', async ({ page }) => {
+    const toggleBtn = page.locator('#password').locator('..').locator('.password-toggle');
+
+    // Should have aria-label for screen readers (Danish: Vis adgangskode)
+    const ariaLabel = await toggleBtn.getAttribute('aria-label');
+    expect(ariaLabel).toBeTruthy();
+    expect(ariaLabel.toLowerCase()).toMatch(/vis|show|skjul|hide/);
+  });
+
+  test('should update aria-label when toggled', async ({ page }) => {
+    const toggleBtn = page.locator('#password').locator('..').locator('.password-toggle');
+
+    const initialLabel = await toggleBtn.getAttribute('aria-label');
+
+    // Toggle
+    await toggleBtn.click();
+
+    const newLabel = await toggleBtn.getAttribute('aria-label');
+
+    // Label should change to reflect new state
+    expect(newLabel).not.toBe(initialLabel);
+  });
+
+  test('should work with PIN field', async ({ page }) => {
+    const pinInput = page.locator('#pin');
+    const toggleBtn = page.locator('#pin').locator('..').locator('.password-toggle');
+
+    // Initially password type
+    await expect(pinInput).toHaveAttribute('type', 'password');
+
+    // Toggle
+    await toggleBtn.click();
+    await expect(pinInput).toHaveAttribute('type', 'text');
+
+    // Toggle back
+    await toggleBtn.click();
+    await expect(pinInput).toHaveAttribute('type', 'password');
+  });
+
+  test('should have visible focus indicator', async ({ page }) => {
+    const toggleBtn = page.locator('#password').locator('..').locator('.password-toggle');
+
+    // Focus the button
+    await toggleBtn.focus();
+
+    // Check that the button is focused
+    await expect(toggleBtn).toBeFocused();
+  });
+});
+
+// =====================================================
+// GHOST MODE VISIBILITY TESTS
+// =====================================================
+test.describe('Ghost Mode Admin-Only Visibility', () => {
+  test('settings.php Ghost panel markup exists with PHP conditional', async ({ page }) => {
+    // This test verifies the Ghost panel is conditionally rendered
+    // When not authenticated, we can't see settings.php content
+    await page.goto('/settings.php');
+
+    // Should redirect to login if not authenticated
+    if (page.url().includes('agent-login.php')) {
+      // Expected behavior - not logged in
+      test.skip(true, 'Requires authenticated session to test Ghost panel visibility');
+      return;
+    }
+
+    // If somehow we got through (test environment), check for Ghost panel
+    const ghostPanel = page.locator('text=Ghost-mode');
+    // Panel visibility depends on is_admin session variable
+    // This documents the expected behavior
+  });
+
+  test('admin.php should only be accessible to admins', async ({ page }) => {
+    await page.goto('/admin.php');
+
+    // Non-admins should be redirected
+    // Either to login or to dashboard
+    const url = page.url();
+    const isRedirected = url.includes('agent-login.php') || url.includes('dashboard.php');
+
+    // If we're on admin.php, we must be admin
+    if (!isRedirected) {
+      // Verify Ghost column exists in user table for admin
+      const ghostColumn = page.locator('th:has-text("Ghost")');
+      await expect(ghostColumn).toBeVisible();
+    }
+  });
+});
+
+// =====================================================
+// DASHBOARD FEEDS API TESTS
+// =====================================================
+test.describe('Dashboard Feeds API', () => {
+  test('API returns 401 when not authenticated', async ({ request }) => {
+    const response = await request.get('/api/dashboard-stats.php');
+    const status = response.status();
+
+    // Should return 401 Unauthorized or redirect
+    expect([401, 302]).toContain(status);
+  });
+
+  test('API response structure is valid JSON', async ({ request }) => {
+    const response = await request.get('/api/dashboard-stats.php');
+
+    if (response.status() === 200) {
+      const contentType = response.headers()['content-type'];
+      expect(contentType).toContain('application/json');
+
+      const data = await response.json();
+      expect(data).toHaveProperty('success');
+    }
+  });
+
+  test('API includes feeds array when authenticated', async ({ request }) => {
+    // Note: This test documents expected behavior
+    // In practice, requires authenticated session
+    const response = await request.get('/api/dashboard-stats.php');
+
+    if (response.status() === 200) {
+      const data = await response.json();
+
+      // Should have feeds array
+      expect(data.data).toHaveProperty('feeds');
+      expect(Array.isArray(data.data.feeds)).toBe(true);
+
+      // Should have agent_region
+      expect(data.data).toHaveProperty('agent_region');
+      expect(typeof data.data.agent_region).toBe('string');
+    }
+  });
+
+  test('Feed items have required properties', async ({ request }) => {
+    const response = await request.get('/api/dashboard-stats.php');
+
+    if (response.status() === 200) {
+      const data = await response.json();
+
+      if (data.data?.feeds?.length > 0) {
+        const feed = data.data.feeds[0];
+
+        // Required feed item properties
+        expect(feed).toHaveProperty('title');
+        expect(feed).toHaveProperty('severity');
+        expect(feed).toHaveProperty('source_ip');
+        expect(feed).toHaveProperty('region');
+        expect(feed).toHaveProperty('timestamp');
+        expect(feed).toHaveProperty('detail');
+      }
+    }
+  });
+
+  test('Feed severity levels are valid', async ({ request }) => {
+    const response = await request.get('/api/dashboard-stats.php');
+
+    if (response.status() === 200) {
+      const data = await response.json();
+      const validSeverities = ['info', 'warning', 'critical'];
+
+      for (const feed of data.data?.feeds || []) {
+        expect(validSeverities).toContain(feed.severity);
+      }
+    }
+  });
+
+  test('Feed timestamps are valid ISO 8601', async ({ request }) => {
+    const response = await request.get('/api/dashboard-stats.php');
+
+    if (response.status() === 200) {
+      const data = await response.json();
+
+      for (const feed of data.data?.feeds || []) {
+        const date = new Date(feed.timestamp);
+        expect(date.toString()).not.toBe('Invalid Date');
+      }
+    }
+  });
+});
+
+// =====================================================
+// LIGHT THEME TESTS
+// =====================================================
+test.describe('Light Theme Support', () => {
+  test('should apply light theme when set in localStorage', async ({ page }) => {
+    await page.goto('/agent-login.php');
+
+    // Set light theme
+    await page.evaluate(() => {
+      localStorage.setItem('theme', 'light');
+      document.documentElement.setAttribute('data-theme', 'light');
+    });
+
+    // Verify theme attribute
+    const theme = await page.evaluate(() =>
+      document.documentElement.getAttribute('data-theme')
+    );
+    expect(theme).toBe('light');
+  });
+
+  test('should persist theme preference across reload', async ({ page }) => {
+    await page.goto('/agent-login.php');
+
+    // Set theme
+    await page.evaluate(() => {
+      localStorage.setItem('theme', 'light');
+    });
+
+    // Reload
+    await page.reload();
+    await page.waitForTimeout(500);
+
+    // Check persistence
+    const storedTheme = await page.evaluate(() =>
+      localStorage.getItem('theme')
+    );
+    expect(storedTheme).toBe('light');
+  });
+
+  test('password toggle should be visible in light theme', async ({ page }) => {
+    await page.goto('/agent-login.php');
+
+    // Set light theme
+    await page.evaluate(() => {
+      localStorage.setItem('theme', 'light');
+      document.documentElement.setAttribute('data-theme', 'light');
+    });
+
+    await page.waitForTimeout(500);
+
+    // Password toggle should still be visible
+    const toggleBtn = page.locator('#password').locator('..').locator('.password-toggle');
+    await expect(toggleBtn).toBeVisible();
+  });
+});

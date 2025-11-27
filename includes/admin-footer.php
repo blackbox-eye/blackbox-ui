@@ -10,6 +10,7 @@
 
 <!-- Admin Scripts -->
 <script src="/assets/js/interface-menu.js"></script>
+<script src="/assets/js/password-toggle.js"></script>
 </body>
 
 </html>

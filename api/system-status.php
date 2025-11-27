@@ -11,7 +11,8 @@
  */
 
 header('Content-Type: application/json');
-header('Cache-Control: no-cache, must-revalidate');
+header('Cache-Control: private, max-age=10'); // Cache for 10 seconds to reduce polling load
+header('X-Content-Type-Options: nosniff');
 
 session_start();
 
@@ -85,19 +86,21 @@ try {
 
   echo json_encode([
     'success' => true,
-    'overall_health' => $overallHealth,
-    'services' => $statusResults,
-    'summary' => [
-      'total' => count($statusResults),
-      'healthy' => count(array_filter($statusResults, fn($s) => $s['status'] === 'ok')),
-      'warning' => $warningCount,
-      'critical' => $criticalCount
+    'data' => [
+      'overall_health' => $overallHealth,
+      'services' => $statusResults,
+      'summary' => [
+        'total' => count($statusResults),
+        'healthy' => count(array_filter($statusResults, fn($s) => $s['status'] === 'ok')),
+        'warning' => $warningCount,
+        'critical' => $criticalCount
+      ]
     ],
     'timestamp' => date('c')
   ], JSON_PRETTY_PRINT);
 } catch (Exception $e) {
   http_response_code(500);
-  echo json_encode(['error' => 'Internal server error']);
+  echo json_encode(['success' => false, 'error' => 'Internal server error']);
 }
 
 /**

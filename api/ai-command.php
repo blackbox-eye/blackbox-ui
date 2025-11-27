@@ -11,7 +11,8 @@
  */
 
 header('Content-Type: application/json');
-header('Cache-Control: no-cache, must-revalidate');
+header('Cache-Control: no-store'); // AI commands should never be cached
+header('X-Content-Type-Options: nosniff');
 
 session_start();
 
@@ -92,11 +93,15 @@ function handleCommandSubmission()
 
   echo json_encode([
     'success' => true,
-    'command_id' => $commandId,
-    'command' => $command,
-    'command_type' => $commandType,
-    'response' => $response,
-    'stored' => $stored,
+    'data' => [
+      'command_id' => $commandId,
+      'command' => $command,
+      'command_type' => $commandType,
+      'response' => $response['text'],
+      'confidence' => $response['confidence'] ?? null,
+      'actions' => $response['actions'] ?? [],
+      'stored' => $stored
+    ],
     'timestamp' => date('c')
   ], JSON_PRETTY_PRINT);
 }
@@ -138,8 +143,8 @@ function handleCommandHistory()
 
   echo json_encode([
     'success' => true,
+    'data' => $commands,
     'count' => count($commands),
-    'commands' => $commands,
     'timestamp' => date('c')
   ], JSON_PRETTY_PRINT);
 }

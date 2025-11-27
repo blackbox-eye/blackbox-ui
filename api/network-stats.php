@@ -13,7 +13,8 @@
  */
 
 header('Content-Type: application/json');
-header('Cache-Control: no-cache, must-revalidate');
+header('Cache-Control: private, max-age=10'); // Cache for 10 seconds to reduce polling load
+header('X-Content-Type-Options: nosniff');
 
 session_start();
 
@@ -81,20 +82,22 @@ try {
 
   echo json_encode([
     'success' => true,
-    'ports' => $networkStats,
-    'summary' => [
-      'total_connections' => $totalConnections,
-      'average_utilization' => $avgUtilization,
-      'bandwidth_in' => formatBandwidth(rand(50, 200) * 1024 * 1024),
-      'bandwidth_out' => formatBandwidth(rand(30, 150) * 1024 * 1024),
-      'packets_per_second' => rand(5000, 25000)
+    'data' => [
+      'ports' => $networkStats,
+      'summary' => [
+        'total_connections' => $totalConnections,
+        'average_utilization' => $avgUtilization,
+        'bandwidth_in' => formatBandwidth(rand(50, 200) * 1024 * 1024),
+        'bandwidth_out' => formatBandwidth(rand(30, 150) * 1024 * 1024),
+        'packets_per_second' => rand(5000, 25000)
+      ],
+      'historical' => $historicalData
     ],
-    'historical' => $historicalData,
     'timestamp' => date('c')
   ], JSON_PRETTY_PRINT);
 } catch (Exception $e) {
   http_response_code(500);
-  echo json_encode(['error' => 'Internal server error']);
+  echo json_encode(['success' => false, 'error' => 'Internal server error']);
 }
 
 /**

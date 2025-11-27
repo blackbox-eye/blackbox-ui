@@ -14,7 +14,8 @@
  */
 
 header('Content-Type: application/json');
-header('Cache-Control: no-cache, must-revalidate');
+header('Cache-Control: private, max-age=10'); // Cache for 10 seconds to reduce polling load
+header('X-Content-Type-Options: nosniff');
 
 session_start();
 
@@ -125,8 +126,22 @@ try {
   // Calculate uptime (mock for now - would connect to monitoring service)
   $stats['uptime']['percentage'] = round(99.5 + (rand(0, 5) / 10), 1);
 
-  echo json_encode($stats, JSON_PRETTY_PRINT);
+  // Format response for frontend compatibility
+  echo json_encode([
+    'success' => true,
+    'data' => [
+      'alerts_count' => $stats['alerts']['active'],
+      'threats_today' => $stats['threats']['today'],
+      'uptime_percent' => $stats['uptime']['percentage'],
+      'api_requests' => $stats['api_requests']['today'],
+      'critical_count' => $stats['alerts']['critical'],
+      'warning_count' => $stats['alerts']['warning'],
+      'blocked_count' => rand(15, 45), // Mock blocked attacks
+      'last_threat_time' => date('c', strtotime('-' . rand(1, 60) . ' minutes'))
+    ],
+    'timestamp' => date('c')
+  ], JSON_PRETTY_PRINT);
 } catch (Exception $e) {
   http_response_code(500);
-  echo json_encode(['error' => 'Internal server error']);
+  echo json_encode(['success' => false, 'error' => 'Internal server error']);
 }

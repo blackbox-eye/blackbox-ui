@@ -784,7 +784,7 @@ include __DIR__ . '/includes/admin-layout.php';
         aria-controls="secondaryCardsSection">
         <span>Vis netværk & AI interface</span>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="6 9 12 15 18 9"/>
+            <polyline points="6 9 12 15 18 9" />
         </svg>
     </button>
 
@@ -949,7 +949,9 @@ include __DIR__ . '/includes/admin-layout.php';
             if (liveRegion) {
                 liveRegion.textContent = message;
                 // Clear after announcement
-                setTimeout(() => { liveRegion.textContent = ''; }, 1000);
+                setTimeout(() => {
+                    liveRegion.textContent = '';
+                }, 1000);
             }
         }
 
@@ -1177,13 +1179,15 @@ include __DIR__ . '/includes/admin-layout.php';
 
                 container.innerHTML = `
                     <div class="dashboard__network-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--admin-spacing-sm);">
-                        ${ports.map(port => `
-                            <div class="dashboard__network-port" style="background: rgba(0,0,0,0.2); padding: var(--admin-spacing-sm); border-radius: var(--admin-border-radius-sm); border-left: 3px solid ${port.color};">
-                                <div style="font-size: 0.7rem; color: var(--admin-text-muted);">Port ${port.number}</div>
-                                <div style="font-size: 1.1rem; font-weight: 600; color: ${port.color};">${port.utilization}%</div>
+                        ${ports.map(port => {
+                            const color = port.level === 'high' ? 'var(--dash-critical)' : port.level === 'medium' ? 'var(--dash-warning)' : 'var(--dash-info)';
+                            return `
+                            <div class="dashboard__network-port" style="background: rgba(0,0,0,0.2); padding: var(--admin-spacing-sm); border-radius: var(--admin-border-radius-sm); border-left: 3px solid ${color};">
+                                <div style="font-size: 0.7rem; color: var(--admin-text-muted);">Port ${port.port}</div>
+                                <div style="font-size: 1.1rem; font-weight: 600; color: ${color};">${port.utilization}%</div>
                                 <div style="font-size: 0.65rem; color: var(--admin-text-secondary);">${escapeHtml(port.name)}</div>
                             </div>
-                        `).join('')}
+                        `}).join('')}
                     </div>
                 `;
 

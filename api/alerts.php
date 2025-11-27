@@ -13,7 +13,8 @@
  */
 
 header('Content-Type: application/json');
-header('Cache-Control: no-cache, must-revalidate');
+header('Cache-Control: private, max-age=5'); // Cache for 5 seconds - alerts are more time-sensitive
+header('X-Content-Type-Options: nosniff');
 
 session_start();
 
@@ -72,15 +73,16 @@ try {
     $alerts = getMockAlerts($severity, $limit);
   }
 
+  // Format for frontend - use 'data' key for consistency
   echo json_encode([
     'success' => true,
+    'data' => $alerts,
     'count' => count($alerts),
-    'alerts' => $alerts,
     'timestamp' => date('c')
   ], JSON_PRETTY_PRINT);
 } catch (Exception $e) {
   http_response_code(500);
-  echo json_encode(['error' => 'Internal server error']);
+  echo json_encode(['success' => false, 'error' => 'Internal server error']);
 }
 
 /**

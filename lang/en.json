@@ -41,6 +41,13 @@
       "mobile_title": "Color theme",
       "mobile_description": "Toggle between dark and light experiences"
     },
+    "graphene": {
+      "toggle_label": "Toggle Graphene theme intensity",
+      "mode_standard": "Graphene Standard",
+      "mode_strong": "Graphene Strong",
+      "standard": "Standard",
+      "strong": "Strong"
+    },
     "desktop": {
       "primary_navigation": "Primary navigation"
     },
@@ -956,6 +963,45 @@
       "description": "Our team is ready to help you. Contact us for personal consultation or book a demo.",
       "contact": "Contact Support",
       "pricing": "View Pricing"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "graphene": {
+      "title": "Graphene Theme Settings",
+      "description": "Configure the Graphene design system colors and effects.",
+      "theme_mode": "Theme Mode",
+      "mode_standard": "Standard",
+      "mode_standard_desc": "Balanced colors and subtle animations for professional use.",
+      "mode_strong": "Strong",
+      "mode_strong_desc": "Intensified colors and dynamic effects for maximum impact.",
+      "colors": "Color Palette",
+      "color_primary": "Primary Color",
+      "color_secondary": "Secondary Color",
+      "color_gold": "Gold / Accent",
+      "color_accent": "Alert Accent",
+      "color_bg_dark": "Dark Background",
+      "color_bg_light": "Light Background",
+      "effects": "Effects & Animation",
+      "pulse_intensity": "Pulse Intensity",
+      "intensity_subtle": "Subtle",
+      "intensity_normal": "Normal",
+      "intensity_intense": "Intense",
+      "animation_speed": "Animation Speed",
+      "speed_slow": "Slow",
+      "speed_normal": "Normal",
+      "speed_fast": "Fast",
+      "gradient_angle": "Gradient Angle",
+      "glow_enabled": "Enable Glow Effects",
+      "preview": "Live Preview",
+      "preview_title": "Security Platform",
+      "preview_subtitle": "Real-time protection for your enterprise",
+      "preview_cta": "Get Started",
+      "preview_secondary": "Learn More",
+      "save_button": "Save Settings",
+      "reset_button": "Reset to Default",
+      "save_success": "Graphene settings saved successfully!",
+      "save_error": "Failed to save settings. Please try again."
     }
   }
 }

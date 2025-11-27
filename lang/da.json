@@ -41,6 +41,13 @@
       "mobile_title": "Farvetema",
       "mobile_description": "Skift mellem mørk og lys oplevelse"
     },
+    "graphene": {
+      "toggle_label": "Skift Graphene tema-intensitet",
+      "mode_standard": "Graphene Standard",
+      "mode_strong": "Graphene Stærk",
+      "standard": "Standard",
+      "strong": "Stærk"
+    },
     "desktop": {
       "primary_navigation": "Primær navigation"
     },
@@ -916,6 +923,45 @@
       "description": "Vores team er klar til at hjælpe dig. Kontakt os for personlig rådgivning eller book en demo.",
       "contact": "Kontakt Support",
       "pricing": "Se Priser"
+    }
+  },
+  "settings": {
+    "title": "Indstillinger",
+    "graphene": {
+      "title": "Graphene Tema Indstillinger",
+      "description": "Konfigurer Graphene designsystemets farver og effekter.",
+      "theme_mode": "Tema Tilstand",
+      "mode_standard": "Standard",
+      "mode_standard_desc": "Balancerede farver og subtile animationer til professionel brug.",
+      "mode_strong": "Stærk",
+      "mode_strong_desc": "Intensiverede farver og dynamiske effekter for maksimal effekt.",
+      "colors": "Farvepalette",
+      "color_primary": "Primær Farve",
+      "color_secondary": "Sekundær Farve",
+      "color_gold": "Guld / Accent",
+      "color_accent": "Alert Accent",
+      "color_bg_dark": "Mørk Baggrund",
+      "color_bg_light": "Lys Baggrund",
+      "effects": "Effekter & Animation",
+      "pulse_intensity": "Puls Intensitet",
+      "intensity_subtle": "Subtil",
+      "intensity_normal": "Normal",
+      "intensity_intense": "Intens",
+      "animation_speed": "Animationshastighed",
+      "speed_slow": "Langsom",
+      "speed_normal": "Normal",
+      "speed_fast": "Hurtig",
+      "gradient_angle": "Gradient Vinkel",
+      "glow_enabled": "Aktiver Gløde-effekter",
+      "preview": "Live Forhåndsvisning",
+      "preview_title": "Sikkerhedsplatform",
+      "preview_subtitle": "Realtidsbeskyttelse til din virksomhed",
+      "preview_cta": "Kom i gang",
+      "preview_secondary": "Læs mere",
+      "save_button": "Gem Indstillinger",
+      "reset_button": "Nulstil til Standard",
+      "save_success": "Graphene indstillinger gemt!",
+      "save_error": "Kunne ikke gemme indstillinger. Prøv venligst igen."
     }
   }
 }

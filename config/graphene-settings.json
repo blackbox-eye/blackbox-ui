@@ -1,0 +1,21 @@
+{
+    "theme_mode": "standard",
+    "colors": {
+        "primary": "#1a73e8",
+        "secondary": "#113c55",
+        "gold": "#d4af37",
+        "accent": "#e94560",
+        "bg_dark": "#0A1217",
+        "bg_light": "#F5F8FA",
+        "text": "#E0E6EB",
+        "text_light": "#22313A"
+    },
+    "effects": {
+        "pulse_intensity": "normal",
+        "glow_enabled": true,
+        "gradient_angle": 135,
+        "animation_speed": "normal"
+    },
+    "updated_at": "2025-11-27T19:46:26+00:00",
+    "updated_by": "::1"
+}

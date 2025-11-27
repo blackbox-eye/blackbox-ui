@@ -1547,3 +1547,1689 @@ footer .group:hover {
     padding-left: calc(1rem - 3px);
   }
 }
+
+/* ========================================================
+   GRAPHENE STRONG MODE
+   Intensified colors, effects and animations
+   ======================================================== */
+
+/* Strong mode color overrides */
+.graphene-strong {
+  --graphene-primary: #2196F3;
+  --graphene-secondary: #0D47A1;
+  --graphene-gold: #FFD700;
+  --graphene-accent: #FF1744;
+  --graphene-bg-dark: #050A0D;
+  --graphene-bg-light: #FFFFFF;
+  --graphene-text: #FFFFFF;
+  --graphene-text-light: #1A1A2E;
+  --graphene-glow: 0 0 40px rgba(33, 150, 243, 0.3);
+  --graphene-border: rgba(33, 150, 243, 0.3);
+}
+
+/* Strong hero with enhanced gradient overlay */
+.graphene-strong .graphene-hero {
+  background-color: var(--graphene-bg-dark);
+}
+
+.graphene-strong .graphene-hero::before {
+  background: linear-gradient(
+    135deg,
+    rgba(5, 10, 13, 0.98) 0%,
+    rgba(5, 10, 13, 0.9) 40%,
+    rgba(13, 71, 161, 0.5) 100%
+  );
+}
+
+/* Strong gradient text with more vibrant colors */
+.graphene-strong .graphene-gradient-text {
+  background: linear-gradient(
+    135deg,
+    #FFD700 0%,
+    #FFF176 30%,
+    #FFD700 50%,
+    #2196F3 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+}
+
+/* Strong badge pulse - more intense animation */
+.graphene-strong .graphene-badge__pulse {
+  background: #FFD700;
+  animation: strong-badge-pulse 1s ease-in-out infinite;
+}
+
+@keyframes strong-badge-pulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.8);
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    box-shadow: 0 0 0 12px rgba(255, 215, 0, 0);
+    transform: scale(1.2);
+  }
+}
+
+/* Strong badge styling */
+.graphene-strong .graphene-badge {
+  background: linear-gradient(135deg, rgba(13, 71, 161, 0.9) 0%, rgba(5, 10, 13, 0.95) 100%);
+  border-color: rgba(33, 150, 243, 0.4);
+  box-shadow: 0 0 20px rgba(33, 150, 243, 0.2);
+}
+
+/* Strong primary button */
+.graphene-strong .btn-graphene-primary {
+  background: linear-gradient(135deg, #2196F3 0%, #0D47A1 100%);
+  box-shadow: 0 4px 20px rgba(33, 150, 243, 0.4);
+}
+
+.graphene-strong .btn-graphene-primary:hover {
+  background: linear-gradient(135deg, #42A5F5 0%, #1565C0 100%);
+  box-shadow: 0 6px 30px rgba(33, 150, 243, 0.5);
+  transform: translateY(-4px);
+}
+
+/* Strong secondary button */
+.graphene-strong .btn-graphene-secondary {
+  border-color: #FFD700;
+  color: #FFD700;
+  background: rgba(255, 215, 0, 0.1);
+}
+
+.graphene-strong .btn-graphene-secondary:hover {
+  background: #FFD700;
+  color: #050A0D;
+  box-shadow: 0 6px 30px rgba(255, 215, 0, 0.4);
+}
+
+/* Strong stats counter */
+.graphene-strong .graphene-stats {
+  border-top-color: rgba(255, 215, 0, 0.3);
+}
+
+.graphene-strong .graphene-stats__value {
+  color: #FFFFFF;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.graphene-strong .graphene-stats__icon {
+  box-shadow: 0 0 15px rgba(var(--icon-color-rgb), 0.3);
+}
+
+.graphene-strong .graphene-stats__icon--shield {
+  --icon-color-rgb: 34, 197, 94;
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+}
+
+.graphene-strong .graphene-stats__icon--uptime {
+  --icon-color-rgb: 33, 150, 243;
+  box-shadow: 0 0 15px rgba(33, 150, 243, 0.4);
+}
+
+.graphene-strong .graphene-stats__icon--response {
+  --icon-color-rgb: 255, 215, 0;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+/* Strong live feed */
+.graphene-strong .live-feed-2 {
+  background: linear-gradient(135deg, rgba(5, 10, 13, 0.98) 0%, rgba(13, 71, 161, 0.85) 100%);
+  border-color: rgba(33, 150, 243, 0.3);
+  box-shadow: 0 8px 40px rgba(33, 150, 243, 0.2);
+}
+
+.graphene-strong .live-feed-2__badge {
+  background: linear-gradient(135deg, #FF1744 0%, #D50000 100%);
+}
+
+.graphene-strong .live-feed-2__pulse {
+  animation: strong-feed-pulse 1s ease-in-out infinite;
+}
+
+@keyframes strong-feed-pulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.9);
+  }
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+  }
+}
+
+.graphene-strong .live-feed-2__item {
+  border-left-width: 5px;
+}
+
+.graphene-strong .live-feed-2__item:hover {
+  transform: translateX(8px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Strong severity tags - brighter colors */
+.graphene-strong .severity-tag--critical {
+  background: rgba(255, 23, 68, 0.2);
+  color: #FF1744;
+  border-color: rgba(255, 23, 68, 0.4);
+}
+
+.graphene-strong .severity-tag--warning {
+  background: rgba(255, 215, 0, 0.2);
+  color: #FFD700;
+  border-color: rgba(255, 215, 0, 0.4);
+}
+
+.graphene-strong .severity-tag--info {
+  background: rgba(33, 150, 243, 0.2);
+  color: #2196F3;
+  border-color: rgba(33, 150, 243, 0.4);
+}
+
+/* Strong CTA section gradient */
+.graphene-strong .cta-section-gradient {
+  background: linear-gradient(135deg,
+    rgba(13, 71, 161, 0.5) 0%,
+    rgba(33, 150, 243, 0.3) 50%,
+    rgba(13, 71, 161, 0.5) 100%
+  );
+  border-color: rgba(33, 150, 243, 0.3);
+}
+
+/* ========================================================
+   GRAPHENE SETTINGS PANEL STYLES
+   ======================================================== */
+
+.graphene-settings-panel {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.graphene-settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.graphene-fieldset {
+  border: 1px solid var(--graphene-border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.graphene-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--graphene-gold);
+  padding: 0 0.75rem;
+}
+
+.graphene-legend__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* Mode selector cards */
+.graphene-mode-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.graphene-mode-option {
+  cursor: pointer;
+}
+
+.graphene-mode-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.graphene-mode-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+  border: 2px solid var(--graphene-border);
+  border-radius: 0.75rem;
+  background: rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.graphene-mode-option:hover .graphene-mode-card {
+  border-color: var(--graphene-primary);
+  background: rgba(26, 115, 232, 0.1);
+}
+
+.graphene-mode-option.is-selected .graphene-mode-card {
+  border-color: var(--graphene-gold);
+  background: rgba(212, 175, 55, 0.1);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+/* Mode preview animation */
+.graphene-mode-preview {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem 0;
+}
+
+.preview-hex {
+  width: 2rem;
+  height: 2rem;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: var(--graphene-primary);
+  animation: hex-float 3s ease-in-out infinite;
+}
+
+.preview-hex:nth-child(2) {
+  animation-delay: 0.3s;
+  background: var(--graphene-gold);
+}
+
+.preview-hex:nth-child(3) {
+  animation-delay: 0.6s;
+  background: var(--graphene-accent);
+}
+
+@keyframes hex-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.graphene-mode-preview--strong .preview-hex {
+  animation-duration: 1.5s;
+}
+
+.graphene-mode-preview--strong .preview-hex:first-child {
+  background: #2196F3;
+}
+
+.graphene-mode-preview--strong .preview-hex:nth-child(2) {
+  background: #FFD700;
+}
+
+.graphene-mode-preview--strong .preview-hex:nth-child(3) {
+  background: #FF1744;
+}
+
+.graphene-mode-info {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.graphene-mode-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--bbx-text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.graphene-mode-desc {
+  font-size: 0.8125rem;
+  color: var(--bbx-text-muted);
+}
+
+/* Color grid */
+.graphene-color-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.graphene-color-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.graphene-color-field label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--bbx-text-secondary);
+}
+
+.graphene-color-input {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.graphene-color-input input[type="color"] {
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  border: 2px solid var(--graphene-border);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  background: transparent;
+}
+
+.graphene-color-input input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 4px;
+}
+
+.graphene-color-input input[type="color"]::-webkit-color-swatch {
+  border-radius: 4px;
+  border: none;
+}
+
+.graphene-color-input input[type="text"] {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--graphene-border);
+  border-radius: 0.375rem;
+  color: var(--bbx-text-primary);
+  font-family: monospace;
+  font-size: 0.875rem;
+}
+
+/* Effects grid */
+.graphene-effects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.graphene-select-field,
+.graphene-range-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.graphene-select-field label,
+.graphene-range-field label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--bbx-text-secondary);
+}
+
+.graphene-select-field select {
+  padding: 0.75rem 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--graphene-border);
+  border-radius: 0.5rem;
+  color: var(--bbx-text-primary);
+  font-size: 0.9375rem;
+  cursor: pointer;
+}
+
+.graphene-select-field select:focus {
+  outline: none;
+  border-color: var(--graphene-gold);
+}
+
+.graphene-range-field input[type="range"] {
+  width: 100%;
+  height: 0.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 0.25rem;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.graphene-range-field input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  background: var(--graphene-gold);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+}
+
+/* Toggle switch */
+.graphene-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.graphene-toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.graphene-toggle__slider {
+  position: relative;
+  width: 3rem;
+  height: 1.5rem;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--graphene-border);
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.graphene-toggle__slider::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 1.125rem;
+  height: 1.125rem;
+  background: var(--bbx-text-muted);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.graphene-toggle input:checked + .graphene-toggle__slider {
+  background: var(--graphene-gold);
+  border-color: var(--graphene-gold);
+}
+
+.graphene-toggle input:checked + .graphene-toggle__slider::after {
+  left: calc(100% - 1.375rem);
+  background: var(--graphene-bg-dark);
+}
+
+.graphene-toggle__label {
+  font-size: 0.875rem;
+  color: var(--bbx-text-secondary);
+}
+
+/* Preview container */
+.graphene-preview-container {
+  --preview-primary: var(--graphene-primary);
+  --preview-gold: var(--graphene-gold);
+  --preview-bg: var(--graphene-bg-dark);
+  --preview-gradient-angle: 135deg;
+  --preview-anim-speed: 2s;
+  --preview-pulse-scale: 0.6;
+
+  border-radius: 0.75rem;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.graphene-preview-hero {
+  padding: 2.5rem;
+  background: linear-gradient(var(--preview-gradient-angle), var(--preview-bg) 0%, rgba(17, 60, 85, 0.8) 100%);
+  text-align: center;
+}
+
+.graphene-preview-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--preview-primary);
+  border-radius: 9999px;
+  margin-bottom: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--graphene-text);
+}
+
+.graphene-preview-pulse {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--preview-gold);
+  border-radius: 50%;
+  animation: preview-pulse var(--preview-anim-speed) ease-in-out infinite;
+}
+
+@keyframes preview-pulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 var(--preview-gold);
+    transform: scale(1);
+  }
+  50% {
+    opacity: calc(1 - var(--preview-pulse-scale) * 0.3);
+    box-shadow: 0 0 0 calc(var(--preview-pulse-scale) * 12px) transparent;
+    transform: scale(calc(1 + var(--preview-pulse-scale) * 0.2));
+  }
+}
+
+.graphene-preview-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--preview-gold) 0%, var(--preview-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.graphene-preview-subtitle {
+  font-size: 0.9375rem;
+  color: var(--graphene-text);
+  opacity: 0.8;
+  margin-bottom: 1.5rem;
+}
+
+.graphene-preview-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.graphene-preview-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: default;
+  transition: all 0.3s ease;
+}
+
+.graphene-preview-btn--primary {
+  background: var(--preview-primary);
+  color: white;
+  border: none;
+}
+
+.graphene-preview-btn--secondary {
+  background: transparent;
+  color: var(--preview-gold);
+  border: 2px solid var(--preview-gold);
+}
+
+/* Form actions */
+.graphene-form-actions {
+  display: flex;
+  gap: 1rem;
+  padding-top: 1rem;
+}
+
+/* Alert messages */
+.graphene-alert {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.graphene-alert__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+}
+
+.graphene-alert--success {
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #22c55e;
+}
+
+.graphene-alert--error {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .graphene-settings-panel {
+    padding: 1rem;
+  }
+
+  .graphene-fieldset {
+    padding: 1rem;
+  }
+
+  .graphene-mode-selector {
+    grid-template-columns: 1fr;
+  }
+
+  .graphene-color-grid,
+  .graphene-effects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .graphene-form-actions {
+    flex-direction: column;
+  }
+
+  .graphene-preview-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* --------------------------------------------------------
+   GRAPHENE HEADER TOGGLE
+   -------------------------------------------------------- */
+button.graphene-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.625rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--graphene-border);
+  border-radius: 0.375rem;
+  color: var(--bbx-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button.graphene-toggle:hover {
+  background: rgba(0, 0, 0, 0.5);
+  border-color: var(--graphene-gold);
+  color: var(--graphene-gold);
+}
+
+button.graphene-toggle:focus-visible {
+  outline: 2px solid var(--graphene-gold);
+  outline-offset: 2px;
+}
+
+button.graphene-toggle[aria-pressed="true"] {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: var(--graphene-gold);
+  color: var(--graphene-gold);
+}
+
+.graphene-toggle__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+
+.graphene-toggle__icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.graphene-toggle__icon--standard,
+.graphene-toggle__icon--strong {
+  display: none;
+}
+
+button.graphene-toggle[aria-pressed="false"] .graphene-toggle__icon--standard {
+  display: block;
+}
+
+button.graphene-toggle[aria-pressed="true"] .graphene-toggle__icon--strong {
+  display: block;
+  color: var(--graphene-gold);
+}
+
+.graphene-toggle__text {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Animation for mode transition */
+@keyframes graphene-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+button.graphene-toggle.is-loading {
+  pointer-events: none;
+}
+
+button.graphene-toggle.is-loading .graphene-toggle__icon {
+  animation: graphene-pulse 0.6s ease-in-out infinite;
+}
+
+/* ========================================================
+   QA FIXES - Nov 2025 Audit
+   Addressing hero, nav, live-feed, contrast, CTA issues
+   ======================================================== */
+
+/* --------------------------------------------------------
+   1. FIX: Header/Nav Overlay Problem
+   Nav should not darken content when scrolled
+   -------------------------------------------------------- */
+#main-header {
+  background: transparent !important;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+#main-header.scrolled {
+  background: rgba(10, 18, 23, 0.95) !important;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+:root[data-theme="light"] #main-header.scrolled {
+  background: rgba(255, 255, 255, 0.97) !important;
+  border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+/* Ensure header doesn't create dark overlay on scroll */
+.header-shell {
+  padding: 0.75rem 0;
+}
+
+/* --------------------------------------------------------
+   2. FIX: Graphene Stats Icons - Smaller, Subtle
+   Reduce from "mastodont" to professional
+   -------------------------------------------------------- */
+.graphene-stats__icon {
+  width: 2rem;
+  height: 2rem;
+  background: rgba(212, 175, 55, 0.08);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.graphene-stats__icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* --------------------------------------------------------
+   3. FIX: Hero CTA Buttons - More Prominent
+   Better contrast, larger touch targets, clearer styling
+   -------------------------------------------------------- */
+.btn-graphene-primary {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--graphene-primary) 0%, #1557b0 100%);
+  box-shadow: 0 4px 20px rgba(26, 115, 232, 0.35);
+  min-width: 180px;
+}
+
+.btn-graphene-primary:hover {
+  background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+  box-shadow: 0 6px 30px rgba(26, 115, 232, 0.5);
+  transform: translateY(-3px);
+}
+
+.btn-graphene-secondary {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border-width: 2px;
+  min-width: 180px;
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.btn-graphene-secondary:hover {
+  background: var(--graphene-gold);
+  color: #0A1217;
+  box-shadow: 0 6px 30px rgba(212, 175, 55, 0.4);
+  transform: translateY(-3px);
+}
+
+.btn-graphene-lg {
+  padding: 1.125rem 2.5rem;
+  font-size: 1.0625rem;
+}
+
+/* Light mode CTA adjustments */
+:root[data-theme="light"] .btn-graphene-primary {
+  box-shadow: 0 4px 20px rgba(26, 115, 232, 0.25);
+}
+
+:root[data-theme="light"] .btn-graphene-secondary {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: #b8860b;
+  color: #8b6914;
+}
+
+:root[data-theme="light"] .btn-graphene-secondary:hover {
+  background: var(--graphene-gold);
+  color: #ffffff;
+}
+
+/* --------------------------------------------------------
+   4. FIX: Live Feed - Proper Spacing, Readable Text
+   -------------------------------------------------------- */
+.live-feed-2 {
+  padding: 1.5rem;
+  max-width: 100%;
+}
+
+.live-feed-2__badge {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.5625rem;
+}
+
+.live-feed-2__header {
+  padding-top: 1rem;
+  margin-bottom: 0.875rem;
+}
+
+.live-feed-2__title {
+  font-size: 0.8125rem;
+}
+
+.live-feed-2__subtitle {
+  font-size: 0.6875rem;
+  color: var(--bbx-text-muted);
+  display: block;
+  margin-top: 0.125rem;
+}
+
+.live-feed-2__items {
+  gap: 0.5rem;
+}
+
+.live-feed-2__item {
+  padding: 0.625rem 0.75rem;
+  gap: 0.625rem;
+  align-items: flex-start;
+}
+
+/* Severity tags - smaller, cleaner */
+.live-feed-2__severity {
+  flex-shrink: 0;
+  min-width: 70px;
+}
+
+.severity-tag {
+  padding: 0.1875rem 0.5rem;
+  font-size: 0.5625rem;
+  gap: 0.25rem;
+}
+
+.severity-tag__icon {
+  width: 0.625rem;
+  height: 0.625rem;
+}
+
+/* Event text - better readability */
+.live-feed-2__event {
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  white-space: normal;
+  overflow: visible;
+}
+
+.live-feed-2__meta {
+  font-size: 0.6875rem;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+  opacity: 0.85;
+}
+
+.live-feed-2__content {
+  flex: 1;
+  min-width: 0;
+  padding-right: 0.5rem;
+}
+
+.live-feed-2__time {
+  font-size: 0.625rem;
+  padding: 0.125rem 0.375rem;
+  flex-shrink: 0;
+}
+
+/* Location/IP styling */
+.live-feed-2__location,
+.live-feed-2__ip,
+.live-feed-2__ports,
+.live-feed-2__pattern {
+  font-size: 0.625rem;
+  opacity: 0.8;
+}
+
+.live-feed-2__status {
+  font-size: 0.5625rem;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-weight: 600;
+}
+
+.live-feed-2__status--resolved {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+/* --------------------------------------------------------
+   5. FIX: Tactical Overview Cards - Better Hierarchy
+   -------------------------------------------------------- */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.glass-effect:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(212, 175, 55, 0.35);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+.glass-effect h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  color: var(--bbx-text-primary);
+}
+
+.glass-effect p {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--bbx-text-secondary);
+}
+
+.glass-effect a {
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  background: rgba(212, 175, 55, 0.1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.glass-effect a:hover {
+  background: rgba(212, 175, 55, 0.2);
+  transform: translateX(4px);
+}
+
+/* Card numbering */
+.glass-effect span.text-xs {
+  color: var(--graphene-gold);
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+/* --------------------------------------------------------
+   6. FIX: Contrast & Readability - WCAG Compliance
+   -------------------------------------------------------- */
+/* Text improvements */
+.text-gray-300 {
+  color: #d1d5db !important;
+}
+
+.text-gray-400 {
+  color: #9ca3af !important;
+}
+
+/* Hero subheadline - better contrast */
+.hero-subheadline {
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+:root[data-theme="light"] .hero-subheadline {
+  color: rgba(34, 49, 58, 0.9);
+  text-shadow: none;
+}
+
+/* Section backgrounds - ensure readability */
+.page-section {
+  position: relative;
+}
+
+.page-section--soft {
+  background: rgba(17, 24, 39, 0.4);
+}
+
+:root[data-theme="light"] .page-section--soft {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* Form elements - better contrast */
+textarea,
+input[type="text"],
+input[type="email"] {
+  background: rgba(17, 24, 39, 0.6) !important;
+  border-color: rgba(75, 85, 99, 0.5) !important;
+  color: #f3f4f6 !important;
+}
+
+textarea::placeholder,
+input::placeholder {
+  color: rgba(156, 163, 175, 0.8) !important;
+}
+
+:root[data-theme="light"] textarea,
+:root[data-theme="light"] input[type="text"],
+:root[data-theme="light"] input[type="email"] {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+  color: #1f2937 !important;
+}
+
+/* --------------------------------------------------------
+   7. FIX: CTA Section - Less Empty Space, Better Buttons
+   -------------------------------------------------------- */
+.cta-section-gradient {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(17, 60, 85, 0.15) 50%,
+    rgba(10, 18, 23, 0.3) 100%
+  );
+  padding: 4rem 0;
+}
+
+.cta-section-gradient h2 {
+  font-size: 2rem;
+}
+
+.cta-section-gradient p {
+  margin-bottom: 2rem;
+}
+
+/* --------------------------------------------------------
+   8. FIX: Footer - Better Contrast & Visibility
+   -------------------------------------------------------- */
+footer {
+  background: #050810;
+}
+
+footer .text-gray-400,
+footer .text-gray-500 {
+  color: #9ca3af !important;
+}
+
+footer .text-xs {
+  font-size: 0.8125rem;
+}
+
+footer a {
+  color: #d1d5db;
+  transition: color 0.2s ease;
+}
+
+footer a:hover {
+  color: var(--graphene-gold);
+}
+
+/* Operational badge */
+footer .bg-green-400 {
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+}
+
+/* Social icons */
+footer svg {
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+footer a:hover svg {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------
+   9. FIX: Mobile Responsiveness
+   -------------------------------------------------------- */
+@media (max-width: 768px) {
+  /* Hero adjustments */
+  .graphene-hero__content {
+    padding: 5rem 1rem 3rem;
+  }
+
+  .graphene-gradient-text {
+    font-size: 2rem !important;
+    line-height: 1.2;
+  }
+
+  .hero-subheadline {
+    font-size: 1rem;
+  }
+
+  /* CTA buttons stack nicely */
+  .btn-graphene-primary,
+  .btn-graphene-secondary {
+    width: 100%;
+    justify-content: center;
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9375rem;
+    min-width: auto;
+  }
+
+  /* Stats - horizontal scroll on small screens */
+  .graphene-stats {
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    flex-wrap: nowrap;
+  }
+
+  .graphene-stats__item {
+    flex-shrink: 0;
+  }
+
+  .graphene-stats__icon {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .graphene-stats__value {
+    font-size: 1.25rem;
+  }
+
+  /* Live feed compact */
+  .live-feed-2 {
+    padding: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .live-feed-2__item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+
+  .live-feed-2__severity {
+    min-width: auto;
+  }
+
+  .live-feed-2__time {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+
+  /* Tactical cards - single column */
+  .glass-effect {
+    padding: 1.25rem;
+  }
+
+  .glass-effect h3 {
+    font-size: 1.125rem;
+  }
+
+  /* Footer adjustments */
+  footer .grid {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .graphene-gradient-text {
+    font-size: 1.75rem !important;
+  }
+
+  .graphene-stats {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .graphene-stats__divider {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------
+   10. Light Theme Comprehensive Fixes
+   -------------------------------------------------------- */
+:root[data-theme="light"] .graphene-hero {
+  background-color: #f8fafc;
+}
+
+:root[data-theme="light"] .graphene-gradient-text {
+  background: linear-gradient(135deg, #1e3a5f 0%, #b8860b 50%, #1e3a5f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+:root[data-theme="light"] .graphene-stats__icon {
+  background: rgba(184, 134, 11, 0.1);
+  border-color: rgba(184, 134, 11, 0.25);
+  color: #8b6914;
+}
+
+:root[data-theme="light"] .graphene-stats__value {
+  color: #1e3a5f;
+}
+
+:root[data-theme="light"] .graphene-stats__label {
+  color: #4b5563;
+}
+
+:root[data-theme="light"] .live-feed-2 {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme="light"] .live-feed-2__item {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+:root[data-theme="light"] .glass-effect {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+:root[data-theme="light"] .glass-effect:hover {
+  background: rgba(255, 255, 255, 0.98);
+  border-color: rgba(184, 134, 11, 0.4);
+}
+
+:root[data-theme="light"] footer {
+  background: #f1f5f9;
+}
+
+:root[data-theme="light"] footer .text-gray-400,
+:root[data-theme="light"] footer .text-gray-500 {
+  color: #4b5563 !important;
+}
+
+:root[data-theme="light"] footer a {
+  color: #374151;
+}
+
+:root[data-theme="light"] .cta-section-gradient {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(184, 134, 11, 0.05) 50%,
+    rgba(241, 245, 249, 0.5) 100%
+  );
+}
+
+/* ========================================================
+   QA FIXES NOV 2025
+   ======================================================== */
+
+/* --------------------------------------------------------
+   1. HEADER / NAV FIXES - Remove dark overlay on scroll
+   -------------------------------------------------------- */
+#main-header {
+  background: rgba(10, 18, 23, 0.85);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+#main-header.scrolled {
+  background: rgba(10, 18, 23, 0.95);
+}
+
+/* Remove any overlay that darkens content below nav */
+#main-header::after {
+  display: none !important;
+}
+
+/* Ensure nav doesn't block content */
+.page-section {
+  position: relative;
+  z-index: 1;
+}
+
+/* --------------------------------------------------------
+   2. CTA BUTTONS - Enhanced Styling
+   -------------------------------------------------------- */
+.btn-graphene-primary,
+.btn-graphene-secondary {
+  min-width: 180px;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.btn-graphene-lg {
+  padding: 1rem 2.5rem;
+  font-size: 1.125rem;
+  min-height: 3.25rem;
+}
+
+.btn-graphene-primary {
+  background: linear-gradient(135deg, var(--graphene-primary) 0%, #1557b0 100%);
+  box-shadow: 0 4px 20px rgba(26, 115, 232, 0.35);
+}
+
+.btn-graphene-primary:hover {
+  background: linear-gradient(135deg, #2196f3 0%, var(--graphene-primary) 100%);
+  box-shadow: 0 6px 28px rgba(26, 115, 232, 0.5);
+  transform: translateY(-3px);
+}
+
+.btn-graphene-secondary {
+  border-width: 2px;
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.btn-graphene-secondary:hover {
+  background: var(--graphene-gold);
+  color: #0a1217;
+  box-shadow: 0 6px 24px rgba(212, 175, 55, 0.4);
+}
+
+/* --------------------------------------------------------
+   3. LIVE FEED 2.0 - Compact severity tags & icons
+   -------------------------------------------------------- */
+.live-feed-2 {
+  max-width: 100%;
+  z-index: 10;
+  position: relative;
+}
+
+/* Smaller, refined severity tags */
+.severity-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.1875rem 0.5rem;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 0.25rem;
+  white-space: nowrap;
+}
+
+/* Small, consistent icons in severity tags */
+.severity-tag__icon {
+  width: 0.75rem;
+  height: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* Feed item layout improvements */
+.live-feed-2__item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.75rem;
+  align-items: start;
+  padding: 0.75rem;
+  border-left-width: 3px;
+}
+
+.live-feed-2__severity {
+  flex-shrink: 0;
+}
+
+.live-feed-2__content {
+  min-width: 0;
+  flex: 1;
+}
+
+.live-feed-2__event {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #e0e6eb;
+  line-height: 1.4;
+  margin-bottom: 0.25rem;
+}
+
+/* Meta info on one line with good contrast */
+.live-feed-2__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.6875rem;
+  color: #9ca3af;
+}
+
+.live-feed-2__meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.live-feed-2__location,
+.live-feed-2__ip,
+.live-feed-2__ports,
+.live-feed-2__pattern {
+  color: #9ca3af;
+}
+
+.live-feed-2__status {
+  font-weight: 600;
+}
+
+.live-feed-2__status--resolved {
+  color: #22c55e;
+}
+
+.live-feed-2__time {
+  font-size: 0.625rem;
+  color: #6b7280;
+  white-space: nowrap;
+  align-self: start;
+  padding-top: 0.125rem;
+}
+
+/* --------------------------------------------------------
+   4. TACTICAL OVERVIEW CARDS - Better readability
+   -------------------------------------------------------- */
+.glass-effect {
+  background: rgba(17, 24, 39, 0.7);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.glass-effect:hover {
+  background: rgba(17, 24, 39, 0.85);
+  border-color: rgba(212, 175, 55, 0.35);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.glass-effect h3 {
+  color: #ffffff;
+  font-size: 1.25rem;
+}
+
+.glass-effect p {
+  color: #d1d5db;
+  line-height: 1.6;
+}
+
+.glass-effect a {
+  color: var(--graphene-gold);
+  font-weight: 600;
+}
+
+.glass-effect a:hover {
+  color: #ffe8a3;
+}
+
+/* --------------------------------------------------------
+   5. GENERAL CONTRAST IMPROVEMENTS
+   -------------------------------------------------------- */
+
+/* Section backgrounds - prevent nav darkening */
+.page-section {
+  background-color: var(--graphene-bg-dark);
+}
+
+.page-section--soft {
+  background-color: rgba(17, 24, 39, 0.5);
+}
+
+/* Text contrast improvements */
+.text-gray-300 {
+  color: #d1d5db !important;
+}
+
+.text-gray-400 {
+  color: #9ca3af !important;
+}
+
+/* Ensure white text is truly white */
+.text-white {
+  color: #ffffff !important;
+}
+
+/* --------------------------------------------------------
+   6. FOOTER CONTRAST FIXES
+   -------------------------------------------------------- */
+footer {
+  background: #070b0e;
+}
+
+footer .text-gray-400,
+footer .text-gray-500 {
+  color: #9ca3af !important;
+}
+
+footer .text-gray-300 {
+  color: #d1d5db !important;
+}
+
+footer a {
+  color: #d1d5db;
+  transition: color 0.2s ease;
+}
+
+footer a:hover {
+  color: var(--graphene-gold);
+}
+
+/* Footer operational badge */
+footer .bg-green-400 {
+  background-color: #22c55e;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+}
+
+/* Social icons */
+footer svg {
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+footer a:hover svg {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------
+   7. CTA SECTION IMPROVEMENTS
+   -------------------------------------------------------- */
+.cta-section-gradient {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 18, 23, 0) 0%,
+    rgba(212, 175, 55, 0.03) 50%,
+    rgba(10, 18, 23, 0.5) 100%
+  );
+}
+
+.cta-section-gradient h2 {
+  color: #ffffff;
+}
+
+.cta-section-gradient p {
+  color: #d1d5db;
+}
+
+/* --------------------------------------------------------
+   8. GRAPHENE STATS - Refined icons
+   -------------------------------------------------------- */
+.graphene-stats__icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.graphene-stats__icon svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+/* --------------------------------------------------------
+   9. MOBILE RESPONSIVE FIXES
+   -------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .live-feed-2 {
+    max-width: 100%;
+  }
+
+  .live-feed-2__item {
+    grid-template-columns: auto 1fr auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .severity-tag {
+    font-size: 0.5rem;
+    padding: 0.125rem 0.375rem;
+  }
+
+  .severity-tag__icon {
+    width: 0.625rem;
+    height: 0.625rem;
+  }
+
+  .live-feed-2__item {
+    gap: 0.5rem;
+    padding: 0.625rem;
+  }
+
+  .live-feed-2__event {
+    font-size: 0.75rem;
+  }
+
+  .live-feed-2__meta {
+    font-size: 0.625rem;
+  }
+
+  .btn-graphene-lg {
+    padding: 0.875rem 1.75rem;
+    font-size: 1rem;
+    width: 100%;
+  }
+
+  .graphene-stats {
+    gap: 1rem;
+  }
+
+  .graphene-stats__icon {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .graphene-stats__value {
+    font-size: 1.25rem;
+  }
+}
+
+/* --------------------------------------------------------
+   10. ACCESSIBILITY IMPROVEMENTS
+   -------------------------------------------------------- */
+
+/* Focus states */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--graphene-gold);
+  outline-offset: 2px;
+}
+
+/* Ensure links have visible hover states */
+.glass-effect a:focus-visible {
+  outline-color: var(--graphene-gold);
+  background: rgba(212, 175, 55, 0.1);
+  border-radius: 0.25rem;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .severity-tag {
+    border: 1px solid currentColor;
+  }
+
+  .glass-effect {
+    border-width: 2px;
+  }
+
+  .live-feed-2__event {
+    color: #ffffff;
+  }
+}
+

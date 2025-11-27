@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/env.php';
 require_once __DIR__ . '/i18n.php';
+require_once __DIR__ . '/graphene-config.php';
 
 $current_language = bbx_get_language();
 
@@ -12,6 +13,10 @@ if (isset($_GET['lang']) && in_array($_GET['lang'], ['da', 'en'])) {
     header('Location: ' . $redirect_url);
     exit;
 }
+
+// Load Graphene theme settings
+$graphene_mode = bbx_graphene_get_mode();
+$graphene_body_class = bbx_graphene_body_class();
 
 $page_title = $page_title ?? 'Blackbox EYE™ - Intelligent Sikkerhed';
 $current_page = $current_page ?? basename($_SERVER['PHP_SELF'], '.php');
@@ -306,10 +311,12 @@ $is_graphene_page = in_array($current_page, $graphene_pages, true);
 $body_classes = ['antialiased'];
 if ($is_graphene_page) {
     $body_classes[] = 'graphene-page';
+    // Add graphene mode class (standard or strong)
+    $body_classes[] = $graphene_body_class;
 }
 ?>
 
-<body class="<?= implode(' ', $body_classes) ?>">
+<body class="<?= implode(' ', $body_classes) ?>" data-graphene-mode="<?= htmlspecialchars($graphene_mode) ?>">
 
     <!-- Skip navigation for keyboard users (WCAG 2.1) -->
     <!-- tabindex="1" ensures this is the first focusable element in all browsers including WebKit -->
@@ -395,6 +402,28 @@ if ($is_graphene_page) {
                                 <?= t('header.language.en') ?>
                             </a>
                         </div>
+                        <!-- Graphene Theme Mode Toggle -->
+                        <?php if ($is_graphene_page): ?>
+                            <button type="button"
+                                id="graphene-mode-toggle"
+                                class="graphene-toggle hidden lg:inline-flex"
+                                data-graphene-toggle
+                                data-current-mode="<?= htmlspecialchars($graphene_mode) ?>"
+                                aria-pressed="<?= $graphene_mode === 'strong' ? 'true' : 'false' ?>"
+                                aria-label="<?= htmlspecialchars(t('header.graphene.toggle_label', 'Skift Graphene tema-intensitet')) ?>"
+                                title="<?= htmlspecialchars($graphene_mode === 'strong' ? t('header.graphene.mode_strong', 'Graphene Strong') : t('header.graphene.mode_standard', 'Graphene Standard')) ?>">
+                                <span class="graphene-toggle__icon" aria-hidden="true">
+                                    <svg class="graphene-toggle__icon--standard" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="5" />
+                                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+                                    </svg>
+                                    <svg class="graphene-toggle__icon--strong" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                                    </svg>
+                                </span>
+                                <span class="graphene-toggle__text hidden xl:inline"><?= $graphene_mode === 'strong' ? t('header.graphene.strong', 'Stærk') : t('header.graphene.standard', 'Standard') ?></span>
+                            </button>
+                        <?php endif; ?>
                         <button type="button"
                             class="theme-toggle hidden lg:inline-flex"
                             data-theme-toggle

@@ -41,6 +41,13 @@
       "mobile_title": "Color theme",
       "mobile_description": "Toggle between dark and light experiences"
     },
+    "graphene": {
+      "toggle_label": "Toggle Graphene theme intensity",
+      "mode_standard": "Graphene Standard",
+      "mode_strong": "Graphene Strong",
+      "standard": "Standard",
+      "strong": "Strong"
+    },
     "desktop": {
       "primary_navigation": "Primary navigation"
     },

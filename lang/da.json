@@ -41,6 +41,13 @@
       "mobile_title": "Farvetema",
       "mobile_description": "Skift mellem mørk og lys oplevelse"
     },
+    "graphene": {
+      "toggle_label": "Skift Graphene tema-intensitet",
+      "mode_standard": "Graphene Standard",
+      "mode_strong": "Graphene Stærk",
+      "standard": "Standard",
+      "strong": "Stærk"
+    },
     "desktop": {
       "primary_navigation": "Primær navigation"
     },

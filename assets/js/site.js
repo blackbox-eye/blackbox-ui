@@ -1729,4 +1729,105 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
+
+    // ==========================================
+    // GRAPHENE MODE TOGGLE
+    // ==========================================
+    const grapheneToggleBtn = document.getElementById('graphene-mode-toggle');
+    if (grapheneToggleBtn) {
+        const updateGrapheneUI = (mode, immediate = false) => {
+            const body = document.body;
+            const isStrong = mode === 'strong';
+
+            // Update body classes
+            body.classList.remove('graphene-standard', 'graphene-strong');
+            body.classList.add(isStrong ? 'graphene-strong' : 'graphene-standard');
+            body.dataset.grapheneMode = mode;
+
+            // Update toggle button state
+            grapheneToggleBtn.setAttribute('aria-pressed', isStrong ? 'true' : 'false');
+            grapheneToggleBtn.dataset.currentMode = mode;
+
+            // Update toggle text if present
+            const toggleText = grapheneToggleBtn.querySelector('.graphene-toggle__text');
+            if (toggleText) {
+                toggleText.textContent = isStrong
+                    ? (window.i18n?.t('header.graphene.strong') || 'Stærk')
+                    : (window.i18n?.t('header.graphene.standard') || 'Standard');
+            }
+
+            // Update title/tooltip
+            grapheneToggleBtn.title = isStrong
+                ? (window.i18n?.t('header.graphene.mode_strong') || 'Graphene Strong')
+                : (window.i18n?.t('header.graphene.mode_standard') || 'Graphene Standard');
+        };
+
+        const toggleGrapheneMode = async () => {
+            const currentMode = grapheneToggleBtn.dataset.currentMode || 'standard';
+            const newMode = currentMode === 'strong' ? 'standard' : 'strong';
+
+            // Add loading state
+            grapheneToggleBtn.classList.add('is-loading');
+            grapheneToggleBtn.disabled = true;
+
+            try {
+                const response = await fetch('/api/graphene-toggle.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ mode: newMode }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update UI immediately
+                    updateGrapheneUI(newMode);
+
+                    // Apply new CSS variables if provided
+                    if (data.css_vars) {
+                        let styleEl = document.getElementById('graphene-dynamic-vars');
+                        if (!styleEl) {
+                            styleEl = document.createElement('style');
+                            styleEl.id = 'graphene-dynamic-vars';
+                            document.head.appendChild(styleEl);
+                        }
+                        styleEl.textContent = data.css_vars;
+                    }
+
+                    // Store preference in localStorage for faster initial load
+                    try {
+                        localStorage.setItem('bbx-graphene-mode', newMode);
+                    } catch (e) {
+                        // Ignore localStorage errors
+                    }
+                } else {
+                    console.error('Failed to toggle Graphene mode:', data.error);
+                }
+            } catch (error) {
+                console.error('Error toggling Graphene mode:', error);
+            } finally {
+                // Remove loading state
+                grapheneToggleBtn.classList.remove('is-loading');
+                grapheneToggleBtn.disabled = false;
+            }
+        };
+
+        grapheneToggleBtn.addEventListener('click', toggleGrapheneMode);
+
+        // Initialize from localStorage if available (faster than waiting for server)
+        try {
+            const storedMode = localStorage.getItem('bbx-graphene-mode');
+            if (storedMode && (storedMode === 'standard' || storedMode === 'strong')) {
+                const serverMode = grapheneToggleBtn.dataset.currentMode;
+                if (storedMode !== serverMode) {
+                    // Sync localStorage with server state
+                    localStorage.setItem('bbx-graphene-mode', serverMode);
+                }
+            }
+        } catch (e) {
+            // Ignore localStorage errors
+        }
+    }
 });

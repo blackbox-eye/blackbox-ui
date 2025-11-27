@@ -6,11 +6,12 @@ declare(strict_types=1);
  * Request Access API Endpoint
  *
  * Handles operator access requests with reCAPTCHA v3, honeypot, and PHPMailer.
- * Sends notification to security team when a valid request is submitted.
+ * Saves requests to database and sends notification to security team.
  */
 
 require_once __DIR__ . '/../includes/env.php';
 require_once __DIR__ . '/../includes/mail-helper.php';
+require_once __DIR__ . '/../db.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -235,6 +236,46 @@ if (!$mailSent) {
     'message' => 'Din anmodning blev modtaget, men vi kunne ikke sende notifikationen. Prøv igen senere.',
   ]);
   exit;
+}
+
+// ───────────────────────────────────────────────────────────────────────────
+// Save request to database
+// ───────────────────────────────────────────────────────────────────────────
+$dbSaved = false;
+$requestId = null;
+
+if (defined('BBX_DB_CONNECTED') && BBX_DB_CONNECTED && isset($pdo)) {
+  try {
+    $roleValue = $rawInput['role'] !== '' ? $rawInput['role'] : 'unspecified';
+
+    $stmt = $pdo->prepare("
+      INSERT INTO access_requests
+        (name, email, organization, role, reason, ip_address, user_agent, recaptcha_score, status)
+      VALUES
+        (:name, :email, :organization, :role, :reason, :ip_address, :user_agent, :recaptcha_score, 'pending')
+    ");
+
+    $stmt->execute([
+      ':name'            => $safeName,
+      ':email'           => $safeEmail,
+      ':organization'    => $safeOrg,
+      ':role'            => $roleValue,
+      ':reason'          => $rawInput['reason'],
+      ':ip_address'      => $_SERVER['REMOTE_ADDR'] ?? null,
+      ':user_agent'      => substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 500),
+      ':recaptcha_score' => $score,
+    ]);
+
+    $requestId = $pdo->lastInsertId();
+    $dbSaved = true;
+
+    error_log('REQUEST ACCESS: Saved to database with ID ' . $requestId);
+  } catch (PDOException $e) {
+    error_log('REQUEST ACCESS WARNING: Database save failed - ' . $e->getMessage());
+    // Continue anyway - email was sent successfully
+  }
+} else {
+  error_log('REQUEST ACCESS WARNING: Database not connected - request not saved');
 }
 
 error_log('REQUEST ACCESS: Successfully processed request from ' . $safeEmail);

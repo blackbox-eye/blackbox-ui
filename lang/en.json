@@ -92,15 +92,33 @@
       "description": "The complete AI-driven security platform that protects your business 24/7 and turns employees into your strongest line of defense."
     },
     "hero": {
-      "headline": "Intelligent Security. Powered by GreyEYE™.",
-      "subheadline": "Blackbox EYE™ delivers unified threat intelligence, AI-driven response, and real-time operational awareness – so you neutralize attacks before they escalate.",
-      "primary_cta": "Book a No-Obligation Demo",
-      "secondary_cta": "Explore the Platform",
-      "live_feed_title": "Live Threat Feed",
+      "badge": "Blackbox EYE™ Security Platform",
+      "headline": "Next-gen Security Infrastructure",
+      "subheadline": "Powered by Graphene architecture – unified threat intelligence, AI-driven response, and real-time operational awareness across your entire digital surface.",
+      "primary_cta": "Request Demo",
+      "primary_cta_aria": "Request a demo of Blackbox EYE security platform",
+      "secondary_cta": "Explore Platform",
+      "secondary_cta_aria": "Explore the Blackbox EYE platform features",
+      "live_feed_title": "Live Threat Intelligence",
+      "live_feed_subtitle": "Real-time security events",
+      "live_badge": "LIVE",
+      "stats_aria": "Platform statistics showing threats neutralized, uptime, and response time",
+      "feed": {
+        "malware": "Ransomware payload blocked – endpoint isolated",
+        "login": "Lateral movement detected – credentials rotated",
+        "scan": "Shadow IT discovery – 23 new assets catalogued",
+        "status_quarantined": "Quarantined",
+        "status_resolved": "Resolved",
+        "status_pending": "Pending",
+        "view_all": "View all events"
+      },
       "stats": {
-        "threats": "Threats Blocked",
-        "uptime": "Uptime",
-        "response": "Response Time"
+        "threats": "Threats Neutralized",
+        "threats_value": "2.4M+",
+        "uptime": "Platform Uptime",
+        "uptime_value": "99.97%",
+        "response": "Avg Response",
+        "response_value": "<50ms"
       }
     },
     "tactical": {

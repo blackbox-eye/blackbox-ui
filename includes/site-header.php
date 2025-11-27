@@ -20,10 +20,13 @@ $meta_keywords = $meta_keywords ?? 'Blackbox EYE, sikkerhed, AI, efterretning, c
 $meta_author = $meta_author ?? BBX_SITE_NAME;
 $meta_og_title = $meta_og_title ?? $page_title;
 $meta_og_description = $meta_og_description ?? $meta_description;
-$meta_og_image = $meta_og_image ?? BBX_SITE_BASE_URL . '/assets/logo.png';
+// Use Blackbox EYE gold cube logo for Open Graph sharing
+$meta_og_image = $meta_og_image ?? BBX_SITE_BASE_URL . '/assets/logo%20pakker%20BlackboxEYE/blackboxeye_logo_package_full/BlackboxEYE_white_512x512.png';
 $meta_og_type = $meta_og_type ?? 'website';
 $canonical_url = $canonical_url ?? BBX_SITE_BASE_URL . ($current_page === 'index' || $current_page === 'home' ? '/' : '/' . $current_page . '.php');
 $meta_robots = $meta_robots ?? 'index,follow';
+// Twitter card type - use summary_large_image for better sharing appearance
+$meta_twitter_card = $meta_twitter_card ?? 'summary_large_image';
 
 $default_structured_data = [
     '@context' => 'https://schema.org',
@@ -238,11 +241,16 @@ if (!empty($disable_alphabot)) {
     <meta property="og:type" content="<?= htmlspecialchars($meta_og_type) ?>">
     <meta property="og:url" content="<?= htmlspecialchars($canonical_url) ?>">
     <meta property="og:image" content="<?= htmlspecialchars($meta_og_image) ?>">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:site_name" content="Blackbox EYE™">
+    <meta property="og:locale" content="<?= $current_language === 'da' ? 'da_DK' : 'en_US' ?>">
 
-    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:card" content="<?= htmlspecialchars($meta_twitter_card) ?>">
     <meta name="twitter:title" content="<?= htmlspecialchars($meta_og_title) ?>">
     <meta name="twitter:description" content="<?= htmlspecialchars($meta_og_description) ?>">
     <meta name="twitter:image" content="<?= htmlspecialchars($meta_og_image) ?>">
+    <meta name="twitter:site" content="@blackboxeye">
 
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/logo%20pakker%20BlackboxEYE/blackboxeye_logo_package_full/BlackboxEYE_white_32x32.png">
     <link rel="icon" type="image/png" sizes="192x192" href="/assets/logo%20pakker%20BlackboxEYE/blackboxeye_logo_package_full/BlackboxEYE_white_256x256.png">
@@ -291,7 +299,17 @@ if (!empty($disable_alphabot)) {
     <!-- Inline styles removed; migrated to /assets/css/custom-ui.css -->
 </head>
 
-<body class="antialiased">
+<?php
+// Determine if this page uses Graphene theme
+$graphene_pages = ['index', 'home', 'about', 'products', 'cases', 'pricing', 'contact', 'demo', 'free-scan', 'faq', 'blog'];
+$is_graphene_page = in_array($current_page, $graphene_pages, true);
+$body_classes = ['antialiased'];
+if ($is_graphene_page) {
+    $body_classes[] = 'graphene-page';
+}
+?>
+
+<body class="<?= implode(' ', $body_classes) ?>">
 
     <!-- Skip navigation for keyboard users (WCAG 2.1) -->
     <!-- tabindex="1" ensures this is the first focusable element in all browsers including WebKit -->

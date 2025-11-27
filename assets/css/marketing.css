@@ -6,6 +6,20 @@
    Design Tokens — Shared with admin.css for brand consistency
    -------------------------------------------------------- */
 :root {
+  /* ========== GRAPHENE THEME TOKENS ========== */
+  /* Primary Graphene colors for modern, clean aesthetic */
+  --graphene-bg-dark: #0A1217;
+  --graphene-bg-light: #F5F8FA;
+  --graphene-primary: #1a73e8;
+  --graphene-secondary: #113c55;
+  --graphene-gold: #d4af37;
+  --graphene-accent: #e94560;
+  --graphene-text: #E0E6EB;
+  --graphene-text-light: #22313A;
+  --graphene-shadow: rgba(0, 0, 0, 0.3);
+  --graphene-border: rgba(26, 115, 232, 0.2);
+  --graphene-glow: 0 0 30px rgba(26, 115, 232, 0.15);
+
   /* Primary brand colors (Blackbox EYE + GreyEYE unified) */
   --bbx-gold: #d4af37;
   --bbx-gold-light: #ffe8a3;
@@ -22,7 +36,7 @@
   --blackbox-glow: 0 0 20px rgba(233, 69, 96, 0.2);
 
   /* Background colors */
-  --bbx-bg-primary: #0a0a0f;
+  --bbx-bg-primary: var(--graphene-bg-dark);
   --bbx-bg-secondary: #111118;
   --bbx-bg-card: rgba(255, 255, 255, 0.03);
 
@@ -39,11 +53,60 @@
   --bbx-shadow-gold: 0 4px 20px rgba(212, 175, 55, 0.15);
   --bbx-shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
 
+  /* Severity colors for feeds/alerts */
+  --severity-critical: #ef4444;
+  --severity-warning: #f59e0b;
+  --severity-info: #3b82f6;
+  --severity-success: #22c55e;
+
   /* Legacy fallback mappings */
   --primary-accent: var(--bbx-gold);
   --text-medium-emphasis: var(--bbx-text-secondary);
   --text-high-emphasis: var(--bbx-text-primary);
   --muted: var(--bbx-text-muted);
+}
+
+/* ========================================================
+   Graphene Section - Reusable Background Component
+   ======================================================== */
+.graphene-section {
+  position: relative;
+  background: var(--graphene-bg-dark);
+  overflow: hidden;
+}
+
+.graphene-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/bg/graphene-dark.svg');
+  background-repeat: repeat;
+  background-size: 120px 104px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+[data-theme="light"] .graphene-section,
+.light .graphene-section {
+  background: var(--graphene-bg-light);
+}
+
+[data-theme="light"] .graphene-section::before,
+.light .graphene-section::before {
+  background-image: url('/assets/bg/graphene-light.svg');
+  opacity: 0.6;
+}
+
+/* Graphene page body defaults */
+.graphene-page {
+  background: var(--graphene-bg-dark);
+  color: var(--graphene-text);
+}
+
+[data-theme="light"] .graphene-page,
+.light .graphene-page {
+  background: var(--graphene-bg-light);
+  color: var(--graphene-text-light);
 }
 
 /* Desktop navigation links */
@@ -491,4 +554,996 @@ body.js-enabled .section-fade-in.visible {
 
 .live-feed-item--new {
   animation: feed-slide-in 0.3s ease-out;
+}
+
+/* --------------------------------------------------------
+   Graphene Theme - Hero Section
+   -------------------------------------------------------- */
+.graphene-hero {
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--graphene-bg-dark);
+  background-image: url('/assets/bg/graphene-dark.svg');
+  background-size: 150px 150px;
+  background-repeat: repeat;
+  overflow: hidden;
+}
+
+.graphene-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(10, 18, 23, 0.95) 0%,
+    rgba(10, 18, 23, 0.85) 50%,
+    rgba(17, 60, 85, 0.4) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Light theme variant */
+[data-theme="light"] .graphene-hero,
+.light .graphene-hero {
+  background-color: var(--graphene-bg-light);
+  background-image: url('/assets/bg/graphene-light.svg');
+}
+
+[data-theme="light"] .graphene-hero::before,
+.light .graphene-hero::before {
+  background: linear-gradient(
+    135deg,
+    rgba(245, 248, 250, 0.95) 0%,
+    rgba(245, 248, 250, 0.9) 50%,
+    rgba(237, 242, 247, 0.85) 100%
+  );
+}
+
+.graphene-hero__content {
+  position: relative;
+  z-index: 10;
+}
+
+/* Graphene gradient text */
+.graphene-gradient-text {
+  background: linear-gradient(
+    135deg,
+    var(--graphene-gold) 0%,
+    var(--bbx-gold-light) 40%,
+    var(--graphene-gold) 60%,
+    var(--graphene-primary) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* --------------------------------------------------------
+   Graphene CTA Buttons
+   -------------------------------------------------------- */
+.btn-graphene-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 2.5rem;
+  background: var(--graphene-primary);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1.125rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+
+.btn-graphene-primary:hover {
+  background: #1557b0;
+  transform: translateY(-2px);
+  box-shadow: var(--graphene-glow);
+}
+
+.btn-graphene-primary:focus {
+  outline: 2px solid var(--graphene-primary);
+  outline-offset: 3px;
+}
+
+.btn-graphene-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 2.5rem;
+  background: transparent;
+  color: var(--graphene-gold);
+  font-weight: 600;
+  font-size: 1.125rem;
+  border-radius: 0.5rem;
+  border: 2px solid var(--graphene-gold);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+
+.btn-graphene-secondary:hover {
+  background: var(--graphene-gold);
+  color: var(--graphene-bg-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--bbx-shadow-gold);
+}
+
+.btn-graphene-secondary:focus {
+  outline: 2px solid var(--graphene-gold);
+  outline-offset: 3px;
+}
+
+/* --------------------------------------------------------
+   Graphene Stats Counter
+   -------------------------------------------------------- */
+.graphene-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.graphene-stats__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.graphene-stats__icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(212, 175, 55, 0.1);
+  border-radius: 0.5rem;
+  color: var(--graphene-gold);
+}
+
+.graphene-stats__icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.graphene-stats__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.graphene-stats__value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--graphene-gold);
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.graphene-stats__label {
+  font-size: 0.75rem;
+  color: var(--graphene-text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.8;
+}
+
+[data-theme="light"] .graphene-stats__label,
+.light .graphene-stats__label {
+  color: var(--graphene-text-light);
+}
+
+/* Mobile responsive stats */
+@media (max-width: 640px) {
+  .graphene-stats {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+/* --------------------------------------------------------
+   Live Feed 2.0 - Enhanced Design
+   -------------------------------------------------------- */
+.live-feed-2 {
+  position: relative;
+  background: rgba(10, 18, 23, 0.8);
+  border: 1px solid var(--graphene-border);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+
+[data-theme="light"] .live-feed-2,
+.light .live-feed-2 {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.live-feed-2__badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--graphene-accent);
+  color: white;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 0 0 0.5rem 0;
+}
+
+.live-feed-2__pulse {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: white;
+  border-radius: 50%;
+  animation: pulse-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+  }
+  50% {
+    opacity: 0.8;
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0);
+  }
+}
+
+.live-feed-2__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-top: 1.5rem;
+}
+
+.live-feed-2__title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--graphene-text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+[data-theme="light"] .live-feed-2__title,
+.light .live-feed-2__title {
+  color: var(--graphene-text-light);
+}
+
+.live-feed-2__items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.live-feed-2__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--graphene-border);
+  transition: all 0.2s ease;
+  animation: feed-slide-in 0.4s ease-out;
+}
+
+[data-theme="light"] .live-feed-2__item,
+.light .live-feed-2__item {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.live-feed-2__item:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Severity colors */
+.live-feed-2__item--critical {
+  border-left-color: var(--severity-critical);
+}
+
+.live-feed-2__item--warning {
+  border-left-color: var(--severity-warning);
+}
+
+.live-feed-2__item--info {
+  border-left-color: var(--severity-info);
+}
+
+/* Severity tags */
+.severity-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 0.25rem;
+  white-space: nowrap;
+}
+
+.severity-tag--critical {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--severity-critical);
+}
+
+.severity-tag--warning {
+  background: rgba(245, 158, 11, 0.2);
+  color: var(--severity-warning);
+}
+
+.severity-tag--info {
+  background: rgba(59, 130, 246, 0.2);
+  color: var(--severity-info);
+}
+
+.live-feed-2__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.live-feed-2__event {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--graphene-text);
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[data-theme="light"] .live-feed-2__event,
+.light .live-feed-2__event {
+  color: var(--graphene-text-light);
+}
+
+.live-feed-2__meta {
+  font-size: 0.6875rem;
+  color: var(--bbx-text-muted);
+}
+
+.live-feed-2__time {
+  font-size: 0.6875rem;
+  color: var(--bbx-text-muted);
+  white-space: nowrap;
+}
+
+/* Feed slide animation for auto-rotation */
+@keyframes feed-item-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.live-feed-2__item--entering {
+  animation: feed-item-enter 0.3s ease-out;
+}
+
+/* --------------------------------------------------------
+   Graphene Brand Badge
+   -------------------------------------------------------- */
+.graphene-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 1.25rem;
+  background: linear-gradient(135deg, rgba(17, 60, 85, 0.8) 0%, rgba(26, 26, 46, 0.9) 100%);
+  border: 1px solid var(--graphene-border);
+  border-radius: 9999px;
+  margin-bottom: 1.5rem;
+}
+
+[data-theme="light"] .graphene-badge,
+.light .graphene-badge {
+  background: linear-gradient(135deg, rgba(26, 115, 232, 0.1) 0%, rgba(17, 60, 85, 0.15) 100%);
+  border-color: rgba(26, 115, 232, 0.3);
+}
+
+.graphene-badge__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--graphene-gold);
+}
+
+.graphene-badge__text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--graphene-text);
+}
+
+[data-theme="light"] .graphene-badge__text,
+.light .graphene-badge__text {
+  color: var(--graphene-secondary);
+}
+
+/* Graphene Badge Pulse Animation */
+.graphene-badge__pulse {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--graphene-gold);
+  border-radius: 50%;
+  animation: badge-pulse 2s ease-in-out infinite;
+}
+
+@keyframes badge-pulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.6);
+  }
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 0 8px rgba(212, 175, 55, 0);
+  }
+}
+
+/* --------------------------------------------------------
+   Hero Subheadline - Improved Contrast
+   -------------------------------------------------------- */
+.hero-subheadline {
+  color: var(--graphene-text);
+  opacity: 0.95;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="light"] .hero-subheadline,
+.light .hero-subheadline {
+  color: var(--graphene-text-light);
+  opacity: 0.9;
+  text-shadow: none;
+}
+
+/* --------------------------------------------------------
+   Graphene CTA Buttons - Large Variant
+   -------------------------------------------------------- */
+.btn-graphene-lg {
+  padding: 1.125rem 2.75rem;
+  font-size: 1.125rem;
+  min-height: 3.5rem;
+}
+
+/* Improved primary button */
+.btn-graphene-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, var(--graphene-primary) 0%, #1557b0 100%);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(26, 115, 232, 0.3);
+}
+
+.btn-graphene-primary:hover {
+  background: linear-gradient(135deg, #1557b0 0%, #0d47a1 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 24px rgba(26, 115, 232, 0.4);
+}
+
+.btn-graphene-primary:focus-visible {
+  outline: 2px solid var(--graphene-gold);
+  outline-offset: 3px;
+}
+
+.btn-graphene-primary:active {
+  transform: translateY(-1px);
+}
+
+/* Improved secondary button */
+.btn-graphene-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 1rem 2rem;
+  background: rgba(212, 175, 55, 0.1);
+  color: var(--graphene-gold);
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  border: 2px solid var(--graphene-gold);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-graphene-secondary:hover {
+  background: var(--graphene-gold);
+  color: var(--graphene-bg-dark);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 24px rgba(212, 175, 55, 0.3);
+}
+
+.btn-graphene-secondary:focus-visible {
+  outline: 2px solid var(--graphene-primary);
+  outline-offset: 3px;
+}
+
+[data-theme="light"] .btn-graphene-secondary:hover,
+.light .btn-graphene-secondary:hover {
+  color: #1a1a2e;
+}
+
+/* --------------------------------------------------------
+   Graphene Stats - Improved Layout
+   -------------------------------------------------------- */
+.graphene-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.graphene-stats__divider {
+  width: 1px;
+  height: 3rem;
+  background: linear-gradient(180deg, transparent 0%, rgba(212, 175, 55, 0.3) 50%, transparent 100%);
+}
+
+.graphene-stats__item {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+.graphene-stats__icon {
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 0.75rem;
+  color: var(--graphene-gold);
+  transition: all 0.3s ease;
+}
+
+.graphene-stats__icon svg {
+  width: 1.375rem;
+  height: 1.375rem;
+}
+
+.graphene-stats__icon--shield { background: rgba(34, 197, 94, 0.1); color: var(--severity-success); border-color: rgba(34, 197, 94, 0.2); }
+.graphene-stats__icon--uptime { background: rgba(59, 130, 246, 0.1); color: var(--severity-info); border-color: rgba(59, 130, 246, 0.2); }
+.graphene-stats__icon--response { background: rgba(245, 158, 11, 0.1); color: var(--severity-warning); border-color: rgba(245, 158, 11, 0.2); }
+
+.graphene-stats__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.graphene-stats__value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--bbx-text-primary);
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.graphene-stats__label {
+  font-size: 0.75rem;
+  color: var(--bbx-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.075em;
+}
+
+[data-theme="light"] .graphene-stats__value,
+.light .graphene-stats__value {
+  color: var(--graphene-text-light);
+}
+
+/* Mobile responsive stats */
+@media (max-width: 640px) {
+  .graphene-stats {
+    flex-direction: column;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+
+  .graphene-stats__divider {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------
+   Live Feed 2.0 - Enhanced Design
+   -------------------------------------------------------- */
+.live-feed-2 {
+  position: relative;
+  background: linear-gradient(135deg, rgba(10, 18, 23, 0.95) 0%, rgba(17, 60, 85, 0.9) 100%);
+  border: 1px solid var(--graphene-border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="light"] .live-feed-2,
+.light .live-feed-2 {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(237, 242, 247, 0.9) 100%);
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.live-feed-2__badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, var(--graphene-accent) 0%, #c0392b 100%);
+  color: white;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 0 0 0.75rem 0;
+}
+
+.live-feed-2__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1.25rem;
+  padding-top: 1.75rem;
+}
+
+.live-feed-2__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--bbx-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.live-feed-2__subtitle {
+  font-size: 0.75rem;
+  color: var(--bbx-text-muted);
+}
+
+[data-theme="light"] .live-feed-2__title,
+.light .live-feed-2__title {
+  color: var(--graphene-text-light);
+}
+
+.live-feed-2__items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.live-feed-2__item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 0.75rem;
+  border-left: 4px solid var(--graphene-border);
+  transition: all 0.2s ease;
+  animation: feed-slide-in 0.4s ease-out;
+}
+
+[data-theme="light"] .live-feed-2__item,
+.light .live-feed-2__item {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.live-feed-2__item:hover {
+  background: rgba(0, 0, 0, 0.35);
+  transform: translateX(4px);
+}
+
+[data-theme="light"] .live-feed-2__item:hover,
+.light .live-feed-2__item:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* Severity colors */
+.live-feed-2__item--critical { border-left-color: var(--severity-critical); }
+.live-feed-2__item--warning { border-left-color: var(--severity-warning); }
+.live-feed-2__item--info { border-left-color: var(--severity-info); }
+
+/* Severity section */
+.live-feed-2__severity {
+  display: flex;
+  align-items: flex-start;
+}
+
+/* Enhanced severity tags */
+.severity-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 0.375rem;
+  white-space: nowrap;
+}
+
+.severity-tag__icon {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.severity-tag--critical {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--severity-critical);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.severity-tag--warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--severity-warning);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.severity-tag--info {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--severity-info);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.live-feed-2__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.live-feed-2__event {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--bbx-text-primary);
+  margin-bottom: 0.375rem;
+  line-height: 1.3;
+}
+
+[data-theme="light"] .live-feed-2__event,
+.light .live-feed-2__event {
+  color: var(--graphene-text-light);
+}
+
+.live-feed-2__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.6875rem;
+  color: var(--bbx-text-muted);
+}
+
+.live-feed-2__status {
+  font-weight: 600;
+}
+
+.live-feed-2__status--resolved {
+  color: var(--severity-success);
+}
+
+.live-feed-2__status--pending {
+  color: var(--severity-warning);
+}
+
+.live-feed-2__location,
+.live-feed-2__ip,
+.live-feed-2__ports,
+.live-feed-2__pattern {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.live-feed-2__time {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--bbx-text-muted);
+  white-space: nowrap;
+  padding: 0.25rem 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.375rem;
+}
+
+[data-theme="light"] .live-feed-2__time,
+.light .live-feed-2__time {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Live Feed Footer */
+.live-feed-2__footer {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="light"] .live-feed-2__footer,
+.light .live-feed-2__footer {
+  border-top-color: rgba(0, 0, 0, 0.1);
+}
+
+.live-feed-2__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--graphene-gold);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.live-feed-2__link:hover {
+  color: var(--bbx-gold-light);
+  gap: 0.75rem;
+}
+
+/* Feed slide animation */
+@keyframes feed-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* --------------------------------------------------------
+   Footer Improvements - Better Contrast & Layout
+   -------------------------------------------------------- */
+footer {
+  background: linear-gradient(180deg, rgba(10, 18, 23, 0.8) 0%, rgba(0, 0, 0, 0.95) 100%);
+}
+
+footer h4 {
+  color: var(--bbx-text-primary) !important;
+}
+
+footer p,
+footer li,
+footer span,
+footer a:not(:hover) {
+  color: var(--bbx-text-secondary);
+}
+
+footer a {
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+footer a:hover {
+  color: var(--graphene-gold);
+}
+
+/* Footer social icons improved hover */
+footer .group:hover {
+  transform: scale(1.1) translateY(-2px);
+}
+
+/* --------------------------------------------------------
+   CTA Section - Light Gradient Background
+   -------------------------------------------------------- */
+.cta-section-gradient {
+  background: linear-gradient(135deg,
+    rgba(17, 60, 85, 0.4) 0%,
+    rgba(26, 115, 232, 0.2) 50%,
+    rgba(17, 60, 85, 0.4) 100%
+  );
+  border-top: 1px solid rgba(26, 115, 232, 0.2);
+  border-bottom: 1px solid rgba(26, 115, 232, 0.2);
+}
+
+[data-theme="light"] .cta-section-gradient,
+.light .cta-section-gradient {
+  background: linear-gradient(135deg,
+    rgba(26, 115, 232, 0.1) 0%,
+    rgba(212, 175, 55, 0.08) 50%,
+    rgba(26, 115, 232, 0.1) 100%
+  );
+}
+
+/* --------------------------------------------------------
+   Assessment Form - Accessible Labels
+   -------------------------------------------------------- */
+#quick-assessment-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--bbx-text-secondary);
+}
+
+#quick-assessment-form textarea,
+#quick-assessment-form input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  color: var(--bbx-text-primary);
+  font-size: 0.9375rem;
+  transition: all 0.2s ease;
+}
+
+#quick-assessment-form textarea:focus,
+#quick-assessment-form input:focus {
+  outline: none;
+  border-color: var(--graphene-gold);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+}
+
+[data-theme="light"] #quick-assessment-form textarea,
+[data-theme="light"] #quick-assessment-form input,
+.light #quick-assessment-form textarea,
+.light #quick-assessment-form input {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--graphene-text-light);
+}
+
+/* --------------------------------------------------------
+   Navigation Active States
+   -------------------------------------------------------- */
+.nav-link--active {
+  color: var(--graphene-gold) !important;
+  position: relative;
+}
+
+.nav-link--active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--graphene-gold);
+  border-radius: 1px;
+}
+
+/* Mobile nav active state */
+@media (max-width: 1023px) {
+  .nav-link--active::after {
+    display: none;
+  }
+
+  .nav-link--active {
+    background: rgba(212, 175, 55, 0.1);
+    border-left: 3px solid var(--graphene-gold);
+    padding-left: calc(1rem - 3px);
+  }
 }

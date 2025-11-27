@@ -1,7 +1,7 @@
 # LEVERANCE 7 – Funktionalitetsudvidelse
 
-**Dato:** 9. januar 2025  
-**Sprint:** 7 – Feature Expansion  
+**Dato:** 9. januar 2025
+**Sprint:** 7 – Feature Expansion
 **Status:** ✅ Gennemført
 
 ---

@@ -153,7 +153,7 @@ $recaptchaSiteKey = defined('BBX_RECAPTCHA_SITE_KEY') ? BBX_RECAPTCHA_SITE_KEY :
           <span class="request-modal__btn-text">Send anmodning</span>
           <span class="request-modal__btn-loading" aria-hidden="true">
             <svg class="request-modal__spinner" viewBox="0 0 24 24" width="18" height="18">
-              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="31.4" stroke-linecap="round"/>
+              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="31.4" stroke-linecap="round" />
             </svg>
             Sender...
           </span>
@@ -174,168 +174,170 @@ $recaptchaSiteKey = defined('BBX_RECAPTCHA_SITE_KEY') ? BBX_RECAPTCHA_SITE_KEY :
 </div>
 
 <?php if ($recaptchaSiteKey): ?>
-<script src="https://www.google.com/recaptcha/api.js?render=<?php echo htmlspecialchars($recaptchaSiteKey); ?>"></script>
+  <script src="https://www.google.com/recaptcha/api.js?render=<?php echo htmlspecialchars($recaptchaSiteKey); ?>"></script>
 <?php endif; ?>
 
 <script>
-(function() {
-  'use strict';
+  (function() {
+    'use strict';
 
-  const RECAPTCHA_SITE_KEY = '<?php echo htmlspecialchars($recaptchaSiteKey); ?>';
+    const RECAPTCHA_SITE_KEY = '<?php echo htmlspecialchars($recaptchaSiteKey); ?>';
 
-  // DOM Elements
-  const overlay = document.getElementById('requestAccessOverlay');
-  const dialog = document.getElementById('requestAccessDialog');
-  const form = document.getElementById('requestAccessForm');
-  const initBtn = document.getElementById('requestAccessInit');
-  const closeBtn = document.getElementById('requestAccessClose');
-  const cancelBtn = document.getElementById('requestAccessCancel');
-  const submitBtn = document.getElementById('requestAccessSubmit');
-  const statusEl = document.getElementById('requestAccessStatus');
-  const tokenField = document.getElementById('requestRecaptchaToken');
+    // DOM Elements
+    const overlay = document.getElementById('requestAccessOverlay');
+    const dialog = document.getElementById('requestAccessDialog');
+    const form = document.getElementById('requestAccessForm');
+    const initBtn = document.getElementById('requestAccessInit');
+    const closeBtn = document.getElementById('requestAccessClose');
+    const cancelBtn = document.getElementById('requestAccessCancel');
+    const submitBtn = document.getElementById('requestAccessSubmit');
+    const statusEl = document.getElementById('requestAccessStatus');
+    const tokenField = document.getElementById('requestRecaptchaToken');
 
-  if (!overlay || !dialog || !form) return;
+    if (!overlay || !dialog || !form) return;
 
-  // Track focusable elements for trap
-  let focusableElements = [];
-  let firstFocusable = null;
-  let lastFocusable = null;
+    // Track focusable elements for trap
+    let focusableElements = [];
+    let firstFocusable = null;
+    let lastFocusable = null;
 
-  function updateFocusableElements() {
-    focusableElements = dialog.querySelectorAll(
-      'button:not([disabled]), input:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-    );
-    firstFocusable = focusableElements[0];
-    lastFocusable = focusableElements[focusableElements.length - 1];
-  }
-
-  function openModal() {
-    overlay.classList.add('is-open');
-    dialog.classList.add('is-open');
-    document.body.style.overflow = 'hidden';
-    updateFocusableElements();
-
-    // Focus first input
-    const firstInput = form.querySelector('input:not([type="hidden"]):not([tabindex="-1"])');
-    if (firstInput) {
-      setTimeout(() => firstInput.focus(), 100);
+    function updateFocusableElements() {
+      focusableElements = dialog.querySelectorAll(
+        'button:not([disabled]), input:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      firstFocusable = focusableElements[0];
+      lastFocusable = focusableElements[focusableElements.length - 1];
     }
-  }
 
-  function closeModal() {
-    overlay.classList.remove('is-open');
-    dialog.classList.remove('is-open');
-    document.body.style.overflow = '';
-    form.reset();
-    statusEl.textContent = '';
-    statusEl.className = 'request-modal__status';
-    submitBtn.disabled = false;
-    submitBtn.classList.remove('is-loading');
+    function openModal() {
+      overlay.classList.add('is-open');
+      dialog.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      updateFocusableElements();
 
-    // Return focus to trigger button
-    initBtn.focus();
-  }
-
-  function trapFocus(e) {
-    if (e.key !== 'Tab') return;
-
-    if (e.shiftKey) {
-      if (document.activeElement === firstFocusable) {
-        e.preventDefault();
-        lastFocusable.focus();
-      }
-    } else {
-      if (document.activeElement === lastFocusable) {
-        e.preventDefault();
-        firstFocusable.focus();
+      // Focus first input
+      const firstInput = form.querySelector('input:not([type="hidden"]):not([tabindex="-1"])');
+      if (firstInput) {
+        setTimeout(() => firstInput.focus(), 100);
       }
     }
-  }
 
-  async function getRecaptchaToken() {
-    if (!RECAPTCHA_SITE_KEY || typeof grecaptcha === 'undefined') {
-      return '';
+    function closeModal() {
+      overlay.classList.remove('is-open');
+      dialog.classList.remove('is-open');
+      document.body.style.overflow = '';
+      form.reset();
+      statusEl.textContent = '';
+      statusEl.className = 'request-modal__status';
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('is-loading');
+
+      // Return focus to trigger button
+      initBtn.focus();
     }
 
-    try {
-      return await grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'request_access' });
-    } catch (err) {
-      console.error('reCAPTCHA error:', err);
-      return '';
-    }
-  }
+    function trapFocus(e) {
+      if (e.key !== 'Tab') return;
 
-  function showStatus(message, type = 'info') {
-    statusEl.textContent = message;
-    statusEl.className = 'request-modal__status request-modal__status--' + type;
-  }
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-
-    // Disable submit and show loading state
-    submitBtn.disabled = true;
-    submitBtn.classList.add('is-loading');
-    showStatus('Sender din anmodning...', 'info');
-
-    // Get reCAPTCHA token
-    const token = await getRecaptchaToken();
-    tokenField.value = token;
-
-    // Collect form data
-    const formData = new FormData(form);
-
-    try {
-      const response = await fetch('/api/request-access.php', {
-        method: 'POST',
-        body: formData
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        showStatus(result.message, 'success');
-
-        // Close modal after delay
-        setTimeout(() => {
-          closeModal();
-        }, 3000);
+      if (e.shiftKey) {
+        if (document.activeElement === firstFocusable) {
+          e.preventDefault();
+          lastFocusable.focus();
+        }
       } else {
-        showStatus(result.message || 'Der opstod en fejl. Prøv igen.', 'error');
+        if (document.activeElement === lastFocusable) {
+          e.preventDefault();
+          firstFocusable.focus();
+        }
+      }
+    }
+
+    async function getRecaptchaToken() {
+      if (!RECAPTCHA_SITE_KEY || typeof grecaptcha === 'undefined') {
+        return '';
+      }
+
+      try {
+        return await grecaptcha.execute(RECAPTCHA_SITE_KEY, {
+          action: 'request_access'
+        });
+      } catch (err) {
+        console.error('reCAPTCHA error:', err);
+        return '';
+      }
+    }
+
+    function showStatus(message, type = 'info') {
+      statusEl.textContent = message;
+      statusEl.className = 'request-modal__status request-modal__status--' + type;
+    }
+
+    async function handleSubmit(e) {
+      e.preventDefault();
+
+      // Disable submit and show loading state
+      submitBtn.disabled = true;
+      submitBtn.classList.add('is-loading');
+      showStatus('Sender din anmodning...', 'info');
+
+      // Get reCAPTCHA token
+      const token = await getRecaptchaToken();
+      tokenField.value = token;
+
+      // Collect form data
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch('/api/request-access.php', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          showStatus(result.message, 'success');
+
+          // Close modal after delay
+          setTimeout(() => {
+            closeModal();
+          }, 3000);
+        } else {
+          showStatus(result.message || 'Der opstod en fejl. Prøv igen.', 'error');
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('is-loading');
+        }
+      } catch (err) {
+        console.error('Submit error:', err);
+        showStatus('Netværksfejl. Kontrollér din forbindelse og prøv igen.', 'error');
         submitBtn.disabled = false;
         submitBtn.classList.remove('is-loading');
       }
-    } catch (err) {
-      console.error('Submit error:', err);
-      showStatus('Netværksfejl. Kontrollér din forbindelse og prøv igen.', 'error');
-      submitBtn.disabled = false;
-      submitBtn.classList.remove('is-loading');
     }
-  }
 
-  // Event listeners
-  initBtn.addEventListener('click', openModal);
-  closeBtn.addEventListener('click', closeModal);
-  cancelBtn.addEventListener('click', closeModal);
-  form.addEventListener('submit', handleSubmit);
+    // Event listeners
+    initBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    form.addEventListener('submit', handleSubmit);
 
-  // Close on overlay click
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) {
-      closeModal();
-    }
-  });
+    // Close on overlay click
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        closeModal();
+      }
+    });
 
-  // Keyboard handling
-  document.addEventListener('keydown', (e) => {
-    if (!overlay.classList.contains('is-open')) return;
+    // Keyboard handling
+    document.addEventListener('keydown', (e) => {
+      if (!overlay.classList.contains('is-open')) return;
 
-    if (e.key === 'Escape') {
-      closeModal();
-    } else {
-      trapFocus(e);
-    }
-  });
+      if (e.key === 'Escape') {
+        closeModal();
+      } else {
+        trapFocus(e);
+      }
+    });
 
-})();
+  })();
 </script>

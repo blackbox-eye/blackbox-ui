@@ -601,7 +601,104 @@ include __DIR__ . '/includes/admin-layout.php';
         text-align: right;
         margin-top: var(--admin-spacing-sm);
     }
+
+    /* Global loading indicator for polling */
+    .dashboard__polling-indicator {
+        position: fixed;
+        top: var(--admin-spacing-md);
+        right: var(--admin-spacing-md);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: var(--admin-bg-secondary);
+        border: 1px solid var(--admin-border-gold);
+        border-radius: var(--admin-border-radius);
+        font-size: 0.7rem;
+        color: var(--admin-text-gold);
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        z-index: 100;
+        pointer-events: none;
+    }
+
+    .dashboard__polling-indicator.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Screen reader only - for live regions */
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    /* Mobile: Collapsible secondary sections */
+    .dashboard__section-toggle {
+        display: none;
+        width: 100%;
+        padding: var(--admin-spacing-sm) var(--admin-spacing-md);
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid var(--admin-border-subtle);
+        border-radius: var(--admin-border-radius);
+        color: var(--admin-text-secondary);
+        font-size: 0.75rem;
+        cursor: pointer;
+        margin-bottom: var(--admin-spacing-sm);
+        transition: background 0.2s, border-color 0.2s;
+    }
+
+    .dashboard__section-toggle:hover,
+    .dashboard__section-toggle:focus {
+        background: rgba(0, 0, 0, 0.3);
+        border-color: var(--admin-border-gold);
+        outline: none;
+    }
+
+    .dashboard__section-toggle svg {
+        width: 12px;
+        height: 12px;
+        margin-left: 0.5rem;
+        transition: transform 0.2s;
+    }
+
+    .dashboard__section-toggle[aria-expanded="true"] svg {
+        transform: rotate(180deg);
+    }
+
+    @media (max-width: 767px) {
+        .dashboard__section-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .dashboard__card--secondary {
+            display: none;
+        }
+
+        .dashboard__card--secondary.is-expanded {
+            display: block;
+        }
+    }
 </style>
+
+<!-- Polling Indicator -->
+<div class="dashboard__polling-indicator" id="pollingIndicator" aria-hidden="true">
+    <span class="dashboard__loading"></span>
+    <span>Opdaterer data...</span>
+</div>
+
+<!-- ARIA Live Region for screen readers -->
+<div id="dashboardLiveRegion" class="sr-only" aria-live="polite" aria-atomic="false"></div>
 
 <!-- Dashboard Content -->
 <div class="dashboard admin-page">
@@ -679,6 +776,18 @@ include __DIR__ . '/includes/admin-layout.php';
         </div>
     </div>
 
+    <!-- Mobile Section Toggles -->
+    <button type="button"
+        class="dashboard__section-toggle"
+        id="toggleSecondaryCards"
+        aria-expanded="false"
+        aria-controls="secondaryCardsSection">
+        <span>Vis netværk & AI interface</span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"/>
+        </svg>
+    </button>
+
     <!-- Card Grid -->
     <div class="dashboard__grid">
 
@@ -727,7 +836,7 @@ include __DIR__ . '/includes/admin-layout.php';
         </div>
 
         <!-- Network Monitoring Card -->
-        <div class="dashboard__card dashboard__card--network">
+        <div class="dashboard__card dashboard__card--network dashboard__card--secondary" id="secondaryCardsSection">
             <header class="dashboard__card-header">
                 <h2 class="dashboard__card-title">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -766,7 +875,7 @@ include __DIR__ . '/includes/admin-layout.php';
         </div>
 
         <!-- AI Command Interface Card -->
-        <div class="dashboard__card dashboard__card--ai">
+        <div class="dashboard__card dashboard__card--ai dashboard__card--secondary">
             <header class="dashboard__card-header">
                 <h2 class="dashboard__card-title">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -783,17 +892,20 @@ include __DIR__ . '/includes/admin-layout.php';
                 Stil et spørgsmål eller giv en kommando til GREY-E AI assistenten.
             </p>
             <form id="aiCommandForm">
+                <label for="aiCommandInput" class="sr-only">Indtast AI kommando</label>
                 <textarea
                     id="aiCommandInput"
                     class="dashboard__ai-input"
                     placeholder="> Analysér trafik fra IP 192.168.1.100..."
+                    aria-describedby="aiCommandHint"
                     rows="3"></textarea>
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--admin-spacing-sm);">
-                    <p class="dashboard__ai-hint">
+                    <p class="dashboard__ai-hint" id="aiCommandHint">
                         Tryk <kbd>Ctrl+Enter</kbd> for at sende kommando
                     </p>
-                    <button type="submit" class="dashboard__card-badge dashboard__card-badge--success" style="cursor: pointer; border: none; padding: 0.4rem 1rem;">
-                        Send Kommando
+                    <button type="submit" id="aiSubmitBtn" class="dashboard__card-badge dashboard__card-badge--success" style="cursor: pointer; border: none; padding: 0.4rem 1rem;" aria-label="Send kommando til AI">
+                        <span class="ai-submit-text">Send Kommando</span>
+                        <span class="ai-submit-spinner dashboard__loading" style="display: none;" aria-hidden="true"></span>
                     </button>
                 </div>
             </form>
@@ -826,24 +938,67 @@ include __DIR__ . '/includes/admin-layout.php';
         // ===== Dashboard API Integration =====
         const API_BASE = 'api/';
         const REFRESH_INTERVAL = 30000; // 30 seconds
-        
+        const AI_TIMEOUT = 15000; // 15 seconds for AI commands
+
         let serverLoadChart = null;
-        
+        const pollingIndicator = document.getElementById('pollingIndicator');
+        const liveRegion = document.getElementById('dashboardLiveRegion');
+
+        // ===== ARIA Live Region Announcer =====
+        function announceToScreenReader(message) {
+            if (liveRegion) {
+                liveRegion.textContent = message;
+                // Clear after announcement
+                setTimeout(() => { liveRegion.textContent = ''; }, 1000);
+            }
+        }
+
+        // ===== Polling Indicator =====
+        function showPollingIndicator() {
+            if (pollingIndicator) {
+                pollingIndicator.classList.add('is-visible');
+                pollingIndicator.setAttribute('aria-hidden', 'false');
+            }
+        }
+
+        function hidePollingIndicator() {
+            if (pollingIndicator) {
+                pollingIndicator.classList.remove('is-visible');
+                pollingIndicator.setAttribute('aria-hidden', 'true');
+            }
+        }
+
+        // ===== Mobile Section Toggle =====
+        const toggleBtn = document.getElementById('toggleSecondaryCards');
+        const secondaryCards = document.querySelectorAll('.dashboard__card--secondary');
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+                toggleBtn.setAttribute('aria-expanded', !isExpanded);
+                toggleBtn.querySelector('span').textContent = isExpanded ? 'Vis netværk & AI interface' : 'Skjul netværk & AI interface';
+                secondaryCards.forEach(card => {
+                    card.classList.toggle('is-expanded', !isExpanded);
+                });
+            });
+        }
+
         // Format time ago helper
         function timeAgo(timestamp) {
             const now = new Date();
             const date = new Date(timestamp);
             const diff = Math.floor((now - date) / 1000);
-            
+
             if (diff < 60) return `${diff} sek. siden`;
             if (diff < 3600) return `${Math.floor(diff / 60)} min. siden`;
             if (diff < 86400) return `${Math.floor(diff / 3600)} timer siden`;
             return `${Math.floor(diff / 86400)} dage siden`;
         }
-        
+
         // Fetch with error handling
-        async function apiFetch(endpoint) {
+        async function apiFetch(endpoint, showIndicator = false) {
             try {
+                if (showIndicator) showPollingIndicator();
                 const response = await fetch(API_BASE + endpoint, {
                     credentials: 'same-origin'
                 });
@@ -852,36 +1007,43 @@ include __DIR__ . '/includes/admin-layout.php';
             } catch (error) {
                 console.error(`API Error (${endpoint}):`, error);
                 return null;
+            } finally {
+                if (showIndicator) hidePollingIndicator();
             }
         }
-        
+
         // ===== Load Dashboard Stats =====
-        async function loadDashboardStats() {
-            const data = await apiFetch('dashboard-stats.php');
+        async function loadDashboardStats(isRefresh = false) {
+            const data = await apiFetch('dashboard-stats.php', isRefresh);
             if (data && data.success) {
                 const stats = data.data;
                 document.getElementById('statAlerts').textContent = stats.alerts_count ?? '0';
                 document.getElementById('statThreats').textContent = stats.threats_today ?? '0';
                 document.getElementById('statUptime').textContent = `${stats.uptime_percent ?? 99.9}%`;
                 document.getElementById('statRequests').textContent = (stats.api_requests ?? 0).toLocaleString('da-DK');
-                
+
                 // Update threat hero
                 updateThreatHero(stats);
+
+                // Announce update to screen readers
+                if (isRefresh) {
+                    announceToScreenReader(`Dashboard opdateret. ${stats.alerts_count ?? 0} aktive alarmer, ${stats.threats_today ?? 0} trusler i dag.`);
+                }
             }
         }
-        
+
         // ===== Update Threat Hero Card =====
         function updateThreatHero(stats) {
             const criticalCount = stats.critical_count ?? 0;
             const warningCount = stats.warning_count ?? 0;
             const blockedCount = stats.blocked_count ?? 0;
             const lastThreat = stats.last_threat_time ?? null;
-            
+
             // Calculate threat score (0-100)
             let score = Math.min(100, criticalCount * 25 + warningCount * 5);
             let statusClass = 'low';
             let statusText = 'Normalt';
-            
+
             if (score >= 75) {
                 statusClass = 'critical';
                 statusText = 'Kritisk';
@@ -889,30 +1051,30 @@ include __DIR__ . '/includes/admin-layout.php';
                 statusClass = 'elevated';
                 statusText = 'Forhøjet';
             }
-            
+
             document.getElementById('threatScore').textContent = score;
             document.getElementById('criticalCount').textContent = criticalCount;
             document.getElementById('warningCount').textContent = warningCount;
             document.getElementById('blockedCount').textContent = blockedCount;
             document.getElementById('lastThreatTime').textContent = lastThreat ? timeAgo(lastThreat) : 'Ingen nylige';
-            
+
             const statusEl = document.getElementById('threatStatus');
             statusEl.className = `dashboard__threat-score-status dashboard__threat-score-status--${statusClass}`;
             statusEl.textContent = statusText;
         }
-        
+
         // ===== Load Alerts =====
         async function loadAlerts() {
             const data = await apiFetch('alerts.php?limit=5');
             const container = document.getElementById('alertsContainer');
             const badge = document.getElementById('alertsBadge');
-            
+
             if (!container) return;
-            
+
             if (data && data.success && data.data.length > 0) {
                 const alerts = data.data;
                 badge.innerHTML = `${alerts.length} aktive`;
-                
+
                 container.innerHTML = alerts.map(alert => `
                     <div class="dashboard__alert ${alert.severity === 'critical' ? 'dashboard__alert--critical' : ''}">
                         <h3 class="dashboard__alert-title">${escapeHtml(alert.title)}</h3>
@@ -942,21 +1104,21 @@ include __DIR__ . '/includes/admin-layout.php';
                 `;
             }
         }
-        
+
         // ===== Load System Status =====
         async function loadSystemStatus() {
             const data = await apiFetch('system-status.php');
             const container = document.getElementById('systemStatusList');
             const badge = document.getElementById('systemHealthBadge');
-            
+
             if (!container) return;
-            
+
             if (data && data.success && data.data.services) {
                 const services = data.data.services;
                 const allOperational = services.every(s => s.status === 'operational');
                 const hasWarnings = services.some(s => s.status === 'warning');
                 const hasDegraded = services.some(s => s.status === 'degraded' || s.status === 'offline');
-                
+
                 if (allOperational) {
                     badge.innerHTML = 'Alle OK';
                     badge.className = 'dashboard__card-badge dashboard__card-badge--success';
@@ -967,22 +1129,22 @@ include __DIR__ . '/includes/admin-layout.php';
                     badge.innerHTML = 'Advarsler';
                     badge.className = 'dashboard__card-badge dashboard__card-badge--warning';
                 }
-                
+
                 container.innerHTML = services.map(service => {
                     const statusClass = {
                         'operational': 'ok',
                         'warning': 'warning',
                         'degraded': 'warning',
                         'offline': 'error'
-                    }[service.status] || 'ok';
-                    
+                    } [service.status] || 'ok';
+
                     const statusText = {
                         'operational': 'Operationel',
                         'warning': 'Advarsel',
                         'degraded': 'Degraderet',
                         'offline': 'Offline'
-                    }[service.status] || service.status;
-                    
+                    } [service.status] || service.status;
+
                     return `
                         <li class="dashboard__status-item dashboard__status-item--${statusClass}">
                             <span class="dashboard__status-indicator"></span>
@@ -1001,18 +1163,18 @@ include __DIR__ . '/includes/admin-layout.php';
                 `;
             }
         }
-        
+
         // ===== Load Network Stats =====
         async function loadNetworkStats() {
             const data = await apiFetch('network-stats.php');
             const container = document.getElementById('networkContainer');
             const lastUpdated = document.getElementById('networkLastUpdated');
-            
+
             if (!container) return;
-            
+
             if (data && data.success && data.data.ports) {
                 const ports = data.data.ports;
-                
+
                 container.innerHTML = `
                     <div class="dashboard__network-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--admin-spacing-sm);">
                         ${ports.map(port => `
@@ -1024,7 +1186,7 @@ include __DIR__ . '/includes/admin-layout.php';
                         `).join('')}
                     </div>
                 `;
-                
+
                 if (lastUpdated) {
                     lastUpdated.textContent = `Sidst opdateret: ${new Date().toLocaleTimeString('da-DK')}`;
                 }
@@ -1036,17 +1198,17 @@ include __DIR__ . '/includes/admin-layout.php';
                 `;
             }
         }
-        
+
         // ===== Load AI Command History =====
         async function loadAICommandHistory() {
             const data = await apiFetch('ai-command.php?limit=5');
             const container = document.getElementById('aiCommandLog');
-            
+
             if (!container) return;
-            
+
             if (data && data.success && data.data.length > 0) {
                 const commands = data.data;
-                
+
                 container.innerHTML = commands.map(cmd => `
                     <div class="dashboard__ai-log-item">
                         <span class="dashboard__ai-log-time">${timeAgo(cmd.timestamp)}</span>
@@ -1064,43 +1226,81 @@ include __DIR__ . '/includes/admin-layout.php';
                 `;
             }
         }
-        
+
         // ===== Submit AI Command =====
         async function submitAICommand(command) {
             const responseArea = document.getElementById('aiResponseArea');
             const responseText = document.getElementById('aiResponseText');
-            
+            const submitBtn = document.getElementById('aiSubmitBtn');
+            const submitText = submitBtn?.querySelector('.ai-submit-text');
+            const submitSpinner = submitBtn?.querySelector('.ai-submit-spinner');
+
+            // Show spinner
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                if (submitText) submitText.style.display = 'none';
+                if (submitSpinner) submitSpinner.style.display = 'inline-block';
+            }
+
             responseArea.style.display = 'block';
             responseText.innerHTML = '<span class="dashboard__loading"></span> Behandler kommando...';
-            
+            responseText.setAttribute('aria-busy', 'true');
+
+            // Create AbortController for timeout
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), AI_TIMEOUT);
+
             try {
                 const response = await fetch(API_BASE + 'ai-command.php', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     credentials: 'same-origin',
-                    body: JSON.stringify({ command })
+                    signal: controller.signal,
+                    body: JSON.stringify({
+                        command
+                    })
                 });
-                
+
+                clearTimeout(timeoutId);
                 const data = await response.json();
-                
+
                 if (data.success) {
                     responseText.textContent = data.data.response || 'Kommando modtaget og behandles.';
+                    announceToScreenReader('AI kommando udført succesfuldt');
                     loadAICommandHistory(); // Refresh history
                 } else {
-                    responseText.innerHTML = `<span style="color: var(--dash-critical);">Fejl: ${escapeHtml(data.error || 'Ukendt fejl')}</span>`;
+                    responseText.innerHTML = `<span style="color: var(--dash-critical);" role="alert">Fejl: ${escapeHtml(data.error || 'Ukendt fejl')}</span>`;
+                    announceToScreenReader('AI kommando fejlede');
                 }
             } catch (error) {
-                responseText.innerHTML = `<span style="color: var(--dash-critical);">Netværksfejl: ${escapeHtml(error.message)}</span>`;
+                clearTimeout(timeoutId);
+                if (error.name === 'AbortError') {
+                    responseText.innerHTML = `<span style="color: var(--dash-critical);" role="alert">Timeout: Kommandoen tog for lang tid (max ${AI_TIMEOUT / 1000} sekunder). Prøv igen.</span>`;
+                    announceToScreenReader('AI kommando timeout');
+                } else {
+                    responseText.innerHTML = `<span style="color: var(--dash-critical);" role="alert">Netværksfejl: ${escapeHtml(error.message)}</span>`;
+                    announceToScreenReader('AI kommando netværksfejl');
+                }
+            } finally {
+                responseText.setAttribute('aria-busy', 'false');
+                // Reset button
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    if (submitText) submitText.style.display = 'inline';
+                    if (submitSpinner) submitSpinner.style.display = 'none';
+                }
             }
         }
-        
+
         // ===== Setup AI Command Form =====
         function setupAICommandForm() {
             const form = document.getElementById('aiCommandForm');
             const input = document.getElementById('aiCommandInput');
-            
+
             if (!form || !input) return;
-            
+
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const command = input.value.trim();
@@ -1109,7 +1309,7 @@ include __DIR__ . '/includes/admin-layout.php';
                     input.value = '';
                 }
             });
-            
+
             // Ctrl+Enter to submit
             input.addEventListener('keydown', (e) => {
                 if (e.ctrlKey && e.key === 'Enter') {
@@ -1118,16 +1318,18 @@ include __DIR__ . '/includes/admin-layout.php';
                 }
             });
         }
-        
+
         // ===== Server Load Chart =====
         function initServerLoadChart() {
             const ctx = document.getElementById('serverLoadChart');
             if (!ctx) return;
-            
+
             serverLoadChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: Array.from({ length: 12 }, (_, i) => `${60 - i * 5}m`),
+                    labels: Array.from({
+                        length: 12
+                    }, (_, i) => `${60 - i * 5}m`),
                     datasets: [{
                         label: 'CPU Belastning',
                         data: Array(12).fill(0),
@@ -1159,11 +1361,17 @@ include __DIR__ . '/includes/admin-layout.php';
                                 color: 'rgba(255,255,255,0.5)',
                                 callback: (v) => v + '%'
                             },
-                            grid: { color: 'rgba(255,255,255,0.08)' }
+                            grid: {
+                                color: 'rgba(255,255,255,0.08)'
+                            }
                         },
                         x: {
-                            ticks: { color: 'rgba(255,255,255,0.5)' },
-                            grid: { display: false }
+                            ticks: {
+                                color: 'rgba(255,255,255,0.5)'
+                            },
+                            grid: {
+                                display: false
+                            }
                         }
                     },
                     plugins: {
@@ -1179,34 +1387,34 @@ include __DIR__ . '/includes/admin-layout.php';
                     }
                 }
             });
-            
+
             // Simulate chart data updates
             updateChartData();
         }
-        
+
         function updateChartData() {
             if (!serverLoadChart) return;
-            
+
             // Simulate CPU and memory data (in real app, fetch from API)
             const cpuData = serverLoadChart.data.datasets[0].data;
             const memData = serverLoadChart.data.datasets[1].data;
-            
+
             cpuData.shift();
             cpuData.push(Math.floor(Math.random() * 40) + 20);
-            
+
             memData.shift();
             memData.push(Math.floor(Math.random() * 30) + 15);
-            
+
             serverLoadChart.update('none');
         }
-        
+
         // ===== Escape HTML Helper =====
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
-        
+
         // ===== Initialize Dashboard =====
         async function initDashboard() {
             // Load all data
@@ -1217,23 +1425,23 @@ include __DIR__ . '/includes/admin-layout.php';
                 loadNetworkStats(),
                 loadAICommandHistory()
             ]);
-            
+
             // Setup interactions
             setupAICommandForm();
             initServerLoadChart();
-            
-            // Setup auto-refresh
+
+            // Setup auto-refresh with polling indicator
             setInterval(() => {
-                loadDashboardStats();
+                loadDashboardStats(true);
                 loadAlerts();
                 loadSystemStatus();
                 loadNetworkStats();
             }, REFRESH_INTERVAL);
-            
+
             // Update chart more frequently
             setInterval(updateChartData, 5000);
         }
-        
+
         // Start dashboard
         initDashboard();
     });

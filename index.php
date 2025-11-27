@@ -11,7 +11,7 @@ include 'includes/site-header.php';
     <section id="home" class="graphene-hero-3d relative min-h-screen w-full flex items-center overflow-hidden">
         <!-- 3D Hexagon Network Canvas -->
         <canvas id="graphene-canvas" class="graphene-hero-3d__canvas" aria-hidden="true"></canvas>
-        
+
         <!-- Gradient Overlays for depth -->
         <div class="graphene-hero-3d__overlay" aria-hidden="true"></div>
         <div class="graphene-hero-3d__vignette" aria-hidden="true"></div>

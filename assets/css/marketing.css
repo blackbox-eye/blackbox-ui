@@ -4088,8 +4088,8 @@ button:focus-visible {
   border-radius: inherit;
   padding: 2px;
   background: linear-gradient(135deg, var(--graphene-3d-gold), transparent, var(--graphene-3d-gold));
-  -webkit-mask: 
-    linear-gradient(#fff 0 0) content-box, 
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;

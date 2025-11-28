@@ -6,21 +6,57 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.m
  */
 
 const canvas = document.getElementById('graphene-canvas');
+const fallback = document.querySelector('.graphene-hero-3d__fallback');
+
+const activateFallback = (reason) => {
+    console.warn('Graphene hero fallback triggered:', reason);
+    if (fallback) {
+        fallback.classList.add('is-active');
+    }
+    if (canvas) {
+        canvas.classList.remove('is-visible');
+    }
+};
+
+const hasWebGLSupport = (element) => {
+    try {
+        if (!window.WebGLRenderingContext) {
+            return false;
+        }
+        const gl = element.getContext('webgl') || element.getContext('experimental-webgl');
+        if (gl && typeof gl.getParameter === 'function') {
+            const loseContext = gl.getExtension('WEBGL_lose_context');
+            if (loseContext) {
+                loseContext.loseContext();
+            }
+            return true;
+        }
+    } catch (error) {
+        console.warn('WebGL capability check failed:', error);
+        return false;
+    }
+    return false;
+};
 
 if (!canvas) {
     console.warn('Graphene hero canvas element not found.');
+    activateFallback('canvas-missing');
 } else {
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let width = window.innerWidth;
-    let height = window.innerHeight;
+    if (!hasWebGLSupport(canvas)) {
+        activateFallback('webgl-unsupported');
+    } else {
+        try {
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            let width = window.innerWidth;
+            let height = window.innerHeight;
 
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.setSize(width, height);
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.05;
-    renderer.setClearColor(0x050608, 0);
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+            renderer.setSize(width, height);
+            renderer.outputColorSpace = THREE.SRGBColorSpace;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.05;
+            renderer.setClearColor(0x050608, 0);
 
     const scene = new THREE.Scene();
     scene.fog = new THREE.Fog(0x050608, 55, 220);
@@ -45,10 +81,10 @@ if (!canvas) {
     scene.add(new THREE.HemisphereLight(0x1a1f29, 0x040507, 0.55));
     scene.add(new THREE.AmbientLight(0x0c0f16, 0.35));
 
-    const latticeGroup = new THREE.Group();
-    scene.add(latticeGroup);
-    latticeGroup.rotation.x = -Math.PI / 2.85;
-    latticeGroup.position.y = -4;
+            const latticeGroup = new THREE.Group();
+            scene.add(latticeGroup);
+            latticeGroup.rotation.x = -Math.PI / 2.85;
+            latticeGroup.position.y = -4;
 
     const upAxis = new THREE.Vector3(0, 1, 0);
     const tempDir = new THREE.Vector3();
@@ -85,9 +121,9 @@ if (!canvas) {
     const nodes = [];
     const connections = [];
 
-    buildLattice();
-    createMeshes();
-    canvas.classList.add('is-visible');
+            buildLattice();
+            createMeshes();
+            canvas.classList.add('is-visible');
 
     const parallax = { targetY: 0, targetTilt: latticeGroup.rotation.x, currentY: 0, currentTilt: latticeGroup.rotation.x };
 
@@ -206,41 +242,51 @@ if (!canvas) {
         parallax.targetTilt = (-Math.PI / 2.85) + ratioY * 0.08;
     }
 
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('pointermove', onPointerMove);
+            window.addEventListener('resize', handleResize);
+            window.addEventListener('pointermove', onPointerMove);
 
-    let rafId;
-    function animate() {
-        const elapsed = performance.now() * 0.001;
+            canvas.addEventListener('webglcontextlost', (event) => {
+                event.preventDefault();
+                activateFallback('context-lost');
+            });
 
-        parallax.currentY += (parallax.targetY - parallax.currentY) * 0.05;
-        parallax.currentTilt += (parallax.targetTilt - parallax.currentTilt) * 0.05;
+            let rafId;
+            function animate() {
+                const elapsed = performance.now() * 0.001;
 
-        latticeGroup.rotation.y = parallax.currentY;
-        latticeGroup.rotation.x = parallax.currentTilt;
-        latticeGroup.position.y = -4 + Math.sin(elapsed * 0.25) * 1.2;
+                parallax.currentY += (parallax.targetY - parallax.currentY) * 0.05;
+                parallax.currentTilt += (parallax.targetTilt - parallax.currentTilt) * 0.05;
 
-        updateNodes(elapsed);
-        renderer.render(scene, camera);
+                latticeGroup.rotation.y = parallax.currentY;
+                latticeGroup.rotation.x = parallax.currentTilt;
+                latticeGroup.position.y = -4 + Math.sin(elapsed * 0.25) * 1.2;
 
-        if (!reduceMotion) {
-            rafId = requestAnimationFrame(animate);
+                updateNodes(elapsed);
+                renderer.render(scene, camera);
+
+                if (!reduceMotion) {
+                    rafId = requestAnimationFrame(animate);
+                }
+            }
+
+            if (reduceMotion) {
+                updateNodes(0);
+                renderer.render(scene, camera);
+            } else {
+                animate();
+            }
+
+            window.addEventListener('beforeunload', () => {
+                if (rafId) {
+                    cancelAnimationFrame(rafId);
+                }
+                renderer.dispose();
+                tubeGeometry.dispose();
+                jointGeometry.dispose();
+            });
+        } catch (error) {
+            console.error('Graphene hero initialization failed:', error);
+            activateFallback('init-error');
         }
     }
-
-    if (reduceMotion) {
-        updateNodes(0);
-        renderer.render(scene, camera);
-    } else {
-        animate();
-    }
-
-    window.addEventListener('beforeunload', () => {
-        if (rafId) {
-            cancelAnimationFrame(rafId);
-        }
-        renderer.dispose();
-        tubeGeometry.dispose();
-        jointGeometry.dispose();
-    });
 }

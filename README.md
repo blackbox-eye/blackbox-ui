@@ -1,26 +1,26 @@
 Her er en fuldt opdateret `README.md` til roden af dit repo. Erstat hele indholdet i din nuværende `README.md` med nedenstående, så alle nye `/docs/`-filer og rapporter linkes korrekt:
 
 ```markdown
-# ALPHA Interface GUI  
+# ALPHA Interface GUI
 > **BLACKBOX.CODES | Enterprise Edition v1.0**
 
 ---
 
 ## 📋 Om Projektet
 
-**ALPHA Interface GUI** er den officielle, responsive brugerflade for BLACKBOX.CODES-platformen (kodenavn: BLACKBOX E.Y.E).  
+**ALPHA Interface GUI** er den officielle, responsive brugerflade for BLACKBOX.CODES-platformen (kodenavn: BLACKBOX E.Y.E).
 Dette repo leverer frontend- og webkomponenter til enterprise cyber operations, OSINT, secure access og AI-drevet mission control.
 
 ---
 
 ## 🏗️ Features & Komponenter
 
-- **Responsivt dashboard** (PHP, HTML, CSS, JS)  
-- **Role-based login:** Agent/Admin, PIN/Password (klar til 2FA/Token-integration)  
-- **Modulbaseret navigation:** Dashboard, Missions, Intelligence, Logs, Tools  
-- **Realtime systemstatus & alerts**  
-- **Stealth log management** (eksport/slet, live-view)  
-- **Klar til CI/CD-pipeline & Vault-integration**  
+- **Responsivt dashboard** (PHP, HTML, CSS, JS)
+- **Role-based login:** Agent/Admin, PIN/Password (klar til 2FA/Token-integration)
+- **Modulbaseret navigation:** Dashboard, Missions, Intelligence, Logs, Tools
+- **Realtime systemstatus & alerts**
+- **Stealth log management** (eksport/slet, live-view)
+- **Klar til CI/CD-pipeline & Vault-integration**
 - **Kompatibel med Hak5 Cloud C2 & AI Codex workflows**
 
 ---
@@ -50,13 +50,13 @@ Dette repo leverer frontend- og webkomponenter til enterprise cyber operations, 
 
 ## 🚦 Installation & Deployment
 
-1. **Krav:**  
-   - PHP 7.4+  
-   - MySQL/MariaDB  
-   - Apache/nginx  
+1. **Krav:**
+   - PHP 7.4+
+   - MySQL/MariaDB
+   - Apache/nginx
    - Git (til CI/CD og deploy)
 
-2. **Klon repo:**  
+2. **Klon repo:**
    ```bash
    git clone https://github.com/AlphaAcces/ALPHA-Interface-GUI.git
 ````
@@ -73,6 +73,17 @@ Dette repo leverer frontend- og webkomponenter til enterprise cyber operations, 
 
    * Se `.github/workflows/ci.yml` for build/test/deploy til staging/production.
    * Sørg for at alle secrets ligger som GitHub Secrets.
+
+5. **Test:**
+
+   ```bash
+   npm install          # Installer dependencies
+   npm test             # Kør alle Playwright-tests (via shim)
+   npm run build:tailwind  # Byg Tailwind CSS
+   ```
+
+   * **Playwright Exit-Code Shim:** Projektet bruger `scripts/playwright-shim.js` til at normalisere exit-koder på Windows. Shimmen analyserer JSON-rapporten og returnerer exit 0, når alle tests passerer.
+   * **Artefakter:** Test-rapporter gemmes i `artifacts/` (ignoreret i git). HTML-rapporter gemmes i `playwright-report/` (også ignoreret).
 
 ---
 

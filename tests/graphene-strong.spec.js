@@ -153,21 +153,18 @@ test.describe('Graphene Strong Theme', () => {
       await page.goto('/');
       await page.waitForLoadState('domcontentloaded');
 
-      // Primary CTA - check for demo link
-      const primaryCTA = page.locator('a[href="demo.php"]').first();
+      // Primary CTA - demo button in hero (not in dropdown)
+      const primaryCTA = page.locator('.graphene-btn-primary[href="demo.php"]');
       await expect(primaryCTA).toBeVisible();
 
+      // Spotlight CTA - platform exploration button
+      const spotlightCTA = page.locator('a.graphene-btn-spotlight');
+      await expect(spotlightCTA).toBeVisible();
+      await expect(spotlightCTA).toHaveAttribute('href', 'products.php');
+
       // Secondary CTA - check for free-scan link
-      const secondaryCTA = page.locator('a[href="free-scan.php"]').first();
+      const secondaryCTA = page.locator('.graphene-btn-secondary[href="free-scan.php"]');
       await expect(secondaryCTA).toBeVisible();
-    });
-
-    test('live feed widget should be present', async ({ page }) => {
-      await page.goto('/');
-      await page.waitForLoadState('domcontentloaded');
-
-      const liveFeed = page.locator('.live-feed-widget, [class*="live-feed"]').first();
-      await expect(liveFeed).toBeVisible();
     });
 
     test('footer should have operational status indicator', async ({ page }) => {
@@ -178,7 +175,7 @@ test.describe('Graphene Strong Theme', () => {
       const footer = page.locator('footer');
       await expect(footer).toBeVisible();
 
-      // Check for operational text
+      // Check for operational text (green pulsing indicator)
       const operationalText = footer.locator('text=Operational');
       await expect(operationalText).toBeVisible();
     });

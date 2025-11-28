@@ -3833,9 +3833,24 @@ button:focus-visible {
   pointer-events: none;
   opacity: 0;
   transition: opacity 600ms ease;
+  will-change: opacity;
 }
 
 .graphene-hero-3d__canvas.is-visible {
+  opacity: 1;
+}
+
+/* Fallback background image when WebGL unavailable */
+.graphene-hero-3d__fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: url('/assets/bg/graphene-fallback.webp') center center / cover no-repeat;
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.graphene-hero-3d__fallback.is-active {
   opacity: 1;
 }
 
@@ -3843,25 +3858,21 @@ button:focus-visible {
 .graphene-hero-3d__overlay {
   position: absolute;
   inset: 0;
-  z-index: 2;
-  background: linear-gradient(
-    135deg,
-    rgba(212, 175, 55, 0.03) 0%,
-    transparent 40%,
-    transparent 60%,
-    rgba(107, 114, 128, 0.03) 100%
-  );
+  z-index: 5;
+  background:
+    linear-gradient(180deg, rgba(6, 10, 14, 0.35) 0%, rgba(6, 10, 14, 0.08) 40%, rgba(6, 10, 14, 0.2) 100%),
+    linear-gradient(120deg, rgba(10, 14, 18, 0.2) 0%, transparent 50%);
   pointer-events: none;
 }
 
 .graphene-hero-3d__vignette {
   position: absolute;
   inset: 0;
-  z-index: 3;
+  z-index: 6;
   background: radial-gradient(
-    ellipse 80% 80% at 50% 50%,
-    transparent 30%,
-    rgba(0, 0, 0, 0.4) 100%
+    ellipse 90% 90% at 50% 50%,
+    transparent 40%,
+    rgba(0, 0, 0, 0.35) 100%
   );
   pointer-events: none;
 }
@@ -3869,7 +3880,34 @@ button:focus-visible {
 /* === Content Area === */
 .graphene-hero-3d__content {
   position: relative;
-  z-index: 20;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  text-align: left;
+}
+
+.graphene-hero-3d__content-inner {
+  width: 100%;
+  max-width: 64rem;
+  margin: 0 auto;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .graphene-hero-3d__content {
+    align-items: center;
+    text-align: center;
+    padding-top: 5rem;
+    padding-bottom: 4rem;
+    min-height: calc(100vh - 4rem);
+  }
+
+  .graphene-hero-3d__content-inner {
+    text-align: center;
+  }
 }
 
 /* === Floating Badge === */
@@ -3904,6 +3942,7 @@ button:focus-visible {
   padding: 0.625rem 1.25rem;
   background: var(--graphene-3d-surface);
   border-radius: 9999px;
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(212, 175, 55, 0.2);
 }
@@ -4002,6 +4041,86 @@ button:focus-visible {
   animation: graphene-fade-in 0.8s ease-out 0.6s forwards;
 }
 
+.graphene-hero-tagline {
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: graphene-fade-in 0.8s ease-out 0.7s forwards;
+}
+
+.graphene-hero-tagline__title {
+  font-size: clamp(1.35rem, 1.8vw, 1.85rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+
+.graphene-hero-tagline__highlight {
+  display: inline-block;
+  margin-left: 0.5rem;
+  color: var(--bbx-gold-light);
+  text-shadow: 0 0 14px rgba(255, 232, 163, 0.45);
+  font-weight: 600;
+}
+
+.graphene-hero-tagline__copy {
+  font-size: clamp(1.25rem, 1.8vw, 1.6rem);
+  color: rgba(229, 231, 235, 0.92);
+  max-width: 44rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .graphene-hero-tagline__copy {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.graphene-btn-spotlight {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1.15rem 3rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #050608;
+  background: linear-gradient(135deg, #ffe8a3, #d4af37);
+  text-decoration: none;
+  box-shadow: 0 25px 60px rgba(212, 175, 55, 0.45);
+  margin-bottom: 2.5rem;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.graphene-btn-spotlight__glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.35), transparent 60%);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.graphene-btn-spotlight:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 35px 80px rgba(212, 175, 55, 0.6);
+}
+
+.graphene-btn-spotlight:focus-visible {
+  outline: 2px solid var(--bbx-gold-light);
+  outline-offset: 4px;
+}
+
+@media (max-width: 768px) {
+  .graphene-btn-spotlight {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 @keyframes graphene-fade-in {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -4015,6 +4134,59 @@ button:focus-visible {
   margin-bottom: 3rem;
   opacity: 0;
   animation: graphene-fade-in 0.8s ease-out 0.8s forwards;
+}
+
+.graphene-hero-usps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  padding: 1.5rem 0 2.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 2.5rem;
+}
+
+.graphene-hero-usps__item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.graphene-hero-usps__icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: rgba(255, 232, 163, 0.12);
+  color: var(--bbx-gold-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 20px rgba(255, 232, 163, 0.15);
+}
+
+.graphene-hero-usps__title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #f9fafb;
+  margin-bottom: 0.25rem;
+}
+
+.graphene-hero-usps__body {
+  color: rgba(226, 232, 240, 0.85);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .graphene-hero-usps {
+    text-align: left;
+  }
+
+  .graphene-hero-usps__item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 }
 
 /* === Primary CTA Button === */
@@ -4098,6 +4270,9 @@ button:focus-visible {
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
@@ -4130,6 +4305,7 @@ button:focus-visible {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 1rem;
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   min-width: 140px;
   transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease;
@@ -4226,7 +4402,7 @@ button:focus-visible {
 /* === Responsive Adjustments === */
 @media (max-width: 768px) {
   .graphene-hero-3d {
-    min-height: auto;
+    min-height: initial;
     padding-top: 6rem;
   }
 

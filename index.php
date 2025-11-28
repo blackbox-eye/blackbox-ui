@@ -9,6 +9,9 @@ include 'includes/site-header.php';
 <main id="main-content" class="pt-0">
     <!-- Hero Section: Graphene 3D Network - BlackboxEYE × GreyEYE Fusion -->
     <section id="home" class="graphene-hero-3d relative min-h-screen w-full flex items-center overflow-hidden">
+        <!-- Fallback background for devices without WebGL -->
+        <div class="graphene-hero-3d__fallback" aria-hidden="true"></div>
+
         <!-- 3D Hexagon Network Canvas -->
         <canvas id="graphene-canvas" class="graphene-hero-3d__canvas" aria-hidden="true"></canvas>
 
@@ -18,7 +21,7 @@ include 'includes/site-header.php';
 
         <!-- Main Content -->
         <div class="graphene-hero-3d__content relative z-20 px-6 sm:px-8 lg:px-16 py-32 sm:py-40 max-w-7xl mx-auto w-full">
-            <div class="max-w-4xl">
+            <div class="graphene-hero-3d__content-inner">
                 <!-- Animated Brand Badge -->
                 <div class="graphene-floating-badge" role="banner">
                     <div class="graphene-floating-badge__ring" aria-hidden="true"></div>
@@ -39,6 +42,24 @@ include 'includes/site-header.php';
                     <?= t('home.hero.subheadline') ?>
                 </p>
 
+                <div class="graphene-hero-tagline">
+                    <p class="graphene-hero-tagline__title">
+                        <?= t('home.hero.tagline_title') ?>
+                        <span class="graphene-hero-tagline__highlight"><?= t('home.hero.tagline_highlight') ?></span>
+                    </p>
+                    <p class="graphene-hero-tagline__copy">
+                        <?= t('home.hero.tagline_copy') ?>
+                    </p>
+                </div>
+
+                <a href="products.php" class="graphene-btn-spotlight" aria-label="<?= t('home.hero.spotlight_cta_aria') ?>">
+                    <span class="graphene-btn-spotlight__glow" aria-hidden="true"></span>
+                    <svg class="graphene-btn__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                    <span class="graphene-btn__text"><?= t('home.hero.spotlight_cta') ?></span>
+                </a>
+
                 <!-- Premium CTA Buttons with Glow Effects -->
                 <div class="graphene-cta-group">
                     <a href="demo.php" class="graphene-btn-primary" aria-label="<?= t('home.hero.primary_cta_aria') ?>">
@@ -49,7 +70,7 @@ include 'includes/site-header.php';
                         </svg>
                         <span class="graphene-btn__text"><?= t('home.hero.primary_cta') ?></span>
                     </a>
-                    <a href="products.php" class="graphene-btn-secondary" aria-label="<?= t('home.hero.secondary_cta_aria') ?>">
+                    <a href="free-scan.php" class="graphene-btn-secondary" aria-label="<?= t('home.hero.secondary_cta_aria') ?>">
                         <span class="graphene-btn-secondary__border"></span>
                         <svg class="graphene-btn__icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <circle cx="12" cy="12" r="10"></circle>
@@ -57,6 +78,43 @@ include 'includes/site-header.php';
                         </svg>
                         <span class="graphene-btn__text"><?= t('home.hero.secondary_cta') ?></span>
                     </a>
+                </div>
+
+                <?php
+                $hero_usps = [
+                    ['key' => 'ai_response', 'icon' => 'shield-bolt'],
+                    ['key' => 'intel', 'icon' => 'radar'],
+                    ['key' => 'compliance', 'icon' => 'layers']
+                ];
+                ?>
+                <div class="graphene-hero-usps" role="list" aria-label="<?= t('home.hero.badge') ?>">
+                    <?php foreach ($hero_usps as $usp): ?>
+                        <div class="graphene-hero-usps__item" role="listitem">
+                            <div class="graphene-hero-usps__icon" aria-hidden="true">
+                                <?php if ($usp['icon'] === 'shield-bolt'): ?>
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                        <path d="M12 7v6l3-1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                <?php elseif ($usp['icon'] === 'radar'): ?>
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                                        <circle cx="12" cy="12" r="9" />
+                                        <path d="M12 3v3m0 12v3m9-9h-3M6 12H3" stroke-linecap="round" />
+                                        <path d="M12 12l4 4" stroke-linecap="round" />
+                                    </svg>
+                                <?php else: ?>
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                                        <rect x="3" y="3" width="13" height="13" rx="2" />
+                                        <path d="M8 8h13v13H8z" />
+                                    </svg>
+                                <?php endif; ?>
+                            </div>
+                            <div class="graphene-hero-usps__text">
+                                <p class="graphene-hero-usps__title"><?= t('home.hero.usps.' . $usp['key'] . '.title') ?></p>
+                                <p class="graphene-hero-usps__body"><?= t('home.hero.usps.' . $usp['key'] . '.body') ?></p>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
 
                 <!-- Stats with Glassmorphism -->

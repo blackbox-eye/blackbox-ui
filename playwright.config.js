@@ -4,6 +4,11 @@ module.exports = defineConfig({
   testDir: 'tests',
   timeout: 30000,
   retries: 1,
+  // Multi-reporter: line for terminal, JSON for shim parsing
+  reporter: [
+    ['line'],
+    ['json', { outputFile: 'artifacts/test-results.json' }]
+  ],
   use: {
     baseURL: process.env.BASE_URL || 'http://localhost:8000',
     headless: true,

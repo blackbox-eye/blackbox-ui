@@ -46,10 +46,10 @@ test.describe('Graphene 3D Hero', () => {
     await expect(primaryCta).toBeVisible();
     await expect(primaryCta).toHaveAttribute('href', 'demo.php');
 
-    // Secondary CTA - gold outlined
+    // Secondary CTA - gold outlined (links to free-scan.php)
     const secondaryCta = page.locator('.graphene-btn-secondary');
     await expect(secondaryCta).toBeVisible();
-    await expect(secondaryCta).toHaveAttribute('href', 'products.php');
+    await expect(secondaryCta).toHaveAttribute('href', 'free-scan.php');
 
     // Check icons exist
     const primaryIcon = primaryCta.locator('.graphene-btn__icon');
@@ -79,15 +79,20 @@ test.describe('Graphene 3D Hero', () => {
     await expect(accent).toBeAttached();
   });
 
-  test('CTA icons should have correct size (22px)', async ({ page }) => {
-    const btnIcons = page.locator('.graphene-btn__icon');
-    const count = await btnIcons.count();
+  test('CTA icons should have correct sizes', async ({ page }) => {
+    // Primary and secondary CTA icons should be 22px
+    const primaryIcon = page.locator('.graphene-btn-primary .graphene-btn__icon');
+    await expect(primaryIcon).toHaveAttribute('width', '22');
+    await expect(primaryIcon).toHaveAttribute('height', '22');
 
-    for (let i = 0; i < count; i++) {
-      const icon = btnIcons.nth(i);
-      await expect(icon).toHaveAttribute('width', '22');
-      await expect(icon).toHaveAttribute('height', '22');
-    }
+    const secondaryIcon = page.locator('.graphene-btn-secondary .graphene-btn__icon');
+    await expect(secondaryIcon).toHaveAttribute('width', '22');
+    await expect(secondaryIcon).toHaveAttribute('height', '22');
+
+    // Spotlight CTA icon should be 24px
+    const spotlightIcon = page.locator('.graphene-btn-spotlight .graphene-btn__icon');
+    await expect(spotlightIcon).toHaveAttribute('width', '24');
+    await expect(spotlightIcon).toHaveAttribute('height', '24');
   });
 
   test('stats icons should have correct size (24px)', async ({ page }) => {

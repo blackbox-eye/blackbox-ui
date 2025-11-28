@@ -104,10 +104,15 @@
       "headline_part1": "Næste generations",
       "headline_part2": "sikkerhedsinfrastruktur",
       "subheadline": "Drevet af Graphene-arkitektur – samlet trusselsefterretning, AI-drevet respons og operationel opmærksomhed i realtid på tværs af hele din digitale overflade.",
+      "tagline_title": "Mission-kritisk dækning",
+      "tagline_highlight": "AI-drevet respons",
+      "tagline_copy": "GreyEYE™, PVE™ og AUT synkroniserer mennesker + maskiner på under 50 ms.",
       "primary_cta": "Anmod om demo",
       "primary_cta_aria": "Anmod om en demo af Blackbox EYE sikkerhedsplatform",
-      "secondary_cta": "Udforsk platformen",
-      "secondary_cta_aria": "Udforsk Blackbox EYE platformens funktioner",
+      "secondary_cta": "Start gratis sikkerhedstjek",
+      "secondary_cta_aria": "Start den gratis sårbarhedsscanning",
+      "spotlight_cta": "Udforsk platformen",
+      "spotlight_cta_aria": "Åbn platformsoverblikket",
       "live_feed_title": "Live Trusselsefterretning",
       "live_feed_subtitle": "Sikkerhedshændelser i realtid",
       "live_badge": "LIVE",
@@ -128,6 +133,20 @@
         "uptime_value": "99,97%",
         "response": "Gns. respons",
         "response_value": "<50ms"
+      },
+      "usps": {
+        "ai_response": {
+          "title": "AI-drevet respons",
+          "body": "GreyEYE™ + AlphaBot™ orkestrerer afværgning uden ventetid."
+        },
+        "intel": {
+          "title": "Samlet efterretning",
+          "body": "Live trusselgraf på tværs af OT, IT og cloud-aktiver."
+        },
+        "compliance": {
+          "title": "Audit-klar compliance",
+          "body": "Automatiserede evidenspakker til ISO27001 og NIS2."
+        }
       }
     },
     "tactical": {

@@ -76,6 +76,8 @@ generate_hash.php
 artifacts/
 !artifacts/.gitkeep
 test-results/
+playwright-report/
+tmp/
 
 # Lighthouse CI (allow config, ignore output)
 .lighthouseci/*.html

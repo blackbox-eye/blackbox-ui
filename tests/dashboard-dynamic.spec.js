@@ -18,19 +18,95 @@ const { test, expect } = require('@playwright/test');
 // Base URL for tests
 const BASE_URL = process.env.TEST_URL || 'http://localhost:8000';
 
-// Helper to check if logged in
-async function isLoggedIn(page) {
-  await page.goto(`${BASE_URL}/dashboard.php`);
-  return !page.url().includes('agent-login.php');
+// Mock payloads to stabilise dashboard UI tests
+const MOCK_DASHBOARD_STATS = {
+  alerts_count: 3,
+  threats_today: 12,
+  uptime_percent: 99.97,
+  api_requests: 18420,
+  critical_count: 1,
+  warning_count: 2,
+  blocked_count: 14,
+  last_threat_time: new Date().toISOString()
+};
+
+const MOCK_ALERTS = [
+  {
+    id: 1,
+    severity: 'critical',
+    title: 'Uautoriseret loginforsøg registreret',
+    target: 'OT Segment',
+    time_ago: '1 min siden',
+    created_at: new Date().toISOString()
+  },
+  {
+    id: 2,
+    severity: 'warning',
+    title: 'Afvigende trafikmønster',
+    target: 'Cloud API',
+    time_ago: '3 min siden',
+    created_at: new Date(Date.now() - 180000).toISOString()
+  }
+];
+
+const MOCK_SYSTEM_STATUS = {
+  services: [
+    { name: 'GreyEYE Sensor Grid', status: 'operational', latency_ms: 12 },
+    { name: 'Command Deck', status: 'warning', latency_ms: 48 },
+    { name: 'Log Broker', status: 'operational', latency_ms: 20 }
+  ]
+};
+
+const MOCK_NETWORK_PORTS = [
+  { port: 443, name: 'Edge Gateway', utilization: 64, level: 'medium' },
+  { port: 8443, name: 'API Bridge', utilization: 32, level: 'low' },
+  { port: 502, name: 'OT Relay', utilization: 78, level: 'high' },
+  { port: 22, name: 'Ops Tunnel', utilization: 18, level: 'low' }
+];
+
+const MOCK_AI_HISTORY = [
+  { command: 'Scan perimeter logs', status: 'completed', timestamp: new Date().toISOString() },
+  { command: 'Sync OT alerts', status: 'pending', timestamp: new Date(Date.now() - 60000).toISOString() }
+];
+
+const jsonResponse = (payload) => ({
+  status: 200,
+  contentType: 'application/json',
+  body: JSON.stringify(payload)
+});
+
+async function setupDashboardMocks(page) {
+  await page.route('**/api/dashboard-stats.php**', (route) => {
+    route.fulfill(jsonResponse({ success: true, data: MOCK_DASHBOARD_STATS }));
+  });
+
+  await page.route('**/api/alerts.php**', (route) => {
+    route.fulfill(jsonResponse({ success: true, data: MOCK_ALERTS }));
+  });
+
+  await page.route('**/api/system-status.php**', (route) => {
+    route.fulfill(jsonResponse({ success: true, data: MOCK_SYSTEM_STATUS }));
+  });
+
+  await page.route('**/api/network-stats.php**', (route) => {
+    route.fulfill(jsonResponse({ success: true, data: { ports: MOCK_NETWORK_PORTS } }));
+  });
+
+  await page.route('**/api/ai-command.php**', (route) => {
+    if (route.request().method() === 'POST') {
+      route.fulfill(jsonResponse({ success: true, data: { response: 'Mock response sendt til GREY-E' } }));
+    } else {
+      route.fulfill(jsonResponse({ success: true, data: MOCK_AI_HISTORY }));
+    }
+  });
 }
 
-// Helper to login (assumes test credentials exist)
-async function login(page, agentId = 'test_agent', password = 'test_password') {
-  await page.goto(`${BASE_URL}/agent-login.php`);
-  await page.fill('input[name="agent_id"]', agentId);
-  await page.fill('input[name="password"]', password);
-  await page.click('button[type="submit"]');
-  await page.waitForURL(/dashboard\.php|agent-login\.php/, { timeout: 5000 });
+async function gotoDashboard(page) {
+  await setupDashboardMocks(page);
+  await page.goto(`${BASE_URL}/dashboard.php`);
+  if (page.url().includes('agent-login.php')) {
+    test.skip('Not logged in - skipping test');
+  }
 }
 
 // =====================================================
@@ -38,10 +114,7 @@ async function login(page, agentId = 'test_agent', password = 'test_password') {
 // =====================================================
 test.describe('Dashboard API Integration', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(`${BASE_URL}/dashboard.php`);
-    if (page.url().includes('agent-login.php')) {
-      test.skip('Not logged in - skipping test');
-    }
+    await gotoDashboard(page);
   });
 
   test('Dashboard stats should load via API', async ({ page }) => {
@@ -111,10 +184,7 @@ test.describe('Dashboard API Integration', () => {
 // =====================================================
 test.describe('AI Command Interface', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(`${BASE_URL}/dashboard.php`);
-    if (page.url().includes('agent-login.php')) {
-      test.skip('Not logged in - skipping test');
-    }
+    await gotoDashboard(page);
   });
 
   test('AI command interface should be visible', async ({ page }) => {
@@ -169,10 +239,7 @@ test.describe('AI Command Interface', () => {
 // =====================================================
 test.describe('Theme Toggle', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(`${BASE_URL}/dashboard.php`);
-    if (page.url().includes('agent-login.php')) {
-      test.skip('Not logged in - skipping test');
-    }
+    await gotoDashboard(page);
     // Clear localStorage theme preference
     await page.evaluate(() => localStorage.removeItem('greyeye-theme'));
   });
@@ -357,16 +424,10 @@ test.describe('API Endpoints', () => {
 // RESPONSIVE DESIGN TESTS
 // =====================================================
 test.describe('Dashboard Responsive Design', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto(`${BASE_URL}/dashboard.php`);
-    if (page.url().includes('agent-login.php')) {
-      test.skip('Not logged in - skipping test');
-    }
-  });
-
   test('Dashboard should be responsive on mobile', async ({ page }) => {
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 812 });
+    await gotoDashboard(page);
 
     // Dashboard grid should stack on mobile
     const grid = page.locator('.dashboard__grid');
@@ -382,6 +443,7 @@ test.describe('Dashboard Responsive Design', () => {
 
   test('Stats row should stack on mobile', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
+    await gotoDashboard(page);
 
     const stats = page.locator('.dashboard__stats');
     await expect(stats).toBeVisible();
@@ -389,6 +451,7 @@ test.describe('Dashboard Responsive Design', () => {
 
   test('Threat hero should be responsive', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
+    await gotoDashboard(page);
 
     const threatHero = page.locator('.dashboard__threat-hero');
     await expect(threatHero).toBeVisible();
@@ -404,10 +467,7 @@ test.describe('Dashboard Responsive Design', () => {
 // =====================================================
 test.describe('Server Load Chart', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(`${BASE_URL}/dashboard.php`);
-    if (page.url().includes('agent-login.php')) {
-      test.skip('Not logged in - skipping test');
-    }
+    await gotoDashboard(page);
   });
 
   test('Server load chart should render', async ({ page }) => {

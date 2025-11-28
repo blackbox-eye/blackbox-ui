@@ -4491,3 +4491,176 @@ button:focus-visible {
     font-size: 1.875rem;
   }
 }
+
+/* ========================================================
+   MOBILE HERO OVERFLOW FIX & STICKY CTA BAR
+   Ensures hero content is visible and CTA is always accessible
+   ======================================================== */
+
+/* Fix hero content overflow on mobile */
+.graphene-hero-3d__content-inner {
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+  .graphene-hero-3d__content-inner {
+    max-width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Ensure text doesn't overflow */
+  .graphene-hero-title,
+  .graphene-hero-subtitle,
+  .graphene-hero-tagline,
+  .graphene-hero-tagline__title,
+  .graphene-hero-tagline__copy {
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+  }
+
+  /* Ensure buttons stack properly and don't overflow */
+  .graphene-btn-spotlight {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .graphene-cta-group {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Ensure USPs don't overflow */
+  .graphene-hero-usps {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .graphene-hero-usps__item {
+    max-width: 100%;
+  }
+
+  /* Ensure stats don't overflow */
+  .graphene-stats-glass {
+    max-width: 100%;
+    overflow: hidden;
+  }
+}
+
+/* ========================================================
+   STICKY CTA BAR — Mobile & Tablet
+   Fixed CTA at bottom of viewport for easy access
+   ======================================================== */
+.sticky-cta-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  background: linear-gradient(180deg, rgba(10, 14, 18, 0.95) 0%, rgba(5, 6, 8, 0.98) 100%);
+  border-top: 1px solid rgba(212, 175, 55, 0.2);
+  padding: 0.75rem 1rem;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+
+.sticky-cta-bar.is-visible {
+  transform: translateY(0);
+}
+
+/* Show sticky CTA on mobile and tablet */
+@media (max-width: 1024px) {
+  .sticky-cta-bar {
+    display: flex;
+  }
+
+  /* Add padding to body to prevent content from being hidden behind sticky bar */
+  body.has-sticky-cta {
+    padding-bottom: 4.5rem;
+  }
+}
+
+/* Hide on desktop */
+@media (min-width: 1025px) {
+  .sticky-cta-bar {
+    display: none !important;
+  }
+}
+
+/* Sticky CTA buttons */
+.sticky-cta-bar__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  flex: 1;
+  max-width: 180px;
+  white-space: nowrap;
+}
+
+.sticky-cta-bar__btn--primary {
+  background: linear-gradient(135deg, var(--graphene-3d-gold, #D4AF37) 0%, var(--graphene-3d-gold-dark, #8B7224) 100%);
+  color: #0D1114;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.sticky-cta-bar__btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+}
+
+.sticky-cta-bar__btn--secondary {
+  background: transparent;
+  color: var(--graphene-3d-gold, #D4AF37);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+}
+
+.sticky-cta-bar__btn--secondary:hover {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: var(--graphene-3d-gold, #D4AF37);
+}
+
+/* Icon in sticky CTA */
+.sticky-cta-bar__btn svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+/* Light theme adjustments */
+[data-theme="light"] .sticky-cta-bar,
+.light .sticky-cta-bar {
+  background: linear-gradient(180deg, rgba(248, 249, 250, 0.98) 0%, rgba(255, 255, 255, 0.99) 100%);
+  border-top-color: rgba(212, 175, 55, 0.3);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .sticky-cta-bar__btn--secondary,
+.light .sticky-cta-bar__btn--secondary {
+  color: var(--graphene-3d-gold-dark, #8B7224);
+  border-color: rgba(139, 114, 36, 0.4);
+}
+
+[data-theme="light"] .sticky-cta-bar__btn--secondary:hover,
+.light .sticky-cta-bar__btn--secondary:hover {
+  background: rgba(212, 175, 55, 0.08);
+  border-color: var(--graphene-3d-gold-dark, #8B7224);
+}

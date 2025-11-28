@@ -1,20 +1,3 @@
-    <!-- Sticky CTA Bar for Mobile/Tablet - Shows on scroll -->
-    <div id="sticky-cta-bar" class="sticky-cta-bar" role="navigation" aria-label="<?= t('header.mobile.quick_actions', 'Quick actions') ?>">
-        <a href="demo.php" class="sticky-cta-bar__btn sticky-cta-bar__btn--primary">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <polygon points="5 3 19 12 5 21 5 3"></polygon>
-            </svg>
-            <?= t('home.hero.primary_cta', 'Book Demo') ?>
-        </a>
-        <a href="free-scan.php" class="sticky-cta-bar__btn sticky-cta-bar__btn--secondary">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M12 16v-4M12 8h.01"></path>
-            </svg>
-            <?= t('home.hero.secondary_cta', 'Free Scan') ?>
-        </a>
-    </div>
-
     <footer class="bg-gradient-to-b from-gray-900/50 to-black border-t border-gray-800/50 mt-24 sm:mt-28 lg:mt-32 section-fade-in">
         <div class="container mx-auto px-4 py-16 sm:py-20 lg:py-24">
             <!-- Main Footer Content -->

@@ -269,23 +269,6 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('scroll', toggleHeaderGlass, { passive: true });
     }
 
-    // Sticky CTA Bar for Mobile/Tablet
-    const stickyCTABar = document.getElementById('sticky-cta-bar');
-    if (stickyCTABar) {
-        const toggleStickyCTABar = () => {
-            const scrollPosition = window.scrollY;
-            const windowHeight = window.innerHeight;
-            const documentHeight = document.documentElement.scrollHeight;
-            // Show after scrolling 30% of viewport, hide near footer
-            const shouldShow = scrollPosition > windowHeight * 0.3 && scrollPosition < documentHeight - windowHeight - 300;
-            stickyCTABar.classList.toggle('is-visible', shouldShow);
-            document.body.classList.toggle('has-sticky-cta', shouldShow);
-        };
-
-        toggleStickyCTABar();
-        window.addEventListener('scroll', toggleStickyCTABar, { passive: true });
-    }
-
     const stickyCTA = document.getElementById('sticky-cta');
     if (stickyCTA) {
         const toggleStickyCTA = () => {

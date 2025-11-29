@@ -267,11 +267,8 @@ test.describe('Graphene Strong Theme', () => {
       // Press Enter to activate
       const initialMode = await toggle.getAttribute('aria-pressed');
       await page.keyboard.press('Enter');
-
-      // Wait for potential animations/state changes
-      await page.waitForTimeout(300);
       
-      // Mode should change
+      // Mode should change - assertion has built-in polling/waiting
       const newMode = initialMode === 'true' ? 'false' : 'true';
       await expect(toggle).toHaveAttribute('aria-pressed', newMode, { timeout: 10000 });
     });

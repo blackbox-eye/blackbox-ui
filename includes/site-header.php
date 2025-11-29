@@ -87,6 +87,7 @@ if (!function_exists('aig_nav_class')) {
             'free-scan' => ['label' => t('header.menu.free_scan'), 'href' => 'free-scan.php'],
             'faq' => ['label' => 'FAQ', 'href' => 'faq.php'],
             'agent-login' => ['label' => t('header.cta.agent_login'), 'href' => 'agent-login.php'],
+            'agent-access' => ['label' => t('agent_access.meta.breadcrumb', 'Agent Access'), 'href' => 'agent-access.php'],
             'dashboard' => ['label' => 'Dashboard', 'href' => 'dashboard.php'],
             'admin' => ['label' => 'Admin', 'href' => 'admin.php'],
             'settings' => ['label' => 'Indstillinger', 'href' => 'settings.php'],
@@ -324,8 +325,8 @@ if ($is_graphene_page) {
     <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
         <div class="container mx-auto px-4">
             <div class="header-shell">
-                <div class="header-grid">
-                    <div class="header-brand">
+                <div class="header-grid bbx-header">
+                    <div class="header-brand bbx-header-left">
                         <a href="/" class="header-logo-link" aria-label="<?= htmlspecialchars(t('header.menu.home')) ?>">
                             <!-- White logo - visible on dark backgrounds (dark theme) -->
                             <img src="/assets/Logo-blackbox-hvid.png"
@@ -389,11 +390,35 @@ if ($is_graphene_page) {
                             </li>
                         </ul>
                     </nav>
-                    <div class="header-actions">
-                        <a href="agent-login.php" class="header-cta agent-login-cta">
-                            <?= t('header.cta.agent_login') ?>
+                    <div class="header-actions bbx-header-right">
+                        <div class="header-cta-group" role="group" aria-label="<?= htmlspecialchars(t('header.cta.primary_actions_label', 'Primary actions')) ?>">
+                            <a href="demo.php"
+                                class="header-cta header-cta--pill header-cta--primary"
+                                aria-label="<?= htmlspecialchars(t('header.cta.book_demo_aria', t('header.cta.book_demo', t('header.menu.demo')))) ?>">
+                                <span class="header-cta__label"><?= t('header.cta.book_demo', t('header.menu.demo')) ?></span>
+                                <span class="header-cta__icon" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M5 12h14" />
+                                        <path d="M13 6l6 6-6 6" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <a href="free-scan.php"
+                                class="header-cta header-cta--pill header-cta--secondary"
+                                aria-label="<?= htmlspecialchars(t('header.cta.free_scan_aria', t('header.cta.free_scan', t('header.menu.free_scan')))) ?>">
+                                <span class="header-cta__label"><?= t('header.cta.free_scan', t('header.menu.free_scan')) ?></span>
+                                <span class="header-cta__icon" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="6.5" />
+                                        <path d="M9.2 14.8 12 12l2.8 2.8" />
+                                    </svg>
+                                </span>
+                            </a>
+                        </div>
+                        <a href="/agent-access.php" class="header-cta agent-login-cta bbx-btn-pill" aria-label="<?= htmlspecialchars(t('header.cta.agent_login')) ?>">
+                            <span class="header-cta__label"><?= t('header.cta.agent_login') ?></span>
                         </a>
-                        <div class="language-switcher-wrapper hidden lg:flex items-center gap-0.5">
+                        <div class="language-switcher-wrapper flex items-center gap-0.5">
                             <a href="?lang=da" class="language-switch <?= $current_language === 'da' ? 'is-active' : '' ?>" aria-label="<?= htmlspecialchars(t('header.language.switch_da')) ?>" <?= $current_language === 'da' ? 'aria-current="true"' : '' ?>>
                                 <?= t('header.language.da') ?>
                             </a>
@@ -519,9 +544,21 @@ if ($is_graphene_page) {
                     <span class="theme-toggle__icon" aria-hidden="true"></span>
                 </button>
             </div>
+            <div class="mobile-primary-ctas">
+                <a href="demo.php"
+                    class="header-cta header-cta--pill header-cta--primary header-cta--wide"
+                    aria-label="<?= htmlspecialchars(t('header.cta.book_demo_aria', t('header.cta.book_demo', t('header.menu.demo')))) ?>">
+                    <span class="header-cta__label"><?= t('header.cta.book_demo', t('header.menu.demo')) ?></span>
+                </a>
+                <a href="free-scan.php"
+                    class="header-cta header-cta--pill header-cta--secondary header-cta--wide"
+                    aria-label="<?= htmlspecialchars(t('header.cta.free_scan_aria', t('header.cta.free_scan', t('header.menu.free_scan')))) ?>">
+                    <span class="header-cta__label"><?= t('header.cta.free_scan', t('header.menu.free_scan')) ?></span>
+                </a>
+            </div>
             <!-- Agent login CTA -->
-            <a href="agent-login.php" class="header-cta header-cta--wide text-xs py-2">
-                <?= t('header.cta.agent_login') ?>
+            <a href="/agent-access.php" class="header-cta header-cta--wide agent-login-cta bbx-btn-pill" aria-label="<?= htmlspecialchars(t('header.cta.agent_login')) ?>">
+                <span class="header-cta__label"><?= t('header.cta.agent_login') ?></span>
             </a>
         </div>
     </div>

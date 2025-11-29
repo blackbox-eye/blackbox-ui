@@ -23,7 +23,12 @@
     },
     "cta": {
       "agent_login": "Agent Login",
-      "book_meeting": "Book Meeting"
+      "book_meeting": "Book Meeting",
+      "book_demo": "Book Demo",
+      "book_demo_aria": "Book a live demo with operations",
+      "free_scan": "Free Security Check",
+      "free_scan_aria": "Start the free vulnerability scan",
+      "primary_actions_label": "Primary actions"
     },
     "language": {
       "da": "DA",
@@ -59,6 +64,33 @@
       "secondary_navigation": "More options"
     },
     "more": "More"
+  },
+  "agent_access": {
+    "meta": {
+      "title": "Choose Secure Access | BLACKBOX EYE™",
+      "description": "Launch GreyEYE or TS24 consoles from a single, audited access hub.",
+      "breadcrumb": "Agent Access"
+    },
+    "hero": {
+      "eyebrow": "Secure operations",
+      "title": "Choose secure access",
+      "lead": "Select the console you need right now – each launch inherits your current clearance and is monitored in real time.",
+      "audit_notice": "All launches require MFA, are logged in the security ledger and raise instant alerts on anomalies."
+    },
+    "cards": {
+      "gdi": {
+        "title": "GreyEYE Data Intelligence (GDI)",
+        "description": "Use for internal investigations, alert triage and direct control of GreyEYE sensors across enclaves.",
+        "cta": "Open GDI console",
+        "meta": "Requires Blackbox VPN + biometric badge"
+      },
+      "ts24": {
+        "title": "TS24 / Intel24 Intelligence Console",
+        "description": "Field telemetry, TS transport alerts and tactical briefings for TS24 rapid-response teams.",
+        "cta": "Open TS24 console",
+        "meta": "Opens secure tstransport.app session"
+      }
+    }
   },
   "footer": {
     "tagline": "Intelligent Security. Ready to Act.",

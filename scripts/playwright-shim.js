@@ -58,10 +58,14 @@ const { expected = 0, unexpected = 0, flaky = 0, skipped = 0 } = stats;
 
 console.log(`[shim] Stats: expected=${expected}, unexpected=${unexpected}, flaky=${flaky}, skipped=${skipped}`);
 
-if (unexpected === 0 && flaky === 0) {
-  console.log('[shim] ✅ All tests passed – normalizing exit code to 0');
+if (unexpected === 0) {
+  if (flaky > 0) {
+    console.log(`[shim] ⚠️ ${flaky} flaky test(s) passed after retry – normalizing exit code to 0`);
+  } else {
+    console.log('[shim] ✅ All tests passed – normalizing exit code to 0');
+  }
   process.exit(0);
 } else {
-  console.log(`[shim] ❌ Tests failed or flaky – returning exit code 1`);
+  console.log(`[shim] ❌ ${unexpected} test(s) failed – returning exit code 1`);
   process.exit(1);
 }

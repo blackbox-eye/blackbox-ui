@@ -257,6 +257,9 @@ test.describe('Graphene Strong Theme', () => {
 
       const toggle = page.locator('#graphene-mode-toggle');
 
+      // Ensure toggle is visible and interactable
+      await expect(toggle).toBeVisible();
+      
       // Tab to toggle and check focus
       await toggle.focus();
       await expect(toggle).toBeFocused();
@@ -265,6 +268,9 @@ test.describe('Graphene Strong Theme', () => {
       const initialMode = await toggle.getAttribute('aria-pressed');
       await page.keyboard.press('Enter');
 
+      // Wait for potential animations/state changes
+      await page.waitForTimeout(300);
+      
       // Mode should change
       const newMode = initialMode === 'true' ? 'false' : 'true';
       await expect(toggle).toHaveAttribute('aria-pressed', newMode, { timeout: 10000 });

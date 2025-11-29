@@ -23,7 +23,12 @@
     },
     "cta": {
       "agent_login": "Agent Login",
-      "book_meeting": "Book Møde"
+      "book_meeting": "Book Møde",
+      "book_demo": "Book demo",
+      "book_demo_aria": "Book en live-demo med operations",
+      "free_scan": "Gratis sikkerhedstjek",
+      "free_scan_aria": "Start det gratis sårbarhedstjek",
+      "primary_actions_label": "Primære handlinger"
     },
     "language": {
       "da": "DA",

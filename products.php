@@ -1,104 +1,181 @@
 <?php
 require_once __DIR__ . '/includes/i18n.php';
-$current_page = 'products';
-$page_title = t('products.hero_section.title') . ' | ' . t('site.name');
+$current_page     = 'products';
+$page_title       = t('products.hero_section.title') . ' | ' . t('site.name');
 $meta_description = t('products.hero_section.description');
 include 'includes/site-header.php';
+
+if (!function_exists('bbx_products_module_icon')) {
+    function bbx_products_module_icon(string $slug): string
+    {
+        switch ($slug) {
+            case 'greyeye':
+                return '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 16s4.5-7.5 12-7.5S28 16 28 16s-4.5 7.5-12 7.5S4 16 4 16Z" /><circle cx="16" cy="16" r="4.5" /><path d="M16 11.5V9" /></svg>';
+            case 'idmatrix':
+                return '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="5" y="5" width="22" height="22" rx="4" /><path d="M10 14h12M10 18h7" /><circle cx="19.5" cy="18" r="1.2" /></svg>';
+            case 'aut':
+                return '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 10h20" /><path d="M8 16h16" /><path d="M10 22h12" /><circle cx="12" cy="10" r="2" /><circle cx="20" cy="16" r="2" /><circle cx="16" cy="22" r="2" /></svg>';
+            case 'pve':
+            default:
+                return '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M16 4 27 8v8.5c0 6.3-5.7 11.5-11 13-5.3-1.5-11-6.7-11-13V8l11-4Z" /><path d="m12.5 16 2.5 2.5 4-4" /></svg>';
+        }
+    }
+}
+
+$products_modules = [
+    [
+        'slug'        => 'pve',
+        'title'       => t('products.pve.title'),
+        'subtitle'    => t('products.pve.subtitle'),
+        'description' => t('products.pve.description'),
+        'features'    => [
+            t('products.pve.features.scanning'),
+            t('products.pve.features.pentest'),
+            t('products.pve.features.reporting'),
+            t('products.pve.features.simulation')
+        ],
+        'data_module' => 'PVE',
+    ],
+    [
+        'slug'        => 'greyeye',
+        'title'       => t('products.greyeye.title'),
+        'subtitle'    => t('products.greyeye.subtitle'),
+        'description' => t('products.greyeye.description'),
+        'features'    => [
+            t('products.greyeye.features.monitoring'),
+            t('products.greyeye.features.analysis'),
+            t('products.greyeye.features.response'),
+            t('products.greyeye.features.intelligence')
+        ],
+        'data_module' => 'GreyEYE',
+    ],
+    [
+        'slug'        => 'idmatrix',
+        'title'       => t('products.idmatrix.title'),
+        'subtitle'    => t('products.idmatrix.subtitle'),
+        'description' => t('products.idmatrix.description'),
+        'features'    => [
+            t('products.idmatrix.features.identity'),
+            t('products.idmatrix.features.mfa'),
+            t('products.idmatrix.features.zerotrust')
+        ],
+        'data_module' => 'IDMatrix',
+    ],
+    [
+        'slug'        => 'aut',
+        'title'       => t('products.aut.title'),
+        'subtitle'    => t('products.aut.subtitle'),
+        'description' => t('products.aut.description'),
+        'features'    => [
+            t('products.aut.features.training'),
+            t('products.aut.features.simulation'),
+            t('products.aut.features.tracking')
+        ],
+        'data_module' => 'AUT',
+    ],
+];
+
+$extra_modules = ['idmatrix', 'aut', 'bridge', 'command'];
 ?>
 
-<main class="pt-16">
-    <section class="py-20 sm:py-24 section-fade-in">
+<main id="main-content" class="pt-24 lg:pt-28">
+    <section class="products-hero section-fade-in">
         <div class="container mx-auto px-4">
-            <div class="text-center max-w-3xl mx-auto mb-12">
-                <p class="text-amber-400 uppercase tracking-widest text-sm font-semibold mb-4"><?= t('products.hero_section.tagline') ?></p>
-                <h1 class="text-3xl sm:text-5xl font-bold mb-6"><?= t('products.hero_section.title') ?></h1>
-                <p class="text-gray-300 text-base sm:text-lg">
-                    <?= t('products.hero_section.description') ?>
-                </p>
+            <div class="products-hero__shell">
+                <div class="products-hero__content">
+                    <p class="products-hero__eyebrow"><?= t('products.hero_section.tagline') ?></p>
+                    <h1 class="products-hero__title"><?= t('products.hero_section.title') ?></h1>
+                    <p class="products-hero__lede">
+                        <?= t('products.hero_section.description') ?>
+                    </p>
+                    <p class="products-hero__meta">
+                        <?= t('products.hero_section.intro') ?>
+                    </p>
+                </div>
+                <div class="products-hero__panel" aria-label="<?= htmlspecialchars(t('products.subtitle')) ?>">
+                    <div class="products-hero__panel-card">
+                        <span class="products-hero__panel-label"><?= t('products.subtitle') ?></span>
+                        <ul class="products-hero__modules" role="list">
+                            <?php foreach ($products_modules as $module): ?>
+                                <li>
+                                    <strong><?= htmlspecialchars($module['title']) ?></strong>
+                                    <span><?= htmlspecialchars($module['subtitle']) ?></span>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </div>
             </div>
-
-            <article class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center section-fade-in mb-16">
-                <div>
-                    <h2 class="text-2xl sm:text-3xl font-bold text-amber-400 mb-4 flex items-center gap-3">
-                        <span class="product-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 3.25 19 6v6.36c0 5.07-5 8.89-6.87 9.94a1 1 0 0 1-.98 0C9.3 21.22 4.5 17.61 4.5 12.36V6l7.5-2.75z" />
-                                <path d="M9.5 12.25 11 13.75l3.5-3.5" />
-                            </svg>
-                        </span>
-                        <?= t('products.pve.subtitle') ?> (<?= t('products.pve.title') ?>)
-                    </h2>
-                    <p class="text-gray-300 mb-6"><?= t('products.pve.description') ?></p>
-                    <button class="gemini-trigger-btn bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-                        data-module="PVE"
-                        data-loading-text="<?= htmlspecialchars(t('common.ai_loading')) ?>">
-                        <?= t('products.scenario_button') ?>
-                    </button>
-                </div>
-                <div class="glass-effect rounded-2xl p-6 sm:p-8 h-full">
-                    <h3 class="font-semibold text-lg mb-4"><?= t('products.key_features_heading') ?></h3>
-                    <ul class="list-disc list-inside text-gray-300 space-y-2">
-                        <li><?= t('products.pve.features.scanning') ?></li>
-                        <li><?= t('products.pve.features.pentest') ?></li>
-                        <li><?= t('products.pve.features.reporting') ?></li>
-                        <li><?= t('products.pve.features.simulation') ?></li>
-                    </ul>
-                </div>
-            </article>
-
-            <article class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center section-fade-in">
-                <div class="lg:order-last">
-                    <h2 class="text-2xl sm:text-3xl font-bold text-amber-400 mb-4 flex items-center gap-3">
-                        <span class="product-icon" aria-hidden="true">
-                            <img src="assets/greyeeye_logo_transparent.png" alt="" class="product-icon-img" loading="lazy">
-                        </span>
-                        <?= t('products.greyeye.title') ?>
-                    </h2>
-                    <p class="text-gray-300 mb-6"><?= t('products.greyeye.description') ?></p>
-                    <button class="gemini-trigger-btn bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-                        data-module="GreyEYE"
-                        data-loading-text="<?= htmlspecialchars(t('common.ai_loading')) ?>">
-                        <?= t('products.scenario_button') ?>
-                    </button>
-                </div>
-                <div class="glass-effect rounded-2xl p-6 sm:p-8 h-full lg:order-first">
-                    <h3 class="font-semibold text-lg mb-4"><?= t('products.key_features_heading') ?></h3>
-                    <ul class="list-disc list-inside text-gray-300 space-y-2">
-                        <li><?= t('products.greyeye.features.monitoring') ?></li>
-                        <li><?= t('products.greyeye.features.analysis') ?></li>
-                        <li><?= t('products.greyeye.features.response') ?></li>
-                        <li><?= t('products.greyeye.features.intelligence') ?></li>
-                    </ul>
-                </div>
-            </article>
         </div>
     </section>
 
-    <section class="py-16 sm:py-20 bg-gray-900/30 section-fade-in">
+    <section class="products-grid section-fade-in">
         <div class="container mx-auto px-4">
-            <div class="glass-effect rounded-3xl p-8 sm:p-12">
-                <h2 class="text-3xl sm:text-4xl font-bold mb-6 text-center"><?= t('products.extras.title') ?></h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <?php foreach (['idmatrix', 'aut', 'bridge', 'command'] as $extra): ?>
-                        <div>
-                            <h3 class="text-xl font-semibold text-amber-400 mb-3"><?= t('products.extras.items.' . $extra . '.title') ?></h3>
-                            <p class="text-gray-300"><?= t('products.extras.items.' . $extra . '.body') ?></p>
+            <div class="module-grid">
+                <?php foreach ($products_modules as $module): ?>
+                    <?php $labelId = $module['slug'] . '-title'; ?>
+                    <article class="module-card" data-module="<?= htmlspecialchars($module['slug']) ?>" aria-labelledby="<?= htmlspecialchars($labelId) ?>">
+                        <div class="module-card__badge">
+                            <span class="module-card__icon" aria-hidden="true"><?= bbx_products_module_icon($module['slug']) ?></span>
+                            <span class="module-card__badge-text"><?= htmlspecialchars($module['subtitle']) ?></span>
                         </div>
+                        <h3 id="<?= htmlspecialchars($labelId) ?>" class="module-card__title"><?= htmlspecialchars($module['title']) ?></h3>
+                        <p class="module-card__description">
+                            <?= htmlspecialchars($module['description']) ?>
+                        </p>
+                        <ul class="module-card__features" role="list">
+                            <?php foreach ($module['features'] as $feature): ?>
+                                <li><?= htmlspecialchars($feature) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                        <div class="module-card__actions">
+                            <button type="button"
+                                class="gemini-trigger-btn module-card__action module-card__action--primary"
+                                data-module="<?= htmlspecialchars($module['data_module']) ?>"
+                                data-loading-text="<?= htmlspecialchars(t('common.ai_loading')) ?>">
+                                <?= t('products.scenario_button') ?>
+                            </button>
+                            <a href="contact.php"
+                                class="module-card__action module-card__action--ghost">
+                                <?= t('products.cta.button') ?>
+                            </a>
+                        </div>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+
+    <section class="products-extras section-fade-in">
+        <div class="container mx-auto px-4">
+            <div class="products-extras__shell glass-effect">
+                <div class="products-extras__header">
+                    <p class="products-extras__eyebrow"><?= t('products.subtitle') ?></p>
+                    <h2 class="products-extras__title"><?= t('products.extras.title') ?></h2>
+                </div>
+                <div class="products-extras-grid">
+                    <?php foreach ($extra_modules as $extra): ?>
+                        <article class="products-extra-card">
+                            <h3><?= t('products.extras.items.' . $extra . '.title') ?></h3>
+                            <p><?= t('products.extras.items.' . $extra . '.body') ?></p>
+                        </article>
                     <?php endforeach; ?>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="py-20 sm:py-24 section-fade-in">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-3xl sm:text-4xl font-bold mb-4"><?= t('products.cta.title') ?></h2>
-            <p class="text-gray-400 max-w-2xl mx-auto mb-8">
-                <?= t('products.cta.description') ?>
-            </p>
-            <a href="contact.php" class="inline-flex items-center justify-center bg-amber-400 text-black font-semibold py-3 px-8 rounded-lg hover:bg-amber-500 transition-colors">
-                <?= t('products.cta.button') ?>
-            </a>
+    <section class="products-cta section-fade-in">
+        <div class="container mx-auto px-4">
+            <div class="products-cta__shell glass-effect">
+                <h2 class="products-cta__title"><?= t('products.cta.title') ?></h2>
+                <p class="products-cta__body">
+                    <?= t('products.cta.description') ?>
+                </p>
+                <a href="contact.php" class="products-cta__btn">
+                    <?= t('products.cta.button') ?>
+                </a>
+            </div>
         </div>
     </section>
 </main>

@@ -779,11 +779,29 @@ body.alphabot-locked {
 }
 
 .header-cta-group {
-  display: flex;
+  display: none;
   align-items: center;
   gap: 0.5rem;
   flex-wrap: wrap;
   justify-content: flex-end;
+}
+
+/* Show header CTA group only on desktop (lg: 1024px+) */
+@media (min-width: 1024px) {
+  .header-cta-group {
+    display: flex;
+  }
+}
+
+/* Hide Agent Login button on mobile, show only on desktop */
+.header-cta.agent-login-cta.bbx-btn-pill {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .header-cta.agent-login-cta.bbx-btn-pill {
+    display: inline-flex;
+  }
 }
 
 .header-cta__label {

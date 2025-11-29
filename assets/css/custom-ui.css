@@ -557,9 +557,9 @@ body.alphabot-locked {
   }
 
   .header-cta.agent-login-cta {
-    padding: 0.45rem 0.95rem;
+    padding: 0.5rem 0.95rem;
     font-size: 0.78rem;
-    min-height: 2.7rem;
+    min-height: 3rem; /* 48px minimum touch target for accessibility */
   }
 
   .language-switcher-wrapper {
@@ -573,8 +573,8 @@ body.alphabot-locked {
   }
 
   .header-burger {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 3rem;  /* 48px minimum touch target */
+    height: 3rem;
   }
 }
 

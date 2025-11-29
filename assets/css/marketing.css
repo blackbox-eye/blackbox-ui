@@ -5507,3 +5507,11 @@ button:focus-visible {
   background: rgba(212, 175, 55, 0.08);
   border-color: var(--graphene-3d-gold-dark, #8B7224);
 }
+
+/* Hide global sticky-cta-bar on graphene pages (home) where graphene-cta-bar is shown */
+@media (max-width: 768px) {
+  .graphene-page #sticky-cta,
+  .graphene-page .sticky-cta-bar[data-component="sticky-cta"] {
+    display: none !important;
+  }
+}

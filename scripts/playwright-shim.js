@@ -6,7 +6,7 @@
  * test runner returns exit code 1 even when all tests pass. This script:
  *   1. Runs Playwright (config has line + JSON reporters configured).
  *   2. Parses the JSON report at artifacts/test-results.json.
- *   3. Returns exit 0 if unexpected === 0 AND flaky === 0; otherwise 1.
+ *   3. Returns exit 0 if unexpected === 0 (flaky tests that passed on retry are OK).
  *
  * TEMPORARY WORKAROUND – Remove once Playwright fixes the bug.
  * See: https://github.com/microsoft/playwright/issues

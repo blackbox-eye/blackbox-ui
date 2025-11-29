@@ -154,7 +154,7 @@ test.describe('Graphene Strong Theme', () => {
       await page.waitForLoadState('domcontentloaded');
 
       // Primary CTA - demo button in hero (not in dropdown)
-      const primaryCTA = page.locator('.graphene-btn-primary[href="demo.php"]');
+      const primaryCTA = page.locator('.graphene-cta-group .graphene-btn-primary[href="demo.php"]').first();
       await expect(primaryCTA).toBeVisible();
 
       // Spotlight CTA - platform exploration button
@@ -163,7 +163,7 @@ test.describe('Graphene Strong Theme', () => {
       await expect(spotlightCTA).toHaveAttribute('href', 'products.php');
 
       // Secondary CTA - check for free-scan link
-      const secondaryCTA = page.locator('.graphene-btn-secondary[href="free-scan.php"]');
+      const secondaryCTA = page.locator('.graphene-cta-group .graphene-btn-secondary[href="free-scan.php"]').first();
       await expect(secondaryCTA).toBeVisible();
     });
 

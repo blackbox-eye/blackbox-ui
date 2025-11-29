@@ -93,6 +93,16 @@
       "aria_label": "Book sikkerhedsmøde"
     }
   },
+  "cta_bar": {
+    "region_label": "Hurtige handlinger",
+    "eyebrow": "Prioriteret adgang",
+    "title": "Book en live-demo eller ring direkte til operations",
+    "primary": "Book live-demo",
+    "primary_aria": "Book en live-demonstration af Blackbox EYE",
+    "secondary": "Ring til operations",
+    "secondary_aria": "Ring til Blackbox EYE operationscenter",
+    "dismiss": "Skjul den faste CTA"
+  },
   "home": {
     "meta": {
       "title": "BLACKBOX EYE™ – Intelligent sikkerhed. Klar til handling.",
@@ -113,6 +123,8 @@
       "secondary_cta_aria": "Start den gratis sårbarhedsscanning",
       "spotlight_cta": "Udforsk platformen",
       "spotlight_cta_aria": "Åbn platformsoverblikket",
+      "cta_bar_label": "Missionsoverblik",
+      "cta_bar_hint": "Vælg dit næste skridt",
       "live_feed_title": "Live Trusselsefterretning",
       "live_feed_subtitle": "Sikkerhedshændelser i realtid",
       "live_badge": "LIVE",

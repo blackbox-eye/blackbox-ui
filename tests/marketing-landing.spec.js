@@ -39,7 +39,7 @@ test.describe('Hero Section', () => {
   });
 
   test('should have primary CTA button with correct styling', async ({ page }) => {
-    const primaryCTA = page.locator('#home .graphene-btn-primary, #home a.btn-graphene-primary').first();
+    const primaryCTA = page.locator('#home .graphene-cta-group .graphene-btn-primary, #home a.btn-graphene-primary').first();
     await expect(primaryCTA).toBeVisible();
 
     // Should link to demo page
@@ -62,7 +62,7 @@ test.describe('Hero Section', () => {
   });
 
   test('should have secondary CTA button with correct styling', async ({ page }) => {
-    const secondaryCTA = page.locator('#home .graphene-btn-secondary, #home a.btn-graphene-secondary').first();
+    const secondaryCTA = page.locator('#home .graphene-cta-group .graphene-btn-secondary, #home a.btn-graphene-secondary').first();
     await expect(secondaryCTA).toBeVisible();
 
     // Should link to free scan page in new layout
@@ -79,7 +79,7 @@ test.describe('Hero Section', () => {
   });
 
   test('CTA buttons should have transition property', async ({ page }) => {
-    const primaryCTA = page.locator('#home .graphene-btn-primary').first();
+    const primaryCTA = page.locator('#home .graphene-cta-group .graphene-btn-primary').first();
 
     // Check that button has transition defined (for hover effects)
     const transition = await primaryCTA.evaluate(el =>
@@ -210,7 +210,7 @@ test.describe('Hero Accessibility', () => {
   });
 
   test('CTA buttons should be keyboard accessible', async ({ page }) => {
-    const primaryCTA = page.locator('#home .graphene-btn-primary').first();
+    const primaryCTA = page.locator('#home .graphene-cta-group .graphene-btn-primary').first();
     await primaryCTA.focus();
     const isFocused = await primaryCTA.evaluate(el => document.activeElement === el);
     expect(isFocused).toBeTruthy();
@@ -256,7 +256,7 @@ test.describe('Responsive Hero Layout', () => {
       await expect(headline).toBeVisible();
 
       // CTAs should be visible (support both old and new selectors)
-      const primaryCTA = page.locator('#home .graphene-btn-primary').first();
+      const primaryCTA = page.locator('#home .graphene-cta-group .graphene-btn-primary').first();
       await expect(primaryCTA).toBeVisible();
 
       const spotlight = page.locator('#home .graphene-btn-spotlight').first();

@@ -93,6 +93,16 @@
       "aria_label": "Book security meeting"
     }
   },
+  "cta_bar": {
+    "region_label": "Quick access actions",
+    "eyebrow": "Priority access",
+    "title": "Book a live demo or call operations",
+    "primary": "Book live demo",
+    "primary_aria": "Book a live Blackbox EYE demo",
+    "secondary": "Call operations",
+    "secondary_aria": "Call the operations desk",
+    "dismiss": "Hide sticky call-to-action"
+  },
   "home": {
     "meta": {
       "title": "BLACKBOX EYE™ – Intelligent security. Ready for action.",
@@ -113,6 +123,8 @@
       "secondary_cta_aria": "Start the free vulnerability scan",
       "spotlight_cta": "Explore the platform",
       "spotlight_cta_aria": "Open the platform overview",
+      "cta_bar_label": "Mission control",
+      "cta_bar_hint": "Stay in command on mobile",
       "live_feed_title": "Live Threat Intelligence",
       "live_feed_subtitle": "Real-time security events",
       "live_badge": "LIVE",

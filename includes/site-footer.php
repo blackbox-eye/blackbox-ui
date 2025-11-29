@@ -125,6 +125,46 @@
         <div id="alphabot-overlay" class="alphabot-overlay" aria-hidden="true"></div>
     <?php endif; ?>
 
+    <aside id="sticky-cta"
+        class="sticky-cta-bar"
+        data-component="sticky-cta"
+        role="region"
+        aria-live="polite"
+        aria-label="<?= htmlspecialchars(t('cta_bar.region_label')) ?>">
+        <div class="sticky-cta-bar__content">
+            <div class="sticky-cta-bar__copy">
+                <p class="sticky-cta-bar__eyebrow"><?= t('cta_bar.eyebrow') ?></p>
+                <p class="sticky-cta-bar__title"><?= t('cta_bar.title') ?></p>
+            </div>
+            <div class="sticky-cta-bar__actions" role="group" aria-label="<?= htmlspecialchars(t('cta_bar.region_label')) ?>">
+                <a href="demo.php"
+                    class="sticky-cta-bar__btn sticky-cta-bar__btn--primary"
+                    aria-label="<?= htmlspecialchars(t('cta_bar.primary_aria')) ?>">
+                    <span><?= t('cta_bar.primary') ?></span>
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </a>
+                <a href="tel:+4531330033"
+                    class="sticky-cta-bar__btn sticky-cta-bar__btn--ghost"
+                    aria-label="<?= htmlspecialchars(t('cta_bar.secondary_aria')) ?>">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M4.5 3.5c-.8 1.7-.8 3.8.2 5.7 1.6 3.1 4.5 6 7.6 7.6 1.9 1 4 1 5.7.2l1.8 1.8a1.5 1.5 0 01-.6 2.5c-2.6.7-5.7.1-8.7-1.6s-5.6-4.1-7.3-6.9c-1.7-3-2.3-6.1-1.6-8.7A1.5 1.5 0 014.5 2l2 1.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <span><?= t('cta_bar.secondary') ?></span>
+                </a>
+            </div>
+            <button type="button"
+                class="sticky-cta-bar__close"
+                data-sticky-cta-close
+                aria-label="<?= htmlspecialchars(t('cta_bar.dismiss')) ?>">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M6 6l12 12M18 6l-12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                </svg>
+            </button>
+        </div>
+    </aside>
+
     <div class="bbx-command-rail<?= empty($show_alphabot) ? ' bbx-command-rail--cta-only' : '' ?>">
         <?php if (!empty($show_alphabot)): ?>
             <div id="alphabot-container" class="alphabot-widget" data-component="alphabot" aria-live="polite">

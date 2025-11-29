@@ -269,35 +269,54 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('scroll', toggleHeaderGlass, { passive: true });
     }
 
-    // Sticky CTA Bar for Mobile/Tablet
-    const stickyCTABar = document.getElementById('sticky-cta-bar');
-    if (stickyCTABar) {
-        const toggleStickyCTABar = () => {
-            const scrollPosition = window.scrollY;
-            const windowHeight = window.innerHeight;
-            const documentHeight = document.documentElement.scrollHeight;
-            // Show after scrolling 30% of viewport, hide near footer
-            const shouldShow = scrollPosition > windowHeight * 0.3 && scrollPosition < documentHeight - windowHeight - 300;
-            stickyCTABar.classList.toggle('is-visible', shouldShow);
-            document.body.classList.toggle('has-sticky-cta', shouldShow);
+    const stickyCtaBar = document.querySelector('[data-component="sticky-cta"]');
+    if (stickyCtaBar) {
+        const STORAGE_KEY = 'bbxStickyCtaDismissed';
+        const closeButton = stickyCtaBar.querySelector('[data-sticky-cta-close]');
+        const actionButtons = stickyCtaBar.querySelectorAll('.sticky-cta-bar__btn');
+
+        const hideBar = () => {
+            stickyCtaBar.setAttribute('data-hidden', 'true');
+            stickyCtaBar.removeAttribute('data-visible');
         };
 
-        toggleStickyCTABar();
-        window.addEventListener('scroll', toggleStickyCTABar, { passive: true });
-    }
-
-    const stickyCTA = document.getElementById('sticky-cta');
-    if (stickyCTA) {
-        const toggleStickyCTA = () => {
-            const scrollPosition = window.scrollY;
-            const windowHeight = window.innerHeight;
-            const documentHeight = document.documentElement.scrollHeight;
-            const shouldShow = scrollPosition > windowHeight * 0.2 && scrollPosition < documentHeight - windowHeight - 200;
-            stickyCTA.classList.toggle('visible', shouldShow);
+        const showBar = () => {
+            if (stickyCtaBar.hasAttribute('data-hidden')) {
+                stickyCtaBar.removeAttribute('data-hidden');
+            }
+            stickyCtaBar.setAttribute('data-visible', 'true');
         };
 
-        toggleStickyCTA();
-        window.addEventListener('scroll', toggleStickyCTA, { passive: true });
+        const isDismissed = () => {
+            try {
+                return window.sessionStorage.getItem(STORAGE_KEY) === '1';
+            } catch (error) {
+                return false;
+            }
+        };
+
+        if (isDismissed()) {
+            hideBar();
+        } else {
+            window.requestAnimationFrame(showBar);
+        }
+
+        const persistDismissal = () => {
+            try {
+                window.sessionStorage.setItem(STORAGE_KEY, '1');
+            } catch (error) {
+                // Ignore storage failures
+            }
+        };
+
+        closeButton?.addEventListener('click', () => {
+            hideBar();
+            persistDismissal();
+        });
+
+        actionButtons.forEach((button) => {
+            button.addEventListener('click', persistDismissal, { once: true });
+        });
     }
 
     const fadeSections = document.querySelectorAll('.section-fade-in');

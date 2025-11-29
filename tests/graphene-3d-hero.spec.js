@@ -42,12 +42,12 @@ test.describe('Graphene 3D Hero', () => {
 
   test('should display CTA buttons with proper styling', async ({ page }) => {
     // Primary CTA - gold filled
-    const primaryCta = page.locator('.graphene-btn-primary');
+    const primaryCta = page.locator('.graphene-cta-group .graphene-btn-primary');
     await expect(primaryCta).toBeVisible();
     await expect(primaryCta).toHaveAttribute('href', 'demo.php');
 
     // Secondary CTA - gold outlined (links to free-scan.php)
-    const secondaryCta = page.locator('.graphene-btn-secondary');
+    const secondaryCta = page.locator('.graphene-cta-group .graphene-btn-secondary');
     await expect(secondaryCta).toBeVisible();
     await expect(secondaryCta).toHaveAttribute('href', 'free-scan.php');
 
@@ -81,11 +81,11 @@ test.describe('Graphene 3D Hero', () => {
 
   test('CTA icons should have correct sizes', async ({ page }) => {
     // Primary and secondary CTA icons should be 22px
-    const primaryIcon = page.locator('.graphene-btn-primary .graphene-btn__icon');
+    const primaryIcon = page.locator('.graphene-cta-group .graphene-btn-primary .graphene-btn__icon');
     await expect(primaryIcon).toHaveAttribute('width', '22');
     await expect(primaryIcon).toHaveAttribute('height', '22');
 
-    const secondaryIcon = page.locator('.graphene-btn-secondary .graphene-btn__icon');
+    const secondaryIcon = page.locator('.graphene-cta-group .graphene-btn-secondary .graphene-btn__icon');
     await expect(secondaryIcon).toHaveAttribute('width', '22');
     await expect(secondaryIcon).toHaveAttribute('height', '22');
 
@@ -104,6 +104,21 @@ test.describe('Graphene 3D Hero', () => {
       await expect(icon).toHaveAttribute('width', '24');
       await expect(icon).toHaveAttribute('height', '24');
     }
+  });
+
+  test('sticky CTA bar should appear on mobile viewports', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/');
+    const stickyBar = page.locator('.graphene-cta-bar');
+    await expect(stickyBar).toBeVisible();
+    const stickyLinks = stickyBar.locator('a');
+    await expect(stickyLinks).toHaveCount(2);
+  });
+
+  test('sticky CTA bar should be hidden on desktop viewports', async ({ page }) => {
+    await page.goto('/');
+    const stickyBar = page.locator('.graphene-cta-bar');
+    await expect(stickyBar).toBeHidden();
   });
 });
 
@@ -191,9 +206,11 @@ test.describe('Graphene 3D Hero - Mobile Responsiveness', () => {
     const title = page.locator('.graphene-hero-title');
     await expect(title).toBeVisible();
 
-    // CTAs should be visible
-    const primaryCta = page.locator('.graphene-btn-primary');
-    await expect(primaryCta).toBeVisible();
+    // Sticky CTA bar should be visible on mobile
+    const stickyBar = page.locator('.graphene-cta-bar');
+    await expect(stickyBar).toBeVisible();
+    const stickyPrimary = stickyBar.locator('.graphene-btn-primary');
+    await expect(stickyPrimary).toBeVisible();
   });
 
   test('stats should stack on mobile', async ({ page }) => {
@@ -250,7 +267,7 @@ test.describe('Canvas Animation', () => {
     await page.waitForLoadState('domcontentloaded');
 
     // Primary CTA should be clickable
-    const primaryCta = page.locator('.graphene-btn-primary');
+    const primaryCta = page.locator('.graphene-cta-group .graphene-btn-primary');
     await expect(primaryCta).toBeVisible();
 
     // Check we can interact with it

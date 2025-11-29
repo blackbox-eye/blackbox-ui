@@ -272,8 +272,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const stickyCtaBar = document.querySelector('[data-component="sticky-cta"]');
     if (stickyCtaBar) {
         const STORAGE_KEY = 'bbxStickyCtaDismissed';
+        const SCROLL_THRESHOLD = 0.6; // Show after scrolling 60% down
         const closeButton = stickyCtaBar.querySelector('[data-sticky-cta-close]');
         const actionButtons = stickyCtaBar.querySelectorAll('.sticky-cta-bar__btn');
+        let hasShown = false;
 
         const hideBar = () => {
             stickyCtaBar.setAttribute('data-hidden', 'true');
@@ -285,6 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 stickyCtaBar.removeAttribute('data-hidden');
             }
             stickyCtaBar.setAttribute('data-visible', 'true');
+            hasShown = true;
         };
 
         const isDismissed = () => {
@@ -295,10 +298,24 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
+        const checkScrollAndShow = () => {
+            if (hasShown || isDismissed()) return;
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = docHeight > 0 ? scrollTop / docHeight : 0;
+            if (scrollPercent >= SCROLL_THRESHOLD) {
+                showBar();
+            }
+        };
+
+        // Initial check (in case user already scrolled or page is short)
         if (isDismissed()) {
             hideBar();
         } else {
-            window.requestAnimationFrame(showBar);
+            // Don't show immediately; wait for scroll
+            window.addEventListener('scroll', checkScrollAndShow, { passive: true });
+            // Check once in case page is already scrolled
+            checkScrollAndShow();
         }
 
         const persistDismissal = () => {

@@ -52,42 +52,41 @@ include 'includes/site-header.php';
                     </p>
                 </div>
 
-                <a href="products.php" class="graphene-btn-spotlight" aria-label="<?= t('home.hero.spotlight_cta_aria') ?>">
-                    <span class="graphene-btn-spotlight__glow" aria-hidden="true"></span>
-                    <svg class="graphene-btn__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"></path>
-                    </svg>
-                    <span class="graphene-btn__text"><?= t('home.hero.spotlight_cta') ?></span>
-                </a>
-
-                <!-- Premium CTA Buttons with Glow Effects -->
+                <!-- Premium CTA Buttons with Glow Effects - Primary: Free scan, Secondary: Demo -->
                 <div class="graphene-cta-group">
-                    <a href="demo.php" class="graphene-btn-primary" aria-label="<?= t('home.hero.primary_cta_aria') ?>">
+                    <a href="free-scan.php" class="graphene-btn-primary" aria-label="<?= t('home.hero.secondary_cta_aria') ?>">
                         <span class="graphene-btn-primary__bg"></span>
                         <span class="graphene-btn-primary__glow"></span>
+                        <svg class="graphene-btn__icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                        <span class="graphene-btn__text"><?= t('home.hero.secondary_cta') ?></span>
+                    </a>
+                    <a href="demo.php" class="graphene-btn-secondary" aria-label="<?= t('home.hero.primary_cta_aria') ?>">
+                        <span class="graphene-btn-secondary__border"></span>
                         <svg class="graphene-btn__icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <polygon points="5 3 19 12 5 21 5 3"></polygon>
                         </svg>
                         <span class="graphene-btn__text"><?= t('home.hero.primary_cta') ?></span>
                     </a>
-                    <a href="free-scan.php" class="graphene-btn-secondary" aria-label="<?= t('home.hero.secondary_cta_aria') ?>">
-                        <span class="graphene-btn-secondary__border"></span>
-                        <svg class="graphene-btn__icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M12 16v-4M12 8h.01"></path>
-                        </svg>
-                        <span class="graphene-btn__text"><?= t('home.hero.secondary_cta') ?></span>
-                    </a>
                 </div>
+
+                <!-- Explore platform as tertiary text link -->
+                <a href="products.php" class="graphene-text-link mt-4" aria-label="<?= t('home.hero.spotlight_cta_aria') ?>">
+                    <span class="graphene-text-link__text"><?= t('home.hero.spotlight_cta') ?></span>
+                    <svg class="graphene-text-link__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </a>
 
                 <div class="graphene-cta-bar" role="region" aria-label="<?= t('home.hero.cta_bar_label') ?>">
                     <p class="graphene-cta-bar__label"><?= t('home.hero.cta_bar_hint') ?></p>
                     <div class="graphene-cta-bar__actions">
-                        <a href="demo.php" class="graphene-btn-primary graphene-btn-primary--compact" aria-label="<?= t('home.hero.primary_cta_aria') ?>">
-                            <span class="graphene-btn__text"><?= t('home.hero.primary_cta') ?></span>
-                        </a>
-                        <a href="free-scan.php" class="graphene-btn-secondary graphene-btn-secondary--compact" aria-label="<?= t('home.hero.secondary_cta_aria') ?>">
+                        <a href="free-scan.php" class="graphene-btn-primary graphene-btn-primary--compact" aria-label="<?= t('home.hero.secondary_cta_aria') ?>">
                             <span class="graphene-btn__text"><?= t('home.hero.secondary_cta') ?></span>
+                        </a>
+                        <a href="demo.php" class="graphene-btn-secondary graphene-btn-secondary--compact" aria-label="<?= t('home.hero.primary_cta_aria') ?>">
+                            <span class="graphene-btn__text"><?= t('home.hero.primary_cta') ?></span>
                         </a>
                     </div>
                 </div>

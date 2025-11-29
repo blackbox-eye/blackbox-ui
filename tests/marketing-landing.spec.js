@@ -42,8 +42,8 @@ test.describe('Hero Section', () => {
     const primaryCTA = page.locator('#home .graphene-cta-group .graphene-btn-primary, #home a.btn-graphene-primary').first();
     await expect(primaryCTA).toBeVisible();
 
-    // Should link to demo page
-    await expect(primaryCTA).toHaveAttribute('href', 'demo.php');
+    // Primary CTA links to free-scan page (main call to action)
+    await expect(primaryCTA).toHaveAttribute('href', 'free-scan.php');
 
     // Check button has correct class and is styled
     const hasClass = await primaryCTA.evaluate(el =>
@@ -53,7 +53,7 @@ test.describe('Hero Section', () => {
   });
 
   test('should render spotlight CTA for platform exploration', async ({ page }) => {
-    const spotlightCTA = page.locator('#home a.graphene-btn-spotlight');
+    const spotlightCTA = page.locator('#home a.graphene-btn-spotlight, #home a.graphene-text-link').first();
     await expect(spotlightCTA).toBeVisible();
     await expect(spotlightCTA).toHaveAttribute('href', 'products.php');
 
@@ -65,8 +65,8 @@ test.describe('Hero Section', () => {
     const secondaryCTA = page.locator('#home .graphene-cta-group .graphene-btn-secondary, #home a.btn-graphene-secondary').first();
     await expect(secondaryCTA).toBeVisible();
 
-    // Should link to free scan page in new layout
-    await expect(secondaryCTA).toHaveAttribute('href', 'free-scan.php');
+    // Secondary CTA links to demo page
+    await expect(secondaryCTA).toHaveAttribute('href', 'demo.php');
 
     // Check button has correct class
     const hasClass = await secondaryCTA.evaluate(el =>
@@ -217,7 +217,7 @@ test.describe('Hero Accessibility', () => {
   });
 
   test('spotlight CTA should expose descriptive aria label', async ({ page }) => {
-    const spotlight = page.locator('#home .graphene-btn-spotlight').first();
+    const spotlight = page.locator('#home .graphene-btn-spotlight, #home .graphene-text-link').first();
     await expect(spotlight).toHaveAttribute('aria-label', /platform|interface/i);
   });
 
@@ -259,7 +259,7 @@ test.describe('Responsive Hero Layout', () => {
       const primaryCTA = page.locator('#home .graphene-cta-group .graphene-btn-primary').first();
       await expect(primaryCTA).toBeVisible();
 
-      const spotlight = page.locator('#home .graphene-btn-spotlight').first();
+      const spotlight = page.locator('#home .graphene-btn-spotlight, #home .graphene-text-link').first();
       await expect(spotlight).toBeVisible();
       await expect(primaryCTA).toBeVisible();
 

@@ -391,7 +391,7 @@ if ($is_graphene_page) {
                         </ul>
                     </nav>
                     <div class="header-actions bbx-header-right">
-                        <div class="header-cta-group" role="group" aria-label="<?= htmlspecialchars(t('header.cta.primary_actions_label', 'Primary actions')) ?>">
+                        <div class="header-cta-group hidden lg:flex" role="group" aria-label="<?= htmlspecialchars(t('header.cta.primary_actions_label', 'Primary actions')) ?>">
                             <a href="demo.php"
                                 class="header-cta header-cta--pill header-cta--primary"
                                 aria-label="<?= htmlspecialchars(t('header.cta.book_demo_aria', t('header.cta.book_demo', t('header.menu.demo')))) ?>">
@@ -415,7 +415,7 @@ if ($is_graphene_page) {
                                 </span>
                             </a>
                         </div>
-                        <a href="/agent-access.php" class="header-cta agent-login-cta bbx-btn-pill" aria-label="<?= htmlspecialchars(t('header.cta.agent_login')) ?>">
+                        <a href="/agent-access.php" class="header-cta agent-login-cta bbx-btn-pill hidden lg:inline-flex" aria-label="<?= htmlspecialchars(t('header.cta.agent_login')) ?>">
                             <span class="header-cta__label"><?= t('header.cta.agent_login') ?></span>
                         </a>
                         <div class="language-switcher-wrapper flex items-center gap-0.5">

@@ -4883,6 +4883,49 @@ button:focus-visible {
   }
 }
 
+/* === Tertiary Text Link (for "Explore platform" etc.) === */
+.graphene-text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--bbx-gold-light, #ffe8a3);
+  text-decoration: none;
+  opacity: 0.85;
+  transition: opacity 0.2s ease, color 0.2s ease;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.graphene-text-link:hover,
+.graphene-text-link:focus-visible {
+  opacity: 1;
+  color: var(--bbx-gold, #d4af37);
+}
+
+.graphene-text-link__icon {
+  transition: transform 0.2s ease;
+}
+
+.graphene-text-link:hover .graphene-text-link__icon {
+  transform: translateX(4px);
+}
+
+.graphene-text-link:focus-visible {
+  outline: 2px solid var(--bbx-gold-light, #ffe8a3);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  .graphene-text-link {
+    justify-content: center;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+}
+
 @keyframes graphene-fade-in {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }

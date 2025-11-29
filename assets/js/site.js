@@ -272,7 +272,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const stickyCtaBar = document.querySelector('[data-component="sticky-cta"]');
     if (stickyCtaBar) {
         const STORAGE_KEY = 'bbxStickyCtaDismissed';
-        const SCROLL_THRESHOLD = 0.6; // Show after scrolling 60% down
+        // Show sticky CTA after scrolling 60% down the page.
+        // This ensures it doesn't block hero CTAs on mobile initial load,
+        // while still appearing before the user reaches the footer.
+        const SCROLL_THRESHOLD = 0.6;
         const closeButton = stickyCtaBar.querySelector('[data-sticky-cta-close]');
         const actionButtons = stickyCtaBar.querySelectorAll('.sticky-cta-bar__btn');
         let hasShown = false;

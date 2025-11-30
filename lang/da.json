@@ -65,6 +65,33 @@
     },
     "more": "Mere"
   },
+  "agent_access": {
+    "meta": {
+      "title": "Vælg sikker adgang | BLACKBOX EYE™",
+      "description": "Start GreyEYE eller TS24 konsollen fra et samlet, auditeret adgangspunkt.",
+      "breadcrumb": "Agent Access"
+    },
+    "hero": {
+      "eyebrow": "Sikker drift",
+      "title": "Vælg sikker adgang",
+      "lead": "Vælg den konsol du har brug for lige nu – hver opstart arver dit nuværende clearance-niveau og overvåges i realtid.",
+      "audit_notice": "Alle opstart kræver MFA, logges i sikkerhedsjournalen og udløser øjeblikkelige alarmer ved anomalier."
+    },
+    "cards": {
+      "gdi": {
+        "title": "GreyEYE Data Intelligence (GDI)",
+        "description": "Brug til interne efterforskninger, alert-triage og direkte styring af GreyEYE-sensorer på tværs af enklaver.",
+        "cta": "Åbn GDI konsol",
+        "meta": "Kræver Blackbox VPN + biometrisk badge"
+      },
+      "ts24": {
+        "title": "TS24 / Intel24 Intelligence Console",
+        "description": "Felt-telemetri, TS transport-alarmer og taktiske briefinger for TS24 rapid-response teams.",
+        "cta": "Åbn TS24 konsol",
+        "meta": "Åbner sikker tstransport.app session"
+      }
+    }
+  },
   "footer": {
     "tagline": "Intelligent Sikkerhed. Klar til Handling.",
     "operational": "Operational 24/7",

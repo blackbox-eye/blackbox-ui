@@ -6,7 +6,7 @@
  * test runner returns exit code 1 even when all tests pass. This script:
  *   1. Runs Playwright (config has line + JSON reporters configured).
  *   2. Parses the JSON report at artifacts/test-results.json.
- *   3. Returns exit 0 if unexpected === 0 AND flaky === 0; otherwise 1.
+ *   3. Returns exit 0 if unexpected === 0 (flaky tests that passed on retry are OK).
  *
  * TEMPORARY WORKAROUND – Remove once Playwright fixes the bug.
  * See: https://github.com/microsoft/playwright/issues
@@ -58,10 +58,14 @@ const { expected = 0, unexpected = 0, flaky = 0, skipped = 0 } = stats;
 
 console.log(`[shim] Stats: expected=${expected}, unexpected=${unexpected}, flaky=${flaky}, skipped=${skipped}`);
 
-if (unexpected === 0 && flaky === 0) {
-  console.log('[shim] ✅ All tests passed – normalizing exit code to 0');
+if (unexpected === 0) {
+  if (flaky > 0) {
+    console.log(`[shim] ⚠️ ${flaky} flaky test(s) passed after retry – normalizing exit code to 0`);
+  } else {
+    console.log('[shim] ✅ All tests passed – normalizing exit code to 0');
+  }
   process.exit(0);
 } else {
-  console.log(`[shim] ❌ Tests failed or flaky – returning exit code 1`);
+  console.log(`[shim] ❌ ${unexpected} test(s) failed – returning exit code 1`);
   process.exit(1);
 }

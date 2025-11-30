@@ -11,7 +11,8 @@ $meta_og_title = $page_title;
 $meta_og_description = $meta_description;
 
 $gdi_console_url = 'agent-login.php';
-$ts24_base_url = BBX_TS24_CONSOLE_URL ?? bbx_env('TS24_CONSOLE_URL', 'https://intel24.tstransport.app/login');
+$ts24_base_url = defined('BBX_TS24_CONSOLE_URL') ? BBX_TS24_CONSOLE_URL : bbx_env('TS24_CONSOLE_URL', 'https://intel24.tstransport.app/login');
+$ts24_base_url = rtrim($ts24_base_url, '/');
 $ts24_active_jwt = bbx_current_agent_jwt();
 $ts24_has_sso = $ts24_active_jwt !== null;
 $ts24_console_url = $ts24_base_url;

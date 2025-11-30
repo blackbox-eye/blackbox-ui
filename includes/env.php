@@ -114,3 +114,24 @@ if (!defined('BBX_SMTP_SECURE')) {
 if (!defined('BBX_CONTACT_EMAIL')) {
     define('BBX_CONTACT_EMAIL', bbx_env('CONTACT_EMAIL', 'ops@blackbox.codes'));
 }
+
+if (!defined('BBX_TS24_CONSOLE_URL')) {
+    $ts24Url = bbx_env('TS24_CONSOLE_URL', 'https://intel24.tstransport.app/login');
+    define('BBX_TS24_CONSOLE_URL', rtrim($ts24Url, '/'));
+}
+
+if (!defined('BBX_JWT_SECRET')) {
+    $jwtSecret = bbx_env('GDI_SSO_SECRET');
+    if ($jwtSecret === '') {
+        $jwtSecret = bbx_env('JWT_SECRET', '');
+    }
+    if ($jwtSecret === '') {
+        error_log('BBX JWT WARNING: GDI_SSO_SECRET / JWT_SECRET not configured – TS24 SSO disabled');
+    }
+    define('BBX_JWT_SECRET', $jwtSecret);
+}
+
+if (!defined('BBX_JWT_TTL')) {
+    $ttlSeconds = (int) bbx_env('GDI_SSO_TTL_SECONDS', bbx_env('JWT_TTL_SECONDS', 600));
+    define('BBX_JWT_TTL', $ttlSeconds > 0 ? $ttlSeconds : 600);
+}

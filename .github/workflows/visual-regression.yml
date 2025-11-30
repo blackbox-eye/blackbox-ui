@@ -89,8 +89,34 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
+      - name: Start PHP dev server
+        run: |
+          php -S 127.0.0.1:8080 -t . >/tmp/php-server.log 2>&1 &
+          echo $! > /tmp/php-server.pid
+          sleep 2
+
+      - name: Run SSO healthcheck preflight
+        env:
+          SSO_HEALTH_BASE_URL: http://127.0.0.1:8080
+        run: php scripts/check_sso_health.php
+
       - name: Run visual tests
         run: npm run test:ci
+
+      - name: Stop PHP dev server
+        if: always()
+        run: |
+          if [ -f /tmp/php-server.pid ]; then
+            kill $(cat /tmp/php-server.pid) || true
+          fi
+
+      - name: PHP server log (on failure)
+        if: failure()
+        run: |
+          if [ -f /tmp/php-server.log ]; then
+            echo '--- PHP Server Log ---'
+            cat /tmp/php-server.log
+          fi
 
       - name: Upload screenshots
         if: always()

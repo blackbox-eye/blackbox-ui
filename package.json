@@ -7,7 +7,9 @@
     "test": "node scripts/playwright-shim.js",
     "test:raw": "playwright test --reporter=list",
     "test:ci": "node scripts/playwright-shim.js",
-    "a11y:contrast": "node tools/a11y/contrast-check.js"
+    "a11y:contrast": "node tools/a11y/contrast-check.js",
+    "sso:health": "php scripts/check_sso_health.php",
+    "sso:audit:tail": "php scripts/inspect_sso_log.php 20"
   },
   "devDependencies": {
     "@playwright/test": "^1.56.1",

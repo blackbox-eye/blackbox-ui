@@ -1,6 +1,8 @@
 <?php
+session_start();
 require_once __DIR__ . '/includes/env.php';
 require_once __DIR__ . '/includes/i18n.php';
+require_once __DIR__ . '/includes/jwt_helper.php';
 
 $current_page = 'agent-access';
 $page_title = t('agent_access.meta.title');
@@ -9,7 +11,15 @@ $meta_og_title = $page_title;
 $meta_og_description = $meta_description;
 
 $gdi_console_url = 'agent-login.php';
-$ts24_console_url = bbx_env('TS24_CONSOLE_URL', 'https://intel24.tstransport.app/login');
+$ts24_base_url = BBX_TS24_CONSOLE_URL ?? bbx_env('TS24_CONSOLE_URL', 'https://intel24.tstransport.app/login');
+$ts24_active_jwt = bbx_current_agent_jwt();
+$ts24_has_sso = $ts24_active_jwt !== null;
+$ts24_console_url = $ts24_base_url;
+
+if ($ts24_has_sso) {
+  $separator = strpos($ts24_base_url, '?') === false ? '?' : '&';
+  $ts24_console_url = $ts24_base_url . $separator . 'sso=' . urlencode($ts24_active_jwt);
+}
 
 include 'includes/site-header.php';
 ?>
@@ -62,6 +72,12 @@ include 'includes/site-header.php';
           <p class="access-card__description">
             <?= t('agent_access.cards.ts24.description') ?>
           </p>
+          <p class="access-card__note">
+            <?= t('agent_access.cards.ts24.sso_notice') ?>
+            <?php if ($ts24_has_sso): ?>
+              <span class="access-card__note-badge"><?= t('agent_access.cards.ts24.sso_ready') ?></span>
+            <?php endif; ?>
+          </p>
           <ul class="access-card__meta" aria-label="<?= htmlspecialchars(t('agent_access.cards.ts24.title')) ?>">
             <li><?= t('agent_access.cards.ts24.meta') ?></li>
             <li><?= t('agent_access.hero.audit_notice') ?></li>
@@ -72,7 +88,8 @@ include 'includes/site-header.php';
             class="access-card__cta bbx-btn-pill"
             data-console-launch="ts24"
             target="_blank"
-            rel="noopener">
+            rel="noopener"
+            <?= $ts24_has_sso ? 'data-sso-active="true"' : '' ?>>
             <?= t('agent_access.cards.ts24.cta') ?>
           </a>
         </div>

@@ -9,6 +9,9 @@
 
 const http = require('http');
 
+// Configuration
+const REQUEST_TIMEOUT_MS = 5000;
+
 const HEALTH_ENDPOINTS = [
   {
     name: 'GDI',
@@ -30,7 +33,7 @@ const HEALTH_ENDPOINTS = [
 function checkEndpoint(endpoint) {
   return new Promise((resolve) => {
     const startTime = Date.now();
-    const request = http.get(endpoint.url, { timeout: 5000 }, (res) => {
+    const request = http.get(endpoint.url, { timeout: REQUEST_TIMEOUT_MS }, (res) => {
       const latency = Date.now() - startTime;
       let data = '';
 
@@ -74,7 +77,7 @@ function checkEndpoint(endpoint) {
         name: endpoint.name,
         description: endpoint.description,
         status: 'TIMEOUT',
-        error: 'Request timed out after 5000ms',
+        error: `Request timed out after ${REQUEST_TIMEOUT_MS}ms`,
         url: endpoint.url
       });
     });

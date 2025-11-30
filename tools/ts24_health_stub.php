@@ -12,7 +12,8 @@
 header('Content-Type: application/json');
 header('Cache-Control: no-store');
 header('X-Content-Type-Options: nosniff');
-header('Access-Control-Allow-Origin: *');
+// Allow local development origins only - this is a stub for local testing
+header('Access-Control-Allow-Origin: http://127.0.0.1:8000');
 
 // Return stub health check response
 $response = [

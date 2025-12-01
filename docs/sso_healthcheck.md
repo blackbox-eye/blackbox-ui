@@ -1,89 +1,109 @@
 # SSO Healthcheck Guide
 
-Denne guide beskriver, hvordan du verificerer SSO-stackens sundhed for GDI ⇄ TS24 integrationen.
+> **Senest opdateret / Last updated:** 2025-12-01
+> **Version:** 1.1
+
+Denne guide forklarer, hvordan du kører SSO healthchecks for GDI og TS24 – både lokalt, i CI og i produktion.
 
 ---
 
-## Automatisk Healthcheck (CI/Lokal)
+## Oversigt
 
-### Kommando
+Healthcheck-scriptet `scripts/sso-health.js` (og det ældre PHP-alternativ `scripts/check_sso_health.php`) validerer, at GDI og TS24 stub svarer korrekt inden Playwright-tests eller deploy.
+
+---
+
+## Endpoints
+
+| Navn | URL | Port | Beskrivelse |
+|------|-----|------|-------------|
+| **GDI** | `http://127.0.0.1:8000` | 8000 | Hoved-GUI-applikation |
+| **TS24** (stub) | `http://127.0.0.1:8091/tools/ts24_health_stub.php` | 8091 | Lokal stub for TS24 SSO |
+| **TS24** (prod) | `https://intel24.tstransport.app/sso-login` | 443 | Kanonisk SSO entry – DNS + cert |
+
+---
+
+## Kør healthcheck lokalt
 
 ```bash
+# Start PHP-servere
+php -S localhost:8000 &
+php -S 127.0.0.1:8091 &
+
+# Node-baseret check (foretrukket)
 npm run sso:health
+
+# Alternativ PHP-check
+npm run sso:health:php
 ```
 
-### Output-format
+### Forventet output (succes)
 
 ```text
-GDI SSO: OK
-TS24 SSO: OK
+🔍 SSO Health Check
+
+==================================================
+
+✅ GDI (Main GUI application)
+   URL: http://127.0.0.1:8000
+   Status: OK
+   HTTP Code: 200
+   Latency: 15ms
+
+✅ TS24 (TS24 SSO integration)
+   URL: http://127.0.0.1:8091/tools/ts24_health_stub.php
+   Status: OK
+   HTTP Code: 200
+   Latency: 8ms
+   Stub: Yes
+   Secret Configured: Yes
+   Uses HS256: Yes
+   Expected Issuer: https://blackbox.codes
+   Expected Audience: ts24
+   Recent Errors: 0
+
+==================================================
+
+✅ All health checks passed!
 ```
 
-Eller ved fejl:
+---
 
-```text
-GDI SSO: Failed flags: has_secret (notes: Missing GDI_SSO_SECRET / JWT_SECRET)
-TS24 SSO: Skipped - TS24 URL not configured
-```
-
-### Exit-koder
+## Exit-koder
 
 | Kode | Betydning |
-| --- | --- |
-| `0` | Begge checks OK |
-| `2` | GDI health endpoint unreachable |
+|------|-----------|
+| `0` | OK – begge endpoints svarer |
+| `1` | En eller flere checks fejlede |
+| `2` | GDI endpoint unreachable |
 | `3` | Invalid JSON fra GDI |
-| `4` | GDI SSO-fejl (manglende secret, JWT-mint fejl, etc.) |
-| `5` | TS24 SSO-fejl (endpoint unreachable, config-problemer) |
+| `4` | GDI-konfigurationsfejl (secret, mint) |
+| `5` | TS24 check fejlede |
 
 ---
 
-## GDI-side healthcheck
+## TS24 stub JSON-respons
 
-Endpoint: `/tools/sso_health.php`
-
-Tjekker:
-
-- `sso_enabled` – Er SSO aktiveret?
-- `has_secret` – Er `GDI_SSO_SECRET` / `JWT_SECRET` konfigureret?
-- `has_ts24_url` – Er `TS24_CONSOLE_URL` sat?
-- `jwt_mint_ok` – Kan vi minte et test-token?
-
-### Lokal test
-
-```bash
-curl http://127.0.0.1:8080/tools/sso_health.php
+```json
+{
+  "stub": true,
+  "secretConfigured": true,
+  "usesHS256": true,
+  "expectedIss": "https://blackbox.codes",
+  "expectedAud": "ts24",
+  "recentErrors": [],
+  "notes": "TS24 stub response for local testing",
+  "timestamp": "2025-12-01T12:00:00+00:00"
+}
 ```
 
 ---
 
-## TS24-side healthcheck
+## 🚀 Prod-verifikation (Ops-supplement)
 
-Endpoint: `{TS24_CONSOLE_URL}/api/auth/sso-health`
+> **Status (2025-12-01):** DNS + cert er live og verificeret.
 
-Tjekker:
-
-- `secretConfigured` – Er `VITE_SSO_JWT_SECRET` sat?
-- `usesHS256` – Bruger TS24 HS256-algoritmen?
-- `expectedIss` – Forventet issuer
-- `expectedAud` – Forventet audience
-- `recentErrors` – Nylige token-verifikationsfejl
-
-### Stub-tilstand (lokal udvikling)
-
-Ved `--ts24-stub` flag bruges `/tools/ts24_health_stub.php` i stedet for det rigtige TS24-endpoint:
-
-```bash
-npm run sso:health  # Bruger stub automatisk
-```
-
----
-
-## 🚀 Ops-test (Prod)
-
-> **Status (2025-12-01):** DNS + cert er verificeret og live. Nedenstående curl-kommando bør returnere HTTP 200.
-
-### Manuel verifikation af TS24 prod-endpoint
+Brug curl til at validere det kanoniske TS24 prod-endpoint inden high-risk releases:
 
 ```bash
 curl -I https://intel24.tstransport.app/sso-login
@@ -95,33 +115,60 @@ curl -I https://intel24.tstransport.app/sso-login
 - Certifikat: Gyldigt SSL/TLS
 - Ingen DNS-fejl
 
-### Fejlsituationer
+### Fejlscenarier
 
 | Symptom | Årsag | Handling |
-| --- | --- | --- |
-| `NXDOMAIN` | DNS-problem | Tjek DNS-konfiguration, kontakt TS24-team |
-| `ERR_CONNECTION_REFUSED` | TS24-server ikke kørende | Kontakt TS24-team |
-| `SSL certificate problem` | Certifikat-fejl | Tjek certifikat-udstedelse |
-| `HTTP 404` | `/sso-login` endpoint ikke deployed | Bekræft TS24-deployment |
+|---------|-------|----------|
+| `NXDOMAIN` | DNS-problem | Tjek DNS, kontakt TS24-team |
+| `ECONNREFUSED` | Server nede | Kontakt TS24-team |
+| `SSL certificate problem` | Certifikat udløbet/invalid | Tjek certifikat |
+| `HTTP 404` | Endpoint ikke deployed | Bekræft TS24-release |
 
 ---
 
 ## CI-integration
 
-Healthcheck køres automatisk i `.github/workflows/visual-regression.yml` som preflight før Playwright-tests.
+Healthcheck kører som preflight i `.github/workflows/visual-regression.yml`:
 
 ```yaml
 - name: SSO Stack Health Preflight
   run: npm run sso:health
 ```
 
-Ved fejl stoppes pipelinen før testene køres.
+Pipeline stoppes automatisk, hvis healthcheck fejler.
+
+---
+
+## Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| `ECONNREFUSED` | Server kører ikke på forventet port |
+| `TIMEOUT` | Server uresponsiv – tjek for blocking ops |
+| `vendor/autoload.php` missing | Kør `composer install` |
+| HTTP 500 | Tjek PHP-fejl i server output |
+
+### Debug manuelt
+
+```bash
+curl -v http://127.0.0.1:8000
+curl -v http://127.0.0.1:8091/tools/ts24_health_stub.php
+```
 
 ---
 
 ## Relateret dokumentation
 
-- `docs/ts24_sso_bridge.md` – Canonical TS24 entry URL og ejerskab
+- `docs/ts24_sso_bridge.md` – Canonical entry URL og ejerskab
 - `docs/sso_ops_runbook.md` – Drift og fejlsøgning
-- `docs/sso_v1_signoff_gdi.md` – GDI sign-off checklist
+- `docs/sso_v1_signoff_gdi.md` – GDI sign-off
 - `docs/ci_pipelines.md` – CI/CD pipeline-oversigt
+
+---
+
+## Changelog
+
+| Dato | Ændring | PR |
+|------|---------|----|
+| 2025-11-30 | Første version | #61 |
+| 2025-12-01 | Tilføjet prod-verifikation + detaljerede sektioner | Current |

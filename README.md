@@ -1,6 +1,3 @@
-Her er en fuldt opdateret `README.md` til roden af dit repo. Erstat hele indholdet i din nuværende `README.md` med nedenstående, så alle nye `/docs/`-filer og rapporter linkes korrekt:
-
-```markdown
 # ALPHA Interface GUI
 > **BLACKBOX.CODES | Enterprise Edition v1.0**
 
@@ -45,6 +42,43 @@ Dette repo leverer frontend- og webkomponenter til enterprise cyber operations, 
 └── docs/              # Dokumentation og rapporter
 
 ````
+
+---
+
+## 🚀 Quickstart for Developers
+
+Quick setup for local development:
+
+```bash
+# 1. Clone repository
+git clone https://github.com/AlphaAcces/ALPHA-Interface-GUI.git
+cd ALPHA-Interface-GUI
+
+# 2. Install dependencies
+npm install
+
+# 3. Start PHP development servers
+php -S localhost:8000 &           # Main application
+php -S 127.0.0.1:8091 &           # TS24 SSO stub
+
+# 4. Verify SSO health
+npm run sso:health
+
+# 5. Run tests
+npm test
+
+# 6. Build Tailwind CSS (if needed)
+npm run build:tailwind
+```
+
+### Available npm Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm test` | Run all Playwright tests (via shim) |
+| `npm run test:ci` | Run tests in CI mode |
+| `npm run sso:health` | Check GDI and TS24 SSO health |
+| `npm run build:tailwind` | Build Tailwind CSS |
 
 ---
 
@@ -136,19 +170,22 @@ Alle dokumenter ligger nu under `/docs/`:
 
 ### 🔧 CI/CD & Workflow Dokumentation
 
-* [CI\_CD\_SETUP\_GUIDE.md](/docs/CI_CD_SETUP_GUIDE.md) - Komplet opsætningsguide til CI/CD workflow
-* [WORKFLOW\_VALIDATION\_REPORT.md](/docs/WORKFLOW_VALIDATION_REPORT.md) - Validering af workflow konfiguration (PR #3/PR #5)
-* [ci\_pipelines.md](/docs/ci_pipelines.md) - CI/CD pipeline-oversigt
+* [CI_CD_SETUP_GUIDE.md](/docs/CI_CD_SETUP_GUIDE.md) - Komplet opsætningsguide til CI/CD workflow
+* [WORKFLOW_VALIDATION_REPORT.md](/docs/WORKFLOW_VALIDATION_REPORT.md) - Validering af workflow-konfiguration (PR #3/PR #5)
+* [ci_pipelines.md](/docs/ci_pipelines.md) - Detaljeret oversigt over workflows, triggers og TS24 curl-ops-supplement
 
 ### 🔗 SSO & TS24 Integration
 
-* [ts24\_sso\_bridge.md](/docs/ts24_sso_bridge.md) - Canonical TS24 entry URLs og ejerskab
-* [sso\_healthcheck.md](/docs/sso_healthcheck.md) - SSO healthcheck-guide
-* [sso\_gdi\_ts24.md](/docs/sso_gdi_ts24.md) - Teknisk JWT-specifikation
-* [sso\_ops\_runbook.md](/docs/sso_ops_runbook.md) - Drift og fejlsøgning
-* [sso\_v1\_signoff\_gdi.md](/docs/sso_v1_signoff_gdi.md) - GDI sign-off checklist
-* [e2e\_gdi\_ts24\_sso\_test.md](/docs/e2e_gdi_ts24_sso_test.md) - End-to-end testplan
-* [qa\_release\_checklist.md](/docs/qa_release_checklist.md) - QA release checklist
+* [ts24_sso_bridge.md](/docs/ts24_sso_bridge.md) - Canonical TS24 entry, ejerskab og JWT-flow
+* [sso_healthcheck.md](/docs/sso_healthcheck.md) - Healthcheck-script, stub og prod-verifikationsguide
+* [sso_gdi_ts24.md](/docs/sso_gdi_ts24.md) - Teknisk JWT-specifikation
+* [sso_ops_runbook.md](/docs/sso_ops_runbook.md) - Drift og fejlsøgning
+* [sso_v1_signoff_gdi.md](/docs/sso_v1_signoff_gdi.md) - GDI sign-off checklist
+* [e2e_gdi_ts24_sso_test.md](/docs/e2e_gdi_ts24_sso_test.md) - End-to-end testplan
+
+### ✅ QA & Release
+
+* [qa_release_checklist.md](/docs/qa_release_checklist.md) - Både dansk release-tjekliste og udvidet preflight-checks
 
 ### 📄 Versionerede rapporter (i `/docs/reports/`)
 
@@ -207,5 +244,3 @@ Dette projekt er frigivet under **MIT License** (se [LICENSE](LICENSE)).
 * Discord: BLACKBOX E.Y.E. Ops Center
 
 Dokumentation og deployment-guides opdateres løbende. For enterprise-integration eller revision, kontakt ALPHA Lead via ovenstående.
-
-````

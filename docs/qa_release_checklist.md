@@ -1,92 +1,146 @@
 # QA Release Checklist
 
-Denne checklist bruges ved releases af ALPHA Interface GUI for at sikre, at alle kritiske funktioner er verificeret.
+> **Senest opdateret / Last updated:** 2025-12-01
+> **Version:** 1.1
+
+Denne checklist kombinerer de oprindelige danske release-gates og den nye detaljerede preflight-guide. Brug den før både PR-merge og produktion.
 
 ---
 
-## Generelt
+## Grundlæggende kontroller
 
-- [ ] Alle unit tests passerer (`npm test`)
-- [ ] Ingen kritiske linting-fejl (`npm run lint` hvis tilgængelig)
-- [ ] Tailwind CSS bygget og opdateret (`npm run build:tailwind`)
-- [ ] CHANGELOG.md opdateret med release-noter
-
----
-
-## Sikkerhed
-
-- [ ] Secrets er ikke hardkodet i kodebasen
-- [ ] Password-hashing bruger bcrypt (ikke plaintext i prod)
+- [ ] `npm test` passerer uden fejl
+- [ ] `npm run build:tailwind` kørt efter CSS-ændringer
+- [ ] CHANGELOG.md opdateret
+- [ ] Ingen hardkodede secrets (brug `bbx_env()`)
+- [ ] Prod-passwords bruger `password_hash()`/`password_verify()`
 - [ ] Session-cookies er Secure + HttpOnly
-- [ ] reCAPTCHA er aktiveret på public forms
+- [ ] reCAPTCHA aktiv på offentlige formularer
 
 ---
 
-## TS24 / SSO Integration
+## Pre-release checklist
 
-### Lokal/CI healthcheck
+### 1. SSO health
 
-- [ ] `npm run sso:health` returnerer OK for både GDI og TS24
-- [ ] SSO audit log (`logs/sso_events.log`) viser ingen gentagne fejl
+- [ ] Start lokale PHP-servere (8000 for GDI, 8091 for TS24 stub)
+- [ ] `npm run sso:health` viser ✅ for GDI og TS24 + `Secret Configured: Yes`
+- [ ] `logs/sso_events.log` indeholder ingen nye fejl
 
-### GDI-side SSO
+### 2. Playwright suites
 
-- [ ] `GDI_SSO_SECRET` / `JWT_SECRET` er konfigureret
-- [ ] JWT-minting fungerer (verificér via healthcheck)
-- [ ] Agent Access-siden viser TS24-kort med `data-sso-active="true"`
-- [ ] TS24-link indeholder korrekt `?sso=` parameter
+- [ ] `npm test` (fuld suite) gennemført
+- [ ] Ekstra targeted suites efter behov (fx `tests/agent-access.spec.js`)
+- [ ] Rapport viser `unexpected === 0`
 
-### TS24 Prod-verifikation
+### 3. i18n
 
-- [ ] Prod TS24 SSO-entry (`https://intel24.tstransport.app/sso-login`) svarer OK (DNS + cert)
-  - Se `docs/sso_healthcheck.md` for curl-eksempel
+- [ ] Ingen rå nøgler på `/agent-access.php`
+- [ ] Hero-tekst, kort og audit notice oversat på både EN/DA
 
-### End-to-end
+### 4. Mobile responsiveness
 
-- [ ] Happy path: GDI login → TS24 link → TS24 dashboard uden fejl
-- [ ] Expired token afvises korrekt af TS24
-- [ ] Tampered token afvises korrekt
+- [ ] 320 px: CTA'er ≥ 48 px, kort stakker korrekt
+- [ ] 768 px: Navigation tilgængelig
+- [ ] 1280 px: Console cards side om side
+
+### 5. Visual regression
+
+- [ ] Graphene hero matcher baseline
+- [ ] Header/footer konsistente
+- [ ] Farver følger GreyEYE palette
+
+### 6. Deployment readiness
+
+- [ ] Cloudflare Pages preview grøn
+- [ ] `ci.yml` smoke tests passerer
+- [ ] Ingen JS-console fejl på preview/staging
+- [ ] Cloudflare cache klar til purge
 
 ---
 
-## Visual Regression
+## TS24 / SSO integration
 
-- [ ] Playwright tests passerer
-- [ ] Graphene hero-komponent vises korrekt
-- [ ] CTA-knapper fungerer og linker korrekt
-- [ ] Ingen visuelle regressionsfejl
+### Lokal & CI healthcheck
+
+- [ ] `npm run sso:health` OK
+- [ ] `GDI_SSO_SECRET` / `JWT_SECRET` sat
+- [ ] Agent Access viser TS24-kort med `data-sso-active="true"`
+- [ ] SSO-link bruger `https://intel24.tstransport.app/sso-login?sso=...`
+
+### Prod-verifikation
+
+- [ ] `curl -I https://intel24.tstransport.app/sso-login` svarer 200/3xx (DNS + cert ok)
+- [ ] Happy path: GDI login → TS24 link → dashboard
+- [ ] Expired og tampered tokens afvises korrekt
 
 ---
 
-## Deployment
+## Quick verification commands
 
-- [ ] FTP-credentials er gyldige
-- [ ] `composer install` kørt (hvis vendor-dependencies)
-- [ ] Database-migrations kørt (hvis relevant)
-- [ ] Cloudflare cache purget
+```bash
+# Minimum gate
+npm run sso:health && npm test -- tests/agent-access.spec.js
+
+# Full pre-merge
+npm run sso:health && npm test
+```
+
+---
+
+## Release approval matrix
+
+| Criterion | Status |
+|-----------|--------|
+| SSO health checks pass | ✅ Required |
+| Playwright + visual regression pass | ✅ Required |
+| Ingen rå i18n-nøgler | ✅ Required |
+| Mobile CTA'er tilgængelige | ✅ Required |
+| CodeQL (JS + PHP) grøn | ✅ Required |
+| Cloudflare Pages deploy | ✅ Required |
 
 ---
 
 ## Post-deploy verifikation
 
-- [ ] Prod-site loader korrekt
-- [ ] Login fungerer
-- [ ] SSO healthcheck på prod returnerer OK
-- [ ] Ingen console-fejl i browser
+- [ ] Prod-site loader (<https://blackbox.codes>)
+- [ ] Agent-login + TS24 redirect fungerer
+- [ ] Prod SSO health OK
+- [ ] Ingen browser-console fejl
+
+---
+
+## Troubleshooting
+
+| Issue | Action |
+|-------|--------|
+| `npm run sso:health` fejler | Tjek at begge PHP-servere kører |
+| Playwright tests fejler | Læs rapport, regenerér snapshots hvis UI ændret |
+| i18n-nøgler vises | Opdater `lang/en.json` og `lang/da.json` |
+| Deploy fejler | Verificér Cloudflare/FTP secrets |
 
 ---
 
 ## Sign-off
 
-- **QA-ansvarlig:** ________________________
-- **Dato:** ________________________
-- **Version:** ________________________
+- **QA-owner:** _______________________
+- **Dato:** _______________________
+- **Version:** _______________________
 
 ---
 
 ## Relateret dokumentation
 
-- `docs/sso_healthcheck.md` – Healthcheck-guide
-- `docs/ts24_sso_bridge.md` – TS24 integration overview
-- `docs/sso_v1_signoff_gdi.md` – SSO v1 sign-off
-- `docs/ci_pipelines.md` – CI/CD pipeline-info
+- `docs/sso_healthcheck.md`
+- `docs/ts24_sso_bridge.md`
+- `docs/sso_v1_signoff_gdi.md`
+- `docs/ci_pipelines.md`
+
+---
+
+## Changelog
+
+| Dato | Ændring | PR |
+|------|---------|----|
+| 2025-11-30 | Første version | #61 |
+| 2025-12-01 | Bilingual merge + TS24 prod-gate | Current |

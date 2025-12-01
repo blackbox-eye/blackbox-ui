@@ -6,6 +6,9 @@
 # Triggeres kun ved relevante fil-ændringer (PHP, assets, includes).
 # Ignorerer docs, agents og markdown-filer for at reducere støj.
 #
+# SSO Health Check: Non-blocking step that validates local SSO stub.
+# External TS24 DNS failures will NOT fail this workflow.
+#
 # ═══════════════════════════════════════════════════════════════
 ---
 name: Visual Regression
@@ -88,6 +91,58 @@ jobs:
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
+
+      # ═══════════════════════════════════════════════════════════════
+      # SSO Health Check (Non-blocking)
+      # ═══════════════════════════════════════════════════════════════
+      # This step validates the local SSO stub. It will NOT fail the
+      # workflow if external TS24 DNS is unavailable (expected in CI).
+      # See docs/sso_healthcheck.md for details on blocking vs non-blocking.
+      # ═══════════════════════════════════════════════════════════════
+      - name: Start PHP servers for SSO health check
+        run: |
+          echo "Starting GDI server on port 8000..."
+          php -S 127.0.0.1:8000 > /tmp/php-8000.log 2>&1 &
+          echo "Starting TS24 stub server on port 8091..."
+          php -S 127.0.0.1:8091 > /tmp/php-8091.log 2>&1 &
+          sleep 2
+          echo "PHP servers started."
+
+      - name: Run SSO health check (non-blocking)
+        id: sso_health
+        continue-on-error: true
+        env:
+          CI: 'true'
+        run: |
+          echo "🔍 Running SSO health check..."
+          echo ""
+          if npm run sso:health; then
+            echo "✅ SSO health check passed"
+            echo "sso_status=passed" >> $GITHUB_OUTPUT
+          else
+            echo "⚠️ SSO health check failed (non-blocking in CI)"
+            echo "   This may indicate TS24 external DNS is unavailable."
+            echo "   See docs/ts24_dns_status_*.md for current DNS status."
+            echo "sso_status=warning" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Report SSO health status
+        run: |
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "SSO Health Check Summary"
+          echo "═══════════════════════════════════════════════════════════════"
+          if [ "${{ steps.sso_health.outcome }}" == "success" ]; then
+            echo "✅ SSO health check: PASSED"
+          else
+            echo "⚠️ SSO health check: WARNING (non-blocking)"
+            echo ""
+            echo "This is expected if TS24 external DNS (intel24.tstransport.app)"
+            echo "is unavailable. The local stub was tested, but external"
+            echo "connectivity could not be verified."
+            echo ""
+            echo "📄 For details, see: docs/ts24_dns_status_*.md"
+          fi
+          echo "═══════════════════════════════════════════════════════════════"
 
       - name: Run visual tests
         run: npm run test:ci

@@ -190,6 +190,55 @@ The health check is used as a preflight step in the Visual Regression workflow. 
 
 See `docs/ci_pipelines.md` for more details on CI/CD workflow integration.
 
+### CI Behaviour: Blocking vs Non-Blocking Conditions
+
+In CI environments (GitHub Actions), certain SSO-related failures should be **non-blocking** to prevent external infrastructure issues from failing otherwise-valid builds.
+
+#### Blocking Conditions (Hard Fail)
+
+These conditions indicate a real problem in the GDI codebase and should fail the CI:
+
+| Condition | Reason |
+|-----------|--------|
+| PHP syntax errors | Code is broken |
+| Missing required GDI files | Deployment issue |
+| Test assertion failures | Regression detected |
+| Security vulnerabilities | Must be fixed |
+
+#### Non-Blocking Conditions (Warning Only)
+
+These conditions are **external dependencies** that GDI cannot control:
+
+| Condition | Log Output | Reason |
+|-----------|------------|--------|
+| TS24 DNS resolution fails | `⚠️ TS24 external DNS unreachable` | TS24 infra issue |
+| Missing `GDI_SSO_SECRET` in CI | `⚠️ GDI_SSO_SECRET not configured` | Optional secret |
+| TS24 endpoint unreachable | `⚠️ intel24.tstransport.app not responding` | External service |
+
+#### Example Log Output When TS24 DNS Is Down
+
+```
+🔍 SSO Health Check
+
+==================================================
+
+✅ GDI (Main GUI application)
+   URL: http://127.0.0.1:8000
+   Status: OK
+   HTTP Code: 200
+   Latency: 15ms
+
+⚠️ TS24 (TS24 SSO integration)
+   URL: http://127.0.0.1:8091/tools/ts24_health_stub.php
+   Status: STUB_OK
+   Note: Using local stub (TS24 external endpoint not tested in CI)
+
+==================================================
+
+✅ Health check passed (with warnings)
+   - TS24 external DNS: Not tested (expected in CI)
+```
+
 ## Troubleshooting
 
 ### Common Issues
@@ -200,6 +249,7 @@ See `docs/ci_pipelines.md` for more details on CI/CD workflow integration.
 | `TIMEOUT` | Server unresponsive; check for blocking operations |
 | `vendor/autoload.php` missing | Run `composer install` first |
 | HTTP 500 errors | Check PHP error logs |
+| TS24 DNS REFUSED | External issue - see `docs/ts24_dns_status_*.md` |
 
 ### Debug Mode
 
@@ -219,5 +269,6 @@ curl -v http://127.0.0.1:8091/tools/ts24_health_stub.php
 
 | Date | Change | PR |
 |------|--------|----|
+| 2025-12-01 | Added CI behaviour section for blocking vs non-blocking conditions | Current |
 | 2025-11-30 | Added TS24 healthcheck stub and sso:health script | #61 |
 | 2025-11-30 | Created documentation | Current |

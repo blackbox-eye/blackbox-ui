@@ -39,7 +39,7 @@ When an agent authenticates at `agent-login.php`:
 When an agent clicks the TS24 card on `agent-access.php`:
 
 1. The system generates a time-limited JWT token
-2. The link is constructed as: `https://intel24.tstransport.app/login?sso=<JWT>`
+2. The link is constructed as: `https://intel24.tstransport.app/sso-login?sso=<JWT>`
 3. The card element includes `data-sso-active="true"` attribute
 4. The agent is redirected to TS24 with the JWT
 
@@ -200,7 +200,7 @@ When validating incoming tokens:
 // config/sso.php
 return [
     'ts24' => [
-        'console_url' => bbx_env('TS24_CONSOLE_URL', 'https://intel24.tstransport.app/login'),
+        'console_url' => bbx_env('TS24_CONSOLE_URL', 'https://intel24.tstransport.app/sso-login'),
         'secret' => bbx_env('TS24_SSO_SECRET'),
         'token_ttl' => bbx_env('SSO_TOKEN_TTL', 300), // 5 minutes
         'algorithm' => 'HS256',
@@ -215,7 +215,7 @@ return [
 The `agent-access.php` page uses the SSO bridge:
 
 ```php
-$ts24_console_url = bbx_env('TS24_CONSOLE_URL', 'https://intel24.tstransport.app/login');
+$ts24_console_url = bbx_env('TS24_CONSOLE_URL', 'https://intel24.tstransport.app/sso-login');
 
 // The CTA link includes SSO parameters when active
 <a href="<?= htmlspecialchars($ts24_console_url) ?>"
@@ -266,9 +266,47 @@ Expected output should show:
 
 ---
 
+## External Dependency: TS24 DNS + TLS
+
+The TS24 SSO integration depends on external infrastructure that is **not** controlled by the GDI repository. This section documents the external dependencies and their ownership.
+
+### Dependency Matrix
+
+| Component | Owner | Must Be Live | Current Status |
+|-----------|-------|--------------|----------------|
+| `intel24.tstransport.app` DNS | TS24 infra team | A/AAAA records must resolve | ❌ REFUSED |
+| `intel24.tstransport.app` TLS | TS24 ops team | Valid TLS certificate | ❓ Cannot test (DNS down) |
+| `/sso-login` endpoint | TS24 app team | HTTP 200/30x response | ❓ Cannot test (DNS down) |
+| JWT validation logic | TS24 app team | Accept HS256 tokens from GDI | ❓ Cannot test (DNS down) |
+
+### What GDI Controls
+
+- ✅ Link generation in `agent-access.php`
+- ✅ JWT token minting (when `GDI_SSO_SECRET` is configured)
+- ✅ Audit logging of SSO events
+- ✅ Documentation and configuration defaults
+
+### What GDI Cannot Fix
+
+- ❌ DNS records for `tstransport.app` domain
+- ❌ TLS certificate provisioning for TS24 servers
+- ❌ Availability of TS24 web application
+- ❌ JWT validation logic on TS24 side
+
+### Escalation Path
+
+If TS24 DNS/TLS issues persist:
+
+1. Contact TS24 infrastructure team with DNS status report
+2. Provide verification commands (see `docs/ts24_dns_status_*.md`)
+3. GDI side is ready — no code changes needed
+
+---
+
 ## Changelog
 
 | Date | Change | PR |
 |------|--------|----|
+| 2025-12-01 | Added external dependency section, updated to /sso-login canonical URL | Current |
 | 2025-11-30 | Added TS24 healthcheck stub | #61 |
 | 2025-11-30 | Created SSO bridge documentation | Current |

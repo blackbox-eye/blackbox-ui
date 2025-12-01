@@ -9,7 +9,7 @@ $meta_og_title = $page_title;
 $meta_og_description = $meta_description;
 
 $gdi_console_url = 'agent-login.php';
-$ts24_console_url = bbx_env('TS24_CONSOLE_URL', 'https://intel24.tstransport.app/login');
+$ts24_console_url = bbx_env('TS24_CONSOLE_URL', 'https://intel24.tstransport.app/sso-login');
 
 include 'includes/site-header.php';
 ?>

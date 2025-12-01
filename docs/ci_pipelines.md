@@ -228,6 +228,38 @@ npm run build:tailwind
 
 ---
 
+## SSO Health Check in CI
+
+The SSO health check validates integration with TS24. In CI environments, this check is **non-blocking** because external DNS issues should not fail GDI builds.
+
+### Blocking vs Non-Blocking
+
+| Condition | CI Behaviour | Reason |
+|-----------|--------------|--------|
+| GDI local server fails | ❌ Blocking | GDI code issue |
+| TS24 stub responds OK | ✅ Non-blocking | Local stub sufficient |
+| TS24 external DNS fails | ⚠️ Warning only | External TS24 issue |
+| Missing `GDI_SSO_SECRET` | ⚠️ Warning only | Optional in CI |
+
+### Expected Log Output
+
+When TS24 external DNS is unavailable (current state), CI logs will show:
+
+```
+⚠️ TS24 external endpoint not tested (expected in CI)
+   Local stub: OK
+   External DNS: Not tested
+```
+
+This is **expected behaviour** — the CI validates GDI code, not TS24 infrastructure.
+
+### See Also
+
+- `docs/sso_healthcheck.md` — Full SSO health check documentation
+- `docs/ts24_dns_status_*.md` — DNS status reports
+
+---
+
 ## Troubleshooting CI Failures
 
 | Failure | Common Cause | Solution |
@@ -236,6 +268,7 @@ npm run build:tailwind
 | CodeQL fails | Syntax errors | Fix code syntax |
 | Deploy fails | Missing secrets | Verify Cloudflare tokens |
 | npm ci fails | Lock file mismatch | Regenerate package-lock.json |
+| SSO health warning | TS24 DNS down | External issue — see DNS report |
 
 ### Checking Logs
 
@@ -251,4 +284,5 @@ npm run build:tailwind
 
 | Date | Change | PR |
 |------|--------|----|
+| 2025-12-01 | Added SSO health check CI behaviour section | Current |
 | 2025-11-30 | Created CI pipelines documentation | Current |

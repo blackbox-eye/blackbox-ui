@@ -98,7 +98,7 @@ jobs:
       - name: Run SSO healthcheck preflight
         env:
           SSO_HEALTH_BASE_URL: http://127.0.0.1:8080
-        run: php scripts/check_sso_health.php
+        run: php scripts/check_sso_health.php --ts24-stub
 
       - name: Run visual tests
         run: npm run test:ci

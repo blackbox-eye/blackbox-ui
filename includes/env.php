@@ -115,8 +115,21 @@ if (!defined('BBX_CONTACT_EMAIL')) {
     define('BBX_CONTACT_EMAIL', bbx_env('CONTACT_EMAIL', 'ops@blackbox.codes'));
 }
 
+// ----------------------------------------------------------------------------
+// TS24 SSO v1 – Canonical Entry URL
+//
+// DNS + cert verified 2025-12-01. This is the production SSO entry point.
+// TS24 handles token verification at /sso-login; /login is manual fallback.
+//
+// Canonical URLs:
+//   - SSO entry:      https://intel24.tstransport.app/sso-login
+//   - Full SSO URL:   https://intel24.tstransport.app/sso-login?sso=<JWT>
+//   - Manual login:   https://intel24.tstransport.app/login (fallback on TS24 side)
+//
+// See docs/ts24_sso_bridge.md for ownership and integration details.
+// ----------------------------------------------------------------------------
 if (!defined('BBX_TS24_CONSOLE_URL')) {
-    $ts24Url = bbx_env('TS24_CONSOLE_URL', 'https://intel24.tstransport.app/login');
+    $ts24Url = bbx_env('TS24_CONSOLE_URL', 'https://intel24.tstransport.app/sso-login');
     define('BBX_TS24_CONSOLE_URL', rtrim($ts24Url, '/'));
 }
 

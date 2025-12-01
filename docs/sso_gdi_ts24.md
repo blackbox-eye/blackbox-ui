@@ -2,6 +2,8 @@
 
 This note documents how the GDI (GreyEYE) login flow now mints and exposes short-lived JWT tokens for the TS24 console.
 
+> **See also:** `docs/ts24_sso_bridge.md` for canonical TS24 entry URLs and ownership details.
+
 ## Dependencies
 
 - PHP 7.4+
@@ -13,7 +15,7 @@ This note documents how the GDI (GreyEYE) login flow now mints and exposes short
 | --- | --- |
 | `GDI_SSO_SECRET` (preferred) / `JWT_SECRET` | HMAC secret used to sign the TS24 SSO token. Tokens are only minted when this value is defined. |
 | `GDI_SSO_TTL_SECONDS` / `JWT_TTL_SECONDS` | Lifetime for the JWT in seconds. Defaults to 600 seconds if omitted. |
-| `TS24_CONSOLE_URL` | Base URL to the TS24 console (defaults to `https://intel24.tstransport.app/login`). |
+| `TS24_CONSOLE_URL` | Base URL to the TS24 console. Default: `https://intel24.tstransport.app/sso-login` (canonical SSO entry, DNS verified 2025-12-01). |
 
 ## JWT Payload
 

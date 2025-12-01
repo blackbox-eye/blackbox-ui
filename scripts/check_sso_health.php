@@ -7,6 +7,7 @@ require_once __DIR__ . '/../includes/sso_audit.php';
 
 const DEFAULT_BASE_URL = 'http://127.0.0.1:8080';
 const DEFAULT_TS24_PATH = '/api/auth/sso-health';
+const DEFAULT_TS24_STUB_PATH = '/tools/ts24_health_stub.php';
 
 function build_context(): array
 {
@@ -33,10 +34,30 @@ function fetch_http(string $url): array
   return [$body, $status];
 }
 
-$argvBase = $argv[1] ?? null;
+$argvBase = null;
+$useTs24Stub = false;
+$ts24HealthOverride = getenv('TS24_HEALTH_URL') ?: null;
+
+foreach (array_slice($argv, 1) as $arg) {
+  if ($arg === '--ts24-stub') {
+    $useTs24Stub = true;
+    continue;
+  }
+
+  if (strpos($arg, '--ts24-health-url=') === 0) {
+    $ts24HealthOverride = substr($arg, strlen('--ts24-health-url='));
+    continue;
+  }
+
+  if ($argvBase === null && $arg !== '') {
+    $argvBase = $arg;
+  }
+}
+
 $envBase = getenv('SSO_HEALTH_BASE_URL') ?: null;
 $baseUrl = rtrim($argvBase ?: ($envBase ?: DEFAULT_BASE_URL), '/');
 $healthUrl = $baseUrl . '/tools/sso_health.php';
+$ts24StubUrl = $ts24HealthOverride ?: ($baseUrl . DEFAULT_TS24_STUB_PATH);
 
 [$payload, $gdiStatus] = fetch_http($healthUrl);
 if ($payload === false) {
@@ -84,13 +105,25 @@ if (!empty($data['ts24_console_url'])) {
 
 $ts24Healthy = null;
 $ts24Summary = 'Skipped - TS24 URL not configured';
-if ($ts24Base) {
-  $ts24HealthUrl = rtrim($ts24Base, '/') . DEFAULT_TS24_PATH;
-  [$ts24Payload, $ts24Status] = fetch_http($ts24HealthUrl);
+$ts24RequestUrl = null;
+
+if ($useTs24Stub) {
+  $ts24RequestUrl = $ts24StubUrl;
+  $ts24Base = $ts24StubUrl;
+} elseif ($ts24HealthOverride) {
+  $ts24RequestUrl = $ts24HealthOverride;
+  $ts24Base = $ts24HealthOverride;
+} elseif ($ts24Base) {
+  $ts24RequestUrl = rtrim($ts24Base, '/') . DEFAULT_TS24_PATH;
+}
+
+if ($ts24RequestUrl) {
+  [$ts24Payload, $ts24Status] = fetch_http($ts24RequestUrl);
 
   if ($ts24Payload === false || $ts24Status >= 400) {
     $ts24Healthy = false;
-    $ts24Summary = "Endpoint unreachable (HTTP {$ts24Status})";
+    $modeLabel = $useTs24Stub ? 'Stub' : 'Endpoint';
+    $ts24Summary = "{$modeLabel} unreachable (HTTP {$ts24Status})";
   } else {
     $ts24Data = json_decode($ts24Payload, true);
     if (!is_array($ts24Data)) {
@@ -123,6 +156,9 @@ if ($ts24Base) {
       $ts24Summary = $ts24Healthy ? 'OK' : ('Issues: ' . implode(', ', $ts24Issues));
       if ($ts24Notes) {
         $ts24Summary .= ' (notes: ' . implode(' | ', $ts24Notes) . ')';
+      }
+      if ($useTs24Stub && $ts24Healthy) {
+        $ts24Summary .= ' (stub response)';
       }
     }
   }

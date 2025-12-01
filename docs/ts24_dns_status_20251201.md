@@ -126,7 +126,7 @@ socket.gaierror: [Errno -3] Temporary failure in name resolution
 
 ## HTTP/TLS Test Results
 
-### Test 8: curl https://intel24.tstransport.app/login
+### Test 8: curl https://intel24.tstransport.app/sso-login
 
 ```
 * Could not resolve host: intel24.tstransport.app

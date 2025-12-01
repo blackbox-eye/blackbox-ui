@@ -97,7 +97,8 @@ jobs:
       # ═══════════════════════════════════════════════════════════════
       # This step validates the local SSO stub. It will NOT fail the
       # workflow if external TS24 DNS is unavailable (expected in CI).
-      # See docs/sso_healthcheck.md for details on blocking vs non-blocking.
+      # See docs/sso_healthcheck.md for blocking vs non-blocking details.
+      # See docs/ts24_dns_status_*.md for current DNS status reports.
       # ═══════════════════════════════════════════════════════════════
       - name: Start PHP servers for SSO health check
         run: |

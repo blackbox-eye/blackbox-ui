@@ -2,6 +2,24 @@
 
 Alle større ændringer i ALPHA Interface GUI (AIG) dokumenteres her, så audit og drift altid kan følge release-tracking.
 
+## [v1.0.1] – 2025-12-02 (Status Report Update)
+### Added
+- **Comprehensive ALPHA Team Status Report**
+  - Ny statusrapport der adresserer alle spørgsmål om GUI, SSO og UI/UX
+  - Dokumenterer GUI ændringer til ny serveropsætning
+  - TS24 SSO login flow status og JWT token specifikation
+  - UI/UX test resultater og WCAG 2.1 compliance
+  - Sikkerhedsforanstaltninger oversigt
+  - GO/NO-GO status for GDI og TS24 integration
+
+### Documentation
+- `docs/ALPHA_TEAM_STATUS_REPORT.md` - Komplet statusrapport
+- Opdateret `README.md` med link til ny statusrapport
+
+### Status Summary
+- GDI (ALPHA-Interface-GUI): ✅ GO - Produktionsklar
+- TS24 Integration: ❌ NO-GO - Afventer ekstern DNS konfiguration
+
 ## [v1.0.0-sprint4] – 2025-11-23 (Sprint 4)
 ### Added
 - **Comprehensive Visual Regression Testing**

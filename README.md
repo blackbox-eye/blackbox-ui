@@ -186,6 +186,7 @@ Alle dokumenter ligger nu under `/docs/`:
 ### ✅ QA & Release
 
 * [qa_release_checklist.md](/docs/qa_release_checklist.md) - Både dansk release-tjekliste og udvidet preflight-checks
+* [ALPHA_TEAM_STATUS_REPORT.md](/docs/ALPHA_TEAM_STATUS_REPORT.md) - **NYT** Komplet statusrapport for GUI, SSO og UI/UX (2025-12-02)
 
 ### 📄 Versionerede rapporter (i `/docs/reports/`)
 

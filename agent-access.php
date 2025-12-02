@@ -41,9 +41,18 @@ if (!$is_logged_in) {
 }
 
 // Auto-launch TS24 if redirected from login with launch=ts24
-if (isset($_GET['launch']) && $_GET['launch'] === 'ts24' && $ts24_has_sso) {
-  header('Location: ' . $ts24_console_url);
-  exit;
+if (isset($_GET['launch']) && $_GET['launch'] === 'ts24') {
+  if ($ts24_has_sso) {
+    // We have a valid JWT - redirect to TS24 with SSO
+    header('Location: ' . $ts24_console_url);
+    exit;
+  } elseif ($is_logged_in) {
+    // Logged in but no JWT available - redirect to TS24 base URL (manual login on TS24 side)
+    // This can happen if JWT secret is not configured or library is missing
+    header('Location: ' . $ts24_base_url);
+    exit;
+  }
+  // Not logged in - fall through to show page (shouldn't happen normally)
 }
 
 include 'includes/site-header.php';

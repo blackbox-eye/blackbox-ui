@@ -1,44 +1,21 @@
-# TS24 SSO Bridge – GDI Integration Guide
+# TS24 SSO Bridge Documentation
 
-> **Senest opdateret / Last updated:** 2025-12-01
-> **Version:** 1.1
+> **Last updated:** 2025-11-30  
+> **Version:** 1.0  
+> **Related PR:** #61
 
-Denne guide beskriver, hvordan ALPHA Interface GUI (GDI) integrerer med TS24 Intel Console via SSO v1.
+## Overview
 
----
+The TS24 SSO v1 bridge enables secure single sign-on authentication between the Blackbox EYE platform and the TS24/Intel24 Intelligence Console. This document describes the architecture, JWT handling, and security considerations.
 
-## 🎯 Canonical TS24 Entry URL
+## Architecture
 
-| Type | URL |
-|------|-----|
-| **SSO Entry (kanonisk)** | `https://intel24.blackbox.codes/sso-login` |
-| **Full SSO URL (GDI bygger)** | `https://intel24.blackbox.codes/sso-login?sso=<JWT>` |
-| **Manual Login (fallback)** | `https://intel24.blackbox.codes/login` |
-
-> **Status (2025-12-02):** DNS + cert er verificeret. GDI default peger på `/sso-login`.
-
----
-
-## Ejerskab
-
-| Komponent | Ejes af | Ansvar |
-|-----------|---------|--------|
-| Domæne `intel24.blackbox.codes` | **ts24-intel-console** | DNS, cert, hosting |
-| `/sso-login` endpoint | **ts24-intel-console** | Token-verifikation, session |
-| `/login` endpoint | **ts24-intel-console** | Fallback login |
-| `TS24_CONSOLE_URL` env | **ALPHA-Interface-GUI** | Config af target-URL |
-| Agent Access TS24-link | **ALPHA-Interface-GUI** | Byg SSO-link med JWT |
-| SSO Token Minting | **ALPHA-Interface-GUI** | Udstedelse af HS256-signeret JWT |
-
----
-
-## Arkitektur
-
-```text
+```
 ┌─────────────────────┐    JWT    ┌─────────────────────┐
 │   Blackbox EYE      │ ───────── │   TS24 Console      │
 │   (agent-login.php) │  ?sso=    │   (tstransport.app) │
 └─────────────────────┘           └─────────────────────┘
+         │                                  │
          │                                  │
          ▼                                  ▼
 ┌─────────────────────┐           ┌─────────────────────┐
@@ -47,147 +24,289 @@ Denne guide beskriver, hvordan ALPHA Interface GUI (GDI) integrerer med TS24 Int
 └─────────────────────┘           └─────────────────────┘
 ```
 
----
+## JWT Flow
 
-## SSO Link-bygning (GDI)
+### 1. Agent Login
 
-GDI bygger TS24-linket på `agent-access.php`:
+When an agent authenticates at `agent-login.php`:
 
-```php
-$ts24Url = rtrim(BBX_TS24_CONSOLE_URL, '/');
-$separator = strpos($ts24Url, '?') === false ? '?' : '&';
-$ts24Link = $ts24Url . $separator . 'sso=' . urlencode($token);
+1. User credentials are validated against the GDI database
+2. A JWT token is generated with the agent's claims
+3. The token is stored in the session for SSO use
+
+### 2. SSO Redirect to TS24
+
+When an agent clicks the TS24 card on `agent-access.php`:
+
+1. The system generates a time-limited JWT token
+2. The link is constructed as: `https://intel24.blackbox.codes/sso-login?sso=<JWT>`
+3. The card element includes `data-sso-active="true"` attribute
+4. The agent is redirected to TS24 with the JWT
+
+### 3. JWT Validation at TS24
+
+The TS24 console:
+
+1. Extracts the JWT from the `sso` query parameter
+2. Validates the signature using HS256
+3. Verifies the issuer (`iss`) matches expected value
+4. Verifies the audience (`aud`) is correct
+5. Checks token expiration (`exp`)
+6. Creates a local session for the agent
+
+## JWT Structure
+
+### Header
+
+```json
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
 ```
 
-Når `TS24_CONSOLE_URL` sættes til `https://intel24.blackbox.codes/sso-login`, bliver det fulde link:
+### Payload (Claims)
 
-```text
-https://intel24.blackbox.codes/sso-login?sso=eyJhbGciOiJIUzI1NiIs...
-```
+| Claim | Type | Description |
+|-------|------|-------------|
+| `iss` | string | Issuer: `https://blackbox.codes` |
+| `aud` | string | Audience: `ts24` |
+| `sub` | string | Subject: Agent ID |
+| `exp` | number | Expiration timestamp (Unix epoch) |
+| `iat` | number | Issued at timestamp |
+| `nbf` | number | Not before timestamp |
+| `jti` | string | Unique token identifier |
+| `agent_name` | string | Agent display name |
+| `clearance` | string | Security clearance level |
+| `permissions` | array | List of allowed operations |
 
----
-
-## JWT Payload
-
-Tokens signeres med **HS256** og indeholder:
-
-| Claim | Beskrivelse |
-|-------|-------------|
-| `iss` | Origin site base URL (`BBX_SITE_BASE_URL`) |
-| `aud` | `ts24` |
-| `sub` | Agent identifier (`agents.agent_id`) |
-| `uid` | Internal numeric agent ID |
-| `name` | Display name (fallback: `agent_id`) |
-| `role` | `admin` eller `operator` |
-| `scope` | Array af tilladte områder |
-| `iat` / `nbf` | Issued-at timestamp |
-| `exp` | `iat + TTL` (default 600 sekunder) |
-| `jti` | Unique token ID (replay-prevention) |
-
-### Eksempel payload
+### Example Token Payload
 
 ```json
 {
   "iss": "https://blackbox.codes",
   "aud": "ts24",
   "sub": "agent_12345",
-  "uid": 42,
-  "name": "Agent Smith",
-  "role": "operator",
-  "scope": ["read:intel", "read:alerts"],
+  "exp": 1733004000,
   "iat": 1733000400,
   "nbf": 1733000400,
-  "exp": 1733004000,
-  "jti": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+  "jti": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "agent_name": "Agent Smith",
+  "clearance": "level-3",
+  "permissions": ["read:intel", "read:alerts", "write:briefings"]
 }
 ```
 
----
-
-## Flow
-
-```text
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│  GDI Login      │ ──► │  Agent Access   │ ──► │  TS24 Console   │
-│  agent-login.php│     │  (mint JWT)     │     │  /sso-login     │
-└─────────────────┘     └─────────────────┘     │  (verify JWT)   │
-                                                └─────────────────┘
-```
-
-1. Agent logger ind via `agent-login.php`
-2. JWT mintes og gemmes i session/cookie
-3. Agent klikker TS24-link på `agent-access.php`
-4. Browser navigerer til `{TS24_CONSOLE_URL}?sso=<JWT>`
-5. TS24 verificerer token og opretter session
-
----
-
 ## Audit Logging
 
-Alle SSO-events logges i `sso_audit.php`:
+All SSO events are logged via `sso_audit.php`:
 
-| Event | Beskrivelse |
+### Logged Events
+
+| Event | Description |
 |-------|-------------|
-| `sso_token_generated` | JWT oprettet |
-| `sso_redirect_initiated` | Bruger redirectet til TS24 |
-| `sso_validation_success` | Token verificeret |
-| `sso_validation_failure` | Token fejlede |
+| `sso_token_generated` | JWT created for SSO redirect |
+| `sso_redirect_initiated` | Agent redirected to TS24 |
+| `sso_validation_success` | Token validated successfully |
+| `sso_validation_failure` | Token validation failed |
+| `sso_session_created` | TS24 session established |
+| `sso_session_terminated` | Agent logged out |
 
-> **Sikkerhed:** Fuld JWT logges aldrig – kun `jti` og `sub`.
+### Audit Log Fields
 
----
+| Field | Description |
+|-------|-------------|
+| `timestamp` | ISO 8601 timestamp |
+| `event_type` | Type of SSO event |
+| `agent_id` | Agent identifier (not full JWT) |
+| `ip_address` | Client IP (anonymized last octet) |
+| `user_agent` | Browser/client information |
+| `jti` | JWT ID for correlation |
+| `status` | Success/failure indicator |
+| `error_code` | Error code if applicable |
 
-## Miljøvariabel
+### Security Note
 
-| Variabel | Beskrivelse |
+The audit system logs only necessary claims for tracking purposes. The **full JWT payload is never logged** to prevent token exposure in log files.
+
+## Security Considerations
+
+### HS256 Key Management
+
+| Aspect | Recommendation |
+|--------|----------------|
+| **Key Length** | Minimum 256 bits (32 bytes) |
+| **Storage** | Environment variable or secrets manager |
+| **Rotation** | Rotate quarterly or after suspected compromise |
+| **Sharing** | Never commit to version control |
+
+**Environment Variable:**
+
+```bash
+# In .env file (not committed)
+TS24_SSO_SECRET=your-256-bit-secret-key-here
+```
+
+### Token TTL (Time To Live)
+
+| Use Case | Recommended TTL |
+|----------|-----------------|
+| Standard SSO redirect | 5 minutes |
+| Remember me (if implemented) | 24 hours |
+| API tokens | 1 hour |
+
+The short TTL for SSO redirects minimizes the window for token interception.
+
+### Token Validation Checklist
+
+When validating incoming tokens:
+
+- [ ] Verify signature with shared secret
+- [ ] Check `iss` matches expected issuer
+- [ ] Check `aud` matches expected audience
+- [ ] Verify `exp` is in the future
+- [ ] Verify `nbf` is in the past
+- [ ] Check `jti` hasn't been used (replay prevention)
+- [ ] Validate required claims are present
+
+### Logging Without Exposing Sensitive Data
+
+**Do Log:**
+- Agent ID (subject claim)
+- Token ID (jti)
+- Timestamp
+- Event type
+- Status
+
+**Do NOT Log:**
+- Full JWT token
+- Token payload contents
+- Signing secret
+- Session tokens
+
+## Configuration
+
+### Required Environment Variables
+
+| Variable | Description |
 |----------|-------------|
-| `TS24_CONSOLE_URL` | Base URL til TS24 SSO-entry. Default: `https://intel24.blackbox.codes/sso-login` |
-| `TS24_SSO_SECRET` | Delt secret til JWT-signering (min. 256 bit) |
-| `SSO_TOKEN_TTL` | Token TTL i sekunder (default 300) |
+| `TS24_CONSOLE_URL` | Base URL for TS24 console |
+| `TS24_SSO_SECRET` | Shared secret for JWT signing |
+| `SSO_TOKEN_TTL` | Token time-to-live in seconds |
 
----
+### Example Configuration
 
-## Sikkerhedsovervejelser
+```php
+// config/sso.php
+return [
+    'ts24' => [
+        'console_url' => bbx_env('TS24_CONSOLE_URL', 'https://intel24.blackbox.codes/sso-login'),
+        'secret' => bbx_env('TS24_SSO_SECRET'),
+        'token_ttl' => bbx_env('SSO_TOKEN_TTL', 300), // 5 minutes
+        'algorithm' => 'HS256',
+        'issuer' => 'https://blackbox.codes',
+        'audience' => 'ts24'
+    ]
+];
+```
 
-| Risiko | Mitigering |
-|--------|------------|
-| Token-intercept | HTTPS, kort TTL |
-| Replay-angreb | JTI-tracking |
-| Nøglekompromittering | Regelmæssig rotation |
-| Clock skew | ±30 s tolerance på exp/nbf |
+## Integration with Agent Access Page
 
----
+The `agent-access.php` page uses the SSO bridge:
 
-## Test lokalt
+```php
+$ts24_console_url = bbx_env('TS24_CONSOLE_URL', 'https://intel24.blackbox.codes/sso-login');
+
+// The CTA link includes SSO parameters when active
+<a href="<?= htmlspecialchars($ts24_console_url) ?>"
+   class="access-card__cta bbx-btn-pill"
+   data-console-launch="ts24"
+   data-sso-active="true"
+   target="_blank"
+   rel="noopener">
+    <?= t('agent_access.cards.ts24.cta') ?>
+</a>
+```
+
+## Risks and Mitigations
+
+| Risk | Mitigation |
+|------|------------|
+| Token interception | Use HTTPS, short TTL |
+| Replay attacks | Implement JTI tracking |
+| Key compromise | Regular rotation, secrets manager |
+| Clock skew | Allow 30-second tolerance on exp/nbf |
+| Session hijacking | Bind token to user agent/IP hash |
+
+## Testing
+
+### Local Development
+
+Use the health check stub for testing:
 
 ```bash
 # Start stub server
 php -S 127.0.0.1:8091
 
-# Healthcheck
+# Verify stub response
+curl http://127.0.0.1:8091/tools/ts24_health_stub.php
+```
+
+### Health Check
+
+```bash
 npm run sso:health
 ```
 
+Expected output should show:
+- `Secret Configured: Yes`
+- `Uses HS256: Yes`
+- `Expected Issuer: https://blackbox.codes`
+- `Expected Audience: ts24`
+
 ---
 
-## Relateret dokumentation
+## External Dependency: TS24 DNS + TLS
 
-- `docs/sso_gdi_ts24.md` – Teknisk JWT-specifikation
-- `docs/sso_healthcheck.md` – Healthcheck-guide
-- `docs/sso_ops_runbook.md` – Drift og fejlsøgning
-- `docs/sso_v1_signoff_gdi.md` – GDI sign-off checklist
-- `docs/e2e_gdi_ts24_sso_test.md` – End-to-end testplan
+The TS24 SSO integration depends on external infrastructure that is **not** controlled by the GDI repository. This section documents the external dependencies and their ownership.
 
-TS24-sidens dokumentation findes i **ts24-intel-console** repoet:
+### Dependency Matrix
 
-- `ts24_login_flow.md`
-- `sso_v1_signoff_ts24.md`
+| Component | Owner | Must Be Live | Current Status |
+|-----------|-------|--------------|----------------|
+| `intel24.blackbox.codes` DNS | TS24 infra team | A/AAAA records must resolve | ❌ REFUSED |
+| `intel24.blackbox.codes` TLS | TS24 ops team | Valid TLS certificate | ❓ Cannot test (DNS down) |
+| `/sso-login` endpoint | TS24 app team | HTTP 200/30x response | ❓ Cannot test (DNS down) |
+| JWT validation logic | TS24 app team | Accept HS256 tokens from GDI | ❓ Cannot test (DNS down) |
+
+### What GDI Controls
+
+- ✅ Link generation in `agent-access.php`
+- ✅ JWT token minting (when `GDI_SSO_SECRET` is configured)
+- ✅ Audit logging of SSO events
+- ✅ Documentation and configuration defaults
+
+### What GDI Cannot Fix
+
+- ❌ DNS records for `tstransport.app` domain
+- ❌ TLS certificate provisioning for TS24 servers
+- ❌ Availability of TS24 web application
+- ❌ JWT validation logic on TS24 side
+
+### Escalation Path
+
+If TS24 DNS/TLS issues persist:
+
+1. Contact TS24 infrastructure team with DNS status report
+2. Provide verification commands (see `docs/ts24_dns_status_*.md`)
+3. GDI side is ready — no code changes needed
 
 ---
 
 ## Changelog
 
-| Dato | Ændring | PR |
-|------|---------|----|
-| 2025-11-30 | Første version | #61 |
-| 2025-12-01 | Sammenlagt arkitektur- og ejerskabsafsnit | Current |
+| Date | Change | PR |
+|------|--------|----|
+| 2025-12-01 | Added external dependency section, updated to /sso-login canonical URL | Current |
+| 2025-11-30 | Added TS24 healthcheck stub | #61 |
+| 2025-11-30 | Created SSO bridge documentation | Current |

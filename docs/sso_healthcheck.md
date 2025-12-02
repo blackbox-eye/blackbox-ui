@@ -1,45 +1,124 @@
-# SSO Healthcheck Guide
+# SSO Health Check Documentation
 
-> **Senest opdateret / Last updated:** 2025-12-01
-> **Version:** 1.1
+> **Last updated:** 2025-11-30  
+> **Version:** 1.0  
+> **Related PR:** #61
 
-Denne guide forklarer, hvordan du kører SSO healthchecks for GDI og TS24 – både lokalt, i CI og i produktion.
+## Overview
 
----
-
-## Oversigt
-
-Healthcheck-scriptet `scripts/sso-health.js` (og det ældre PHP-alternativ `scripts/check_sso_health.php`) validerer, at GDI og TS24 stub svarer korrekt inden Playwright-tests eller deploy.
-
----
+The SSO Health Check script (`scripts/sso-health.js`) validates that the SSO system components (GDI and TS24) are accessible and returning valid responses. This is an essential preflight check before running visual regression tests or deploying changes.
 
 ## Endpoints
 
-| Navn | URL | Port | Beskrivelse |
-|------|-----|------|-------------|
-| **GDI** | `http://127.0.0.1:8000` | 8000 | Hoved-GUI-applikation |
-| **TS24** (stub) | `http://127.0.0.1:8091/tools/ts24_health_stub.php` | 8091 | Lokal stub for TS24 SSO |
-| **TS24** (prod) | `https://intel24.blackbox.codes/sso-login` | 443 | Kanonisk SSO entry – DNS + cert |
+The health check validates two primary endpoints:
 
----
+### 1. GDI (GreyEYE Data Intelligence)
 
-## Kør healthcheck lokalt
+| Property | Value |
+|----------|-------|
+| **Name** | GDI |
+| **URL** | `http://127.0.0.1:8000` |
+| **Port** | 8000 |
+| **Description** | Main GUI application |
+
+The GDI endpoint serves the main web application. A successful health check returns any HTTP 2xx/3xx status code.
+
+### 2. TS24 (Intel24 Intelligence Console)
+
+| Property | Value |
+|----------|-------|
+| **Name** | TS24 |
+| **URL** | `http://127.0.0.1:8091/tools/ts24_health_stub.php` |
+| **Port** | 8091 |
+| **Description** | TS24 SSO integration |
+
+The TS24 endpoint is a stub that simulates the health check response from the production TS24 SSO integration.
+
+## Expected JSON Response Fields
+
+The TS24 health endpoint returns a JSON response with the following fields:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `stub` | boolean | Indicates this is a stub response (true in development) |
+| `secretConfigured` | boolean | Whether the SSO secret is configured |
+| `usesHS256` | boolean | Whether HS256 algorithm is used for JWT signing |
+| `expectedIss` | string | Expected JWT issuer (e.g., `https://blackbox.codes`) |
+| `expectedAud` | string | Expected JWT audience (e.g., `ts24`) |
+| `recentErrors` | array | List of recent error events (empty in healthy state) |
+| `notes` | string | Additional information about the response |
+| `timestamp` | string | ISO 8601 timestamp of the response |
+
+### Example Response
+
+```json
+{
+  "stub": true,
+  "secretConfigured": true,
+  "usesHS256": true,
+  "expectedIss": "https://blackbox.codes",
+  "expectedAud": "ts24",
+  "recentErrors": [],
+  "notes": "TS24 stub response for local testing",
+  "timestamp": "2025-11-30T12:00:00+00:00"
+}
+```
+
+## Environment Variables
+
+The health check script uses the following configuration:
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `REQUEST_TIMEOUT_MS` | `5000` | Timeout for health check requests in milliseconds |
+
+Currently, the endpoints are hardcoded in the script. Future versions may support:
+
+| Variable | Purpose |
+|----------|---------|
+| `SSO_HEALTH_BASE_URL` | Base URL for health checks |
+| `GDI_SSO_SECRET` | Secret for GDI SSO validation |
+
+## CLI Usage
+
+### Running the Health Check
 
 ```bash
-# Start PHP-servere
+# Using npm script (recommended)
+npm run sso:health
+
+# Direct Node.js execution
+node scripts/sso-health.js
+```
+
+### Starting Required Servers
+
+Before running the health check, ensure both PHP servers are running:
+
+```bash
+# Terminal 1: Start GDI server on port 8000
+php -S localhost:8000
+
+# Terminal 2: Start TS24 stub server on port 8091
+php -S 127.0.0.1:8091
+```
+
+Or use the combined approach:
+
+```bash
+# Start both servers in background (Unix/Linux/macOS)
 php -S localhost:8000 &
 php -S 127.0.0.1:8091 &
 
-# Node-baseret check (foretrukket)
+# Run health check
 npm run sso:health
-
-# Alternativ PHP-check
-npm run sso:health:php
 ```
 
-### Forventet output (succes)
+### Interpreting Results
 
-```text
+#### Successful Output (All OK)
+
+```
 🔍 SSO Health Check
 
 ==================================================
@@ -67,108 +146,129 @@ npm run sso:health:php
 ✅ All health checks passed!
 ```
 
----
+#### Failed Output
 
-## Exit-koder
+```
+🔍 SSO Health Check
 
-| Kode | Betydning |
-|------|-----------|
-| `0` | OK – begge endpoints svarer |
-| `1` | En eller flere checks fejlede |
-| `2` | GDI endpoint unreachable |
-| `3` | Invalid JSON fra GDI |
-| `4` | GDI-konfigurationsfejl (secret, mint) |
-| `5` | TS24 check fejlede |
+==================================================
 
----
+✅ GDI (Main GUI application)
+   URL: http://127.0.0.1:8000
+   Status: OK
+   HTTP Code: 200
+   Latency: 12ms
 
-## TS24 stub JSON-respons
+❌ TS24 (TS24 SSO integration)
+   URL: http://127.0.0.1:8091/tools/ts24_health_stub.php
+   Status: UNAVAILABLE
+   Error: connect ECONNREFUSED 127.0.0.1:8091
 
-```json
-{
-  "stub": true,
-  "secretConfigured": true,
-  "usesHS256": true,
-  "expectedIss": "https://blackbox.codes",
-  "expectedAud": "ts24",
-  "recentErrors": [],
-  "notes": "TS24 stub response for local testing",
-  "timestamp": "2025-12-01T12:00:00+00:00"
-}
+==================================================
+
+❌ Some health checks failed!
+
+Make sure both servers are running:
+  1. PHP server on port 8000: php -S localhost:8000
+  2. PHP server on port 8091: php -S 127.0.0.1:8091
 ```
 
----
+### Exit Codes
 
-## 🚀 Prod-verifikation (Ops-supplement)
+| Code | Meaning |
+|------|---------|
+| `0` | All health checks passed |
+| `1` | One or more health checks failed |
 
-> **Status (2025-12-02):** DNS + cert er live og verificeret.
+## CI/CD Integration
 
-Brug curl til at validere det kanoniske TS24 prod-endpoint inden high-risk releases:
+The health check is used as a preflight step in the Visual Regression workflow. When integrated in CI:
 
-```bash
-curl -I https://intel24.blackbox.codes/sso-login
+1. The workflow starts the PHP servers
+2. Runs `npm run sso:health` as a preflight check
+3. Only proceeds to visual tests if health checks pass
+
+See `docs/ci_pipelines.md` for more details on CI/CD workflow integration.
+
+### CI Behaviour: Blocking vs Non-Blocking Conditions
+
+In CI environments (GitHub Actions), certain SSO-related failures should be **non-blocking** to prevent external infrastructure issues from failing otherwise-valid builds.
+
+#### Blocking Conditions (Hard Fail)
+
+These conditions indicate a real problem in the GDI codebase and should fail the CI:
+
+| Condition | Reason |
+|-----------|--------|
+| PHP syntax errors | Code is broken |
+| Missing required GDI files | Deployment issue |
+| Test assertion failures | Regression detected |
+| Security vulnerabilities | Must be fixed |
+
+#### Non-Blocking Conditions (Warning Only)
+
+These conditions are **external dependencies** that GDI cannot control:
+
+| Condition | Log Output | Reason |
+|-----------|------------|--------|
+| TS24 DNS resolution fails | `⚠️ TS24 external DNS unreachable` | TS24 infra issue |
+| Missing `GDI_SSO_SECRET` in CI | `⚠️ GDI_SSO_SECRET not configured` | Optional secret |
+| TS24 endpoint unreachable | `⚠️ intel24.blackbox.codes not responding` | External service |
+
+#### Example Log Output When TS24 DNS Is Down
+
 ```
+🔍 SSO Health Check
 
-**Forventet resultat:**
+==================================================
 
-- HTTP-status: `200 OK` eller `3xx` redirect
-- Certifikat: Gyldigt SSL/TLS
-- Ingen DNS-fejl
+✅ GDI (Main GUI application)
+   URL: http://127.0.0.1:8000
+   Status: OK
+   HTTP Code: 200
+   Latency: 15ms
 
-### Fejlscenarier
+⚠️ TS24 (TS24 SSO integration)
+   URL: http://127.0.0.1:8091/tools/ts24_health_stub.php
+   Status: STUB_OK
+   Note: Using local stub (TS24 external endpoint not tested in CI)
 
-| Symptom | Årsag | Handling |
-|---------|-------|----------|
-| `NXDOMAIN` | DNS-problem | Tjek DNS, kontakt TS24-team |
-| `ECONNREFUSED` | Server nede | Kontakt TS24-team |
-| `SSL certificate problem` | Certifikat udløbet/invalid | Tjek certifikat |
-| `HTTP 404` | Endpoint ikke deployed | Bekræft TS24-release |
+==================================================
 
----
-
-## CI-integration
-
-Healthcheck kører som preflight i `.github/workflows/visual-regression.yml`:
-
-```yaml
-- name: SSO Stack Health Preflight
-  run: npm run sso:health
+✅ Health check passed (with warnings)
+   - TS24 external DNS: Not tested (expected in CI)
 ```
-
-Pipeline stoppes automatisk, hvis healthcheck fejler.
-
----
 
 ## Troubleshooting
 
+### Common Issues
+
 | Issue | Solution |
 |-------|----------|
-| `ECONNREFUSED` | Server kører ikke på forventet port |
-| `TIMEOUT` | Server uresponsiv – tjek for blocking ops |
-| `vendor/autoload.php` missing | Kør `composer install` |
-| HTTP 500 | Tjek PHP-fejl i server output |
+| `ECONNREFUSED` | Server not running on the expected port |
+| `TIMEOUT` | Server unresponsive; check for blocking operations |
+| `vendor/autoload.php` missing | Run `composer install` first |
+| HTTP 500 errors | Check PHP error logs |
+| TS24 DNS REFUSED | External issue - see `docs/ts24_dns_status_*.md` |
 
-### Debug manuelt
+### Debug Mode
+
+For verbose output, you can modify the script or check the raw HTTP responses:
 
 ```bash
+# Test GDI endpoint manually
 curl -v http://127.0.0.1:8000
+
+# Test TS24 endpoint manually
 curl -v http://127.0.0.1:8091/tools/ts24_health_stub.php
 ```
 
 ---
 
-## Relateret dokumentation
-
-- `docs/ts24_sso_bridge.md` – Canonical entry URL og ejerskab
-- `docs/sso_ops_runbook.md` – Drift og fejlsøgning
-- `docs/sso_v1_signoff_gdi.md` – GDI sign-off
-- `docs/ci_pipelines.md` – CI/CD pipeline-oversigt
-
----
-
 ## Changelog
 
-| Dato | Ændring | PR |
-|------|---------|----|
-| 2025-11-30 | Første version | #61 |
-| 2025-12-01 | Tilføjet prod-verifikation + detaljerede sektioner | Current |
+| Date | Change | PR |
+|------|--------|----|
+| 2025-12-01 | Added CI behaviour section for blocking vs non-blocking conditions | Current |
+| 2025-11-30 | Added TS24 healthcheck stub and sso:health script | #61 |
+| 2025-11-30 | Created documentation | Current |

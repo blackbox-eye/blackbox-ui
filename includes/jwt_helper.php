@@ -53,9 +53,13 @@ function bbx_generate_agent_jwt(array $claims): array
   }
   $expiresAt = $issuedAt + $ttl;
 
+  // TS24 SSO configuration - issuer and audience agreed with TS24 team
+  $ts24_issuer = bbx_env('TS24_JWT_ISSUER', 'ts24-intel');
+  $ts24_audience = bbx_env('TS24_JWT_AUDIENCE', 'ts24-intel');
+
   $defaultClaims = [
-    'iss' => BBX_SITE_BASE_URL,
-    'aud' => defined('BBX_TS24_CONSOLE_URL') ? BBX_TS24_CONSOLE_URL : BBX_SITE_BASE_URL,
+    'iss' => $ts24_issuer,
+    'aud' => $ts24_audience,
     'iat' => $issuedAt,
     'nbf' => $issuedAt,
     'exp' => $expiresAt,
@@ -75,10 +79,20 @@ function bbx_generate_agent_jwt(array $claims): array
  * Issue a JWT based on the authenticated agent row.
  *
  * @param array $agentRow Database row for the agent.
+ *
+ * JWT payload matches TS24 SSO specification:
+ * - iss: "ts24-intel" (issuer)
+ * - aud: "ts24-intel" (audience)
+ * - sub: agent_id (bruger-id)
+ * - name: display name (visningsnavn)
+ * - role: "admin" | "user"
+ * - exp: expiration timestamp
+ * - iat: issued at timestamp
  */
 function bbx_issue_agent_sso_token(array $agentRow): array
 {
-  $role = !empty($agentRow['is_admin']) ? 'admin' : 'operator';
+  // Role mapping: GDI admin -> "admin", otherwise -> "user"
+  $role = !empty($agentRow['is_admin']) ? 'admin' : 'user';
   $scope = $role === 'admin' ? ['dashboard', 'intel', 'admin'] : ['dashboard', 'intel'];
   $nameFallbacks = [
     $agentRow['name'] ?? null,

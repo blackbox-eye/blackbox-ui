@@ -1,0 +1,46 @@
+<?php
+/**
+ * Database Configuration Example
+ * 
+ * Copy this file to db.php and configure with your database credentials.
+ * For production, use environment variables for sensitive data.
+ * For local testing without a database, the stub values below are sufficient.
+ * 
+ * IMPORTANT: Never commit db.php with real credentials to version control!
+ */
+
+require_once __DIR__ . '/includes/env.php';
+
+// Database configuration from environment variables
+$db_host = bbx_env('DB_HOST', 'localhost');
+$db_name = bbx_env('DB_NAME', 'blackbox_eye');
+$db_user = bbx_env('DB_USER', '');
+$db_pass = bbx_env('DB_PASSWORD', '');
+
+// Initialize PDO as null (no connection)
+$pdo = null;
+
+// Track connection status - determine before defining the constant
+$db_connected = false;
+
+// Attempt database connection only if credentials are provided
+if ($db_user !== '' && $db_pass !== '') {
+    try {
+        $dsn = "mysql:host={$db_host};dbname={$db_name};charset=utf8mb4";
+        $options = [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false,
+        ];
+        $pdo = new PDO($dsn, $db_user, $db_pass, $options);
+        $db_connected = true;
+    } catch (PDOException $e) {
+        error_log('BBX DB ERROR: Failed to connect to database - ' . $e->getMessage());
+        // Fall through with $pdo = null and $db_connected = false
+    }
+}
+
+// Define the connection status constant once, after connection attempt
+if (!defined('BBX_DB_CONNECTED')) {
+    define('BBX_DB_CONNECTED', $db_connected);
+}

@@ -31,7 +31,6 @@ $protectedRoutes = [
   '/dashboard.php',
   '/admin.php',
   '/settings.php',
-  '/agent-access.php',
   '/api-keys.php',
   '/intel-vault.php',
   '/download-logs.php',

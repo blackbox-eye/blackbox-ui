@@ -57,17 +57,21 @@ cd ALPHA-Interface-GUI
 # 2. Install dependencies
 npm install
 
-# 3. Start PHP development servers
+# 3. Configure database (optional for UI testing)
+cp db.php.example db.php
+# Edit db.php with your database credentials, or leave as-is for UI-only testing
+
+# 4. Start PHP development servers
 php -S localhost:8000 &           # Main application
 php -S 127.0.0.1:8091 &           # TS24 SSO stub
 
-# 4. Verify SSO health
+# 5. Verify SSO health
 npm run sso:health
 
-# 5. Run tests
+# 6. Run tests
 npm test
 
-# 6. Build Tailwind CSS (if needed)
+# 7. Build Tailwind CSS (if needed)
 npm run build:tailwind
 ```
 

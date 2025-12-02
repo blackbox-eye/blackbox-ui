@@ -39,7 +39,7 @@ When an agent authenticates at `agent-login.php`:
 When an agent clicks the TS24 card on `agent-access.php`:
 
 1. The system generates a time-limited JWT token
-2. The link is constructed as: `https://intel24.tstransport.app/sso-login?sso=<JWT>`
+2. The link is constructed as: `https://intel24.blackbox.codes/sso-login?sso=<JWT>`
 3. The card element includes `data-sso-active="true"` attribute
 4. The agent is redirected to TS24 with the JWT
 
@@ -200,7 +200,7 @@ When validating incoming tokens:
 // config/sso.php
 return [
     'ts24' => [
-        'console_url' => bbx_env('TS24_CONSOLE_URL', 'https://intel24.tstransport.app/sso-login'),
+        'console_url' => bbx_env('TS24_CONSOLE_URL', 'https://intel24.blackbox.codes/sso-login'),
         'secret' => bbx_env('TS24_SSO_SECRET'),
         'token_ttl' => bbx_env('SSO_TOKEN_TTL', 300), // 5 minutes
         'algorithm' => 'HS256',
@@ -215,7 +215,7 @@ return [
 The `agent-access.php` page uses the SSO bridge:
 
 ```php
-$ts24_console_url = bbx_env('TS24_CONSOLE_URL', 'https://intel24.tstransport.app/sso-login');
+$ts24_console_url = bbx_env('TS24_CONSOLE_URL', 'https://intel24.blackbox.codes/sso-login');
 
 // The CTA link includes SSO parameters when active
 <a href="<?= htmlspecialchars($ts24_console_url) ?>"
@@ -274,8 +274,8 @@ The TS24 SSO integration depends on external infrastructure that is **not** cont
 
 | Component | Owner | Must Be Live | Current Status |
 |-----------|-------|--------------|----------------|
-| `intel24.tstransport.app` DNS | TS24 infra team | A/AAAA records must resolve | ❌ REFUSED |
-| `intel24.tstransport.app` TLS | TS24 ops team | Valid TLS certificate | ❓ Cannot test (DNS down) |
+| `intel24.blackbox.codes` DNS | TS24 infra team | A/AAAA records must resolve | ❌ REFUSED |
+| `intel24.blackbox.codes` TLS | TS24 ops team | Valid TLS certificate | ❓ Cannot test (DNS down) |
 | `/sso-login` endpoint | TS24 app team | HTTP 200/30x response | ❓ Cannot test (DNS down) |
 | JWT validation logic | TS24 app team | Accept HS256 tokens from GDI | ❓ Cannot test (DNS down) |
 

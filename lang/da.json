@@ -135,6 +135,35 @@
     "secondary_aria": "Ring til Blackbox EYE operationscenter",
     "dismiss": "Skjul den faste CTA"
   },
+  "agent_access": {
+    "meta": {
+      "title": "Vælg sikker adgang | BLACKBOX EYE™",
+      "description": "Start GreyEYE eller TS24-konsoller fra ét samlet, revideret adgangshub.",
+      "breadcrumb": "Agent adgang"
+    },
+    "hero": {
+      "eyebrow": "Sikre operationer",
+      "title": "Vælg din adgang",
+      "lead": "Vælg den konsol du skal bruge nu – hver session nedarver din aktuelle clearance og overvåges i realtid.",
+      "audit_notice": "Alle launches kræver MFA, logges i sikkerheds-ledgeren og udløser alarmer ved afvigelser."
+    },
+    "cards": {
+      "gdi": {
+        "title": "GreyEYE Data Intelligence (GDI)",
+        "description": "Bruges til interne undersøgelser, alert-triage og direkte styring af GreyEYE-sensorer på tværs af zoner.",
+        "cta": "Åbn GDI-konsollen",
+        "meta": "Kræver Blackbox VPN + biometrisk badge"
+      },
+      "ts24": {
+        "title": "TS24 / Intel24 operationskonsol",
+        "description": "Feltelemetri, TS-transportalerts og taktiske briefinger til TS24 responsteams med mulighed for SSO-handoff fra GDI.",
+        "cta": "Åbn TS24-konsollen",
+        "meta": "Åbner en sikker tstransport.app-session",
+        "sso_notice": "Når du er logget ind som agent, vedhæfter vi et kortlivet GreyEYE SSO-token, så TS24 åbner automatisk. Hvis tokenet udløber, kan du stadig logge ind manuelt på næste skærm.",
+        "sso_ready": "SSO klar"
+      }
+    }
+  },
   "home": {
     "meta": {
       "title": "BLACKBOX EYE™ – Intelligent sikkerhed. Klar til handling.",

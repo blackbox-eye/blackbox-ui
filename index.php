@@ -222,7 +222,11 @@ include 'includes/site-header.php';
                     <ul class="space-y-4 text-gray-300">
                         <?php foreach (['penetration', 'monitoring', 'expertise'] as $bullet): ?>
                             <li class="flex items-start">
-                                <span class="text-green-400 mr-3 mt-1">✓</span>
+                                <span class="text-[var(--bbx-gold)] mr-3 mt-0.5 flex-shrink-0">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </span>
                                 <span><strong class="text-white"><?= t('home.operational.bullets.' . $bullet . '.title') ?></strong> <?= t('home.operational.bullets.' . $bullet . '.body') ?></span>
                             </li>
                         <?php endforeach; ?>

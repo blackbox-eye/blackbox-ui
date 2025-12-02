@@ -8,8 +8,11 @@
  */
 
 session_start();
+require_once __DIR__ . '/includes/env.php';
 require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/includes/logging.php';
+require_once __DIR__ . '/includes/jwt_helper.php';
+require_once __DIR__ . '/includes/sso_audit.php';
 
 $page_title = 'Agent Login';
 $error = $_SESSION['error'] ?? null;
@@ -22,74 +25,118 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pin      = trim($_POST['pin'] ?? '');
     $token    = trim($_POST['token'] ?? '');
     $normalizedAgentId = mb_strtolower($agent_id, 'UTF-8');
+    $attemptId = $agent_id !== '' ? $agent_id : 'unknown';
 
-    if (isset($pdo)) {
-        $stmt = $pdo->prepare("SELECT * FROM agents WHERE LOWER(agent_id) = ? LIMIT 1");
-        $stmt->execute([$normalizedAgentId]);
-        $agent = $stmt->fetch();
-        $attemptId = $agent_id !== '' ? $agent_id : 'unknown';
+    $dbReady = isset($pdo) && defined('BBX_DB_CONNECTED') && BBX_DB_CONNECTED === true;
 
-        if ($agent) {
-            $storedPassword = (string) ($agent['password'] ?? '');
-            $passwordMatch = false;
-            $rehashNeeded = false;
+    if (!$dbReady) {
+        bbx_log_error('LOGIN_DB_UNAVAILABLE', ['agent_id' => $attemptId]);
+        log_agent_event($attemptId, 'LOGIN_FAILED', ['reason' => 'db_unavailable']);
+        $error = "Login er midlertidigt utilgængeligt. Kontakt operations, hvis problemet fortsætter.";
+    } else {
+        /** @var PDO $pdo */
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM agents WHERE LOWER(agent_id) = ? LIMIT 1");
+            $stmt->execute([$normalizedAgentId]);
+            $agent = $stmt->fetch();
 
-            if ($storedPassword !== '') {
-                if (password_verify($password, $storedPassword)) {
-                    $passwordMatch = true;
-                    $rehashNeeded = password_needs_rehash($storedPassword, PASSWORD_DEFAULT);
-                } elseif (hash_equals($storedPassword, $password)) {
-                    // Plaintext fallback (development only)
-                    $passwordMatch = true;
-                    $rehashNeeded = true;
-                }
-            }
+            if ($agent) {
+                $storedPassword = (string) ($agent['password'] ?? '');
+                $passwordMatch = false;
+                $rehashNeeded = false;
 
-            $storedPinRaw = (string) ($agent['pin'] ?? '');
-            $providedPinRaw = $pin;
-            $pinMatch = false;
-
-            if ($storedPinRaw !== '' && $providedPinRaw !== '') {
-                $pinLength = max(strlen($storedPinRaw), strlen($providedPinRaw));
-                $storedPinCanonical = str_pad($storedPinRaw, $pinLength, '0', STR_PAD_LEFT);
-                $providedPinCanonical = str_pad($providedPinRaw, $pinLength, '0', STR_PAD_LEFT);
-                $pinMatch = hash_equals($storedPinCanonical, $providedPinCanonical);
-            }
-
-            $isActive = strtolower((string) $agent['status']) === 'active';
-
-            if ($passwordMatch && $pinMatch && $isActive) {
-                if ($rehashNeeded) {
-                    $newHash = password_hash($password, PASSWORD_DEFAULT);
-                    try {
-                        $upgradeStmt = $pdo->prepare("UPDATE agents SET password = ? WHERE id = ?");
-                        $upgradeStmt->execute([$newHash, $agent['id']]);
-                    } catch (Throwable $e) {
-                        // Silent fail - password will be rehashed on next login
+                if ($storedPassword !== '') {
+                    if (password_verify($password, $storedPassword)) {
+                        $passwordMatch = true;
+                        $rehashNeeded = password_needs_rehash($storedPassword, PASSWORD_DEFAULT);
+                    } elseif (hash_equals($storedPassword, $password)) {
+                        // Plaintext fallback (development only)
+                        $passwordMatch = true;
+                        $rehashNeeded = true;
                     }
                 }
-                session_regenerate_id(true);
-                $_SESSION['agent_id'] = $agent['agent_id'];
-                $_SESSION['is_admin'] = (bool)$agent['is_admin'];
-                // Capture basic client metadata for personalised dashboard feeds
-                $clientIp = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
-                // If X-Forwarded-For contains multiple IPs, take the first
-                if (strpos($clientIp, ',') !== false) {
-                    $clientIp = trim(explode(',', $clientIp)[0]);
+
+                $storedPinRaw = (string) ($agent['pin'] ?? '');
+                $providedPinRaw = $pin;
+                $pinMatch = false;
+
+                if ($storedPinRaw !== '' && $providedPinRaw !== '') {
+                    $pinLength = max(strlen($storedPinRaw), strlen($providedPinRaw));
+                    $storedPinCanonical = str_pad($storedPinRaw, $pinLength, '0', STR_PAD_LEFT);
+                    $providedPinCanonical = str_pad($providedPinRaw, $pinLength, '0', STR_PAD_LEFT);
+                    $pinMatch = hash_equals($storedPinCanonical, $providedPinCanonical);
                 }
-                $_SESSION['agent_ip'] = $clientIp;
-                $_SESSION['agent_user_agent'] = $_SERVER['HTTP_USER_AGENT'] ?? '';
-                log_agent_event($agent['agent_id'], 'LOGIN_SUCCESS');
-                header("Location: dashboard.php");
-                exit;
+
+                $isActive = strtolower((string) $agent['status']) === 'active';
+
+                if ($passwordMatch && $pinMatch && $isActive) {
+                    if ($rehashNeeded) {
+                        $newHash = password_hash($password, PASSWORD_DEFAULT);
+                        try {
+                            $upgradeStmt = $pdo->prepare("UPDATE agents SET password = ? WHERE id = ?");
+                            $upgradeStmt->execute([$newHash, $agent['id']]);
+                        } catch (Throwable $e) {
+                            // Silent fail - password will be rehashed on next login
+                        }
+                    }
+                    session_regenerate_id(true);
+                    $_SESSION['agent_id'] = $agent['agent_id'];
+                    $_SESSION['is_admin'] = (bool)$agent['is_admin'];
+                    // Capture basic client metadata for personalised dashboard feeds
+                    $clientIp = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+                    // If X-Forwarded-For contains multiple IPs, take the first
+                    if (strpos($clientIp, ',') !== false) {
+                        $clientIp = trim(explode(',', $clientIp)[0]);
+                    }
+                    $_SESSION['agent_ip'] = $clientIp;
+                    $_SESSION['agent_user_agent'] = $_SERVER['HTTP_USER_AGENT'] ?? '';
+
+                    if (bbx_jwt_secret_available() && bbx_jwt_library_available()) {
+                        try {
+                            $tokenBundle = bbx_issue_agent_sso_token($agent);
+                            bbx_store_agent_sso_token($tokenBundle);
+                            bbx_set_agent_jwt_cookie($tokenBundle['token'], $tokenBundle['expires_at']);
+                            $fingerprint = substr(sha1($tokenBundle['token']), 0, 16);
+                            bbx_log_sso_event('SSO_TOKEN_ISSUED', [
+                                'agent_id' => $agent['agent_id'] ?? null,
+                                'uid' => $tokenBundle['payload']['uid'] ?? null,
+                                'sub' => $tokenBundle['payload']['sub'] ?? null,
+                                'role' => $tokenBundle['payload']['role'] ?? null,
+                                'scope' => $tokenBundle['payload']['scope'] ?? null,
+                                'expires_at' => $tokenBundle['expires_at'],
+                                'token_fingerprint' => $fingerprint,
+                            ]);
+                            log_agent_event($agent['agent_id'], 'SSO_TOKEN_ISSUED', [
+                                'expires_at' => $tokenBundle['expires_at'],
+                            ]);
+                        } catch (Throwable $jwtError) {
+                            bbx_log_error('JWT_ISSUE_FAILED', [
+                                'agent_id' => $agent['agent_id'],
+                                'message' => $jwtError->getMessage(),
+                            ]);
+                            bbx_log_sso_event('SSO_TOKEN_MINT_FAILED', [
+                                'agent_id' => $agent['agent_id'] ?? $attemptId,
+                                'reason' => $jwtError->getMessage(),
+                            ]);
+                        }
+                    }
+
+                    log_agent_event($agent['agent_id'], 'LOGIN_SUCCESS');
+                    header("Location: dashboard.php");
+                    exit;
+                }
+                log_agent_event($attemptId, 'LOGIN_FAILED', ['reason' => !$isActive ? 'inactive' : (!$passwordMatch ? 'password' : 'pin')]);
+            } else {
+                log_agent_event($attemptId, 'LOGIN_FAILED', ['reason' => 'not_found']);
             }
-            log_agent_event($attemptId, 'LOGIN_FAILED', ['reason' => !$isActive ? 'inactive' : (!$passwordMatch ? 'password' : 'pin')]);
-        } else {
-            log_agent_event($attemptId, 'LOGIN_FAILED', ['reason' => 'not_found']);
+            $error = "Ugyldigt Agent ID, Password eller PIN.";
+        } catch (Throwable $exception) {
+            bbx_log_error('LOGIN_PROCESSING_ERROR', [
+                'agent_id' => $attemptId,
+                'message' => $exception->getMessage(),
+            ]);
+            $error = "Der opstod en systemfejl under login. Prøv igen om lidt.";
         }
-        $error = "Ugyldigt Agent ID, Password eller PIN.";
-    } else {
-        $error = "Databaseforbindelse fejlede.";
     }
 }
 ?>
@@ -115,6 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="/assets/css/admin.css">
+    <?php include __DIR__ . '/includes/qa-bootstrap.php'; ?>
 </head>
 
 <body class="admin-body admin-body--login">
@@ -144,7 +192,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Request Access Section -->
     <?php include __DIR__ . '/includes/components/request-access.php'; ?>
 
+    <?php if (defined('BBX_QA_MODE') && BBX_QA_MODE) {
+        include __DIR__ . '/includes/components/qa-debug-panel.php';
+    } ?>
+
     <!-- Scripts -->
+    <script src="/assets/js/router-guard.js" defer></script>
+    <script src="/assets/js/qa-mode.js" defer></script>
     <script src="/assets/js/interface-menu.js"></script>
     <script src="/assets/js/password-toggle.js"></script>
 </body>

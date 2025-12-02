@@ -131,6 +131,23 @@ npm run build:tailwind
 * **Audit logging & change tracking**
 * **GDPR / Privacy-by-Design:** Pseudonymisering og logging efter enterprise-standard
 
+### 🔗 TS24 SSO Integration
+
+GDI (ALPHA Interface GUI) understøtter single sign-on til TS24 Intel Console:
+
+* **Canonical TS24 SSO entry:** `https://intel24.blackbox.codes/sso-login`
+* **Fuld SSO URL (GDI bygger):** `https://intel24.blackbox.codes/sso-login?sso=<JWT>`
+* **Manuel login fallback:** `https://intel24.blackbox.codes/login`
+
+Domænet `intel24.blackbox.codes` ejes af **ts24-intel-console**. GDI ejer konfigurationen (`TS24_CONSOLE_URL` env var) og token-minting.
+
+> **Status (2025-12-02):** DNS + cert er verificeret. GDI peger nu på den kanoniske SSO-entry `/sso-login` som default.
+
+For detaljer, se:
+* [docs/ts24\_sso\_bridge.md](docs/ts24_sso_bridge.md) – Canonical URLs og ejerskab
+* [docs/sso\_healthcheck.md](docs/sso_healthcheck.md) – Healthcheck-guide
+* [docs/sso\_gdi\_ts24.md](docs/sso_gdi_ts24.md) – Teknisk JWT-specifikation
+
 ---
 
 ## 👤 Agentroller & Adgang
@@ -153,18 +170,22 @@ Alle dokumenter ligger nu under `/docs/`:
 
 ### 🔧 CI/CD & Workflow Dokumentation
 
-* [CI\_CD\_SETUP\_GUIDE.md](/docs/CI_CD_SETUP_GUIDE.md) - Komplet opsætningsguide til CI/CD workflow
-* [WORKFLOW\_VALIDATION\_REPORT.md](/docs/WORKFLOW_VALIDATION_REPORT.md) - Validering af workflow konfiguration (PR #3/PR #5)
-* [ci\_pipelines.md](/docs/ci_pipelines.md) - Oversigt over CI/CD pipelines og workflows
+* [CI_CD_SETUP_GUIDE.md](/docs/CI_CD_SETUP_GUIDE.md) - Komplet opsætningsguide til CI/CD workflow
+* [WORKFLOW_VALIDATION_REPORT.md](/docs/WORKFLOW_VALIDATION_REPORT.md) - Validering af workflow-konfiguration (PR #3/PR #5)
+* [ci_pipelines.md](/docs/ci_pipelines.md) - Detaljeret oversigt over workflows, triggers og TS24 curl-ops-supplement
 
-### 🔐 SSO & Healthcheck Dokumentation
+### 🔗 SSO & TS24 Integration
 
-* [sso\_healthcheck.md](/docs/sso_healthcheck.md) - SSO health check script og endpoint dokumentation
-* [ts24\_sso\_bridge.md](/docs/ts24_sso_bridge.md) - TS24 SSO v1 bridge arkitektur og JWT flow
+* [ts24_sso_bridge.md](/docs/ts24_sso_bridge.md) - Canonical TS24 entry, ejerskab og JWT-flow
+* [sso_healthcheck.md](/docs/sso_healthcheck.md) - Healthcheck-script, stub og prod-verifikationsguide
+* [sso_gdi_ts24.md](/docs/sso_gdi_ts24.md) - Teknisk JWT-specifikation
+* [sso_ops_runbook.md](/docs/sso_ops_runbook.md) - Drift og fejlsøgning
+* [sso_v1_signoff_gdi.md](/docs/sso_v1_signoff_gdi.md) - GDI sign-off checklist
+* [e2e_gdi_ts24_sso_test.md](/docs/e2e_gdi_ts24_sso_test.md) - End-to-end testplan
 
 ### ✅ QA & Release
 
-* [qa\_release\_checklist.md](/docs/qa_release_checklist.md) - Manuel QA checklist før releases
+* [qa_release_checklist.md](/docs/qa_release_checklist.md) - Både dansk release-tjekliste og udvidet preflight-checks
 
 ### 📄 Versionerede rapporter (i `/docs/reports/`)
 

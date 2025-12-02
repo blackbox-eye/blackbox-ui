@@ -97,8 +97,7 @@ jobs:
       # ═══════════════════════════════════════════════════════════════
       # This step validates the local SSO stub. It will NOT fail the
       # workflow if external TS24 DNS is unavailable (expected in CI).
-      # See docs/sso_healthcheck.md for blocking vs non-blocking details.
-      # See docs/ts24_dns_status_*.md for current DNS status reports.
+      # Updated: TS24 now uses intel24.blackbox.codes (valid domain)
       # ═══════════════════════════════════════════════════════════════
       - name: Start PHP servers for SSO health check
         run: |
@@ -122,8 +121,6 @@ jobs:
             echo "sso_status=passed" >> $GITHUB_OUTPUT
           else
             echo "⚠️ SSO health check failed (non-blocking in CI)"
-            echo "   This may indicate TS24 external DNS is unavailable."
-            echo "   See docs/ts24_dns_status_*.md for current DNS status."
             echo "sso_status=warning" >> $GITHUB_OUTPUT
           fi
 
@@ -137,16 +134,28 @@ jobs:
           else
             echo "⚠️ SSO health check: WARNING (non-blocking)"
             echo ""
-            echo "This is expected if TS24 external DNS (intel24.tstransport.app)"
-            echo "is unavailable. The local stub was tested, but external"
-            echo "connectivity could not be verified."
-            echo ""
-            echo "📄 For details, see: docs/ts24_dns_status_*.md"
+            echo "Local stub was tested, external connectivity"
+            echo "could not be fully verified."
           fi
           echo "═══════════════════════════════════════════════════════════════"
 
       - name: Run visual tests
         run: npm run test:ci
+
+      - name: Stop PHP dev server
+        if: always()
+        run: |
+          if [ -f /tmp/php-server.pid ]; then
+            kill $(cat /tmp/php-server.pid) || true
+          fi
+
+      - name: PHP server log (on failure)
+        if: failure()
+        run: |
+          if [ -f /tmp/php-server.log ]; then
+            echo '--- PHP Server Log ---'
+            cat /tmp/php-server.log
+          fi
 
       - name: Upload screenshots
         if: always()

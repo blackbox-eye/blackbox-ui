@@ -19,7 +19,11 @@ const path = require('path');
 const REPORT_FILE = path.join(process.cwd(), 'artifacts', 'test-results.json');
 
 // Pass all CLI args after the script name to Playwright
-const playwrightArgs = process.argv.slice(2);
+const rawArgs = process.argv.slice(2);
+const playwrightArgs = rawArgs.filter((arg) => arg !== '--run');
+if (rawArgs.length !== playwrightArgs.length) {
+  console.log('[shim] Removed unsupported --run flag (Playwright runs all tests by default).');
+}
 
 const args = ['playwright', 'test', ...playwrightArgs];
 

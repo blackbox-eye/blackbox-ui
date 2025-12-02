@@ -213,7 +213,7 @@ These conditions are **external dependencies** that GDI cannot control:
 |-----------|------------|--------|
 | TS24 DNS resolution fails | `⚠️ TS24 external DNS unreachable` | TS24 infra issue |
 | Missing `GDI_SSO_SECRET` in CI | `⚠️ GDI_SSO_SECRET not configured` | Optional secret |
-| TS24 endpoint unreachable | `⚠️ intel24.tstransport.app not responding` | External service |
+| TS24 endpoint unreachable | `⚠️ intel24.blackbox.codes not responding` | External service |
 
 #### Example Log Output When TS24 DNS Is Down
 

@@ -557,9 +557,9 @@ body.alphabot-locked {
   }
 
   .header-cta.agent-login-cta {
-    padding: 0.45rem 0.95rem;
+    padding: 0.5rem 0.95rem;
     font-size: 0.78rem;
-    min-height: 2.7rem;
+    min-height: 3rem; /* 48px minimum touch target for accessibility */
   }
 
   .language-switcher-wrapper {
@@ -573,8 +573,8 @@ body.alphabot-locked {
   }
 
   .header-burger {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 3rem;  /* 48px minimum touch target */
+    height: 3rem;
   }
 }
 
@@ -979,13 +979,15 @@ body.alphabot-locked {
   background: var(--surface-200);
 }
 
-/* Mobile menu nav links - compact left-aligned styling */
+/* Mobile menu nav links - compact left-aligned styling - GRAPHENE DESIGN */
 .nav-link-mobile {
   display: block;
   font-size: 0.68rem; /* Reduced by ~15% from 0.8rem */
   font-weight: 500;
   color: var(--text-medium-emphasis);
-  padding: 0.4rem 0.65rem;
+  padding: 0.35rem 0.6rem;
+  margin-bottom: 0.15rem;
+  line-height: 1.3;
   border-radius: 0.5rem;
   text-align: left;
   transition: color 0.15s ease, background-color 0.15s ease;
@@ -1485,17 +1487,40 @@ body.mobile-menu-open .alphabot-overlay {
 .sticky-cta { position:relative; background:var(--cta-background); color:var(--cta-contrast); padding:1rem 1.5rem; border-radius:3rem; font-weight:600; display:inline-flex; align-items:center; gap:0.5rem; box-shadow:0 10px 25px rgba(0,0,0,.3),0 0 20px rgba(255,199,0,.4); transition:transform .2s ease, box-shadow .2s ease, opacity .3s ease, background .2s ease; opacity:0; transform:translateY(100px); pointer-events:none; }
 .sticky-cta.visible { opacity:1; transform:translateY(0); pointer-events:auto; }
 .sticky-cta:hover { transform:translateY(-2px) scale(1.05); background:var(--cta-background-hover); box-shadow:0 15px 30px rgba(0,0,0,.4),0 0 30px rgba(255,199,0,.6); }
-/* AlphaBot widget */
-.bbx-command-rail { position:fixed; bottom:1.5rem; right:1.5rem; z-index:45; display:flex; flex-direction:column; gap:1rem; align-items:flex-end; }
+/* AlphaBot widget - GRAPHENE STYLE (Nov 2025 QA) */
+.bbx-command-rail { position:fixed; bottom:calc(1.5rem + 22px); right:1.5rem; z-index:45; display:flex; flex-direction:column; gap:1rem; align-items:flex-end; }
 .alphabot-overlay { position:fixed; inset:0; background:rgba(8,13,20,0.68); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); opacity:0; pointer-events:none; transition:opacity 0.25s ease; z-index:44; }
 .alphabot-overlay.visible { opacity:1; pointer-events:auto; }
 
 .alphabot-widget { position:relative; display:flex; flex-direction:column; align-items:flex-end; min-width:15rem; z-index:46; }
-.alphabot-toggle { display:inline-flex; align-items:center; gap:0.5rem; background:rgba(14,20,29,.95); border:1px solid rgba(255,255,255,.08); color:var(--text-high-emphasis); padding:0.65rem 1.25rem; border-radius:999px; font-weight:600; letter-spacing:.02em; box-shadow:0 12px 30px rgba(0,0,0,.4); transition:transform .2s ease, box-shadow .2s ease; }
-.alphabot-toggle:hover { transform:translateY(-2px); box-shadow:0 18px 35px rgba(0,0,0,.45); }
-.alphabot-status-dot { width:0.65rem; height:0.65rem; border-radius:999px; background:#22c55e; box-shadow:0 0 10px rgba(34,197,94,.6); }
-.alphabot-widget.alphabot-offline .alphabot-status-dot { background:#f87171; box-shadow:0 0 10px rgba(248,113,113,.55); }
-.alphabot-panel { position:absolute; bottom:100%; right:0; margin-bottom:1rem; width:min(22rem,calc(100vw - 4rem)); max-height:60vh; background:rgba(8,13,20,.98); border:1px solid rgba(255,255,255,.08); border-radius:1.25rem; padding:1.25rem; box-shadow:0 25px 55px rgba(0,0,0,.6); opacity:0; transform:translate3d(0,10px,0); pointer-events:none; transition:opacity .25s ease, transform .25s ease; display:flex; flex-direction:column; }
+.alphabot-toggle {
+  display:inline-flex;
+  align-items:center;
+  gap:0.5rem;
+  background:rgba(13,15,17,.92);
+  border:1px solid rgba(214,178,94,.25);
+  color:var(--text-high-emphasis);
+  padding:0.65rem 1.25rem;
+  border-radius:8px;
+  font-weight:600;
+  letter-spacing:.02em;
+  box-shadow:0 8px 24px rgba(0,0,0,.45), 0 0 0 1px rgba(214,178,94,.08);
+  transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+}
+.alphabot-toggle:hover {
+  transform:translateY(-2px);
+  background:rgba(13,15,17,.96);
+  border-color:rgba(214,178,94,.45);
+  box-shadow:0 12px 32px rgba(0,0,0,.5), 0 0 20px rgba(214,178,94,.15);
+}
+.alphabot-toggle:focus-visible {
+  outline:2px solid #D6B25E;
+  outline-offset:2px;
+}
+.alphabot-status-dot { width:0.6rem; height:0.6rem; border-radius:999px; background:#22c55e; box-shadow:0 0 8px rgba(34,197,94,.7), 0 0 16px rgba(34,197,94,.35); animation:alphabot-pulse 2s ease-in-out infinite; }
+@keyframes alphabot-pulse { 0%,100%{opacity:1;} 50%{opacity:0.7;} }
+.alphabot-widget.alphabot-offline .alphabot-status-dot { background:#f87171; box-shadow:0 0 8px rgba(248,113,113,.6); animation:none; }
+.alphabot-panel { position:absolute; bottom:100%; right:0; margin-bottom:1rem; width:min(22rem,calc(100vw - 4rem)); max-height:60vh; background:linear-gradient(135deg, rgba(13,15,17,.98), rgba(20,22,26,.98)); border:1px solid rgba(214,178,94,.2); border-radius:8px; padding:1.25rem; box-shadow:0 20px 45px rgba(0,0,0,.55), 0 0 0 1px rgba(214,178,94,.08); opacity:0; transform:translate3d(0,10px,0); pointer-events:none; transition:opacity .25s ease, transform .25s ease; display:flex; flex-direction:column; }
 .alphabot-widget.open .alphabot-panel { opacity:1; transform:translate3d(0,0,0); pointer-events:auto; }
 .alphabot-widget.alphabot-offline .alphabot-toggle { cursor:not-allowed; opacity:0.65; }
 .alphabot-widget.alphabot-offline .alphabot-toggle:hover,
@@ -2335,3 +2360,836 @@ body.mobile-menu-open .alphabot-overlay {
 :root[data-theme="light"] [dir="rtl"] {
   color: #8B6914 !important;
 }
+
+/* ============================================
+   GRAPHENE DESIGN SYSTEM - Sprint 7 Foundation
+   Pixel-perfect consistency & premium finish
+   ============================================ */
+
+/* ─────────────────────────────────────────────
+   GRAPHENE DESIGN TOKENS - Core System
+   ───────────────────────────────────────────── */
+:root {
+  /* Core Palette */
+  --graphene-black: #0D0F11;
+  --graphene-grafit: #14161A;
+  --graphene-gold: #D6B25E;
+  --graphene-gold-light: #FFE8A3;
+  --graphene-gold-dark: #B89B4A;
+  --graphene-white: #F4F4F4;
+  --graphene-white-muted: rgba(244, 244, 244, 0.75);
+
+  /* Spacing System (8px base) */
+  --g-space-xs: 8px;
+  --g-space-sm: 12px;
+  --g-space-md: 16px;
+  --g-space-base: 20px;
+  --g-space-lg: 24px;
+  --g-space-xl: 32px;
+  --g-space-2xl: 48px;
+  --g-space-3xl: 64px;
+
+  /* Border Radius */
+  --g-radius-sm: 4px;
+  --g-radius-base: 8px;
+  --g-radius-md: 12px;
+  --g-radius-lg: 16px;
+  --g-radius-xl: 24px;
+  --g-radius-full: 9999px;
+
+  /* Transitions */
+  --g-transition-fast: 0.15s ease;
+  --g-transition-base: 0.2s ease;
+  --g-transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --g-transition-bounce: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Shadows - Gold Glow System */
+  --g-glow-subtle: 0 0 0 1px rgba(214, 178, 94, 0.1);
+  --g-glow-soft: 0 0 8px rgba(214, 178, 94, 0.15);
+  --g-glow-medium: 0 0 12px rgba(214, 178, 94, 0.2);
+  --g-glow-strong: 0 0 20px rgba(214, 178, 94, 0.3);
+  --g-glow-intense: 0 0 30px rgba(214, 178, 94, 0.4);
+
+  /* Inner Shadows */
+  --g-inner-soft: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  --g-inner-medium: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+  --g-inner-gold: inset 0 0 8px rgba(214, 178, 94, 0.1);
+
+  /* Card Shadows */
+  --g-shadow-card: 0 4px 16px rgba(0, 0, 0, 0.25);
+  --g-shadow-card-hover: 0 8px 32px rgba(0, 0, 0, 0.35);
+  --g-shadow-elevated: 0 12px 40px rgba(0, 0, 0, 0.45);
+
+  /* Borders */
+  --g-border-subtle: 1px solid rgba(214, 178, 94, 0.1);
+  --g-border-soft: 1px solid rgba(214, 178, 94, 0.15);
+  --g-border-medium: 1px solid rgba(214, 178, 94, 0.25);
+  --g-border-strong: 1px solid rgba(214, 178, 94, 0.4);
+  --g-border-gold: 1px solid var(--graphene-gold);
+
+  /* Legacy compatibility */
+  --graphene-spacing: var(--g-space-base);
+  --graphene-radius: var(--g-radius-base);
+}
+
+/* ─────────────────────────────────────────────
+   GRAPHENE HOVER STATES - Universal System
+   ───────────────────────────────────────────── */
+
+/* Interactive element base */
+.g-interactive {
+  transition: all var(--g-transition-base);
+  cursor: pointer;
+}
+
+/* Gold glow hover - Primary interactive elements */
+.g-hover-glow:hover,
+.g-hover-glow:focus-visible {
+  border-color: var(--graphene-gold) !important;
+  box-shadow:
+    0 0 0 2px rgba(214, 178, 94, 0.1),
+    0 0 12px rgba(214, 178, 94, 0.2),
+    var(--g-shadow-card-hover) !important;
+}
+
+/* Subtle glow hover - Secondary elements */
+.g-hover-subtle:hover,
+.g-hover-subtle:focus-visible {
+  border-color: rgba(214, 178, 94, 0.35) !important;
+  box-shadow: var(--g-glow-soft), var(--g-shadow-card) !important;
+}
+
+/* Gold text hover */
+.g-hover-text:hover,
+.g-hover-text:focus-visible {
+  color: var(--graphene-gold-light) !important;
+}
+
+/* Scale hover */
+.g-hover-scale:hover {
+  transform: scale(1.02);
+}
+
+/* Lift hover */
+.g-hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--g-shadow-elevated) !important;
+}
+
+/* ─────────────────────────────────────────────
+   GRAPHENE CARD SYSTEM - Unified Styling
+   ───────────────────────────────────────────── */
+
+.g-card {
+  background: var(--graphene-grafit);
+  border: var(--g-border-soft);
+  border-radius: var(--g-radius-base);
+  padding: var(--g-space-lg);
+  transition: all var(--g-transition-base);
+}
+
+.g-card:hover {
+  border-color: rgba(214, 178, 94, 0.3);
+  box-shadow: var(--g-glow-soft), var(--g-shadow-card-hover);
+}
+
+.g-card--elevated {
+  background: var(--graphene-black);
+  box-shadow: var(--g-shadow-card);
+}
+
+.g-card--elevated:hover {
+  box-shadow: var(--g-glow-medium), var(--g-shadow-elevated);
+}
+
+/* ─────────────────────────────────────────────
+   GRAPHENE BUTTON SYSTEM - Unified Styling
+   ───────────────────────────────────────────── */
+
+.g-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--g-space-xs);
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: var(--g-radius-base);
+  transition: all var(--g-transition-base);
+  cursor: pointer;
+}
+
+.g-btn--primary {
+  background: linear-gradient(135deg, var(--graphene-gold-light) 0%, var(--graphene-gold) 50%, var(--graphene-gold-dark) 100%);
+  color: var(--graphene-black);
+  border: none;
+  box-shadow: 0 4px 12px rgba(214, 178, 94, 0.3);
+}
+
+.g-btn--primary:hover {
+  box-shadow:
+    0 0 0 2px rgba(214, 178, 94, 0.15),
+    0 6px 20px rgba(214, 178, 94, 0.4);
+  transform: translateY(-1px);
+}
+
+.g-btn--secondary {
+  background: transparent;
+  color: var(--graphene-white);
+  border: var(--g-border-medium);
+}
+
+.g-btn--secondary:hover {
+  border-color: var(--graphene-gold);
+  color: var(--graphene-gold-light);
+  box-shadow: var(--g-glow-soft);
+}
+
+.g-btn--ghost {
+  background: rgba(214, 178, 94, 0.08);
+  color: var(--graphene-gold-light);
+  border: var(--g-border-subtle);
+}
+
+.g-btn--ghost:hover {
+  background: rgba(214, 178, 94, 0.15);
+  border-color: rgba(214, 178, 94, 0.3);
+}
+
+/* --------------------------------------------------------
+   FIX #1: AlphaBot Button - Modernized Graphene Style
+   -------------------------------------------------------- */
+.alphabot-toggle {
+  background: rgba(13, 15, 17, 0.92) !important;
+  border: 1px solid rgba(214, 178, 94, 0.25) !important;
+  border-radius: var(--graphene-radius) !important;
+}
+
+.alphabot-toggle:hover,
+.alphabot-toggle:focus-visible {
+  border-color: var(--graphene-gold) !important;
+  box-shadow: 0 0 0 3px rgba(214, 178, 94, 0.15), 0 12px 28px rgba(0, 0, 0, 0.45) !important;
+}
+
+.alphabot-label {
+  font-size: 0.9rem;
+}
+
+/* --------------------------------------------------------
+   FIX #2: Header Navigation - Consistent Gold Accents
+   -------------------------------------------------------- */
+.nav-chip {
+  padding: 0.5rem 0.85rem !important;
+  border-radius: var(--graphene-radius) !important;
+  background: rgba(20, 22, 26, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  transition: all 0.2s ease !important;
+}
+
+.nav-chip:hover {
+  background: rgba(20, 22, 26, 0.8) !important;
+  border-color: rgba(214, 178, 94, 0.3) !important;
+}
+
+.nav-chip.nav-link-active {
+  background: rgba(214, 178, 94, 0.15) !important;
+  border-color: rgba(214, 178, 94, 0.4) !important;
+  color: var(--graphene-gold-light) !important;
+}
+
+/* Fix header controls alignment */
+.header-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.65rem !important;
+}
+
+.theme-toggle,
+.graphene-toggle,
+.language-switcher-wrapper {
+  height: 36px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+/* --------------------------------------------------------
+   FIX #3: Hero CTA Modal / Sticky CTA - Graphene Style
+   -------------------------------------------------------- */
+.sticky-cta-bar {
+  background: linear-gradient(135deg, rgba(13, 15, 17, 0.95) 0%, rgba(20, 22, 26, 0.96) 100%) !important;
+  border: 1px solid rgba(214, 178, 94, 0.35) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(214, 178, 94, 0.1) !important;
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+.sticky-cta-bar__title {
+  line-height: 1.4 !important;
+}
+
+.sticky-cta-bar__btn {
+  padding: 0.7rem 0.9rem !important;
+  font-size: 0.88rem !important;
+  border-radius: var(--graphene-radius) !important;
+}
+
+.sticky-cta-bar__btn--primary {
+  background: linear-gradient(120deg, #FFE8A3 0%, #D6B25E 50%, #C9A54D 100%) !important;
+  box-shadow: 0 8px 20px rgba(214, 178, 94, 0.35) !important;
+}
+
+.sticky-cta-bar__close {
+  width: 28px !important;
+  height: 28px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.sticky-cta-bar__close svg {
+  width: 14px !important;
+  height: 14px !important;
+  stroke-width: 2.5 !important;
+}
+
+/* --------------------------------------------------------
+   FIX #5: Mobile Menu - Compact & Consistent Spacing
+   -------------------------------------------------------- */
+#mobile-menu .nav-link-mobile {
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  padding: 0.6rem 0.75rem !important;
+  margin-bottom: 2px !important;
+  line-height: 1.3 !important;
+}
+
+#mobile-menu .nav-link-mobile--secondary {
+  font-size: 0.8rem !important;
+}
+
+#mobile-menu .mobile-primary-ctas .header-cta {
+  padding: 0.65rem 1rem !important;
+  min-height: 42px !important;
+  font-size: 0.85rem !important;
+}
+
+#mobile-menu .language-switch--drawer {
+  padding: 0.35rem 0.65rem !important;
+  font-size: 0.75rem !important;
+}
+
+/* Fix theme toggle jump */
+#mobile-menu .theme-toggle--mobile {
+  position: relative !important;
+  top: 0 !important;
+  transform: none !important;
+}
+
+/* --------------------------------------------------------
+   FIX #8: Logo Container - No Yellow Background
+   -------------------------------------------------------- */
+.header-logo-link {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.header-brand {
+  background: transparent !important;
+}
+
+:root[data-theme="light"] .header-logo-link,
+:root[data-theme="light"] .header-brand {
+  background: transparent !important;
+}
+
+/* --------------------------------------------------------
+   FIX #9: STÆRK Mode Button - Correct Gold + Glow
+   -------------------------------------------------------- */
+button.graphene-toggle {
+  background: rgba(20, 22, 26, 0.85) !important;
+  border: 1px solid rgba(214, 178, 94, 0.2) !important;
+  border-radius: var(--graphene-radius) !important;
+  padding: 0.4rem 0.7rem !important;
+  color: rgba(244, 244, 244, 0.8) !important;
+  font-size: 0.78rem !important;
+}
+
+button.graphene-toggle:hover {
+  border-color: var(--graphene-gold) !important;
+  color: var(--graphene-gold-light) !important;
+  box-shadow: 0 0 12px rgba(214, 178, 94, 0.2) !important;
+}
+
+button.graphene-toggle[aria-pressed="true"] {
+  background: rgba(214, 178, 94, 0.12) !important;
+  border-color: var(--graphene-gold) !important;
+  color: var(--graphene-gold-light) !important;
+  box-shadow:
+    0 0 0 2px rgba(214, 178, 94, 0.1),
+    0 0 15px rgba(214, 178, 94, 0.25),
+    inset 0 0 8px rgba(214, 178, 94, 0.1) !important;
+}
+
+.graphene-toggle__text {
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+}
+
+/* --------------------------------------------------------
+   FIX #6: Case Cards - Modern Graphene Style
+   -------------------------------------------------------- */
+.case-card-graphene {
+  background: var(--graphene-black) !important;
+  border: 1px solid rgba(214, 178, 94, 0.15) !important;
+  border-radius: 16px !important;
+  padding: 1.75rem !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.case-card-graphene:hover {
+  border-color: rgba(214, 178, 94, 0.35) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4) !important;
+}
+
+.case-card-graphene h2,
+.case-card-graphene h3 {
+  color: var(--graphene-gold) !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.case-card-graphene p {
+  color: rgba(244, 244, 244, 0.8) !important;
+  line-height: 1.6 !important;
+}
+
+.case-card-graphene .result-text {
+  color: var(--graphene-gold) !important;
+  font-weight: 600 !important;
+}
+
+/* Override emoji-based styling */
+.case-metric-card .text-emerald-400,
+.glass-effect .text-emerald-400 {
+  color: var(--graphene-gold) !important;
+}
+
+/* --------------------------------------------------------
+   FIX #7: Info Boxes - Differentiated Design
+   -------------------------------------------------------- */
+.info-box-graphene {
+  background: linear-gradient(135deg, rgba(13, 15, 17, 0.9), rgba(20, 22, 26, 0.85)) !important;
+  border: 1px solid rgba(214, 178, 94, 0.12) !important;
+  border-radius: 12px !important;
+  padding: 1.5rem !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 1rem !important;
+}
+
+.info-box-graphene__icon {
+  flex-shrink: 0 !important;
+  width: 48px !important;
+  height: 48px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(214, 178, 94, 0.1) !important;
+  border: 1px solid rgba(214, 178, 94, 0.2) !important;
+  border-radius: 10px !important;
+  color: var(--graphene-gold) !important;
+}
+
+.info-box-graphene__content h3 {
+  color: var(--graphene-gold-light) !important;
+  font-size: 1rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.info-box-graphene__content ul {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.info-box-graphene__content li {
+  position: relative !important;
+  padding-left: 1rem !important;
+  color: rgba(244, 244, 244, 0.75) !important;
+  font-size: 0.9rem !important;
+  line-height: 1.5 !important;
+  margin-bottom: 0.35rem !important;
+}
+
+.info-box-graphene__content li::before {
+  content: '' !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 0.55em !important;
+  width: 4px !important;
+  height: 4px !important;
+  background: var(--graphene-gold) !important;
+  border-radius: 50% !important;
+}
+
+/* Responsive mobile menu fixes */
+@media (max-width: 768px) {
+  .bbx-command-rail {
+    bottom: calc(5.5rem + env(safe-area-inset-bottom, 1rem) + 22px) !important;
+  }
+
+  .alphabot-widget {
+    bottom: calc(5.5rem + env(safe-area-inset-bottom, 1rem) + 22px) !important;
+  }
+}
+
+
+/* ============================================
+   SPRINT 7 - UI/UX FINISHING PASS
+   Premium polish & pixel-perfect consistency
+   ============================================ */
+
+/* ─────────────────────────────────────────────
+   TASK 2: Header Alignment Finpudsning
+   All buttons same height/baseline, reduced gap
+   ───────────────────────────────────────────── */
+
+/* Unified header button height system */
+.header-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important; /* Reduced from 0.65rem for tighter alignment */
+}
+
+/* All header interactive elements: 36px height */
+.header-cta,
+.agent-login-cta,
+.theme-toggle,
+.graphene-toggle,
+.language-switch {
+  height: 36px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
+
+/* Language switcher wrapper alignment */
+.language-switcher-wrapper {
+  height: 36px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 2px !important;
+}
+
+/* Individual language buttons within wrapper */
+.language-switch {
+  height: 32px !important;
+  padding: 0 0.5rem !important;
+  font-size: 0.75rem !important;
+  border-radius: var(--g-radius-sm) !important;
+}
+
+/* Agent Login button - reduced gap to language */
+.agent-login-cta {
+  margin-right: 4px !important; /* 4-6px gap before language */
+  padding: 0 0.875rem !important;
+  font-size: 0.8rem !important;
+  border-radius: var(--g-radius-base) !important;
+}
+
+/* STÆRK mode toggle - pixel-aligned with DA/EN */
+button.graphene-toggle {
+  height: 36px !important;
+  padding: 0 0.625rem !important;
+  font-size: 0.75rem !important;
+  border-radius: var(--g-radius-base) !important;
+  background: rgba(20, 22, 26, 0.85) !important;
+  border: var(--g-border-soft) !important;
+  color: rgba(244, 244, 244, 0.8) !important;
+  transition: all var(--g-transition-base) !important;
+}
+
+button.graphene-toggle:hover {
+  border-color: var(--graphene-gold) !important;
+  color: var(--graphene-gold-light) !important;
+  box-shadow: var(--g-glow-soft) !important;
+}
+
+button.graphene-toggle[aria-pressed="true"] {
+  background: rgba(214, 178, 94, 0.12) !important;
+  border-color: var(--graphene-gold) !important;
+  color: var(--graphene-gold-light) !important;
+  box-shadow:
+    0 0 0 2px rgba(214, 178, 94, 0.1),
+    var(--g-glow-medium),
+    var(--g-inner-gold) !important;
+}
+
+/* Theme toggle alignment */
+.theme-toggle {
+  height: 36px !important;
+  padding: 0 0.5rem !important;
+  border-radius: var(--g-radius-base) !important;
+}
+
+/* ─────────────────────────────────────────────
+   TASK 5: Mobile Menu Animations & UX
+   Smooth slide-in, focus trap, backdrop blur
+   ───────────────────────────────────────────── */
+
+/* Mobile menu drawer - enhanced animation */
+#mobile-menu {
+  background: rgba(13, 15, 17, 0.98) !important;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-left: var(--g-border-soft) !important;
+  transform: translateX(100%);
+  opacity: 0;
+  transition:
+    transform 0.35s cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 0.25s ease !important;
+}
+
+#mobile-menu[aria-hidden="false"],
+#mobile-menu.is-open {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Mobile menu overlay - enhanced backdrop */
+#mobile-menu-overlay {
+  background: rgba(0, 0, 0, 0.6) !important;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition: opacity 0.3s ease !important;
+}
+
+#mobile-menu-overlay.is-visible {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Mobile nav links - Graphene styled */
+#mobile-menu .nav-link-mobile {
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  padding: var(--g-space-sm) var(--g-space-md) !important;
+  margin-bottom: 2px !important;
+  line-height: 1.4 !important;
+  border-radius: var(--g-radius-base) !important;
+  color: var(--graphene-white-muted) !important;
+  transition: all var(--g-transition-base) !important;
+}
+
+#mobile-menu .nav-link-mobile:hover,
+#mobile-menu .nav-link-mobile:focus-visible {
+  background: rgba(214, 178, 94, 0.08) !important;
+  color: var(--graphene-gold-light) !important;
+}
+
+#mobile-menu .nav-link-mobile.is-active {
+  background: rgba(214, 178, 94, 0.12) !important;
+  color: var(--graphene-gold-light) !important;
+  border-left: 2px solid var(--graphene-gold) !important;
+}
+
+/* Mobile CTA buttons */
+#mobile-menu .mobile-primary-ctas .header-cta {
+  padding: var(--g-space-sm) var(--g-space-md) !important;
+  min-height: 44px !important;
+  font-size: 0.875rem !important;
+  border-radius: var(--g-radius-base) !important;
+}
+
+/* Mobile language switches */
+#mobile-menu .language-switch--drawer {
+  padding: var(--g-space-xs) var(--g-space-sm) !important;
+  font-size: 0.75rem !important;
+  border-radius: var(--g-radius-sm) !important;
+}
+
+/* ─────────────────────────────────────────────
+   TASK 6: Footer Graphene Redesign
+   #0D0F11 background, gold dividers, 48px spacing
+   ───────────────────────────────────────────── */
+
+footer {
+  background: var(--graphene-black) !important;
+  border-top: var(--g-border-soft) !important;
+  margin-top: var(--g-space-2xl) !important;
+}
+
+footer .container {
+  padding-top: var(--g-space-2xl) !important;
+  padding-bottom: var(--g-space-2xl) !important;
+}
+
+/* Footer grid spacing */
+footer .grid {
+  gap: var(--g-space-2xl) !important;
+}
+
+/* Footer section headers */
+footer h4 {
+  color: var(--graphene-gold) !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em !important;
+  margin-bottom: var(--g-space-md) !important;
+}
+
+/* Footer divider lines */
+footer .border-t,
+footer .border-b {
+  border-color: rgba(214, 178, 94, 0.15) !important;
+}
+
+/* Footer links */
+footer a {
+  color: var(--graphene-white-muted) !important;
+  transition: color var(--g-transition-fast) !important;
+}
+
+footer a:hover,
+footer a:focus-visible {
+  color: var(--graphene-gold-light) !important;
+}
+
+/* Footer social icons - hover glow */
+footer .rounded-lg[aria-label] {
+  background: var(--graphene-grafit) !important;
+  border: var(--g-border-subtle) !important;
+  transition: all var(--g-transition-base) !important;
+}
+
+footer .rounded-lg[aria-label]:hover {
+  background: var(--graphene-gold) !important;
+  border-color: var(--graphene-gold) !important;
+  box-shadow: var(--g-glow-medium) !important;
+  transform: scale(1.1) !important;
+}
+
+footer .rounded-lg[aria-label]:hover svg {
+  color: var(--graphene-black) !important;
+}
+
+/* Footer bottom section */
+footer .pt-8 {
+  padding-top: var(--g-space-xl) !important;
+  border-top: var(--g-border-soft) !important;
+}
+
+/* Operational status badge in footer */
+footer .bg-amber-400\/10 {
+  background: rgba(214, 178, 94, 0.1) !important;
+  border-color: rgba(214, 178, 94, 0.2) !important;
+}
+
+footer .text-amber-400 {
+  color: var(--graphene-gold) !important;
+}
+
+/* ─────────────────────────────────────────────
+   TASK 7: Global Font Consistency
+   Inter (body), Space Grotesk (H1/H2), Chakra (logo)
+   ───────────────────────────────────────────── */
+
+/* Body text - Inter */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* Primary headings - Space Grotesk */
+h1, h2,
+.products-hero__title,
+.graphene-hero__title,
+.hero-title {
+  font-family: 'Space Grotesk', 'Inter', sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* Secondary headings - Inter Bold */
+h3, h4, h5, h6 {
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 600 !important;
+}
+
+/* Logo only - Chakra Petch */
+.header-logo-link,
+.logo-text,
+.brand-name {
+  font-family: 'Chakra Petch', 'Inter', sans-serif !important;
+}
+
+/* ─────────────────────────────────────────────
+   TASK 8: STÆRK-mode Microinteraction
+   Pulse animation, color morph, aria-live
+   ───────────────────────────────────────────── */
+
+/* STÆRK mode activation pulse */
+@keyframes staerk-pulse {
+  0% {
+    box-shadow:
+      0 0 0 0 rgba(214, 178, 94, 0.4),
+      0 0 0 0 rgba(214, 178, 94, 0.2);
+  }
+  50% {
+    box-shadow:
+      0 0 0 8px rgba(214, 178, 94, 0),
+      0 0 20px rgba(214, 178, 94, 0.3);
+  }
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(214, 178, 94, 0),
+      var(--g-glow-medium);
+  }
+}
+
+/* STÆRK mode color morph transition */
+@keyframes staerk-morph {
+  0% {
+    background: rgba(20, 22, 26, 0.85);
+    border-color: rgba(214, 178, 94, 0.2);
+  }
+  50% {
+    background: rgba(214, 178, 94, 0.2);
+    border-color: var(--graphene-gold);
+  }
+  100% {
+    background: rgba(214, 178, 94, 0.12);
+    border-color: var(--graphene-gold);
+  }
+}
+
+button.graphene-toggle[aria-pressed="true"] {
+  animation: staerk-pulse 0.6s ease-out !important;
+}
+
+button.graphene-toggle.is-activating {
+  animation: staerk-morph 0.4s ease-out forwards !important;
+}
+
+/* STÆRK mode icon rotation */
+button.graphene-toggle .graphene-toggle__icon {
+  transition: transform var(--g-transition-smooth) !important;
+}
+
+button.graphene-toggle[aria-pressed="true"] .graphene-toggle__icon {
+  transform: rotate(180deg) !important;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  button.graphene-toggle[aria-pressed="true"],
+  button.graphene-toggle.is-activating {
+    animation: none !important;
+  }
+
+  button.graphene-toggle .graphene-toggle__icon {
+    transition: none !important;
+  }
+}
+

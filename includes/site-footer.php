@@ -111,11 +111,20 @@
                         <a href="terms.php" class="hover:text-amber-400 transition-colors"><?= t('footer.terms', 'Vilkår') ?></a>
                         <span class="text-gray-700">|</span>
                         <span class="text-gray-600"><?= t('footer.recaptcha_notice', 'This site is protected by reCAPTCHA') ?></span>
+                        <?php if (defined('BBX_QA_MODE') && BBX_QA_MODE): ?>
+                            <span class="qa-version-chip inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-400/60 text-amber-200 text-[0.65rem] uppercase tracking-[0.08em]">
+                                ALPHA-GUI v1.0.0-QA
+                            </span>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
         </div>
     </footer>
+
+    <?php if (defined('BBX_QA_MODE') && BBX_QA_MODE) {
+        include __DIR__ . '/components/qa-debug-panel.php';
+    } ?>
 
     <?php // Cookie Consent Banner (GDPR Compliance)
     ?>
@@ -207,7 +216,8 @@
             </div>
         <?php endif; ?>
     </div>
-
+    <script src="assets/js/router-guard.js" defer></script>
+    <script src="assets/js/qa-mode.js" defer></script>
     <script src="assets/js/site.min.js" defer></script>
     <?php if (isset($current_page) && $current_page === 'home'): ?>
         <script type="module" src="assets/js/graphene-hero.js"></script>

@@ -303,6 +303,7 @@ if (!empty($disable_alphabot)) {
     </script>
 
     <!-- Inline styles removed; migrated to /assets/css/custom-ui.css -->
+    <?php include __DIR__ . '/qa-bootstrap.php'; ?>
 </head>
 
 <?php

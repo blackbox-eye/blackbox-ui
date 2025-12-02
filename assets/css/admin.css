@@ -358,6 +358,7 @@
   inset: 0;
   pointer-events: none;
   background: rgba(5, 5, 15, 0);
+  -webkit-backdrop-filter: blur(0px);
   backdrop-filter: blur(0px);
   transition: background 0.4s ease, backdrop-filter 0.4s ease;
   z-index: 0;
@@ -365,6 +366,7 @@
 
 .admin-body--login.interaction-active::after {
   background: rgba(5, 5, 15, 0.32);
+  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
 
@@ -434,8 +436,8 @@ body {
   border: 1px solid var(--admin-border-gold);
   border-radius: var(--admin-border-radius);
   padding: 1.65rem 1.45rem 1.4rem;
-  backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   box-shadow: var(--admin-shadow-card);
   position: relative;
   z-index: 1;
@@ -670,6 +672,7 @@ body {
   position: fixed;
   inset: 0;
   background: rgba(4, 6, 12, 0.75);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   display: none;
   align-items: center;
@@ -955,8 +958,8 @@ body {
   border: 1px solid var(--admin-border-gold);
   border-right: none;
   border-radius: var(--admin-border-radius) 0 0 var(--admin-border-radius);
-  backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
   cursor: pointer;
   z-index: var(--z-launcher);
   transition: all 0.3s ease;
@@ -1012,6 +1015,7 @@ body {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   z-index: var(--z-backdrop);
   opacity: 0;
@@ -1042,15 +1046,13 @@ body {
   background: var(--admin-bg-glass);
   border-left: 1px solid var(--admin-border-gold);
   box-shadow: var(--admin-shadow-menu);
-  backdrop-filter: blur(22px);
   -webkit-backdrop-filter: blur(22px);
+  backdrop-filter: blur(22px);
   z-index: var(--z-menu);
   transform: translateX(100%);
   transition: transform var(--admin-transition-medium);
   overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-width: thin;
-  scrollbar-color: var(--admin-border-gold) transparent;
 }
 
 /* Hide scrollbar when not needed */
@@ -1357,6 +1359,24 @@ body {
   text-transform: uppercase;
 }
 
+.admin-footer-meta {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--admin-border-subtle);
+  background: rgba(5, 7, 11, 0.85);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.admin-footer-meta__label {
+  font-weight: 600;
+}
+
 /* —————————————————————————————————————————————————————
    BACK LINK
    ————————————————————————————————————————————————————— */
@@ -1375,6 +1395,7 @@ body {
   padding: 8px 12px;
   border-radius: 4px;
   background: rgba(0, 0, 0, 0.3);
+  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   border: 1px solid var(--admin-border-subtle);
   z-index: 1;

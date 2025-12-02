@@ -1,150 +1,112 @@
 # QA Release Checklist
 
-> **Last updated:** 2025-11-30  
-> **Version:** 1.0
+> **Senest opdateret / Last updated:** 2025-12-01
+> **Version:** 1.1
 
-## Overview
-
-This checklist provides manual QA steps to verify before merging PRs or releasing to production. Complete all applicable items before marking a release as ready.
+Denne checklist kombinerer de oprindelige danske release-gates og den nye detaljerede preflight-guide. Brug den før både PR-merge og produktion.
 
 ---
 
-## Pre-Release Checklist
+## Grundlæggende kontroller
 
-### 1. SSO Health Checks
-
-- [ ] **Start local servers**
-  ```bash
-  php -S localhost:8000 &
-  php -S 127.0.0.1:8091 &
-  ```
-
-- [ ] **Run SSO health check**
-  ```bash
-  npm run sso:health
-  ```
-
-- [ ] **Verify output shows:**
-  - ✅ GDI: OK
-  - ✅ TS24: OK
-  - Secret Configured: Yes
-  - Uses HS256: Yes
-
-### 2. Playwright Test Suites
-
-- [ ] **Run full test suite**
-  ```bash
-  npm test
-  ```
-
-- [ ] **Check specific suites as needed:**
-  ```bash
-  # Agent access tests
-  npm test -- tests/agent-access.spec.js
-  
-  # Marketing landing tests
-  npm test -- tests/marketing-landing.spec.js
-  
-  # Graphene hero tests
-  npm test -- tests/graphene-3d-hero.spec.js
-  ```
-
-- [ ] **Verify test output:**
-  - expected === total
-  - unexpected === 0
-  - flaky tests acknowledged
-
-### 3. i18n Verification
-
-- [ ] **Agent Access page (`/agent-access.php`)**
-  - [ ] No raw i18n keys visible (no `agent_access.` strings)
-  - [ ] Hero title displays translated text
-  - [ ] Hero lead text displays translated text
-  - [ ] GDI card shows proper title, description, CTA
-  - [ ] TS24 card shows proper title, description, CTA
-  - [ ] Audit notice displays correctly
-
-- [ ] **Test both languages:**
-  - [ ] Switch to Danish: verify translations
-  - [ ] Switch to English: verify translations
-
-### 4. Mobile Responsiveness
-
-- [ ] **Test at 320px viewport width:**
-  - [ ] Hero section visible and readable
-  - [ ] CTA buttons visible and not overlapping
-  - [ ] Touch targets ≥ 48px height
-  - [ ] Cards stack properly on small screens
-
-- [ ] **Test at 768px viewport width (tablet):**
-  - [ ] Layout adjusts appropriately
-  - [ ] Navigation menu accessible
-
-- [ ] **Test at 1280px viewport width (desktop):**
-  - [ ] Console cards display side by side
-  - [ ] Full navigation visible
-  - [ ] Hero section properly sized
-
-### 5. Visual Regression
-
-- [ ] **Check for visual regressions:**
-  - [ ] Hero section unchanged (unless intentional)
-  - [ ] Footer consistent
-  - [ ] Header layout correct
-  - [ ] Colors match Graphene design system
-
-### 6. Deployment Verification
-
-- [ ] **Check Cloudflare Pages deploy log:**
-  - [ ] Build completed successfully
-  - [ ] No deployment errors
-  - [ ] Preview URL accessible
-
-- [ ] **Verify on preview/staging:**
-  - [ ] Pages load without errors
-  - [ ] Console (F12) shows no JavaScript errors
-  - [ ] Network tab shows no failed requests
+- [ ] `npm test` passerer uden fejl
+- [ ] `npm run build:tailwind` kørt efter CSS-ændringer
+- [ ] CHANGELOG.md opdateret
+- [ ] Ingen hardkodede secrets (brug `bbx_env()`)
+- [ ] Prod-passwords bruger `password_hash()`/`password_verify()`
+- [ ] Session-cookies er Secure + HttpOnly
+- [ ] reCAPTCHA aktiv på offentlige formularer
 
 ---
 
-## Quick Verification Commands
+## Pre-release checklist
+
+### 1. SSO health
+
+- [ ] Start lokale PHP-servere (8000 for GDI, 8091 for TS24 stub)
+- [ ] `npm run sso:health` viser ✅ for GDI og TS24 + `Secret Configured: Yes`
+- [ ] `logs/sso_events.log` indeholder ingen nye fejl
+
+### 2. Playwright suites
+
+- [ ] `npm test` (fuld suite) gennemført
+- [ ] Ekstra targeted suites efter behov (fx `tests/agent-access.spec.js`)
+- [ ] Rapport viser `unexpected === 0`
+
+### 3. i18n
+
+- [ ] Ingen rå nøgler på `/agent-access.php`
+- [ ] Hero-tekst, kort og audit notice oversat på både EN/DA
+
+### 4. Mobile responsiveness
+
+- [ ] 320 px: CTA'er ≥ 48 px, kort stakker korrekt
+- [ ] 768 px: Navigation tilgængelig
+- [ ] 1280 px: Console cards side om side
+
+### 5. Visual regression
+
+- [ ] Graphene hero matcher baseline
+- [ ] Header/footer konsistente
+- [ ] Farver følger GreyEYE palette
+
+### 6. Deployment readiness
+
+- [ ] Cloudflare Pages preview grøn
+- [ ] `ci.yml` smoke tests passerer
+- [ ] Ingen JS-console fejl på preview/staging
+- [ ] Cloudflare cache klar til purge
+
+---
+
+## TS24 / SSO integration
+
+### Lokal & CI healthcheck
+
+- [ ] `npm run sso:health` OK
+- [ ] `GDI_SSO_SECRET` / `JWT_SECRET` sat
+- [ ] Agent Access viser TS24-kort med `data-sso-active="true"`
+- [ ] SSO-link bruger `https://intel24.blackbox.codes/sso-login?sso=...`
+
+### Prod-verifikation
+
+- [ ] `curl -I https://intel24.blackbox.codes/sso-login` svarer 200/3xx (DNS + cert ok)
+- [ ] Happy path: GDI login → TS24 link → dashboard
+- [ ] Expired og tampered tokens afvises korrekt
+
+---
+
+## Quick verification commands
 
 ```bash
-# One-liner for basic verification
+# Minimum gate
 npm run sso:health && npm test -- tests/agent-access.spec.js
 
-# Full pre-merge check
+# Full pre-merge
 npm run sso:health && npm test
 ```
 
 ---
 
-## Release Approval Criteria
-
-A release is **ready for merge** when:
+## Release approval matrix
 
 | Criterion | Status |
 |-----------|--------|
 | SSO health checks pass | ✅ Required |
-| Playwright tests pass | ✅ Required |
-| No raw i18n keys visible | ✅ Required |
-| Mobile CTA buttons accessible | ✅ Required |
-| Visual regression tests pass | ✅ Required |
-| CodeQL (JS + PHP) passes | ✅ Required |
-| Cloudflare Pages deploy succeeds | ✅ Required |
+| Playwright + visual regression pass | ✅ Required |
+| Ingen rå i18n-nøgler | ✅ Required |
+| Mobile CTA'er tilgængelige | ✅ Required |
+| CodeQL (JS + PHP) grøn | ✅ Required |
+| Cloudflare Pages deploy | ✅ Required |
 
 ---
 
-## Post-Release Verification
+## Post-deploy verifikation
 
-After merging to main:
-
-- [ ] **Monitor Cloudflare Pages deployment**
-- [ ] **Verify production site:**
-  - [ ] https://blackbox.codes loads correctly
-  - [ ] /agent-access shows translated content
-  - [ ] No JavaScript console errors
-- [ ] **Check for error alerts in monitoring**
+- [ ] Prod-site loader (<https://blackbox.codes>)
+- [ ] Agent-login + TS24 redirect fungerer
+- [ ] Prod SSO health OK
+- [ ] Ingen browser-console fejl
 
 ---
 
@@ -152,15 +114,33 @@ After merging to main:
 
 | Issue | Action |
 |-------|--------|
-| SSO health fails | Check PHP servers are running |
-| Tests fail | Review test output, check for breaking changes |
-| i18n keys showing | Verify JSON files have translations |
-| Deploy fails | Check Cloudflare dashboard for errors |
+| `npm run sso:health` fejler | Tjek at begge PHP-servere kører |
+| Playwright tests fejler | Læs rapport, regenerér snapshots hvis UI ændret |
+| i18n-nøgler vises | Opdater `lang/en.json` og `lang/da.json` |
+| Deploy fejler | Verificér Cloudflare/FTP secrets |
+
+---
+
+## Sign-off
+
+- **QA-owner:** _______________________
+- **Dato:** _______________________
+- **Version:** _______________________
+
+---
+
+## Relateret dokumentation
+
+- `docs/sso_healthcheck.md`
+- `docs/ts24_sso_bridge.md`
+- `docs/sso_v1_signoff_gdi.md`
+- `docs/ci_pipelines.md`
 
 ---
 
 ## Changelog
 
-| Date | Change | PR |
-|------|--------|----|
-| 2025-11-30 | Created QA release checklist | Current |
+| Dato | Ændring | PR |
+|------|---------|----|
+| 2025-11-30 | Første version | #61 |
+| 2025-12-01 | Bilingual merge + TS24 prod-gate | Current |

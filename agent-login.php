@@ -162,6 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="/assets/css/admin.css">
+    <?php include __DIR__ . '/includes/qa-bootstrap.php'; ?>
 </head>
 
 <body class="admin-body admin-body--login">
@@ -191,7 +192,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Request Access Section -->
     <?php include __DIR__ . '/includes/components/request-access.php'; ?>
 
+    <?php if (defined('BBX_QA_MODE') && BBX_QA_MODE) {
+        include __DIR__ . '/includes/components/qa-debug-panel.php';
+    } ?>
+
     <!-- Scripts -->
+    <script src="/assets/js/router-guard.js" defer></script>
+    <script src="/assets/js/qa-mode.js" defer></script>
     <script src="/assets/js/interface-menu.js"></script>
     <script src="/assets/js/password-toggle.js"></script>
 </body>

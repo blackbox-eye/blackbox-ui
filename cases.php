@@ -72,7 +72,11 @@ $case_navigator = [
                 <ul class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
                     <?php foreach (['evidence', 'frameworks', 'results'] as $bullet_key): ?>
                         <li class="surface-card p-5 flex items-start gap-3">
-                            <span class="text-emerald-400 mt-1" aria-hidden="true">✓</span>
+                            <span class="text-amber-400 mt-1" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </span>
                             <span class="text-sm text-gray-300">
                                 <strong class="text-white block text-base mb-1"><?= t('cases.hero_section.bullets.' . $bullet_key . '.title') ?></strong>
                                 <?= t('cases.hero_section.bullets.' . $bullet_key . '.description') ?>
@@ -157,14 +161,14 @@ $case_navigator = [
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <?php foreach (['municipality', 'realestate', 'security'] as $case_key): ?>
-                    <article class="glass-effect rounded-2xl p-8 flex flex-col">
-                        <h2 class="text-xl font-bold mb-2"><?= t('cases.cards.' . $case_key . '.title') ?></h2>
-                        <p class="text-gray-400 mb-4"><strong><?= t('cases.labels.challenge') ?>:</strong> <?= t('cases.cards.' . $case_key . '.challenge') ?></p>
-                        <p class="text-gray-300 mb-6"><strong><?= t('cases.labels.solution') ?>:</strong> <?= t('cases.cards.' . $case_key . '.solution') ?></p>
-                        <div class="mt-auto pt-4 border-t border-gray-700">
-                            <p class="text-amber-400 font-bold text-lg"><?= t('cases.labels.result') ?>: <?= t('cases.cards.' . $case_key . '.result') ?></p>
+                    <article class="case-card-graphene flex flex-col" style="background: #0D0F11; border: 1px solid rgba(214,178,94,0.12); border-radius: 16px; padding: 1.75rem;">
+                        <h2 class="text-xl font-bold mb-3" style="color: #D6B25E;"><?= t('cases.cards.' . $case_key . '.title') ?></h2>
+                        <p class="mb-4" style="color: rgba(244,244,244,0.7);"><strong style="color: rgba(244,244,244,0.9);"><?= t('cases.labels.challenge') ?>:</strong> <?= t('cases.cards.' . $case_key . '.challenge') ?></p>
+                        <p class="mb-6" style="color: rgba(244,244,244,0.8);"><strong style="color: rgba(244,244,244,0.9);"><?= t('cases.labels.solution') ?>:</strong> <?= t('cases.cards.' . $case_key . '.solution') ?></p>
+                        <div class="mt-auto pt-4" style="border-top: 1px solid rgba(214,178,94,0.15);">
+                            <p class="font-bold text-lg" style="color: #D6B25E;"><?= t('cases.labels.result') ?>: <?= t('cases.cards.' . $case_key . '.result') ?></p>
                         </div>
                     </article>
                 <?php endforeach; ?>

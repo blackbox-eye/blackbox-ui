@@ -66,11 +66,11 @@ Denne checklist kombinerer de oprindelige danske release-gates og den nye detalj
 - [ ] `npm run sso:health` OK
 - [ ] `GDI_SSO_SECRET` / `JWT_SECRET` sat
 - [ ] Agent Access viser TS24-kort med `data-sso-active="true"`
-- [ ] SSO-link bruger `https://intel24.tstransport.app/sso-login?sso=...`
+- [ ] SSO-link bruger `https://intel24.blackbox.codes/sso-login?sso=...`
 
 ### Prod-verifikation
 
-- [ ] `curl -I https://intel24.tstransport.app/sso-login` svarer 200/3xx (DNS + cert ok)
+- [ ] `curl -I https://intel24.blackbox.codes/sso-login` svarer 200/3xx (DNS + cert ok)
 - [ ] Happy path: GDI login → TS24 link → dashboard
 - [ ] Expired og tampered tokens afvises korrekt
 

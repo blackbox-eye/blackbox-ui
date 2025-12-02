@@ -100,10 +100,10 @@ npm run build:tailwind
 
 ## 🔧 Ops-supplement: Manuel TS24 prod-kontrol
 
-Kør inden high-risk releases for at bekræfte den kanoniske TS24-entry (`https://intel24.tstransport.app/sso-login`):
+Kør inden high-risk releases for at bekræfte den kanoniske TS24-entry (`https://intel24.blackbox.codes/sso-login`):
 
 ```bash
-curl -I https://intel24.tstransport.app/sso-login
+curl -I https://intel24.blackbox.codes/sso-login
 ```
 
 Valider DNS, SSL/TLS og HTTP 200/3xx. Fejlscenarier og handlinger findes i `docs/sso_healthcheck.md`.

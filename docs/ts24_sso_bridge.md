@@ -11,11 +11,11 @@ Denne guide beskriver, hvordan ALPHA Interface GUI (GDI) integrerer med TS24 Int
 
 | Type | URL |
 |------|-----|
-| **SSO Entry (kanonisk)** | `https://intel24.tstransport.app/sso-login` |
-| **Full SSO URL (GDI bygger)** | `https://intel24.tstransport.app/sso-login?sso=<JWT>` |
-| **Manual Login (fallback)** | `https://intel24.tstransport.app/login` |
+| **SSO Entry (kanonisk)** | `https://intel24.blackbox.codes/sso-login` |
+| **Full SSO URL (GDI bygger)** | `https://intel24.blackbox.codes/sso-login?sso=<JWT>` |
+| **Manual Login (fallback)** | `https://intel24.blackbox.codes/login` |
 
-> **Status (2025-12-01):** DNS + cert er verificeret. GDI default peger på `/sso-login`.
+> **Status (2025-12-02):** DNS + cert er verificeret. GDI default peger på `/sso-login`.
 
 ---
 
@@ -23,7 +23,7 @@ Denne guide beskriver, hvordan ALPHA Interface GUI (GDI) integrerer med TS24 Int
 
 | Komponent | Ejes af | Ansvar |
 |-----------|---------|--------|
-| Domæne `intel24.tstransport.app` | **ts24-intel-console** | DNS, cert, hosting |
+| Domæne `intel24.blackbox.codes` | **ts24-intel-console** | DNS, cert, hosting |
 | `/sso-login` endpoint | **ts24-intel-console** | Token-verifikation, session |
 | `/login` endpoint | **ts24-intel-console** | Fallback login |
 | `TS24_CONSOLE_URL` env | **ALPHA-Interface-GUI** | Config af target-URL |
@@ -59,10 +59,10 @@ $separator = strpos($ts24Url, '?') === false ? '?' : '&';
 $ts24Link = $ts24Url . $separator . 'sso=' . urlencode($token);
 ```
 
-Når `TS24_CONSOLE_URL` sættes til `https://intel24.tstransport.app/sso-login`, bliver det fulde link:
+Når `TS24_CONSOLE_URL` sættes til `https://intel24.blackbox.codes/sso-login`, bliver det fulde link:
 
 ```text
-https://intel24.tstransport.app/sso-login?sso=eyJhbGciOiJIUzI1NiIs...
+https://intel24.blackbox.codes/sso-login?sso=eyJhbGciOiJIUzI1NiIs...
 ```
 
 ---
@@ -141,7 +141,7 @@ Alle SSO-events logges i `sso_audit.php`:
 
 | Variabel | Beskrivelse |
 |----------|-------------|
-| `TS24_CONSOLE_URL` | Base URL til TS24 SSO-entry. Default: `https://intel24.tstransport.app/sso-login` |
+| `TS24_CONSOLE_URL` | Base URL til TS24 SSO-entry. Default: `https://intel24.blackbox.codes/sso-login` |
 | `TS24_SSO_SECRET` | Delt secret til JWT-signering (min. 256 bit) |
 | `SSO_TOKEN_TTL` | Token TTL i sekunder (default 300) |
 

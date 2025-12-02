@@ -10,11 +10,14 @@
     "a11y:contrast": "node tools/a11y/contrast-check.js",
     "sso:health": "node scripts/sso-health.js",
     "sso:health:php": "php scripts/check_sso_health.php --ts24-stub",
-    "sso:audit:tail": "php scripts/inspect_sso_log.php 20"
+    "sso:audit:tail": "php scripts/inspect_sso_log.php 20",
+    "qa:gui": "cross-env QA_MODE=1 playwright test tests/e2e/sso-gui.spec.ts --headed",
+    "qa:gui:ci": "cross-env QA_MODE=1 playwright test tests/e2e/sso-gui.spec.ts --reporter=line"
   },
   "devDependencies": {
     "@playwright/test": "^1.56.1",
     "autoprefixer": "^10.4.22",
+    "cross-env": "^7.0.3",
     "lighthouse": "^12.8.2",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.18",

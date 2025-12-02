@@ -12,7 +12,7 @@ $meta_og_description = $meta_description;
 
 $gdi_console_url = 'agent-login.php';
 // Canonical TS24 SSO entry - /login is manual fallback on TS24 side only
-$ts24_base_url = defined('BBX_TS24_CONSOLE_URL') ? BBX_TS24_CONSOLE_URL : bbx_env('TS24_CONSOLE_URL', 'https://intel24.tstransport.app/sso-login');
+$ts24_base_url = defined('BBX_TS24_CONSOLE_URL') ? BBX_TS24_CONSOLE_URL : bbx_env('TS24_CONSOLE_URL', 'https://intel24.blackbox.codes/sso-login');
 $ts24_base_url = rtrim($ts24_base_url, '/');
 $ts24_active_jwt = bbx_current_agent_jwt();
 $ts24_has_sso = $ts24_active_jwt !== null;
@@ -21,6 +21,9 @@ $ts24_console_url = $ts24_base_url;
 if ($ts24_has_sso) {
   $separator = strpos($ts24_base_url, '?') === false ? '?' : '&';
   $ts24_console_url = $ts24_base_url . $separator . 'sso=' . urlencode($ts24_active_jwt);
+
+  $_SESSION['ts24_last_redirect'] = $ts24_console_url;
+  $_SESSION['ts24_last_redirect_at'] = time();
 }
 
 include 'includes/site-header.php';

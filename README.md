@@ -135,13 +135,13 @@ npm run build:tailwind
 
 GDI (ALPHA Interface GUI) understøtter single sign-on til TS24 Intel Console:
 
-* **Canonical TS24 SSO entry:** `https://intel24.tstransport.app/sso-login`
-* **Fuld SSO URL (GDI bygger):** `https://intel24.tstransport.app/sso-login?sso=<JWT>`
-* **Manuel login fallback:** `https://intel24.tstransport.app/login`
+* **Canonical TS24 SSO entry:** `https://intel24.blackbox.codes/sso-login`
+* **Fuld SSO URL (GDI bygger):** `https://intel24.blackbox.codes/sso-login?sso=<JWT>`
+* **Manuel login fallback:** `https://intel24.blackbox.codes/login`
 
-Domænet `intel24.tstransport.app` ejes af **ts24-intel-console**. GDI ejer konfigurationen (`TS24_CONSOLE_URL` env var) og token-minting.
+Domænet `intel24.blackbox.codes` ejes af **ts24-intel-console**. GDI ejer konfigurationen (`TS24_CONSOLE_URL` env var) og token-minting.
 
-> **Status (2025-12-01):** DNS + cert er verificeret. GDI peger nu på den kanoniske SSO-entry `/sso-login` som default.
+> **Status (2025-12-02):** DNS + cert er verificeret. GDI peger nu på den kanoniske SSO-entry `/sso-login` som default.
 
 For detaljer, se:
 * [docs/ts24\_sso\_bridge.md](docs/ts24_sso_bridge.md) – Canonical URLs og ejerskab

@@ -105,6 +105,7 @@ function admin_is_active(string $slug, string $current): bool
   <!-- Stylesheets -->
   <link rel="stylesheet" href="/assets/css/tailwind.full.css">
   <link rel="stylesheet" href="/assets/css/admin.css">
+  <?php include __DIR__ . '/qa-bootstrap.php'; ?>
 </head>
 
 <body class="admin-body">
@@ -246,6 +247,9 @@ function admin_is_active(string $slug, string $current): bool
       <div class="command-deck__footer">
         <span class="command-deck__status-dot"></span>
         <span class="command-deck__status-text">System online</span>
+        <?php if (defined('BBX_QA_MODE') && BBX_QA_MODE): ?>
+          <span class="command-deck__status-badge">ALPHA-GUI v1.0.0-QA</span>
+        <?php endif; ?>
       </div>
     </nav>
   <?php endif; ?>

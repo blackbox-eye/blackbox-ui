@@ -63,6 +63,12 @@ if (!defined('BBX_DEBUG_SMTP')) {
     define('BBX_DEBUG_SMTP', $smtpDebugEnabled);
 }
 
+if (!defined('BBX_QA_MODE')) {
+    $qaFlag = strtolower(bbx_env('QA_MODE', '0'));
+    $qaEnabled = in_array($qaFlag, ['1', 'true', 'on'], true);
+    define('BBX_QA_MODE', $qaEnabled);
+}
+
 // Debug: Log all loaded reCAPTCHA values
 if (BBX_DEBUG_RECAPTCHA) {
     error_log('BBX ENV DEBUG - RECAPTCHA_SITE_KEY: ' . (BBX_RECAPTCHA_SITE_KEY ? '[SET]' : '[EMPTY]'));
@@ -122,14 +128,14 @@ if (!defined('BBX_CONTACT_EMAIL')) {
 // TS24 handles token verification at /sso-login; /login is manual fallback.
 //
 // Canonical URLs:
-//   - SSO entry:      https://intel24.tstransport.app/sso-login
-//   - Full SSO URL:   https://intel24.tstransport.app/sso-login?sso=<JWT>
-//   - Manual login:   https://intel24.tstransport.app/login (fallback on TS24 side)
+//   - SSO entry:      https://intel24.blackbox.codes/sso-login
+//   - Full SSO URL:   https://intel24.blackbox.codes/sso-login?sso=<JWT>
+//   - Manual login:   https://intel24.blackbox.codes/login (fallback on TS24 side)
 //
 // See docs/ts24_sso_bridge.md for ownership and integration details.
 // ----------------------------------------------------------------------------
 if (!defined('BBX_TS24_CONSOLE_URL')) {
-    $ts24Url = bbx_env('TS24_CONSOLE_URL', 'https://intel24.tstransport.app/sso-login');
+    $ts24Url = bbx_env('TS24_CONSOLE_URL', 'https://intel24.blackbox.codes/sso-login');
     define('BBX_TS24_CONSOLE_URL', rtrim($ts24Url, '/'));
 }
 

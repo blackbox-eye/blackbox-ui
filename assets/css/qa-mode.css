@@ -1,0 +1,93 @@
+.qa-debug-panel {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  width: min(340px, 92vw);
+  background: rgba(7, 9, 12, 0.95);
+  border: 1px solid rgba(255, 232, 163, 0.45);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  color: #f8fafc;
+  font-size: 0.85rem;
+  z-index: 9999;
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.65);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.qa-debug-panel__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.qa-debug-panel__eyebrow {
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #FFE8A3;
+  margin: 0 0 0.2rem;
+}
+
+.qa-debug-panel__title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.qa-debug-panel__badge,
+.qa-version-chip,
+.command-deck__status-badge {
+  font-size: 0.65rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 232, 163, 0.6);
+  color: #FFE8A3;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.qa-debug-panel__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0 0 0.75rem;
+}
+
+.qa-debug-panel__grid dt {
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+.qa-debug-panel__grid dd {
+  margin: 0.15rem 0 0;
+  word-break: break-all;
+  font-family: 'Inter', sans-serif;
+}
+
+.qa-debug-panel__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.qa-debug-panel__actions button {
+  flex: 1;
+  font-size: 0.75rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 232, 163, 0.45);
+  background: rgba(255, 232, 163, 0.08);
+  color: #FFE8A3;
+  cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  .qa-debug-panel {
+    left: 1rem;
+    right: 1rem;
+    width: auto;
+  }
+}

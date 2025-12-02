@@ -19,7 +19,7 @@ Healthcheck-scriptet `scripts/sso-health.js` (og det ældre PHP-alternativ `scri
 |------|-----|------|-------------|
 | **GDI** | `http://127.0.0.1:8000` | 8000 | Hoved-GUI-applikation |
 | **TS24** (stub) | `http://127.0.0.1:8091/tools/ts24_health_stub.php` | 8091 | Lokal stub for TS24 SSO |
-| **TS24** (prod) | `https://intel24.tstransport.app/sso-login` | 443 | Kanonisk SSO entry – DNS + cert |
+| **TS24** (prod) | `https://intel24.blackbox.codes/sso-login` | 443 | Kanonisk SSO entry – DNS + cert |
 
 ---
 
@@ -101,12 +101,12 @@ npm run sso:health:php
 
 ## 🚀 Prod-verifikation (Ops-supplement)
 
-> **Status (2025-12-01):** DNS + cert er live og verificeret.
+> **Status (2025-12-02):** DNS + cert er live og verificeret.
 
 Brug curl til at validere det kanoniske TS24 prod-endpoint inden high-risk releases:
 
 ```bash
-curl -I https://intel24.tstransport.app/sso-login
+curl -I https://intel24.blackbox.codes/sso-login
 ```
 
 **Forventet resultat:**

@@ -12,7 +12,7 @@ const AGENT_ID = process.env.TEST_AGENT_ID || '';
 const AGENT_PASSWORD = process.env.TEST_AGENT_PASSWORD || '';
 const AGENT_PIN = process.env.TEST_AGENT_PIN || '';
 // Canonical TS24 SSO entry - /login is manual fallback on TS24 side only
-const EXPECTED_TS24_BASE = (process.env.TS24_CONSOLE_URL || 'https://intel24.tstransport.app/sso-login').replace(/\/$/, '');
+const EXPECTED_TS24_BASE = (process.env.TS24_CONSOLE_URL || 'https://intel24.blackbox.codes/sso-login').replace(/\/$/, '');
 
 async function loginAsTestAgent(page) {
   await page.goto('/agent-login.php');

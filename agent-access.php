@@ -15,44 +15,34 @@ $gdi_console_url = 'agent-login.php';
 // Check if user is logged in
 $is_logged_in = isset($_SESSION['agent_id']) && !empty($_SESSION['agent_id']);
 
-// Canonical TS24 SSO entry - /login is manual fallback on TS24 side only
-$ts24_base_url = defined('BBX_TS24_CONSOLE_URL') ? BBX_TS24_CONSOLE_URL : bbx_env('TS24_CONSOLE_URL', 'https://intel24.blackbox.codes/sso-login');
-$ts24_base_url = rtrim($ts24_base_url, '/');
+// TS24 URLs - SSO entry and login fallback
+$ts24_sso_url = defined('BBX_TS24_CONSOLE_URL') ? BBX_TS24_CONSOLE_URL : bbx_env('TS24_CONSOLE_URL', 'https://intel24.blackbox.codes/sso-login');
+$ts24_sso_url = rtrim($ts24_sso_url, '/');
+$ts24_login_url = bbx_env('TS24_LOGIN_URL', 'https://intel24.blackbox.codes/login');
 $ts24_active_jwt = bbx_current_agent_jwt();
 $ts24_has_sso = $ts24_active_jwt !== null;
 
-// Determine TS24 URL based on login state
-if (!$is_logged_in) {
-  // Not logged in: send to login first with redirect back to TS24
-  $ts24_console_url = 'agent-login.php?redirect=ts24';
-  $ts24_requires_login = true;
-} elseif ($ts24_has_sso) {
-  // Logged in with valid JWT: direct SSO handoff
-  $separator = strpos($ts24_base_url, '?') === false ? '?' : '&';
-  $ts24_console_url = $ts24_base_url . $separator . 'sso=' . urlencode($ts24_active_jwt);
+// Determine TS24 URL based on login state and JWT availability
+if ($ts24_has_sso) {
+  // User is logged in with valid JWT: direct SSO handoff to TS24
+  $separator = strpos($ts24_sso_url, '?') === false ? '?' : '&';
+  $ts24_console_url = $ts24_sso_url . $separator . 'sso=' . urlencode($ts24_active_jwt);
   $ts24_requires_login = false;
 
   $_SESSION['ts24_last_redirect'] = $ts24_console_url;
   $_SESSION['ts24_last_redirect_at'] = time();
 } else {
-  // Logged in but no JWT (edge case) - try to issue one or send to login
-  $ts24_console_url = 'agent-login.php?redirect=ts24';
-  $ts24_requires_login = true;
+  // No JWT available: send directly to TS24's own login page
+  // TS24 has its own authentication system as fallback
+  $ts24_console_url = $ts24_login_url;
+  $ts24_requires_login = false; // TS24 handles its own login
 }
 
-// Auto-launch TS24 if redirected from login with launch=ts24
-if (isset($_GET['launch']) && $_GET['launch'] === 'ts24') {
-  if ($ts24_has_sso) {
-    // We have a valid JWT - redirect to TS24 with SSO
-    header('Location: ' . $ts24_console_url);
-    exit;
-  } elseif ($is_logged_in) {
-    // Logged in but no JWT available - redirect to TS24 base URL (manual login on TS24 side)
-    // This can happen if JWT secret is not configured or library is missing
-    header('Location: ' . $ts24_base_url);
-    exit;
-  }
-  // Not logged in - fall through to show page (shouldn't happen normally)
+// Auto-launch TS24 if redirected from GDI login with launch=ts24 parameter
+// This handles the case where user logged into GDI first and we now have a JWT
+if (isset($_GET['launch']) && $_GET['launch'] === 'ts24' && $ts24_has_sso) {
+  header('Location: ' . $ts24_console_url);
+  exit;
 }
 
 include 'includes/site-header.php';
@@ -121,10 +111,10 @@ include 'includes/site-header.php';
           <a href="<?= htmlspecialchars($ts24_console_url) ?>"
             class="access-card__cta bbx-btn-pill"
             data-console-launch="ts24"
-            <?php if (!$ts24_requires_login): ?>target="_blank" rel="noopener" <?php endif; ?>
-            <?= $ts24_has_sso ? 'data-sso-active="true"' : '' ?>
-            <?= $ts24_requires_login ? 'data-requires-login="true"' : '' ?>>
-            <?= $ts24_requires_login ? t('agent_access.cards.ts24.cta_login', t('agent_access.cards.ts24.cta')) : t('agent_access.cards.ts24.cta') ?>
+            target="_blank"
+            rel="noopener"
+            <?= $ts24_has_sso ? 'data-sso-active="true"' : '' ?>>
+            <?= t('agent_access.cards.ts24.cta') ?>
           </a>
         </div>
       </article>

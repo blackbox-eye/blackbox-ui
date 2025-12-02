@@ -88,6 +88,7 @@
         "title": "TS24 / Intel24 Intelligence Console",
         "description": "Field telemetry, TS transport alerts and tactical briefings for TS24 rapid-response teams with optional SSO hand-off from GDI.",
         "cta": "Open TS24 console",
+        "cta_login": "Log in → TS24 console",
         "meta": "Opens secure tstransport.app session",
         "sso_notice": "Signed-in agents receive a short-lived GreyEYE SSO token so TS24 can launch automatically. If the token expires you can continue with your TS24 credentials on the next screen.",
         "sso_ready": "SSO ready"

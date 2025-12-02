@@ -43,6 +43,9 @@ $login_action = $login_action ?? 'agent-login.php';
 
   <!-- Login Form -->
   <form action="<?= htmlspecialchars($login_action) ?>" method="post" autocomplete="off" class="login-card__form">
+    <?php if (isset($_SESSION['login_redirect'])): ?>
+      <input type="hidden" name="redirect" value="<?= htmlspecialchars($_SESSION['login_redirect']) ?>">
+    <?php endif; ?>
     <div class="login-card__field">
       <label for="agent_id" class="sr-only">Brugernavn</label>
       <input type="text"

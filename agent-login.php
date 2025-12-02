@@ -18,6 +18,12 @@ $page_title = 'Agent Login';
 $error = $_SESSION['error'] ?? null;
 unset($_SESSION['error']);
 
+// Handle redirect parameter (e.g., redirect=ts24 for SSO handoff)
+$redirect_target = $_GET['redirect'] ?? $_POST['redirect'] ?? null;
+if ($redirect_target === 'ts24') {
+    $_SESSION['login_redirect'] = 'ts24';
+}
+
 // Handle login form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $agent_id = trim($_POST['agent_id'] ?? '');
@@ -122,6 +128,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
 
                     log_agent_event($agent['agent_id'], 'LOGIN_SUCCESS');
+
+                    // Check for pending redirect (e.g., TS24 SSO)
+                    $pending_redirect = $_SESSION['login_redirect'] ?? null;
+                    unset($_SESSION['login_redirect']);
+
+                    if ($pending_redirect === 'ts24') {
+                        // Redirect to agent-access which will now have a valid JWT
+                        header("Location: agent-access.php?launch=ts24");
+                        exit;
+                    }
+
                     header("Location: dashboard.php");
                     exit;
                 }

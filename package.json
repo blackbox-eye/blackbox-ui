@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "build:tailwind": "npx tailwindcss -i ./assets/css/tailwind-src.css -o ./assets/css/tailwind.full.css --minify",
+    "build:css": "npx postcss assets/css/marketing.css -o assets/css/marketing.min.css --use cssnano && npx postcss assets/css/admin.css -o assets/css/admin.min.css --use cssnano",
+    "build": "npm run build:tailwind && npm run build:css",
     "test": "node scripts/playwright-shim.js",
     "test:raw": "playwright test --reporter=list",
     "test:ci": "node scripts/playwright-shim.js",
@@ -18,8 +20,10 @@
     "@playwright/test": "^1.56.1",
     "autoprefixer": "^10.4.22",
     "cross-env": "^7.0.3",
+    "cssnano": "^7.1.2",
     "lighthouse": "^12.8.2",
     "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
     "tailwindcss": "^3.4.18",
     "terser": "^5.44.1"
   },

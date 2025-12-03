@@ -1,11 +1,13 @@
-# ALPHA Interface GUI
+# Blackbox UI
 > **BLACKBOX.CODES | Enterprise Edition v1.0**
 
 ---
 
 ## 📋 Om Projektet
 
-**ALPHA Interface GUI** er den officielle, responsive brugerflade for BLACKBOX.CODES-platformen (kodenavn: BLACKBOX E.Y.E).
+**Blackbox UI** er den officielle, responsive brugerflade for BLACKBOX.CODES-platformen (kodenavn: BLACKBOX E.Y.E).
+> _Tidligere kodenavn: **ALPHA Interface GUI**_
+
 Dette repo leverer frontend- og webkomponenter til enterprise cyber operations, OSINT, secure access og AI-drevet mission control.
 
 ---
@@ -24,7 +26,7 @@ Dette repo leverer frontend- og webkomponenter til enterprise cyber operations, 
 
 ## 🗂️ Mappestruktur
 
-```
+```text
 
 /  # Projektrod
 ├── assets/            # Billeder, stylesheets, scripts
@@ -41,7 +43,7 @@ Dette repo leverer frontend- og webkomponenter til enterprise cyber operations, 
 ├── .github/           # CI/CD workflows
 └── docs/              # Dokumentation og rapporter
 
-````
+```
 
 ---
 
@@ -51,8 +53,8 @@ Quick setup for local development:
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/AlphaAcces/ALPHA-Interface-GUI.git
-cd ALPHA-Interface-GUI
+git clone https://github.com/Blackbox-EYE/blackbox-ui.git
+cd blackbox-ui
 
 # 2. Install dependencies
 npm install
@@ -95,22 +97,23 @@ npm run build:tailwind
    - Git (til CI/CD og deploy)
 
 2. **Klon repo:**
+
    ```bash
-   git clone https://github.com/AlphaAcces/ALPHA-Interface-GUI.git
-````
+   git clone https://github.com/Blackbox-EYE/blackbox-ui.git
+   ```
 
 3. **Upload & konfiguration:**
 
-   * Upload `assets/`, PHP-filer og `.well-known/` til `public_html`.
-   * Importér SQL-script til `agents`, `hosts` mv.
-   * Redigér `db.php` med korrekte DB-credentials.
-   * Konfigurer Vault/Secrets (HashiCorp/Azure) ifølge blueprint.
-   * Tilpas branding ved at udskifte logo, CSS og tekster.
+   - Upload `assets/`, PHP-filer og `.well-known/` til `public_html`.
+   - Importér SQL-script til `agents`, `hosts` mv.
+   - Redigér `db.php` med korrekte DB-credentials.
+   - Konfigurer Vault/Secrets (HashiCorp/Azure) ifølge blueprint.
+   - Tilpas branding ved at udskifte logo, CSS og tekster.
 
 4. **CI/CD:**
 
-   * Se `.github/workflows/ci.yml` for build/test/deploy til staging/production.
-   * Sørg for at alle secrets ligger som GitHub Secrets.
+   - Se `.github/workflows/ci.yml` for build/test/deploy til staging/production.
+   - Sørg for at alle secrets ligger som GitHub Secrets.
 
 5. **Test:**
 
@@ -120,37 +123,37 @@ npm run build:tailwind
    npm run build:tailwind  # Byg Tailwind CSS
    ```
 
-   * **Playwright Exit-Code Shim:** Projektet bruger `scripts/playwright-shim.js` til at normalisere exit-koder på Windows. Shimmen analyserer JSON-rapporten og returnerer exit 0, når alle tests passerer.
-   * **Artefakter:** Test-rapporter gemmes i `artifacts/` (ignoreret i git). HTML-rapporter gemmes i `playwright-report/` (også ignoreret).
+   - **Playwright Exit-Code Shim:** Projektet bruger `scripts/playwright-shim.js` til at normalisere exit-koder på Windows. Shimmen analyserer JSON-rapporten og returnerer exit 0, når alle tests passerer.
+   - **Artefakter:** Test-rapporter gemmes i `artifacts/` (ignoreret i git). HTML-rapporter gemmes i `playwright-report/` (også ignoreret).
 
 ---
 
 ## 🔒 Sikkerhed & Compliance
 
-* **Password auth (midlertidigt dev-setup):** Agent-login matcher nu klartekst-passwords for hurtig test; revert til `password_hash()` / `password_verify()` før produktion
-* **Prepared statements:** MySQLi/PDO for SQL-injection-beskyttelse
-* **Session management:** Secure cookies, `session_start()`
-* **Role-based access control:** Admin vs. Agent
-* **Vault-integration:** Klar til HashiCorp/Azure Secrets
-* **Audit logging & change tracking**
-* **GDPR / Privacy-by-Design:** Pseudonymisering og logging efter enterprise-standard
+- **Password auth (midlertidigt dev-setup):** Agent-login matcher nu klartekst-passwords for hurtig test; revert til `password_hash()` / `password_verify()` før produktion
+- **Prepared statements:** MySQLi/PDO for SQL-injection-beskyttelse
+- **Session management:** Secure cookies, `session_start()`
+- **Role-based access control:** Admin vs. Agent
+- **Vault-integration:** Klar til HashiCorp/Azure Secrets
+- **Audit logging & change tracking**
+- **GDPR / Privacy-by-Design:** Pseudonymisering og logging efter enterprise-standard
 
 ### 🔗 TS24 SSO Integration
 
-GDI (ALPHA Interface GUI) understøtter single sign-on til TS24 Intel Console:
+GDI (Blackbox UI) understøtter single sign-on til TS24 Intel Console:
 
-* **Canonical TS24 SSO entry:** `https://intel24.blackbox.codes/sso-login`
-* **Fuld SSO URL (GDI bygger):** `https://intel24.blackbox.codes/sso-login?sso=<JWT>`
-* **Manuel login fallback:** `https://intel24.blackbox.codes/login`
+- **Canonical TS24 SSO entry:** `https://intel24.blackbox.codes/sso-login`
+- **Fuld SSO URL (GDI bygger):** `https://intel24.blackbox.codes/sso-login?sso=<JWT>`
+- **Manuel login fallback:** `https://intel24.blackbox.codes/login`
 
 Domænet `intel24.blackbox.codes` ejes af **ts24-intel-console**. GDI ejer konfigurationen (`TS24_CONSOLE_URL` env var) og token-minting.
 
 > **Status (2025-12-02):** DNS + cert er verificeret. GDI peger nu på den kanoniske SSO-entry `/sso-login` som default.
 
 For detaljer, se:
-* [docs/ts24\_sso\_bridge.md](docs/ts24_sso_bridge.md) – Canonical URLs og ejerskab
-* [docs/sso\_healthcheck.md](docs/sso_healthcheck.md) – Healthcheck-guide
-* [docs/sso\_gdi\_ts24.md](docs/sso_gdi_ts24.md) – Teknisk JWT-specifikation
+- [docs/ts24\_sso\_bridge.md](docs/ts24_sso_bridge.md) – Canonical URLs og ejerskab
+- [docs/sso\_healthcheck.md](docs/sso_healthcheck.md) – Healthcheck-guide
+- [docs/sso\_gdi\_ts24.md](docs/sso_gdi_ts24.md) – Teknisk JWT-specifikation
 
 ---
 
@@ -169,27 +172,27 @@ Alle dokumenter ligger nu under `/docs/`:
 
 ### 📑 Blueprint & Handlingsplan
 
-* [SYSTEM\_BLUEPRINT\_AIG\_v1.0.md](/docs/SYSTEM_BLUEPRINT_AIG_v1.0.md)
-* [aig\_blueprint\_v1.md](/docs/aig_blueprint_v1.md)
+- [SYSTEM\_BLUEPRINT\_AIG\_v1.0.md](/docs/SYSTEM_BLUEPRINT_AIG_v1.0.md)
+- [aig\_blueprint\_v1.md](/docs/aig_blueprint_v1.md)
 
 ### 🔧 CI/CD & Workflow Dokumentation
 
-* [CI_CD_SETUP_GUIDE.md](/docs/CI_CD_SETUP_GUIDE.md) - Komplet opsætningsguide til CI/CD workflow
-* [WORKFLOW_VALIDATION_REPORT.md](/docs/WORKFLOW_VALIDATION_REPORT.md) - Validering af workflow-konfiguration (PR #3/PR #5)
-* [ci_pipelines.md](/docs/ci_pipelines.md) - Detaljeret oversigt over workflows, triggers og TS24 curl-ops-supplement
+- [CI_CD_SETUP_GUIDE.md](/docs/CI_CD_SETUP_GUIDE.md) - Komplet opsætningsguide til CI/CD workflow
+- [WORKFLOW_VALIDATION_REPORT.md](/docs/WORKFLOW_VALIDATION_REPORT.md) - Validering af workflow-konfiguration (PR #3/PR #5)
+- [ci_pipelines.md](/docs/ci_pipelines.md) - Detaljeret oversigt over workflows, triggers og TS24 curl-ops-supplement
 
 ### 🔗 SSO & TS24 Integration
 
-* [ts24_sso_bridge.md](/docs/ts24_sso_bridge.md) - Canonical TS24 entry, ejerskab og JWT-flow
-* [sso_healthcheck.md](/docs/sso_healthcheck.md) - Healthcheck-script, stub og prod-verifikationsguide
-* [sso_gdi_ts24.md](/docs/sso_gdi_ts24.md) - Teknisk JWT-specifikation
-* [sso_ops_runbook.md](/docs/sso_ops_runbook.md) - Drift og fejlsøgning
-* [sso_v1_signoff_gdi.md](/docs/sso_v1_signoff_gdi.md) - GDI sign-off checklist
-* [e2e_gdi_ts24_sso_test.md](/docs/e2e_gdi_ts24_sso_test.md) - End-to-end testplan
+- [ts24_sso_bridge.md](/docs/ts24_sso_bridge.md) - Canonical TS24 entry, ejerskab og JWT-flow
+- [sso_healthcheck.md](/docs/sso_healthcheck.md) - Healthcheck-script, stub og prod-verifikationsguide
+- [sso_gdi_ts24.md](/docs/sso_gdi_ts24.md) - Teknisk JWT-specifikation
+- [sso_ops_runbook.md](/docs/sso_ops_runbook.md) - Drift og fejlsøgning
+- [sso_v1_signoff_gdi.md](/docs/sso_v1_signoff_gdi.md) - GDI sign-off checklist
+- [e2e_gdi_ts24_sso_test.md](/docs/e2e_gdi_ts24_sso_test.md) - End-to-end testplan
 
 ### ✅ QA & Release
 
-* [qa_release_checklist.md](/docs/qa_release_checklist.md) - Både dansk release-tjekliste og udvidet preflight-checks
+- [qa_release_checklist.md](/docs/qa_release_checklist.md) - Både dansk release-tjekliste og udvidet preflight-checks
 
 ### 📄 Versionerede rapporter (i `/docs/reports/`)
 
@@ -211,10 +214,10 @@ Se [CHANGELOG.md](CHANGELOG.md) for detaljeret release-tracking.
 
 ## 🤝 Bidrag & Udvikling
 
-* Følg branch-/PR-politik og semver.
-* QA & CI er obligatorisk før merge til `main`.
-* Sørg for at opdatere dokumentation ved hver major/minor release.
-* Security audits og code reviews kræves før produktion.
+- Følg branch-/PR-politik og semver.
+- QA & CI er obligatorisk før merge til `main`.
+- Sørg for at opdatere dokumentation ved hver major/minor release.
+- Security audits og code reviews kræves før produktion.
 
 ---
 
@@ -244,7 +247,7 @@ Dette projekt er frigivet under **MIT License** (se [LICENSE](LICENSE)).
 
 ## 📞 Kontakt & Support
 
-* E-mail: [ops@blackbox.codes](mailto:ops@blackbox.codes)
-* Discord: BLACKBOX E.Y.E. Ops Center
+- E-mail: [ops@blackbox.codes](mailto:ops@blackbox.codes)
+- Discord: BLACKBOX E.Y.E. Ops Center
 
-Dokumentation og deployment-guides opdateres løbende. For enterprise-integration eller revision, kontakt ALPHA Lead via ovenstående.
+Dokumentation og deployment-guides opdateres løbende. For enterprise-integration eller revision, kontakt Blackbox Lead via ovenstående.

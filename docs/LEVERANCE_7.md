@@ -8,13 +8,13 @@
 
 ## Oversigt
 
-Denne leverance udvider ALPHA Interface GUI med tre nye funktionelle områder:
+Denne leverance udvider Blackbox UI med tre nye funktionelle områder:
 
 1. **Request Access Workflow** – Komplet formular til adgangsanmodninger (nu med database)
 2. **Intel Vault** – Sikker dokumenthåndtering med AES-256-GCM kryptering
 3. **API & Keys** – Administration af API-nøgler med fuld CRUD
 
-Alle nye sider bruger det fælles `admin-layout.php` og er integreret i Command Deck-navigationen.
+Alle nye sider bruger det fælles `admin-layout.php` og er integreret i Control Panel-navigationen.
 
 ---
 
@@ -24,7 +24,7 @@ Alle nye sider bruger det fælles `admin-layout.php` og er integreret i Command 
 
 | Problem | Løsning | Fil |
 |---------|---------|-----|
-| Command Deck synlig før login | Fjernet helt fra login-siden | `agent-login.php` |
+| Control Panel synlig før login | Fjernet helt fra login-siden | `agent-login.php` |
 | Navigation tilgængelig uautentificeret | Menu-markup fjernet, kun efter session | `agent-login.php` |
 
 ### Favicon-konsistens
@@ -115,7 +115,7 @@ Ny testfil: `tests/admin-features.spec.js`
 ### Test-scenarier
 
 1. **Login Security Tests**
-   - Command Deck IKKE synlig på login-side
+   - Control Panel IKKE synlig på login-side
    - Login-kort centreret og synlig
    - Back-link navigerer til forside
    - Request Access modal funktionel
@@ -125,7 +125,7 @@ Ny testfil: `tests/admin-features.spec.js`
    - Korrekt BlackboxEYE-logo
 
 3. **Authenticated Admin Tests** (kræver session)
-   - Command Deck synlig efter login
+   - Control Panel synlig efter login
    - Request Access admin-side loader
    - Intel Vault side loader
    - API Keys side loader
@@ -144,7 +144,7 @@ Ny testfil: `tests/admin-features.spec.js`
 
 ### Oversigt
 
-Komplet modernisering af alle admin-sider med ensartet design, forbedret responsivitet og GreyEYE-branding.
+Komplet modernisering af alle admin-sider med ensartet design, forbedret responsivitet og Blackbox EYE-branding.
 
 ### Opdaterede sider
 
@@ -166,8 +166,8 @@ Komplet modernisering af alle admin-sider med ensartet design, forbedret respons
   - **Systemstatus** – operationel status med indikatorer
   - **AI Command** – hurtigkommandoer
   - **Netværk** – forbindelsesstatus
-- GreyEYE-logo erstatter BLACKBOX EYE
-- Command Deck til navigation (ingen sidebar)
+- Blackbox EYE-logo erstatter BLACKBOX EYE
+- Control Panel til navigation (ingen sidebar)
 
 ### Settings-redesign
 
@@ -246,7 +246,7 @@ Testfil: `tests/admin-redesign.spec.js`
    - Tjekker stats-kort
    - Bekræfter oprettelsesformular
 
-4. **Command Deck Integration**
+4. **Control Panel Integration**
    - Tilgængelig fra alle admin-sider
    - Korrekt aktiv-markering
    - Tastatur-tilgængelighed (ESC lukker)
@@ -365,7 +365,7 @@ Siden viser 4 eksempel-API-nøgler med forskellige statusser til demonstration.
 
 ---
 
-## 4. Command Deck-opdatering
+## 4. Control Panel-opdatering
 
 Navigation udvidet i `includes/admin-layout.php`:
 
@@ -452,7 +452,7 @@ Nye styles i `assets/css/admin.css`:
 
 - `includes/mail-helper.php` – PHPMailer-wrapper
 - `includes/env.php` – Miljøvariabel-helper
-- `assets/js/interface-menu.js` – Command Deck-controller
+- `assets/js/interface-menu.js` – Control Panel-controller
 
 ---
 
@@ -490,7 +490,7 @@ Nye styles i `assets/css/admin.css`:
 | < 900px | PIN, Token, Ghost |
 | < 640px | ID, Sidste login (ekstra) |
 
-### Command Deck Forbedringer
+### Control Panel Forbedringer
 
 - Farvet scrollbar med thin styling
 - MENU-tekst lysere i light theme (`rgba(0,0,0,0.45)`)
@@ -519,7 +519,7 @@ Nye styles i `assets/css/admin.css`:
 **ARIA Labels Comprehensive (3 tests):**
 - Alle interaktive elementer har accessible names
 - Dashboard cards har proper heading struktur
-- Command Deck links har descriptive text
+- Control Panel links har descriptive text
 
 ### Bugfixes i Tests
 
@@ -626,7 +626,7 @@ $_SESSION['agent_user_agent'] = $_SERVER['HTTP_USER_AGENT'];
 
 **Regioner:** Copenhagen, Aarhus, London, New York, Berlin, Stockholm, Oslo, Amsterdam
 
-### Light Theme Command Deck Finjustering
+### Light Theme Control Panel Finjustering
 
 **Nye CSS regler tilføjet:**
 
@@ -740,7 +740,7 @@ Nye Blackbox-specifikke CSS-variabler tilføjet i `assets/css/marketing.css`:
 ### Branding Strategi
 
 - **Hero + Footer:** Blackbox EYE branding (moderselskab)
-- **Produktsider:** GreyEYE som produktmodul
+- **Produktsider:** Blackbox EYE som produktmodul
 - **Design ratio:** 80-90% fælles tokens, 10-20% Blackbox-specifikke
 
 ### Nye CSS Komponenter

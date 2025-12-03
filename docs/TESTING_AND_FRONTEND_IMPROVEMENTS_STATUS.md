@@ -298,7 +298,7 @@ Systemet har **omfattende accessibility features**:
 
 For spørgsmål eller problemer, kontakt:
 - **Email:** ops@blackbox.codes
-- **GitHub:** AlphaAcces/ALPHA-Interface-GUI
+- **GitHub:** AlphaAcces/blackbox-ui
 - **Branch:** feat/sprint5-leadflows-ux
 
 ---

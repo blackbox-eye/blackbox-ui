@@ -36,7 +36,7 @@
 
 ### Step 1: Initialize Tailwind Project
 ```bash
-cd "c:\BLACKBOX E.Y.E\Blackbox.codes\ALPHA Interface GUI"
+cd "c:\BLACKBOX E.Y.E\Blackbox.codes\Blackbox UI"
 npm init -y
 npm install -D tailwindcss
 npx tailwindcss init

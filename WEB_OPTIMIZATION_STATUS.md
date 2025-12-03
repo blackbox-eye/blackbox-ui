@@ -93,7 +93,7 @@
 **ARIA-Labels:**
 - ✅ Contact form: `aria-label`, `aria-required`, `role="alert"`, `role="status"`
 - ✅ Navigation: `aria-current="page"`, `aria-expanded`, `aria-controls`
-- ✅ AlphaBot: `role="dialog"`, `aria-modal="false"`, `aria-live="polite"`
+- ✅ Blackbox EYE Assistant: `role="dialog"`, `aria-modal="false"`, `aria-live="polite"`
 - ✅ Buttons: `aria-label` på icon-only buttons
 - ✅ Form errors: `aria-live="polite"` for dynamic feedback
 
@@ -323,7 +323,7 @@ Alle fire hovedområder er blevet verificeret, testet og dokumenteret til høj s
 3. ✅ **SRI** - Implementeret for relevante CDN-assets med korrekt security
 4. ✅ **Accessibility** - Excellent implementation med WCAG 2.1 AA compliance
 
-**ALPHA Interface GUI** har nu en **production-ready** web optimization og accessibility implementation som overgår industri-standarder.
+**Blackbox UI** har nu en **production-ready** web optimization og accessibility implementation som overgår industri-standarder.
 
 **Overall Assessment:** 🟢 **EXCELLENT** (95/100)
 

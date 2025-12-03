@@ -144,7 +144,7 @@ Security Benefits:
 ### Lokal Test (ANBEFALET FØRST)
 ```powershell
 # 1. Start PHP server
-cd "c:\BLACKBOX E.Y.E\Blackbox.codes\ALPHA Interface GUI"
+cd "c:\BLACKBOX E.Y.E\Blackbox.codes\Blackbox UI"
 php -S localhost:8000 -t .
 
 # 2. Åbn i browser

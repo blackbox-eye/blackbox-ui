@@ -1,4 +1,4 @@
-# UX/UI Analyse og Forbedringsplan – ALPHA Interface GUI
+# UX/UI Analyse og Forbedringsplan – Blackbox UI
 
 **Version:** 1.0
 **Dato:** 2025-11-22
@@ -9,7 +9,7 @@
 
 ## 1. Executive Summary
 
-Denne rapport præsenterer en omfattende UX/UI-analyse af ALPHA Interface GUI (Blackbox EYE™) med fokus på:
+Denne rapport præsenterer en omfattende UX/UI-analyse af Blackbox UI (Blackbox EYE™) med fokus på:
 - Tilgængelighed (WCAG 2.1 AA compliance)
 - Brugeroplevelse og informationsarkitektur
 - Performance og responsivitet
@@ -113,7 +113,7 @@ Analysen identificerer 6 hovedområder med i alt 23 konkrete forbedringspunkter,
 **❌ Mangler/problemer:**
 1. **Keyboard navigation:** Ingen skip-link til hovedindhold
 2. **Form validation:** Native HTML5 validation, men ingen visuelt tilgængelige fejlbeskeder ved siden af felter
-3. **Focus management:** Modal/AlphaBot focus trap mangler
+3. **Focus management:** Modal/Blackbox EYE Assistant focus trap mangler
 4. **ARIA-live regions:** Success/error-beskeder bruger ikke `aria-live`
 5. **Color contrast:** Visse tekst-kombinationer failer WCAG AA (fx grå på mørk baggrund)
 6. **Alt-text:** Ingen billeder i koden, men logo mangler muligvis tekstalternativ
@@ -341,7 +341,7 @@ contactForm.querySelectorAll('input[required], textarea[required]').forEach(fiel
 ---
 
 ### 5.3 Loading States for AI-features
-**Problem:** AlphaBot/Gemini requests uden visuelt feedback før loader vises
+**Problem:** Blackbox EYE Assistant/Gemini requests uden visuelt feedback før loader vises
 
 **Løsning:** Optimistic UI updates + skeleton screens
 
@@ -407,15 +407,15 @@ document.addEventListener('visibilitychange', () => {
 ---
 
 ### 6.2 Lazy Loading for AI-komponenter
-**Problem:** AlphaBot og Gemini-scripts loader ved pageload selvom ikke brugt
+**Problem:** Blackbox EYE Assistant og Gemini-scripts loader ved pageload selvom ikke brugt
 
 **Løsning:** Dynamic import når bruger interagerer
 
 ```javascript
 alphaToggleBtn?.addEventListener('click', async () => {
   if (!window.alphabotInitialized) {
-    const { initAlphaBot } = await import('./alphabot-module.js');
-    initAlphaBot(alphaContainer, messagesDiv, inputEl);
+    const { initBlackbox EYE Assistant } = await import('./alphabot-module.js');
+    initBlackbox EYE Assistant(alphaContainer, messagesDiv, inputEl);
     window.alphabotInitialized = true;
   }
   alphaContainer.classList.toggle('open');

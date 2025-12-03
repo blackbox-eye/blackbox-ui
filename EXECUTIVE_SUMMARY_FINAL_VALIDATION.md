@@ -1,6 +1,6 @@
 # Executive Summary - Afsluttende Validering
 
-**Repository:** AlphaAcces/ALPHA-Interface-GUI  
+**Repository:** AlphaAcces/blackbox-ui  
 **Dato:** 2025-11-24  
 **Agent:** ALPHA-CI-Security-Agent  
 
@@ -95,7 +95,7 @@ Valgfrie implementeringsmetoder er dokumenteret i rapporterne.
 For at teste deployment før produktion:
 
 1. **Test CI/CD Workflow:**
-   - Gå til: https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions
+   - Gå til: https://github.com/AlphaAcces/blackbox-ui/actions
    - Klik "CI & Deploy (Secure)"
    - Klik "Run workflow" → vælg branch → Run
    - Vent ~10-15 minutter

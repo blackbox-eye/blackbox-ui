@@ -295,7 +295,7 @@ if (heroCanvas) {
 
 ### Mellemlang sigt (Uge 2):
 7. **Rich Snippets** - Product schema for pricing
-8. **AlphaBot i18n** - Full DA/EN support
+8. **Blackbox EYE Assistant i18n** - Full DA/EN support
 9. **Newsletter Integration** - Mailchimp/SendGrid API
 
 ---
@@ -344,7 +344,7 @@ if (heroCanvas) {
 ### Not Started (20%):
 - ⬜ A/B Testing Framework
 - ⬜ Advanced SEO (Product schema)
-- ⬜ AlphaBot Enhancements (i18n)
+- ⬜ Blackbox EYE Assistant Enhancements (i18n)
 - ⬜ Newsletter Integration
 
 **Overall Sprint 4 Completion:** ~60% (3 af 5 hovedopgaver færdige)

@@ -1,17 +1,17 @@
 ```markdown
-# 🟩 ALPHA Interface GUI (AIG) – MASTERPROMPT v1.2
+# 🟩 Blackbox UI (AIG) – MASTERPROMPT v1.2
 
 **Lead/Owner:** NEX  
 **Udarbejdet:** 2025-06-30  
 **Godkendt:** ALPHADEV  
-**Projekt:** ALPHA Interface GUI – Blackbox E.Y.E  
+**Projekt:** Blackbox UI – Blackbox E.Y.E  
 **Status:** Autoritativ version til udvikling, QA, compliance, audit og drift.
 
 ---
 
 ## 1. Mission & Formål
 
-- Gøre ALPHA Interface GUI (AIG) til enterprise-grade frontend og mission control for BLACKBOX.CODES.
+- Gøre Blackbox UI (AIG) til enterprise-grade frontend og mission control for BLACKBOX.CODES.
 - Alt udvikling, QA, compliance, deployment og audit sker efter denne manual.
 - Manualen er bindende for alle deltagere – ingen undtagelser uden godkendelse fra NEX.
 

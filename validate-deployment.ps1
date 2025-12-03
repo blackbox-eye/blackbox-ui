@@ -388,7 +388,7 @@ All validation checks passed successfully."
       git push origin v1.0.0-sprint4
       Write-Host "✅ Tag pushed to GitHub" -ForegroundColor Green
       Write-Host "`nCreate GitHub release at:" -ForegroundColor Yellow
-      Write-Host "https://github.com/AlphaAcces/ALPHA-Interface-GUI/releases/new?tag=v1.0.0-sprint4"
+      Write-Host "https://github.com/AlphaAcces/blackbox-ui/releases/new?tag=v1.0.0-sprint4"
     }
   }
 }

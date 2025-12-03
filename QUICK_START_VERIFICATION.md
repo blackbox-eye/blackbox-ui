@@ -21,7 +21,7 @@ Merge this PR to `main` branch. This will automatically trigger:
 - CI/CD Deploy workflow (if on main)
 
 ### Option B: Manual Trigger
-1. Go to: https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions
+1. Go to: https://github.com/AlphaAcces/blackbox-ui/actions
 2. Select "Visual Regression" workflow
 3. Click "Run workflow" dropdown
 4. Click "Run workflow" button
@@ -32,8 +32,8 @@ Merge this PR to `main` branch. This will automatically trigger:
 ## Step 2: Wait for Workflow Completion
 
 Monitor the workflows at:
-- https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions/workflows/visual-regression.yml
-- https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions/workflows/lighthouse.yml
+- https://github.com/AlphaAcces/blackbox-ui/actions/workflows/visual-regression.yml
+- https://github.com/AlphaAcces/blackbox-ui/actions/workflows/lighthouse.yml
 
 Expected duration: 2-5 minutes each
 
@@ -43,7 +43,7 @@ Expected duration: 2-5 minutes each
 
 ### Visual Regression Screenshots
 
-1. Go to: https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions/workflows/visual-regression.yml
+1. Go to: https://github.com/AlphaAcces/blackbox-ui/actions/workflows/visual-regression.yml
 2. Click on the most recent **successful** run (green checkmark)
 3. Scroll to bottom "Artifacts" section
 4. Click **"visual-screenshots"** to download ZIP file
@@ -51,7 +51,7 @@ Expected duration: 2-5 minutes each
 
 ### Lighthouse Reports
 
-1. Go to: https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions/workflows/lighthouse.yml
+1. Go to: https://github.com/AlphaAcces/blackbox-ui/actions/workflows/lighthouse.yml
 2. Click on the most recent **successful** run
 3. Scroll to bottom "Artifacts" section
 4. Download the lighthouse report artifact
@@ -129,7 +129,7 @@ Each viewport also has header-only screenshots with `-header-` in the filename f
 
 ### Extract Scores (Automated)
 ```bash
-cd /path/to/ALPHA-Interface-GUI
+cd /path/to/blackbox-ui
 ./scripts/extract-lighthouse-scores.sh
 ```
 
@@ -214,7 +214,7 @@ If you want to supplement automated screenshots:
 ## Step 8: Run Verification Helper Script
 
 ```bash
-cd /path/to/ALPHA-Interface-GUI
+cd /path/to/blackbox-ui
 ./scripts/verify-deployment.sh
 ```
 
@@ -263,7 +263,7 @@ git push origin v1.0.0-sprint4
 ```
 
 ### Create GitHub Release
-1. Go to: https://github.com/AlphaAcces/ALPHA-Interface-GUI/releases/new
+1. Go to: https://github.com/AlphaAcces/blackbox-ui/releases/new
 2. Select tag: v1.0.0-sprint4
 3. Title: "v1.0.0-sprint4 - Enhanced Verification & Testing"
 4. Description: Copy from RELEASE_NOTES_v1.0.0-sprint4.md

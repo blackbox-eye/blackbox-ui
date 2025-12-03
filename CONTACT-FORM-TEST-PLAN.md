@@ -222,6 +222,6 @@ After merging to main and deployment completes:
 ## Contact
 
 For issues or questions about this test plan:
-- Repository: AlphaAcces/ALPHA-Interface-GUI
+- Repository: AlphaAcces/blackbox-ui
 - Agent: ALPHA-Web-Diagnostics-Agent
 - Issue: Priority One - Contact Form Logging & Mail

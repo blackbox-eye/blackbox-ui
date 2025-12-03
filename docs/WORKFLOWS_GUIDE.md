@@ -1,6 +1,6 @@
 # GitHub Actions Workflows Guide
 
-Dette dokument beskriver alle CI/CD workflows i ALPHA Interface GUI repository.
+Dette dokument beskriver alle CI/CD workflows i Blackbox UI repository.
 
 ## 📋 Oversigt
 

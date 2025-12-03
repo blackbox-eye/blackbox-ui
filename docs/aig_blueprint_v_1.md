@@ -1,4 +1,4 @@
-# 🛠️ SYSTEMBLUEPRINT & HANDLINGSPLAN – ALPHA Interface GUI (Blackbox E.Y.E)
+# 🛠️ SYSTEMBLUEPRINT & HANDLINGSPLAN – Blackbox UI (Blackbox E.Y.E)
 
 **Version:** v1.0  
 **Dato:** 2025-07-01  
@@ -9,7 +9,7 @@
 
 ## 🎯 FORMÅL
 
-Systemblueprintet beskriver ALPHA Interface GUI (AIG) som modulær webfrontend til BLACKBOX CODES-platformen (Blackbox E.Y.E). Formålet er at tilbyde et brugervenligt kontrolpanel for missions, intelligence, loghåndtering og værktøjer til agenter og administratorer. Systemet er hybrid (offline-first), med lokal krypteret database (MySQL/MariaDB) og cloud-backend (GreyEYE-platform).
+Systemblueprintet beskriver Blackbox UI (AIG) som modulær webfrontend til BLACKBOX CODES-platformen (Blackbox E.Y.E). Formålet er at tilbyde et brugervenligt kontrolpanel for missions, intelligence, loghåndtering og værktøjer til agenter og administratorer. Systemet er hybrid (offline-first), med lokal krypteret database (MySQL/MariaDB) og cloud-backend (Blackbox EYE-platform).
 
 ---
 
@@ -39,7 +39,7 @@ Systemblueprintet beskriver ALPHA Interface GUI (AIG) som modulær webfrontend t
 ### Login roadmap (midlertidig status)
 
 - Aktuel løsning: lokal `agents`-tabel bevarer `password_hash()`-værdier; UI accepterer midlertidigt klartekstinput for hurtig verificering.
-- TODO: migrér til GreyEYE central auth via `/api/auth/token` i tråd med MASTER BLUEPRINT, inkl. session-håndtering og token-refresh.
+- TODO: migrér til Blackbox EYE central auth via `/api/auth/token` i tråd med MASTER BLUEPRINT, inkl. session-håndtering og token-refresh.
 
 ---
 
@@ -67,7 +67,7 @@ Systemblueprintet beskriver ALPHA Interface GUI (AIG) som modulær webfrontend t
 | **BCP**      | REST/Webhook, fælles JWT/OAuth2 auth |
 | **ID-Matrix**| API til agent-identifikation          |
 | **BBP**      | REST API for prompt-udveksling       |
-| **GreyEYE**  | AI-eventbus/WebSocket                |
+| **Blackbox EYE**  | AI-eventbus/WebSocket                |
 
 ---
 

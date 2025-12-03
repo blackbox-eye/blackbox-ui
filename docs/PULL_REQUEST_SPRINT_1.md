@@ -2,7 +2,7 @@
 
 ## 🎯 Formål
 
-Implementering af kritiske WCAG 2.1 Level AA tilgængelighedsforbedringer som første fase af den omfattende UX/UI-forbedringsplan for ALPHA Interface GUI.
+Implementering af kritiske WCAG 2.1 Level AA tilgængelighedsforbedringer som første fase af den omfattende UX/UI-forbedringsplan for Blackbox UI.
 
 ---
 

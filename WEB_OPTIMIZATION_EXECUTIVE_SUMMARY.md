@@ -1,6 +1,6 @@
 # Web Optimization - Executive Summary
 
-**Project:** ALPHA Interface GUI  
+**Project:** Blackbox UI  
 **Date:** 2025-11-24  
 **Agent:** ALPHA-Web-Diagnostics-Agent  
 **Status:** ✅ COMPLETED - Ready for Production
@@ -94,7 +94,7 @@ Gennemføre test og optimering af web- og performanceforbedringer:
 **ARIA Implementation:**
 - ✅ Contact form: `aria-label`, `aria-required`, `role="alert"`
 - ✅ Navigation: `aria-current`, `aria-expanded`, `aria-controls`
-- ✅ AlphaBot: `role="dialog"`, `aria-live="polite"`
+- ✅ Blackbox EYE Assistant: `role="dialog"`, `aria-live="polite"`
 - ✅ Dynamic content: `aria-live` announcements
 
 **Semantic HTML:**

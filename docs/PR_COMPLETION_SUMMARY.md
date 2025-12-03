@@ -195,4 +195,4 @@ For questions about this PR or the validation process:
 
 **Prepared by:** GitHub Copilot SWE Agent  
 **Validated on:** 2025-11-19  
-**Repository:** AlphaAcces/ALPHA-Interface-GUI
+**Repository:** AlphaAcces/blackbox-ui

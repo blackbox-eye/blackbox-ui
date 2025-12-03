@@ -100,7 +100,7 @@
 | Test ID | Feature | Expected Result | Status |
 |---------|---------|-----------------|--------|
 | R01 | Sticky CTA visibility | Appears after 20% scroll (not 50%) | ⏳ |
-| R02 | AlphaBot command rail | No overlap with content on any page | ⏳ |
+| R02 | Blackbox EYE Assistant command rail | No overlap with content on any page | ⏳ |
 | R03 | Page spacing | pt-16 spacing (not pt-24) on all pages | ⏳ |
 | R04 | Mobile responsiveness | All features work on mobile/tablet/desktop | ⏳ |
 
@@ -167,7 +167,7 @@ http://localhost:8000/about.php
 
 5. **Regression Testing**
    - [ ] Verify Sticky CTA at 20% scroll
-   - [ ] Check AlphaBot positioning
+   - [ ] Check Blackbox EYE Assistant positioning
    - [ ] Confirm pt-16 spacing
    - [ ] Test mobile responsiveness
 

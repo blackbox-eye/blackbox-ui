@@ -48,7 +48,7 @@ Denne checklist kombinerer de oprindelige danske release-gates og den nye detalj
 
 - [ ] Graphene hero matcher baseline
 - [ ] Header/footer konsistente
-- [ ] Farver følger GreyEYE palette
+- [ ] Farver følger Blackbox EYE palette
 
 ### 6. Deployment readiness
 

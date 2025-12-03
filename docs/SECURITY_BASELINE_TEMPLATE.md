@@ -2,7 +2,7 @@
 
 **Version**: 1.0  
 **Dato**: 2025-11-23  
-**Gyldig for**: Alle Blackbox EYE repositories (GreyEYE, ALPHA-Interface-GUI, osv.)  
+**Gyldig for**: Alle Blackbox EYE repositories (Blackbox EYE, blackbox-ui, osv.)  
 **Ejer**: ops@blackbox.codes  
 **Status**: 🟢 Aktiv baseline standard
 
@@ -375,9 +375,9 @@ Når nyt repo oprettes eller eksisterende repo skal compliance-upgrades:
 
 ---
 
-## 🎯 Konkret Eksempel: ALPHA-Interface-GUI
+## 🎯 Konkret Eksempel: blackbox-ui
 
-Dette repo (ALPHA-Interface-GUI) følger baseline-standarden med følgende konkrete implementeringer:
+Dette repo (blackbox-ui) følger baseline-standarden med følgende konkrete implementeringer:
 
 ### ✅ Implementeret
 
@@ -457,7 +457,7 @@ Dette repo (ALPHA-Interface-GUI) følger baseline-standarden med følgende konkr
 ### Version 1.0 - 2025-11-23
 - **Created**: Initial security baseline template for Blackbox EYE
 - **Scope**: Branch protection, CI/CD, SAST, dependency scanning, secret management, web security, compliance
-- **Example**: ALPHA-Interface-GUI used as reference implementation
+- **Example**: blackbox-ui used as reference implementation
 - **Status**: Active baseline standard for all repos
 
 ---

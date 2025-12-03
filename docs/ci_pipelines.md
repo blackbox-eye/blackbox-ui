@@ -5,7 +5,7 @@
 
 ## Overview
 
-This document describes the CI/CD workflows in the ALPHA-Interface-GUI repository and when each workflow runs.
+This document describes the CI/CD workflows in the blackbox-ui repository and when each workflow runs.
 
 ---
 

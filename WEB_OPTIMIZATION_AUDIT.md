@@ -1,7 +1,7 @@
 # Web Optimization & Performance Audit Report
 
 **Date:** 2025-11-24  
-**Repository:** AlphaAcces/ALPHA-Interface-GUI  
+**Repository:** AlphaAcces/blackbox-ui  
 **Agent:** ALPHA-Web-Diagnostics-Agent  
 **Status:** ✅ COMPLETED
 
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-Denne rapport dokumenterer den gennemførte audit og optimering af web-performance og tilgængelighed i ALPHA Interface GUI projektet. Alle fire hovedområder er blevet verificeret og optimeret:
+Denne rapport dokumenterer den gennemførte audit og optimering af web-performance og tilgængelighed i Blackbox UI projektet. Alle fire hovedområder er blevet verificeret og optimeret:
 
 1. ✅ **Lazy Loading** - Fuldt implementeret
 2. ✅ **CSS/JS Minificering** - Fuldt implementeret og aktiv
@@ -237,7 +237,7 @@ const openMobileMenu = () => {
 - ✅ `aria-controls` for menu relationships
 - ✅ `aria-label` på icon-only buttons
 
-**AlphaBot Widget** (site-footer.php, linje 83-118)
+**Blackbox EYE Assistant Widget** (site-footer.php, linje 83-118)
 ```html
 <div id="alphabot-container" aria-live="polite">
     <button aria-expanded="false" 
@@ -473,7 +473,7 @@ const openMobileMenu = () => {
 
 **Status:** ✅ **EXCELLENT IMPLEMENTATION**
 
-ALPHA Interface GUI har en **meget stærk** implementation af web optimization og accessibility features. Projektet overholder sandsynligvis WCAG 2.1 AA standarder og har best-practice implementations af:
+Blackbox UI har en **meget stærk** implementation af web optimization og accessibility features. Projektet overholder sandsynligvis WCAG 2.1 AA standarder og har best-practice implementations af:
 
 - ✅ Lazy loading (100% coverage)
 - ✅ CSS/JS minification (56% size reduction)

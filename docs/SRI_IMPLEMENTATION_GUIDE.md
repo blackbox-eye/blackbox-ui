@@ -1,5 +1,5 @@
 # Subresource Integrity (SRI) Implementation Guide
-**Platform:** ALPHA Interface GUI (Blackbox EYE™)  
+**Platform:** Blackbox UI (Blackbox EYE™)  
 **Date:** 2025-11-24  
 **Version:** 1.0.0
 
@@ -7,7 +7,7 @@
 
 ## Executive Summary
 
-Dette dokument beskriver implementering af Subresource Integrity (SRI) for ALPHA Interface GUI platformen. SRI er en sikkerhedsmekanisme der verificerer at eksterne ressourcer (CDN scripts og stylesheets) ikke er blevet modificeret.
+Dette dokument beskriver implementering af Subresource Integrity (SRI) for Blackbox UI platformen. SRI er en sikkerhedsmekanisme der verificerer at eksterne ressourcer (CDN scripts og stylesheets) ikke er blevet modificeret.
 
 ### Status
 - ✅ **Chart.js**: Pinned version + crossorigin (SRI klar)

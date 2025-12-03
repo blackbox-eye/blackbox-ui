@@ -51,7 +51,7 @@
 
 - **Playwright Report:** `__PATH_OR_URL__`
 - **Screenshots / Video:** `__PATH_OR_URL__`
-- **Logs (ALPHA-SSO / War-room):** `__PATH_OR_URL__`
+- **Logs (Blackbox-SSO / War-room):** `__PATH_OR_URL__`
 
 ## Recommended TS24 Signal
 

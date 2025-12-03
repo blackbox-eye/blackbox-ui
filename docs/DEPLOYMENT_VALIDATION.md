@@ -488,7 +488,7 @@ git push origin v1.0.0-sprint4
 ```
 
 #### Step 4: Create GitHub Release
-1. Go to: https://github.com/AlphaAcces/ALPHA-Interface-GUI/releases
+1. Go to: https://github.com/AlphaAcces/blackbox-ui/releases
 2. Click "Draft a new release"
 3. Tag: `v1.0.0-sprint4`
 4. Title: "Sprint 4: Navigation Fix + Performance Optimization"

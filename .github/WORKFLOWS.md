@@ -1,6 +1,6 @@
 # GitHub Workflows Documentation
 
-This directory contains CI/CD workflows for ALPHA Interface GUI.
+This directory contains CI/CD workflows for Blackbox UI.
 
 ## Workflow Overview
 

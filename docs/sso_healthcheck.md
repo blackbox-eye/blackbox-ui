@@ -12,7 +12,7 @@ The SSO Health Check script (`scripts/sso-health.js`) validates that the SSO sys
 
 The health check validates two primary endpoints:
 
-### 1. GDI (GreyEYE Data Intelligence)
+### 1. GDI (Blackbox EYE Data Intelligence)
 
 | Property | Value |
 |----------|-------|

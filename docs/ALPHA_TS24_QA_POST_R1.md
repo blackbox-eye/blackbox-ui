@@ -28,7 +28,7 @@
 
 - **GUI Playwright rapport:** `__REPORT_LINK__`
 - **Screenshots / video:** `__MEDIA_LINK__`
-- **Logs (ALPHA-SSO / war-room):** `__LOG_LINK__`
+- **Logs (Blackbox-SSO / war-room):** `__LOG_LINK__`
 
 **Konklusion:**
 

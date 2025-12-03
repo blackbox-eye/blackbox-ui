@@ -110,7 +110,7 @@ Once the workflow is re-run, we will capture:
 Visual regression screenshots have been captured and are available in two locations:
 
 1. **GitHub Actions Artifact**: `visual-screenshots` (Seneste: Workflow Run #19616469246)
-   - Workflow Run: https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions/runs/19616469246
+   - Workflow Run: https://github.com/AlphaAcces/blackbox-ui/actions/runs/19616469246
    - Size: ~2.3 MB (24 PNG files)
    - Retention: 90 dage fra upload-dato
 
@@ -167,7 +167,7 @@ The following screenshots were captured for each browser (chromium, firefox, web
 ### How to Download Artifacts
 
 **Option 1: GitHub Actions Web Interface**
-1. Go to: https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions/runs/19616469246
+1. Go to: https://github.com/AlphaAcces/blackbox-ui/actions/runs/19616469246
 2. Click on the "visual-screenshots" artifact at the bottom
 3. Download the ZIP file (~2.3 MB)
 4. Extract and review the screenshots

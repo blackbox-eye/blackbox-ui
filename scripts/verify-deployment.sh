@@ -31,7 +31,7 @@ if [ ! -d "$ARTIFACTS_DIR" ]; then
   echo -e "${RED}⚠️  Artifacts directory not found!${NC}"
   echo ""
   echo "Please download artifacts from GitHub Actions first:"
-  echo "  1. Go to: https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions"
+  echo "  1. Go to: https://github.com/AlphaAcces/blackbox-ui/actions"
   echo "  2. Click on 'Visual Regression' workflow"
   echo "  3. Select the latest successful run"
   echo "  4. Download 'visual-screenshots' artifact"

@@ -155,4 +155,4 @@ Contact submissions log (`logs/contact-submissions.log`) entry example:
 ---
 
 *Last updated: 2025-11-21*
-*Maintainer: ALPHA Interface GUI Team*
+*Maintainer: Blackbox UI Team*

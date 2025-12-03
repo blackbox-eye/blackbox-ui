@@ -76,7 +76,7 @@ All browser screenshots confirm that the header is:
 
 To download the full artifact archive from GitHub Actions:
 
-1. Navigate to: https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions/runs/19616065194
+1. Navigate to: https://github.com/AlphaAcces/blackbox-ui/actions/runs/19616065194
 2. Scroll to "Artifacts" section at bottom
 3. Click "visual-screenshots" to download ZIP (2.3 MB)
 4. Extract to view all 24 screenshots

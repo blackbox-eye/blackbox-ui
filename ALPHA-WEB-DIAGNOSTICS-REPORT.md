@@ -425,7 +425,7 @@ The solution is minimal, surgical, and comprehensive:
 ## Contact
 
 **Agent**: ALPHA-Web-Diagnostics-Agent  
-**Repository**: AlphaAcces/ALPHA-Interface-GUI  
+**Repository**: AlphaAcces/blackbox-ui  
 **Branch**: copilot/fix-contact-form-issues  
 **Issue Priority**: ONE ✅ RESOLVED
 

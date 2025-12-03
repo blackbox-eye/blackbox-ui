@@ -194,7 +194,7 @@
 - [ ] Build A/B testing framework (api/ab-test.php)
 - [ ] Implement newsletter signup (api/newsletter-subscribe.php)
 - [ ] Mailchimp/SendGrid integration
-- [ ] Event tracking for forms/CTAs/AlphaBot
+- [ ] Event tracking for forms/CTAs/Blackbox EYE Assistant
 
 ### 9. Advanced SEO Optimization
 **Status:** Not started
@@ -208,7 +208,7 @@
 - [ ] Twitter Cards (summary_large_image)
 - [ ] Verify rich results with Google Rich Results Test
 
-### 10. AlphaBot Enhancements
+### 10. Blackbox EYE Assistant Enhancements
 **Status:** Not started
 **Priority:** MEDIUM
 **Estimated Time:** 2 days
@@ -333,7 +333,7 @@ Week 3: ░░░░░░░░░░░░░░░░░░░░ (Target: 11
 - [ ] Blog CMS functional
 - [ ] FAQ Section with AI search
 - [ ] Analytics tracking operational
-- [ ] AlphaBot multi-language support
+- [ ] Blackbox EYE Assistant multi-language support
 
 ### Should-Have (P1)
 - [ ] Rich snippets for all pages

@@ -1,5 +1,5 @@
 # Manual Testing & Verification Checklist
-**Platform:** ALPHA Interface GUI (Blackbox EYE™)  
+**Platform:** Blackbox UI (Blackbox EYE™)  
 **Date:** 2025-11-24  
 **Testing Version:** Post Web Optimization Sprint  
 **Agent:** ALPHA-Web-Diagnostics-Agent
@@ -650,11 +650,11 @@ Actual Result: _____________
 Status: ⬜ Pass  ⬜ Fail
 ```
 
-#### Test 8.2: AlphaBot Widget
+#### Test 8.2: Blackbox EYE Assistant Widget
 ```
 Steps:
 1. Visit homepage
-2. Click AlphaBot toggle
+2. Click Blackbox EYE Assistant toggle
 3. Send test message
 
 Expected Result:

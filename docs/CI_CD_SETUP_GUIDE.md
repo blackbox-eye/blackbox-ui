@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the CI/CD workflow configuration for the ALPHA Interface GUI project. The workflow automates FTP deployment, ensures index.html is removed from the remote server, and runs smoke tests to verify the deployment.
+This document describes the CI/CD workflow configuration for the Blackbox UI project. The workflow automates FTP deployment, ensures index.html is removed from the remote server, and runs smoke tests to verify the deployment.
 
 ## Workflow Trigger
 
@@ -71,7 +71,7 @@ The smoke tests verify:
 
 2. **index.php is Served**
    - Verifies the page content contains expected HTML markers
-   - Looks for "ALPHA Interface", "<!DOCTYPE", or "<html" in response
+   - Looks for "Blackbox UI", "<!DOCTYPE", or "<html" in response
 
 3. **index.html is NOT Served**
    - Tests that `http://{FTP_HOST}/index.html` returns 404 or 403

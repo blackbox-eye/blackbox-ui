@@ -2,7 +2,7 @@
 
 > **Date:** 2025-12-01  
 > **Version:** 1.0  
-> **Repository:** AlphaAcces/ALPHA-Interface-GUI  
+> **Repository:** AlphaAcces/blackbox-ui  
 > **Related PRs:** #60, #61, #63, Current
 
 ---

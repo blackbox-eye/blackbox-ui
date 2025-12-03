@@ -38,7 +38,7 @@
 **Action Required**: Manually trigger Lighthouse Audit workflow
 
 **Steps**:
-1. Go to: https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions/workflows/lighthouse.yml
+1. Go to: https://github.com/AlphaAcces/blackbox-ui/actions/workflows/lighthouse.yml
 2. Click "Run workflow" button (top right)
 3. Select branch: `main`
 4. Click green "Run workflow" button
@@ -57,7 +57,7 @@ Once the workflow completes successfully:
 gh run download <RUN_ID> --name lighthouse_results
 
 # Or manually from web interface
-# https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions/runs/<RUN_ID>
+# https://github.com/AlphaAcces/blackbox-ui/actions/runs/<RUN_ID>
 
 # Extract scores using utility script
 ./scripts/extract-lighthouse-scores.sh
@@ -110,11 +110,11 @@ The chromium-dark tests passed but screenshots weren't included in the artifact 
 - **Screenshots Captured**: 24 files (2.3 MB)
 - **Browsers Covered**: 3/4 configurations
 - **Artifact ID**: 4654322376
-- **Workflow Run**: https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions/runs/19616065194
+- **Workflow Run**: https://github.com/AlphaAcces/blackbox-ui/actions/runs/19616065194
 
 ### Lighthouse Audit
 - **Status**: Configuration fixed, pending re-run
-- **Workflow**: https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions/workflows/lighthouse.yml
+- **Workflow**: https://github.com/AlphaAcces/blackbox-ui/actions/workflows/lighthouse.yml
 - **Fix Applied**: artifactName uses underscore (compliant with action requirements)
 
 ## 📁 Artifact Locations
@@ -155,10 +155,10 @@ The chromium-dark tests passed but screenshots weren't included in the artifact 
 
 ## 🔗 Useful Links
 
-- Visual Regression Workflow: https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions/runs/19616065194
-- Lighthouse Workflow: https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions/workflows/lighthouse.yml
+- Visual Regression Workflow: https://github.com/AlphaAcces/blackbox-ui/actions/runs/19616065194
+- Lighthouse Workflow: https://github.com/AlphaAcces/blackbox-ui/actions/workflows/lighthouse.yml
 - PR Branch: `copilot/update-sprint4-documentation`
-- Screenshot Artifact: https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions/runs/19616065194/artifacts/4654322376
+- Screenshot Artifact: https://github.com/AlphaAcces/blackbox-ui/actions/runs/19616065194/artifacts/4654322376
 
 ---
 

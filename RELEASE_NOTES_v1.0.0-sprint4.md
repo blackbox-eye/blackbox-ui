@@ -56,7 +56,7 @@ Sprint 4 focused on comprehensive deployment verification, cross-browser testing
 - Multi-browser test execution: ✅ **Chromium, Firefox, WebKit, Chromium-dark**
 - Artifact generation and archiving for review: ✅ **24 screenshots captured**
 - Test execution time: **49,5 sekunder**
-- **Workflow Run**: [#19616469246](https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions/runs/19616469246) (Latest: 2025-11-23 19:58 UTC)
+- **Workflow Run**: [#19616469246](https://github.com/AlphaAcces/blackbox-ui/actions/runs/19616469246) (Latest: 2025-11-23 19:58 UTC)
 
 ## 🔧 Infrastructure Improvements
 
@@ -168,7 +168,7 @@ All artifacts are available in the GitHub Actions workflow runs:
 ### How to Access
 ```bash
 # Navigate to repository
-https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions
+https://github.com/AlphaAcces/blackbox-ui/actions
 
 # Select workflow: Visual Regression or Lighthouse Audit
 # Click on latest successful run

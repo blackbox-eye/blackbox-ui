@@ -1,6 +1,6 @@
 # CI/CD Workflows Oversigt
 
-Dette dokument giver et overblik over alle GitHub Actions workflows i ALPHA-Interface-GUI repositoriet.
+Dette dokument giver et overblik over alle GitHub Actions workflows i blackbox-ui repositoriet.
 
 ## Workflow-oversigt
 

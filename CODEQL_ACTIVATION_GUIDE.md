@@ -1,5 +1,5 @@
 # CodeQL Aktiveringsguide
-**Repository:** AlphaAcces/ALPHA-Interface-GUI
+**Repository:** AlphaAcces/blackbox-ui
 **Dato:** 2025-11-24
 
 ---
@@ -22,7 +22,7 @@ CodeQL er GitHubs avancerede security analysis tool, der scanner din kode for:
 
 1. **Gå til Repository Settings:**
    ```
-   https://github.com/AlphaAcces/ALPHA-Interface-GUI/settings/security_analysis
+   https://github.com/AlphaAcces/blackbox-ui/settings/security_analysis
    ```
 
 2. **Find "Code scanning" sektionen:**

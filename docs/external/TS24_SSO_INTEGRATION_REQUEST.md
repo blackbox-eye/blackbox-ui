@@ -1,10 +1,10 @@
 # 📨 EKSTERN POST – TIL TS24 TEAM
 
-**Fra:** ALPHA Development Team (GDI)  
-**Til:** TS24 Development Team  
-**Dato:** 2. december 2025  
-**Emne:** SSO Integration – Konfiguration af TS24 Login Redirect  
-**Prioritet:** 🔴 Høj  
+**Fra:** ALPHA Development Team (GDI)
+**Til:** TS24 Development Team
+**Dato:** 2. december 2025
+**Emne:** SSO Integration – Konfiguration af TS24 Login Redirect
+**Prioritet:** 🔴 Høj
 **Status:** ✅ AFTALT - Afventer secret deployment
 
 ---
@@ -50,7 +50,7 @@ SSO_JWT_SECRET=<secret-delt-via-sikker-kanal>
 
 **ALPHA Team:**
 ```bash
-# Sæt i production environment  
+# Sæt i production environment
 GDI_SSO_SECRET=<samme-secret>
 # eller
 JWT_SECRET=<samme-secret>

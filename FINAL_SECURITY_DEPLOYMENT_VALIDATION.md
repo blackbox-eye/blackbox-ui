@@ -1,6 +1,6 @@
 # Afsluttende Sikkerhedsvalidering og Deployment-Verifikation
 
-**Repository:** AlphaAcces/ALPHA-Interface-GUI  
+**Repository:** AlphaAcces/blackbox-ui  
 **Dato:** 2025-11-24  
 **Agent:** ALPHA-CI-Security-Agent  
 **Status:** ✅ GODKENDT - KLAR TIL PRODUKTION
@@ -9,7 +9,7 @@
 
 ## 📋 Executive Summary
 
-Dette dokument beskriver resultaterne af den afsluttende sikkerhedsskanning og deployment-verifikation for ALPHA Interface GUI. Alle kritiske kontroller er gennemført og godkendt.
+Dette dokument beskriver resultaterne af den afsluttende sikkerhedsskanning og deployment-verifikation for Blackbox UI. Alle kritiske kontroller er gennemført og godkendt.
 
 ### Samlet Vurdering
 **STATUS: ✅ KLAR TIL PRODUKTION**

@@ -1,5 +1,5 @@
 # Executive Summary: CI/CD Security Hardening v2.0
-**ALPHA Interface GUI - 5-Line Maximum Summary**
+**Blackbox UI - 5-Line Maximum Summary**
 
 ---
 

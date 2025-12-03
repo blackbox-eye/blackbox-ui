@@ -1,7 +1,7 @@
 # GDI ⇄ TS24 SSO Operations Runbook
 
 ## A. Formål
-Dette dokument er den operative manual til overvågning og fejlsøgning af SSO-broen mellem ALPHA-Interface-GUI (GDI) og ts24-intel-console. Hvor `docs/sso_gdi_ts24.md` beskriver den tekniske protokol, og `docs/e2e_gdi_ts24_sso_test.md` beskriver de manuelle end-to-end tests, fokuserer denne runbook på de konkrete skridt ops/dev skal tage for at holde integrationen sund i daglig drift.
+Dette dokument er den operative manual til overvågning og fejlsøgning af SSO-broen mellem blackbox-ui (GDI) og ts24-intel-console. Hvor `docs/sso_gdi_ts24.md` beskriver den tekniske protokol, og `docs/e2e_gdi_ts24_sso_test.md` beskriver de manuelle end-to-end tests, fokuserer denne runbook på de konkrete skridt ops/dev skal tage for at holde integrationen sund i daglig drift.
 
 ## B. Sådan kører du SSO stack health (lokalt og i CI)
 

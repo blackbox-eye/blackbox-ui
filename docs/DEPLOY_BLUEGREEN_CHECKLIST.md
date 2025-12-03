@@ -42,7 +42,7 @@
 - [ ] Run `scripts/post-deploy-verify.ps1`
 - [ ] Check Playwright smoke (optional): `npm run qa:gui:ci`
 - [ ] Verify QA debug panel is **hidden** (QA_MODE=0)
-- [ ] Review `[ALPHA-SSO]` logs for anomalies
+- [ ] Review `[Blackbox-SSO]` logs for anomalies
 - [ ] Confirm version badge NOT showing `-QA` suffix
 
 ## Rollback Trigger Criteria

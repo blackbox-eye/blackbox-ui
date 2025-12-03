@@ -95,7 +95,7 @@
 
 ## Key Workflow Runs Verified
 
-- **Latest (#55)**: https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions/runs/19548950865
+- **Latest (#55)**: https://github.com/AlphaAcces/blackbox-ui/actions/runs/19548950865
 - **Previous 9 runs**: All successful, analyzed for patterns
 - **Total analyzed**: 10 consecutive successful deployments
 
@@ -115,4 +115,4 @@
 
 **Audit Date**: 2025-11-20 19:41 UTC  
 **Agent**: ALPHA-CI-Security-Agent  
-**Repository**: AlphaAcces/ALPHA-Interface-GUI
+**Repository**: AlphaAcces/blackbox-ui

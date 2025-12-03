@@ -1,5 +1,5 @@
 # Validering af Sikkerhed og Secrets - Komplet Rapport
-**Repository:** AlphaAcces/ALPHA-Interface-GUI  
+**Repository:** AlphaAcces/blackbox-ui  
 **Dato:** 2025-11-24  
 **Agent:** ALPHA-CI-Security-Agent  
 **Status:** ✅ VALIDERING GENNEMFØRT

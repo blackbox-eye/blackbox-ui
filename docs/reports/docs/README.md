@@ -1,6 +1,6 @@
-# 📁 ALPHA Interface GUI – /docs/ Oversigt
+# 📁 Blackbox UI – /docs/ Oversigt
 
-Her finder du alle autoritative manualer, rapporter og projektstandarder for ALPHA Interface GUI (AIG) – Blackbox E.Y.E.
+Her finder du alle autoritative manualer, rapporter og projektstandarder for Blackbox UI (AIG) – Blackbox E.Y.E.
 
 ---
 

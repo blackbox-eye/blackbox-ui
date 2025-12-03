@@ -1,4 +1,4 @@
-name=COMPLIANCE.md url=https://github.com/AlphaAcces/ALPHA-Interface-GUI/blob/main/COMPLIANCE.md
+name=COMPLIANCE.md url=https://github.com/AlphaAcces/blackbox-ui/blob/main/COMPLIANCE.md
 # Security & Compliance Changes — Ready for Review
 
 Summary of changes in this PR:

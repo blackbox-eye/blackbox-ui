@@ -1,6 +1,6 @@
-# GreyEYE → TS24 SSO Hand-off
+# Blackbox EYE → TS24 SSO Hand-off
 
-This note documents how the GDI (GreyEYE) login flow now mints and exposes short-lived JWT tokens for the TS24 console.
+This note documents how the GDI (Blackbox EYE) login flow now mints and exposes short-lived JWT tokens for the TS24 console.
 
 > **See also:** `docs/ts24_sso_bridge.md` for canonical TS24 entry URLs and ownership details.
 

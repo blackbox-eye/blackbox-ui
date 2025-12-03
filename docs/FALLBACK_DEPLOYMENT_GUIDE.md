@@ -1,5 +1,5 @@
 # Fallback Deployment Guide
-**ALPHA Interface GUI - Manual Deployment Instructions**
+**Blackbox UI - Manual Deployment Instructions**
 
 ---
 
@@ -17,7 +17,7 @@ Use this guide if:
 ### Step 1: Create Branch
 
 ```bash
-cd /path/to/ALPHA-Interface-GUI
+cd /path/to/blackbox-ui
 git checkout -b ci/security-hardening-v2
 ```
 
@@ -35,7 +35,7 @@ git push origin ci/security-hardening-v2
 
 ### Step 4: Create Pull Request
 
-Go to: `https://github.com/AlphaAcces/ALPHA-Interface-GUI/compare/main...ci/security-hardening-v2`
+Go to: `https://github.com/AlphaAcces/blackbox-ui/compare/main...ci/security-hardening-v2`
 
 **PR Title:**
 ```
@@ -54,7 +54,7 @@ Save this as `.github/workflows/ci.yml`:
 
 ```yaml
 # ═══════════════════════════════════════════════════════════════════════════════
-# ALPHA Interface GUI - Secure CI/CD Pipeline v2.0
+# Blackbox UI - Secure CI/CD Pipeline v2.0
 # ═══════════════════════════════════════════════════════════════════════════════
 # 
 # This workflow implements a hardened deployment pipeline with:

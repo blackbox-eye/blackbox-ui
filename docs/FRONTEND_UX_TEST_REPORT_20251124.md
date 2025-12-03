@@ -235,7 +235,7 @@ role: 14 implementations
        aria-modal="true"
        aria-labelledby="gemini-modal-title">
 
-✓ AlphaBot widget (site-footer.php Line 95, 97)
+✓ Blackbox EYE Assistant widget (site-footer.php Line 95, 97)
   <div role="dialog" aria-label="AI Assistant">
   <div role="log" aria-live="polite">Chat messages</div>
 ```
@@ -595,7 +595,7 @@ Status: All Core Web Vitals in "Good" range
 ### 1. Lokal Verificering (ANBEFALET)
 ```bash
 # Start PHP development server
-cd "c:\BLACKBOX E.Y.E\Blackbox.codes\ALPHA Interface GUI"
+cd "c:\BLACKBOX E.Y.E\Blackbox.codes\Blackbox UI"
 php -S localhost:8000 -t .
 
 # Åbn i browser og verificer:
@@ -605,7 +605,7 @@ php -S localhost:8000 -t .
 # - Billeder lazy loader
 # - Mobile menu fungerer
 # - Forms submitter
-# - AlphaBot widget
+# - Blackbox EYE Assistant widget
 
 # Kør Playwright tests
 $env:BASE_URL="http://localhost:8000"
@@ -681,11 +681,11 @@ npx lighthouse https://blackbox.codes --view
 
 **Teknisk Support:**
 - **Email:** ops@blackbox.codes
-- **GitHub:** AlphaAcces/ALPHA-Interface-GUI
+- **GitHub:** AlphaAcces/blackbox-ui
 - **Branch:** feat/sprint5-leadflows-ux
 
 **CI/CD Status:**
-- **GitHub Actions:** https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions
+- **GitHub Actions:** https://github.com/AlphaAcces/blackbox-ui/actions
 - **Lighthouse CI:** Klar til eksekvering ved push til main
 
 ---

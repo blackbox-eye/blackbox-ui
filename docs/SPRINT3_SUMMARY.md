@@ -15,7 +15,7 @@ Sprint 3 focused on implementing **comprehensive internationalization (i18n)** s
 2. ✅ Create translation system (includes/i18n.php + JSON files)
 3. ✅ Convert navigation and key UI components to use i18n
 4. ✅ Validate pricing data (6 tiers with correct DKK amounts)
-5. ✅ Maintain Sprint 2 features (spacing, CTA, AlphaBot)
+5. ✅ Maintain Sprint 2 features (spacing, CTA, Blackbox EYE Assistant)
 
 ---
 
@@ -59,7 +59,7 @@ lang/
 - `cases.*` - Case studies
 - `pricing.*` - All pricing text, packages, features
 - `contact.*` - Contact form labels
-- `alphabot.*` - AlphaBot widget text
+- `alphabot.*` - Blackbox EYE Assistant widget text
 - `common.*` - Shared UI elements
 
 **Total Translation Keys:** 150+ per language
@@ -105,12 +105,12 @@ _*Enterprise pricing: "Or by arrangement" (eller efter aftale)_
 ### Feature Matrix
 
 #### MVP Tiers
-- **Basis:** GreyEYE AI (limited), Basic ID-Matrix, Email support
-- **Pro:** Full GreyEYE AI, Standard ID-Matrix, Chat support
+- **Basis:** Blackbox EYE AI (limited), Basic ID-Matrix, Email support
+- **Pro:** Full Blackbox EYE AI, Standard ID-Matrix, Chat support
 - **Premium:** Everything in Pro + Basic PVE, Onboarding workshop
 
 #### Enterprise Tiers
-- **Standard:** Full GreyEYE, ID-Matrix, Basic reporting
+- **Standard:** Full Blackbox EYE, ID-Matrix, Basic reporting
 - **Premium:** Everything in Standard + Full PVE, AUT module, Advanced reporting
 - **Enterprise:** Everything in Premium + Specialist teams, 24/7 ops, Account manager
 
@@ -227,7 +227,7 @@ All Sprint 2 enhancements remain functional:
 | Feature | Status | Notes |
 |---------|--------|-------|
 | Sticky CTA (20% threshold) | ✅ Active | No changes |
-| AlphaBot Command Rail | ✅ Active | No overlap issues |
+| Blackbox EYE Assistant Command Rail | ✅ Active | No overlap issues |
 | Spacing Reduction (pt-16) | ✅ Active | Maintained across all pages |
 | Pricing Tiers (6 packages) | ✅ Active | Validated with v3.0 data |
 | Mobile Responsiveness | ✅ Active | Language switcher responsive |

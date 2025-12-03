@@ -55,7 +55,7 @@ cover/
 *.pot
 
 # ────────────────────────────────────────────────────────────────────────────────
-# --- ALPHA Interface GUI / Web / PHP-specific ---
+# --- Blackbox UI / Web / PHP-specific ---
 error_log
 # .htaccess                  # tidligere ignore-regel (deaktiveret)
 !.htaccess                   # UNDTagelse: spor .htaccess i repo (ny politik)
@@ -209,4 +209,4 @@ marimo/_lsp/
 __marimo__/
 
 # Legacy long-path mappestruktur (skal ikke trackes i Git)
-Blackbox.codes/(OLD) GUI ALPHA Interface – Blackbox.codes/
+Blackbox.codes/(OLD) GUI Blackbox UI – Blackbox.codes/

@@ -232,5 +232,5 @@ Timeout Protection: All jobs ✅ +100%
 
 **Audit Dato**: 2025-11-24  
 **Auditor**: ALPHA-CI-Security-Agent  
-**Repository**: AlphaAcces/ALPHA-Interface-GUI  
+**Repository**: AlphaAcces/blackbox-ui  
 **Branch**: copilot/audit-cicd-workflows

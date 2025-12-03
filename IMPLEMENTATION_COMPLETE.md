@@ -144,8 +144,8 @@ Or use GitHub UI to merge the PR.
 
 ### Step 2: Monitor Workflows (2-5 minutes)
 Navigate to:
-- https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions/workflows/visual-regression.yml
-- https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions/workflows/lighthouse.yml
+- https://github.com/AlphaAcces/blackbox-ui/actions/workflows/visual-regression.yml
+- https://github.com/AlphaAcces/blackbox-ui/actions/workflows/lighthouse.yml
 
 Wait for green checkmarks.
 

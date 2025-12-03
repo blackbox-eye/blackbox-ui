@@ -1,8 +1,8 @@
-# SSO v1 Sign-off – GDI / ALPHA Interface GUI
+# SSO v1 Sign-off – GDI / Blackbox UI
 
 ## A. Purpose / Scope
 
-Dette dokument beskriver, hvornår ALPHA Interface GUI (GDI-siden) betragter SSO v1 som klar til sign-off. Det anvendes sammen med:
+Dette dokument beskriver, hvornår Blackbox UI (GDI-siden) betragter SSO v1 som klar til sign-off. Det anvendes sammen med:
 
 - `docs/sso_gdi_ts24.md` – teknisk kontrakt og payload-specifikation.
 - `docs/e2e_gdi_ts24_sso_test.md` – detaljerede end-to-end tests.

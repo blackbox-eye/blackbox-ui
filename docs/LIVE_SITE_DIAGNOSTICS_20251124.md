@@ -313,7 +313,7 @@ BASE_URL=https://blackbox.codes npx playwright test --grep @readonly
 ### 1. Lokal Server Test
 ```powershell
 # Start PHP development server
-cd "c:\BLACKBOX E.Y.E\Blackbox.codes\ALPHA Interface GUI"
+cd "c:\BLACKBOX E.Y.E\Blackbox.codes\Blackbox UI"
 php -S localhost:8000 -t .
 
 # Åbn i browser
@@ -434,7 +434,7 @@ git push origin feat/sprint5-leadflows-ux
 
 **Teknisk Support:**
 - **Email:** ops@blackbox.codes
-- **GitHub:** AlphaAcces/ALPHA-Interface-GUI
+- **GitHub:** AlphaAcces/blackbox-ui
 - **Branch:** feat/sprint5-leadflows-ux
 
 **Dokumentation:**

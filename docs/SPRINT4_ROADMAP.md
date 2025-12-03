@@ -14,7 +14,7 @@
 2. **Content Management** - Launch blog CMS and FAQ system
 3. **Lead Generation** - Implement analytics and conversion tracking
 4. **SEO Enhancement** - Rich snippets and advanced meta tags
-5. **AlphaBot Evolution** - Full internationalization and personalization
+5. **Blackbox EYE Assistant Evolution** - Full internationalization and personalization
 
 ---
 
@@ -188,7 +188,7 @@ async function searchFAQ(query, language) {
 2. **Newsletter Signup** - Footer and dedicated page
 3. **Demo Request** - Pricing page CTA
 4. **Whitepaper Downloads** - Gated content
-5. **AI Consultation** - AlphaBot lead qualification
+5. **AI Consultation** - Blackbox EYE Assistant lead qualification
 
 #### Analytics Integration
 - **Google Analytics 4**
@@ -354,7 +354,7 @@ echo '</urlset>';
 
 ---
 
-### 6. AlphaBot Enhancements (Priority: MEDIUM)
+### 6. Blackbox EYE Assistant Enhancements (Priority: MEDIUM)
 
 #### Multi-Language Support
 **Current State:** English prompt, Danish/English responses
@@ -367,8 +367,8 @@ const userLanguage = i18n.lang; // 'da' or 'en'
 
 // System prompt in user's language
 const systemPrompt = userLanguage === 'da'
-    ? "Du er AlphaBot, en AI-sikkerhedsassistent for Blackbox EYE..."
-    : "You are AlphaBot, an AI security assistant for Blackbox EYE...";
+    ? "Du er Blackbox EYE Assistant, en AI-sikkerhedsassistent for Blackbox EYE..."
+    : "You are Blackbox EYE Assistant, an AI security assistant for Blackbox EYE...";
 
 // User messages in their language
 const userMessage = document.getElementById('alphabot-input').value;
@@ -448,10 +448,10 @@ const showTypingIndicator = () => {
 };
 
 // Error recovery with retry
-const callAlphaBotWithRetry = async (maxRetries = 2) => {
+const callBlackbox EYE AssistantWithRetry = async (maxRetries = 2) => {
     for (let attempt = 0; attempt < maxRetries; attempt++) {
         try {
-            return await callAlphaBot();
+            return await callBlackbox EYE Assistant();
         } catch (error) {
             if (attempt === maxRetries - 1) {
                 appendMessage('bot', i18n.t('alphabot.error_final',
@@ -466,8 +466,8 @@ const callAlphaBotWithRetry = async (maxRetries = 2) => {
 ```
 
 **Files to Update:**
-- `assets/js/site.js` - AlphaBot enhancements
-- `lang/da.json` - New AlphaBot translations
+- `assets/js/site.js` - Blackbox EYE Assistant enhancements
+- `lang/da.json` - New Blackbox EYE Assistant translations
 - `lang/en.json` - English equivalents
 
 ---
@@ -541,7 +541,7 @@ const callAlphaBotWithRetry = async (maxRetries = 2) => {
 
 ### Week 3 (Dec 7-13)
 - [ ] Advanced SEO (rich snippets, sitemaps)
-- [ ] AlphaBot enhancements (i18n, personalization)
+- [ ] Blackbox EYE Assistant enhancements (i18n, personalization)
 - [ ] Footer redesign with newsletter
 - [ ] Comprehensive testing and QA
 
@@ -554,7 +554,7 @@ const callAlphaBotWithRetry = async (maxRetries = 2) => {
 - [ ] Blog CMS: Fully functional with admin interface
 - [ ] FAQ Section: Live with AI search
 - [ ] Analytics: Lead tracking operational
-- [ ] AlphaBot: Multi-language support
+- [ ] Blackbox EYE Assistant: Multi-language support
 
 ### Should-Have (P1)
 - [ ] Rich snippets for all pages

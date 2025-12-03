@@ -1,5 +1,5 @@
 # Security Implementation Summary
-**ALPHA Interface GUI - Security Scanning Configuration**
+**Blackbox UI - Security Scanning Configuration**
 
 ---
 
@@ -10,7 +10,7 @@
 | **Document Title** | Security Implementation Summary - CodeQL Configuration |
 | **Version** | 1.1 |
 | **Date** | 2025-11-23 |
-| **Repository** | AlphaAcces/ALPHA-Interface-GUI |
+| **Repository** | AlphaAcces/blackbox-ui |
 | **Branch** | copilot/update-codeql-workflow |
 | **Agent** | ALPHA-CI-Security-Agent |
 | **Status** | 🔄 Enhanced - Security Baseline & 90-Day Roadmap Added |
@@ -64,7 +64,7 @@ You must have **admin access** to the repository to enable code scanning.
 #### Option 1: Via GitHub Web Interface (Recommended)
 
 1. **Navigate to Repository Settings**
-   - Go to: https://github.com/AlphaAcces/ALPHA-Interface-GUI/settings/security_analysis
+   - Go to: https://github.com/AlphaAcces/blackbox-ui/settings/security_analysis
    - Or: Repository → Settings → Security → "Code security and analysis"
 
 2. **Locate Code Scanning Section**
@@ -93,7 +93,7 @@ You must have **admin access** to the repository to enable code scanning.
 gh api \
   --method PUT \
   -H "Accept: application/vnd.github+json" \
-  /repos/AlphaAcces/ALPHA-Interface-GUI/code-scanning/default-setup \
+  /repos/AlphaAcces/blackbox-ui/code-scanning/default-setup \
   -f state='configured'
 ```
 
@@ -105,7 +105,7 @@ curl -L \
   -H "Accept: application/vnd.github+json" \
   -H "Authorization: Bearer <YOUR-TOKEN>" \
   -H "X-GitHub-Api-Version: 2022-11-28" \
-  https://api.github.com/repos/AlphaAcces/ALPHA-Interface-GUI/code-scanning/default-setup \
+  https://api.github.com/repos/AlphaAcces/blackbox-ui/code-scanning/default-setup \
   -d '{"state":"configured"}'
 ```
 
@@ -337,7 +337,7 @@ Once code scanning is enabled, test in this order:
 For questions about security scanning setup or to report security concerns:
 
 - **Email**: ops@blackbox.codes
-- **Repository**: https://github.com/AlphaAcces/ALPHA-Interface-GUI
+- **Repository**: https://github.com/AlphaAcces/blackbox-ui
 - **Security Policy**: See `SECURITY.md` for vulnerability reporting
 
 ---
@@ -362,7 +362,7 @@ For questions about security scanning setup or to report security concerns:
 
 ---
 
-## 🔐 Security Features Status for ALPHA-Interface-GUI
+## 🔐 Security Features Status for blackbox-ui
 
 ### Current Security Posture
 
@@ -391,7 +391,7 @@ For questions about security scanning setup or to report security concerns:
 ### Critical TODOs (Do These First)
 
 1. **Aktiver Code Scanning**
-   - Gå til: [Repository Settings → Security](https://github.com/AlphaAcces/ALPHA-Interface-GUI/settings/security_analysis)
+   - Gå til: [Repository Settings → Security](https://github.com/AlphaAcces/blackbox-ui/settings/security_analysis)
    - Klik "Set up" ved "Code scanning"
    - Vælg "GitHub Actions" som metode
    - Efter aktivering: Uncomment triggers i `.github/workflows/codeql-analysis.yml` (linje 27-33)
@@ -399,21 +399,21 @@ For questions about security scanning setup or to report security concerns:
    - **Virkning**: Automatisk sikkerhedsscanning af al PHP-kode
 
 2. **Aktiver Dependabot Alerts**
-   - Samme side: [Security Settings](https://github.com/AlphaAcces/ALPHA-Interface-GUI/settings/security_analysis)
+   - Samme side: [Security Settings](https://github.com/AlphaAcces/blackbox-ui/settings/security_analysis)
    - Slå til: "Dependabot alerts"
    - Slå til: "Dependabot security updates" (anbefalet)
    - **Forventet tid**: 2 minutter
    - **Virkning**: Automatisk notifikation om sårbare dependencies (npm, composer)
 
 3. **Aktiver Secret Scanning**
-   - Samme side: [Security Settings](https://github.com/AlphaAcces/ALPHA-Interface-GUI/settings/security_analysis)
+   - Samme side: [Security Settings](https://github.com/AlphaAcces/blackbox-ui/settings/security_analysis)
    - Slå til: "Secret scanning"
    - Slå til: "Push protection" (forhindrer commits med secrets)
    - **Forventet tid**: 2 minutter
    - **Virkning**: Detekterer FTP-passwords, API keys, tokens i commits
 
 4. **Konfigurer Branch Protection for `main`**
-   - Gå til: [Branch Settings](https://github.com/AlphaAcces/ALPHA-Interface-GUI/settings/branches)
+   - Gå til: [Branch Settings](https://github.com/AlphaAcces/blackbox-ui/settings/branches)
    - Klik "Add rule" for `main`
    - Vælg:
      - ✅ Require pull request reviews before merging (minimum 1 approval)
@@ -424,7 +424,7 @@ For questions about security scanning setup or to report security concerns:
    - **Virkning**: Tvinger PR-review og status checks før merge
 
 5. **Test CodeQL Workflow Manuelt**
-   - Gå til: [Actions → CodeQL](https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions/workflows/codeql-analysis.yml)
+   - Gå til: [Actions → CodeQL](https://github.com/AlphaAcces/blackbox-ui/actions/workflows/codeql-analysis.yml)
    - Klik "Run workflow"
    - Vælg: Run PHP analysis = true
    - Monitor resultat i Security → Code scanning
@@ -446,7 +446,7 @@ For questions about security scanning setup or to report security concerns:
 
 ### Compliance & Standards
 
-**Note**: ALPHA-Interface-GUI følger Blackbox EYE's compliance framework som defineret i Leverance 5. Specifikke guides for GDPR, NIS2, og Vault-integration findes i dette dokument:
+**Note**: blackbox-ui følger Blackbox EYE's compliance framework som defineret i Leverance 5. Specifikke guides for GDPR, NIS2, og Vault-integration findes i dette dokument:
 
 - **GDPR Compliance**: Se Leverance 5, afsnit "GDPR Requirements & Implementation"
   - Data minimering, brugerrettigheder, cookie-consent, audit-logging
@@ -529,7 +529,7 @@ Baseret på Leverance 5's compliance- og sikkerhedsplan:
 ## 🔄 Changelog
 
 ### Version 1.1 - 2025-11-23
-- **Added**: Security features status table for ALPHA-Interface-GUI
+- **Added**: Security features status table for blackbox-ui
 - **Added**: 5 critical action items for repository owner (Danish)
 - **Added**: Related documentation section with links to compliance guides
 - **Added**: Next 90 days security roadmap (aligned with Leverance 5)

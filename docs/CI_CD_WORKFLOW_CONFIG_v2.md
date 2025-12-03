@@ -6,7 +6,7 @@
 
 ## Oversigt
 
-CI/CD workflow-konfiguration for ALPHA Interface GUI efter November 2025 opdateringerne.
+CI/CD workflow-konfiguration for Blackbox UI efter November 2025 opdateringerne.
 
 ### Ændringer i v2.0
 - Timeout tilføjet til alle workflow jobs

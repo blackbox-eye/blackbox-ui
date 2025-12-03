@@ -118,7 +118,7 @@ HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$SITE_URL" || echo "000")
 #### Test 2: index.php is Served
 ```bash
 RESPONSE=$(curl -s "$SITE_URL" || echo "CURL_FAILED")
-# Checks for: "ALPHA Interface", "<!DOCTYPE", or "<html"
+# Checks for: "Blackbox UI", "<!DOCTYPE", or "<html"
 ```
 **Result:** ✅ PASS - Properly implemented
 
@@ -253,7 +253,7 @@ The workflow is production-ready pending:
 
 **Validated by:** GitHub Copilot SWE Agent  
 **Date:** 2025-11-19  
-**Repository:** AlphaAcces/ALPHA-Interface-GUI  
+**Repository:** AlphaAcces/blackbox-ui  
 **Branch:** copilot/validate-workflow-configurations  
 **Base Commit:** d595c02 (PR #5 merge)
 

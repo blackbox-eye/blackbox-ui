@@ -1,4 +1,4 @@
-name=SECURITY.md url=https://github.com/AlphaAcces/ALPHA-Interface-GUI/blob/main/SECURITY.md
+name=SECURITY.md url=https://github.com/AlphaAcces/blackbox-ui/blob/main/SECURITY.md
 # Security & Code Scanning
 
 This repository uses CodeQL for code scanning. Due to repository/plan permissions (GitHub Advanced Security), JavaScript CodeQL scanning is gated. PHP scanning runs by default.

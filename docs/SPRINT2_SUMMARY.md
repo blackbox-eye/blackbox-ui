@@ -81,7 +81,7 @@
   - ARIA label for accessibility
 - **Optimization:** Earlier visibility ensures users discover CTA within 1-2 seconds of scrolling
 
-### 5. 🤖 AlphaBot Widget (Restored)
+### 5. 🤖 Blackbox EYE Assistant Widget (Restored)
 
 - **Status:** ✅ Complete
 - **Code:** `includes/site-header.php` (CSS + page targeting), `includes/site-footer.php` (HTML), `assets/js/site.js` (logic)
@@ -122,7 +122,7 @@ Key Files:
 
 ### 1. Test Plan (`docs/SPRINT2_TEST_PLAN.md`)
 
-- **47 test cases** across 5 features (inkl. AlphaBot)
+- **47 test cases** across 5 features (inkl. Blackbox EYE Assistant)
 - Device/browser compatibility matrix
 - Keyboard accessibility checklist (8 tests)
 - Screen reader testing scenarios
@@ -131,7 +131,7 @@ Key Files:
 - Reduced motion validation (5 tests)
 - Cross-feature integration tests (5 scenarier)
 - Visual regression checkpoints
-- AlphaBot widget behavior coverage (visibility, CTA separation, fallback)
+- Blackbox EYE Assistant widget behavior coverage (visibility, CTA separation, fallback)
 
 ### 2. Pull Request Template (`docs/PULL_REQUEST_SPRINT_2.md`)
 

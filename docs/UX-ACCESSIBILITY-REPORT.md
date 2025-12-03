@@ -1,4 +1,4 @@
-# UX Accessibility Report – ALPHA Interface GUI
+# UX Accessibility Report – Blackbox UI
 
 **Version:** 1.0
 **Dato:** 2025-11-22
@@ -9,7 +9,7 @@
 
 ## 1. Executive Summary
 
-Denne rapport dokumenterer implementeringen af kritiske WCAG 2.1 Level AA tilgængelighedsforbedringer i ALPHA Interface GUI. Alle P0 (kritiske) tiltag fra UX-analysen er nu implementeret og klar til test.
+Denne rapport dokumenterer implementeringen af kritiske WCAG 2.1 Level AA tilgængelighedsforbedringer i Blackbox UI. Alle P0 (kritiske) tiltag fra UX-analysen er nu implementeret og klar til test.
 
 **Implementerede forbedringer:**
 - ✅ Skip navigation link
@@ -186,7 +186,7 @@ const setupFocusTrap = (container) => {
 ```
 
 **Påvirkede filer:**
-- `assets/js/site.js` (Gemini modal, AlphaBot future)
+- `assets/js/site.js` (Gemini modal, Blackbox EYE Assistant future)
 
 **Test:**
 - [x] TAB cykler kun inden for modal
@@ -470,7 +470,7 @@ Tilføjet til alle sider for skip-link kompatibilitet.
 **Impact:** Medium
 **Løsning:** Planlagt i Sprint 2 (ARIA live status updates)
 
-**3. AlphaBot Focus Trap**
+**3. Blackbox EYE Assistant Focus Trap**
 **Problem:** Chat-widget har ikke focus trap endnu
 **Impact:** Medium (feature ikke aktiveret i prod)
 **Løsning:** Samme pattern som Gemini modal, implementeres når feature aktiveres

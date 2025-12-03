@@ -1,6 +1,6 @@
 # Staging Deployment & Test Guide - Quick Reference
 
-**Repository:** AlphaAcces/ALPHA-Interface-GUI  
+**Repository:** AlphaAcces/blackbox-ui  
 **Formål:** Hurtig guide til at køre deployment og tests på staging  
 **Status:** ✅ KLAR TIL BRUG
 
@@ -11,7 +11,7 @@
 ### 1. Kør CI/CD Deployment (Anbefalet)
 
 **Via GitHub Web:**
-1. Gå til: https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions
+1. Gå til: https://github.com/AlphaAcces/blackbox-ui/actions
 2. Klik på "CI & Deploy (Secure)" i venstre sidebar
 3. Klik "Run workflow" knappen (højre side)
 4. Vælg branch (vælg `main` for produktion eller feature branch for test)
@@ -45,7 +45,7 @@
 ### Option A: CodeQL Security Scanning
 
 **Via GitHub Web:**
-1. Gå til: https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions
+1. Gå til: https://github.com/AlphaAcces/blackbox-ui/actions
 2. Klik på "CodeQL" workflow
 3. Klik "Run workflow"
 4. Vælg options:
@@ -72,7 +72,7 @@ Se `CODEQL_ACTIVATION_GUIDE.md` for instruktioner.
 ## 🔍 Kør Lighthouse Performance Audit
 
 **Via GitHub Web:**
-1. Gå til: https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions
+1. Gå til: https://github.com/AlphaAcces/blackbox-ui/actions
 2. Klik på "Lighthouse Audit" workflow
 3. Klik "Run workflow"
 4. Vælg branch
@@ -109,8 +109,8 @@ bash scripts/extract-lighthouse-scores.sh
 
 ```bash
 # Clone repo
-git clone https://github.com/AlphaAcces/ALPHA-Interface-GUI.git
-cd ALPHA-Interface-GUI
+git clone https://github.com/AlphaAcces/blackbox-ui.git
+cd blackbox-ui
 
 # Check for hardcoded secrets (skal returnere kun REPLACE_ON_SERVER)
 grep -r "password\|secret\|token" --include="*.php" . | grep -v "password_hash\|password_verify\|REPLACE_ON_SERVER"
@@ -238,7 +238,7 @@ Efter deployment til staging/produktion, verificer følgende:
 ```
 
 **Løsning:**
-1. Gå til: https://github.com/AlphaAcces/ALPHA-Interface-GUI/settings/secrets/actions
+1. Gå til: https://github.com/AlphaAcces/blackbox-ui/settings/secrets/actions
 2. Tilføj manglende secret
 3. Kør workflow igen
 
@@ -278,7 +278,7 @@ Efter deployment til staging/produktion, verificer følgende:
 ```
 
 **Løsning:**
-1. Gå til: https://github.com/AlphaAcces/ALPHA-Interface-GUI/settings/security_analysis
+1. Gå til: https://github.com/AlphaAcces/blackbox-ui/settings/security_analysis
 2. Enable "Code scanning"
 3. Kør CodeQL workflow igen
 

@@ -10,7 +10,7 @@
 
 ## 🎯 Mission
 
-Forbedre ALPHA Interface GUI's udseende, brugeroplevelse (UX), tilgængelighed og responsivitet i overensstemmelse med audit-rapporten og moderne web standards.
+Forbedre Blackbox UI's udseende, brugeroplevelse (UX), tilgængelighed og responsivitet i overensstemmelse med audit-rapporten og moderne web standards.
 
 ---
 
@@ -223,7 +223,7 @@ Refresh page and verify:
 ## 🐛 Known Issues
 
 ### Minor (Non-blocking)
-- **AlphaBot focus trap:** Not implemented yet (feature not in production)
+- **Blackbox EYE Assistant focus trap:** Not implemented yet (feature not in production)
 - **Form validation UX:** HTML5 validation only (custom inline validation planned Sprint 2)
 
 ### Future Enhancements

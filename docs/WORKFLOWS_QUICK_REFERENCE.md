@@ -12,7 +12,7 @@ git push origin main  # Trigger automatisk deployment
 ```
 
 ### Run Manual Workflow
-1. Gå til: https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions
+1. Gå til: https://github.com/AlphaAcces/blackbox-ui/actions
 2. Vælg workflow i venstre menu
 3. Klik "Run workflow" (højre side)
 4. Vælg branch og parametre
@@ -24,7 +24,7 @@ git push origin main  # Trigger automatisk deployment
 gh run list --workflow=ci.yml --limit 5
 
 # Via Browser
-https://github.com/AlphaAcces/ALPHA-Interface-GUI/actions
+https://github.com/AlphaAcces/blackbox-ui/actions
 ```
 
 ## 🔧 Common Fixes
@@ -166,7 +166,7 @@ Actions → CI & Deploy (Secure) → Run workflow
 - 📖 Full Guide: [WORKFLOWS_GUIDE.md](WORKFLOWS_GUIDE.md)
 - 🔧 Setup Guide: [CI_CD_SETUP_GUIDE.md](CI_CD_SETUP_GUIDE.md)
 - 📧 Support: ops@blackbox.codes
-- 🐛 Issues: https://github.com/AlphaAcces/ALPHA-Interface-GUI/issues
+- 🐛 Issues: https://github.com/AlphaAcces/blackbox-ui/issues
 
 ---
 

@@ -178,14 +178,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AlphaAcces/ALPHA-Interface-GUI.git"
+    "url": "git+https://github.com/AlphaAcces/blackbox-ui.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/AlphaAcces/ALPHA-Interface-GUI/issues"
+    "url": "https://github.com/AlphaAcces/blackbox-ui/issues"
   },
-  "homepage": "https://github.com/AlphaAcces/ALPHA-Interface-GUI#readme"
+  "homepage": "https://github.com/AlphaAcces/blackbox-ui#readme"
 }

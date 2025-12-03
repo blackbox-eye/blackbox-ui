@@ -1,14 +1,14 @@
 
 # GDI / TS24 SSO – End-to-End Test Plan
 
-The steps below document how to manually validate the ALPHA Interface GUI single-sign-on flow for GreyEYE operators connecting to TS24. Follow them in order when smoke-testing deployments or debugging incidents. Automation coverage will be added in a future sprint.
+The steps below document how to manually validate the Blackbox UI single-sign-on flow for Blackbox EYE operators connecting to TS24. Follow them in order when smoke-testing deployments or debugging incidents. Automation coverage will be added in a future sprint.
 
 See also `docs/sso_v1_signoff_gdi.md` for the GUI-side sign-off checklist that accompanies these scenarios.
 
 
 ## Prerequisites
 
-- Valid GreyEYE agent account with dashboard access.
+- Valid Blackbox EYE agent account with dashboard access.
 - `GDI_SSO_SECRET` (or fallback `JWT_SECRET`) and `TS24_CONSOLE_URL` configured in the target environment.
 - Ability to inspect browser network traffic (DevTools) or server logs if troubleshooting.
 
@@ -99,7 +99,7 @@ Interpret the result:
 - Exit code `0` means both the GUI (secret, TS24 URL, JWT mint) **and** TS24’s `/api/auth/sso-health` endpoint agree the stack is healthy.
 - Non-zero exit codes occur if either side is misconfigured (missing secret, JWT lib, TS24 health unreachable, `usesHS256=false`, etc.). Inspect `/tools/sso_health.php` locally and `{TS24_CONSOLE_URL}/api/auth/sso-health` remotely for JSON notes.
 
-Triage hint: If the GUI half fails, verify env vars in the hosting control panel, confirm `vendor/autoload.php` exists, and ensure the TS24 base URL points to a live environment. If the TS24 half fails, check that `TS24_CONSOLE_URL` is reachable and that TS24’s `VITE_SSO_JWT_SECRET`, issuer/audience and HS256 config match the GreyEYE values.
+Triage hint: If the GUI half fails, verify env vars in the hosting control panel, confirm `vendor/autoload.php` exists, and ensure the TS24 base URL points to a live environment. If the TS24 half fails, check that `TS24_CONSOLE_URL` is reachable and that TS24’s `VITE_SSO_JWT_SECRET`, issuer/audience and HS256 config match the Blackbox EYE values.
 
 ### CI SSO Healthcheck
 

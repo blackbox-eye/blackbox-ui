@@ -1,8 +1,8 @@
-# ALPHA Interface GUI — QA Support Guide (SSO v1)
+# Blackbox UI — QA Support Guide (SSO v1)
 
 Version: 2025-12-01 · Maintainer: GUI QA Team (GDI)
 
-This guide mirrors TS24 backend QA expectations but tailors each step to the ALPHA Interface GUI. Use it whenever the TS24 platform declares QA-support mode.
+This guide mirrors TS24 backend QA expectations but tailors each step to the Blackbox UI. Use it whenever the TS24 platform declares QA-support mode.
 
 ---
 

@@ -1,6 +1,6 @@
 # CHANGELOG
 
-Alle større ændringer i ALPHA Interface GUI (AIG) dokumenteres her, så audit og drift altid kan følge release-tracking.
+Alle større ændringer i Blackbox UI (AIG) dokumenteres her, så audit og drift altid kan følge release-tracking.
 
 ## [v1.0.0-sprint4] – 2025-11-23 (Sprint 4)
 ### Added

@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-Sprint 5 fokuserer på at transformere ALPHA Interface GUI (Blackbox EYE™) fra en teknisk platform til en **fuldt konverterings-optimeret** website med moderne UX/UI, SEO-fundamenter og lead-generation capabilities. 
+Sprint 5 fokuserer på at transformere Blackbox UI (Blackbox EYE™) fra en teknisk platform til en **fuldt konverterings-optimeret** website med moderne UX/UI, SEO-fundamenter og lead-generation capabilities. 
 
 Baseret på UX/UI-analyse, marketing/branding-rapport og forretningsplanen (concept_plan.md) er følgende prioriteter identificeret:
 
@@ -34,7 +34,7 @@ Nuværende navigation har 7+ items og er uoverskuelig, især på mobil. UX-audit
 ```
 HOVEDMENU (max 5 items):
 ├── Løsninger          (ny gruppering)
-│   ├── GreyEYE AI-Platform
+│   ├── Blackbox EYE AI-Platform
 │   ├── Penetration & Vulnerability Engine (PVE)
 │   ├── ID-Matrix
 │   ├── Awareness Training (AUT)
@@ -239,7 +239,7 @@ Baseret på `concept_plan.md`, skal følgende pakker præsenteres:
 **Design:**  
 3-kolonne grid (desktop), stacked cards (mobil) med:
 - Pakkenavn & pris
-- Liste af inkluderede moduler (GreyEYE, PVE, ID-Matrix, AUT osv.)
+- Liste af inkluderede moduler (Blackbox EYE, PVE, ID-Matrix, AUT osv.)
 - Målgruppe (SMV, Enterprise, Offentlig sektor)
 - CTA-knap: "Vælg pakke" → demo-booking
 
@@ -255,7 +255,7 @@ Baseret på `concept_plan.md`, skal følgende pakker præsenteres:
     </div>
   </div>
   <ul class="features">
-    <li>✅ GreyEYE AI-assistent (24/7)</li>
+    <li>✅ Blackbox EYE AI-assistent (24/7)</li>
     <li>✅ PVE (automatisk pentest)</li>
     <li>✅ ID-Matrix adgangskontrol</li>
     <li>✅ AUT træningsmodul</li>
@@ -561,7 +561,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 {
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": "GreyEYE Premium Package",
+  "name": "Blackbox EYE Premium Package",
   "description": "AI-drevet cybersikkerhedsplatform med 24/7 overvågning",
   "offers": {
     "@type": "Offer",
@@ -667,7 +667,7 @@ Tilføj `aria-live="polite"` på success/error-beskeder:
 
 #### 4.1.4 Focus Trap for Modals
 
-Implementer focus trap i AlphaBot og Gemini modals:
+Implementer focus trap i Blackbox EYE Assistant og Gemini modals:
 
 ```javascript
 // I site.js, efter modal åbning
@@ -1268,7 +1268,7 @@ Lighthouse audit mod https://blackbox.codes fejlede med "Chrome prevented page l
 | **Alt text** | ⚠️ | Few images currently, needs review when more added |
 | **Heading hierarchy** | ✅ | Proper h1→h2→h3 structure |
 | **Language attribute** | ✅ | <html lang="da"> or "en" based on selection |
-| **Focus trap (modals)** | ✅ | Implemented in mobile menu and AlphaBot |
+| **Focus trap (modals)** | ✅ | Implemented in mobile menu and Blackbox EYE Assistant |
 
 **Automated tools to run:**
 - [ ] axe DevTools browser extension
@@ -1401,7 +1401,7 @@ For at verificere implementation, følg denne test sequence:
 
 ## 10. Konklusion & Næste Skridt
 
-Sprint 5 har leveret **fundamental UX improvements** der transformerer ALPHA Interface GUI til en **conversion-optimized marketing platform**.
+Sprint 5 har leveret **fundamental UX improvements** der transformerer Blackbox UI til en **conversion-optimized marketing platform**.
 
 **Key Deliverables:**
 1. ✅ **Navigation optimeret** til 5 hovedpunkter med sekundær navigation

@@ -469,7 +469,7 @@ The implementation is minimal, backward-compatible, and provides automatic fallb
 ## Contact
 
 **Agent**: ALPHA-Web-Diagnostics-Agent  
-**Repository**: AlphaAcces/ALPHA-Interface-GUI  
+**Repository**: AlphaAcces/blackbox-ui  
 **Branch**: copilot/fix-contact-form-email-issue  
 **Priority**: ONE ✅ RESOLVED  
 

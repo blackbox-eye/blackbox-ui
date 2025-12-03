@@ -1,5 +1,5 @@
 # Sikkerhedsvalidering og Secrets-kontrol Rapport
-**Repository:** AlphaAcces/ALPHA-Interface-GUI
+**Repository:** AlphaAcces/blackbox-ui
 **Dato:** 2025-11-24
 **Agent:** ALPHA-CI-Security-Agent
 
@@ -7,7 +7,7 @@
 
 ## 📋 Executive Summary
 
-Denne rapport dokumenterer resultaterne af en komplet sikkerhedsvalidering af ALPHA Interface GUI repository, inklusiv CodeQL-scanning, secrets-validering og timeout-beskyttelse.
+Denne rapport dokumenterer resultaterne af en komplet sikkerhedsvalidering af Blackbox UI repository, inklusiv CodeQL-scanning, secrets-validering og timeout-beskyttelse.
 
 ### Overordnet Status: ✅ GODKENDT med mindre anbefalinger
 

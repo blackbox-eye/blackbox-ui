@@ -204,7 +204,7 @@ Selv efter style.css-link ville der være problemer, fordi:
 
 **Verifikation:**
 ```bash
-# Checked: c:\BLACKBOX E.Y.E\Blackbox.codes\ALPHA Interface GUI\.htaccess
+# Checked: c:\BLACKBOX E.Y.E\Blackbox.codes\Blackbox UI\.htaccess
 ```
 
 **Fund:**

@@ -7,7 +7,7 @@
 
 **Date**: 2025-11-19
 **Agent**: ALPHA-CI-Security-Agent
-**Repository**: AlphaAcces/ALPHA-Interface-GUI
+**Repository**: AlphaAcces/blackbox-ui
 **Branch**: ci/security-hardening-v2 (merged to copilot/harden-cicd-pipeline)
 **Status**: ✅ **PRODUCTION READY**
 
@@ -392,7 +392,7 @@ If not supported:
 
 ### Key Contacts
 - **Project Lead**: AlphaAcces
-- **Repository**: https://github.com/AlphaAcces/ALPHA-Interface-GUI
+- **Repository**: https://github.com/AlphaAcces/blackbox-ui
 - **Documentation**: /docs/ directory in repository
 
 ### Support Resources
@@ -471,7 +471,7 @@ Monitor first 3 deployments closely, but expect smooth operation based on compre
 
 ## 🙏 Acknowledgments
 
-**ALPHA-CI-Security-Agent** successfully completed comprehensive CI/CD security hardening mission for **AlphaAcces/ALPHA-Interface-GUI** repository.
+**ALPHA-CI-Security-Agent** successfully completed comprehensive CI/CD security hardening mission for **AlphaAcces/blackbox-ui** repository.
 
 **Special Features Delivered:**
 - Enterprise-grade security implementation
@@ -488,7 +488,7 @@ Monitor first 3 deployments closely, but expect smooth operation based on compre
 **Mission Complete**: 2025-11-19 ~11:15:00 UTC (estimated)
 **Total Duration**: ~3 hours
 **Agent**: ALPHA-CI-Security-Agent
-**Repository**: AlphaAcces/ALPHA-Interface-GUI
+**Repository**: AlphaAcces/blackbox-ui
 **Branch**: ci/security-hardening-v2 → copilot/harden-cicd-pipeline
 
 **Commits:**

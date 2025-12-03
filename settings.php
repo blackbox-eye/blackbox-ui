@@ -5,7 +5,7 @@
  *
  * Modern panel-based layout for managing personal settings including
  * password, PIN, token, contact info, and account status.
- * Uses admin-layout.php with Command Deck navigation.
+ * Uses admin-layout.php with Control Panel navigation.
  */
 
 session_start();

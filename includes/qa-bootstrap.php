@@ -63,7 +63,7 @@ $qaState = [
   window.BBX_ROUTER_CONFIG = <?= json_encode($routerConfig, JSON_UNESCAPED_SLASHES) ?>;
   window.BBX_QA_STATE = <?= json_encode($qaState, JSON_UNESCAPED_SLASHES) ?>;
   if (window.BBX_QA_MODE) {
-    console.info('[ALPHA-SSO] QA MODE ACTIVE');
+    console.info('[Blackbox-SSO] QA MODE ACTIVE');
   }
 </script>
 <?php

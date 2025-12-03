@@ -20,7 +20,7 @@
   --graphene-border: rgba(26, 115, 232, 0.2);
   --graphene-glow: 0 0 30px rgba(26, 115, 232, 0.15);
 
-  /* Primary brand colors (Blackbox EYE + GreyEYE unified) */
+  /* Primary brand colors (Blackbox EYE + Blackbox EYE unified) */
   --bbx-gold: #d4af37;
   --bbx-gold-light: #ffe8a3;
   --bbx-gold-hover: #e5c04a;
@@ -4567,7 +4567,7 @@ button:focus-visible {
 }
 
 /* ========================================================
-   GRAPHENE HERO 3D — BlackboxEYE × GreyEYE Fusion
+   GRAPHENE HERO 3D — BlackboxEYE × Blackbox EYE Fusion
    Premium animated hero with 3D hexagon network
    ======================================================== */
 

@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Intel Vault Delete API
  *
  * Handles secure document deletion (soft delete).
- * Part of ALPHA Interface GUI.
+ * Part of Blackbox UI.
  */
 
 header('Content-Type: application/json; charset=utf-8');

@@ -26,12 +26,12 @@ $login_action = $login_action ?? 'agent-login.php';
 
   <!-- Logo Section -->
   <div class="login-card__logo-section">
-    <img src="/assets/greyeeye_logo_transparent.png"
-      alt="GreyEYE Data Intelligence"
+    <img src="/assets/blackbox_eye_logo.png"
+      alt="Blackbox EYE Intelligence Portal"
       class="login-card__logo"
       loading="lazy">
     <h1 class="login-card__title">Sikker adgang</h1>
-    <p class="login-card__subtitle">GreyEYE Data Intelligence (GDI) operatør-portal</p>
+    <p class="login-card__subtitle">Blackbox EYE Intelligence Portal</p>
   </div>
 
   <!-- Error Message -->

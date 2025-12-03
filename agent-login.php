@@ -3,7 +3,7 @@
 /**
  * Agent Login Page
  *
- * Secure login portal for GreyEYE Data Intelligence operators.
+ * Secure login portal for Blackbox EYE Data Intelligence operators.
  * Uses the new admin layout system with componentized login card.
  */
 
@@ -164,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title><?= htmlspecialchars($page_title) ?> - GreyEYE</title>
+    <title><?= htmlspecialchars($page_title) ?> - Blackbox EYE</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
@@ -195,10 +195,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </a>
 
     <!--
-        SECURITY: Command Deck er FJERNET fra login-siden.
+        SECURITY: Control Panel er FJERNET fra login-siden.
         Navigation til dashboard, brugerstyring og indstillinger
         er kun tilgængelig efter succesfuld autentificering.
-        Se includes/admin-layout.php for Command Deck implementering.
+        Se includes/admin-layout.php for Control Panel implementering.
     -->
 
     <!-- Main Content -->

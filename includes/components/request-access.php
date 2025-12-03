@@ -29,9 +29,9 @@ $recaptchaSiteKey = defined('BBX_RECAPTCHA_SITE_KEY') ? BBX_RECAPTCHA_SITE_KEY :
       aria-controls="requestAccessDialog">
       Anmod om adgang
     </button>
-    <a href="mailto:ops@blackbox.codes?subject=GreyEYE%20Access%20Request"
+    <a href="mailto:ops@blackbox.codes?subject=Blackbox EYE%20Access%20Request"
       class="request-access__link">
-      Eller kontakt GreyEYE sikkerhedsdesk direkte
+      Eller kontakt Blackbox EYE sikkerhedsdesk direkte
     </a>
   </div>
   <p class="request-access__note">
@@ -132,7 +132,7 @@ $recaptchaSiteKey = defined('BBX_RECAPTCHA_SITE_KEY') ? BBX_RECAPTCHA_SITE_KEY :
         </span>
         <textarea name="reason"
           id="requestReason"
-          placeholder="Beskriv hvorfor du har brug for adgang til GreyEYE™ portalen og dit operationelle scope"
+          placeholder="Beskriv hvorfor du har brug for adgang til Blackbox EYE™ portalen og dit operationelle scope"
           required
           rows="4"
           class="request-modal__textarea"></textarea>

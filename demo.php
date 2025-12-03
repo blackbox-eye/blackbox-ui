@@ -209,7 +209,7 @@ $demo_slots = [
                                 <?= t('demo.expect.step1.title', 'Introduktion til platformen') ?>
                             </h3>
                             <p class="text-gray-300">
-                                <?= t('demo.expect.step1.description', 'Vi viser dig hvordan GreyEYE AI-assistenten, PVE-modulet og ID-Matrix arbejder sammen for at beskytte din organisation 24/7.') ?>
+                                <?= t('demo.expect.step1.description', 'Vi viser dig hvordan Blackbox EYE AI-assistenten, PVE-modulet og ID-Matrix arbejder sammen for at beskytte din organisation 24/7.') ?>
                             </p>
                         </div>
                     </div>

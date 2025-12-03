@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Intel Vault Upload API
  *
  * Handles secure file uploads with AES-256-GCM encryption.
- * Part of ALPHA Interface GUI.
+ * Part of Blackbox UI.
  */
 
 // CORS headers for API

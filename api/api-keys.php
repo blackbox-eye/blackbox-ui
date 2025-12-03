@@ -6,7 +6,7 @@ declare(strict_types=1);
  * API Keys Management Endpoint
  *
  * Handles CRUD operations for API keys.
- * Part of ALPHA Interface GUI.
+ * Part of Blackbox UI.
  */
 
 header('Content-Type: application/json; charset=utf-8');

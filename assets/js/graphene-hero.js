@@ -65,7 +65,7 @@ if (!canvas) {
     camera.position.set(0, 34, 78);
     scene.add(camera);
 
-    // Lighting design mimics GreyEYE reference render.
+    // Lighting design mimics Blackbox EYE reference render.
     const warmFloorLight = new THREE.PointLight(0xffa347, 4, 220, 2);
     warmFloorLight.position.set(0, -24, 16);
     scene.add(warmFloorLight);

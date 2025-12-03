@@ -47,7 +47,7 @@ $products_modules = [
             t('products.greyeye.features.response'),
             t('products.greyeye.features.intelligence')
         ],
-        'data_module' => 'GreyEYE',
+        'data_module' => 'Blackbox EYE',
     ],
     [
         'slug'        => 'idmatrix',

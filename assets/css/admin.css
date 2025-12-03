@@ -1,10 +1,10 @@
 /* ========================================================
-   admin.css — Styles for Admin Portal (GreyEYE Command Deck)
+   admin.css — Styles for Admin Portal (Blackbox EYE Control Panel)
 
    This stylesheet provides:
    - Admin layout structure
    - Login card component
-   - Command Deck slide-in menu
+   - Control Panel slide-in menu
    - Request access modal
    - Admin panel styles
    - Responsive design (mobile-first)
@@ -15,9 +15,9 @@
    ————————————————————————————————————————————————————— */
 :root {
   /* Brand Colors */
-  --admin-gold: #d4af37;
+  --admin-gold: #ffe8a3;
   --admin-gold-light: #ffe8a3;
-  --admin-gold-dark: #b8960f;
+  --admin-gold-dark: #d4af37;
   --admin-gold-transparent: rgba(212, 175, 55, 0.2);
 
   /* Background Colors */
@@ -144,7 +144,7 @@
   background: linear-gradient(90deg, rgba(197, 155, 42, 0.15) 0%, transparent 100%);
 }
 
-/* Light theme Command Deck launcher */
+/* Light theme Control Panel launcher */
 [data-theme="light"] .command-deck-launcher {
   background: rgba(255, 255, 255, 0.95);
   border-color: var(--admin-border-subtle);
@@ -233,12 +233,12 @@
   background: rgba(0, 0, 0, 0.25);
 }
 
-/* Light theme Command Deck heading (MENU text) - softer in light mode */
+/* Light theme Control Panel heading (MENU text) - softer in light mode */
 [data-theme="light"] .command-deck__heading {
   color: rgba(0, 0, 0, 0.45);
 }
 
-/* Light theme Command Deck items - improved contrast */
+/* Light theme Control Panel items - improved contrast */
 [data-theme="light"] .command-deck__item {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 248, 250, 0.9));
   border-color: rgba(0, 0, 0, 0.12);
@@ -279,7 +279,7 @@
   color: #4a3a08;
 }
 
-/* Light theme Command Deck actions */
+/* Light theme Control Panel actions */
 [data-theme="light"] .command-deck__action {
   background: rgba(0, 0, 0, 0.03);
   border-color: rgba(0, 0, 0, 0.1);
@@ -292,13 +292,13 @@
   color: #5a4a10;
 }
 
-/* Light theme Command Deck agent info */
+/* Light theme Control Panel agent info */
 [data-theme="light"] .command-deck__agent-badge {
   background: rgba(139, 105, 20, 0.12);
   color: #6b5712;
 }
 
-/* Light theme Command Deck divider */
+/* Light theme Control Panel divider */
 [data-theme="light"] .command-deck__divider {
   background: rgba(0, 0, 0, 0.1);
 }
@@ -942,7 +942,7 @@ body {
 }
 
 /* —————————————————————————————————————————————————————
-   COMMAND DECK LAUNCHER
+   CONTROL PANEL LAUNCHER
    ————————————————————————————————————————————————————— */
 .command-deck-launcher {
   position: fixed;
@@ -1009,7 +1009,7 @@ body {
 }
 
 /* —————————————————————————————————————————————————————
-   COMMAND DECK OVERLAY
+   CONTROL PANEL OVERLAY
    ————————————————————————————————————————————————————— */
 .command-deck-overlay {
   position: fixed;
@@ -1030,7 +1030,7 @@ body {
 }
 
 /* —————————————————————————————————————————————————————
-   COMMAND DECK MENU
+   CONTROL PANEL MENU
    ————————————————————————————————————————————————————— */
 .command-deck {
   position: fixed;

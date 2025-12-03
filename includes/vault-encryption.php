@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Intel Vault Encryption Helper
  *
  * Provides AES-256-GCM encryption for secure document storage.
- * Part of ALPHA Interface GUI.
+ * Part of Blackbox UI.
  */
 
 // Load environment configuration

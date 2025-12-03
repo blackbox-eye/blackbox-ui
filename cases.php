@@ -9,7 +9,7 @@ $case_metrics = [
     [
         'value' => '68%',
         'label' => t('cases.metrics.response', 'Reduceret responstid'),
-        'caption' => t('cases.metrics.response_caption', 'Gennemsnitlig reduktion efter 6 måneder med GreyEYE™'),
+        'caption' => t('cases.metrics.response_caption', 'Gennemsnitlig reduktion efter 6 måneder med Blackbox EYE™'),
     ],
     [
         'value' => '42',
@@ -33,7 +33,7 @@ $case_navigator = [
             t('cases.navigator.municipality.metric_two', 'Automatiseret kommunikation til ledelsesrapportering'),
             t('cases.navigator.municipality.metric_three', 'Opgraderet awareness-program for 4.500 medarbejdere'),
         ],
-        'modules' => ['GreyEYE™ SOC Co-pilot', 'ID-Matrix™ Identity Shield'],
+        'modules' => ['Blackbox EYE™ SOC Co-pilot', 'ID-Matrix™ Identity Shield'],
     ],
     'realestate' => [
         'label' => t('cases.navigator.realestate.label', 'Internationalt ejendomsselskab'),
@@ -52,10 +52,10 @@ $case_navigator = [
         'impact' => t('cases.navigator.security.impact', '0 kritiske driftsstop i 18 måneder og 91% hurtigere efterretningsflow.'),
         'metrics' => [
             t('cases.navigator.security.metric_one', 'Fusionscenter med live-threat feeds til 38 lokationer'),
-            t('cases.navigator.security.metric_two', 'Integreret insider threat-detection med GreyEYE™'),
-            t('cases.navigator.security.metric_three', 'Predictive staffing med AlphaBot™ alerts'),
+            t('cases.navigator.security.metric_two', 'Integreret insider threat-detection med Blackbox EYE™'),
+            t('cases.navigator.security.metric_three', 'Predictive staffing med Blackbox EYE Assistant™ alerts'),
         ],
-        'modules' => ['AUT™ Autonomous Testing', 'AlphaBot™ Command'],
+        'modules' => ['AUT™ Autonomous Testing', 'Blackbox EYE Assistant™ Command'],
     ],
 ];
 ?>

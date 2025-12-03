@@ -6,7 +6,7 @@ declare(strict_types=1);
  * API Keys Helper
  *
  * Functions for generating, validating and managing API keys.
- * Part of ALPHA Interface GUI.
+ * Part of Blackbox UI.
  */
 
 require_once __DIR__ . '/env.php';

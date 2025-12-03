@@ -1336,8 +1336,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 let prompt;
                 if (moduleName === 'PVE') {
                     prompt = "Beskriv et realistisk cybersecurity-trusselsscenarie for en mellemstor dansk virksomhed, som Blackbox EYE's 'Penetration & Vulnerability Engine' ville opdage og forhindre. Forklar kort, hvordan en uopdaget sårbarhed i deres webshop-software kunne udnyttes af en hacker til at stjæle kundedata. Hold sproget letforståeligt for en ikke-teknisk direktør. Start med en fængende overskrift i markdown.";
-                } else if (moduleName === 'GreyEYE') {
-                    prompt = "Beskriv et realistisk insider-trusselsscenarie i en dansk kommune, som Blackbox EYE's 'GreyEYE' modul ville opdage. Scenariet skal involvere en medarbejder, der forsøger at eksfiltrere følsomme borgerdata over en længere periode ved at tilgå filservere uden for normal arbejdstid. Forklar hvordan GreyEYE's anomali-detektion ville reagere. Hold sproget letforståeligt. Start med en fængende overskrift i markdown.";
+                } else if (moduleName === 'Blackbox EYE') {
+                    prompt = "Beskriv et realistisk insider-trusselsscenarie i en dansk kommune, som Blackbox EYE's Intelligence Module ville opdage. Scenariet skal involvere en medarbejder, der forsøger at eksfiltrere følsomme borgerdata over en længere periode ved at tilgå filservere uden for normal arbejdstid. Forklar hvordan Blackbox EYE's anomali-detektion ville reagere. Hold sproget letforståeligt. Start med en fængende overskrift i markdown.";
                 } else {
                     prompt = 'Beskriv et generelt cybersecurity-trusselsscenarie til Blackbox EYE™.';
                 }
@@ -1411,7 +1411,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 caseResult.innerHTML = '';
             }
 
-            const prompt = `Du er ekspert AI-sikkerhedskonsulent for Blackbox EYE™. Kunden beskriver: "${caseInput.value.trim()}". Returnér i markdown: 1) Sammenlign med én af vores cases (kommune, ejendomsselskab, vagtselskab) og forklar hvorfor. 2) Anbefal 1-2 relevante moduler (PVE, GreyEYE, ID-Matrix, AUT) med begrundelser. 3) Foreslå næste skridt (f.eks. demo, workshop).`;
+            const prompt = `Du er ekspert AI-sikkerhedskonsulent for Blackbox EYE™. Kunden beskriver: "${caseInput.value.trim()}". Returnér i markdown: 1) Sammenlign med én af vores cases (kommune, ejendomsselskab, vagtselskab) og forklar hvorfor. 2) Anbefal 1-2 relevante moduler (PVE, Blackbox EYE, ID-Matrix, AUT) med begrundelser. 3) Foreslå næste skridt (f.eks. demo, workshop).`;
             await callGemini(prompt, caseResult, caseLoader, 'case-analysis');
         });
     }
@@ -1495,7 +1495,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    const markAlphaBotUnavailable = (tooltipMessage) => {
+    const markAssistantUnavailable = (tooltipMessage) => {
         if (!alphaContainer) {
             return;
         }
@@ -1513,7 +1513,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     if (alphaContainer && (!geminiReady || !hasAIConfig)) {
-        markAlphaBotUnavailable(i18n.t('alphabot.offline_tooltip', 'AlphaBot er offline. Kontakt support for at aktivere integrationen.'));
+        markAssistantUnavailable(i18n.t('alphabot.offline_tooltip', 'Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen.'));
     }
 
     if (alphaContainer && alphaToggleBtn && alphaPanel && hasAIConfig && geminiReady) {
@@ -1638,7 +1638,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            const callAlphaBot = async () => {
+            const callAssistant = async () => {
                 const apiUrl = `${AI_CONFIG.API_BASE_URL}/${AI_CONFIG.GEMINI_MODEL}:generateContent?key=${AI_CONFIG.GEMINI_API_KEY}`;
                 const controller = new AbortController();
                 const timeoutId = window.setTimeout(() => controller.abort(), AI_CONFIG.REQUEST_TIMEOUT || 15000);
@@ -1652,7 +1652,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     window.clearTimeout(timeoutId);
                     if (!response.ok) {
                         const errorText = await response.text();
-                        throw new Error(`AlphaBot API error: ${response.status} - ${errorText}`);
+                        throw new Error(`Blackbox EYE Assistant API error: ${response.status} - ${errorText}`);
                     }
                     const result = await response.json();
                     const reply = result?.candidates?.[0]?.content?.parts?.[0]?.text || i18n.t('common.alphabot_error', 'Undskyld, jeg kunne ikke generere et svar.');
@@ -1661,10 +1661,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 } catch (error) {
                     const fallback = error.name === 'AbortError'
                         ? i18n.t('common.ai_timeout', 'Foresp\u00f8rgslen tog for lang tid \u2013 pr\u00f8v igen.')
-                        : i18n.t('common.alphabot_connection_error', 'Der opstod en fejl under forbindelsen til AlphaBot. Pr\u00f8v igen senere.');
+                        : i18n.t('common.alphabot_connection_error', 'Der opstod en fejl under forbindelsen til Blackbox EYE Assistant. Pr\u00f8v igen senere.');
                     appendMessage('bot', fallback);
                     if (error && error.name !== 'AbortError') {
-                        markAlphaBotUnavailable(i18n.t('alphabot.offline_tooltip', 'AlphaBot er offline. Kontakt support for at aktivere integrationen.'));
+                        markAssistantUnavailable(i18n.t('alphabot.offline_tooltip', 'Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen.'));
                     }
                 } finally {
                     setProcessing(false);
@@ -1679,10 +1679,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 conversation.push({ role: 'user', parts: [{ text: value }] });
                 inputEl.value = '';
                 setProcessing(true);
-                void callAlphaBot();
+                void callAssistant();
             };
 
-            const openAlphaBot = () => {
+            const openAssistant = () => {
                 alphaLastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
                 alphaContainer.classList.add('open');
                 alphaToggleBtn.setAttribute('aria-expanded', 'true');
@@ -1697,7 +1697,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 inputEl.focus();
             };
 
-            const closeAlphaBot = (focusToggle = true) => {
+            const closeAssistant = (focusToggle = true) => {
                 alphaContainer.classList.remove('open');
                 alphaToggleBtn.setAttribute('aria-expanded', 'false');
                 alphaOverlay?.classList.remove('visible');
@@ -1719,28 +1719,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
             alphaToggleBtn.addEventListener('click', () => {
                 if (alphaContainer.classList.contains('open')) {
-                    closeAlphaBot(false);
+                    closeAssistant(false);
                 } else {
-                    openAlphaBot();
+                    openAssistant();
                 }
             });
 
             alphaCloseBtn?.addEventListener('click', () => {
-                closeAlphaBot();
+                closeAssistant();
             });
 
-            alphaOverlay?.addEventListener('click', () => closeAlphaBot());
+            alphaOverlay?.addEventListener('click', () => closeAssistant());
 
             document.addEventListener('click', (event) => {
                 if (!alphaContainer.contains(event.target) && alphaContainer.classList.contains('open')) {
-                    closeAlphaBot(false);
+                    closeAssistant(false);
                 }
             });
 
             document.addEventListener('keydown', (event) => {
                 if (event.key === 'Escape' && alphaContainer.classList.contains('open')) {
                     event.preventDefault();
-                    closeAlphaBot();
+                    closeAssistant();
                 }
             });
 

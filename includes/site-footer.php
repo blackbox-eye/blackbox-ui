@@ -113,7 +113,7 @@
                         <span class="text-gray-600"><?= t('footer.recaptcha_notice', 'This site is protected by reCAPTCHA') ?></span>
                         <?php if (defined('BBX_QA_MODE') && BBX_QA_MODE): ?>
                             <span class="qa-version-chip inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-400/60 text-amber-200 text-[0.65rem] uppercase tracking-[0.08em]">
-                                ALPHA-GUI v1.0.0-QA
+                                Blackbox UI v1.0.0-QA
                             </span>
                         <?php endif; ?>
                     </div>
@@ -182,7 +182,7 @@
                     class="alphabot-toggle"
                     aria-expanded="false"
                     aria-controls="alphabot-panel"
-                    aria-label="Åbn AlphaBot sikkerhedsassistent">
+                    aria-label="Åbn Blackbox EYE Assistant sikkerhedsassistent">
                     <span class="alphabot-status-dot" aria-hidden="true"></span>
                     <span class="alphabot-label"><?= t('alphabot.title') ?></span>
                 </button>

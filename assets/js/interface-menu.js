@@ -1,7 +1,7 @@
 /**
- * interface-menu.js — Command Deck Menu Controller
+ * interface-menu.js — Control Panel Menu Controller
  *
- * Handles the collapsible right-side Command Deck menu for admin pages.
+ * Handles the collapsible right-side Control Panel menu for admin pages.
  * Features:
  * - Slide-in/slide-out animation
  * - Keyboard navigation (ESC to close, Tab trapping)
@@ -25,7 +25,7 @@
   }
 
   /**
-   * Opens the Command Deck menu
+   * Opens the Control Panel menu
    */
   function openMenu() {
     menu.classList.add('is-open');
@@ -48,7 +48,7 @@
   }
 
   /**
-   * Closes the Command Deck menu
+   * Closes the Control Panel menu
    */
   function closeMenu() {
     menu.classList.remove('is-open');
@@ -67,7 +67,7 @@
   }
 
   /**
-   * Toggles the Command Deck menu
+   * Toggles the Control Panel menu
    */
   function toggleMenu() {
     const isOpen = menu.classList.contains('is-open');
@@ -280,7 +280,7 @@
 
       setTimeout(() => {
         if (requestStatus) {
-          requestStatus.textContent = 'Tak. GreyEYE-teamet verificerer og udsender en sikker onboarding-mail (typisk < 24 timer).';
+          requestStatus.textContent = 'Tak. Blackbox EYE-teamet verificerer og udsender en sikker onboarding-mail (typisk < 24 timer).';
         }
         requestForm.reset();
       }, 900);
@@ -309,7 +309,7 @@
 (function() {
   'use strict';
 
-  const STORAGE_KEY = 'greyeye-theme';
+  const STORAGE_KEY = 'blackbox-eye-theme';
   const themeToggle = document.getElementById('themeToggle');
 
   // Exit if no toggle button

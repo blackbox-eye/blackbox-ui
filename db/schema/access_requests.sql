@@ -1,4 +1,4 @@
--- Access Requests Table for GreyEYE Portal
+-- Access Requests Table for Blackbox EYE Portal
 -- Sprint 7: Request Access Workflow with Database Storage
 -- Created: November 27, 2025
 

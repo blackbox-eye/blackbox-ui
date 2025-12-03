@@ -343,9 +343,9 @@
         return;
       }
       if (details) {
-        console.info('[ALPHA-SSO]', message, details);
+        console.info('[Blackbox-SSO]', message, details);
       } else {
-        console.info('[ALPHA-SSO]', message);
+        console.info('[Blackbox-SSO]', message);
       }
     }
 
@@ -395,7 +395,7 @@
   try {
     guard.hydrate(bootstrapState);
   } catch (error) {
-    console.error('[ALPHA-SSO] Failed to hydrate guard', error);
+    console.error('[Blackbox-SSO] Failed to hydrate guard', error);
   }
 
   if (config.qaMode) {

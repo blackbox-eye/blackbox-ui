@@ -1,6 +1,6 @@
 -- Intel Vault Database Schema
 -- Secure encrypted document storage
--- Part of ALPHA Interface GUI
+-- Part of Blackbox UI
 
 CREATE TABLE IF NOT EXISTS intel_vault_documents (
     id              INT AUTO_INCREMENT PRIMARY KEY,

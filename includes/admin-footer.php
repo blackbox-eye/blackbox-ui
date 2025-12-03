@@ -9,7 +9,7 @@
 </main>
 
 <footer class="admin-footer-meta" aria-label="Admin status footer">
-  <span class="admin-footer-meta__label">GreyEYE Command Deck</span>
+  <span class="admin-footer-meta__label">Blackbox EYE Control Panel</span>
   <?php if (defined('BBX_QA_MODE') && BBX_QA_MODE): ?>
     <span class="qa-version-chip">ALPHA-GUI v1.0.0-QA</span>
   <?php endif; ?>

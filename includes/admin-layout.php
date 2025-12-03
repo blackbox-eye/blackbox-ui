@@ -4,7 +4,7 @@
  * Admin Layout Template
  *
  * Fælles layout for alle admin-sider (dashboard, admin, settings osv.)
- * Inkluderer: Header, command deck menu, main content area, footer
+ * Inkluderer: Header, control panel menu, main content area, footer
  *
  * Variabler der kan sættes før include:
  * - $page_title: Sidetitel
@@ -89,7 +89,7 @@ function admin_is_active(string $slug, string $current): bool
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="<?= htmlspecialchars($meta_robots) ?>">
-  <title><?= htmlspecialchars($page_title) ?> - GreyEYE Admin</title>
+  <title><?= htmlspecialchars($page_title) ?> - Blackbox EYE Admin</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
@@ -113,11 +113,11 @@ function admin_is_active(string $slug, string $current): bool
   <a href="#main-content" class="skip-link">Spring til indhold</a>
 
   <?php if (!$hide_command_deck): ?>
-    <!-- Command Deck Launcher Button -->
+    <!-- Control Panel Launcher Button -->
     <button type="button"
       class="command-deck-launcher"
       id="commandDeckLauncher"
-      aria-label="Åbn kommandopanel"
+      aria-label="Åbn kontrolpanel"
       aria-expanded="false"
       aria-controls="commandDeckMenu">
       <span class="command-deck-launcher__icon" aria-hidden="true">
@@ -130,13 +130,13 @@ function admin_is_active(string $slug, string $current): bool
       <span class="command-deck-launcher__label">Menu</span>
     </button>
 
-    <!-- Command Deck Overlay -->
+    <!-- Control Panel Overlay -->
     <div class="command-deck-overlay" id="commandDeckOverlay" aria-hidden="true"></div>
 
-    <!-- Command Deck Slide-in Menu -->
+    <!-- Control Panel Slide-in Menu -->
     <nav class="command-deck"
       id="commandDeckMenu"
-      aria-label="GreyEYE Admin Navigation"
+      aria-label="Blackbox Control Panel Navigation"
       aria-hidden="true">
 
       <!-- Close Button -->
@@ -152,13 +152,13 @@ function admin_is_active(string $slug, string $current): bool
 
       <!-- Brand Section -->
       <div class="command-deck__brand">
-        <img src="/assets/greyeeye_logo_transparent.png"
-          alt="GreyEYE Logo"
+        <img src="/assets/blackbox_eye_logo.png"
+          alt="Blackbox EYE Logo"
           class="command-deck__logo"
           loading="lazy">
         <div class="command-deck__brand-text">
-          <span class="command-deck__brand-label">GreyEYE</span>
-          <strong class="command-deck__brand-title">Command Deck</strong>
+          <span class="command-deck__brand-label">Blackbox EYE</span>
+          <strong class="command-deck__brand-title">Control Panel</strong>
         </div>
       </div>
 

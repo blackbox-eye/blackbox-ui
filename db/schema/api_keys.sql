@@ -1,6 +1,6 @@
 -- API Keys Database Schema
--- Secure API key management for ALPHA Interface GUI
--- Part of ALPHA Interface GUI
+-- Secure API key management for Blackbox UI
+-- Part of Blackbox UI
 
 CREATE TABLE IF NOT EXISTS api_keys (
     id              INT AUTO_INCREMENT PRIMARY KEY,

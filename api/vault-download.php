@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Intel Vault Download API
  *
  * Handles secure file downloads with decryption.
- * Part of ALPHA Interface GUI.
+ * Part of Blackbox UI.
  */
 
 session_start();

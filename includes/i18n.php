@@ -2,7 +2,7 @@
 
 /**
  * ═══════════════════════════════════════════════════════════════════════════════
- * ALPHA Interface GUI - Internationalization (i18n) System
+ * Blackbox UI - Internationalization (i18n) System
  * ═══════════════════════════════════════════════════════════════════════════════
  *
  * Provides multilingual support for the Blackbox EYE platform.

@@ -166,7 +166,7 @@ if ($securityEmail === '') {
   $securityEmail = 'ops@blackbox.codes';
 }
 
-$subject = 'Ny adgangsanmodning til GreyEYE™ Portal';
+$subject = 'Ny adgangsanmodning til Blackbox EYE™ Portal';
 
 // Sanitize for email headers
 $safeName = str_replace(["\r", "\n"], '', $rawInput['name']);
@@ -185,7 +185,7 @@ $roleDisplay = $roleLabels[$rawInput['role']] ?? $safeRole;
 
 $emailBodyLines = [
   '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
-  '   NY ADGANGSANMODNING TIL GREYEYE™ PORTAL',
+  '   NY ADGANGSANMODNING TIL BLACKBOX EYE™ INTELLIGENCE PORTAL',
   '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
   '',
   '▸ KONTAKTOPLYSNINGER',
@@ -221,7 +221,7 @@ $mailSent = bbx_send_mail(
   $securityEmail,
   $subject,
   $emailBody,
-  'GreyEYE Security',
+  'Blackbox EYE Security',
   '', // Will use noreply@{domain} automatically
   $safeEmail,
   $safeName

@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Dashboard - GreyEYE Command Center
+ * Dashboard - Blackbox EYE Command Center
  *
  * Modern dashboard interface with responsive card-based layout.
- * Uses admin-layout.php for consistent navigation via Command Deck.
+ * Uses admin-layout.php for consistent navigation via Control Panel.
  * Displays alerts, system status, network monitoring, and AI interface.
  */
 

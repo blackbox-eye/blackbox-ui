@@ -68,7 +68,7 @@
   "agent_access": {
     "meta": {
       "title": "Choose Secure Access | BLACKBOX EYE™",
-      "description": "Launch GreyEYE or TS24 consoles from a single, audited access hub.",
+      "description": "Launch Blackbox EYE or TS24 consoles from a single, audited access hub.",
       "breadcrumb": "Agent Access"
     },
     "hero": {
@@ -79,8 +79,8 @@
     },
     "cards": {
       "gdi": {
-        "title": "GreyEYE Data Intelligence (GDI)",
-        "description": "Use for internal investigations, alert triage and direct control of GreyEYE sensors across enclaves.",
+        "title": "Blackbox EYE Data Intelligence (GDI)",
+        "description": "Use for internal investigations, alert triage and direct control of Blackbox EYE sensors across enclaves.",
         "cta": "Open GDI console",
         "meta": "Requires Blackbox VPN + biometric badge"
       },
@@ -90,7 +90,7 @@
         "cta": "Open TS24 console",
         "cta_login": "Log in → TS24 console",
         "meta": "Opens secure tstransport.app session",
-        "sso_notice": "Signed-in agents receive a short-lived GreyEYE SSO token so TS24 can launch automatically. If the token expires you can continue with your TS24 credentials on the next screen.",
+        "sso_notice": "Signed-in agents receive a short-lived Blackbox EYE SSO token so TS24 can launch automatically. If the token expires you can continue with your TS24 credentials on the next screen.",
         "sso_ready": "SSO ready"
       }
     }
@@ -151,7 +151,7 @@
       "subheadline": "Powered by Graphene architecture – unified threat intelligence, AI-driven response, and real-time operational awareness across your entire digital surface.",
       "tagline_title": "Mission-critical coverage",
       "tagline_highlight": "AI-driven response",
-      "tagline_copy": "GreyEYE™, PVE™, and AUT orchestrate human + machine action in under 50 ms.",
+      "tagline_copy": "Blackbox EYE™, PVE™, and AUT orchestrate human + machine action in under 50 ms.",
       "primary_cta": "Request Demo",
       "primary_cta_aria": "Request a demo of Blackbox EYE security platform",
       "secondary_cta": "Run free scan",
@@ -184,7 +184,7 @@
       "usps": {
         "ai_response": {
           "title": "AI-driven response",
-          "body": "Coordinated mitigation playbooks with GreyEYE™ and AlphaBot™."
+          "body": "Coordinated mitigation playbooks with Blackbox EYE™ and Blackbox EYE Assistant™."
         },
         "intel": {
           "title": "Unified intelligence",
@@ -202,7 +202,7 @@
       "description": "One platform, five focus areas. Navigate directly to the intelligence you need.",
     "metrics": {
       "response": "Reduced response time",
-      "response_caption": "Average reduction after 6 months with GreyEYE™",
+      "response_caption": "Average reduction after 6 months with Blackbox EYE™",
       "threats": "Automated attacks stopped",
       "threats_caption": "Per quarter with PVE™ and AUT in production",
       "incidents": "Critical incidents",
@@ -236,8 +236,8 @@
         "industry": "Critical infrastructure",
         "impact": "Zero critical outages in 18 months and 91% faster intelligence flow.",
         "metric_one": "Fusion center with live threat feeds to 38 locations",
-        "metric_two": "Integrated insider threat detection with GreyEYE™",
-        "metric_three": "Predictive staffing powered by AlphaBot™ alerts"
+        "metric_two": "Integrated insider threat detection with Blackbox EYE™",
+        "metric_three": "Predictive staffing powered by Blackbox EYE Assistant™ alerts"
       }
     },
       "cards": {
@@ -248,7 +248,7 @@
         },
         "products": {
           "title": "Products",
-          "body": "See how our AI modules operate as one defense layer—from PVE to GreyEYE.",
+          "body": "See how our AI modules operate as one defense layer—from PVE to Blackbox EYE.",
           "cta": "View Products"
         },
         "cases": {
@@ -279,7 +279,7 @@
         },
         "monitoring": {
           "title": "Live monitoring",
-          "body": "of insider and network threats with GreyEYE."
+          "body": "of insider and network threats with Blackbox EYE."
         },
         "expertise": {
           "title": "Expertise on-demand",
@@ -401,7 +401,7 @@
     "scenario_button": "✨ Generate a Threat Scenario",
     "key_features_heading": "Key Capabilities",
     "greyeye": {
-      "title": "GreyEYE™",
+      "title": "Blackbox EYE™",
       "subtitle": "AI Security Assistant",
       "description": "24/7 AI-driven monitoring and incident response with natural language interface",
       "features": {
@@ -502,7 +502,7 @@
       "municipality": {
         "title": "Municipality with critical infrastructure",
         "challenge": "Unauthorized access to technical installations.",
-        "solution": "ID-Matrix and GreyEYE implemented to log every access attempt and deliver weekly reports.",
+        "solution": "ID-Matrix and Blackbox EYE implemented to log every access attempt and deliver weekly reports.",
         "result": "80% reduction in access breaches."
       },
       "realestate": {
@@ -514,13 +514,13 @@
       "security": {
         "title": "Security firm",
         "challenge": "Manual logbooks and slow response time.",
-        "solution": "GreyEYE now assists guards with automated documentation and live updates.",
+        "solution": "Blackbox EYE now assists guards with automated documentation and live updates.",
         "result": "New differentiation lever in the market."
       }
     },
     "metrics": {
       "response": "Reduced response time",
-      "response_caption": "Average reduction after six months with GreyEYE™",
+      "response_caption": "Average reduction after six months with Blackbox EYE™",
       "threats": "Automated attacks stopped",
       "threats_caption": "Per quarter with PVE™ and AUT in production",
       "incidents": "Critical incidents",
@@ -554,8 +554,8 @@
         "industry": "Critical infrastructure",
         "impact": "Zero critical outages in 18 months and 91% faster intelligence flow.",
         "metric_one": "Fusion center with live threat feeds to 38 locations",
-        "metric_two": "Integrated insider threat detection with GreyEYE™",
-        "metric_three": "Predictive staffing powered by AlphaBot™ alerts"
+        "metric_two": "Integrated insider threat detection with Blackbox EYE™",
+        "metric_three": "Predictive staffing powered by Blackbox EYE Assistant™ alerts"
       }
     },
     "analysis": {
@@ -660,7 +660,7 @@
         "period": "per month + VAT",
         "description": "Essential protection for small teams and startups.",
         "features": {
-          "greyeye": "GreyEYE AI assistant (limited features)",
+          "greyeye": "Blackbox EYE AI assistant (limited features)",
           "idmatrix": "Basic ID-Matrix access",
           "support": "Email support (weekdays)",
           "users": "Up to 10 users"
@@ -675,7 +675,7 @@
         "description": "Extended MVP solution for growing businesses.",
         "features": {
           "includes": "Everything in MVP-Basis +",
-          "greyeye": "GreyEYE AI assistant (full features)",
+          "greyeye": "Blackbox EYE AI assistant (full features)",
           "idmatrix": "Standard ID-Matrix access control",
           "users": "Up to 25 users",
           "support": "Chat support (weekdays 9-5)"
@@ -707,7 +707,7 @@
         "period": "per month + VAT",
         "description": "Effective security protection and digital solutions for daily use.",
         "features": {
-          "greyeye": "GreyEYE AI assistant (full access)",
+          "greyeye": "Blackbox EYE AI assistant (full access)",
           "idmatrix": "ID-Matrix access control",
           "reporting": "Basic reporting and analytics",
           "users": "Up to 100 users",
@@ -851,7 +851,7 @@
     }
   },
   "alphabot": {
-    "title": "Talk to AlphaBot",
+    "title": "Talk to Blackbox EYE Assistant",
     "subtitle": "Your AI Security Assistant",
     "placeholder": "Ask me a question about cybersecurity...",
     "send": "Send",
@@ -859,8 +859,8 @@
     "error": "Sorry, I couldn't process your request. Please try again.",
     "panel_tagline": "AI security advisor 24/7",
     "hint": "Press Enter to send. Shift + Enter adds a new line.",
-    "aria_toggle": "Open AlphaBot security assistant",
-    "offline_tooltip": "AlphaBot is offline. Contact support to activate the integration."
+    "aria_toggle": "Open Blackbox EYE Assistant security assistant",
+    "offline_tooltip": "Blackbox EYE Assistant is offline. Contact support to activate the integration."
   },
   "common": {
     "loading": "Loading...",
@@ -885,7 +885,7 @@
     "form_error_default": "An error occurred. Please try again later.",
     "form_error_network": "Could not send the request. Check your connection and try again.",
     "alphabot_error": "Sorry, I couldn't generate a response.",
-    "alphabot_connection_error": "An error occurred while connecting to AlphaBot. Please try again later."
+    "alphabot_connection_error": "An error occurred while connecting to Blackbox EYE Assistant. Please try again later."
   },
   "blog": {
     "title": "Blog",
@@ -984,7 +984,7 @@
       "title": "What can you expect?",
       "step1": {
         "title": "Introduction to the platform",
-        "description": "We'll show you how the GreyEYE AI assistant, PVE module, and ID-Matrix work together to protect your organization 24/7."
+        "description": "We'll show you how the Blackbox EYE AI assistant, PVE module, and ID-Matrix work together to protect your organization 24/7."
       },
       "step2": {
         "title": "Live demonstration",

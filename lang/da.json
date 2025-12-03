@@ -68,7 +68,7 @@
   "agent_access": {
     "meta": {
       "title": "Vælg sikker adgang | BLACKBOX EYE™",
-      "description": "Start GreyEYE eller TS24 konsollen fra et samlet, auditeret adgangspunkt.",
+      "description": "Start Blackbox EYE eller TS24 konsollen fra et samlet, auditeret adgangspunkt.",
       "breadcrumb": "Agent Access"
     },
     "hero": {
@@ -79,8 +79,8 @@
     },
     "cards": {
       "gdi": {
-        "title": "GreyEYE Data Intelligence (GDI)",
-        "description": "Brug til interne efterforskninger, alert-triage og direkte styring af GreyEYE-sensorer på tværs af enklaver.",
+        "title": "Blackbox EYE Data Intelligence (GDI)",
+        "description": "Brug til interne efterforskninger, alert-triage og direkte styring af Blackbox EYE-sensorer på tværs af enklaver.",
         "cta": "Åbn GDI konsol",
         "meta": "Kræver Blackbox VPN + biometrisk badge"
       },
@@ -151,7 +151,7 @@
       "subheadline": "Drevet af Graphene-arkitektur – samlet trusselsefterretning, AI-drevet respons og operationel opmærksomhed i realtid på tværs af hele din digitale overflade.",
       "tagline_title": "Mission-kritisk dækning",
       "tagline_highlight": "AI-drevet respons",
-      "tagline_copy": "GreyEYE™, PVE™ og AUT synkroniserer mennesker + maskiner på under 50 ms.",
+      "tagline_copy": "Blackbox EYE™, PVE™ og AUT synkroniserer mennesker + maskiner på under 50 ms.",
       "primary_cta": "Anmod om demo",
       "primary_cta_aria": "Anmod om en demo af Blackbox EYE sikkerhedsplatform",
       "secondary_cta": "Start gratis sikkerhedstjek",
@@ -184,7 +184,7 @@
       "usps": {
         "ai_response": {
           "title": "AI-drevet respons",
-          "body": "GreyEYE™ + AlphaBot™ orkestrerer afværgning uden ventetid."
+          "body": "Blackbox EYE™ + Blackbox EYE Assistant™ orkestrerer afværgning uden ventetid."
         },
         "intel": {
           "title": "Samlet efterretning",
@@ -208,7 +208,7 @@
         },
         "products": {
           "title": "Produkter",
-          "body": "Se hvordan vores AI-moduler opererer som et samlet forsvar – fra PVE til GreyEYE.",
+          "body": "Se hvordan vores AI-moduler opererer som et samlet forsvar – fra PVE til Blackbox EYE.",
           "cta": "Gå til produkter"
         },
         "cases": {
@@ -239,7 +239,7 @@
         },
         "monitoring": {
           "title": "Live overvågning",
-          "body": "af insider- og netværkstrusler med GreyEYE."
+          "body": "af insider- og netværkstrusler med Blackbox EYE."
         },
         "expertise": {
           "title": "Ekspertise on-demand",
@@ -361,7 +361,7 @@
     "scenario_button": "✨ Generer trussels-scenarie",
     "key_features_heading": "Nøglefunktioner",
     "greyeye": {
-      "title": "GreyEYE™",
+      "title": "Blackbox EYE™",
       "subtitle": "AI Security Assistant",
       "description": "24/7 AI-drevet overvågning og incident response med natural language interface",
       "features": {
@@ -462,7 +462,7 @@
       "municipality": {
         "title": "Kommune med kritisk infrastruktur",
         "challenge": "Uautoriseret adgang til tekniske installationer.",
-        "solution": "ID-Matrix og GreyEYE implementeret til at logge al adgang og levere ugentlige rapporter.",
+        "solution": "ID-Matrix og Blackbox EYE implementeret til at logge al adgang og levere ugentlige rapporter.",
         "result": "80% reduktion i adgangsbrud."
       },
       "realestate": {
@@ -474,13 +474,13 @@
       "security": {
         "title": "Vagtselskab",
         "challenge": "Manuelle logbøger og langsom reaktionstid.",
-        "solution": "GreyEYE assisterer nu vagter med automatisk dokumentation og live-opdateringer.",
+        "solution": "Blackbox EYE assisterer nu vagter med automatisk dokumentation og live-opdateringer.",
         "result": "Ny differentieringsfaktor på markedet."
       }
     },
     "metrics": {
       "response": "Reduceret responstid",
-      "response_caption": "Gennemsnitlig reduktion efter 6 måneder med GreyEYE™",
+      "response_caption": "Gennemsnitlig reduktion efter 6 måneder med Blackbox EYE™",
       "threats": "Automatisk standsede forsøg",
       "threats_caption": "Pr. kvartal med PVE™ og AUT i produktion",
       "incidents": "Kritiske hændelser",
@@ -514,8 +514,8 @@
         "industry": "Critical infrastructure",
         "impact": "0 kritiske driftsstop i 18 måneder og 91% hurtigere efterretningsflow.",
         "metric_one": "Fusionscenter med live-threat feeds til 38 lokationer",
-        "metric_two": "Integreret insider threat-detection med GreyEYE™",
-        "metric_three": "Predictive staffing med AlphaBot™ alerts"
+        "metric_two": "Integreret insider threat-detection med Blackbox EYE™",
+        "metric_three": "Predictive staffing med Blackbox EYE Assistant™ alerts"
       }
     },
     "analysis": {
@@ -620,7 +620,7 @@
         "period": "pr. måned + moms",
         "description": "Grundlæggende beskyttelse til små teams og startups.",
         "features": {
-          "greyeye": "GreyEYE AI-assistent (begrænsede features)",
+          "greyeye": "Blackbox EYE AI-assistent (begrænsede features)",
           "idmatrix": "Basis ID-Matrix adgang",
           "support": "Email support (hverdage)",
           "users": "Op til 10 brugere"
@@ -635,7 +635,7 @@
         "description": "Udvidet MVP-løsning til voksende virksomheder.",
         "features": {
           "includes": "Alt i MVP-Basis +",
-          "greyeye": "GreyEYE AI-assistent (fulde features)",
+          "greyeye": "Blackbox EYE AI-assistent (fulde features)",
           "idmatrix": "Standard ID-Matrix adgangskontrol",
           "users": "Op til 25 brugere",
           "support": "Chat support (hverdage 9-17)"
@@ -667,7 +667,7 @@
         "period": "pr. måned + moms",
         "description": "Effektiv sikkerhedsbeskyttelse og digitale løsninger til daglig brug.",
         "features": {
-          "greyeye": "GreyEYE AI-assistent (fuld adgang)",
+          "greyeye": "Blackbox EYE AI-assistent (fuld adgang)",
           "idmatrix": "ID-Matrix adgangskontrol",
           "reporting": "Basis rapportering og analytics",
           "users": "Op til 100 brugere",
@@ -811,7 +811,7 @@
     }
   },
   "alphabot": {
-    "title": "Tal med AlphaBot",
+    "title": "Tal med Blackbox EYE Assistant",
     "subtitle": "Din AI sikkerhedsassistent",
     "placeholder": "Stil mig et spørgsmål om cybersikkerhed...",
     "send": "Send",
@@ -819,8 +819,8 @@
     "error": "Beklager, jeg kunne ikke behandle din forespørgsel. Prøv igen.",
     "panel_tagline": "AI-sikkerhedsrådgiver 24/7",
     "hint": "Enter sender beskeden. Shift + Enter giver linjeskift.",
-    "aria_toggle": "Åbn AlphaBot sikkerhedsassistent",
-    "offline_tooltip": "AlphaBot er offline. Kontakt support for at aktivere integrationen."
+    "aria_toggle": "Åbn Blackbox EYE Assistant sikkerhedsassistent",
+    "offline_tooltip": "Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen."
   },
   "common": {
     "loading": "Indlæser...",
@@ -845,7 +845,7 @@
     "form_error_default": "Der opstod en fejl. Prøv igen senere.",
     "form_error_network": "Kunne ikke sende forespørgslen. Kontrollér din forbindelse og prøv igen.",
     "alphabot_error": "Undskyld, jeg kunne ikke generere et svar.",
-    "alphabot_connection_error": "Der opstod en fejl under forbindelsen til AlphaBot. Prøv igen senere."
+    "alphabot_connection_error": "Der opstod en fejl under forbindelsen til Blackbox EYE Assistant. Prøv igen senere."
   },
   "blog": {
     "title": "Blog",
@@ -944,7 +944,7 @@
       "title": "Hvad kan du forvente?",
       "step1": {
         "title": "Introduktion til platformen",
-        "description": "Vi viser dig hvordan GreyEYE AI-assistenten, PVE-modulet og ID-Matrix arbejder sammen for at beskytte din organisation 24/7."
+        "description": "Vi viser dig hvordan Blackbox EYE AI-assistenten, PVE-modulet og ID-Matrix arbejder sammen for at beskytte din organisation 24/7."
       },
       "step2": {
         "title": "Live demonstration",

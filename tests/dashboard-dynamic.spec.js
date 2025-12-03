@@ -51,8 +51,8 @@ const MOCK_ALERTS = [
 
 const MOCK_SYSTEM_STATUS = {
   services: [
-    { name: 'GreyEYE Sensor Grid', status: 'operational', latency_ms: 12 },
-    { name: 'Command Deck', status: 'warning', latency_ms: 48 },
+    { name: 'Blackbox EYE Sensor Grid', status: 'operational', latency_ms: 12 },
+    { name: 'Control Panel', status: 'warning', latency_ms: 48 },
     { name: 'Log Broker', status: 'operational', latency_ms: 20 }
   ]
 };
@@ -241,11 +241,11 @@ test.describe('Theme Toggle', () => {
   test.beforeEach(async ({ page }) => {
     await gotoDashboard(page);
     // Clear localStorage theme preference
-    await page.evaluate(() => localStorage.removeItem('greyeye-theme'));
+    await page.evaluate(() => localStorage.removeItem('blackbox-eye-theme'));
   });
 
-  test('Theme toggle button should be visible in Command Deck', async ({ page }) => {
-    // First open the Command Deck
+  test('Theme toggle button should be visible in Control Panel', async ({ page }) => {
+    // First open the Control Panel
     const launcher = page.locator('#commandDeckLauncher');
     await expect(launcher).toBeVisible();
     await launcher.click();
@@ -268,7 +268,7 @@ test.describe('Theme Toggle', () => {
   });
 
   test('Clicking theme toggle should switch to light mode', async ({ page }) => {
-    // Open Command Deck
+    // Open Control Panel
     const launcher = page.locator('#commandDeckLauncher');
     await launcher.click();
     await page.waitForSelector('.command-deck.is-open');
@@ -286,7 +286,7 @@ test.describe('Theme Toggle', () => {
   });
 
   test('Theme preference should persist in localStorage', async ({ page }) => {
-    // Open Command Deck and click toggle
+    // Open Control Panel and click toggle
     await page.locator('#commandDeckLauncher').click();
     await page.waitForSelector('.command-deck.is-open');
     await page.locator('#themeToggle').click();
@@ -296,7 +296,7 @@ test.describe('Theme Toggle', () => {
 
     // Check localStorage
     const storedTheme = await page.evaluate(() =>
-      localStorage.getItem('greyeye-theme')
+      localStorage.getItem('blackbox-eye-theme')
     );
 
     expect(storedTheme).toBe('light');
@@ -304,7 +304,7 @@ test.describe('Theme Toggle', () => {
 
   test('Theme should load from localStorage on page refresh', async ({ page }) => {
     // Set theme preference in localStorage
-    await page.evaluate(() => localStorage.setItem('greyeye-theme', 'light'));
+    await page.evaluate(() => localStorage.setItem('blackbox-eye-theme', 'light'));
 
     // Reload page
     await page.reload();

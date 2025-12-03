@@ -23,7 +23,7 @@ test.describe('Agent Access Page - i18n', () => {
   test('should not display raw i18n keys in hero section', async ({ page }) => {
     // Check hero section for raw keys
     const heroContent = await page.locator('.access-hero').textContent();
-    
+
     // Should NOT contain raw i18n key patterns
     expect(heroContent).not.toContain('agent_access.');
     expect(heroContent).not.toContain('.hero.');
@@ -36,7 +36,7 @@ test.describe('Agent Access Page - i18n', () => {
   test('should display translated hero title', async ({ page }) => {
     const heroTitle = page.locator('.access-hero__title');
     await expect(heroTitle).toBeVisible();
-    
+
     const text = await heroTitle.textContent();
     // Should have actual translated text, not raw key
     expect(text.length).toBeGreaterThan(5);
@@ -48,7 +48,7 @@ test.describe('Agent Access Page - i18n', () => {
   test('should display translated hero lead text', async ({ page }) => {
     const heroLead = page.locator('.access-hero__lead');
     await expect(heroLead).toBeVisible();
-    
+
     const text = await heroLead.textContent();
     expect(text.length).toBeGreaterThan(20);
     expect(text).not.toMatch(/^agent_access/);
@@ -56,7 +56,7 @@ test.describe('Agent Access Page - i18n', () => {
 
   test('should not display raw i18n keys in GDI card', async ({ page }) => {
     const gdiCard = await page.locator('[data-console="gdi"]').textContent();
-    
+
     expect(gdiCard).not.toContain('agent_access.');
     expect(gdiCard).not.toContain('.cards.');
     expect(gdiCard).not.toContain('.gdi.');
@@ -65,17 +65,17 @@ test.describe('Agent Access Page - i18n', () => {
   test('should display translated GDI card title', async ({ page }) => {
     const gdiTitle = page.locator('[data-console="gdi"] .access-card__title');
     await expect(gdiTitle).toBeVisible();
-    
+
     const text = await gdiTitle.textContent();
     expect(text.length).toBeGreaterThan(5);
     expect(text).not.toMatch(/^agent_access/);
-    // Should contain GDI or GreyEYE reference
-    expect(text.toLowerCase()).toMatch(/gdi|greyeye|intelligence/i);
+    // Should contain GDI or Blackbox EYE reference
+    expect(text.toLowerCase()).toMatch(/gdi|blackbox|intelligence/i);
   });
 
   test('should not display raw i18n keys in TS24 card', async ({ page }) => {
     const ts24Card = await page.locator('[data-console="ts24"]').textContent();
-    
+
     expect(ts24Card).not.toContain('agent_access.');
     expect(ts24Card).not.toContain('.cards.');
     expect(ts24Card).not.toContain('.ts24.');
@@ -84,7 +84,7 @@ test.describe('Agent Access Page - i18n', () => {
   test('should display translated TS24 card title', async ({ page }) => {
     const ts24Title = page.locator('[data-console="ts24"] .access-card__title');
     await expect(ts24Title).toBeVisible();
-    
+
     const text = await ts24Title.textContent();
     expect(text.length).toBeGreaterThan(5);
     expect(text).not.toMatch(/^agent_access/);
@@ -108,7 +108,7 @@ test.describe('Agent Access Page - Mobile (320px)', () => {
   test('should display GDI CTA button visible on mobile', async ({ page }) => {
     const gdiCta = page.locator('[data-console="gdi"] .access-card__cta');
     await expect(gdiCta).toBeVisible();
-    
+
     // Check minimum touch target size (48px recommended)
     const box = await gdiCta.boundingBox();
     expect(box.height).toBeGreaterThanOrEqual(44); // Allow slight tolerance
@@ -117,7 +117,7 @@ test.describe('Agent Access Page - Mobile (320px)', () => {
   test('should display TS24 CTA button visible on mobile', async ({ page }) => {
     const ts24Cta = page.locator('[data-console="ts24"] .access-card__cta');
     await expect(ts24Cta).toBeVisible();
-    
+
     // Check minimum touch target size
     const box = await ts24Cta.boundingBox();
     expect(box.height).toBeGreaterThanOrEqual(44);
@@ -128,7 +128,7 @@ test.describe('Agent Access Page - Mobile (320px)', () => {
     const gdiCta = page.locator('[data-console="gdi"] .access-card__cta');
     await expect(gdiCta).toBeEnabled();
     await expect(gdiCta).toHaveAttribute('href');
-    
+
     // TS24 CTA
     const ts24Cta = page.locator('[data-console="ts24"] .access-card__cta');
     await expect(ts24Cta).toBeEnabled();
@@ -138,7 +138,7 @@ test.describe('Agent Access Page - Mobile (320px)', () => {
   test('should display hero section properly on mobile', async ({ page }) => {
     const hero = page.locator('.access-hero');
     await expect(hero).toBeVisible();
-    
+
     // Hero should not overflow
     const heroBox = await hero.boundingBox();
     expect(heroBox.width).toBeLessThanOrEqual(320);
@@ -160,7 +160,7 @@ test.describe('Agent Access Page - Desktop', () => {
   test('should display both console cards', async ({ page }) => {
     const gdiCard = page.locator('[data-console="gdi"]');
     const ts24Card = page.locator('[data-console="ts24"]');
-    
+
     await expect(gdiCard).toBeVisible();
     await expect(ts24Card).toBeVisible();
   });

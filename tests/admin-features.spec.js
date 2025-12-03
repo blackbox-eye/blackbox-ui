@@ -2,7 +2,7 @@
  * Admin Features Test Suite
  *
  * Tests for the admin portal features including:
- * - Login flow security (Command Deck should be hidden)
+ * - Login flow security (Control Panel should be hidden)
  * - Request Access functionality
  * - Intel Vault operations
  * - API Keys management
@@ -16,14 +16,14 @@ const { test, expect } = require('@playwright/test');
 // LOGIN SECURITY TESTS
 // =====================================================
 test.describe('Login Page Security', () => {
-  test('Command Deck should NOT be visible on login page', async ({ page }) => {
+  test('Control Panel should NOT be visible on login page', async ({ page }) => {
     await page.goto('/agent-login.php');
 
-    // Verify Command Deck launcher button is NOT present
+    // Verify Control Panel launcher button is NOT present
     const launcher = page.locator('#commandDeckLauncher');
     await expect(launcher).not.toBeVisible();
 
-    // Verify Command Deck menu is NOT present
+    // Verify Control Panel menu is NOT present
     const menu = page.locator('#commandDeckMenu');
     await expect(menu).not.toBeAttached();
 
@@ -110,8 +110,8 @@ test.describe('Authenticated Admin Features', () => {
     return !page.url().includes('agent-login.php');
   };
 
-  test.describe('Command Deck Navigation', () => {
-    test('Command Deck should be visible after login', async ({ page }) => {
+  test.describe('Control Panel Navigation', () => {
+    test('Control Panel should be visible after login', async ({ page }) => {
       // Note: This test requires a valid session
       // In CI, this may be skipped or use test credentials
 
@@ -123,7 +123,7 @@ test.describe('Authenticated Admin Features', () => {
         return;
       }
 
-      // Verify Command Deck launcher is visible
+      // Verify Control Panel launcher is visible
       const launcher = page.locator('#commandDeckLauncher');
       await expect(launcher).toBeVisible();
 

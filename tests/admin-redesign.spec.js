@@ -6,7 +6,7 @@
  * - Settings panel-based design
  * - Admin page user management
  * - Responsive grid layouts
- * - GreyEYE branding consistency
+ * - Blackbox EYE branding consistency
  *
  * @requires A running local server (e.g., php -S localhost:8000)
  */
@@ -129,7 +129,7 @@ test.describe('Dashboard Redesign', () => {
   });
 
   test.describe('Dashboard Branding', () => {
-    test('Dashboard should display GreyEYE logo', async ({ page }) => {
+    test('Dashboard should display Blackbox EYE logo', async ({ page }) => {
       await page.goto('/dashboard.php');
 
       if (page.url().includes('agent-login.php')) {
@@ -137,8 +137,8 @@ test.describe('Dashboard Redesign', () => {
         return;
       }
 
-      // Check for GreyEYE logo in header or page
-      const logo = page.locator('img[src*="greyeye"], img[alt*="GreyEYE"], img[alt*="Grey EYE"]');
+      // Check for Blackbox EYE logo in header or page
+      const logo = page.locator('img[src*="blackbox_eye"], img[alt*="Blackbox EYE"], img[alt*="Control Panel"]');
       await expect(logo.first()).toBeVisible();
     });
   });
@@ -355,9 +355,9 @@ test.describe('Admin Page Redesign', () => {
 });
 
 // =====================================================
-// COMMAND DECK INTEGRATION TESTS
+// CONTROL PANEL INTEGRATION TESTS
 // =====================================================
-test.describe('Command Deck Integration', () => {
+test.describe('Control Panel Integration', () => {
   const adminPages = [
     { name: 'Dashboard', url: '/dashboard.php' },
     { name: 'Settings', url: '/settings.php' },
@@ -365,7 +365,7 @@ test.describe('Command Deck Integration', () => {
   ];
 
   for (const p of adminPages) {
-    test(`Command Deck accessible from ${p.name}`, async ({ page }) => {
+    test(`Control Panel accessible from ${p.name}`, async ({ page }) => {
       await page.goto(p.url);
 
       if (page.url().includes('agent-login.php')) {
@@ -373,7 +373,7 @@ test.describe('Command Deck Integration', () => {
         return;
       }
 
-      // Command Deck launcher should be visible
+      // Control Panel launcher should be visible
       const launcher = page.locator('#commandDeckLauncher');
       await expect(launcher).toBeVisible();
 
@@ -395,7 +395,7 @@ test.describe('Command Deck Integration', () => {
     });
   }
 
-  test('Command Deck highlights active page', async ({ page }) => {
+  test('Control Panel highlights active page', async ({ page }) => {
     await page.goto('/dashboard.php');
 
     if (page.url().includes('agent-login.php')) {
@@ -515,7 +515,7 @@ test.describe('Accessibility - Redesigned Pages', () => {
     }
   });
 
-  test('Command Deck should be keyboard accessible', async ({ page }) => {
+  test('Control Panel should be keyboard accessible', async ({ page }) => {
     await page.goto('/dashboard.php');
 
     if (page.url().includes('agent-login.php')) {

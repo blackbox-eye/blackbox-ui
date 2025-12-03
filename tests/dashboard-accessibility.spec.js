@@ -212,7 +212,7 @@ test.describe('Theme Toggle Accessibility', () => {
   });
 
   test('Theme toggle should have proper ARIA attributes', async ({ page }) => {
-    // Open Command Deck first
+    // Open Control Panel first
     await page.click('#commandDeckLauncher');
     await page.waitForSelector('#commandDeckMenu.is-open');
 
@@ -223,7 +223,7 @@ test.describe('Theme Toggle Accessibility', () => {
   });
 
   test('Theme toggle should update aria-pressed on click', async ({ page }) => {
-    // Open Command Deck
+    // Open Control Panel
     await page.click('#commandDeckLauncher');
     await page.waitForSelector('#commandDeckMenu.is-open');
 
@@ -263,8 +263,8 @@ test.describe('Keyboard Navigation', () => {
     }
   });
 
-  test('Command Deck should close with Escape key', async ({ page }) => {
-    // Open Command Deck
+  test('Control Panel should close with Escape key', async ({ page }) => {
+    // Open Control Panel
     await page.click('#commandDeckLauncher');
     await expect(page.locator('#commandDeckMenu')).toHaveClass(/is-open/);
 
@@ -451,12 +451,12 @@ test.describe('Theme Toggle with Real Data', () => {
     const initialAlerts = await page.locator('#statAlerts').textContent();
     const initialThreats = await page.locator('#statThreats').textContent();
 
-    // Open Command Deck and toggle theme
+    // Open Control Panel and toggle theme
     await page.click('#commandDeckLauncher');
     await page.waitForSelector('#commandDeckMenu.is-open');
     await page.click('#themeToggle');
 
-    // Close Command Deck
+    // Close Control Panel
     await page.keyboard.press('Escape');
 
     // Verify data is still displayed (not reset to loading state)
@@ -547,8 +547,8 @@ test.describe('ARIA Labels Comprehensive', () => {
     }
   });
 
-  test('Command Deck links should have descriptive text or aria-label', async ({ page }) => {
-    // Open Command Deck
+  test('Control Panel links should have descriptive text or aria-label', async ({ page }) => {
+    // Open Control Panel
     await page.click('#commandDeckLauncher');
     await page.waitForSelector('#commandDeckMenu.is-open');
 

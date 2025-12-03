@@ -35,7 +35,7 @@ test.describe('Hero Section', () => {
     await expect(badge).toBeVisible();
 
     const text = await badge.textContent();
-    expect(text.toLowerCase()).toMatch(/blackbox|eye|greyeye|security/i);
+    expect(text.toLowerCase()).toMatch(/blackbox|eye|security/i);
   });
 
   test('should have primary CTA button with correct styling', async ({ page }) => {
@@ -286,7 +286,7 @@ test.describe('Blackbox EYE Branding', () => {
     await expect(badge).toBeVisible();
 
     const badgeText = await badge.textContent();
-    expect(badgeText.toLowerCase()).toMatch(/blackbox|eye|greyeye|security/i);
+    expect(badgeText.toLowerCase()).toMatch(/blackbox|eye|security/i);
   });
 
   test('hero section should have appropriate section class', async ({ page }) => {
@@ -328,7 +328,7 @@ test.describe('Blackbox EYE Branding', () => {
     // Badge should have Blackbox branding
     const badge = page.locator('.graphene-floating-badge, .graphene-badge, .blackbox-badge').first();
     const badgeText = await badge.textContent();
-    expect(badgeText.toLowerCase()).toMatch(/blackbox|greyeye|security/i);
+    expect(badgeText.toLowerCase()).toMatch(/blackbox|security/i);
   });
 });
 

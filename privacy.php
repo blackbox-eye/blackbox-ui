@@ -17,7 +17,7 @@ $current_lang = bbx_get_language();
     <div class="container mx-auto px-4">
       <div class="max-w-3xl mx-auto">
         <div class="mb-12">
-          <p class="text-amber-400 uppercase tracking-widest text-sm font-semibold mb-4">Legal</p>
+          <p class="" style="color: var(--primary-accent); uppercase tracking-widest text-sm font-semibold mb-4">Legal</p>
           <h1 class="text-3xl sm:text-4xl font-bold mb-6">
             <?= $current_lang === 'da' ? 'Privatlivspolitik' : 'Privacy Policy' ?>
           </h1>
@@ -38,7 +38,7 @@ $current_lang = bbx_get_language();
               </p>
               <p class="text-gray-300 leading-relaxed mt-3">
                 <strong class="text-white">Kontakt:</strong><br>
-                E-mail: <a href="mailto:privacy@blackbox.codes" class="text-amber-400 hover:text-amber-300">privacy@blackbox.codes</a><br>
+                E-mail: <a href="mailto:privacy@blackbox.codes" class="" style="color: var(--primary-accent); ">privacy@blackbox.codes</a><br>
                 Telefon: +45 31 33 00 33
               </p>
             </section>
@@ -112,7 +112,7 @@ $current_lang = bbx_get_language();
                 <li>Indsigelse mod behandling</li>
               </ul>
               <p class="text-gray-300 leading-relaxed mt-3">
-                Kontakt os på <a href="mailto:privacy@blackbox.codes" class="text-amber-400 hover:text-amber-300">privacy@blackbox.codes</a> for at udøve dine rettigheder.
+                Kontakt os på <a href="mailto:privacy@blackbox.codes" class="" style="color: var(--primary-accent); ">privacy@blackbox.codes</a> for at udøve dine rettigheder.
               </p>
             </section>
 
@@ -132,11 +132,11 @@ $current_lang = bbx_get_language();
               <h2 class="text-xl font-semibold text-white mb-4">6. Kontakt og klager</h2>
               <p class="text-gray-300 leading-relaxed">
                 Har du spørgsmål eller klager vedrørende vores behandling af persondata, kontakt os på
-                <a href="mailto:privacy@blackbox.codes" class="text-amber-400 hover:text-amber-300">privacy@blackbox.codes</a>.
+                <a href="mailto:privacy@blackbox.codes" class="" style="color: var(--primary-accent); ">privacy@blackbox.codes</a>.
               </p>
               <p class="text-gray-300 leading-relaxed mt-3">
                 Du har også ret til at klage til Datatilsynet:<br>
-                <a href="https://www.datatilsynet.dk" target="_blank" rel="noopener" class="text-amber-400 hover:text-amber-300">www.datatilsynet.dk</a>
+                <a href="https://www.datatilsynet.dk" target="_blank" rel="noopener" class="" style="color: var(--primary-accent); ">www.datatilsynet.dk</a>
               </p>
             </section>
 
@@ -150,7 +150,7 @@ $current_lang = bbx_get_language();
               </p>
               <p class="text-gray-300 leading-relaxed mt-3">
                 <strong class="text-white">Contact:</strong><br>
-                Email: <a href="mailto:privacy@blackbox.codes" class="text-amber-400 hover:text-amber-300">privacy@blackbox.codes</a><br>
+                Email: <a href="mailto:privacy@blackbox.codes" class="" style="color: var(--primary-accent); ">privacy@blackbox.codes</a><br>
                 Phone: +45 31 33 00 33
               </p>
             </section>
@@ -224,7 +224,7 @@ $current_lang = bbx_get_language();
                 <li>Object to processing</li>
               </ul>
               <p class="text-gray-300 leading-relaxed mt-3">
-                Contact us at <a href="mailto:privacy@blackbox.codes" class="text-amber-400 hover:text-amber-300">privacy@blackbox.codes</a> to exercise your rights.
+                Contact us at <a href="mailto:privacy@blackbox.codes" class="" style="color: var(--primary-accent); ">privacy@blackbox.codes</a> to exercise your rights.
               </p>
             </section>
 
@@ -244,11 +244,11 @@ $current_lang = bbx_get_language();
               <h2 class="text-xl font-semibold text-white mb-4">6. Contact and Complaints</h2>
               <p class="text-gray-300 leading-relaxed">
                 If you have questions or complaints regarding our processing of personal data, contact us at
-                <a href="mailto:privacy@blackbox.codes" class="text-amber-400 hover:text-amber-300">privacy@blackbox.codes</a>.
+                <a href="mailto:privacy@blackbox.codes" class="" style="color: var(--primary-accent); ">privacy@blackbox.codes</a>.
               </p>
               <p class="text-gray-300 leading-relaxed mt-3">
                 You also have the right to lodge a complaint with the Danish Data Protection Agency:<br>
-                <a href="https://www.datatilsynet.dk" target="_blank" rel="noopener" class="text-amber-400 hover:text-amber-300">www.datatilsynet.dk</a>
+                <a href="https://www.datatilsynet.dk" target="_blank" rel="noopener" class="" style="color: var(--primary-accent); ">www.datatilsynet.dk</a>
               </p>
             </section>
 
@@ -258,7 +258,7 @@ $current_lang = bbx_get_language();
 
         <!-- Back to home -->
         <div class="mt-12 pt-8 border-t border-gray-800">
-          <a href="/" class="inline-flex items-center text-amber-400 hover:text-amber-300 font-medium">
+          <a href="/" class="inline-flex items-center " style="color: var(--primary-accent);  font-medium">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
             </svg>

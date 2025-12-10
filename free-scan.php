@@ -21,7 +21,7 @@ include 'includes/site-header.php';
   <section class="py-16 sm:py-20 section-fade-in">
     <div class="container mx-auto px-4">
       <div class="max-w-3xl mx-auto text-center">
-        <p class="text-amber-400 uppercase tracking-widest text-sm font-semibold mb-4">
+        <p class="uppercase tracking-widest text-sm font-semibold mb-4" style="color: var(--primary-accent);">
           <?= t('free_scan.hero.tagline', 'Lead flow') ?>
         </p>
         <h1 class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight hero-gradient-text mb-6">
@@ -57,7 +57,7 @@ include 'includes/site-header.php';
               inputmode="url"
               autocomplete="off"
               required
-              class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm sm:text-base text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400"
+              class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm sm:text-base text-gray-100 focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-accent);"
               placeholder="<?= htmlspecialchars(t('free_scan.form.domain_placeholder', 'example.com')) ?>"
               data-error-message="<?= htmlspecialchars(t('free_scan.validation.domain_required', 'Indtast et domæne.')) ?>"
               data-invalid-message="<?= htmlspecialchars(t('free_scan.validation.domain_invalid', 'Angiv et gyldigt domæne (fx example.com).')) ?>">
@@ -74,7 +74,7 @@ include 'includes/site-header.php';
               id="scan-email"
               name="email"
               autocomplete="email"
-              class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm sm:text-base text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400"
+              class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm sm:text-base text-gray-100 focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-accent);"
               placeholder="<?= htmlspecialchars(t('free_scan.form.email_placeholder', 'navn@virksomhed.dk')) ?>"
               data-invalid-message="<?= htmlspecialchars(t('free_scan.validation.email_invalid', 'Angiv en gyldig e-mailadresse.')) ?>">
             <p class="text-sm text-rose-400 mt-2 hidden" data-error-for="scan-email"></p>
@@ -82,7 +82,10 @@ include 'includes/site-header.php';
 
           <div class="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
             <button type="submit"
-              class="inline-flex items-center justify-center bg-amber-400 text-black font-semibold py-3 px-6 rounded-lg hover:bg-amber-500 transition-colors"
+              class="inline-flex items-center justify-center font-semibold py-3 px-6 rounded-lg transition-all duration-300 border-2" 
+              style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); backdrop-filter: blur(8px);"
+              onmouseover="this.style.background='rgba(212, 175, 55, 0.2)'; this.style.color='#F4D03F';" 
+              onmouseout="this.style.background='rgba(212, 175, 55, 0.1)'; this.style.color='var(--primary-accent)';"
               data-loading-text="<?= htmlspecialchars(t('free_scan.form.loading', 'Analyserer angrebsfladen...')) ?>">
               <?= t('free_scan.form.submit', 'Generér rapport') ?>
             </button>
@@ -137,7 +140,11 @@ include 'includes/site-header.php';
         <p class="text-gray-300 max-w-2xl mx-auto mb-8">
           <?= t('free_scan.report.cta_description', 'Se hvordan vores specialister aktiverer hele PVE-modulet og leverer en komplet rapport med anbefalinger.') ?>
         </p>
-        <a href="demo.php" class="inline-flex items-center justify-center bg-amber-400 text-black font-semibold py-3 px-8 rounded-lg hover:bg-amber-500 transition-colors">
+        <a href="demo.php" 
+           class="inline-flex items-center justify-center font-semibold py-3 px-8 rounded-lg transition-all duration-300 border-2" 
+           style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); backdrop-filter: blur(8px);"
+           onmouseover="this.style.background='rgba(212, 175, 55, 0.2)'; this.style.color='#F4D03F';" 
+           onmouseout="this.style.background='rgba(212, 175, 55, 0.1)'; this.style.color='var(--primary-accent)';">
           <?= t('free_scan.report.cta_link', 'Book en demo') ?>
         </a>
       </div>

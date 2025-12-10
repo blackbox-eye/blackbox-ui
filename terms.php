@@ -31,7 +31,7 @@ include __DIR__ . '/includes/site-header.php';
 
       <!-- Introduction -->
       <section class="mb-12 p-6 rounded-xl bg-gray-900/50 border border-gray-800">
-        <h2 class="text-xl font-bold text-amber-400 mb-4">1. Introduktion</h2>
+        <h2 class="text-xl font-bold " style="color: var(--primary-accent); mb-4">1. Introduktion</h2>
         <p class="text-gray-300 leading-relaxed">
           Ved at bruge Blackbox EYE™ platformen, tjenesterne og hjemmesiden accepterer du disse vilkår og betingelser.
           Blackbox EYE™ drives af Blackbox Codes ApS ("vi", "os", "vores"). Hvis du ikke accepterer disse vilkår,
@@ -41,7 +41,7 @@ include __DIR__ . '/includes/site-header.php';
 
       <!-- Service Description -->
       <section class="mb-12 p-6 rounded-xl bg-gray-900/50 border border-gray-800">
-        <h2 class="text-xl font-bold text-amber-400 mb-4">2. Tjenestebeskrivelse</h2>
+        <h2 class="text-xl font-bold " style="color: var(--primary-accent); mb-4">2. Tjenestebeskrivelse</h2>
         <p class="text-gray-300 leading-relaxed mb-4">
           Blackbox EYE™ er en enterprise cybersikkerhedsplatform, der tilbyder:
         </p>
@@ -56,7 +56,7 @@ include __DIR__ . '/includes/site-header.php';
 
       <!-- Usage Rights -->
       <section class="mb-12 p-6 rounded-xl bg-gray-900/50 border border-gray-800">
-        <h2 class="text-xl font-bold text-amber-400 mb-4">3. Brugsrettigheder og Begrænsninger</h2>
+        <h2 class="text-xl font-bold " style="color: var(--primary-accent); mb-4">3. Brugsrettigheder og Begrænsninger</h2>
         <div class="space-y-4 text-gray-300">
           <h3 class="text-lg font-semibold text-white">3.1 Tilladte anvendelser</h3>
           <p>Du må bruge vores tjenester til lovlige forretningsformål relateret til din organisations cybersikkerhed.</p>
@@ -75,7 +75,7 @@ include __DIR__ . '/includes/site-header.php';
 
       <!-- Intellectual Property -->
       <section class="mb-12 p-6 rounded-xl bg-gray-900/50 border border-gray-800">
-        <h2 class="text-xl font-bold text-amber-400 mb-4">4. Immaterielle Rettigheder</h2>
+        <h2 class="text-xl font-bold " style="color: var(--primary-accent); mb-4">4. Immaterielle Rettigheder</h2>
         <p class="text-gray-300 leading-relaxed">
           Alle rettigheder til Blackbox EYE™ platformen, inklusiv software, varemærker, algoritmer,
           rapporter og dokumentation tilhører Blackbox Codes ApS. Du erhverver en begrænset,
@@ -85,7 +85,7 @@ include __DIR__ . '/includes/site-header.php';
 
       <!-- Confidentiality -->
       <section class="mb-12 p-6 rounded-xl bg-gray-900/50 border border-gray-800">
-        <h2 class="text-xl font-bold text-amber-400 mb-4">5. Fortrolighed</h2>
+        <h2 class="text-xl font-bold " style="color: var(--primary-accent); mb-4">5. Fortrolighed</h2>
         <div class="space-y-4 text-gray-300">
           <h3 class="text-lg font-semibold text-white">5.1 Vores forpligtelser</h3>
           <p>
@@ -103,7 +103,7 @@ include __DIR__ . '/includes/site-header.php';
 
       <!-- Liability -->
       <section class="mb-12 p-6 rounded-xl bg-gray-900/50 border border-gray-800">
-        <h2 class="text-xl font-bold text-amber-400 mb-4">6. Ansvar og Garantier</h2>
+        <h2 class="text-xl font-bold " style="color: var(--primary-accent); mb-4">6. Ansvar og Garantier</h2>
         <div class="space-y-4 text-gray-300">
           <h3 class="text-lg font-semibold text-white">6.1 Ingen garantier</h3>
           <p>
@@ -123,7 +123,7 @@ include __DIR__ . '/includes/site-header.php';
 
       <!-- Payment Terms -->
       <section class="mb-12 p-6 rounded-xl bg-gray-900/50 border border-gray-800">
-        <h2 class="text-xl font-bold text-amber-400 mb-4">7. Betalingsvilkår</h2>
+        <h2 class="text-xl font-bold " style="color: var(--primary-accent); mb-4">7. Betalingsvilkår</h2>
         <p class="text-gray-300 leading-relaxed">
           Abonnementsafgifter faktureres forud. Betalingsbetingelser er 14 dage netto.
           Ved forsinket betaling tilskrives renter i henhold til renteloven.
@@ -133,7 +133,7 @@ include __DIR__ . '/includes/site-header.php';
 
       <!-- Termination -->
       <section class="mb-12 p-6 rounded-xl bg-gray-900/50 border border-gray-800">
-        <h2 class="text-xl font-bold text-amber-400 mb-4">8. Opsigelse</h2>
+        <h2 class="text-xl font-bold " style="color: var(--primary-accent); mb-4">8. Opsigelse</h2>
         <div class="space-y-4 text-gray-300">
           <p>Abonnementer kan opsiges med 30 dages varsel til udgangen af en måned.</p>
           <p>Vi kan opsige din adgang med øjeblikkelig virkning ved:</p>
@@ -147,7 +147,7 @@ include __DIR__ . '/includes/site-header.php';
 
       <!-- Governing Law -->
       <section class="mb-12 p-6 rounded-xl bg-gray-900/50 border border-gray-800">
-        <h2 class="text-xl font-bold text-amber-400 mb-4">9. Lovvalg og Tvister</h2>
+        <h2 class="text-xl font-bold " style="color: var(--primary-accent); mb-4">9. Lovvalg og Tvister</h2>
         <p class="text-gray-300 leading-relaxed">
           Disse vilkår er underlagt dansk ret. Enhver tvist, der udspringer af disse vilkår eller
           brugen af vores tjenester, skal afgøres ved Københavns Byret som første instans,
@@ -157,7 +157,7 @@ include __DIR__ . '/includes/site-header.php';
 
       <!-- Changes to Terms -->
       <section class="mb-12 p-6 rounded-xl bg-gray-900/50 border border-gray-800">
-        <h2 class="text-xl font-bold text-amber-400 mb-4">10. Ændringer af Vilkår</h2>
+        <h2 class="text-xl font-bold " style="color: var(--primary-accent); mb-4">10. Ændringer af Vilkår</h2>
         <p class="text-gray-300 leading-relaxed">
           Vi kan opdatere disse vilkår med 30 dages varsel. Fortsat brug af tjenesterne efter
           ændringerne træder i kraft betragtes som accept af de nye vilkår.
@@ -166,13 +166,13 @@ include __DIR__ . '/includes/site-header.php';
       </section>
 
       <!-- Contact -->
-      <section class="p-6 rounded-xl bg-amber-400/10 border border-amber-400/30">
-        <h2 class="text-xl font-bold text-amber-400 mb-4">Kontakt</h2>
+      <section class="p-6 rounded-xl bg-amber-400/10 border " style="border-color: var(--primary-accent);/30">
+        <h2 class="text-xl font-bold " style="color: var(--primary-accent); mb-4">Kontakt</h2>
         <p class="text-gray-300 leading-relaxed mb-4">
           For spørgsmål om disse vilkår, kontakt venligst:
         </p>
         <ul class="text-gray-300 space-y-2">
-          <li><strong class="text-white">E-mail:</strong> <a href="mailto:legal@blackbox.codes" class="text-amber-400 hover:underline">legal@blackbox.codes</a></li>
+          <li><strong class="text-white">E-mail:</strong> <a href="mailto:legal@blackbox.codes" class="" style="color: var(--primary-accent); hover:underline">legal@blackbox.codes</a></li>
           <li><strong class="text-white">CVR:</strong> [Indsæt CVR-nummer]</li>
           <li><strong class="text-white">Adresse:</strong> Schweiz / UAE</li>
         </ul>

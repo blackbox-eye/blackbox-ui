@@ -21,7 +21,7 @@ include 'includes/site-header.php';
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
                     <div>
                         <label for="industry-select" class="block text-sm font-medium text-gray-300 mb-2"><?= t('pricing.ai_advisor.industry_label') ?></label>
-                        <select id="industry-select" class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-2" style="--tw-ring-color: var(--primary-accent);">
+                        <select id="industry-select" class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-3 py-2.5 text-sm text-gray-100 focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-accent);">
                             <option><?= t('pricing.ai_advisor.industries.manufacturing') ?></option>
                             <option><?= t('pricing.ai_advisor.industries.public') ?></option>
                             <option><?= t('pricing.ai_advisor.industries.law') ?></option>
@@ -189,7 +189,7 @@ include 'includes/site-header.php';
                         </li>
                     </ul>
                     <div class="text-xs text-gray-500 mb-4"><?= t('pricing.mvp.basis.subscription') ?></div>
-                    <a href="contact.php" class="mt-auto w-full inline-block border-2" style="border-color: var(--primary-accent);  py-3 rounded-lg  transition-all font-semibold text-sm lg:text-base" style="color: var(--primary-accent);"><?= t('pricing.cta.button') ?></a>
+                    <a href="contact.php" class="mt-auto w-full inline-block border-2 py-3 rounded-lg transition-all font-semibold text-sm lg:text-base" style="border-color: var(--primary-accent); color: var(--primary-accent);"><?= t('pricing.cta.button') ?></a>
                 </article>
 
                 <!-- MVP-Pro -->

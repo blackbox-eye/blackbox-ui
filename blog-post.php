@@ -100,7 +100,7 @@ include 'includes/site-header.php';
 
         <!-- Category Badge -->
         <?php if ($post['category']): ?>
-          <span class="inline-block px-4 py-1 text-sm font-semibold " style="background: rgba(212, 175, 55, 0.15); " style="color: var(--primary-accent); rounded-full mb-4">
+          <span class="inline-block px-4 py-1 text-sm font-semibold rounded-full mb-4" style="background: rgba(212, 175, 55, 0.15); color: var(--primary-accent);">
             <?= htmlspecialchars($post['category']) ?>
           </span>
         <?php endif; ?>

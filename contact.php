@@ -147,7 +147,7 @@ $current_lang = bbx_get_language();
                         <div class="border-t border-gray-700/50 pt-4">
                             <p class="text-gray-400 text-sm">
                                 <strong class="text-gray-200"><?= t('contact.details.offices.uae') ?></strong><br>
-                                <span class="/80 text-xs" style="color: var(--primary-accent);" dir="rtl"><?= t('footer.offices.uae_company_ar') ?></span><br>
+                                <span class="text-xs" style="color: rgba(212, 175, 55, 0.8);" dir="rtl"><?= t('footer.offices.uae_company_ar') ?></span><br>
                                 <span class="text-gray-500 text-xs">(<?= t('footer.offices.uae_company_en') ?>)</span><br>
                                 <?= t('contact.details.offices.uae_address') ?><br>
                                 <span class="text-gray-300"><?= t('footer.offices.uae_phone') ?></span>

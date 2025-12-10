@@ -41,7 +41,7 @@
                         <!-- Dubai HQ -->
                         <div>
                             <p class="font-semibold text-white mb-1"><?= t('footer.offices.uae') ?></p>
-                            <p class="text-xs " style="color: var(--primary-accent);/80 mb-1 font-medium" dir="rtl"><?= t('footer.offices.uae_company_ar') ?></p>
+                            <p class="text-xs mb-1 font-medium" style="color: rgba(212, 175, 55, 0.8);" dir="rtl"><?= t('footer.offices.uae_company_ar') ?></p>
                             <p class="text-xs text-gray-500 mb-2">(<?= t('footer.offices.uae_company_en') ?>)</p>
                             <p class="text-xs leading-relaxed text-gray-400 mb-2"><?= t('footer.offices.uae_address') ?></p>
                             <p class="text-xs text-gray-400">

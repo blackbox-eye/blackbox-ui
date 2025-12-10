@@ -258,7 +258,7 @@ $current_lang = bbx_get_language();
 
         <!-- Back to home -->
         <div class="mt-12 pt-8 border-t border-gray-800">
-          <a href="/" class="inline-flex items-center " style="color: var(--primary-accent);  font-medium">
+          <a href="/" class="inline-flex items-center font-medium" style="color: var(--primary-accent);">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
             </svg>

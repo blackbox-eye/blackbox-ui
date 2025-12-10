@@ -146,7 +146,7 @@ include 'includes/site-header.php';
           <p class="text-gray-300 mb-6">
             <?= htmlspecialchars($faq_error_message) ?>
           </p>
-          <a href="contact.php" class="inline-flex items-center gap-2 px-6 py-3 border-2" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); text-black font-semibold rounded-lg hover:bg-amber-500 transition-colors">
+          <a href="contact.php" class="inline-flex items-center gap-2 px-6 py-3 border-2 font-semibold rounded-lg transition-colors hover:bg-opacity-80" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent);">
             Kontakt support
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>

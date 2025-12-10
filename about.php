@@ -319,9 +319,9 @@ include 'includes/site-header.php';
 
         <div class="container mx-auto px-4 relative z-10">
             <div class="max-w-4xl mx-auto text-center">
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-400/10 border " style="border-color: var(--primary-accent);/30 mb-6 backdrop-blur-sm">
-                    <div class="w-2 h-2 rounded-full border-2" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); animate-pulse motion-reduce:animate-none" aria-hidden="true"></div>
-                    <span class="text-xs uppercase tracking-widest " style="color: var(--primary-accent); font-bold"><?= t('about.hero_section.tagline') ?></span>
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-6 backdrop-blur-sm" style="background: rgba(212, 175, 55, 0.1); border-color: rgba(212, 175, 55, 0.3);">
+                    <div class="w-2 h-2 rounded-full border-2 animate-pulse motion-reduce:animate-none" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent);" aria-hidden="true"></div>
+                    <span class="text-xs uppercase tracking-widest font-bold" style="color: var(--primary-accent);"><?= t('about.hero_section.tagline') ?></span>
                 </div>
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black mb-6 leading-tight">
                     <span class="bg-gradient-to-r from-white via-amber-200 to-amber-400 bg-clip-text text-transparent">

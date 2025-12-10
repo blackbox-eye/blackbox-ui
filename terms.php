@@ -31,7 +31,7 @@ include __DIR__ . '/includes/site-header.php';
 
       <!-- Introduction -->
       <section class="mb-12 p-6 rounded-xl bg-gray-900/50 border border-gray-800">
-        <h2 class="text-xl font-bold " style="color: var(--primary-accent); mb-4">1. Introduktion</h2>
+        <h2 class="text-xl font-bold mb-4" style="color: var(--primary-accent);">1. Introduktion</h2>
         <p class="text-gray-300 leading-relaxed">
           Ved at bruge Blackbox EYE™ platformen, tjenesterne og hjemmesiden accepterer du disse vilkår og betingelser.
           Blackbox EYE™ drives af Blackbox Codes ApS ("vi", "os", "vores"). Hvis du ikke accepterer disse vilkår,
@@ -166,13 +166,13 @@ include __DIR__ . '/includes/site-header.php';
       </section>
 
       <!-- Contact -->
-      <section class="p-6 rounded-xl bg-amber-400/10 border " style="border-color: var(--primary-accent);/30">
+      <section class="p-6 rounded-xl border" style="background: rgba(212, 175, 55, 0.1); border-color: rgba(212, 175, 55, 0.3);">
         <h2 class="text-xl font-bold " style="color: var(--primary-accent); mb-4">Kontakt</h2>
         <p class="text-gray-300 leading-relaxed mb-4">
           For spørgsmål om disse vilkår, kontakt venligst:
         </p>
         <ul class="text-gray-300 space-y-2">
-          <li><strong class="text-white">E-mail:</strong> <a href="mailto:legal@blackbox.codes" class="" style="color: var(--primary-accent); hover:underline">legal@blackbox.codes</a></li>
+          <li><strong class="text-white">E-mail:</strong> <a href="mailto:legal@blackbox.codes" class="hover:underline" style="color: var(--primary-accent);">legal@blackbox.codes</a></li>
           <li><strong class="text-white">CVR:</strong> [Indsæt CVR-nummer]</li>
           <li><strong class="text-white">Adresse:</strong> Schweiz / UAE</li>
         </ul>

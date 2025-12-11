@@ -21,9 +21,9 @@
   --graphene-glow: 0 0 30px rgba(26, 115, 232, 0.15);
 
   /* Primary brand colors (Blackbox EYE + Blackbox EYE unified) */
-  --bbx-gold: #d4af37;
-  --bbx-gold-light: #ffe8a3;
-  --bbx-gold-hover: #e5c04a;
+  --bbx-gold: #D4AF37;
+  --bbx-gold-light: #F4D03F;
+  --bbx-gold-hover: #B8860B;
   --bbx-gold-transparent: rgba(212, 175, 55, 0.15);
 
   /* Blackbox EYE brand colors (parent company identity) */
@@ -260,7 +260,7 @@
 }
 
 .sticky-cta-bar__btn--primary {
-  background: linear-gradient(120deg, #fff4d3 0%, #ffe08c 45%, #facc15 100%);
+  background: linear-gradient(120deg, #F4D03F 0%, #D4AF37 45%, #B8860B 100%);
   color: #1c1206;
   box-shadow: 0 12px 22px rgba(250, 204, 21, 0.35);
 }
@@ -273,7 +273,7 @@
 .sticky-cta-bar__btn--ghost {
   background: rgba(255, 255, 255, 0.04);
   border-color: rgba(255, 232, 163, 0.55);
-  color: #ffe8a3;
+  color: #D4AF37;
 }
 
 .sticky-cta-bar__btn--ghost:hover {
@@ -612,7 +612,7 @@
   width: 0.6rem;
   height: 0.6rem;
   border-radius: 999px;
-  background: linear-gradient(120deg, #fff4d3, #ffe8a3);
+  background: linear-gradient(120deg, #F4D03F, #D4AF37);
   box-shadow: 0 0 12px rgba(255, 232, 163, 0.6);
 }
 
@@ -644,7 +644,7 @@
 }
 
 .module-card__action--primary {
-  background: linear-gradient(120deg, #fff4d3 0%, #ffe8a3 50%, #f5c86a 100%);
+  background: linear-gradient(120deg, #F4D03F 0%, #D4AF37 50%, #B8860B 100%);
   color: #080b12;
   box-shadow: 0 20px 40px rgba(255, 232, 163, 0.45);
 }
@@ -663,7 +663,7 @@
 .module-card__action--ghost:hover,
 .module-card__action--ghost:focus-visible {
   border-color: rgba(255, 232, 163, 0.6);
-  color: #ffe8a3;
+  color: #D4AF37;
 }
 
 /* Module card action icon (arrow) */
@@ -722,7 +722,7 @@
 }
 
 .products-extra-card h3 {
-  color: #ffe8a3;
+  color: #D4AF37;
   font-size: 1.1rem;
   margin-bottom: 0.75rem;
 }
@@ -762,7 +762,7 @@
   padding: 0.95rem 2.75rem;
   border-radius: 999px;
   font-weight: 600;
-  background: linear-gradient(120deg, #fff4d3, #ffe8a3, #f5c86a);
+  background: linear-gradient(120deg, #F4D03F, #D4AF37, #B8860B);
   color: #080b12;
   text-decoration: none;
   box-shadow: 0 20px 45px rgba(255, 232, 163, 0.4);
@@ -2792,20 +2792,20 @@ button.graphene-toggle {
 
 button.graphene-toggle:hover {
   background: rgba(20, 22, 26, 0.95);
-  border-color: #D6B25E;
-  color: #FFE8A3;
+  border-color: #B8860B;
+  color: #D4AF37;
   box-shadow: 0 0 12px rgba(214, 178, 94, 0.2);
 }
 
 button.graphene-toggle:focus-visible {
-  outline: 2px solid #D6B25E;
+  outline: 2px solid #B8860B;
   outline-offset: 2px;
 }
 
 button.graphene-toggle[aria-pressed="true"] {
   background: rgba(214, 178, 94, 0.12);
-  border-color: #D6B25E;
-  color: #FFE8A3;
+  border-color: #B8860B;
+  color: #D4AF37;
   box-shadow:
     0 0 0 2px rgba(214, 178, 94, 0.1),
     0 0 15px rgba(214, 178, 94, 0.25),
@@ -3033,7 +3033,7 @@ button.graphene-toggle.is-loading .graphene-toggle__icon {
 .access-card__badge--ts24 {
   background: rgba(255, 232, 163, 0.12);
   border: 1px solid rgba(255, 232, 163, 0.4);
-  color: #ffe8a3;
+  color: #D4AF37;
 }
 
 .access-card__title {
@@ -3805,7 +3805,7 @@ footer a:hover svg {
 }
 
 .glass-effect a:hover {
-  color: #ffe8a3;
+  color: #D4AF37;
 }
 
 /* --------------------------------------------------------
@@ -4873,7 +4873,7 @@ button:focus-visible {
   font-weight: 600;
   font-size: 1.05rem;
   color: #050608;
-  background: linear-gradient(135deg, #ffe8a3, #d4af37);
+  background: linear-gradient(135deg, #D4AF37, #d4af37);
   text-decoration: none;
   box-shadow: 0 25px 60px rgba(212, 175, 55, 0.45);
   margin-bottom: 2.5rem;
@@ -5548,8 +5548,8 @@ button:focus-visible {
 :root {
   --gfx-black: #0D0F11;
   --gfx-grafit: #14161A;
-  --gfx-gold: #D6B25E;
-  --gfx-gold-light: #FFE8A3;
+  --gfx-gold: #B8860B;
+  --gfx-gold-light: #D4AF37;
   --gfx-white: #F4F4F4;
   --gfx-spacing: 20px;
   --gfx-radius: 8px;
@@ -5649,7 +5649,7 @@ button:focus-visible {
 }
 
 .module-card__action--primary {
-  background: linear-gradient(120deg, var(--gfx-gold-light) 0%, var(--gfx-gold) 50%, #C9A54D 100%) !important;
+  background: linear-gradient(120deg, var(--gfx-gold-light) 0%, var(--gfx-gold) 50%, #8B6914 100%) !important;
   color: #0D0F11 !important;
   box-shadow: 0 10px 25px rgba(214, 178, 94, 0.35) !important;
 }
@@ -5709,7 +5709,7 @@ button:focus-visible {
 }
 
 .products-cta__btn {
-  background: linear-gradient(120deg, var(--gfx-gold-light) 0%, var(--gfx-gold) 50%, #C9A54D 100%) !important;
+  background: linear-gradient(120deg, var(--gfx-gold-light) 0%, var(--gfx-gold) 50%, #8B6914 100%) !important;
   color: #0D0F11 !important;
   border-radius: var(--gfx-radius) !important;
   box-shadow: 0 12px 30px rgba(214, 178, 94, 0.35) !important;

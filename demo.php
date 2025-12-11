@@ -55,7 +55,7 @@ $demo_slots = [
     <section class="py-16 sm:py-20 section-fade-in page-section">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto text-center mb-12">
-                <p class="text-amber-400 uppercase tracking-widest text-sm font-semibold mb-4">
+                <p class="uppercase tracking-widest text-sm font-semibold mb-4" style="color: var(--primary-accent);">
                     <?= t('demo.hero.tagline', 'GRATIS DEMONSTRATION') ?>
                 </p>
                 <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 hero-gradient-text tracking-tight">
@@ -65,10 +65,19 @@ $demo_slots = [
                     <?= t('demo.hero.description', 'Book en personlig demo og oplev hvordan vores AI-drevne sikkerhedsplatform kan transformere din cybersikkerhed. Få svar på dine spørgsmål fra vores eksperter.') ?>
                 </p>
                 <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
-                    <a href="#demo-booking" class="inline-flex items-center justify-center bg-amber-400 text-black font-semibold py-3 px-8 rounded-lg hover:bg-amber-500 transition-colors">
+                    <a href="#demo-booking" 
+                       class="inline-flex items-center justify-center font-semibold py-3 px-8 rounded-lg transition-all duration-300 border-2" 
+                       style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); backdrop-filter: blur(8px);"
+                       onmouseover="this.style.background='rgba(212, 175, 55, 0.2)'; this.style.color='#F4D03F';" 
+                       onmouseout="this.style.background='rgba(212, 175, 55, 0.1)'; this.style.color='var(--primary-accent)';">
                         <?= t('demo.hero.primary_cta', 'Book demo slot') ?>
                     </a>
-                    <button type="button" class="inline-flex items-center justify-center border border-amber-400 text-amber-400 font-semibold py-3 px-8 rounded-lg hover:bg-amber-400 hover:text-black transition-colors" data-calendly-launch="popup" data-calendly-url="<?= htmlspecialchars(BBX_CALENDLY_URL) ?>">
+                    <button type="button" 
+                            class="inline-flex items-center justify-center font-semibold py-3 px-8 rounded-lg transition-all duration-300 border-2" 
+                            style="background: rgba(255, 255, 255, 0.04); border-color: rgba(212, 175, 55, 0.3); color: var(--text-high-emphasis); backdrop-filter: blur(8px);"
+                            onmouseover="this.style.background='rgba(212, 175, 55, 0.1)'; this.style.borderColor='var(--primary-accent)'; this.style.color='var(--primary-accent)';" 
+                            onmouseout="this.style.background='rgba(255, 255, 255, 0.04)'; this.style.borderColor='rgba(212, 175, 55, 0.3)'; this.style.color='var(--text-high-emphasis)';"
+                            data-calendly-launch="popup" data-calendly-url="<?= htmlspecialchars(BBX_CALENDLY_URL) ?>">
                         <?= t('demo.hero.secondary_cta', 'Åbn booking i popup') ?>
                     </button>
                 </div>
@@ -91,8 +100,8 @@ $demo_slots = [
                 </div>
 
                 <div class="glass-effect rounded-xl p-6 text-center">
-                    <div class="w-12 h-12 bg-amber-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style="background: rgba(212, 175, 55, 0.15);">
+                        <svg class="w-6 h-6" style="color: var(--primary-accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
                         </svg>
                     </div>
@@ -105,8 +114,8 @@ $demo_slots = [
                 </div>
 
                 <div class="glass-effect rounded-xl p-6 text-center">
-                    <div class="w-12 h-12 bg-amber-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4" style="background: rgba(212, 175, 55, 0.15);">
+                        <svg class="w-6 h-6" style="color: var(--primary-accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
                         </svg>
                     </div>
@@ -184,7 +193,7 @@ $demo_slots = [
 
                     <p class="text-center text-gray-400 text-sm mt-6">
                         <?= t('demo.booking.note', 'Kan du ikke finde et passende tidspunkt? Kontakt os direkte på') ?>
-                        <a href="mailto:ops@blackbox.codes" class="text-amber-400 hover:text-amber-300">ops@blackbox.codes</a>
+                        <a href="mailto:ops@blackbox.codes" style="color: var(--primary-accent);" onmouseover="this.style.color='#F4D03F'" onmouseout="this.style.color='var(--primary-accent)'">ops@blackbox.codes</a>
                     </p>
                 </div>
             </div>
@@ -201,7 +210,7 @@ $demo_slots = [
 
                 <div class="space-y-6">
                     <div class="flex gap-4">
-                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-amber-400 text-black flex items-center justify-center font-bold">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center font-bold" style="background: var(--primary-accent); color: #000;">
                             1
                         </div>
                         <div>
@@ -215,7 +224,7 @@ $demo_slots = [
                     </div>
 
                     <div class="flex gap-4">
-                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-amber-400 text-black flex items-center justify-center font-bold">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center font-bold" style="background: var(--primary-accent); color: #000;">
                             2
                         </div>
                         <div>
@@ -229,7 +238,7 @@ $demo_slots = [
                     </div>
 
                     <div class="flex gap-4">
-                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-amber-400 text-black flex items-center justify-center font-bold">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center font-bold" style="background: var(--primary-accent); color: #000;">
                             3
                         </div>
                         <div>
@@ -256,10 +265,18 @@ $demo_slots = [
                 <?= t('demo.cta.description', 'Vores team er klar til at hjælpe dig med at forstå hvordan Blackbox EYE kan styrke din sikkerhed.') ?>
             </p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="contact.php" class="inline-flex items-center justify-center bg-amber-400 text-black font-semibold py-3 px-8 rounded-lg hover:bg-amber-500 transition-colors">
+                <a href="contact.php" 
+                   class="inline-flex items-center justify-center font-semibold py-3 px-8 rounded-lg transition-all duration-300 border-2" 
+                   style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); backdrop-filter: blur(8px);"
+                   onmouseover="this.style.background='rgba(212, 175, 55, 0.2)'; this.style.color='#F4D03F';" 
+                   onmouseout="this.style.background='rgba(212, 175, 55, 0.1)'; this.style.color='var(--primary-accent)';">
                     <?= t('demo.cta.contact', 'Kontakt os') ?>
                 </a>
-                <a href="pricing.php" class="inline-flex items-center justify-center border border-amber-400 text-amber-400 font-semibold py-3 px-8 rounded-lg hover:bg-amber-400 hover:text-black transition-colors">
+                <a href="pricing.php" 
+                   class="inline-flex items-center justify-center font-semibold py-3 px-8 rounded-lg transition-all duration-300 border-2" 
+                   style="background: rgba(255, 255, 255, 0.04); border-color: rgba(212, 175, 55, 0.3); color: var(--text-high-emphasis); backdrop-filter: blur(8px);"
+                   onmouseover="this.style.background='rgba(212, 175, 55, 0.1)'; this.style.borderColor='var(--primary-accent)'; this.style.color='var(--primary-accent)';" 
+                   onmouseout="this.style.background='rgba(255, 255, 255, 0.04)'; this.style.borderColor='rgba(212, 175, 55, 0.3)'; this.style.color='var(--text-high-emphasis)';">
                     <?= t('demo.cta.pricing', 'Se priser') ?>
                 </a>
             </div>

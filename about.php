@@ -538,17 +538,21 @@ include 'includes/site-header.php';
                 </div>
 
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-                    <a href="contact.php" class="group inline-flex items-center gap-3 bg-gradient-to-r from-amber-400 to-amber-500 text-black font-bold py-5 px-12 rounded-2xl hover:from-amber-500 hover:to-amber-600 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/50 focus:outline-none focus:ring-4 focus:ring-amber-400/50 motion-reduce:hover:scale-100 text-lg" aria-label="Kontakt os for at komme i gang">
-                        <?= t('about.cta.button') ?>
-                        <svg class="w-6 h-6 group-hover:translate-x-1 transition-transform motion-reduce:transform-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                        </svg>
+                    <a href="contact.php" class="header-cta header-cta--pill header-cta--primary" aria-label="Kontakt os for at komme i gang">
+                        <span class="header-cta__label"><?= t('about.cta.button') ?></span>
+                        <span class="header-cta__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </span>
                     </a>
-                    <a href="demo.php" class="group inline-flex items-center gap-3 bg-gray-800/80 border-2 border-gray-600 text-white font-bold py-5 px-12 rounded-2xl hover:bg-gray-700 hover:border-amber-400/50 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-gray-600 text-lg" aria-label="Book en demo af vores produkter">
-                        <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                        </svg>
-                        Book en demo
+                    <a href="demo.php" class="header-cta header-cta--pill header-cta--secondary" aria-label="Book en demo af vores produkter">
+                        <span class="header-cta__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                        </span>
+                        <span class="header-cta__label">Book en demo</span>
                     </a>
                 </div>
             </div>

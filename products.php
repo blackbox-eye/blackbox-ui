@@ -176,8 +176,8 @@ $extra_modules = ['idmatrix', 'aut', 'bridge', 'command'];
                 <p class="products-cta__body">
                     <?= t('products.cta.description') ?>
                 </p>
-                <a href="contact.php" class="products-cta__btn">
-                    <?= t('products.cta.button') ?>
+                <a href="contact.php" class="header-cta header-cta--pill header-cta--primary">
+                    <span class="header-cta__label"><?= t('products.cta.button') ?></span>
                 </a>
             </div>
         </div>

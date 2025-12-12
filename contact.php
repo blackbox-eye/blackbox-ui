@@ -187,8 +187,8 @@ $current_lang = bbx_get_language();
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-3xl sm:text-4xl font-bold mb-4"><?= t('contact.cta.title') ?></h2>
             <p class="text-gray-400 max-w-2xl mx-auto mb-8"><?= t('contact.cta.description') ?></p>
-            <a href="mailto:ops@blackbox.codes" class="inline-flex items-center justify-center border border-amber-400 text-amber-400 font-semibold py-3 px-8 rounded-lg hover:bg-amber-400 hover:text-black transition-colors">
-                <?= t('contact.cta.button') ?>
+            <a href="mailto:ops@blackbox.codes" class="header-cta header-cta--pill header-cta--primary">
+                <span class="header-cta__label"><?= t('contact.cta.button') ?></span>
             </a>
         </div>
     </section>

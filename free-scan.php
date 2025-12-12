@@ -137,8 +137,8 @@ include 'includes/site-header.php';
         <p class="text-gray-300 max-w-2xl mx-auto mb-8">
           <?= t('free_scan.report.cta_description', 'Se hvordan vores specialister aktiverer hele PVE-modulet og leverer en komplet rapport med anbefalinger.') ?>
         </p>
-        <a href="demo.php" class="inline-flex items-center justify-center bg-amber-400 text-black font-semibold py-3 px-8 rounded-lg hover:bg-amber-500 transition-colors">
-          <?= t('free_scan.report.cta_link', 'Book en demo') ?>
+        <a href="demo.php" class="header-cta header-cta--pill header-cta--primary">
+          <span class="header-cta__label"><?= t('free_scan.report.cta_link', 'Book en demo') ?></span>
         </a>
       </div>
     </div>

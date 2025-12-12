@@ -272,8 +272,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const stickyCtaBar = document.querySelector('[data-component="sticky-cta"]');
     if (stickyCtaBar) {
         const STORAGE_KEY = 'bbxStickyCtaDismissed';
+        const SCROLL_THRESHOLD = 0.35; // 35% of viewport scroll before showing
         const closeButton = stickyCtaBar.querySelector('[data-sticky-cta-close]');
         const actionButtons = stickyCtaBar.querySelectorAll('.sticky-cta-bar__btn');
+        let stickyCtaHasShown = false;
 
         const hideBar = () => {
             stickyCtaBar.setAttribute('data-hidden', 'true');
@@ -285,6 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 stickyCtaBar.removeAttribute('data-hidden');
             }
             stickyCtaBar.setAttribute('data-visible', 'true');
+            stickyCtaHasShown = true;
         };
 
         const isDismissed = () => {
@@ -295,10 +298,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
+        const checkScrollThreshold = () => {
+            if (stickyCtaHasShown || isDismissed()) {
+                return;
+            }
+            const scrollY = window.scrollY || window.pageYOffset;
+            const viewportHeight = window.innerHeight;
+            if (scrollY > viewportHeight * SCROLL_THRESHOLD) {
+                window.requestAnimationFrame(showBar);
+            }
+        };
+
+        // Start hidden, only show after scroll threshold
         if (isDismissed()) {
             hideBar();
         } else {
-            window.requestAnimationFrame(showBar);
+            hideBar(); // Initially hidden
+            window.addEventListener('scroll', checkScrollThreshold, { passive: true });
+            // Check immediately in case page already scrolled (e.g., anchor navigation)
+            checkScrollThreshold();
         }
 
         const persistDismissal = () => {
@@ -316,6 +334,66 @@ document.addEventListener('DOMContentLoaded', () => {
 
         actionButtons.forEach((button) => {
             button.addEventListener('click', persistDismissal, { once: true });
+        });
+    }
+
+    // Graphene CTA bar scroll trigger (mobile hero CTA panel)
+    const grapheneCtaBar = document.querySelector('.graphene-cta-bar');
+    if (grapheneCtaBar) {
+        const GRAPHENE_SCROLL_THRESHOLD = 0.35; // 35% of viewport scroll before showing
+        const GRAPHENE_STORAGE_KEY = 'bbxGrapheneCtaDismissed';
+        let grapheneCtaHasShown = false;
+
+        const isGrapheneDismissed = () => {
+            try {
+                return window.sessionStorage.getItem(GRAPHENE_STORAGE_KEY) === '1';
+            } catch (error) {
+                return false;
+            }
+        };
+
+        const hideGrapheneBar = () => {
+            grapheneCtaBar.setAttribute('data-hidden', 'true');
+            grapheneCtaBar.removeAttribute('data-visible');
+        };
+
+        const showGrapheneBar = () => {
+            if (grapheneCtaBar.hasAttribute('data-hidden')) {
+                grapheneCtaBar.removeAttribute('data-hidden');
+            }
+            grapheneCtaBar.setAttribute('data-visible', 'true');
+            grapheneCtaHasShown = true;
+        };
+
+        const checkGrapheneScrollThreshold = () => {
+            if (grapheneCtaHasShown || isGrapheneDismissed()) {
+                return;
+            }
+            const scrollY = window.scrollY || window.pageYOffset;
+            const viewportHeight = window.innerHeight;
+            if (scrollY > viewportHeight * GRAPHENE_SCROLL_THRESHOLD) {
+                window.requestAnimationFrame(showGrapheneBar);
+            }
+        };
+
+        // Start hidden, only show after scroll threshold
+        if (isGrapheneDismissed()) {
+            hideGrapheneBar();
+        } else {
+            hideGrapheneBar(); // Initially hidden
+            window.addEventListener('scroll', checkGrapheneScrollThreshold, { passive: true });
+            checkGrapheneScrollThreshold();
+        }
+
+        // Close button for graphene CTA bar
+        const grapheneCloseBtn = grapheneCtaBar.querySelector('[data-graphene-cta-close]');
+        grapheneCloseBtn?.addEventListener('click', () => {
+            hideGrapheneBar();
+            try {
+                window.sessionStorage.setItem(GRAPHENE_STORAGE_KEY, '1');
+            } catch (error) {
+                // Ignore storage failures
+            }
         });
     }
 

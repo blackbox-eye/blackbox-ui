@@ -2646,6 +2646,12 @@ body.cookie-banner-open .sticky-cta-bar {
 body.cookie-banner-open .bbx-command-rail {
   bottom: calc(4.5rem + env(safe-area-inset-bottom));
 }
+
+/* Alphabot widget pushed up when cookie banner is open */
+body.cookie-banner-open .alphabot-widget {
+  bottom: calc(6rem + env(safe-area-inset-bottom)) !important;
+}
+
 /* Arabic text in footer - ensure proper display */
 :root[data-theme="light"] [dir="rtl"] {
   color: var(--primary-accent) !important;
@@ -2941,6 +2947,57 @@ body.cookie-banner-open .bbx-command-rail {
   width: 14px !important;
   height: 14px !important;
   stroke-width: 2.5 !important;
+}
+
+/* --------------------------------------------------------
+   FIX #4: Graphene CTA Bar - Scroll-Triggered Display
+   Sprint 1.5: Initially hidden, shows after 35% scroll
+   -------------------------------------------------------- */
+@media (max-width: 768px) {
+  .graphene-cta-bar {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+    pointer-events: none;
+    transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+  }
+
+  .graphene-cta-bar[data-visible="true"] {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+  }
+
+  .graphene-cta-bar[data-hidden="true"] {
+    opacity: 0 !important;
+    transform: translateX(-50%) translateY(20px) !important;
+    pointer-events: none !important;
+  }
+}
+
+/* Sticky CTA bar (site-footer aside) scroll-triggered display */
+[data-component="sticky-cta"] {
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+}
+
+[data-component="sticky-cta"][data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+[data-component="sticky-cta"][data-hidden="true"] {
+  opacity: 0 !important;
+  transform: translateY(20px) !important;
+  pointer-events: none !important;
+}
+
+/* Ensure CTA bars don't overlap cookie banner */
+body.cookie-banner-open .graphene-cta-bar,
+body.cookie-banner-open [data-component="sticky-cta"] {
+  bottom: calc(1rem + 72px + env(safe-area-inset-bottom, 0px));
 }
 
 /* --------------------------------------------------------

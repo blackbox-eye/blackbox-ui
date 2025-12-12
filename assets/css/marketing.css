@@ -1194,22 +1194,22 @@ body.js-enabled .section-fade-in.visible {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 1rem 2.5rem;
-  background: var(--graphene-primary);
-  color: #ffffff;
+  padding: 0.9rem 2.1rem;
+  background: linear-gradient(135deg, var(--bbx-gold-hover) 0%, var(--bbx-gold) 100%);
+  color: #0A1217;
   font-weight: 600;
-  font-size: 1.125rem;
-  border-radius: 0.5rem;
+  font-size: 1.05rem;
+  border-radius: 9999px;
   border: none;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
   text-decoration: none;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(var(--bbx-metal-rgb-light), 0.12);
 }
 
 .btn-graphene-primary:hover {
-  background: #1557b0;
-  transform: translateY(-2px);
-  box-shadow: var(--graphene-glow);
+  transform: translateY(-1px);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(var(--bbx-metal-rgb-light), 0.18);
 }
 
 .btn-graphene-primary:focus {
@@ -1222,27 +1222,27 @@ body.js-enabled .section-fade-in.visible {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 1rem 2.5rem;
+  padding: 0.9rem 2.1rem;
   background: transparent;
-  color: var(--graphene-gold);
+  color: rgba(255, 255, 255, 0.92);
   font-weight: 600;
-  font-size: 1.125rem;
-  border-radius: 0.5rem;
-  border: 2px solid var(--graphene-gold);
+  font-size: 1.05rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(var(--bbx-metal-rgb-light), 0.28);
   cursor: pointer;
   transition: all 0.25s ease;
   text-decoration: none;
 }
 
 .btn-graphene-secondary:hover {
-  background: var(--graphene-gold);
-  color: var(--graphene-bg-dark);
-  transform: translateY(-2px);
-  box-shadow: var(--bbx-shadow-gold);
+  background: rgba(var(--bbx-metal-rgb), 0.10);
+  border-color: rgba(var(--bbx-metal-rgb-light), 0.38);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
 }
 
 .btn-graphene-secondary:focus {
-  outline: 2px solid var(--graphene-gold);
+  outline: 2px solid var(--bbx-gold);
   outline-offset: 3px;
 }
 
@@ -4848,8 +4848,8 @@ button:focus-visible {
 .graphene-hero-tagline__highlight {
   display: inline-block;
   margin-left: 0.5rem;
-  color: var(--bbx-gold-light);
-  text-shadow: 0 0 14px rgba(var(--bbx-metal-rgb-light), 0.22);
+  color: var(--bbx-gold);
+  text-shadow: none;
   font-weight: 600;
 }
 
@@ -4872,14 +4872,14 @@ button:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 0.85rem;
-  padding: 1.15rem 3rem;
+  padding: 0.95rem 2.35rem;
   border-radius: 9999px;
   font-weight: 600;
-  font-size: 1.05rem;
+  font-size: 1rem;
   color: #050608;
-  background: linear-gradient(135deg, var(--bbx-gold), var(--bbx-gold-hover));
+  background: linear-gradient(135deg, var(--bbx-gold-hover), var(--bbx-gold));
   text-decoration: none;
-  box-shadow: 0 25px 60px rgba(var(--bbx-metal-rgb), 0.35);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(var(--bbx-metal-rgb-light), 0.12);
   margin-bottom: 2.5rem;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -4889,13 +4889,13 @@ button:focus-visible {
   position: absolute;
   inset: 0;
   background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.35), transparent 60%);
-  opacity: 0.9;
+  opacity: 0.55;
   pointer-events: none;
 }
 
 .graphene-btn-spotlight:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 35px 80px rgba(var(--bbx-metal-rgb), 0.48);
+  transform: translateY(-1px);
+  box-shadow: 0 24px 55px rgba(0, 0, 0, 0.52), 0 0 0 1px rgba(var(--bbx-metal-rgb-light), 0.18);
 }
 
 .graphene-btn-spotlight:focus-visible {
@@ -5061,21 +5061,22 @@ button:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1rem 2rem;
+  padding: 0.85rem 1.6rem;
   font-size: 1rem;
   font-weight: 600;
   color: #0A0E12;
   text-decoration: none;
-  border-radius: 0.75rem;
+  border-radius: 9999px;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   z-index: 1;
+  min-height: 48px;
 }
 
 .graphene-btn-primary__bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, var(--graphene-3d-gold), var(--graphene-3d-gold-light));
+  background: linear-gradient(135deg, var(--bbx-gold-hover) 0%, var(--bbx-gold) 100%);
   z-index: -2;
   transition: filter 0.3s ease;
 }
@@ -5083,15 +5084,15 @@ button:focus-visible {
 .graphene-btn-primary__glow {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.3), transparent 60%);
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.18), transparent 60%);
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: -1;
 }
 
 .graphene-btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 40px rgba(var(--bbx-metal-rgb), 0.28);
+  transform: translateY(-1px);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(var(--bbx-metal-rgb-light), 0.14);
 }
 
 .graphene-btn-primary:hover .graphene-btn-primary__glow {
@@ -5116,23 +5117,29 @@ button:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1rem 2rem;
+  padding: 0.85rem 1.6rem;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--graphene-3d-gold);
+  color: rgba(255, 255, 255, 0.92);
   text-decoration: none;
-  border-radius: 0.75rem;
+  border-radius: 9999px;
   background: transparent;
   overflow: hidden;
   transition: transform 0.3s ease, background 0.3s ease;
+  min-height: 48px;
 }
 
 .graphene-btn-secondary__border {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: 2px;
-  background: linear-gradient(135deg, var(--graphene-3d-gold), transparent, var(--graphene-3d-gold));
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--bbx-metal-rgb-light), 0.42),
+    rgba(var(--bbx-metal-rgb), 0.10),
+    rgba(var(--bbx-metal-rgb-light), 0.32)
+  );
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
@@ -5145,8 +5152,8 @@ button:focus-visible {
 }
 
 .graphene-btn-secondary:hover {
-  transform: translateY(-2px);
-  background: rgba(var(--bbx-metal-rgb), 0.08);
+  transform: translateY(-1px);
+  background: rgba(var(--bbx-metal-rgb), 0.10);
 }
 
 .graphene-btn-secondary:active {
@@ -5855,5 +5862,88 @@ ul.grid.grid-cols-1.sm\:grid-cols-3 .surface-card:hover {
 :root[data-theme="light"] .case-metric-value,
 :root[data-theme="light"] .products-hero__eyebrow {
   color: var(--gfx-gold) !important;
+}
+
+/* ========================================================
+   PREMIUM CTA OVERRIDES (Sprint 1.2)
+   Ensure bronze/copper CTAs win over older QA/legacy rules
+   ======================================================== */
+
+.btn-graphene-primary,
+.graphene-strong .btn-graphene-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 1rem 2rem;
+  min-width: 180px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: linear-gradient(135deg, var(--bbx-gold-hover) 0%, var(--bbx-gold) 100%);
+  color: #0b1116;
+  border: 1px solid rgba(var(--bbx-metal-rgb), 0.28);
+  border-radius: 0.75rem;
+  text-decoration: none;
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(var(--bbx-metal-rgb), 0.12) inset;
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+.btn-graphene-primary:hover,
+.graphene-strong .btn-graphene-primary:hover {
+  transform: translateY(-1px);
+  border-color: rgba(var(--bbx-metal-rgb), 0.38);
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(var(--bbx-metal-rgb), 0.14) inset;
+}
+
+.btn-graphene-primary:active,
+.graphene-strong .btn-graphene-primary:active {
+  transform: translateY(0);
+}
+
+.btn-graphene-secondary,
+.graphene-strong .btn-graphene-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 1rem 2rem;
+  min-width: 180px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: rgba(var(--bbx-metal-rgb), 0.06);
+  color: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(var(--bbx-metal-rgb), 0.26);
+  border-radius: 0.75rem;
+  text-decoration: none;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+.btn-graphene-secondary:hover,
+.graphene-strong .btn-graphene-secondary:hover {
+  transform: translateY(-1px);
+  background: rgba(var(--bbx-metal-rgb), 0.09);
+  border-color: rgba(var(--bbx-metal-rgb), 0.38);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22);
+}
+
+:root[data-theme="light"] .btn-graphene-secondary,
+:root[data-theme="light"] .graphene-strong .btn-graphene-secondary {
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--graphene-text-light);
+  border-color: rgba(var(--bbx-metal-rgb), 0.22);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+}
+
+:root[data-theme="light"] .btn-graphene-secondary:hover,
+:root[data-theme="light"] .graphene-strong .btn-graphene-secondary:hover {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(var(--bbx-metal-rgb), 0.30);
 }
 

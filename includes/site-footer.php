@@ -23,15 +23,15 @@
                 <div class="sm:col-span-2 lg:col-span-1 text-center sm:text-left">
                     <h4 class="text-xl font-bold text-white mb-4"><?= t('site.name') ?></h4>
                     <p class="text-gray-400 text-sm leading-relaxed mb-6"><?= t('footer.tagline') ?></p>
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-400/10 border border-amber-400/20">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-lg " style="background: rgba(212, 175, 55, 0.1); border " style="border-color: rgba(212, 175, 55, 0.2);">
                         <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                        <span class="text-xs text-amber-400 font-semibold"><?= t('footer.operational') ?></span>
+                        <span class="text-xs " style="color: var(--primary-accent); font-semibold"><?= t('footer.operational') ?></span>
                     </div>
                 </div>
 
                 <!-- Global Offices -->
                 <div class="text-center sm:text-left">
-                    <h4 class="text-sm font-bold uppercase tracking-wider text-amber-400 mb-4"><?= t('footer.offices.title') ?></h4>
+                    <h4 class="text-sm font-bold uppercase tracking-wider " style="color: var(--primary-accent); mb-4"><?= t('footer.offices.title') ?></h4>
                     <div class="space-y-6 text-gray-300">
                         <!-- Geneva Office -->
                         <div class="pb-4 border-b border-gray-700/50">
@@ -41,14 +41,14 @@
                         <!-- Dubai HQ -->
                         <div>
                             <p class="font-semibold text-white mb-1"><?= t('footer.offices.uae') ?></p>
-                            <p class="text-xs text-amber-400/80 mb-1 font-medium" dir="rtl"><?= t('footer.offices.uae_company_ar') ?></p>
+                            <p class="text-xs mb-1 font-medium" style="color: rgba(212, 175, 55, 0.8);" dir="rtl"><?= t('footer.offices.uae_company_ar') ?></p>
                             <p class="text-xs text-gray-500 mb-2">(<?= t('footer.offices.uae_company_en') ?>)</p>
                             <p class="text-xs leading-relaxed text-gray-400 mb-2"><?= t('footer.offices.uae_address') ?></p>
                             <p class="text-xs text-gray-400">
-                                <svg class="w-3 h-3 inline mr-1 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-3 h-3 inline mr-1 " style="color: var(--primary-accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                                 </svg>
-                                <a href="tel:+971547335770" class="hover:text-amber-400 transition-colors"><?= t('footer.offices.uae_phone') ?></a>
+                                <a href="tel:+971547335770" class="hover:" style="color: var(--primary-accent); transition-colors"><?= t('footer.offices.uae_phone') ?></a>
                             </p>
                         </div>
                     </div>
@@ -56,25 +56,25 @@
 
                 <!-- Contact Information -->
                 <div class="text-center sm:text-left">
-                    <h4 class="text-sm font-bold uppercase tracking-wider text-amber-400 mb-4"><?= t('footer.contact.title') ?></h4>
+                    <h4 class="text-sm font-bold uppercase tracking-wider " style="color: var(--primary-accent); mb-4"><?= t('footer.contact.title') ?></h4>
                     <ul class="space-y-3 text-gray-300">
                         <li class="flex items-center justify-center sm:justify-start gap-2">
-                            <svg class="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 " style="color: var(--primary-accent); flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                             </svg>
-                            <a href="mailto:ops@blackbox.codes" class="text-sm hover:text-amber-400 transition-colors">ops@blackbox.codes</a>
+                            <a href="mailto:ops@blackbox.codes" class="text-sm hover:" style="color: var(--primary-accent); transition-colors">ops@blackbox.codes</a>
                         </li>
                         <li class="flex items-center justify-center sm:justify-start gap-2">
-                            <svg class="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 " style="color: var(--primary-accent); flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                             </svg>
                             <span class="text-xs text-gray-500 mr-1"><?= t('footer.contact.dk_label') ?></span>
-                            <a href="tel:+4531330033" class="text-sm hover:text-amber-400 transition-colors">+45 31 33 00 33</a>
+                            <a href="tel:+4531330033" class="text-sm hover:" style="color: var(--primary-accent); transition-colors">+45 31 33 00 33</a>
                         </li>
                     </ul>
                     <!-- PGP Key Link -->
                     <div class="mt-6 pt-4 border-t border-gray-700/50">
-                        <a href="contact.php#secure-comm" class="inline-flex items-center gap-2 text-xs text-gray-500 hover:text-amber-400 transition-colors">
+                        <a href="contact.php#secure-comm" class="inline-flex items-center gap-2 text-xs text-gray-500 hover:" style="color: var(--primary-accent); transition-colors">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                             </svg>
@@ -85,7 +85,7 @@
 
                 <!-- Social Links -->
                 <div class="text-center sm:text-left">
-                    <h4 class="text-sm font-bold uppercase tracking-wider text-amber-400 mb-4"><?= t('footer.social.title') ?></h4>
+                    <h4 class="text-sm font-bold uppercase tracking-wider " style="color: var(--primary-accent); mb-4"><?= t('footer.social.title') ?></h4>
                     <div class="flex justify-center sm:justify-start gap-4">
                         <a href="#" class="group flex items-center justify-center w-12 h-12 rounded-lg bg-gray-800 hover:bg-amber-400 hover:scale-110 transition-all duration-300" aria-label="LinkedIn">
                             <svg class="w-6 h-6 text-gray-400 group-hover:text-black transition-colors" fill="currentColor" viewBox="0 0 24 24">
@@ -106,9 +106,9 @@
                 <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
                     <p><?= t('footer.copyright') ?></p>
                     <div class="flex items-center gap-4">
-                        <a href="privacy.php" class="hover:text-amber-400 transition-colors"><?= t('footer.privacy', 'Privatlivspolitik') ?></a>
+                        <a href="privacy.php" class="hover:" style="color: var(--primary-accent); transition-colors"><?= t('footer.privacy', 'Privatlivspolitik') ?></a>
                         <span class="text-gray-700">|</span>
-                        <a href="terms.php" class="hover:text-amber-400 transition-colors"><?= t('footer.terms', 'Vilkår') ?></a>
+                        <a href="terms.php" class="hover:" style="color: var(--primary-accent); transition-colors"><?= t('footer.terms', 'Vilkår') ?></a>
                         <span class="text-gray-700">|</span>
                         <span class="text-gray-600"><?= t('footer.recaptcha_notice', 'This site is protected by reCAPTCHA') ?></span>
                         <?php if (defined('BBX_QA_MODE') && BBX_QA_MODE): ?>

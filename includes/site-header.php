@@ -480,7 +480,7 @@ if ($is_graphene_page) {
         <!-- Compact header -->
         <div class="flex justify-between items-center px-4 py-3 border-b border-gray-800/50">
             <span id="mobile-menu-heading" class="text-sm font-semibold text-gray-400 uppercase tracking-wider"><?= t('header.mobile.navigation') ?></span>
-            <button id="mobile-menu-close" class="text-gray-400 hover:text-white p-1.5 -mr-1 rounded-lg hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400 transition-colors" aria-label="<?= htmlspecialchars(t('header.mobile.close_menu')) ?>">
+            <button id="mobile-menu-close" class="text-gray-400 hover:text-white p-1.5 -mr-1 rounded-lg hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 transition-colors" style="--tw-ring-color: var(--primary-accent);" aria-label="<?= htmlspecialchars(t('header.mobile.close_menu')) ?>">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>

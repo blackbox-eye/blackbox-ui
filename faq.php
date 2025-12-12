@@ -123,7 +123,7 @@ include 'includes/site-header.php';
             placeholder="<?= htmlspecialchars(t('faq.search.placeholder')) ?>"
             class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-6 py-4 pr-12 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent">
           <button id="faq-search-btn"
-            class="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-amber-400 hover:text-amber-300 transition-colors">
+            class="absolute right-2 top-1/2 -translate-y-1/2 p-2 " style="color: var(--primary-accent);  transition-colors">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
             </svg>
@@ -146,7 +146,7 @@ include 'includes/site-header.php';
           <p class="text-gray-300 mb-6">
             <?= htmlspecialchars($faq_error_message) ?>
           </p>
-          <a href="contact.php" class="inline-flex items-center gap-2 px-6 py-3 bg-amber-400 text-black font-semibold rounded-lg hover:bg-amber-500 transition-colors">
+          <a href="contact.php" class="inline-flex items-center gap-2 px-6 py-3 border-2 font-semibold rounded-lg transition-colors hover:bg-opacity-80" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent);">
             Kontakt support
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -161,12 +161,12 @@ include 'includes/site-header.php';
       <div class="container mx-auto px-4">
         <div class="flex flex-wrap justify-center gap-3">
           <a href="faq.php"
-            class="px-4 py-2 rounded-lg transition-colors <?= $selected_category === null ? 'bg-amber-400 text-black font-semibold' : 'bg-gray-800 hover:bg-gray-700 text-gray-300' ?>">
+            class="px-4 py-2 rounded-lg transition-colors <?= $selected_category === null ? 'border-2" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); text-black font-semibold' : 'bg-gray-800 hover:bg-gray-700 text-gray-300' ?>">
             <?= t('faq.filter.all') ?>
           </a>
           <?php foreach ($categories as $cat): ?>
             <a href="faq.php?category=<?= urlencode($cat) ?>"
-              class="px-4 py-2 rounded-lg transition-colors <?= $selected_category === $cat ? 'bg-amber-400 text-black font-semibold' : 'bg-gray-800 hover:bg-gray-700 text-gray-300' ?>">
+              class="px-4 py-2 rounded-lg transition-colors <?= $selected_category === $cat ? 'border-2" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); text-black font-semibold' : 'bg-gray-800 hover:bg-gray-700 text-gray-300' ?>">
               <?= htmlspecialchars($cat) ?>
             </a>
           <?php endforeach; ?>
@@ -187,7 +187,7 @@ include 'includes/site-header.php';
               <!-- Category Header -->
               <div class="mb-8">
                 <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
-                  <span class="text-amber-400"><?= htmlspecialchars($category) ?></span>
+                  <span class="" style="color: var(--primary-accent);"><?= htmlspecialchars($category) ?></span>
                   <span class="text-sm text-gray-400 font-normal">(<?= count($category_faqs) ?> <?= t('faq.questions') ?>)</span>
                 </h2>
 
@@ -200,7 +200,7 @@ include 'includes/site-header.php';
                         aria-expanded="false"
                         aria-controls="faq-answer-<?= $faq['id'] ?>">
                         <span class="text-lg font-semibold text-white pr-4"><?= htmlspecialchars($faq['question']) ?></span>
-                        <svg class="faq-icon w-6 h-6 text-amber-400 flex-shrink-0 transition-transform duration-300"
+                        <svg class="faq-icon w-6 h-6 " style="color: var(--primary-accent); flex-shrink-0 transition-transform duration-300"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24">
@@ -253,18 +253,18 @@ include 'includes/site-header.php';
   <?php endif; ?>
 
   <!-- CTA Section -->
-  <section class="py-16 bg-gradient-to-r from-amber-400/10 to-amber-600/10 border-y border-amber-400/20">
+  <section class="py-16 bg-gradient-to-r from-amber-400/10 to-amber-600/10 border-y " style="border-color: var(--primary-accent);/20">
     <div class="container mx-auto px-4">
       <div class="max-w-3xl mx-auto text-center">
         <h3 class="text-2xl sm:text-3xl font-bold mb-4"><?= t('faq.cta.title') ?></h3>
         <p class="text-gray-300 mb-8 text-lg"><?= t('faq.cta.description') ?></p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <a href="contact.php"
-            class="px-8 py-4 bg-amber-400 text-black font-semibold rounded-lg hover:bg-amber-500 transition-colors">
+            class="px-8 py-4 border-2" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); text-black font-semibold rounded-lg hover:bg-amber-500 transition-colors">
             <?= t('faq.cta.contact') ?>
           </a>
           <a href="pricing.php"
-            class="px-8 py-4 border border-amber-400 text-amber-400 font-semibold rounded-lg hover:bg-amber-400 hover:text-black transition-colors">
+            class="px-8 py-4 border " style="border-color: var(--primary-accent); " style="color: var(--primary-accent); font-semibold rounded-lg hover:border-2" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); hover:text-black transition-colors">
             <?= t('faq.cta.pricing') ?>
           </a>
         </div>
@@ -343,7 +343,7 @@ include 'includes/site-header.php';
         return;
       }
 
-      searchResults.innerHTML = '<div class="glass-effect rounded-xl p-6 text-center"><span class="text-amber-400"><?= t('common.ai_loading') ?></span></div>';
+      searchResults.innerHTML = '<div class="glass-effect rounded-xl p-6 text-center"><span class="" style="color: var(--primary-accent);"><?= t('common.ai_loading') ?></span></div>';
       searchResults.classList.remove('hidden');
 
       try {
@@ -361,12 +361,12 @@ include 'includes/site-header.php';
         const data = await response.json();
 
         if (data.results && data.results.length > 0) {
-          let html = '<div class="glass-effect rounded-xl p-6"><h3 class="text-lg font-bold mb-4 text-amber-400"><?= t('faq.search.results') ?> (' + data.results.length + ')</h3><div class="space-y-4">';
+          let html = '<div class="glass-effect rounded-xl p-6"><h3 class="text-lg font-bold mb-4 " style="color: var(--primary-accent);"><?= t('faq.search.results') ?> (' + data.results.length + ')</h3><div class="space-y-4">';
 
           data.results.forEach(faq => {
             html += `
                         <div class="border-b border-gray-700 last:border-0 pb-4 last:pb-0">
-                            <a href="#faq-answer-${faq.id}" class="block hover:text-amber-400 transition-colors">
+                            <a href="#faq-answer-${faq.id}" class="block hover:" style="color: var(--primary-accent); transition-colors">
                                 <h4 class="font-semibold mb-2">${faq.question}</h4>
                                 <p class="text-sm text-gray-400">${faq.answer.substring(0, 150)}...</p>
                             </a>

@@ -30,7 +30,7 @@ if (!$post) {
       <div class="max-w-2xl mx-auto text-center py-16">
         <h1 class="text-4xl font-bold mb-6"><?= t('blog.post.not_found') ?></h1>
         <p class="text-xl text-gray-400 mb-8"><?= t('blog.post.not_found_desc') ?></p>
-        <a href="blog.php" class="inline-block px-6 py-3 bg-amber-400 text-black font-semibold rounded-lg hover:bg-amber-500 transition-colors">
+        <a href="blog.php" class="inline-block px-6 py-3 border-2" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); text-black font-semibold rounded-lg hover:bg-amber-500 transition-colors">
           <?= t('blog.post.back_to_blog') ?>
         </a>
       </div>
@@ -86,12 +86,12 @@ include 'includes/site-header.php';
         <!-- Breadcrumbs -->
         <nav class="mb-6 text-sm" aria-label="Breadcrumb">
           <ol class="flex items-center gap-2 text-gray-400">
-            <li><a href="index.php" class="hover:text-amber-400"><?= t('common.home') ?></a></li>
+            <li><a href="index.php" class="hover:" style="color: var(--primary-accent);"><?= t('common.home') ?></a></li>
             <li>/</li>
-            <li><a href="blog.php" class="hover:text-amber-400"><?= t('blog.title') ?></a></li>
+            <li><a href="blog.php" class="hover:" style="color: var(--primary-accent);"><?= t('blog.title') ?></a></li>
             <?php if ($post['category']): ?>
               <li>/</li>
-              <li><a href="blog.php?category=<?= urlencode($post['category']) ?>" class="hover:text-amber-400"><?= htmlspecialchars($post['category']) ?></a></li>
+              <li><a href="blog.php?category=<?= urlencode($post['category']) ?>" class="hover:" style="color: var(--primary-accent);"><?= htmlspecialchars($post['category']) ?></a></li>
             <?php endif; ?>
             <li>/</li>
             <li class="text-white truncate max-w-xs"><?= htmlspecialchars($post['title']) ?></li>
@@ -100,7 +100,7 @@ include 'includes/site-header.php';
 
         <!-- Category Badge -->
         <?php if ($post['category']): ?>
-          <span class="inline-block px-4 py-1 text-sm font-semibold bg-amber-400/20 text-amber-400 rounded-full mb-4">
+          <span class="inline-block px-4 py-1 text-sm font-semibold rounded-full mb-4" style="background: rgba(212, 175, 55, 0.15); color: var(--primary-accent);">
             <?= htmlspecialchars($post['category']) ?>
           </span>
         <?php endif; ?>
@@ -209,7 +209,7 @@ include 'includes/site-header.php';
                     </div>
                   <?php endif; ?>
                   <div class="p-4">
-                    <h3 class="font-bold mb-2 text-white hover:text-amber-400 transition-colors">
+                    <h3 class="font-bold mb-2 text-white hover:" style="color: var(--primary-accent); transition-colors">
                       <a href="<?= bbx_get_blog_post_url($related['slug']) ?>">
                         <?= htmlspecialchars($related['title']) ?>
                       </a>

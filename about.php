@@ -319,9 +319,9 @@ include 'includes/site-header.php';
 
         <div class="container mx-auto px-4 relative z-10">
             <div class="max-w-4xl mx-auto text-center">
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-400/10 border border-amber-400/30 mb-6 backdrop-blur-sm">
-                    <div class="w-2 h-2 rounded-full bg-amber-400 animate-pulse motion-reduce:animate-none" aria-hidden="true"></div>
-                    <span class="text-xs uppercase tracking-widest text-amber-400 font-bold"><?= t('about.hero_section.tagline') ?></span>
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-6 backdrop-blur-sm" style="background: rgba(212, 175, 55, 0.1); border-color: rgba(212, 175, 55, 0.3);">
+                    <div class="w-2 h-2 rounded-full border-2 animate-pulse motion-reduce:animate-none" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent);" aria-hidden="true"></div>
+                    <span class="text-xs uppercase tracking-widest font-bold" style="color: var(--primary-accent);"><?= t('about.hero_section.tagline') ?></span>
                 </div>
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black mb-6 leading-tight">
                     <span class="bg-gradient-to-r from-white via-amber-200 to-amber-400 bg-clip-text text-transparent">
@@ -335,15 +335,15 @@ include 'includes/site-header.php';
                 <!-- Quick stats with hover effects -->
                 <div class="grid grid-cols-3 gap-4 sm:gap-6 max-w-2xl mx-auto">
                     <div class="text-center group cursor-default">
-                        <div class="text-3xl sm:text-4xl font-black text-amber-400 mb-2 transition-transform group-hover:scale-110">24/7</div>
+                        <div class="text-3xl sm:text-4xl font-black " style="color: var(--primary-accent); mb-2 transition-transform group-hover:scale-110">24/7</div>
                         <div class="text-xs sm:text-sm text-gray-400 uppercase tracking-wide">Operations</div>
                     </div>
                     <div class="text-center group cursor-default">
-                        <div class="text-3xl sm:text-4xl font-black text-amber-400 mb-2 transition-transform group-hover:scale-110">3</div>
+                        <div class="text-3xl sm:text-4xl font-black " style="color: var(--primary-accent); mb-2 transition-transform group-hover:scale-110">3</div>
                         <div class="text-xs sm:text-sm text-gray-400 uppercase tracking-wide">Kontinenter</div>
                     </div>
                     <div class="text-center group cursor-default">
-                        <div class="text-3xl sm:text-4xl font-black text-amber-400 mb-2 transition-transform group-hover:scale-110">∞</div>
+                        <div class="text-3xl sm:text-4xl font-black " style="color: var(--primary-accent); mb-2 transition-transform group-hover:scale-110">∞</div>
                         <div class="text-xs sm:text-sm text-gray-400 uppercase tracking-wide">Dedikation</div>
                     </div>
                 </div>
@@ -351,19 +351,19 @@ include 'includes/site-header.php';
                 <!-- Trust indicators -->
                 <div class="mt-12 pt-8 border-t border-gray-800 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-400">
                     <div class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                        <svg class="w-5 h-5 " style="color: var(--primary-accent);" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                         </svg>
                         <span>ISO 27001 Ready</span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 " style="color: var(--primary-accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                         </svg>
                         <span>GDPR Compliant</span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 " style="color: var(--primary-accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         <span>5+ Years Experience</span>
@@ -374,7 +374,7 @@ include 'includes/site-header.php';
 
         <!-- Scroll indicator -->
         <a href="#vision-mission" class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce motion-reduce:animate-none focus:outline-none focus:ring-2 focus:ring-amber-400 rounded-full p-2" aria-label="Scroll to content">
-            <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-6 h-6 " style="color: var(--primary-accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
             </svg>
         </a>
@@ -388,12 +388,12 @@ include 'includes/site-header.php';
                     <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-3xl group-hover:bg-amber-500/10 transition-all duration-500 motion-reduce:transition-none" aria-hidden="true"></div>
                     <div class="relative z-10">
                         <div class="w-14 h-14 rounded-2xl bg-amber-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                            <svg class="w-7 h-7 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-7 h-7 " style="color: var(--primary-accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                             </svg>
                         </div>
-                        <h2 class="text-2xl sm:text-3xl font-bold text-amber-400 mb-4"><?= t('about.pillars.vision_title') ?></h2>
+                        <h2 class="text-2xl sm:text-3xl font-bold " style="color: var(--primary-accent); mb-4"><?= t('about.pillars.vision_title') ?></h2>
                         <p class="text-gray-300 leading-relaxed"><?= t('about.pillars.vision_body') ?></p>
                     </div>
                 </article>
@@ -435,9 +435,9 @@ include 'includes/site-header.php';
                 foreach ($values_data as $value): ?>
                     <div class="group relative">
                         <div class="absolute inset-0 bg-gradient-to-br from-amber-500/20 to-transparent rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
-                        <div class="relative bg-gray-900/80 backdrop-blur-sm border border-gray-700 rounded-2xl p-10 hover:border-amber-400/60 transition-all duration-300 min-h-[280px] flex flex-col">
+                        <div class="relative bg-gray-900/80 backdrop-blur-sm border border-gray-700 rounded-2xl p-10 hover:" style="border-color: var(--primary-accent);/60 transition-all duration-300 min-h-[280px] flex flex-col">
                             <div class="w-16 h-16 rounded-2xl bg-amber-500/15 flex items-center justify-center mb-6 group-hover:bg-amber-500/25 transition-colors duration-300">
-                                <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-8 h-8 " style="color: var(--primary-accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <?= $value['icon'] ?>
                                 </svg>
                             </div>
@@ -501,11 +501,11 @@ include 'includes/site-header.php';
                     <div class="absolute inset-0 bg-gradient-to-r from-amber-500/20 via-purple-500/20 to-blue-500/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500 opacity-50 motion-reduce:transition-none" aria-hidden="true"></div>
                     <div class="relative bg-gray-900/90 backdrop-blur-sm border border-amber-500/30 rounded-3xl p-8 sm:p-10 text-center focus-within:ring-2 focus-within:ring-amber-400">
                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500/20 to-purple-500/20 flex items-center justify-center mx-auto mb-6" aria-hidden="true">
-                            <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-8 h-8 " style="color: var(--primary-accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path>
                             </svg>
                         </div>
-                        <h3 class="text-2xl font-bold text-amber-400 mb-4"><?= t('about.teams.units.custom.title') ?></h3>
+                        <h3 class="text-2xl font-bold " style="color: var(--primary-accent); mb-4"><?= t('about.teams.units.custom.title') ?></h3>
                         <p class="text-gray-300 leading-relaxed max-w-3xl mx-auto"><?= t('about.teams.units.custom.body') ?></p>
                     </div>
                 </article>
@@ -518,11 +518,11 @@ include 'includes/site-header.php';
         <div class="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-blue-500/10" aria-hidden="true"></div>
         <div class="container mx-auto px-4 relative z-10">
             <div class="max-w-4xl mx-auto text-center">
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-400/10 border border-amber-400/30 mb-8 backdrop-blur-sm">
-                    <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-400/10 border " style="border-color: var(--primary-accent);/30 mb-8 backdrop-blur-sm">
+                    <svg class="w-4 h-4 " style="color: var(--primary-accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                     </svg>
-                    <span class="text-xs uppercase tracking-widest text-amber-400 font-bold">Klar til handling</span>
+                    <span class="text-xs uppercase tracking-widest " style="color: var(--primary-accent); font-bold">Klar til handling</span>
                 </div>
                 <h2 class="text-4xl sm:text-5xl font-black mb-6 leading-tight"><?= t('about.cta.title') ?></h2>
                 <p class="text-lg text-gray-300 mb-6 max-w-2xl mx-auto leading-relaxed">
@@ -531,7 +531,7 @@ include 'includes/site-header.php';
 
                 <!-- Social proof -->
                 <div class="flex items-center justify-center gap-2 mb-10 text-sm text-gray-400">
-                    <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                    <svg class="w-5 h-5 " style="color: var(--primary-accent);" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                         <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
                     </svg>
                     <span>Tillidsvurderet af 500+ virksomheder globalt</span>

@@ -64,7 +64,7 @@ $case_navigator = [
     <section class="py-20 sm:py-24 section-fade-in page-section">
         <div class="container mx-auto px-4">
             <div class="text-center max-w-3xl mx-auto mb-12">
-                <p class="text-amber-400 uppercase tracking-widest text-sm font-semibold mb-4"><?= t('cases.hero_section.tagline') ?></p>
+                <p class=" uppercase tracking-widest text-sm font-semibold mb-4" style="color: var(--primary-accent);"><?= t('cases.hero_section.tagline') ?></p>
                 <h1 class="text-3xl sm:text-5xl font-bold mb-6"><?= t('cases.hero_section.title') ?></h1>
                 <p class="text-gray-300 text-base sm:text-lg">
                     <?= t('cases.hero_section.description') ?>
@@ -72,7 +72,7 @@ $case_navigator = [
                 <ul class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
                     <?php foreach (['evidence', 'frameworks', 'results'] as $bullet_key): ?>
                         <li class="surface-card p-5 flex items-start gap-3">
-                            <span class="text-amber-400 mt-1" aria-hidden="true">
+                            <span class=" mt-1" style="color: var(--primary-accent);" aria-hidden="true">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                     <polyline points="20 6 9 17 4 12"></polyline>
                                 </svg>
@@ -185,7 +185,7 @@ $case_navigator = [
                 </p>
                 <div class="space-y-4">
                     <label for="case-input" class="block text-sm font-medium text-gray-300 mb-2"><?= t('cases.analysis.label') ?></label>
-                    <textarea id="case-input" rows="4" class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="<?= htmlspecialchars(t('cases.analysis.placeholder')) ?>"></textarea>
+                    <textarea id="case-input" rows="4" class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-2" style="--tw-ring-color: var(--primary-accent);" placeholder="<?= htmlspecialchars(t('cases.analysis.placeholder')) ?>"></textarea>
                     <button id="analyze-case-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors" data-loading-text="<?= htmlspecialchars(t('cases.analysis.loading')) ?>">
                         <?= t('cases.analysis.button') ?>
                     </button>

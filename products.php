@@ -187,7 +187,7 @@ $extra_modules = ['idmatrix', 'aut', 'bridge', 'command'];
 <div id="gemini-modal" role="dialog" aria-modal="true" aria-labelledby="gemini-modal-title" class="hidden fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4">
     <div class="glass-effect rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
         <div class="flex justify-between items-center p-4 border-b border-gray-700">
-            <h3 id="gemini-modal-title" class="text-lg sm:text-xl font-bold text-amber-400">AI-genereret trusselsscenarie</h3>
+            <h3 id="gemini-modal-title" class="text-lg sm:text-xl font-bold " style="color: var(--primary-accent);">AI-genereret trusselsscenarie</h3>
             <button id="close-modal-btn" class="text-gray-400 hover:text-white text-3xl leading-none" aria-label="Luk">&times;</button>
         </div>
         <div id="modal-content" class="p-6 overflow-y-auto flex-1">

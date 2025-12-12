@@ -1,21 +1,21 @@
 {
-    "theme_mode": "standard",
+    "theme_mode": "strong",
     "colors": {
-        "primary": "#1a73e8",
-        "secondary": "#113c55",
-        "gold": "#d4af37",
-        "accent": "#e94560",
-        "bg_dark": "#0A1217",
-        "bg_light": "#F5F8FA",
-        "text": "#E0E6EB",
-        "text_light": "#22313A"
+        "primary": "#2196F3",
+        "secondary": "#0D47A1",
+        "gold": "#FFD700",
+        "accent": "#FF1744",
+        "bg_dark": "#050A0D",
+        "bg_light": "#FFFFFF",
+        "text": "#FFFFFF",
+        "text_light": "#1A1A2E"
     },
     "effects": {
-        "pulse_intensity": "normal",
+        "pulse_intensity": "intense",
         "glow_enabled": true,
         "gradient_angle": 135,
-        "animation_speed": "normal"
+        "animation_speed": "fast"
     },
-    "updated_at": "2025-12-02T12:47:26+00:00",
+    "updated_at": "2025-12-12T23:27:22+00:00",
     "updated_by": "::1"
 }

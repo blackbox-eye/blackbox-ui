@@ -356,7 +356,8 @@
     "hero_section": {
       "tagline": "Platformen",
       "title": "En holistisk sikkerhedsstrategi på ét sted",
-      "description": "Hvert modul i Blackbox EYE™ er en specialiseret forsvarslinje. Brug vores AI-assistent til at generere konkrete trussels-scenarier og se, hvordan vi neutraliserer dem."
+      "description": "Hvert modul i Blackbox EYE™ er en specialiseret forsvarslinje. Brug vores AI-assistent til at generere konkrete trussels-scenarier og se, hvordan vi neutraliserer dem.",
+      "intro": "Se hvordan hvert modul samarbejder for at give dig komplet beskyttelse."
     },
     "scenario_button": "✨ Generer trussels-scenarie",
     "key_features_heading": "Nøglefunktioner",

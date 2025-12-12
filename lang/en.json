@@ -396,7 +396,8 @@
     "hero_section": {
       "tagline": "The Platform",
       "title": "A holistic security strategy in one place",
-      "description": "Every module inside Blackbox EYE™ is a specialized line of defense. Use our AI assistant to generate concrete threat scenarios and see how we neutralize them."
+      "description": "Every module inside Blackbox EYE™ is a specialized line of defense. Use our AI assistant to generate concrete threat scenarios and see how we neutralize them.",
+      "intro": "See how each module works together to provide complete protection."
     },
     "scenario_button": "✨ Generate a Threat Scenario",
     "key_features_heading": "Key Capabilities",

@@ -76,8 +76,9 @@ $texts = $banner_texts[$banner_lang] ?? $banner_texts['en'];
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 9999;
+    z-index: 70;
     padding: 1rem;
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom));
     background: var(--surface-card-bg, rgba(17, 24, 39, 0.98));
     border-top: 1px solid var(--surface-border, rgba(255, 255, 255, 0.08));
     backdrop-filter: blur(12px);
@@ -254,6 +255,7 @@ $texts = $banner_texts[$banner_lang] ?? $banner_texts['en'];
     function showBanner() {
       banner.hidden = false;
       banner.setAttribute('data-visible', 'true');
+      document.body.classList.add('cookie-banner-open');
       // Focus first button for accessibility
       setTimeout(function() {
         acceptBtn.focus();
@@ -266,6 +268,7 @@ $texts = $banner_texts[$banner_lang] ?? $banner_texts['en'];
       setTimeout(function() {
         banner.hidden = true;
       }, 300);
+      document.body.classList.remove('cookie-banner-open');
     }
 
     // Handle accept

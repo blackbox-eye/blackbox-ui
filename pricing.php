@@ -189,7 +189,9 @@ include 'includes/site-header.php';
                         </li>
                     </ul>
                     <div class="text-xs text-gray-500 mb-4"><?= t('pricing.mvp.basis.subscription') ?></div>
-                    <a href="contact.php" class="mt-auto w-full inline-block border-2 py-3 rounded-lg transition-all font-semibold text-sm lg:text-base" style="border-color: var(--primary-accent); color: var(--primary-accent);"><?= t('pricing.cta.button') ?></a>
+                    <a href="contact.php" class="mt-auto w-full header-cta header-cta--pill header-cta--secondary">
+                        <span class="header-cta__label"><?= t('pricing.cta.button') ?></span>
+                    </a>
                 </article>
 
                 <!-- MVP-Pro -->
@@ -224,7 +226,9 @@ include 'includes/site-header.php';
                         </li>
                     </ul>
                     <div class="text-xs text-gray-500 mb-4"><?= t('pricing.mvp.pro.subscription') ?></div>
-                    <a href="contact.php" class="mt-auto w-full inline-block border-2" style="border-color: var(--primary-accent);  py-3 rounded-lg  transition-all font-semibold text-sm lg:text-base" style="color: var(--primary-accent);"><?= t('pricing.cta.button') ?></a>
+                    <a href="contact.php" class="mt-auto w-full header-cta header-cta--pill header-cta--secondary">
+                        <span class="header-cta__label"><?= t('pricing.cta.button') ?></span>
+                    </a>
                 </article>
 
                 <!-- MVP-Premium -->
@@ -259,7 +263,9 @@ include 'includes/site-header.php';
                         </li>
                     </ul>
                     <div class="text-xs text-gray-500 mb-4"><?= t('pricing.mvp.premium.subscription') ?></div>
-                    <a href="contact.php" class="mt-auto w-full inline-block border-2" style="border-color: var(--primary-accent);  py-3 rounded-lg  transition-all font-semibold text-sm lg:text-base" style="color: var(--primary-accent);"><?= t('pricing.cta.button') ?></a>
+                    <a href="contact.php" class="mt-auto w-full header-cta header-cta--pill header-cta--secondary">
+                        <span class="header-cta__label"><?= t('pricing.cta.button') ?></span>
+                    </a>
                 </article>
             </div>
 
@@ -297,7 +303,9 @@ include 'includes/site-header.php';
                         </li>
                     </ul>
                     <div class="text-xs text-gray-500 mb-4"><?= t('pricing.enterprise.standard.subscription') ?></div>
-                    <a href="contact.php" class="mt-auto w-full inline-block border-2" style="border-color: var(--primary-accent);  py-3 rounded-lg  transition-all font-semibold text-sm lg:text-base" style="color: var(--primary-accent);"><?= t('pricing.cta.contact') ?></a>
+                    <a href="contact.php" class="mt-auto w-full header-cta header-cta--pill header-cta--secondary">
+                        <span class="header-cta__label"><?= t('pricing.cta.contact') ?></span>
+                    </a>
                 </article>
                 <article class="relative glass-effect rounded-2xl p-6 lg:p-8 text-center border-2" style="border-color: var(--primary-accent); flex flex-col min-h-[500px] order-1 lg:order-2 transform lg:scale-105 z-10">
                     <div class="absolute -top-3 left-1/2 -translate-x-1/2 border-2" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); backdrop-filter: blur(8px); px-4 py-1 rounded-full text-xs lg:text-sm font-bold whitespace-nowrap"><?= t('pricing.enterprise.premium.badge') ?></div>
@@ -332,7 +340,9 @@ include 'includes/site-header.php';
                         </li>
                     </ul>
                     <div class="text-xs text-gray-500 mb-4"><?= t('pricing.enterprise.premium.subscription') ?></div>
-                    <a href="contact.php" class="mt-auto w-full inline-block border-2" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); backdrop-filter: blur(8px); py-3 rounded-lg  transition-all font-semibold text-sm lg:text-base"><?= t('pricing.cta.contact') ?></a>
+                    <a href="contact.php" class="mt-auto w-full header-cta header-cta--pill header-cta--primary">
+                        <span class="header-cta__label"><?= t('pricing.cta.contact') ?></span>
+                    </a>
                 </article>
                 <article class="glass-effect rounded-2xl p-6 lg:p-8 text-center flex flex-col min-h-[500px] order-3">
                     <h2 class="text-xl lg:text-2xl font-bold mb-2"><?= t('pricing.enterprise.enterprise.title') ?></h2>
@@ -366,7 +376,9 @@ include 'includes/site-header.php';
                         </li>
                     </ul>
                     <div class="text-xs text-gray-500 mb-4"><?= t('pricing.enterprise.enterprise.subscription') ?></div>
-                    <a href="contact.php" class="mt-auto w-full inline-block border-2" style="border-color: var(--primary-accent);  py-3 rounded-lg  transition-all font-semibold text-sm lg:text-base" style="color: var(--primary-accent);"><?= t('pricing.cta.contact') ?></a>
+                    <a href="contact.php" class="mt-auto w-full header-cta header-cta--pill header-cta--secondary">
+                        <span class="header-cta__label"><?= t('pricing.cta.contact') ?></span>
+                    </a>
                 </article>
             </div>
         </div>
@@ -376,8 +388,8 @@ include 'includes/site-header.php';
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-3xl sm:text-4xl font-bold mb-4"><?= t('pricing.custom.title') ?></h2>
             <p class="text-gray-400 max-w-2xl mx-auto mb-8"><?= t('pricing.custom.description') ?></p>
-            <a href="contact.php" class="inline-flex items-center justify-center border-2" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); backdrop-filter: blur(8px); font-semibold py-3 px-8 rounded-lg  transition-colors">
-                <?= t('pricing.custom.button') ?>
+            <a href="contact.php" class="header-cta header-cta--pill header-cta--primary">
+                <span class="header-cta__label"><?= t('pricing.custom.button') ?></span>
             </a>
         </div>
     </section>

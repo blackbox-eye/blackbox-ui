@@ -187,12 +187,8 @@ $current_lang = bbx_get_language();
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-3xl sm:text-4xl font-bold mb-4"><?= t('contact.cta.title') ?></h2>
             <p class="text-gray-400 max-w-2xl mx-auto mb-8"><?= t('contact.cta.description') ?></p>
-            <a href="mailto:ops@blackbox.codes" 
-               class="inline-flex items-center justify-center font-semibold py-3 px-8 rounded-lg transition-all duration-300 border-2" 
-               style="background: rgba(255, 255, 255, 0.04); border-color: rgba(212, 175, 55, 0.3); color: var(--text-high-emphasis); backdrop-filter: blur(8px);"
-               onmouseover="this.style.background='rgba(212, 175, 55, 0.1)'; this.style.borderColor='var(--primary-accent)'; this.style.color='var(--primary-accent)';" 
-               onmouseout="this.style.background='rgba(255, 255, 255, 0.04)'; this.style.borderColor='rgba(212, 175, 55, 0.3)'; this.style.color='var(--text-high-emphasis)';">
-                <?= t('contact.cta.button') ?>
+            <a href="mailto:ops@blackbox.codes" class="header-cta header-cta--pill header-cta--primary">
+                <span class="header-cta__label"><?= t('contact.cta.button') ?></span>
             </a>
         </div>
     </section>

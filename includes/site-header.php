@@ -416,7 +416,7 @@ if ($is_graphene_page) {
                                 </span>
                             </a>
                         </div>
-                        <a href="/agent-access.php" class="header-cta agent-login-cta bbx-btn-pill" aria-label="<?= htmlspecialchars(t('header.cta.agent_login')) ?>">
+                        <a href="/agent-access.php" class="header-cta header-cta--pill header-cta--secondary agent-login-cta" aria-label="<?= htmlspecialchars(t('header.cta.agent_login')) ?>">
                             <span class="header-cta__label"><?= t('header.cta.agent_login') ?></span>
                         </a>
                         <div class="language-switcher-wrapper flex items-center gap-0.5">
@@ -558,7 +558,7 @@ if ($is_graphene_page) {
                 </a>
             </div>
             <!-- Agent login CTA -->
-            <a href="/agent-access.php" class="header-cta header-cta--wide agent-login-cta bbx-btn-pill" aria-label="<?= htmlspecialchars(t('header.cta.agent_login')) ?>">
+            <a href="/agent-access.php" class="header-cta header-cta--pill header-cta--secondary header-cta--wide agent-login-cta" aria-label="<?= htmlspecialchars(t('header.cta.agent_login')) ?>">
                 <span class="header-cta__label"><?= t('header.cta.agent_login') ?></span>
             </a>
         </div>

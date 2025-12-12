@@ -140,12 +140,8 @@ include 'includes/site-header.php';
         <p class="text-gray-300 max-w-2xl mx-auto mb-8">
           <?= t('free_scan.report.cta_description', 'Se hvordan vores specialister aktiverer hele PVE-modulet og leverer en komplet rapport med anbefalinger.') ?>
         </p>
-        <a href="demo.php" 
-           class="inline-flex items-center justify-center font-semibold py-3 px-8 rounded-lg transition-all duration-300 border-2" 
-           style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); backdrop-filter: blur(8px);"
-           onmouseover="this.style.background='rgba(212, 175, 55, 0.2)'; this.style.color='#F4D03F';" 
-           onmouseout="this.style.background='rgba(212, 175, 55, 0.1)'; this.style.color='var(--primary-accent)';">
-          <?= t('free_scan.report.cta_link', 'Book en demo') ?>
+        <a href="demo.php" class="header-cta header-cta--pill header-cta--primary">
+          <span class="header-cta__label"><?= t('free_scan.report.cta_link', 'Book en demo') ?></span>
         </a>
       </div>
     </div>

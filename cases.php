@@ -150,8 +150,8 @@ $case_navigator = [
                                             <li><?= htmlspecialchars($module) ?></li>
                                         <?php endforeach; ?>
                                     </ul>
-                                    <a href="contact.php" class="case-navigator-cta">
-                                        <?= t('cases.navigator.cta', 'Planlæg et strategisk matchmøde') ?>
+                                    <a href="contact.php" class="header-cta header-cta--pill header-cta--secondary">
+                                        <span class="header-cta__label"><?= t('cases.navigator.cta', 'Planlæg et strategisk matchmøde') ?></span>
                                     </a>
                                 </div>
                             </div>
@@ -209,8 +209,8 @@ $case_navigator = [
             <p class="text-gray-400 max-w-2xl mx-auto mb-8">
                 <?= t('cases.cta.description') ?>
             </p>
-            <a href="contact.php" class="inline-flex items-center justify-center border-2" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); backdrop-filter: blur(8px); font-semibold py-3 px-8 rounded-lg  transition-colors">
-                <?= t('cases.cta.button') ?>
+            <a href="contact.php" class="header-cta header-cta--pill header-cta--primary">
+                <span class="header-cta__label"><?= t('cases.cta.button') ?></span>
             </a>
         </div>
     </section>

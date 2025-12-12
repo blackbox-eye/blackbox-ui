@@ -16,9 +16,11 @@
 
 :root,
 :root[data-theme="dark"] {
-  --color-gold-dark: #c7a24a;
-  --color-gold-dark-glow: #e6c372;
-  --color-gold-outline: #8b6a24;
+  /* Sprint 1.5.2: SUBTLE BRONZE - NO GOLD/YELLOW 
+     Matches about.php family design */
+  --color-gold-dark: rgba(180, 160, 130, 0.85);
+  --color-gold-dark-glow: rgba(180, 160, 130, 0.5);
+  --color-gold-outline: rgba(140, 120, 90, 0.4);
   --color-bg-dark: #0b0c10;
   --color-card-dark: #11131a;
 
@@ -34,20 +36,23 @@
   --text-high-emphasis: #EAEAEA;
   --text-medium-emphasis: #B0B8C6;
   --muted: #9CA3AF;
-  --primary-accent: var(--color-gold-dark);
-  --primary-accent-soft: rgba(199, 162, 74, 0.18);
-  --primary-accent-strong: rgba(199, 162, 74, 0.9);
-  /* Premium Gold Metal palette for dark theme
-     Sprint 1.3: Darkened to bronze - NO YELLOW */
-  --gold-gradient-start: #a67f38;
-  --gold-gradient-mid: #8b6a24;
-  --gold-gradient-end: #6b4f1a;
-  --gold-shine: #b8923e;
-  --gold-shadow: #4a3810;
-  --gold-highlight: #c9a352;
+  --primary-accent: rgba(180, 160, 130, 0.85);
+  --primary-accent-soft: rgba(160, 140, 110, 0.18);
+  --primary-accent-strong: rgba(180, 160, 130, 0.9);
+  /* Sprint 1.5.2: All gold vars now subtle bronze */
+  --gold-gradient-start: rgba(160, 140, 110, 0.85);
+  --gold-gradient-mid: rgba(140, 120, 90, 0.8);
+  --gold-gradient-end: rgba(120, 100, 70, 0.75);
+  --gold-shine: rgba(180, 160, 130, 0.7);
+  --gold-shadow: rgba(60, 50, 35, 0.6);
+  --gold-highlight: rgba(180, 160, 130, 0.85);
   --glitch-dark-green: #003d00;
-  --glitch-fire: #c7a24a;
+  --glitch-fire: rgba(180, 160, 130, 0.85);
   --toggle-track: rgba(148, 163, 184, 0.15);
+  
+  /* BBX Gold override - subtle bronze */
+  --bbx-gold: rgba(180, 160, 130, 0.85);
+  --bbx-gold-light: rgba(200, 180, 150, 0.9);
   --toggle-knob: #F8FAFC;
   --toggle-knob-glow: rgba(248, 250, 252, 0.45);
   --nav-chip-bg: rgba(17, 24, 39, 0.6);
@@ -3682,60 +3687,56 @@ a.header-cta.agent-login-cta {
    ============================================ */
 
 /* ─────────────────────────────────────────────
-   FIX 1: Header CTA Overflow Protection
-   Prevent button overlap on mobile/tablet
+   FIX 1: HEADER - SINGLE LINE ON MOBILE
+   Under 1024px: ONLY Logo + Burger Menu visible
+   Everything else goes in mobile menu
    ───────────────────────────────────────────── */
-@media (max-width: 480px) {
-  /* Hide secondary CTAs on very small screens */
-  .header-cta-group .header-cta--secondary {
+
+/* === MOBILE/TABLET: Under 1024px === */
+@media (max-width: 1023px) {
+  /* Hide desktop nav */
+  .main-nav.header-nav {
     display: none !important;
   }
   
-  /* Agent login moves to mobile menu */
+  /* HIDE ALL HEADER CTAs - They go in burger menu */
+  .header-cta-group {
+    display: none !important;
+  }
+  
   .agent-login-cta {
     display: none !important;
   }
   
-  /* Single primary CTA - full width on tiny screens */
-  .header-cta-group .header-cta--primary {
-    flex: 0 0 auto;
-    min-width: 100px;
-  }
-  
-  /* Hide language switcher on tiny screens */
+  /* Hide language switcher - in burger menu */
   .language-switcher-wrapper {
     display: none !important;
   }
   
-  /* Graphene toggle hidden on mobile - accessible via menu */
+  /* Hide graphene toggle */
   .graphene-toggle {
     display: none !important;
   }
-}
-
-@media (max-width: 640px) {
-  /* Ensure header actions don't wrap chaotically */
+  
+  /* Hide theme toggle */
+  .theme-toggle:not(.theme-toggle--mobile) {
+    display: none !important;
+  }
+  
+  /* Header is SINGLE LINE only */
+  .header-grid {
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+  }
+  
   .header-actions {
     flex-wrap: nowrap !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    gap: 0.5rem !important;
   }
   
-  .header-actions::-webkit-scrollbar {
-    display: none;
-  }
-  
-  /* Compact header CTAs on small mobile */
-  .header-cta {
-    padding: 0.4rem 0.75rem !important;
-    font-size: 0.78rem !important;
-    min-height: 32px !important;
-  }
-  
-  .header-cta__icon {
-    display: none !important;
+  /* Only burger menu button visible */
+  .mobile-menu-toggle {
+    display: flex !important;
   }
 }
 
@@ -3748,10 +3749,9 @@ a.header-cta.agent-login-cta {
   .alphabot-widget {
     bottom: calc(7rem + env(safe-area-inset-bottom, 0px)) !important;
     right: 0.75rem !important;
-    z-index: 45 !important; /* Below CTAs */
+    z-index: 45 !important;
   }
   
-  /* Ensure sticky CTA bars have clear z-index hierarchy */
   [data-component="sticky-cta"] {
     z-index: 65 !important;
   }
@@ -3760,7 +3760,6 @@ a.header-cta.agent-login-cta {
     z-index: 65 !important;
   }
   
-  /* Cookie banner always on top */
   .cookie-banner {
     z-index: 80 !important;
   }
@@ -3771,7 +3770,6 @@ a.header-cta.agent-login-cta {
    Clean visual hierarchy for call-to-actions
    ───────────────────────────────────────────── */
 @media (max-width: 768px) {
-  /* Hero primary CTAs - clear visual separation */
   .graphene-cta-group {
     gap: 0.75rem !important;
     margin-bottom: 1.5rem !important;
@@ -3785,12 +3783,10 @@ a.header-cta.agent-login-cta {
     font-size: 1rem !important;
   }
   
-  /* Spotlight CTA should not compete with primary CTAs */
   .graphene-btn-spotlight {
     margin-bottom: 1.25rem !important;
   }
   
-  /* Hero tagline breathing room */
   .graphene-hero-tagline {
     margin-bottom: 1.5rem !important;
   }
@@ -3849,4 +3845,286 @@ a.header-cta.agent-login-cta {
   .graphene-hero-title__line--2 {
     font-size: clamp(1.5rem, 6vw, 2.25rem) !important;
   }
+}
+
+/* ─────────────────────────────────────────────
+   FIX 6: COMPLETE COLOR SYSTEM OVERRIDE
+   NO yellow/gold anywhere - subtle bronze/white only
+   Matches about.php design language
+   ───────────────────────────────────────────── */
+
+/* === GLOBAL COLOR OVERRIDE === */
+:root {
+  --accent-subtle: rgba(180, 160, 130, 0.85) !important;
+  --accent-muted: rgba(160, 140, 110, 0.7) !important;
+  --accent-border: rgba(140, 120, 90, 0.35) !important;
+  --surface-subtle: rgba(35, 30, 25, 0.9) !important;
+  --text-primary: rgba(255, 255, 255, 0.92) !important;
+  --text-secondary: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* === LANGUAGE SWITCHER - Subtle design === */
+.language-switch {
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  border-radius: 6px !important;
+}
+
+.language-switch.is-active {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.language-switch:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* === GRAPHENE TOGGLE - Subtle design === */
+.graphene-toggle,
+button.graphene-toggle {
+  background: rgba(25, 22, 18, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.graphene-toggle:hover,
+button.graphene-toggle:hover {
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.graphene-toggle[aria-pressed="true"],
+button.graphene-toggle[aria-pressed="true"] {
+  background: rgba(40, 35, 28, 0.9) !important;
+  border-color: rgba(180, 160, 130, 0.4) !important;
+  color: rgba(180, 160, 130, 0.85) !important;
+  box-shadow: none !important;
+}
+
+/* === NAV CHIPS - Subtle hover/active === */
+.nav-chip {
+  color: rgba(255, 255, 255, 0.75) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.nav-chip:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.nav-chip.nav-link-active {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(180, 160, 130, 0.35) !important;
+  color: rgba(180, 160, 130, 0.85) !important;
+}
+
+/* === HERO SECTION - All elements subtle === */
+
+/* Badge */
+.graphene-floating-badge,
+.graphene-floating-badge__inner {
+  background: rgba(30, 26, 22, 0.85) !important;
+  border: 1px solid rgba(180, 160, 130, 0.25) !important;
+  color: rgba(180, 160, 130, 0.85) !important;
+}
+
+.graphene-floating-badge__ring {
+  border-color: rgba(180, 160, 130, 0.15) !important;
+}
+
+.graphene-floating-badge__icon {
+  color: rgba(160, 140, 110, 0.7) !important;
+}
+
+/* Title shimmer - muted */
+.graphene-text-shimmer {
+  color: rgba(180, 160, 130, 0.85) !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: rgba(180, 160, 130, 0.85) !important;
+}
+
+/* Hero tagline */
+.graphene-hero-tagline__highlight {
+  color: rgba(180, 160, 130, 0.85) !important;
+}
+
+/* Primary CTA - Dark subtle */
+.graphene-btn-primary,
+.graphene-btn-spotlight {
+  background: linear-gradient(145deg, rgba(45, 40, 32, 0.95) 0%, rgba(30, 26, 22, 0.98) 100%) !important;
+  border: 1px solid rgba(180, 160, 130, 0.3) !important;
+  color: rgba(180, 160, 130, 0.85) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35) !important;
+}
+
+.graphene-btn-primary:hover,
+.graphene-btn-spotlight:hover {
+  background: linear-gradient(145deg, rgba(55, 48, 38, 0.95) 0%, rgba(40, 35, 28, 0.98) 100%) !important;
+  border-color: rgba(180, 160, 130, 0.45) !important;
+}
+
+.graphene-btn-primary__bg,
+.graphene-btn-primary__glow,
+.graphene-btn-spotlight__glow {
+  display: none !important;
+}
+
+/* Secondary CTA - Ghost */
+.graphene-btn-secondary {
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.graphene-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.graphene-btn-secondary__border {
+  display: none !important;
+}
+
+/* USP cards */
+.graphene-hero-usps__icon {
+  background: rgba(30, 26, 22, 0.8) !important;
+  color: rgba(160, 140, 110, 0.7) !important;
+  box-shadow: none !important;
+}
+
+.graphene-hero-usps__title {
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+
+/* Stat cards */
+.graphene-stat-card {
+  background: rgba(25, 22, 18, 0.7) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.graphene-stat-card__icon {
+  color: rgba(160, 140, 110, 0.7) !important;
+}
+
+.graphene-stat-card__value {
+  color: rgba(180, 160, 130, 0.85) !important;
+}
+
+/* Scroll indicator */
+.graphene-scroll-indicator {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.graphene-scroll-indicator__mouse {
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.graphene-scroll-indicator__wheel {
+  background: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* === FOOTER STICKY CTA - Hidden or subtle === */
+.graphene-cta-bar {
+  display: none !important;
+}
+
+[data-component="sticky-cta"] {
+  background: rgba(18, 16, 14, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.sticky-cta-bar {
+  background: rgba(18, 16, 14, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.sticky-cta-bar__btn--primary {
+  background: rgba(40, 35, 28, 0.9) !important;
+  border: 1px solid rgba(180, 160, 130, 0.35) !important;
+  color: rgba(180, 160, 130, 0.85) !important;
+}
+
+.sticky-cta-bar__btn--ghost,
+.sticky-cta-bar__btn--secondary {
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+/* === COOKIE BANNER - Subtle === */
+.cookie-banner {
+  background: rgba(18, 16, 14, 0.98) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.cookie-banner button,
+.cookie-banner .btn {
+  background: rgba(40, 35, 28, 0.9) !important;
+  border: 1px solid rgba(180, 160, 130, 0.3) !important;
+  color: rgba(180, 160, 130, 0.85) !important;
+}
+
+/* === SECTION HEADINGS - Subtle accent === */
+.text-\[var\(--bbx-gold\)\],
+[style*="bbx-gold"],
+[class*="text-amber"],
+[class*="text-yellow"] {
+  color: rgba(180, 160, 130, 0.85) !important;
+}
+
+/* === TACTICAL CARDS === */
+.glass-effect a[href] {
+  color: rgba(180, 160, 130, 0.85) !important;
+}
+
+/* === BTN GRAPHENE VARIANTS === */
+.btn-graphene-primary,
+.btn-primary {
+  background: linear-gradient(145deg, rgba(45, 40, 32, 0.95) 0%, rgba(30, 26, 22, 0.98) 100%) !important;
+  border: 1px solid rgba(180, 160, 130, 0.3) !important;
+  color: rgba(180, 160, 130, 0.85) !important;
+}
+
+.btn-graphene-secondary {
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* === ALPHABOT WIDGET - Subtle === */
+.alphabot-toggle {
+  background: rgba(25, 22, 18, 0.9) !important;
+  border: 1px solid rgba(180, 160, 130, 0.25) !important;
+}
+
+.alphabot-label {
+  color: rgba(180, 160, 130, 0.85) !important;
+}
+
+.alphabot-status-dot {
+  background: rgba(160, 140, 110, 0.7) !important;
+}
+
+/* === MORE DROPDOWN === */
+.more-dropdown-menu {
+  background: rgba(20, 18, 15, 0.98) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.more-dropdown-item {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.more-dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+.more-dropdown-item.is-active {
+  color: rgba(180, 160, 130, 0.85) !important;
 }

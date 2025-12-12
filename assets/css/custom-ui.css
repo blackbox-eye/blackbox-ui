@@ -3675,3 +3675,178 @@ a.header-cta.agent-login-cta {
   color: #8b6a24 !important;
 }
 
+
+/* ============================================
+   SPRINT 1.5.1 - CRITICAL QA FIXES
+   Landing Page Visual Audit Resolution
+   ============================================ */
+
+/* ─────────────────────────────────────────────
+   FIX 1: Header CTA Overflow Protection
+   Prevent button overlap on mobile/tablet
+   ───────────────────────────────────────────── */
+@media (max-width: 480px) {
+  /* Hide secondary CTAs on very small screens */
+  .header-cta-group .header-cta--secondary {
+    display: none !important;
+  }
+  
+  /* Agent login moves to mobile menu */
+  .agent-login-cta {
+    display: none !important;
+  }
+  
+  /* Single primary CTA - full width on tiny screens */
+  .header-cta-group .header-cta--primary {
+    flex: 0 0 auto;
+    min-width: 100px;
+  }
+  
+  /* Hide language switcher on tiny screens */
+  .language-switcher-wrapper {
+    display: none !important;
+  }
+  
+  /* Graphene toggle hidden on mobile - accessible via menu */
+  .graphene-toggle {
+    display: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Ensure header actions don't wrap chaotically */
+  .header-actions {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .header-actions::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Compact header CTAs on small mobile */
+  .header-cta {
+    padding: 0.4rem 0.75rem !important;
+    font-size: 0.78rem !important;
+    min-height: 32px !important;
+  }
+  
+  .header-cta__icon {
+    display: none !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   FIX 2: Alphabot Widget Collision Prevention
+   Ensure alphabot never overlaps hero CTAs
+   ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Push alphabot well above all bottom-fixed elements */
+  .alphabot-widget {
+    bottom: calc(7rem + env(safe-area-inset-bottom, 0px)) !important;
+    right: 0.75rem !important;
+    z-index: 45 !important; /* Below CTAs */
+  }
+  
+  /* Ensure sticky CTA bars have clear z-index hierarchy */
+  [data-component="sticky-cta"] {
+    z-index: 65 !important;
+  }
+  
+  .graphene-cta-bar {
+    z-index: 65 !important;
+  }
+  
+  /* Cookie banner always on top */
+  .cookie-banner {
+    z-index: 80 !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   FIX 3: Hero CTA Clarity & Spacing
+   Clean visual hierarchy for call-to-actions
+   ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Hero primary CTAs - clear visual separation */
+  .graphene-cta-group {
+    gap: 0.75rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+  
+  .graphene-cta-group .graphene-btn-primary,
+  .graphene-cta-group .graphene-btn-secondary {
+    width: 100%;
+    justify-content: center;
+    min-height: 52px !important;
+    font-size: 1rem !important;
+  }
+  
+  /* Spotlight CTA should not compete with primary CTAs */
+  .graphene-btn-spotlight {
+    margin-bottom: 1.25rem !important;
+  }
+  
+  /* Hero tagline breathing room */
+  .graphene-hero-tagline {
+    margin-bottom: 1.5rem !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   FIX 4: Visual Breathing Room
+   Prevent cramped feeling across sections
+   ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Hero content inner padding */
+  .graphene-hero-3d__content {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  /* Hero title line spacing */
+  .graphene-hero-title__line {
+    margin-bottom: 0.25rem !important;
+  }
+  
+  /* Stat cards need room to breathe */
+  .graphene-stats-glass {
+    gap: 0.75rem !important;
+    padding: 1rem 0.5rem !important;
+  }
+  
+  .graphene-stat-card {
+    padding: 0.875rem !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   FIX 5: Hero Subtitle Visibility
+   Ensure all hero text is readable
+   ───────────────────────────────────────────── */
+.graphene-hero-subtitle {
+  font-size: clamp(0.95rem, 2.5vw, 1.25rem) !important;
+  line-height: 1.6 !important;
+  max-width: 38rem;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0.92;
+}
+
+@media (max-width: 768px) {
+  .graphene-hero-subtitle {
+    font-size: 0.95rem !important;
+    padding: 0 0.5rem !important;
+  }
+  
+  .graphene-hero-title {
+    font-size: clamp(1.75rem, 7vw, 2.5rem) !important;
+  }
+  
+  .graphene-hero-title__line--2 {
+    font-size: clamp(1.5rem, 6vw, 2.25rem) !important;
+  }
+}

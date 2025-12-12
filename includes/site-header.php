@@ -392,33 +392,8 @@ if ($is_graphene_page) {
                         </ul>
                     </nav>
                     <div class="header-actions bbx-header-right">
-                        <div class="header-cta-group" role="group" aria-label="<?= htmlspecialchars(t('header.cta.primary_actions_label', 'Primary actions')) ?>">
-                            <a href="demo.php"
-                                class="header-cta header-cta--pill header-cta--primary"
-                                aria-label="<?= htmlspecialchars(t('header.cta.book_demo_aria', t('header.cta.book_demo', t('header.menu.demo')))) ?>">
-                                <span class="header-cta__label"><?= t('header.cta.book_demo', t('header.menu.demo')) ?></span>
-                                <span class="header-cta__icon" aria-hidden="true">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M5 12h14" />
-                                        <path d="M13 6l6 6-6 6" />
-                                    </svg>
-                                </span>
-                            </a>
-                            <a href="free-scan.php"
-                                class="header-cta header-cta--pill header-cta--secondary"
-                                aria-label="<?= htmlspecialchars(t('header.cta.free_scan_aria', t('header.cta.free_scan', t('header.menu.free_scan')))) ?>">
-                                <span class="header-cta__label"><?= t('header.cta.free_scan', t('header.menu.free_scan')) ?></span>
-                                <span class="header-cta__icon" aria-hidden="true">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="12" cy="12" r="6.5" />
-                                        <path d="M9.2 14.8 12 12l2.8 2.8" />
-                                    </svg>
-                                </span>
-                            </a>
-                        </div>
-                        <a href="/agent-access.php" class="header-cta header-cta--pill header-cta--secondary agent-login-cta" aria-label="<?= htmlspecialchars(t('header.cta.agent_login')) ?>">
-                            <span class="header-cta__label"><?= t('header.cta.agent_login') ?></span>
-                        </a>
+                        <!-- CTAs removed from header - clean navigation only -->
+                        <!-- Demo/Scan links available in MERE dropdown and mobile menu -->
                         <div class="language-switcher-wrapper flex items-center gap-0.5">
                             <a href="?lang=da" class="language-switch <?= $current_language === 'da' ? 'is-active' : '' ?>" aria-label="<?= htmlspecialchars(t('header.language.switch_da')) ?>" <?= $current_language === 'da' ? 'aria-current="true"' : '' ?>>
                                 <?= t('header.language.da') ?>
@@ -427,28 +402,7 @@ if ($is_graphene_page) {
                                 <?= t('header.language.en') ?>
                             </a>
                         </div>
-                        <!-- Graphene Theme Mode Toggle -->
-                        <?php if ($is_graphene_page): ?>
-                            <button type="button"
-                                id="graphene-mode-toggle"
-                                class="graphene-toggle hidden lg:inline-flex"
-                                data-graphene-toggle
-                                data-current-mode="<?= htmlspecialchars($graphene_mode) ?>"
-                                aria-pressed="<?= $graphene_mode === 'strong' ? 'true' : 'false' ?>"
-                                aria-label="<?= htmlspecialchars(t('header.graphene.toggle_label', 'Skift Graphene tema-intensitet')) ?>"
-                                title="<?= htmlspecialchars($graphene_mode === 'strong' ? t('header.graphene.mode_strong', 'Graphene Strong') : t('header.graphene.mode_standard', 'Graphene Standard')) ?>">
-                                <span class="graphene-toggle__icon" aria-hidden="true">
-                                    <svg class="graphene-toggle__icon--standard" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="12" cy="12" r="5" />
-                                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
-                                    </svg>
-                                    <svg class="graphene-toggle__icon--strong" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-                                    </svg>
-                                </span>
-                                <span class="graphene-toggle__text hidden xl:inline"><?= $graphene_mode === 'strong' ? t('header.graphene.strong', 'Stærk') : t('header.graphene.standard', 'Standard') ?></span>
-                            </button>
-                        <?php endif; ?>
+                        <!-- Graphene Theme Mode Toggle - REMOVED: No functional value -->
                         <button type="button"
                             class="theme-toggle hidden lg:inline-flex"
                             data-theme-toggle

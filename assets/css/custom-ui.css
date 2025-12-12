@@ -37,13 +37,14 @@
   --primary-accent: var(--color-gold-dark);
   --primary-accent-soft: rgba(199, 162, 74, 0.18);
   --primary-accent-strong: rgba(199, 162, 74, 0.9);
-  /* Premium Gold Metal palette for dark theme */
-  --gold-gradient-start: #d4b25a;
-  --gold-gradient-mid: #b88932;
-  --gold-gradient-end: #8b6a24;
-  --gold-shine: #e6c372;
-  --gold-shadow: #5c4800;
-  --gold-highlight: #f1d79a;
+  /* Premium Gold Metal palette for dark theme
+     Sprint 1.3: Darkened to bronze - NO YELLOW */
+  --gold-gradient-start: #a67f38;
+  --gold-gradient-mid: #8b6a24;
+  --gold-gradient-end: #6b4f1a;
+  --gold-shine: #b8923e;
+  --gold-shadow: #4a3810;
+  --gold-highlight: #c9a352;
   --glitch-dark-green: #003d00;
   --glitch-fire: #c7a24a;
   --toggle-track: rgba(148, 163, 184, 0.15);
@@ -3410,5 +3411,107 @@ button.graphene-toggle[aria-pressed="true"] .graphene-toggle__icon {
   button.graphene-toggle .graphene-toggle__icon {
     transition: none !important;
   }
+}
+
+/* ========================================================
+   SPRINT 1.3 VISUAL FINAL: HEADER CTA HARD OVERRIDE
+   Tokens NOT trusted - explicit bronze hex values
+   This block MUST be last to win cascade
+   ======================================================== */
+
+/* Header primary CTA (Book demo) - HARD OVERRIDE */
+.header-cta.header-cta--primary,
+.header-cta.header-cta--pill.header-cta--primary,
+.header-cta-group .header-cta--primary {
+  background: linear-gradient(145deg, #8b6a24 0%, #6b4f1a 100%) !important;
+  border-color: rgba(107, 79, 26, 0.45) !important;
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.32),
+    0 0 0 1px rgba(139, 106, 36, 0.18) inset !important;
+  color: #faf9f7 !important;
+}
+
+.header-cta.header-cta--primary:hover,
+.header-cta.header-cta--primary:focus-visible,
+.header-cta.header-cta--pill.header-cta--primary:hover,
+.header-cta-group .header-cta--primary:hover {
+  background: linear-gradient(145deg, #a67f38 0%, #8b6a24 58%, #6b4f1a 100%) !important;
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.38),
+    0 0 0 1px rgba(166, 127, 56, 0.22) inset !important;
+  transform: translateY(-1px);
+}
+
+/* Header secondary CTA (Gratis sikkerhedstjek) - HARD OVERRIDE */
+.header-cta.header-cta--secondary,
+.header-cta.header-cta--pill.header-cta--secondary,
+.header-cta-group .header-cta--secondary {
+  background: transparent !important;
+  border: 1px solid rgba(139, 106, 36, 0.38) !important;
+  color: #c9a352 !important;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18) !important;
+}
+
+.header-cta.header-cta--secondary:hover,
+.header-cta.header-cta--secondary:focus-visible,
+.header-cta.header-cta--pill.header-cta--secondary:hover,
+.header-cta-group .header-cta--secondary:hover {
+  background: rgba(139, 106, 36, 0.12) !important;
+  border-color: rgba(166, 127, 56, 0.48) !important;
+  color: #f0e6d2 !important;
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.24),
+    0 0 0 1px rgba(139, 106, 36, 0.14) inset !important;
+}
+
+/* Agent Login CTA - HARD OVERRIDE */
+.header-cta.agent-login-cta,
+a.header-cta.agent-login-cta {
+  background: transparent !important;
+  border: 1px solid rgba(139, 106, 36, 0.32) !important;
+  color: #b8923e !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16) !important;
+}
+
+.header-cta.agent-login-cta:hover,
+.header-cta.agent-login-cta:focus-visible {
+  background: rgba(139, 106, 36, 0.10) !important;
+  border-color: rgba(166, 127, 56, 0.45) !important;
+  color: #f0e6d2 !important;
+}
+
+/* Mobile drawer CTAs - HARD OVERRIDE */
+#mobile-menu .mobile-primary-ctas .header-cta.header-cta--primary {
+  background: linear-gradient(145deg, #8b6a24 0%, #6b4f1a 100%) !important;
+  color: #faf9f7 !important;
+}
+
+#mobile-menu .mobile-primary-ctas .header-cta.header-cta--secondary {
+  background: transparent !important;
+  border-color: rgba(139, 106, 36, 0.38) !important;
+  color: #c9a352 !important;
+}
+
+/* Light mode header CTAs - HARD OVERRIDE */
+:root[data-theme="light"] .header-cta.header-cta--primary,
+:root[data-theme="light"] .header-cta.header-cta--pill.header-cta--primary {
+  background: linear-gradient(145deg, #a67f38 0%, #8b6a24 100%) !important;
+  color: #faf9f7 !important;
+  box-shadow:
+    0 8px 20px rgba(15, 23, 42, 0.12),
+    0 0 0 1px rgba(166, 127, 56, 0.28) inset !important;
+}
+
+:root[data-theme="light"] .header-cta.header-cta--secondary,
+:root[data-theme="light"] .header-cta.header-cta--pill.header-cta--secondary {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(139, 106, 36, 0.32) !important;
+  color: #6b4f1a !important;
+}
+
+:root[data-theme="light"] .header-cta.agent-login-cta {
+  background: rgba(255, 255, 255, 0.78) !important;
+  border-color: rgba(139, 106, 36, 0.28) !important;
+  color: #8b6a24 !important;
 }
 

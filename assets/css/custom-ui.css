@@ -4881,6 +4881,12 @@ a.agent-login-cta {
   transform: rotate(180deg);
 }
 
+/* Ensure dropdown container has proper positioning */
+.console-access-dropdown {
+  position: relative !important;
+  z-index: 9999 !important;
+}
+
 .console-access-menu {
   position: absolute;
   top: calc(100% + 8px);
@@ -4894,14 +4900,16 @@ a.agent-login-cta {
   visibility: hidden;
   transform: translateY(-8px);
   transition: all 0.2s ease;
-  z-index: 100;
+  z-index: 99999 !important;
   overflow: hidden;
+  pointer-events: none;
 }
 
 .console-access-dropdown[aria-expanded="true"] .console-access-menu {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+  pointer-events: auto;
 }
 
 .console-menu-header {

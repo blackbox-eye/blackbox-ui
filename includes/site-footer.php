@@ -224,19 +224,36 @@
         <script type="module" src="assets/js/graphene-hero.js"></script>
     <?php endif; ?>
     
-    <!-- Login Dropdown - inline backup -->
+    <!-- Login Dropdown - CRITICAL FIX -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const dropdown = document.querySelector('.console-access-dropdown');
-        const trigger = document.querySelector('.console-access-trigger');
-        
-        if (trigger && dropdown) {
+    (function() {
+        function initLoginDropdown() {
+            var dropdown = document.querySelector('.console-access-dropdown');
+            var trigger = document.querySelector('.console-access-trigger');
+            
+            if (!trigger || !dropdown) {
+                console.error('Login dropdown elements not found!');
+                return;
+            }
+            
+            console.log('Login dropdown initialized');
+            
+            // Remove any existing listeners by cloning
+            var newTrigger = trigger.cloneNode(true);
+            trigger.parentNode.replaceChild(newTrigger, trigger);
+            trigger = newTrigger;
+            
             trigger.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                const isOpen = dropdown.getAttribute('aria-expanded') === 'true';
-                dropdown.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
-                trigger.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+                
+                var isOpen = dropdown.getAttribute('aria-expanded') === 'true';
+                var newState = isOpen ? 'false' : 'true';
+                
+                dropdown.setAttribute('aria-expanded', newState);
+                trigger.setAttribute('aria-expanded', newState);
+                
+                console.log('Login dropdown clicked, new state:', newState);
             });
             
             document.addEventListener('click', function(e) {
@@ -245,8 +262,21 @@
                     trigger.setAttribute('aria-expanded', 'false');
                 }
             });
+            
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    dropdown.setAttribute('aria-expanded', 'false');
+                    trigger.setAttribute('aria-expanded', 'false');
+                }
+            });
         }
-    });
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initLoginDropdown);
+        } else {
+            initLoginDropdown();
+        }
+    })();
     </script>
     </body>
 

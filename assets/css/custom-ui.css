@@ -4838,3 +4838,337 @@ a.agent-login-cta {
   --primary-accent-hover: #7a6b5a !important;
   --primary-accent-soft: rgba(106, 93, 78, 0.12) !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPRINT 1.6 QA: CONSOLE ACCESS DROPDOWN
+   New fold-out menu for GDI/TS24 login options
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.console-access-dropdown {
+  position: relative;
+  display: inline-flex;
+}
+
+.console-access-trigger {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.7rem !important;
+  font-size: 0.78rem;
+  background: linear-gradient(135deg, 
+    rgba(138, 123, 106, 0.12) 0%, 
+    rgba(106, 93, 78, 0.18) 100%);
+  border: 1px solid rgba(138, 123, 106, 0.35);
+  border-radius: 9999px;
+  color: rgba(220, 210, 200, 0.95);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.console-access-trigger:hover {
+  background: linear-gradient(135deg, 
+    rgba(138, 123, 106, 0.22) 0%, 
+    rgba(106, 93, 78, 0.28) 100%);
+  border-color: rgba(166, 149, 133, 0.5);
+}
+
+.console-chevron {
+  transition: transform 0.2s ease;
+}
+
+.console-access-dropdown[aria-expanded="true"] .console-chevron {
+  transform: rotate(180deg);
+}
+
+.console-access-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 220px;
+  background: rgba(18, 20, 24, 0.98);
+  border: 1px solid rgba(138, 123, 106, 0.25);
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all 0.2s ease;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.console-access-dropdown[aria-expanded="true"] .console-access-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.console-menu-header {
+  padding: 0.6rem 1rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(166, 149, 133, 0.7);
+  border-bottom: 1px solid rgba(138, 123, 106, 0.15);
+}
+
+.console-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: rgba(220, 210, 200, 0.9);
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.console-menu-item:hover {
+  background: rgba(138, 123, 106, 0.12);
+}
+
+.console-menu-item__icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.console-menu-item__icon--gdi {
+  background: rgba(26, 115, 232, 0.15);
+  color: #5b9cf5;
+  border: 1px solid rgba(26, 115, 232, 0.3);
+}
+
+.console-menu-item__icon--ts24 {
+  background: rgba(138, 123, 106, 0.15);
+  color: rgba(200, 185, 170, 0.9);
+  border: 1px solid rgba(138, 123, 106, 0.3);
+}
+
+.console-menu-item__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.console-menu-item__title {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.console-menu-item__desc {
+  font-size: 0.68rem;
+  color: rgba(180, 170, 160, 0.6);
+}
+
+/* Light mode */
+:root[data-theme="light"] .console-access-trigger {
+  background: linear-gradient(135deg, 
+    rgba(106, 93, 78, 0.08) 0%, 
+    rgba(85, 74, 62, 0.12) 100%);
+  border-color: rgba(106, 93, 78, 0.3);
+  color: rgba(60, 50, 40, 0.9);
+}
+
+:root[data-theme="light"] .console-access-menu {
+  background: rgba(255, 255, 255, 0.98);
+  border-color: rgba(106, 93, 78, 0.2);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+:root[data-theme="light"] .console-menu-item {
+  color: rgba(40, 35, 30, 0.9);
+}
+
+:root[data-theme="light"] .console-menu-item:hover {
+  background: rgba(106, 93, 78, 0.08);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPRINT 1.6 QA: RESPONSIVE BREAKPOINTS FIX
+   Adjust when burger menu appears - earlier transition to full nav
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Show desktop nav at 900px instead of 1024px */
+@media (min-width: 900px) {
+  .main-nav.header-nav {
+    display: flex !important;
+  }
+  
+  .header-burger {
+    display: none !important;
+  }
+  
+  #mobile-menu-overlay,
+  #mobile-menu {
+    display: none !important;
+  }
+  
+  .console-access-dropdown {
+    display: inline-flex !important;
+  }
+  
+  .language-switcher-wrapper {
+    display: flex !important;
+  }
+  
+  .theme-toggle {
+    display: inline-flex !important;
+  }
+}
+
+/* Below 900px - mobile layout */
+@media (max-width: 899px) {
+  .main-nav.header-nav {
+    display: none !important;
+  }
+  
+  .header-burger {
+    display: flex !important;
+  }
+  
+  /* Console dropdown still visible but compact */
+  .console-access-trigger .header-cta__label {
+    display: none !important;
+  }
+  
+  .console-access-trigger {
+    padding: 0.4rem 0.5rem !important;
+  }
+  
+  /* Language switches hidden - in burger */
+  .language-switcher-wrapper {
+    display: none !important;
+  }
+  
+  .theme-toggle:not(.theme-toggle--mobile) {
+    display: none !important;
+  }
+}
+
+/* Very narrow screens */
+@media (max-width: 480px) {
+  .console-access-dropdown {
+    display: inline-flex !important;
+  }
+  
+  .console-access-trigger {
+    padding: 0.35rem 0.4rem !important;
+    gap: 0.2rem;
+  }
+  
+  .console-access-trigger svg:first-child {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .console-chevron {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPRINT 1.6 QA: HEADER HEIGHT & HERO SPACING FIX
+   Prevent overlap between header and hero content
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Tighter header padding */
+.header-shell {
+  padding-top: 0.4rem !important;
+  padding-bottom: 0.4rem !important;
+}
+
+.bbx-header {
+  padding: 0.1rem 0 !important;
+}
+
+/* Hero needs more top padding to avoid overlap */
+.graphene-hero,
+[class*="hero-section"],
+.access-hero,
+main > section:first-child {
+  padding-top: 5rem !important;
+}
+
+/* Breadcrumb spacing */
+nav[aria-label="Breadcrumb"] {
+  padding-top: 4.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+@media (max-width: 768px) {
+  .graphene-hero,
+  [class*="hero-section"],
+  .access-hero,
+  main > section:first-child {
+    padding-top: 4rem !important;
+  }
+  
+  nav[aria-label="Breadcrumb"] {
+    padding-top: 3.5rem !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPRINT 1.6 QA: MOBILE CONSOLE ACCESS BUTTONS
+   Console selection buttons in mobile drawer
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.mobile-console-access {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(120, 110, 100, 0.1);
+}
+
+.mobile-console-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  background: rgba(138, 123, 106, 0.08);
+  border: 1px solid rgba(138, 123, 106, 0.2);
+  border-radius: 8px;
+  color: rgba(220, 210, 200, 0.9);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.mobile-console-btn:hover,
+.mobile-console-btn:active {
+  background: rgba(138, 123, 106, 0.15);
+  border-color: rgba(138, 123, 106, 0.35);
+}
+
+.mobile-console-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.mobile-console-icon--gdi {
+  background: rgba(26, 115, 232, 0.15);
+  color: #5b9cf5;
+  border: 1px solid rgba(26, 115, 232, 0.3);
+}
+
+.mobile-console-icon--ts24 {
+  background: rgba(138, 123, 106, 0.15);
+  color: rgba(200, 185, 170, 0.9);
+  border: 1px solid rgba(138, 123, 106, 0.3);
+}
+
+.mobile-console-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+}

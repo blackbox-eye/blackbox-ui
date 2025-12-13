@@ -402,7 +402,7 @@ if ($is_graphene_page) {
                                 <?= t('header.language.en') ?>
                             </a>
                         </div>
-                        <!-- Graphene Theme Mode Toggle - REMOVED: No functional value -->
+                        <!-- Graphene Theme Mode Toggle -->
                         <button type="button"
                             class="theme-toggle hidden lg:inline-flex"
                             data-theme-toggle
@@ -413,17 +413,41 @@ if ($is_graphene_page) {
                             aria-pressed="false"
                             aria-label="<?= htmlspecialchars(t('header.theme.toggle_label', 'Skift farvetema')) ?>">
                             <span class="theme-toggle__icon" aria-hidden="true"></span>
-                            <span class="theme-toggle__text hidden xl:inline"><?= t('header.theme.toggle_text', 'Tema') ?></span>
                         </button>
-                        <!-- Agent Login - Premium Million Dollar Button -->
-                        <a href="/agent-access.php" 
-                           class="agent-login-cta header-cta header-cta--pill hidden sm:inline-flex items-center gap-2"
-                           aria-label="<?= htmlspecialchars(t('header.cta.agent_login', 'Agent Login')) ?>">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                            </svg>
-                            <span class="header-cta__label"><?= t('header.cta.agent_login', 'Agent Login') ?></span>
-                        </a>
+                        <!-- Console Access Dropdown - Sprint 1.6 QA: New fold-out menu -->
+                        <div class="console-access-dropdown" data-dropdown>
+                            <button type="button" 
+                                class="console-access-trigger header-cta header-cta--pill items-center gap-1.5"
+                                aria-haspopup="true"
+                                aria-expanded="false">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                                <span class="header-cta__label hidden sm:inline"><?= t('header.cta.console_access', 'Konsol') ?></span>
+                                <svg class="console-chevron w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            <div class="console-access-menu" role="menu">
+                                <div class="console-menu-header">
+                                    <span><?= t('header.console.title', 'Vælg konsol') ?></span>
+                                </div>
+                                <a href="/agent-access.php" class="console-menu-item" role="menuitem">
+                                    <div class="console-menu-item__icon console-menu-item__icon--gdi">GDI</div>
+                                    <div class="console-menu-item__content">
+                                        <span class="console-menu-item__title"><?= t('header.console.gdi', 'GDI Konsol') ?></span>
+                                        <span class="console-menu-item__desc"><?= t('header.console.gdi_desc', 'Data Intelligence') ?></span>
+                                    </div>
+                                </a>
+                                <a href="/agent-access.php" class="console-menu-item" role="menuitem">
+                                    <div class="console-menu-item__icon console-menu-item__icon--ts24">TS24</div>
+                                    <div class="console-menu-item__content">
+                                        <span class="console-menu-item__title"><?= t('header.console.ts24', 'TS24 Konsol') ?></span>
+                                        <span class="console-menu-item__desc"><?= t('header.console.ts24_desc', 'Intel24 Transport') ?></span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
                         <button id="mobile-menu-button" class="header-burger lg:hidden" aria-controls="mobile-menu" aria-expanded="false" aria-label="<?= htmlspecialchars(t('header.mobile.open_menu')) ?>">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
@@ -508,15 +532,20 @@ if ($is_graphene_page) {
                     <span class="theme-toggle__icon" aria-hidden="true"></span>
                 </button>
             </div>
-            <!-- Agent Login - Premium Prominent Placement -->
-            <a href="/agent-access.php" 
-               class="agent-login-cta header-cta header-cta--pill header-cta--wide flex items-center justify-center gap-2 mb-3"
-               aria-label="<?= htmlspecialchars(t('header.cta.agent_login', 'Agent Login')) ?>">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                </svg>
-                <span class="header-cta__label"><?= t('header.cta.agent_login', 'Agent Login') ?></span>
-            </a>
+            <!-- Console Access - Mobile version -->
+            <div class="mobile-console-access mb-3">
+                <p class="text-xs text-gray-500 uppercase tracking-wider mb-2"><?= t('header.console.title', 'Vælg konsol') ?></p>
+                <div class="flex gap-2">
+                    <a href="/agent-access.php" class="mobile-console-btn flex-1">
+                        <span class="mobile-console-icon mobile-console-icon--gdi">GDI</span>
+                        <span class="mobile-console-label"><?= t('header.console.gdi', 'GDI Konsol') ?></span>
+                    </a>
+                    <a href="/agent-access.php" class="mobile-console-btn flex-1">
+                        <span class="mobile-console-icon mobile-console-icon--ts24">TS24</span>
+                        <span class="mobile-console-label"><?= t('header.console.ts24', 'TS24 Konsol') ?></span>
+                    </a>
+                </div>
+            </div>
             <div class="mobile-primary-ctas">
                 <a href="demo.php"
                     class="header-cta header-cta--pill header-cta--primary header-cta--wide"

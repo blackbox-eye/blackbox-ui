@@ -23,12 +23,20 @@
     },
     "cta": {
       "agent_login": "Agent Login",
+      "console_access": "Konsol",
       "book_meeting": "Book Møde",
       "book_demo": "Book demo",
       "book_demo_aria": "Book en live-demo med operations",
       "free_scan": "Gratis sikkerhedstjek",
       "free_scan_aria": "Start det gratis sårbarhedstjek",
       "primary_actions_label": "Primære handlinger"
+    },
+    "console": {
+      "title": "Vælg konsol",
+      "gdi": "GDI Konsol",
+      "gdi_desc": "Data Intelligence",
+      "ts24": "TS24 Konsol",
+      "ts24_desc": "Intel24 Transport"
     },
     "language": {
       "da": "DA",

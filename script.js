@@ -41,4 +41,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	updateHeader();
 	updateNavButtons();
+
+	// ============================================
+	// Console Access Dropdown
+	// Sprint 1.6 QA: New fold-out menu
+	// ============================================
+	const consoleDropdown = document.querySelector('.console-access-dropdown');
+	const consoleTrigger = document.querySelector('.console-access-trigger');
+	const consoleMenu = document.querySelector('.console-access-menu');
+
+	if (consoleTrigger && consoleDropdown) {
+		consoleTrigger.addEventListener('click', (e) => {
+			e.stopPropagation();
+			const isExpanded = consoleDropdown.getAttribute('aria-expanded') === 'true';
+			consoleDropdown.setAttribute('aria-expanded', !isExpanded);
+			consoleTrigger.setAttribute('aria-expanded', !isExpanded);
+		});
+
+		// Close on outside click
+		document.addEventListener('click', (e) => {
+			if (!consoleDropdown.contains(e.target)) {
+				consoleDropdown.setAttribute('aria-expanded', 'false');
+				consoleTrigger.setAttribute('aria-expanded', 'false');
+			}
+		});
+
+		// Close on escape
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape') {
+				consoleDropdown.setAttribute('aria-expanded', 'false');
+				consoleTrigger.setAttribute('aria-expanded', 'false');
+			}
+		});
+	}
 });

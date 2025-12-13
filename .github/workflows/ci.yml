@@ -428,13 +428,11 @@ jobs:
           MAX_RETRIES=3
           RETRY_DELAY=10
           css=""
-          success=false
           
           for i in $(seq 1 $MAX_RETRIES); do
             # Capture only stdout (CSS content), stderr goes to /dev/null for cleaner variable
             if css=$(curl -fsSL "$CSS_URL" 2>/dev/null) && [ -n "$css" ]; then
               echo "✅ Successfully fetched marketing.min.css (attempt $i/$MAX_RETRIES)"
-              success=true
               break
             else
               if [ $i -lt $MAX_RETRIES ]; then
@@ -451,11 +449,6 @@ jobs:
               fi
             fi
           done
-          
-          if [ "$success" != "true" ]; then
-            echo "::error::Failed to fetch CSS content" >&2
-            exit 1
-          fi
 
           # Guardrails: these were the legacy 'yellow/bronze' values we removed from hero CTAs.
           if echo "$css" | grep -qiE "#9a7630|rgba\(154,\s*118,\s*48"; then

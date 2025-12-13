@@ -82,7 +82,7 @@ jobs:
 
       - name: Initialize CodeQL for PHP
         id: init-codeql
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         continue-on-error: true
         with:
           languages: php
@@ -115,7 +115,7 @@ jobs:
 
       - name: Perform PHP CodeQL Analysis
         if: steps.init-codeql.outcome == 'success'
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
         continue-on-error: true
         id: php-analysis
         with:
@@ -151,7 +151,7 @@ jobs:
 
       - name: Initialize CodeQL for JavaScript
         id: init-codeql-js
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         continue-on-error: true
         with:
           languages: javascript
@@ -171,7 +171,7 @@ jobs:
 
       - name: Perform JavaScript CodeQL Analysis
         if: steps.init-codeql-js.outcome == 'success'
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
         continue-on-error: true
         id: js-analysis
         with:

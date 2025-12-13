@@ -51,11 +51,18 @@ document.addEventListener('DOMContentLoaded', () => {
 	const consoleMenu = document.querySelector('.console-access-menu');
 
 	if (consoleTrigger && consoleDropdown) {
+		// Initialize aria-expanded
+		consoleDropdown.setAttribute('aria-expanded', 'false');
+		consoleTrigger.setAttribute('aria-expanded', 'false');
+
 		consoleTrigger.addEventListener('click', (e) => {
+			e.preventDefault();
 			e.stopPropagation();
 			const isExpanded = consoleDropdown.getAttribute('aria-expanded') === 'true';
-			consoleDropdown.setAttribute('aria-expanded', !isExpanded);
-			consoleTrigger.setAttribute('aria-expanded', !isExpanded);
+			const newState = isExpanded ? 'false' : 'true';
+			consoleDropdown.setAttribute('aria-expanded', newState);
+			consoleTrigger.setAttribute('aria-expanded', newState);
+			console.log('Console dropdown toggled:', newState);
 		});
 
 		// Close on outside click

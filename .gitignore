@@ -57,6 +57,7 @@ cover/
 # ────────────────────────────────────────────────────────────────────────────────
 # --- Blackbox UI / Web / PHP-specific ---
 error_log
+.phpserver.pid
 # .htaccess                  # tidligere ignore-regel (deaktiveret)
 !.htaccess                   # UNDTagelse: spor .htaccess i repo (ny politik)
 .htaccess.production         # IGNORER produktionsfil med rigtige credentials
@@ -78,6 +79,9 @@ artifacts/
 test-results/
 playwright-report/
 tmp/
+
+# Local Playwright runtime libs (developer-only)
+playwright-libs/
 
 # Lighthouse CI (allow config, ignore output)
 .lighthouseci/*.html

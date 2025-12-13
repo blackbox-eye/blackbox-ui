@@ -18,6 +18,13 @@ const path = require('path');
 
 const REPORT_FILE = path.join(process.cwd(), 'artifacts', 'test-results.json');
 
+// Ensure the report directory exists so the JSON reporter can write reliably.
+try {
+  fs.mkdirSync(path.dirname(REPORT_FILE), { recursive: true });
+} catch (err) {
+  // If we can't create the directory, let Playwright run anyway; we'll fall back later.
+}
+
 // Pass all CLI args after the script name to Playwright
 const rawArgs = process.argv.slice(2);
 const playwrightArgs = rawArgs.filter((arg) => arg !== '--run');

@@ -332,8 +332,8 @@ jobs:
       - name: Wait for deployment propagation
         run: |
           echo "⏳ Waiting for deployment to propagate..."
-          echo "   Duration: 15 seconds"
-          sleep 15
+          echo "   Duration: 60 seconds"
+          sleep 60
           echo "✅ Ready for testing"
 
       - name: Purge Cloudflare cache
@@ -419,7 +419,21 @@ jobs:
           CSS_URL="$SITE_URL/assets/css/marketing.min.css?v=${{ github.sha }}"
           echo "🔎 Fetching: $CSS_URL"
 
-          css=$(curl -fsSL "$CSS_URL")
+          # Retry to avoid transient 404s / stale edge caches right after deploy.
+          css=""
+          for i in $(seq 1 12); do
+            if css=$(curl -fsSL "$CSS_URL" 2>/dev/null); then
+              echo "✅ marketing.min.css fetched (attempt $i/12)"
+              break
+            fi
+            echo "⏳ marketing.min.css not ready yet (attempt $i/12)" >&2
+            sleep 10
+          done
+
+          if [ -z "$css" ]; then
+            echo "::error::Unable to fetch marketing.min.css after retries. This often indicates cache propagation or deploy upload issues." >&2
+            exit 1
+          fi
 
           # Guardrails: these were the legacy 'yellow/bronze' values we removed from hero CTAs.
           if echo "$css" | grep -qiE "#9a7630|rgba\(154,\s*118,\s*48"; then

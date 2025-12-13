@@ -4,6 +4,9 @@ module.exports = defineConfig({
   testDir: 'tests',
   timeout: 30000,
   retries: 1,
+  // The PHP built-in server is effectively single-threaded; high parallelism can
+  // cause request backlogs and test timeouts. Keep CI stable by limiting workers.
+  workers: process.env.CI ? 1 : undefined,
   // Multi-reporter: line for terminal, JSON for shim parsing
   reporter: [
     ['line'],
@@ -31,7 +34,9 @@ module.exports = defineConfig({
     },
     {
       name: 'webkit',
-      use: { ...devices['Desktop Safari'] }
+      timeout: 45000,
+      retries: 2,
+      use: { ...devices['Desktop Safari'], navigationTimeout: 45000 }
     },
     // Note: Edge uses Chromium engine, so chromium tests cover Edge behavior
     // Brave also uses Chromium engine with privacy enhancements

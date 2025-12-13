@@ -240,7 +240,7 @@ jobs:
       - name: Wait for deployment propagation
         run: |
           echo "⏳ Waiting for Cloudflare to propagate deployment..."
-          sleep 30
+          echo "This step polls the preview URL to avoid transient 404s."
           echo "✅ Ready for testing"
 
       - name: Test 1 - Root endpoint
@@ -252,7 +252,16 @@ jobs:
           echo "════════════════════════════════════════"
           echo "Target: ${DEPLOYMENT_URL}/"
           
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L "${DEPLOYMENT_URL}/" || echo "000")
+          # Retry for up to ~5 minutes to handle edge/cache propagation.
+          HTTP_CODE="000"
+          for i in $(seq 1 30); do
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L "${DEPLOYMENT_URL}/" || echo "000")
+            echo "Attempt $i/30 -> HTTP $HTTP_CODE"
+            if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || [ "$HTTP_CODE" = "302" ]; then
+              break
+            fi
+            sleep 10
+          done
           echo "HTTP Status: $HTTP_CODE"
           
           if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || [ "$HTTP_CODE" = "302" ]; then

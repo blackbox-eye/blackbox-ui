@@ -25,8 +25,12 @@ $meta_keywords = $meta_keywords ?? 'Blackbox EYE, sikkerhed, AI, efterretning, c
 $meta_author = $meta_author ?? BBX_SITE_NAME;
 $meta_og_title = $meta_og_title ?? $page_title;
 $meta_og_description = $meta_og_description ?? $meta_description;
-// Use Blackbox EYE gold cube logo for Open Graph sharing
-$meta_og_image = $meta_og_image ?? BBX_SITE_BASE_URL . '/assets/logo%20pakker%20BlackboxEYE/blackboxeye_logo_package_full/BlackboxEYE_white_512x512.png';
+// Centralized brand asset paths (approved 2025 set)
+$bbx_brand_base = '/assets/logo%20pakker%20BlackboxEYE/blackboxeye_logo_package_full';
+$bbx_brand_full_url = BBX_SITE_BASE_URL . $bbx_brand_base;
+$bbx_logo_black = '/assets/new_logo_black_BBX.svg';
+$bbx_logo_white = '/assets/new_logo_white_BBX.svg';
+$meta_og_image = $meta_og_image ?? ($bbx_brand_base . '/BlackboxEYE_black_512x512.png');
 $meta_og_type = $meta_og_type ?? 'website';
 $canonical_url = $canonical_url ?? BBX_SITE_BASE_URL . ($current_page === 'index' || $current_page === 'home' ? '/' : '/' . $current_page . '.php');
 $meta_robots = $meta_robots ?? 'index,follow';
@@ -38,7 +42,7 @@ $default_structured_data = [
     '@type' => 'Organization',
     'name' => BBX_SITE_NAME,
     'url' => BBX_SITE_BASE_URL,
-    'logo' => BBX_SITE_BASE_URL . '/assets/logo.png',
+    'logo' => $bbx_brand_full_url . '/BlackboxEYE_black_512x512.png',
     'contactPoint' => [
         [
             '@type' => 'ContactPoint',
@@ -258,13 +262,13 @@ if (!empty($disable_alphabot)) {
     <meta name="twitter:image" content="<?= htmlspecialchars($meta_og_image) ?>">
     <meta name="twitter:site" content="@blackboxeye">
 
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/logo%20pakker%20BlackboxEYE/blackboxeye_logo_package_full/BlackboxEYE_white_32x32.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="/assets/logo%20pakker%20BlackboxEYE/blackboxeye_logo_package_full/BlackboxEYE_white_256x256.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/logo%20pakker%20BlackboxEYE/blackboxeye_logo_package_full/BlackboxEYE_white_256x256.png">
-    <link rel="shortcut icon" href="/assets/logo%20pakker%20BlackboxEYE/blackboxeye_logo_package_full/BlackboxEYE_white.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= htmlspecialchars($bbx_brand_base) ?>/BlackboxEYE_black_32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="<?= htmlspecialchars($bbx_brand_base) ?>/BlackboxEYE_black_256x256.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?= htmlspecialchars($bbx_brand_base) ?>/BlackboxEYE_black_256x256.png">
+    <link rel="shortcut icon" href="<?= htmlspecialchars($bbx_brand_base) ?>/BlackboxEYE_black.ico">
 
     <!-- Local compiled Tailwind CSS (v3 build) -->
-    <?php $css_version = '1.6.3'; // Cache-bust version - increment on CSS changes ?>
+    <?php $css_version = '1.6.6'; // Cache-bust version - increment on CSS changes ?>
     <link rel="stylesheet" href="/assets/css/tailwind.full.css?v=<?= $css_version ?>">
     <!-- Custom UI components extracted from previous inline styles -->
     <link rel="stylesheet" href="/assets/css/custom-ui.css?v=<?= $css_version ?>">
@@ -331,12 +335,12 @@ if ($is_graphene_page) {
                     <div class="header-brand bbx-header-left">
                         <a href="/" class="header-logo-link" aria-label="<?= htmlspecialchars(t('header.menu.home')) ?>">
                             <!-- White logo - visible on dark backgrounds (dark theme) -->
-                            <img src="/assets/Logo-blackbox-hvid.png"
+                            <img src="<?= htmlspecialchars($bbx_logo_white) ?>"
                                 alt="BLACKBOX EYE™"
                                 class="header-logo header-logo--white"
                                 loading="lazy">
                             <!-- Black logo - visible on light backgrounds (light theme) -->
-                            <img src="/assets/blackbox_logo_black.png"
+                            <img src="<?= htmlspecialchars($bbx_logo_black) ?>"
                                 alt="BLACKBOX EYE™"
                                 class="header-logo header-logo--black"
                                 loading="lazy">
@@ -363,13 +367,7 @@ if ($is_graphene_page) {
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </button>
-                                <div class="more-dropdown-menu" role="menu">
-                                    <a href="faq.php" class="more-dropdown-item <?= $current_page === 'faq' ? 'is-active' : '' ?>" role="menuitem">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        <?= t('header.menu.faq') ?>
-                                    </a>
+                                <div class="more-dropdown more-dropdown-menu" role="menu">
                                     <a href="blog.php" class="more-dropdown-item <?= $current_page === 'blog' ? 'is-active' : '' ?>" role="menuitem">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
@@ -395,6 +393,20 @@ if ($is_graphene_page) {
                     <div class="header-actions bbx-header-right">
                         <!-- CTAs removed from header - clean navigation only -->
                         <!-- Demo/Scan links available in MERE dropdown and mobile menu -->
+                        <button
+                            id="graphene-mode-toggle"
+                            type="button"
+                            class="graphene-toggle-btn inline-flex"
+                            data-current-mode="<?= htmlspecialchars($graphene_mode) ?>"
+                            aria-pressed="<?= $graphene_mode === 'strong' ? 'true' : 'false' ?>"
+                            aria-label="<?= htmlspecialchars(t('header.graphene.toggle_label', 'Skift Graphene-mode')) ?>">
+                            <span class="graphene-toggle__dot" aria-hidden="true"></span>
+                            <span class="graphene-toggle__text">
+                                <?= $graphene_mode === 'strong'
+                                    ? htmlspecialchars(t('header.graphene.strong', 'Strong'))
+                                    : htmlspecialchars(t('header.graphene.standard', 'Standard')) ?>
+                            </span>
+                        </button>
                         <div class="language-switcher-wrapper flex items-center gap-0.5">
                             <a href="?lang=da" class="language-switch <?= $current_language === 'da' ? 'is-active' : '' ?>" aria-label="<?= htmlspecialchars(t('header.language.switch_da')) ?>" <?= $current_language === 'da' ? 'aria-current="true"' : '' ?>>
                                 <?= t('header.language.da') ?>

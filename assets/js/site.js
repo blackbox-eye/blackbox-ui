@@ -263,10 +263,74 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (header) {
         const toggleHeaderGlass = () => {
-            header.classList.toggle('glass-effect', window.scrollY > 50);
+            header.classList.toggle('header-glass', window.scrollY > 50);
         };
         toggleHeaderGlass();
         window.addEventListener('scroll', toggleHeaderGlass, { passive: true });
+    }
+
+    const moreDropdownWrapper = document.querySelector('.more-dropdown-wrapper');
+    if (moreDropdownWrapper) {
+        const moreTrigger = moreDropdownWrapper.querySelector('.more-dropdown-trigger');
+        const moreMenu = moreDropdownWrapper.querySelector('.more-dropdown-menu');
+        let isMoreOpen = false;
+
+        const positionMoreMenu = () => {
+            if (!moreTrigger || !moreMenu) {
+                return;
+            }
+            const rect = moreTrigger.getBoundingClientRect();
+            const menuWidth = moreMenu.offsetWidth || 240;
+            const maxLeft = Math.max(12, window.innerWidth - menuWidth - 12);
+            const left = Math.min(Math.max(rect.right - menuWidth, 12), maxLeft);
+            const top = Math.max(rect.bottom + 10, 10);
+            moreMenu.style.setProperty('--more-menu-left', `${left}px`);
+            moreMenu.style.setProperty('--more-menu-top', `${top}px`);
+        };
+
+        const openMoreMenu = () => {
+            positionMoreMenu();
+            moreMenu?.classList.add('is-open');
+            moreTrigger?.setAttribute('aria-expanded', 'true');
+            isMoreOpen = true;
+        };
+
+        const closeMoreMenu = () => {
+            moreMenu?.classList.remove('is-open');
+            moreTrigger?.setAttribute('aria-expanded', 'false');
+            isMoreOpen = false;
+        };
+
+        moreTrigger?.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            if (isMoreOpen) {
+                closeMoreMenu();
+            } else {
+                openMoreMenu();
+            }
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!moreMenu || !moreTrigger) {
+                return;
+            }
+            if (!moreMenu.contains(event.target) && !moreTrigger.contains(event.target)) {
+                closeMoreMenu();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closeMoreMenu();
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            if (isMoreOpen) {
+                positionMoreMenu();
+            }
+        });
     }
 
     const stickyCtaBar = document.querySelector('[data-component="sticky-cta"]');
@@ -337,12 +401,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Graphene CTA bar scroll trigger (mobile hero CTA panel)
+    // Graphene CTA bar: mobile-first, visible by default (hide only when dismissed)
     const grapheneCtaBar = document.querySelector('.graphene-cta-bar');
     if (grapheneCtaBar) {
-        const GRAPHENE_SCROLL_THRESHOLD = 0.35; // 35% of viewport scroll before showing
         const GRAPHENE_STORAGE_KEY = 'bbxGrapheneCtaDismissed';
-        let grapheneCtaHasShown = false;
+        const mobileBreakpoint = window.matchMedia('(max-width: 900px)');
 
         const isGrapheneDismissed = () => {
             try {
@@ -358,42 +421,49 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const showGrapheneBar = () => {
-            if (grapheneCtaBar.hasAttribute('data-hidden')) {
-                grapheneCtaBar.removeAttribute('data-hidden');
-            }
+            grapheneCtaBar.removeAttribute('data-hidden');
             grapheneCtaBar.setAttribute('data-visible', 'true');
-            grapheneCtaHasShown = true;
         };
 
-        const checkGrapheneScrollThreshold = () => {
-            if (grapheneCtaHasShown || isGrapheneDismissed()) {
-                return;
-            }
-            const scrollY = window.scrollY || window.pageYOffset;
-            const viewportHeight = window.innerHeight;
-            if (scrollY > viewportHeight * GRAPHENE_SCROLL_THRESHOLD) {
-                window.requestAnimationFrame(showGrapheneBar);
-            }
-        };
-
-        // Start hidden, only show after scroll threshold
-        if (isGrapheneDismissed()) {
-            hideGrapheneBar();
-        } else {
-            hideGrapheneBar(); // Initially hidden
-            window.addEventListener('scroll', checkGrapheneScrollThreshold, { passive: true });
-            checkGrapheneScrollThreshold();
-        }
-
-        // Close button for graphene CTA bar
-        const grapheneCloseBtn = grapheneCtaBar.querySelector('[data-graphene-cta-close]');
-        grapheneCloseBtn?.addEventListener('click', () => {
-            hideGrapheneBar();
+        const persistGrapheneDismissal = () => {
             try {
                 window.sessionStorage.setItem(GRAPHENE_STORAGE_KEY, '1');
             } catch (error) {
                 // Ignore storage failures
             }
+        };
+
+        const initializeGrapheneCta = () => {
+            if (isGrapheneDismissed()) {
+                hideGrapheneBar();
+                return;
+            }
+            showGrapheneBar();
+        };
+
+        initializeGrapheneCta();
+
+        mobileBreakpoint.addEventListener('change', (event) => {
+            if (isGrapheneDismissed()) {
+                return;
+            }
+            if (event.matches) {
+                showGrapheneBar();
+            } else {
+                grapheneCtaBar.removeAttribute('data-hidden');
+                grapheneCtaBar.setAttribute('data-visible', 'true');
+            }
+        });
+
+        const grapheneCloseBtn = grapheneCtaBar.querySelector('[data-graphene-cta-close]');
+        grapheneCloseBtn?.addEventListener('click', () => {
+            hideGrapheneBar();
+            persistGrapheneDismissal();
+        });
+
+        const grapheneActionButtons = grapheneCtaBar.querySelectorAll('a');
+        grapheneActionButtons.forEach((button) => {
+            button.addEventListener('click', persistGrapheneDismissal, { once: true });
         });
     }
 
@@ -1578,12 +1648,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         alphaContainer.classList.add('alphabot-offline');
-        if (alphaToggleBtn) {
-            alphaToggleBtn.setAttribute('aria-disabled', 'true');
-            alphaToggleBtn.setAttribute('disabled', 'true');
-            if (tooltipMessage) {
-                alphaToggleBtn.setAttribute('title', tooltipMessage);
-            }
+        if (alphaToggleBtn && tooltipMessage) {
+            alphaToggleBtn.setAttribute('title', tooltipMessage);
         }
         if (alphaStatusDot) {
             alphaStatusDot.setAttribute('data-status', 'offline');
@@ -1594,12 +1660,14 @@ document.addEventListener('DOMContentLoaded', () => {
         markAssistantUnavailable(i18n.t('alphabot.offline_tooltip', 'Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen.'));
     }
 
-    if (alphaContainer && alphaToggleBtn && alphaPanel && hasAIConfig && geminiReady) {
+    if (alphaContainer && alphaToggleBtn && alphaPanel) {
         const messagesDiv = document.getElementById('alphabot-messages');
         const inputEl = document.getElementById('alphabot-input');
         const sendBtn = document.getElementById('alphabot-send-btn');
         const sendText = document.getElementById('send-text');
         const sendLoader = document.getElementById('send-loader');
+
+        const assistantReady = Boolean(hasAIConfig && geminiReady);
 
         if (messagesDiv && inputEl && sendBtn && sendText && sendLoader) {
             const conversation = [
@@ -1637,9 +1705,11 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             if (!messagesDiv.dataset.initialized) {
-                const introMessage = conversation[1]?.parts?.[0]?.text;
+                const introMessage = assistantReady
+                    ? conversation[1]?.parts?.[0]?.text
+                    : i18n.t('alphabot.offline_tooltip', 'Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen.');
                 if (introMessage) {
-                    appendMessage('bot', introMessage.trim());
+                    appendMessage('bot', String(introMessage).trim());
                 }
                 messagesDiv.dataset.initialized = 'true';
             }
@@ -1751,6 +1821,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const sendMessage = () => {
                 if (isProcessing) return;
+                if (!assistantReady) {
+                    appendMessage('bot', i18n.t('alphabot.offline_tooltip', 'Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen.'));
+                    return;
+                }
                 const value = inputEl.value.trim();
                 if (!value) return;
                 appendMessage('user', value);
@@ -1772,7 +1846,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 setAlphaInert(true);
                 alphaIsOpen = true;
                 enableAlphaFocusTrap();
-                inputEl.focus();
+                if (assistantReady) {
+                    inputEl.focus();
+                } else {
+                    alphaCloseBtn?.focus();
+                }
             };
 
             const closeAssistant = (focusToggle = true) => {
@@ -1827,6 +1905,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.body.classList.remove('alphabot-locked');
                 }
             });
+
+            // Offline mode: keep UI usable, disable sending.
+            if (!assistantReady) {
+                inputEl.disabled = true;
+                sendBtn.disabled = true;
+            }
 
             sendBtn.addEventListener('click', sendMessage);
             inputEl.addEventListener('keydown', event => {

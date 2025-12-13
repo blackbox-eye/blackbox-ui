@@ -18,7 +18,7 @@ $login_action = $login_action ?? 'agent-login.php';
   <!-- Powered by badge -->
   <div class="login-card__meta">
     <span class="login-card__powered-label">… Powered by</span>
-    <img src="/assets/Logo-blackbox-hvid.png"
+    <img src="/assets/logo%20pakker%20BlackboxEYE/blackboxeye_logo_package_full/BlackboxEYE_white_128x128.png"
       alt="Powered by Blackbox EYE"
       class="login-card__powered-logo"
       loading="lazy">
@@ -26,7 +26,7 @@ $login_action = $login_action ?? 'agent-login.php';
 
   <!-- Logo Section -->
   <div class="login-card__logo-section">
-    <img src="/assets/blackbox_eye_logo.png"
+    <img src="/assets/logo%20pakker%20BlackboxEYE/blackboxeye_logo_package_full/BlackboxEYE_white_original.png"
       alt="Blackbox EYE Intelligence Portal"
       class="login-card__logo"
       loading="lazy">

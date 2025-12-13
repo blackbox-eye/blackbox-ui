@@ -80,7 +80,7 @@ include 'includes/site-header.php';
                     </a>
                 </div>
 
-                <div class="graphene-cta-bar" role="region" aria-label="<?= t('home.hero.cta_bar_label') ?>">
+                <div class="graphene-cta-bar" role="region" aria-label="<?= t('home.hero.cta_bar_label') ?>" data-visible="true">
                     <p class="graphene-cta-bar__label"><?= t('home.hero.cta_bar_hint') ?></p>
                     <div class="graphene-cta-bar__actions">
                         <a href="demo.php" class="graphene-btn-primary graphene-btn-primary--compact" aria-label="<?= t('home.hero.primary_cta_aria') ?>">

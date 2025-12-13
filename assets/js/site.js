@@ -341,9 +341,31 @@ document.addEventListener('DOMContentLoaded', () => {
         const actionButtons = stickyCtaBar.querySelectorAll('.sticky-cta-bar__btn');
         let stickyCtaHasShown = false;
 
+        const setStickyCtaLayout = () => {
+            const isVisible = stickyCtaBar.getAttribute('data-visible') === 'true' && !stickyCtaBar.hasAttribute('data-hidden');
+            document.body.classList.toggle('has-sticky-cta', isVisible);
+
+            if (!isVisible) {
+                document.documentElement.style.setProperty('--bbx-sticky-cta-height', '0px');
+                return;
+            }
+
+            const rect = stickyCtaBar.getBoundingClientRect();
+            const height = Math.ceil(rect.height);
+            const gap = 12;
+            document.documentElement.style.setProperty('--bbx-sticky-cta-height', `${height + gap}px`);
+        };
+
+        const scheduleStickyCtaLayout = () => {
+            window.requestAnimationFrame(() => {
+                window.requestAnimationFrame(setStickyCtaLayout);
+            });
+        };
+
         const hideBar = () => {
             stickyCtaBar.setAttribute('data-hidden', 'true');
             stickyCtaBar.removeAttribute('data-visible');
+            scheduleStickyCtaLayout();
         };
 
         const showBar = () => {
@@ -352,6 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             stickyCtaBar.setAttribute('data-visible', 'true');
             stickyCtaHasShown = true;
+            scheduleStickyCtaLayout();
         };
 
         const isDismissed = () => {
@@ -382,6 +405,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Check immediately in case page already scrolled (e.g., anchor navigation)
             checkScrollThreshold();
         }
+
+        window.addEventListener('resize', scheduleStickyCtaLayout, { passive: true });
+        scheduleStickyCtaLayout();
 
         const persistDismissal = () => {
             try {

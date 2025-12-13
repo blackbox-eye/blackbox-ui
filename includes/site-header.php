@@ -268,7 +268,7 @@ if (!empty($disable_alphabot)) {
     <link rel="shortcut icon" href="<?= htmlspecialchars($bbx_brand_base) ?>/BlackboxEYE_black.ico">
 
     <!-- Local compiled Tailwind CSS (v3 build) -->
-    <?php $css_version = '1.6.6'; // Cache-bust version - increment on CSS changes ?>
+    <?php $css_version = '1.6.7'; // Cache-bust version - increment on CSS changes ?>
     <link rel="stylesheet" href="/assets/css/tailwind.full.css?v=<?= $css_version ?>">
     <!-- Custom UI components extracted from previous inline styles -->
     <link rel="stylesheet" href="/assets/css/custom-ui.css?v=<?= $css_version ?>">

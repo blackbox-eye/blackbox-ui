@@ -333,6 +333,51 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Bottom CTA offset coordination (shared for sticky-cta + graphene-cta-bar)
+    const setBottomCtaOffset = () => {
+        const gap = 12;
+        let offset = 0;
+
+        const measureIfVisible = (element, isVisible) => {
+            if (!element || !isVisible) {
+                return;
+            }
+
+            const style = window.getComputedStyle(element);
+            if (style.display === 'none' || style.visibility === 'hidden') {
+                return;
+            }
+
+            const rect = element.getBoundingClientRect();
+            const height = Math.ceil(rect.height);
+            if (height > 0) {
+                offset = Math.max(offset, height + gap);
+            }
+        };
+
+        const sticky = document.querySelector('[data-component="sticky-cta"]');
+        const stickyVisible = Boolean(sticky && sticky.getAttribute('data-visible') === 'true' && !sticky.hasAttribute('data-hidden'));
+        measureIfVisible(sticky, stickyVisible);
+
+        const graphene = document.querySelector('.graphene-cta-bar');
+        const grapheneVisible = Boolean(graphene && graphene.getAttribute('data-visible') === 'true' && !graphene.hasAttribute('data-hidden'));
+        if (graphene) {
+            const grapheneStyle = window.getComputedStyle(graphene);
+            // Only account for the graphene CTA when it is fixed (mobile layout)
+            measureIfVisible(graphene, grapheneVisible && grapheneStyle.position === 'fixed');
+        }
+
+        document.documentElement.style.setProperty('--bbx-sticky-cta-height', offset ? `${offset}px` : '0px');
+    };
+
+    const scheduleBottomCtaOffset = () => {
+        window.requestAnimationFrame(() => {
+            window.requestAnimationFrame(setBottomCtaOffset);
+        });
+    };
+
+    window.addEventListener('resize', scheduleBottomCtaOffset, { passive: true });
+
     const stickyCtaBar = document.querySelector('[data-component="sticky-cta"]');
     if (stickyCtaBar) {
         const STORAGE_KEY = 'bbxStickyCtaDismissed';
@@ -345,22 +390,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const isVisible = stickyCtaBar.getAttribute('data-visible') === 'true' && !stickyCtaBar.hasAttribute('data-hidden');
             document.body.classList.toggle('has-sticky-cta', isVisible);
 
-            if (!isVisible) {
-                document.documentElement.style.setProperty('--bbx-sticky-cta-height', '0px');
-                return;
-            }
-
-            const rect = stickyCtaBar.getBoundingClientRect();
-            const height = Math.ceil(rect.height);
-            const gap = 12;
-            document.documentElement.style.setProperty('--bbx-sticky-cta-height', `${height + gap}px`);
+            scheduleBottomCtaOffset();
         };
 
-        const scheduleStickyCtaLayout = () => {
-            window.requestAnimationFrame(() => {
-                window.requestAnimationFrame(setStickyCtaLayout);
-            });
-        };
+        const scheduleStickyCtaLayout = scheduleBottomCtaOffset;
 
         const hideBar = () => {
             stickyCtaBar.setAttribute('data-hidden', 'true');
@@ -406,7 +439,6 @@ document.addEventListener('DOMContentLoaded', () => {
             checkScrollThreshold();
         }
 
-        window.addEventListener('resize', scheduleStickyCtaLayout, { passive: true });
         scheduleStickyCtaLayout();
 
         const persistDismissal = () => {
@@ -444,11 +476,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const hideGrapheneBar = () => {
             grapheneCtaBar.setAttribute('data-hidden', 'true');
             grapheneCtaBar.removeAttribute('data-visible');
+            scheduleBottomCtaOffset();
         };
 
         const showGrapheneBar = () => {
             grapheneCtaBar.removeAttribute('data-hidden');
             grapheneCtaBar.setAttribute('data-visible', 'true');
+            scheduleBottomCtaOffset();
         };
 
         const persistGrapheneDismissal = () => {
@@ -468,6 +502,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         initializeGrapheneCta();
+        scheduleBottomCtaOffset();
 
         mobileBreakpoint.addEventListener('change', (event) => {
             if (isGrapheneDismissed()) {
@@ -478,6 +513,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 grapheneCtaBar.removeAttribute('data-hidden');
                 grapheneCtaBar.setAttribute('data-visible', 'true');
+                scheduleBottomCtaOffset();
             }
         });
 
@@ -492,6 +528,9 @@ document.addEventListener('DOMContentLoaded', () => {
             button.addEventListener('click', persistGrapheneDismissal, { once: true });
         });
     }
+
+    // Ensure initial bottom CTA offset is correct even when sticky-cta is hidden (e.g., home page).
+    scheduleBottomCtaOffset();
 
     const fadeSections = document.querySelectorAll('.section-fade-in');
     if (fadeSections.length) {

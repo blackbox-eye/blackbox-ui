@@ -361,6 +361,11 @@ jobs:
             exit 1
           fi
           echo "✅ Cloudflare cache purged successfully."
+          
+          echo "⏳ Waiting for Cloudflare cache propagation..."
+          echo "   Duration: 30 seconds"
+          sleep 30
+          echo "✅ Cache propagation complete"
 
       - name: Configure test environment
         id: config
@@ -419,7 +424,30 @@ jobs:
           CSS_URL="$SITE_URL/assets/css/marketing.min.css?v=${{ github.sha }}"
           echo "🔎 Fetching: $CSS_URL"
 
-          css=$(curl -fsSL "$CSS_URL")
+          # Retry logic for cache propagation delays
+          MAX_RETRIES=3
+          RETRY_DELAY=10
+          css=""
+          
+          for i in $(seq 1 $MAX_RETRIES); do
+            if css=$(curl -fsSL "$CSS_URL" 2>&1); then
+              echo "✅ Successfully fetched marketing.min.css (attempt $i/$MAX_RETRIES)"
+              break
+            else
+              if [ $i -lt $MAX_RETRIES ]; then
+                echo "⚠️  Attempt $i/$MAX_RETRIES failed, retrying in ${RETRY_DELAY}s..."
+                sleep $RETRY_DELAY
+              else
+                echo "::error::Failed to fetch marketing.min.css after $MAX_RETRIES attempts" >&2
+                echo "URL: $CSS_URL" >&2
+                echo "This could indicate:" >&2
+                echo "  - File not deployed to server" >&2
+                echo "  - Cloudflare cache not fully purged" >&2
+                echo "  - Server configuration blocking access" >&2
+                exit 1
+              fi
+            fi
+          done
 
           # Guardrails: these were the legacy 'yellow/bronze' values we removed from hero CTAs.
           if echo "$css" | grep -qiE "#9a7630|rgba\(154,\s*118,\s*48"; then

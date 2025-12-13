@@ -184,19 +184,17 @@
    Authentic gold coin/metal aesthetic
    ============================================ */
 
-/* Primary CTA Buttons - Gold Metal Effect */
+/* Primary CTA Buttons - Premium Grey-Brown (Sprint 1.6) */
 :root[data-theme="light"] .bg-amber-400,
 :root[data-theme="light"] .bg-yellow-400,
 :root[data-theme="light"] [class*="bg-amber-400"] {
-  background: var(--cta-background) !important;
+  background: linear-gradient(145deg, rgba(85, 78, 68, 0.95) 0%, rgba(65, 60, 52, 0.98) 100%) !important;
   box-shadow:
-    inset 0 1px 0 rgba(243, 192, 143, 0.55),
-    inset 0 -2px 4px rgba(139, 75, 34, 0.28),
-    0 4px 12px rgba(198, 124, 72, 0.38),
-    0 2px 4px rgba(0, 0, 0, 0.08) !important;
-  border: 1px solid rgba(139, 75, 34, 0.45) !important;
-  color: var(--cta-contrast) !important;
-  text-shadow: 0 1px 0 rgba(243, 192, 143, 0.35);
+    var(--glow-copper-soft),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(120, 110, 95, 0.4) !important;
+  color: rgba(245, 242, 238, 0.95) !important;
+  text-shadow: none;
   transition: all 0.3s ease !important;
 }
 
@@ -205,45 +203,41 @@
 :root[data-theme="light"] [class*="bg-amber-400"]:hover,
 :root[data-theme="light"] .hover\:bg-amber-500:hover,
 :root[data-theme="light"] .hover\:bg-yellow-500:hover {
-  background: var(--cta-background-hover) !important;
+  background: linear-gradient(145deg, rgba(95, 88, 76, 0.95) 0%, rgba(75, 70, 60, 0.98) 100%) !important;
   box-shadow:
-    inset 0 1px 0 rgba(247, 215, 173, 0.6),
-    inset 0 -2px 4px rgba(139, 75, 34, 0.24),
-    0 6px 20px rgba(198, 124, 72, 0.48),
-    0 3px 6px rgba(0, 0, 0, 0.12) !important;
+    var(--glow-copper-medium),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(140, 128, 110, 0.5) !important;
   transform: translateY(-2px);
 }
 
 :root[data-theme="light"] .bg-amber-400:active,
 :root[data-theme="light"] .bg-yellow-400:active {
-  background: linear-gradient(145deg, #c67c48 0%, #8b4b22 50%, #653516 100%) !important;
+  background: linear-gradient(145deg, rgba(70, 65, 55, 0.98) 0%, rgba(55, 50, 42, 1) 100%) !important;
   box-shadow:
-    inset 0 2px 4px rgba(0, 0, 0, 0.18),
-    0 1px 2px rgba(0, 0, 0, 0.08) !important;
+    inset 0 2px 4px rgba(0, 0, 0, 0.15) !important;
   transform: translateY(0);
 }
 
-/* Secondary Outline Buttons - Copper Border */
+/* Secondary Outline Buttons - Premium Grey-Brown (Sprint 1.6) */
 :root[data-theme="light"] .border-amber-400,
 :root[data-theme="light"] .border-yellow-400,
 :root[data-theme="light"] [class*="border-amber-400"] {
-  border-color: var(--primary-accent) !important;
-  border-width: 2px !important;
+  border-color: rgba(100, 92, 80, 0.4) !important;
+  border-width: 1px !important;
   background: transparent !important;
-  color: var(--color-copper-shadow) !important;
-  box-shadow: 0 2px 8px rgba(198, 124, 72, 0.18) !important;
+  color: rgba(70, 65, 55, 0.9) !important;
+  box-shadow: var(--glow-copper-subtle) !important;
   transition: all 0.3s ease !important;
 }
 
 :root[data-theme="light"] .border-amber-400:hover,
 :root[data-theme="light"] .border-yellow-400:hover,
 :root[data-theme="light"] [class*="border-amber-400"]:hover {
-  background: var(--cta-background) !important;
-  color: var(--cta-contrast) !important;
-  border-color: rgba(139, 75, 34, 0.55) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(243, 192, 143, 0.55),
-    0 4px 12px rgba(198, 124, 72, 0.38) !important;
+  background: rgba(85, 78, 68, 0.08) !important;
+  color: rgba(60, 55, 48, 0.95) !important;
+  border-color: rgba(100, 92, 80, 0.55) !important;
+  box-shadow: var(--glow-copper-soft) !important;
 }
 
 /* Text accents in light mode */
@@ -1647,29 +1641,37 @@ textarea.field-error:focus {
   color: #4b5563 !important;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   HEADER - FIXED & COMPACT (Sprint 1.6 QA Fix)
+   NO scroll state changes - consistent appearance
+   ═══════════════════════════════════════════════════════════════ */
 #main-header {
-  background: linear-gradient(180deg, rgba(7, 11, 18, 0.9) 0%, rgba(7, 11, 18, 0.7) 100%);
-  border-bottom: 1px solid color-mix(in srgb, var(--primary-accent) 12%, transparent);
-  box-shadow: 0 26px 60px -36px rgba(0, 0, 0, 0.85);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
-  transition: background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  background: rgba(10, 12, 16, 0.92) !important;
+  border-bottom: 1px solid rgba(180, 165, 150, 0.1) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  /* REMOVE scroll transition - no state changes */
+  transition: none !important;
 }
 
 :root[data-theme="light"] #main-header {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.8) 100%);
-  border-bottom-color: rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
 }
 
+/* DISABLE scroll state changes completely */
 #main-header.scrolled {
-  background-color: var(--surface-100);
-  border-bottom-color: var(--surface-border);
-  box-shadow: 0 18px 40px -24px rgba(15, 23, 42, 0.65);
+  background: rgba(10, 12, 16, 0.92) !important;
+  border-bottom-color: rgba(180, 165, 150, 0.1) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
 }
 
 :root[data-theme="light"] #main-header.scrolled {
-  background-color: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 18px 40px -24px rgba(15, 23, 42, 0.15);
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-bottom-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
 }
 /* Glitch Logo */
 .glitch-logo { font-family: 'Chakra Petch', sans-serif; font-weight:700; text-transform:uppercase; position:relative; font-size:1.65rem; line-height:1.65rem; color:var(--text-high-emphasis); text-shadow:0.05em 0 0 var(--glitch-dark-green), -0.025em -0.05em 0 var(--glitch-fire), 0.025em 0.05em 0 var(--glitch-dark-green); animation:glitch 500ms infinite; }
@@ -4605,3 +4607,234 @@ a.agent-login-cta {
   box-shadow: var(--glow-copper-soft) !important;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPRINT 1.6 QA FIX: HEADER HEIGHT REDUCTION
+   Smaller, more compact header
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Header shell - reduced padding */
+.header-shell {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+/* BBX header compact */
+.bbx-header {
+  padding: 0.15rem 0 !important;
+}
+
+/* Nav chips smaller */
+.nav-chip {
+  padding: 0.35rem 0.75rem !important;
+  font-size: 0.78rem !important;
+  min-height: auto !important;
+}
+
+/* Logo smaller */
+.header-logo img,
+.header-logo svg {
+  height: 28px !important;
+  max-height: 28px !important;
+}
+
+/* Header CTAs compact */
+.header-cta {
+  padding: 0.4rem 0.9rem !important;
+  font-size: 0.8rem !important;
+  min-height: 2.25rem !important;
+}
+
+/* Language switcher compact */
+.language-switch {
+  padding: 0.3rem 0.55rem !important;
+  font-size: 0.72rem !important;
+}
+
+/* Theme toggle compact */
+.theme-toggle {
+  padding: 0.35rem !important;
+  min-width: auto !important;
+}
+
+/* Agent Login in header - compact */
+.agent-login-cta.header-cta {
+  padding: 0.4rem 0.85rem !important;
+}
+
+/* Mobile burger smaller */
+.header-burger {
+  padding: 0.4rem !important;
+}
+
+@media (min-width: 1024px) {
+  .header-shell {
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+  }
+  
+  .bbx-header {
+    padding: 0.2rem 0 !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPRINT 1.6 QA FIX: HERO SECTION - REDUCED TOP PADDING
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.graphene-hero,
+[class*="hero-section"],
+#home .min-h-screen {
+  padding-top: 4.5rem !important;
+}
+
+@media (max-width: 768px) {
+  .graphene-hero,
+  [class*="hero-section"],
+  #home .min-h-screen {
+    padding-top: 3.5rem !important;
+  }
+}
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPRINT 1.6 QA FIX: AMBER/GOLD → PREMIUM GREY-BROWN OVERRIDE
+   Global override for all Tailwind amber utilities
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Background amber → grey-brown */
+.bg-amber-400,
+.bg-amber-500,
+.bg-amber-400\/20,
+.bg-amber-500\/20,
+[class*="bg-amber"] {
+  background-color: rgba(138, 123, 106, 0.2) !important;
+}
+
+.bg-amber-400:not([class*="\/20"]):not([class*="\/10"]),
+.bg-amber-500:not([class*="\/20"]):not([class*="\/10"]) {
+  background-color: rgb(138, 123, 106) !important;
+}
+
+/* Text amber → grey-brown */
+.text-amber-400,
+.text-amber-500,
+.text-amber-600,
+[class*="text-amber"] {
+  color: rgb(166, 149, 133) !important;
+}
+
+/* Border amber → grey-brown */
+.border-amber-400,
+.border-amber-500,
+.border-amber-600,
+[class*="border-amber"] {
+  border-color: rgba(138, 123, 106, 0.6) !important;
+}
+
+/* Ring/focus amber → grey-brown */
+.ring-amber-400,
+.ring-amber-500,
+.focus\\:ring-amber-400:focus,
+.focus\\:ring-amber-500:focus {
+  --tw-ring-color: rgba(138, 123, 106, 0.5) !important;
+}
+
+/* Hover states */
+.hover\\:bg-amber-400:hover,
+.hover\\:bg-amber-500:hover {
+  background-color: rgba(138, 123, 106, 0.85) !important;
+}
+
+.hover\\:text-amber-400:hover,
+.hover\\:text-amber-500:hover {
+  color: rgb(182, 165, 149) !important;
+}
+
+/* Inline style overrides for gold hex codes */
+[style*="#fbbf24"],
+[style*="#f59e0b"],
+[style*="#d97706"] {
+  color: rgb(166, 149, 133) !important;
+}
+
+/* Fix any remaining gold accents in blog/marketing */
+.blog-card-accent,
+.marketing-gold,
+[class*="gold-accent"] {
+  color: var(--bbx-gold) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPRINT 1.6 QA FIX: LIGHT MODE THEME HARMONY
+   Ensuring premium grey-brown works in light theme
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root[data-theme="light"] .bg-amber-400,
+:root[data-theme="light"] .bg-amber-500,
+:root[data-theme="light"] [class*="bg-amber"] {
+  background-color: rgba(106, 93, 78, 0.15) !important;
+}
+
+:root[data-theme="light"] .text-amber-400,
+:root[data-theme="light"] .text-amber-500,
+:root[data-theme="light"] [class*="text-amber"] {
+  color: rgb(106, 93, 78) !important;
+}
+
+:root[data-theme="light"] .border-amber-400,
+:root[data-theme="light"] .border-amber-500,
+:root[data-theme="light"] [class*="border-amber"] {
+  border-color: rgba(106, 93, 78, 0.5) !important;
+}
+
+/* Light mode buttons - ensure grey-brown CTA */
+:root[data-theme="light"] .cta-button,
+:root[data-theme="light"] .nav-chip.cta-chip,
+:root[data-theme="light"] .header-cta {
+  background: linear-gradient(135deg, 
+    rgba(106, 93, 78, 0.92) 0%, 
+    rgba(85, 74, 62, 0.96) 50%,
+    rgba(65, 57, 47, 1) 100%) !important;
+  color: #fff !important;
+  border: 1px solid rgba(138, 123, 106, 0.4) !important;
+}
+
+:root[data-theme="light"] .cta-button:hover,
+:root[data-theme="light"] .nav-chip.cta-chip:hover,
+:root[data-theme="light"] .header-cta:hover {
+  background: linear-gradient(135deg, 
+    rgba(85, 74, 62, 0.95) 0%, 
+    rgba(65, 57, 47, 0.98) 50%,
+    rgba(55, 48, 40, 1) 100%) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPRINT 1.6 QA: BLOG/NEWS SEVERITY BADGES - KEEP WARNING COLOR
+   Note: Severity badges use amber semantically for "warning" level
+   This is acceptable for warning states (not brand/UI color)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Keep warning severity amber but slightly muted */
+.news-card__severity-badge[data-severity="high"] {
+  background: rgba(212, 175, 100, 0.15) !important;
+  color: #d4af64 !important; /* Muted amber/gold */
+  border: 1px solid rgba(212, 175, 100, 0.3) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPRINT 1.6 QA: FINAL TOUCH - ENSURE NO BRIGHT GOLD ANYWHERE
+   Override inline styles that use gold hex codes
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Dark mode - primary accent should be grey-brown not gold */
+:root,
+:root[data-theme="dark"] {
+  --primary-accent: #a69585 !important;
+  --primary-accent-hover: #b8a594 !important;
+  --primary-accent-soft: rgba(166, 149, 133, 0.15) !important;
+}
+
+/* Light mode - primary accent grey-brown */
+:root[data-theme="light"] {
+  --primary-accent: #6a5d4e !important;
+  --primary-accent-hover: #7a6b5a !important;
+  --primary-accent-soft: rgba(106, 93, 78, 0.12) !important;
+}

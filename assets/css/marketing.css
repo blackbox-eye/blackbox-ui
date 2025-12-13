@@ -12,7 +12,7 @@
   --graphene-bg-light: #F5F8FA;
   --graphene-primary: #1a73e8;
   --graphene-secondary: #113c55;
-  --graphene-gold: #b88932;
+  --graphene-gold: #7a6b5a; /* Sprint 1.6 QA: Premium grey-brown */
   --graphene-accent: #e94560;
   --graphene-text: #E0E6EB;
   --graphene-text-light: #22313A;
@@ -20,16 +20,16 @@
   --graphene-border: rgba(26, 115, 232, 0.2);
   --graphene-glow: 0 0 30px rgba(26, 115, 232, 0.15);
 
-  /* Primary brand colors (Blackbox EYE + Blackbox EYE unified)
-     Sprint 1.3: Darkened/desaturated bronze – no bright yellow */
-  --bbx-gold: #9a7630;
-  --bbx-gold-light: #b8923e;
-  --bbx-gold-hover: #7a5c22;
-  --bbx-gold-transparent: rgba(154, 118, 48, 0.15);
+  /* Primary brand colors - Sprint 1.6 QA: Premium Grey-Brown Palette
+     Replaces bright gold/amber with sophisticated earthy tones */
+  --bbx-gold: #8a7b6a;           /* Primary grey-brown */
+  --bbx-gold-light: #a69585;     /* Lighter hover state */
+  --bbx-gold-hover: #6a5d4e;     /* Darker pressed state */
+  --bbx-gold-transparent: rgba(138, 123, 106, 0.15);
 
-  /* RGB helpers for consistent bronze tints (Sprint 1.3: darker) */
-  --bbx-metal-rgb: 154, 118, 48;
-  --bbx-metal-rgb-light: 184, 146, 62;
+  /* RGB helpers for consistent grey-brown tints */
+  --bbx-metal-rgb: 138, 123, 106;
+  --bbx-metal-rgb-light: 166, 149, 133;
 
   /* Blackbox EYE brand colors (parent company identity) */
   --blackbox-primary: #1a1a2e;
@@ -50,12 +50,12 @@
   --bbx-text-secondary: #d1d5db;
   --bbx-text-muted: #9ca3af;
 
-  /* Borders */
-  --bbx-border-subtle: rgba(184, 137, 50, 0.2);
-  --bbx-border-gold: rgba(184, 137, 50, 0.4);
+  /* Borders - Sprint 1.6 QA: Grey-brown */
+  --bbx-border-subtle: rgba(138, 123, 106, 0.2);
+  --bbx-border-gold: rgba(138, 123, 106, 0.4);
 
-  /* Shadows */
-  --bbx-shadow-gold: 0 4px 20px rgba(184, 137, 50, 0.14);
+  /* Shadows - Sprint 1.6 QA: Grey-brown */
+  --bbx-shadow-gold: 0 4px 20px rgba(138, 123, 106, 0.14);
   --bbx-shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
 
   /* Severity colors for feeds/alerts */

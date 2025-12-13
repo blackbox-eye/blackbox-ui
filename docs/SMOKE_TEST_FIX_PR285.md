@@ -89,7 +89,8 @@ RETRY_DELAY=10
 css=""
 
 for i in $(seq 1 $MAX_RETRIES); do
-  if css=$(curl -fsSL "$CSS_URL" 2>&1); then
+  # Capture only stdout (CSS content), stderr goes to /dev/null for cleaner variable
+  if css=$(curl -fsSL "$CSS_URL" 2>/dev/null) && [ -n "$css" ]; then
     echo "✅ Successfully fetched marketing.min.css (attempt $i/$MAX_RETRIES)"
     break
   else
@@ -111,9 +112,11 @@ done
 
 **Benefits**:
 1. **Resilience**: Up to 3 attempts with 10-second delays
-2. **Observability**: Clear logging of each attempt
-3. **Debugging**: Specific error messages for different failure scenarios
-4. **Graceful degradation**: Handles transient network issues
+2. **Content validation**: Ensures non-empty response before proceeding
+3. **Clean output**: Suppresses stderr to keep CSS content pure for validation
+4. **Observability**: Clear logging of each attempt
+5. **Debugging**: Specific error messages for different failure scenarios
+6. **Graceful degradation**: Handles transient network issues
 
 ---
 

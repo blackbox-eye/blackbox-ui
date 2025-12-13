@@ -16,11 +16,41 @@
 
 :root,
 :root[data-theme="dark"] {
-  /* Sprint 1.5.3: PREMIUM GREY-BROWN PALETTE
-     Super exclusive look - more grey, less bronze */
-  --color-gold-dark: rgba(160, 155, 145, 0.85);
-  --color-gold-dark-glow: rgba(160, 155, 145, 0.4);
-  --color-gold-outline: rgba(130, 125, 115, 0.35);
+  /* ═══════════════════════════════════════════════════════════════
+     SPRINT 1.6.0: PREMIUM GLOW FOUNDATION SYSTEM
+     Authentic copper/gold with life - not flat
+     ═══════════════════════════════════════════════════════════════ */
+  
+  /* === GLOW DESIGN TOKENS === */
+  --glow-copper-subtle: 0 0 8px rgba(185, 165, 145, 0.12);
+  --glow-copper-soft: 0 0 14px rgba(190, 170, 150, 0.2);
+  --glow-copper-medium: 0 0 22px rgba(195, 175, 155, 0.28);
+  --glow-copper-strong: 0 0 32px rgba(200, 180, 160, 0.38);
+  --glow-copper-intense: 0 0 45px rgba(205, 185, 165, 0.45);
+  
+  /* Animated pulse glow */
+  --glow-pulse-idle: 0 0 12px rgba(185, 165, 145, 0.15);
+  --glow-pulse-peak: 0 0 28px rgba(200, 180, 160, 0.35);
+  
+  /* Agent Login Special Glow */
+  --glow-agent-idle: 0 0 12px rgba(180, 165, 150, 0.18), 0 0 4px rgba(200, 185, 170, 0.12);
+  --glow-agent-hover: 0 0 22px rgba(195, 175, 160, 0.32), 0 0 8px rgba(210, 190, 175, 0.2);
+  --glow-agent-active: 0 0 35px rgba(205, 185, 170, 0.45), 0 0 12px rgba(220, 200, 185, 0.28);
+  
+  /* Inner glow for buttons */
+  --inner-glow-subtle: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --inner-glow-copper: inset 0 1px 0 rgba(200, 180, 160, 0.15);
+  --inner-glow-strong: inset 0 1px 2px rgba(220, 200, 180, 0.2);
+  
+  /* Border glow effect */
+  --border-glow-idle: 0 0 0 1px rgba(180, 165, 150, 0.2);
+  --border-glow-hover: 0 0 0 1px rgba(195, 175, 160, 0.35);
+  --border-glow-active: 0 0 0 2px rgba(200, 180, 165, 0.45);
+  
+  /* === PREMIUM COLOR PALETTE (with life) === */
+  --color-gold-dark: rgba(175, 160, 145, 0.88);
+  --color-gold-dark-glow: rgba(190, 175, 160, 0.5);
+  --color-gold-outline: rgba(160, 145, 130, 0.4);
   --color-bg-dark: #0a0b0e;
   --color-card-dark: #10121a;
 
@@ -36,35 +66,45 @@
   --text-high-emphasis: #E8E8E8;
   --text-medium-emphasis: #A8B0BC;
   --muted: #8A9199;
-  --primary-accent: rgba(160, 155, 145, 0.85);
-  --primary-accent-soft: rgba(145, 140, 130, 0.15);
-  --primary-accent-strong: rgba(165, 160, 150, 0.9);
-  /* Sprint 1.5.3: Greyer tones - less warm */
-  --gold-gradient-start: rgba(150, 145, 135, 0.8);
-  --gold-gradient-mid: rgba(130, 125, 115, 0.75);
-  --gold-gradient-end: rgba(110, 105, 95, 0.7);
-  --gold-shine: rgba(165, 160, 150, 0.6);
-  --gold-shadow: rgba(50, 48, 42, 0.5);
-  --gold-highlight: rgba(170, 165, 155, 0.85);
-  --glitch-dark-green: #003d00;
-  --glitch-fire: rgba(160, 155, 145, 0.85);
-  --toggle-track: rgba(140, 145, 155, 0.12);
   
-  /* BBX accent - cool grey-brown */
-  --bbx-gold: rgba(160, 155, 145, 0.85);
-  --bbx-gold-light: rgba(175, 170, 160, 0.9);
+  /* Primary accent - warmer with more life */
+  --primary-accent: rgba(180, 165, 150, 0.9);
+  --primary-accent-soft: rgba(170, 155, 140, 0.18);
+  --primary-accent-strong: rgba(190, 175, 160, 0.95);
+  --primary-accent-glow: rgba(200, 185, 170, 0.35);
+  
+  /* Gold gradients - richer */
+  --gold-gradient-start: rgba(185, 170, 155, 0.85);
+  --gold-gradient-mid: rgba(165, 150, 135, 0.8);
+  --gold-gradient-end: rgba(145, 130, 115, 0.75);
+  --gold-shine: rgba(200, 185, 170, 0.7);
+  --gold-shadow: rgba(60, 55, 48, 0.55);
+  --gold-highlight: rgba(210, 195, 180, 0.9);
+  
+  --glitch-dark-green: #003d00;
+  --glitch-fire: rgba(180, 165, 150, 0.9);
+  --toggle-track: rgba(160, 155, 150, 0.15);
+  
+  /* BBX accent - premium copper-gold */
+  --bbx-gold: rgba(180, 165, 150, 0.9);
+  --bbx-gold-light: rgba(195, 180, 165, 0.95);
+  --bbx-gold-glow: rgba(200, 185, 170, 0.4);
   --toggle-knob: #F8FAFC;
   --toggle-knob-glow: rgba(248, 250, 252, 0.45);
   --nav-chip-bg: rgba(15, 18, 25, 0.6);
-  --nav-chip-border: rgba(255, 255, 255, 0.04);
-  --nav-chip-active: rgba(160, 155, 145, 0.18);
+  --nav-chip-border: rgba(180, 165, 150, 0.08);
+  --nav-chip-active: rgba(185, 170, 155, 0.22);
+  --nav-chip-glow: var(--glow-copper-soft);
   --section-muted: rgba(20, 24, 32, 0.68);
   --section-soft: rgba(25, 30, 40, 0.52);
   --section-ring: rgba(255, 255, 255, 0.06);
   --cta-contrast: #0c0c0c;
-  /* Sprint 1.5.3: Cool grey-brown palette */
+  
+  /* Sprint 1.6.0: Enhanced CTA with glow */
   --cta-background: linear-gradient(145deg, var(--gold-gradient-mid) 0%, var(--gold-gradient-end) 100%);
   --cta-background-hover: linear-gradient(145deg, var(--gold-gradient-start) 0%, var(--gold-gradient-mid) 58%, var(--gold-gradient-end) 100%);
+  --cta-glow: var(--glow-copper-medium);
+  --cta-glow-hover: var(--glow-copper-strong);
   --button-secondary-bg: transparent;
   --button-secondary-border: rgba(255, 255, 255, 0.15);
   --button-secondary-text: #E8E8E8;
@@ -4154,3 +4194,414 @@ button.graphene-toggle[aria-pressed="true"] {
   border: 1px solid rgba(160, 155, 145, 0.2) !important;
   color: rgba(160, 155, 145, 0.85) !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPRINT 1.6.0: GLOW ANIMATIONS & KEYFRAMES
+   Premium copper/gold glow with life
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Subtle breathing glow animation */
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: var(--glow-pulse-idle);
+  }
+  50% {
+    box-shadow: var(--glow-pulse-peak);
+  }
+}
+
+/* Premium shimmer sweep */
+@keyframes shimmerSweep {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* Subtle border glow pulse */
+@keyframes borderGlowPulse {
+  0%, 100% {
+    border-color: rgba(180, 165, 150, 0.25);
+    box-shadow: var(--glow-copper-subtle);
+  }
+  50% {
+    border-color: rgba(195, 180, 165, 0.4);
+    box-shadow: var(--glow-copper-soft);
+  }
+}
+
+/* Agent Login special glow */
+@keyframes agentGlow {
+  0%, 100% {
+    box-shadow: var(--glow-agent-idle);
+  }
+  50% {
+    box-shadow: var(--glow-agent-hover);
+  }
+}
+
+/* Status dot pulse */
+@keyframes statusPulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPRINT 1.6.0: GLOBAL HOVER TRANSITION SYSTEM
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Premium transition defaults */
+.nav-chip,
+.language-switch,
+.header-cta,
+.graphene-btn-primary,
+.graphene-btn-secondary,
+.theme-toggle,
+.alphabot-toggle {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPRINT 1.6.1: AGENT LOGIN "MILLION DOLLAR" BUTTON
+   Premium design with subtle glow - center of attention
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Agent Login Button - Base State */
+.agent-login-cta,
+.header-cta.agent-login-cta,
+a.agent-login-cta {
+  position: relative !important;
+  background: linear-gradient(
+    145deg,
+    rgba(28, 26, 24, 0.95) 0%,
+    rgba(22, 20, 18, 0.98) 100%
+  ) !important;
+  border: 1px solid rgba(180, 165, 150, 0.35) !important;
+  color: rgba(195, 180, 165, 0.95) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em !important;
+  box-shadow: 
+    var(--glow-agent-idle),
+    var(--inner-glow-copper) !important;
+  overflow: hidden !important;
+}
+
+/* Shimmer overlay effect */
+.agent-login-cta::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(200, 185, 170, 0.08) 50%,
+    transparent 100%
+  ) !important;
+  background-size: 200% 100% !important;
+  animation: shimmerSweep 4s ease-in-out infinite !important;
+  pointer-events: none !important;
+}
+
+/* Subtle glow ring */
+.agent-login-cta::after {
+  content: '' !important;
+  position: absolute !important;
+  top: -2px !important;
+  left: -2px !important;
+  right: -2px !important;
+  bottom: -2px !important;
+  border-radius: inherit !important;
+  background: transparent !important;
+  border: 1px solid rgba(190, 175, 160, 0.15) !important;
+  opacity: 0 !important;
+  transition: opacity 0.4s ease !important;
+  pointer-events: none !important;
+}
+
+/* Hover State */
+.agent-login-cta:hover,
+.header-cta.agent-login-cta:hover {
+  background: linear-gradient(
+    145deg,
+    rgba(35, 32, 28, 0.95) 0%,
+    rgba(28, 25, 22, 0.98) 100%
+  ) !important;
+  border-color: rgba(195, 180, 165, 0.5) !important;
+  color: rgba(210, 195, 180, 1) !important;
+  box-shadow: 
+    var(--glow-agent-hover),
+    var(--inner-glow-strong) !important;
+  transform: translateY(-1px) !important;
+}
+
+.agent-login-cta:hover::after {
+  opacity: 1 !important;
+}
+
+/* Focus State */
+.agent-login-cta:focus-visible {
+  outline: none !important;
+  box-shadow: 
+    var(--glow-agent-active),
+    var(--border-glow-active) !important;
+}
+
+/* Active/Pressed State */
+.agent-login-cta:active {
+  transform: translateY(0) !important;
+  box-shadow: 
+    var(--glow-agent-idle),
+    inset 0 2px 4px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Icon styling */
+.agent-login-cta .header-cta__icon,
+.agent-login-cta svg {
+  color: rgba(200, 185, 170, 0.9) !important;
+  filter: drop-shadow(0 0 3px rgba(200, 185, 170, 0.3)) !important;
+  transition: all 0.3s ease !important;
+}
+
+.agent-login-cta:hover .header-cta__icon,
+.agent-login-cta:hover svg {
+  color: rgba(215, 200, 185, 1) !important;
+  filter: drop-shadow(0 0 5px rgba(215, 200, 185, 0.5)) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPRINT 1.6.2: LANGUAGE SWITCHER POLISH
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.language-switch {
+  background: rgba(18, 17, 15, 0.6) !important;
+  border: 1px solid rgba(180, 165, 150, 0.12) !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  border-radius: 6px !important;
+  box-shadow: var(--glow-copper-subtle) !important;
+}
+
+.language-switch.is-active {
+  background: rgba(25, 23, 20, 0.85) !important;
+  border-color: rgba(185, 170, 155, 0.35) !important;
+  color: rgba(200, 185, 170, 0.95) !important;
+  box-shadow: 
+    var(--glow-copper-soft),
+    var(--inner-glow-subtle) !important;
+}
+
+.language-switch:hover:not(.is-active) {
+  background: rgba(22, 20, 18, 0.75) !important;
+  border-color: rgba(180, 165, 150, 0.25) !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+  box-shadow: var(--glow-copper-soft) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPRINT 1.6.3: NAV CHIPS RETHINK
+   Premium hover/active with glow
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.nav-chip {
+  background: var(--nav-chip-bg) !important;
+  border: 1px solid var(--nav-chip-border) !important;
+  color: rgba(255, 255, 255, 0.72) !important;
+  box-shadow: none !important;
+}
+
+.nav-chip:hover {
+  background: rgba(25, 23, 20, 0.7) !important;
+  border-color: rgba(180, 165, 150, 0.2) !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+  box-shadow: var(--glow-copper-subtle) !important;
+  transform: translateY(-1px) !important;
+}
+
+.nav-chip.nav-link-active {
+  background: rgba(30, 27, 24, 0.85) !important;
+  border-color: rgba(185, 170, 155, 0.35) !important;
+  color: rgba(195, 180, 165, 0.95) !important;
+  box-shadow: 
+    var(--glow-copper-soft),
+    var(--inner-glow-subtle) !important;
+}
+
+.nav-chip.nav-link-active:hover {
+  box-shadow: 
+    var(--glow-copper-medium),
+    var(--inner-glow-copper) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPRINT 1.6.6: ALPHABOT WIDGET REVIVAL
+   Premium look with subtle glow
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.alphabot-toggle {
+  background: rgba(22, 20, 18, 0.92) !important;
+  border: 1px solid rgba(180, 165, 150, 0.25) !important;
+  box-shadow: var(--glow-copper-soft) !important;
+  transition: all 0.3s ease !important;
+}
+
+.alphabot-toggle:hover {
+  background: rgba(28, 25, 22, 0.95) !important;
+  border-color: rgba(190, 175, 160, 0.4) !important;
+  box-shadow: var(--glow-copper-medium) !important;
+  transform: translateY(-2px) !important;
+}
+
+.alphabot-label {
+  color: rgba(190, 175, 160, 0.9) !important;
+  font-weight: 500 !important;
+  text-shadow: 0 0 8px rgba(190, 175, 160, 0.25) !important;
+}
+
+.alphabot-status-dot {
+  background: rgba(180, 165, 150, 0.8) !important;
+  box-shadow: 0 0 8px rgba(180, 165, 150, 0.5) !important;
+  animation: statusPulse 2.5s ease-in-out infinite !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPRINT 1.6.4: HERO SECTION ENHANCEMENT
+   Badges, buttons with life
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Hero Badge with glow */
+.graphene-floating-badge,
+.graphene-floating-badge__inner {
+  background: rgba(25, 23, 20, 0.88) !important;
+  border: 1px solid rgba(185, 170, 155, 0.28) !important;
+  color: rgba(195, 180, 165, 0.92) !important;
+  box-shadow: var(--glow-copper-soft) !important;
+}
+
+.graphene-floating-badge__ring {
+  border-color: rgba(185, 170, 155, 0.18) !important;
+  animation: borderGlowPulse 3s ease-in-out infinite !important;
+}
+
+.graphene-floating-badge__icon {
+  color: rgba(190, 175, 160, 0.8) !important;
+  filter: drop-shadow(0 0 4px rgba(190, 175, 160, 0.35)) !important;
+}
+
+/* Title shimmer with life */
+.graphene-text-shimmer {
+  color: rgba(195, 180, 165, 0.92) !important;
+  text-shadow: 0 0 20px rgba(195, 180, 165, 0.25) !important;
+  background: linear-gradient(
+    90deg,
+    rgba(180, 165, 150, 0.9) 0%,
+    rgba(210, 195, 180, 1) 50%,
+    rgba(180, 165, 150, 0.9) 100%
+  ) !important;
+  background-size: 200% auto !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: shimmerSweep 5s linear infinite !important;
+}
+
+/* Hero tagline */
+.graphene-hero-tagline__highlight {
+  color: rgba(195, 180, 165, 0.92) !important;
+  text-shadow: 0 0 12px rgba(195, 180, 165, 0.2) !important;
+}
+
+/* Primary CTA with glow */
+.graphene-btn-primary,
+.graphene-btn-spotlight {
+  background: linear-gradient(
+    145deg,
+    rgba(45, 40, 35, 0.95) 0%,
+    rgba(32, 28, 24, 0.98) 100%
+  ) !important;
+  border: 1px solid rgba(185, 170, 155, 0.35) !important;
+  color: rgba(200, 185, 170, 0.95) !important;
+  box-shadow: 
+    var(--glow-copper-soft),
+    var(--inner-glow-copper) !important;
+}
+
+.graphene-btn-primary:hover,
+.graphene-btn-spotlight:hover {
+  background: linear-gradient(
+    145deg,
+    rgba(55, 48, 42, 0.95) 0%,
+    rgba(42, 38, 32, 0.98) 100%
+  ) !important;
+  border-color: rgba(195, 180, 165, 0.5) !important;
+  box-shadow: 
+    var(--glow-copper-medium),
+    var(--inner-glow-strong) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Secondary CTA */
+.graphene-btn-secondary {
+  background: transparent !important;
+  border: 1px solid rgba(180, 165, 150, 0.25) !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+  box-shadow: var(--glow-copper-subtle) !important;
+}
+
+.graphene-btn-secondary:hover {
+  background: rgba(180, 165, 150, 0.08) !important;
+  border-color: rgba(190, 175, 160, 0.4) !important;
+  box-shadow: var(--glow-copper-soft) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Stat cards with glow */
+.graphene-stat-card {
+  background: rgba(22, 20, 18, 0.75) !important;
+  border: 1px solid rgba(180, 165, 150, 0.12) !important;
+  box-shadow: var(--glow-copper-subtle) !important;
+  transition: all 0.3s ease !important;
+}
+
+.graphene-stat-card:hover {
+  border-color: rgba(185, 170, 155, 0.25) !important;
+  box-shadow: var(--glow-copper-soft) !important;
+  transform: translateY(-2px) !important;
+}
+
+.graphene-stat-card__value {
+  color: rgba(195, 180, 165, 0.92) !important;
+  text-shadow: 0 0 10px rgba(195, 180, 165, 0.2) !important;
+}
+
+.graphene-stat-card__icon {
+  color: rgba(185, 170, 155, 0.75) !important;
+  filter: drop-shadow(0 0 4px rgba(185, 170, 155, 0.3)) !important;
+}
+
+/* USP cards */
+.graphene-hero-usps__icon {
+  background: rgba(28, 25, 22, 0.85) !important;
+  color: rgba(185, 170, 155, 0.8) !important;
+  box-shadow: var(--glow-copper-subtle) !important;
+}
+
+/* Section badges */
+.graphene-section-badge,
+[class*="dna-badge"],
+[class*="section-badge"] {
+  background: rgba(25, 23, 20, 0.88) !important;
+  border: 1px solid rgba(185, 170, 155, 0.25) !important;
+  color: rgba(195, 180, 165, 0.92) !important;
+  box-shadow: var(--glow-copper-soft) !important;
+}
+

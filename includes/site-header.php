@@ -262,13 +262,15 @@ if (!empty($disable_alphabot)) {
     <meta name="twitter:image" content="<?= htmlspecialchars($meta_og_image) ?>">
     <meta name="twitter:site" content="@blackboxeye">
 
-    <link rel="icon" type="image/png" sizes="32x32" href="<?= htmlspecialchars($bbx_brand_base) ?>/BlackboxEYE_black_32x32.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="<?= htmlspecialchars($bbx_brand_base) ?>/BlackboxEYE_black_256x256.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="<?= htmlspecialchars($bbx_brand_base) ?>/BlackboxEYE_black_256x256.png">
-    <link rel="shortcut icon" href="<?= htmlspecialchars($bbx_brand_base) ?>/BlackboxEYE_black.ico">
+    <?php $css_version = '1.6.8'; // Cache-bust version - increment on CSS changes ?>
+
+    <link rel="icon" type="image/svg+xml" href="/assets/icon_box.svg?v=<?= $css_version ?>">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png?v=<?= $css_version ?>">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png?v=<?= $css_version ?>">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png?v=<?= $css_version ?>">
+    <link rel="shortcut icon" href="/assets/favicon.ico?v=<?= $css_version ?>">
 
     <!-- Local compiled Tailwind CSS (v3 build) -->
-    <?php $css_version = '1.6.7'; // Cache-bust version - increment on CSS changes ?>
     <link rel="stylesheet" href="/assets/css/tailwind.full.css?v=<?= $css_version ?>">
     <!-- Custom UI components extracted from previous inline styles -->
     <link rel="stylesheet" href="/assets/css/custom-ui.css?v=<?= $css_version ?>">

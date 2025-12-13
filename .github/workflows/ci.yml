@@ -13,8 +13,10 @@
 # - FTP_USERNAME    : FTP account username
 # - FTP_PASSWORD    : FTP account password (stored securely)
 # - FTP_REMOTE_PATH : Remote path (e.g., /public_html)
-# - SITE_URL (opt)  : Site URL (e.g., https://blackbox.codes)
-#                     If not set, defaults to http://FTP_HOST
+# - SITE_URL (opt)  : Public site URL (e.g., https://blackbox.codes)
+#                     If not set, workflow will attempt to derive a public URL
+#                     from FTP_HOST (e.g., strip leading "ftp.") and finally
+#                     fall back to https://blackbox.codes.
 #
 # Optional Secrets:
 # - CF_ZONE_ID      : Cloudflare Zone ID for cache purging
@@ -366,18 +368,46 @@ jobs:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           SITE_URL_SECRET: ${{ secrets.SITE_URL }}
         run: |
+          set -euo pipefail
+
           # Prefer an explicit public SITE_URL when provided.
-          # Falling back to FTP_HOST can point at a non-public hostname and hide production issues.
-          if [ -n "$SITE_URL_SECRET" ]; then
+          if [ -n "${SITE_URL_SECRET:-}" ]; then
             SITE_URL="$SITE_URL_SECRET"
           else
-            SITE_URL="https://$FTP_HOST"
-          fi
+            # FTP_HOST is often an FTP-only hostname (e.g., ftp.example.com) which may 404 over HTTP.
+            # Try a small set of candidates to find a reachable public origin.
+            candidates=()
 
-          echo "Resolved SITE_URL: $SITE_URL"
+            if [ -n "${FTP_HOST:-}" ]; then
+              # Common case: FTP host is ftp.<domain> but the website is <domain>.
+              if echo "$FTP_HOST" | grep -qiE '^ftp\.'; then
+                candidates+=("https://${FTP_HOST#ftp.}")
+              fi
+
+              candidates+=("https://$FTP_HOST")
+            fi
+
+            # Final fallback: production domain for this repo.
+            candidates+=("https://blackbox.codes")
+
+            SITE_URL=""
+            for c in "${candidates[@]}"; do
+              c="${c%/}"
+              if curl -fsSL -o /dev/null -L "$c/"; then
+                SITE_URL="$c"
+                break
+              fi
+            done
+
+            if [ -z "$SITE_URL" ]; then
+              SITE_URL="${candidates[-1]}"
+            fi
+          fi
 
           # Remove trailing slash if present
           SITE_URL="${SITE_URL%/}"
+
+          echo "Resolved SITE_URL: $SITE_URL"
 
           # Export for subsequent steps
           echo "SITE_URL=$SITE_URL" >> $GITHUB_ENV

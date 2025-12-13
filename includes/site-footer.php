@@ -218,7 +218,7 @@
     </div>
     <script src="assets/js/router-guard.js" defer></script>
     <script src="assets/js/qa-mode.js" defer></script>
-    <script src="assets/js/site.min.js?v=1.6.8" defer></script>
+    <script src="assets/js/site.min.js?v=1.6.10" defer></script>
     <script src="script.js" defer></script>
     <?php if (isset($current_page) && $current_page === 'home'): ?>
         <script type="module" src="assets/js/graphene-hero.js"></script>

@@ -139,24 +139,24 @@
   --text-high-emphasis: #1F2933;
   --text-medium-emphasis: #4B5563;
   --muted: #6B7280;
-  /* Copper-forward palette for light theme */
-  --primary-accent: var(--color-copper-light);
-  --primary-accent-soft: rgba(198, 124, 72, 0.16);
-  --primary-accent-strong: rgba(198, 124, 72, 0.9);
-  --gold-gradient-start: #e8aa72;
-  --gold-gradient-mid: #c67c48;
-  --gold-gradient-end: #8b4b22;
-  --gold-shine: #f3c08f;
-  --gold-shadow: #7a3e1c;
-  --gold-highlight: #f7d7ad;
+  /* Use the brand grey-brown/gold system from marketing.css in light mode as well */
+  --primary-accent: var(--bbx-gold);
+  --primary-accent-soft: color-mix(in srgb, var(--bbx-gold) 18%, transparent);
+  --primary-accent-strong: var(--bbx-gold-light);
+  --gold-gradient-start: var(--bbx-gold-light);
+  --gold-gradient-mid: var(--bbx-gold);
+  --gold-gradient-end: var(--bbx-gold-hover);
+  --gold-shine: color-mix(in srgb, var(--bbx-gold-light) 65%, white);
+  --gold-shadow: color-mix(in srgb, var(--bbx-gold-hover) 70%, black);
+  --gold-highlight: color-mix(in srgb, var(--bbx-gold-light) 55%, white);
   --glitch-dark-green: #00a651;
-  --glitch-fire: #c67c48;
+  --glitch-fire: var(--bbx-gold);
   --toggle-track: rgba(15, 23, 42, 0.08);
   --toggle-knob: #0F172A;
   --toggle-knob-glow: rgba(15, 23, 42, 0.25);
   --nav-chip-bg: rgba(15, 23, 42, 0.04);
   --nav-chip-border: rgba(15, 23, 42, 0.08);
-  --nav-chip-active: rgba(198, 124, 72, 0.24);
+  --nav-chip-active: color-mix(in srgb, var(--bbx-gold) 20%, transparent);
   --section-muted: rgba(255, 255, 255, 0.86);
   --section-soft: rgba(243, 246, 251, 0.9);
   --section-ring: rgba(15, 23, 42, 0.09);
@@ -164,18 +164,17 @@
   /* Slightly darker/desaturated copper to avoid peach/yellow CTAs */
   --cta-background: linear-gradient(145deg, var(--gold-gradient-mid) 0%, var(--gold-gradient-end) 100%);
   --cta-background-hover: linear-gradient(145deg, var(--gold-gradient-start) 0%, var(--gold-gradient-mid) 58%, var(--gold-gradient-end) 100%);
-  --cta-background-solid: #c67c48;
   --button-secondary-bg: transparent;
-  --button-secondary-border: #c67c48;
-  --button-secondary-text: #8b4b22;
+  --button-secondary-border: var(--bbx-gold);
+  --button-secondary-text: var(--bbx-gold-hover);
   --form-field-bg: rgba(236, 240, 249, 0.95);
   --form-field-border: rgba(15, 23, 42, 0.12);
   --form-field-text: #111827;
   --form-field-placeholder: rgba(30, 41, 59, 0.5);
-  --badge-background: rgba(198, 124, 72, 0.16);
-  --badge-text: #8b4b22;
+  --badge-background: color-mix(in srgb, var(--bbx-gold) 16%, transparent);
+  --badge-text: var(--bbx-gold-hover);
   --metric-card-bg: rgba(233, 236, 243, 0.9);
-  --outline-color: rgba(198, 124, 72, 0.65);
+  --outline-color: color-mix(in srgb, var(--bbx-gold) 60%, transparent);
   --digital-rain-color: #0f172a;
 }
 
@@ -244,7 +243,7 @@
 :root[data-theme="light"] .text-amber-400,
 :root[data-theme="light"] .text-yellow-400 {
   color: var(--primary-accent) !important;
-  text-shadow: 0 0 1px rgba(198, 124, 72, 0.35);
+  text-shadow: 0 0 1px color-mix(in srgb, var(--primary-accent) 35%, transparent);
 }
 
 /* Badge styling - Copper metal effect */
@@ -252,34 +251,38 @@
 :root[data-theme="light"] .bg-amber-400\/20,
 :root[data-theme="light"] .bg-yellow-400\/10,
 :root[data-theme="light"] .bg-yellow-400\/20 {
-  background: linear-gradient(135deg, rgba(232, 170, 114, 0.16) 0%, rgba(198, 124, 72, 0.22) 100%) !important;
-  border: 1px solid rgba(198, 124, 72, 0.28) !important;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--primary-accent) 14%, transparent) 0%,
+    color-mix(in srgb, var(--primary-accent) 22%, transparent) 100%
+  ) !important;
+  border: 1px solid color-mix(in srgb, var(--primary-accent) 28%, transparent) !important;
 }
 
 /* Header CTA in light mode */
 :root[data-theme="light"] .header-cta {
   background: var(--cta-background);
   box-shadow:
-    inset 0 1px 0 rgba(243, 192, 143, 0.45),
-    0 3px 10px rgba(198, 124, 72, 0.32);
-  border: 1px solid rgba(139, 75, 34, 0.4);
+    inset 0 1px 0 color-mix(in srgb, var(--primary-accent) 16%, white),
+    0 3px 10px color-mix(in srgb, var(--primary-accent) 24%, transparent);
+  border: 1px solid color-mix(in srgb, var(--primary-accent) 45%, transparent);
   color: var(--cta-contrast);
 }
 
 :root[data-theme="light"] .header-cta:hover {
   background: var(--cta-background-hover);
   box-shadow:
-    inset 0 1px 0 rgba(247, 215, 173, 0.55),
-    0 5px 15px rgba(198, 124, 72, 0.42);
+    inset 0 1px 0 color-mix(in srgb, var(--primary-accent) 22%, white),
+    0 5px 15px color-mix(in srgb, var(--primary-accent) 30%, transparent);
 }
 
 /* Nav chips active state - copper */
 :root[data-theme="light"] .nav-chip.nav-link-active {
   background: var(--cta-background);
   box-shadow:
-    inset 0 1px 0 rgba(243, 192, 143, 0.45),
-    0 3px 12px rgba(198, 124, 72, 0.38);
-  border: 1px solid rgba(139, 75, 34, 0.4);
+    inset 0 1px 0 color-mix(in srgb, var(--primary-accent) 16%, white),
+    0 3px 12px color-mix(in srgb, var(--primary-accent) 28%, transparent);
+  border: 1px solid color-mix(in srgb, var(--primary-accent) 45%, transparent);
   color: var(--cta-contrast);
 }
 
@@ -300,17 +303,17 @@
 :root[data-theme="light"] .sticky-cta {
   background: var(--cta-background);
   box-shadow:
-    inset 0 1px 0 rgba(243, 192, 143, 0.5),
-    0 8px 25px rgba(198, 124, 72, 0.4),
-    0 0 30px rgba(198, 124, 72, 0.24);
+    inset 0 1px 0 color-mix(in srgb, var(--primary-accent) 18%, white),
+    0 8px 25px color-mix(in srgb, var(--primary-accent) 32%, transparent),
+    0 0 30px color-mix(in srgb, var(--primary-accent) 18%, transparent);
 }
 
 :root[data-theme="light"] .sticky-cta:hover {
   background: var(--cta-background-hover);
   box-shadow:
-    inset 0 1px 0 rgba(247, 215, 173, 0.6),
-    0 12px 35px rgba(198, 124, 72, 0.5),
-    0 0 40px rgba(198, 124, 72, 0.3);
+    inset 0 1px 0 color-mix(in srgb, var(--primary-accent) 24%, white),
+    0 12px 35px color-mix(in srgb, var(--primary-accent) 38%, transparent),
+    0 0 40px color-mix(in srgb, var(--primary-accent) 22%, transparent);
 }
 
 /* ============================================
@@ -640,19 +643,33 @@ body.alphabot-locked {
 }
 
 @media (max-width: 640px) {
+  /* Mobile header: keep primary actions (Login + burger) grouped right */
   .header-grid {
-    flex-wrap: wrap !important;
+    flex-wrap: nowrap !important;
+    align-items: center;
   }
 
   .bbx-header {
-    flex-wrap: wrap;
-    align-items: flex-start;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+
+  /* Keep header clean on mobile: language lives in drawer footer */
+  .language-switcher-wrapper {
+    display: none !important;
+  }
+
+  /* Graphene mode ("STÆRK/Standard") is a power toggle; hide on mobile header */
+  #graphene-mode-toggle {
+    display: none !important;
   }
 
   .bbx-header-right {
-    width: 100%;
-    justify-content: space-between;
+    width: auto;
+    margin-left: auto;
+    justify-content: flex-end;
     gap: 0.65rem;
+    flex-wrap: nowrap;
   }
 }
 
@@ -692,19 +709,10 @@ body.alphabot-locked {
 }
 
 @media (max-width: 380px) {
+  /* Extra small: keep actions on one line */
   .bbx-header-right {
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    row-gap: 0.35rem;
-  }
-
-  .language-switcher-wrapper {
-    width: 100%;
-    justify-content: flex-start;
-  }
-
-  .header-burger {
-    order: 3;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
   }
 }
 
@@ -1690,11 +1698,11 @@ textarea.field-error:focus {
 }
 
 :root[data-theme="light"] .hero-gradient-text {
-  background: linear-gradient(135deg, #0f172a 0%, #78350f 50%, #0f172a 100%);
+  background: linear-gradient(135deg, var(--text-high-emphasis) 0%, var(--primary-accent) 50%, var(--text-high-emphasis) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+  filter: drop-shadow(0 2px 4px rgba(15, 23, 42, 0.12));
 }
 
 /* Hero overlay for theme adaptation */

@@ -102,7 +102,7 @@ test.describe('Favicon Consistency', () => {
       await browserPage.goto(page.path);
 
       const favicon = browserPage.locator('link[rel="icon"][sizes="32x32"]');
-      await expect(favicon).toHaveAttribute('href', /BlackboxEYE/i);
+      await expect(favicon).toHaveAttribute('href', /\/assets\/favicon-32x32\.png(\?|$)/i);
     });
 
     test(`${page.name} should have apple-touch-icon`, async ({ page: browserPage }) => {
@@ -112,7 +112,7 @@ test.describe('Favicon Consistency', () => {
 
       const appleTouchIcon = browserPage.locator('link[rel="apple-touch-icon"]');
       await expect(appleTouchIcon).toBeAttached({ timeout: 10000 });
-      await expect(appleTouchIcon).toHaveAttribute('href', /BlackboxEYE/i);
+      await expect(appleTouchIcon).toHaveAttribute('href', /\/assets\/apple-touch-icon\.png(\?|$)/i);
     });
   }
 });

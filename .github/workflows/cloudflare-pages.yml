@@ -28,18 +28,6 @@
 name: Cloudflare Pages Deploy
 
 on:
-  push:
-    branches: [main]
-    paths-ignore:
-      - '.github/agents/**'
-      - 'docs/**'
-      - '**/*.md'
-  pull_request:
-    branches: [main]
-    paths-ignore:
-      - '.github/agents/**'
-      - 'docs/**'
-      - '**/*.md'
   workflow_dispatch:
     inputs:
       environment:

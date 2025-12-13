@@ -364,10 +364,17 @@ jobs:
         id: config
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
+          SITE_URL_SECRET: ${{ secrets.SITE_URL }}
         run: |
-          # Ensure SITE_URL is set (previous steps export to GITHUB_ENV)
-          SITE_URL="http://$FTP_HOST"
-          echo "Current SITE_URL: $SITE_URL"
+          # Prefer an explicit public SITE_URL when provided.
+          # Falling back to FTP_HOST can point at a non-public hostname and hide production issues.
+          if [ -n "$SITE_URL_SECRET" ]; then
+            SITE_URL="$SITE_URL_SECRET"
+          else
+            SITE_URL="https://$FTP_HOST"
+          fi
+
+          echo "Resolved SITE_URL: $SITE_URL"
 
           # Remove trailing slash if present
           SITE_URL="${SITE_URL%/}"
@@ -375,6 +382,23 @@ jobs:
           # Export for subsequent steps
           echo "SITE_URL=$SITE_URL" >> $GITHUB_ENV
           echo "✅ Test environment configured"
+
+      - name: Test 0 - Verify production serves updated marketing CSS
+        run: |
+          set -euo pipefail
+          CSS_URL="$SITE_URL/assets/css/marketing.min.css?v=${{ github.sha }}"
+          echo "🔎 Fetching: $CSS_URL"
+
+          css=$(curl -fsSL "$CSS_URL")
+
+          # Guardrails: these were the legacy 'yellow/bronze' values we removed from hero CTAs.
+          if echo "$css" | grep -qiE "#9a7630|rgba\(154,\s*118,\s*48"; then
+            echo "::error::marketing.min.css still contains legacy hero CTA yellow/bronze values (#9a7630 / rgba(154,118,48,...))." >&2
+            echo "This usually means deploy didn't upload updated assets or a cache layer is serving stale CSS." >&2
+            exit 1
+          fi
+
+          echo "✅ marketing.min.css does not contain legacy hero CTA yellow/bronze values"
 
       - name: Test 1 - Root endpoint (/)
         run: |

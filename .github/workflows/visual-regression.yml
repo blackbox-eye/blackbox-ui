@@ -162,5 +162,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: visual-screenshots
-          path: artifacts/**
-          if-no-files-found: warn
+          path: |
+            artifacts/
+            test-results/
+            playwright-report/
+          if-no-files-found: ignore
+          retention-days: 7

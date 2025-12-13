@@ -264,9 +264,10 @@ if (!empty($disable_alphabot)) {
     <link rel="shortcut icon" href="/assets/logo%20pakker%20BlackboxEYE/blackboxeye_logo_package_full/BlackboxEYE_white.ico">
 
     <!-- Local compiled Tailwind CSS (v3 build) -->
-    <link rel="stylesheet" href="/assets/css/tailwind.full.css">
+    <?php $css_version = '1.6.3'; // Cache-bust version - increment on CSS changes ?>
+    <link rel="stylesheet" href="/assets/css/tailwind.full.css?v=<?= $css_version ?>">
     <!-- Custom UI components extracted from previous inline styles -->
-    <link rel="stylesheet" href="/assets/css/custom-ui.css">
+    <link rel="stylesheet" href="/assets/css/custom-ui.css?v=<?= $css_version ?>">
     <!-- Removed redundant inline Tailwind utility overrides -->
 
     <!-- Conditional CSS loading -->
@@ -280,9 +281,9 @@ if (!empty($disable_alphabot)) {
     $css_suffix = $use_minified ? '.min.css' : '.css';
 
     if ($is_admin_page): ?>
-        <link rel="stylesheet" href="/assets/css/admin<?= $css_suffix ?>">
+        <link rel="stylesheet" href="/assets/css/admin<?= $css_suffix ?>?v=<?= $css_version ?>">
     <?php else: ?>
-        <link rel="stylesheet" href="/assets/css/marketing<?= $css_suffix ?>">
+        <link rel="stylesheet" href="/assets/css/marketing<?= $css_suffix ?>?v=<?= $css_version ?>">
     <?php endif; ?>
 
     <script src="config.js"></script>

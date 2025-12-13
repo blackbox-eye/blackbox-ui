@@ -5264,3 +5264,98 @@ nav[aria-label="Breadcrumb"] {
   flex-wrap: nowrap !important;
   align-items: center !important;
 }
+/* ═══════════════════════════════════════════════════════════════════════════
+   FINAL OVERRIDES - Sprint 1.6.2 QA (Dec 2025)
+   These rules MUST be last and use !important to override all previous styles
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 1. HEADER - FIXED HEIGHT, NO SCROLL CHANGES */
+#main-header,
+#main-header.scrolled,
+#main-header.glass-effect {
+  background: rgba(10, 12, 16, 0.92) !important;
+  border-bottom: 1px solid rgba(138, 123, 106, 0.12) !important;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.35) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  backdrop-filter: blur(16px) !important;
+  transition: none !important;
+}
+
+:root[data-theme="light"] #main-header,
+:root[data-theme="light"] #main-header.scrolled,
+:root[data-theme="light"] #main-header.glass-effect {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-bottom-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+}
+
+.header-shell {
+  padding: 0.5rem 0 0.5rem !important;
+  gap: 0.5rem !important;
+}
+
+@media (min-width: 1024px) {
+  .header-shell {
+    padding: 0.6rem 0 0.6rem !important;
+  }
+}
+
+/* 2. LOGIN DROPDOWN - COMPACT */
+.console-access-menu {
+  min-width: 180px !important;
+  max-width: 200px !important;
+  padding: 0.5rem !important;
+}
+
+/* 3. CTA BUTTONS - GREY-BROWN (NO YELLOW) */
+.btn-graphene-primary,
+.graphene-strong .btn-graphene-primary,
+a.btn-graphene-primary {
+  background: linear-gradient(135deg, rgba(138, 123, 106, 0.95) 0%, rgba(110, 98, 85, 1) 100%) !important;
+  color: #fff !important;
+  border: 1px solid rgba(166, 149, 133, 0.3) !important;
+  box-shadow: 0 4px 20px rgba(138, 123, 106, 0.25) !important;
+}
+
+.btn-graphene-primary:hover,
+.graphene-strong .btn-graphene-primary:hover,
+a.btn-graphene-primary:hover {
+  background: linear-gradient(135deg, rgba(166, 149, 133, 1) 0%, rgba(138, 123, 106, 1) 100%) !important;
+  box-shadow: 0 6px 28px rgba(138, 123, 106, 0.35) !important;
+}
+
+.btn-graphene-secondary,
+.graphene-strong .btn-graphene-secondary,
+a.btn-graphene-secondary {
+  background: rgba(138, 123, 106, 0.08) !important;
+  border: 2px solid rgba(138, 123, 106, 0.4) !important;
+  color: rgba(200, 185, 170, 0.95) !important;
+}
+
+.btn-graphene-secondary:hover,
+.graphene-strong .btn-graphene-secondary:hover,
+a.btn-graphene-secondary:hover {
+  background: rgba(138, 123, 106, 0.2) !important;
+  border-color: rgba(166, 149, 133, 0.6) !important;
+  color: #fff !important;
+}
+
+/* 4. BBX ASSISTANT - GREY-BROWN ACCENTS */
+.alphabot-toggle {
+  border-color: rgba(138, 123, 106, 0.35) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(138, 123, 106, 0.12) !important;
+}
+
+.alphabot-toggle:hover {
+  border-color: rgba(166, 149, 133, 0.5) !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 20px rgba(138, 123, 106, 0.18) !important;
+}
+
+.alphabot-panel {
+  border-color: rgba(138, 123, 106, 0.25) !important;
+}
+
+/* 5. HERO BADGE - NO RING */
+.graphene-floating-badge__ring {
+  display: none !important;
+}

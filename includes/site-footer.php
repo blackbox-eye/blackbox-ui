@@ -219,9 +219,35 @@
     <script src="assets/js/router-guard.js" defer></script>
     <script src="assets/js/qa-mode.js" defer></script>
     <script src="assets/js/site.min.js" defer></script>
+    <script src="script.js" defer></script>
     <?php if (isset($current_page) && $current_page === 'home'): ?>
         <script type="module" src="assets/js/graphene-hero.js"></script>
     <?php endif; ?>
+    
+    <!-- Login Dropdown - inline backup -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdown = document.querySelector('.console-access-dropdown');
+        const trigger = document.querySelector('.console-access-trigger');
+        
+        if (trigger && dropdown) {
+            trigger.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const isOpen = dropdown.getAttribute('aria-expanded') === 'true';
+                dropdown.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+                trigger.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (!dropdown.contains(e.target)) {
+                    dropdown.setAttribute('aria-expanded', 'false');
+                    trigger.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+    });
+    </script>
     </body>
 
     </html>

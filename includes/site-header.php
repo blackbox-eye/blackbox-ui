@@ -415,15 +415,15 @@ if ($is_graphene_page) {
                             <span class="theme-toggle__icon" aria-hidden="true"></span>
                         </button>
                         <!-- Console Access Dropdown - Sprint 1.6 QA: New fold-out menu -->
-                        <div class="console-access-dropdown" data-dropdown>
+                        <div class="console-access-dropdown" data-dropdown aria-expanded="false">
                             <button type="button" 
                                 class="console-access-trigger header-cta header-cta--pill items-center gap-1.5"
                                 aria-haspopup="true"
                                 aria-expanded="false">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                 </svg>
-                                <span class="header-cta__label hidden sm:inline"><?= t('header.cta.console_access', 'Konsol') ?></span>
+                                <span class="header-cta__label"><?= t('header.cta.login', 'Login') ?></span>
                                 <svg class="console-chevron w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                                 </svg>

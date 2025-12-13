@@ -5053,12 +5053,13 @@ a.agent-login-cta {
     display: inline-flex !important;
   }
   
+  /* ALWAYS show Login label */
   .console-access-trigger .header-cta__label {
-    display: none !important;
+    display: inline !important;
   }
   
   .console-access-trigger {
-    padding: 0.4rem 0.5rem !important;
+    padding: 0.4rem 0.65rem !important;
   }
   
   /* Language switches hidden - in burger */

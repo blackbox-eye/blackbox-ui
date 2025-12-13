@@ -3131,21 +3131,23 @@ button.graphene-toggle.is-loading .graphene-toggle__icon {
 }
 
 /* --------------------------------------------------------
-   3. FIX: Hero CTA Buttons - More Prominent
-   Better contrast, larger touch targets, clearer styling
+   3. FIX: Hero CTA Buttons - Premium Grey-Brown Design
+   Matching our refined palette - NO YELLOW
    -------------------------------------------------------- */
 .btn-graphene-primary {
   padding: 1rem 2rem;
   font-size: 1rem;
   font-weight: 700;
-  background: linear-gradient(135deg, var(--graphene-primary) 0%, #1557b0 100%);
-  box-shadow: 0 4px 20px rgba(26, 115, 232, 0.35);
+  background: linear-gradient(135deg, rgba(138, 123, 106, 0.9) 0%, rgba(110, 98, 85, 0.95) 100%);
+  box-shadow: 0 4px 20px rgba(138, 123, 106, 0.25);
   min-width: 180px;
+  color: #fff;
+  border: 1px solid rgba(166, 149, 133, 0.3);
 }
 
 .btn-graphene-primary:hover {
-  background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
-  box-shadow: 0 6px 30px rgba(26, 115, 232, 0.5);
+  background: linear-gradient(135deg, rgba(166, 149, 133, 0.95) 0%, rgba(138, 123, 106, 1) 100%);
+  box-shadow: 0 6px 30px rgba(138, 123, 106, 0.35);
   transform: translateY(-3px);
 }
 
@@ -3153,15 +3155,17 @@ button.graphene-toggle.is-loading .graphene-toggle__icon {
   padding: 1rem 2rem;
   font-size: 1rem;
   font-weight: 700;
-  border-width: 2px;
+  border: 2px solid rgba(138, 123, 106, 0.4);
   min-width: 180px;
-  background: rgba(var(--bbx-metal-rgb), 0.08);
+  background: rgba(138, 123, 106, 0.06);
+  color: rgba(200, 185, 170, 0.95);
 }
 
 .btn-graphene-secondary:hover {
-  background: var(--graphene-gold);
-  color: #0A1217;
-  box-shadow: 0 6px 30px rgba(var(--bbx-metal-rgb), 0.22);
+  background: rgba(138, 123, 106, 0.18);
+  border-color: rgba(166, 149, 133, 0.6);
+  color: #fff;
+  box-shadow: 0 6px 30px rgba(138, 123, 106, 0.18);
   transform: translateY(-3px);
 }
 
@@ -4717,20 +4721,9 @@ button:focus-visible {
   margin-bottom: 2rem;
 }
 
+/* Ring REMOVED - clean badge design */
 .graphene-floating-badge__ring {
-  position: absolute;
-  inset: -4px;
-  border-radius: 9999px;
-  background: linear-gradient(135deg, var(--graphene-3d-gold), var(--graphene-3d-grey), var(--graphene-3d-gold));
-  background-size: 200% 200%;
-  animation: graphene-badge-rotate 3s linear infinite;
-  opacity: 0.6;
-}
-
-@keyframes graphene-badge-rotate {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  display: none !important;
 }
 
 .graphene-floating-badge__inner {
@@ -4739,11 +4732,12 @@ button:focus-visible {
   align-items: center;
   gap: 0.625rem;
   padding: 0.625rem 1.25rem;
-  background: var(--graphene-3d-surface);
+  background: rgba(15, 18, 22, 0.85);
   border-radius: 9999px;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(var(--bbx-metal-rgb), 0.20);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(138, 123, 106, 0.25);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .graphene-floating-badge__icon {

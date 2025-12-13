@@ -1819,29 +1819,29 @@ body.mobile-menu-open .alphabot-overlay {
   align-items:center;
   gap:0.5rem;
   background:rgba(13,15,17,.92);
-  border:1px solid rgba(214,178,94,.25);
+  border:1px solid rgba(138, 123, 106, 0.3);
   color:var(--text-high-emphasis);
   padding:0.65rem 1.25rem;
   border-radius:8px;
   font-weight:600;
   letter-spacing:.02em;
-  box-shadow:0 8px 24px rgba(0,0,0,.45), 0 0 0 1px rgba(214,178,94,.08);
+  box-shadow:0 8px 24px rgba(0,0,0,.45), 0 0 0 1px rgba(138, 123, 106, 0.12);
   transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
 }
 .alphabot-toggle:hover {
   transform:translateY(-2px);
   background:rgba(13,15,17,.96);
-  border-color:rgba(214,178,94,.45);
-  box-shadow:0 12px 32px rgba(0,0,0,.5), 0 0 20px rgba(214,178,94,.15);
+  border-color:rgba(166, 149, 133, 0.5);
+  box-shadow:0 12px 32px rgba(0,0,0,.5), 0 0 20px rgba(138, 123, 106, 0.2);
 }
 .alphabot-toggle:focus-visible {
-  outline:2px solid var(--primary-accent);
+  outline:2px solid rgba(138, 123, 106, 0.6);
   outline-offset:2px;
 }
 .alphabot-status-dot { width:0.6rem; height:0.6rem; border-radius:999px; background:#22c55e; box-shadow:0 0 8px rgba(34,197,94,.7), 0 0 16px rgba(34,197,94,.35); animation:alphabot-pulse 2s ease-in-out infinite; }
 @keyframes alphabot-pulse { 0%,100%{opacity:1;} 50%{opacity:0.7;} }
 .alphabot-widget.alphabot-offline .alphabot-status-dot { background:#f87171; box-shadow:0 0 8px rgba(248,113,113,.6); animation:none; }
-.alphabot-panel { position:absolute; bottom:100%; right:0; margin-bottom:1rem; width:min(22rem,calc(100vw - 4rem)); max-height:60vh; background:linear-gradient(135deg, rgba(13,15,17,.98), rgba(20,22,26,.98)); border:1px solid rgba(214,178,94,.2); border-radius:8px; padding:1.25rem; box-shadow:0 20px 45px rgba(0,0,0,.55), 0 0 0 1px rgba(214,178,94,.08); opacity:0; transform:translate3d(0,10px,0); pointer-events:none; transition:opacity .25s ease, transform .25s ease; display:flex; flex-direction:column; }
+.alphabot-panel { position:absolute; bottom:100%; right:0; margin-bottom:1rem; width:min(22rem,calc(100vw - 4rem)); max-height:60vh; background:linear-gradient(135deg, rgba(13,15,17,.98), rgba(20,22,26,.98)); border:1px solid rgba(138, 123, 106, 0.25); border-radius:8px; padding:1.25rem; box-shadow:0 20px 45px rgba(0,0,0,.55), 0 0 0 1px rgba(138, 123, 106, 0.1); opacity:0; transform:translate3d(0,10px,0); pointer-events:none; transition:opacity .25s ease, transform .25s ease; display:flex; flex-direction:column; }
 .alphabot-widget.open .alphabot-panel { opacity:1; transform:translate3d(0,0,0); pointer-events:auto; }
 .alphabot-widget.alphabot-offline .alphabot-toggle { cursor:not-allowed; opacity:0.65; }
 .alphabot-widget.alphabot-offline .alphabot-toggle:hover,
@@ -4889,16 +4889,17 @@ a.agent-login-cta {
 
 .console-access-menu {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 6px);
   right: 0;
-  min-width: 220px;
+  min-width: 180px;
+  max-width: 200px;
   background: rgba(18, 20, 24, 0.98);
-  border: 1px solid rgba(138, 123, 106, 0.25);
-  border-radius: 12px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(138, 123, 106, 0.2);
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-8px);
+  transform: translateY(-6px);
   transition: all 0.2s ease;
   z-index: 99999 !important;
   overflow: hidden;
@@ -4912,9 +4913,9 @@ a.agent-login-cta {
   pointer-events: auto;
 }
 
-/* Debug: Show click is received */
+/* Click feedback - subtle press effect */
 .console-access-trigger:active {
-  background: red !important;
+  transform: scale(0.98);
 }
 
 /* Alternative: Use :focus-within on parent */
@@ -4927,20 +4928,20 @@ a.agent-login-cta {
 }
 
 .console-menu-header {
-  padding: 0.6rem 1rem;
-  font-size: 0.68rem;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.62rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: rgba(166, 149, 133, 0.7);
-  border-bottom: 1px solid rgba(138, 123, 106, 0.15);
+  color: rgba(166, 149, 133, 0.65);
+  border-bottom: 1px solid rgba(138, 123, 106, 0.12);
 }
 
 .console-menu-item {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
+  gap: 0.6rem;
+  padding: 0.55rem 0.85rem;
   color: rgba(220, 210, 200, 0.9);
   text-decoration: none;
   transition: background 0.15s ease;

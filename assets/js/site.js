@@ -545,6 +545,34 @@ document.addEventListener('DOMContentLoaded', () => {
         grapheneActionButtons.forEach((button) => {
             button.addEventListener('click', persistGrapheneDismissal, { once: true });
         });
+
+        // Hide CTA bar when footer is visible (prevents overlap)
+        const footer = document.querySelector('footer, .site-footer');
+        if (footer) {
+            const footerObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (isGrapheneDismissed()) {
+                        return;
+                    }
+                    if (entry.isIntersecting) {
+                        // Footer is visible - hide the CTA bar
+                        grapheneCtaBar.setAttribute('data-footer-visible', 'true');
+                        grapheneCtaBar.style.opacity = '0';
+                        grapheneCtaBar.style.pointerEvents = 'none';
+                        grapheneCtaBar.style.transform = 'translateX(-50%) translateY(20px)';
+                    } else {
+                        // Footer not visible - show the CTA bar
+                        grapheneCtaBar.removeAttribute('data-footer-visible');
+                        grapheneCtaBar.style.opacity = '';
+                        grapheneCtaBar.style.pointerEvents = '';
+                        grapheneCtaBar.style.transform = '';
+                    }
+                    scheduleBottomCtaOffset();
+                });
+            }, { threshold: 0.1 }); // Trigger when 10% of footer is visible
+
+            footerObserver.observe(footer);
+        }
     }
 
     // Ensure initial bottom CTA offset is correct even when sticky-cta is hidden (e.g., home page).
@@ -2009,6 +2037,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }
+    }
+
+    // Hide assistant widget when footer is visible (prevents overlap with footer content)
+    const assistantRail = document.querySelector('.bbx-command-rail');
+    const siteFooter = document.querySelector('footer, .site-footer');
+    if (assistantRail && siteFooter) {
+        const assistantFooterObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    // Footer visible - hide assistant toggle
+                    assistantRail.style.opacity = '0';
+                    assistantRail.style.pointerEvents = 'none';
+                    assistantRail.style.transform = 'translateY(20px)';
+                } else {
+                    // Footer not visible - show assistant toggle
+                    assistantRail.style.opacity = '';
+                    assistantRail.style.pointerEvents = '';
+                    assistantRail.style.transform = '';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        assistantFooterObserver.observe(siteFooter);
     }
 
     // ==========================================

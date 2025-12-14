@@ -1822,11 +1822,11 @@ body.mobile-menu-open .alphabot-overlay {
 .sticky-cta:hover { transform:translateY(-2px) scale(1.05); background:var(--cta-background-hover); box-shadow:0 15px 30px rgba(0,0,0,.4),0 0 30px color-mix(in srgb, var(--primary-accent) 45%, transparent); }
 /* Blackbox EYE Assistant widget - GRAPHENE STYLE (Nov 2025 QA) */
 :root { --bbx-sticky-cta-height: 0px; }
-.bbx-command-rail { position:fixed; bottom:calc(1.5rem + 22px); right:1.5rem; z-index:9990; display:flex; flex-direction:column; gap:1rem; align-items:flex-end; }
-.alphabot-overlay { position:fixed; inset:0; background:rgba(8,13,20,0.68); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); opacity:0; pointer-events:none; transition:opacity 0.25s ease; z-index:9989; }
+.bbx-command-rail { position:fixed; bottom:calc(1.5rem + 22px); right:1.5rem; z-index:2147483647; display:flex; flex-direction:column; gap:1rem; align-items:flex-end; isolation:isolate; transform:translateZ(0); }
+.alphabot-overlay { position:fixed; inset:0; background:rgba(8,13,20,0.68); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); opacity:0; pointer-events:none; transition:opacity 0.25s ease; z-index:2147483646; }
 .alphabot-overlay.visible { opacity:1; pointer-events:auto; }
 
-.alphabot-widget { position:relative; display:flex; flex-direction:column; align-items:flex-end; min-width:15rem; z-index:9990; }
+.alphabot-widget { position:relative; display:flex; flex-direction:column; align-items:flex-end; min-width:15rem; z-index:2147483647; }
 .alphabot-toggle {
   display:inline-flex;
   align-items:center;
@@ -5483,11 +5483,14 @@ a.btn-graphene-secondary:hover {
 
 /* 4. BBX ASSISTANT - GREY-BROWN ACCENTS */
 /* Mobile offset is JS-controlled via --bbx-sticky-cta-height (set in site.js) */
+/* CRITICAL: Assistant must ALWAYS be visible above ALL page content */
 .bbx-command-rail {
   position: fixed !important;
   left: auto !important;
   width: auto !important;
-  z-index: 9990 !important; /* Very high - below mobile menu (9999) but above all content */
+  z-index: 2147483647 !important; /* Maximum possible z-index - absolutely nothing can be above this except mobile menu */
+  isolation: isolate !important; /* Create own stacking context */
+  transform: translateZ(0) !important; /* Force GPU layer / new stacking context */
 }
 
 /* Desktop: fixed offset from bottom */
@@ -5526,11 +5529,13 @@ a.btn-graphene-secondary:hover {
 
 .alphabot-widget {
   min-width: 0 !important;
-  z-index: 9990 !important; /* Ensure widget itself is above content */
+  z-index: 2147483647 !important;
+  position: relative !important;
 }
 
 .alphabot-toggle {
-  z-index: 9990 !important; /* Ensure toggle button is always visible */
+  z-index: 2147483647 !important;
+  position: relative !important;
 }
 
 .alphabot-toggle {

@@ -334,37 +334,55 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Bottom CTA offset coordination (shared for sticky-cta + graphene-cta-bar)
+    // Ensures assistant toggle sits above any fixed CTA bar on mobile
     const setBottomCtaOffset = () => {
-        const gap = 12;
+        const gap = 16; // Gap between CTA bar and assistant
         let offset = 0;
 
-        const measureIfVisible = (element, isVisible) => {
-            if (!element || !isVisible) {
-                return;
+        // Helper: measure element if visible and fixed
+        const measureIfVisibleAndFixed = (element) => {
+            if (!element) {
+                return 0;
             }
 
             const style = window.getComputedStyle(element);
+            
+            // Only measure if position is fixed (mobile layout)
+            if (style.position !== 'fixed') {
+                return 0;
+            }
+
+            // Skip if display:none or visibility:hidden
             if (style.display === 'none' || style.visibility === 'hidden') {
-                return;
+                return 0;
+            }
+
+            // Skip if opacity is 0 (transitioning out)
+            if (parseFloat(style.opacity) < 0.1) {
+                return 0;
+            }
+
+            // Skip if data-hidden attribute is present
+            if (element.hasAttribute('data-hidden')) {
+                return 0;
             }
 
             const rect = element.getBoundingClientRect();
-            const height = Math.ceil(rect.height);
-            if (height > 0) {
-                offset = Math.max(offset, height + gap);
-            }
+            return Math.ceil(rect.height);
         };
 
+        // Measure sticky-cta (footer CTA bar)
         const sticky = document.querySelector('[data-component="sticky-cta"]');
-        const stickyVisible = Boolean(sticky && sticky.getAttribute('data-visible') === 'true' && !sticky.hasAttribute('data-hidden'));
-        measureIfVisible(sticky, stickyVisible);
+        const stickyHeight = measureIfVisibleAndFixed(sticky);
+        if (stickyHeight > 0) {
+            offset = Math.max(offset, stickyHeight + gap);
+        }
 
+        // Measure graphene-cta-bar (home page CTA bar)
         const graphene = document.querySelector('.graphene-cta-bar');
-        const grapheneVisible = Boolean(graphene && graphene.getAttribute('data-visible') === 'true' && !graphene.hasAttribute('data-hidden'));
-        if (graphene) {
-            const grapheneStyle = window.getComputedStyle(graphene);
-            // Only account for the graphene CTA when it is fixed (mobile layout)
-            measureIfVisible(graphene, grapheneVisible && grapheneStyle.position === 'fixed');
+        const grapheneHeight = measureIfVisibleAndFixed(graphene);
+        if (grapheneHeight > 0) {
+            offset = Math.max(offset, grapheneHeight + gap);
         }
 
         document.documentElement.style.setProperty('--bbx-sticky-cta-height', offset ? `${offset}px` : '0px');

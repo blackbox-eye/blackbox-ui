@@ -262,7 +262,7 @@ if (!empty($disable_alphabot)) {
     <meta name="twitter:image" content="<?= htmlspecialchars($meta_og_image) ?>">
     <meta name="twitter:site" content="@blackboxeye">
 
-    <?php $css_version = '1.6.11'; // Cache-bust version - increment on CSS changes ?>
+    <?php $css_version = '1.6.12'; // Cache-bust version - increment on CSS changes ?>
 
     <link rel="icon" type="image/svg+xml" href="/assets/icon_box.svg?v=<?= $css_version ?>">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png?v=<?= $css_version ?>">

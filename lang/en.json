@@ -145,21 +145,21 @@
     },
     "hero": {
       "badge": "Blackbox EYE™ Security Platform",
-      "headline": "Next-gen Security Infrastructure",
-      "headline_part1": "Next generation",
-      "headline_part2": "security infrastructure",
-      "subheadline": "Powered by Graphene architecture – unified threat intelligence, AI-driven response, and real-time operational awareness across your entire digital surface.",
+      "headline": "Security infrastructure that acts with you",
+      "headline_part1": "Security infrastructure",
+      "headline_part2": "that acts with you",
+      "subheadline": "Unified threat picture, fast containment, and accountable response across every business unit.",
       "tagline_title": "Mission-critical coverage",
-      "tagline_highlight": "AI-driven response",
-      "tagline_copy": "Blackbox EYE™, PVE™, and AUT orchestrate human + machine action in under 50 ms.",
-      "primary_cta": "Request Demo",
-      "primary_cta_aria": "Request a demo of Blackbox EYE security platform",
-      "secondary_cta": "Run free scan",
-      "secondary_cta_aria": "Start the free vulnerability scan",
-      "spotlight_cta": "Explore the platform",
+      "tagline_highlight": "Coordinated response",
+      "tagline_copy": "Blackbox EYE™, PVE™, and AUT coordinate people and automation in under 50 ms.",
+      "primary_cta": "Book live demo",
+      "primary_cta_aria": "Book a live demo of the Blackbox EYE platform",
+      "secondary_cta": "Start free scan",
+      "secondary_cta_aria": "Start a free vulnerability scan",
+      "spotlight_cta": "View platform overview",
       "spotlight_cta_aria": "Open the platform overview",
       "cta_bar_label": "Mission control",
-      "cta_bar_hint": "Stay in command on mobile",
+      "cta_bar_hint": "Pick your next action",
       "live_feed_title": "Live Threat Intelligence",
       "live_feed_subtitle": "Real-time security events",
       "live_badge": "LIVE",
@@ -183,23 +183,23 @@
       },
       "usps": {
         "ai_response": {
-          "title": "AI-driven response",
-          "body": "Coordinated mitigation playbooks with Blackbox EYE™ and Blackbox EYE Assistant™."
+          "title": "Coordinated response",
+          "body": "Mitigation playbooks that pair operators with Blackbox EYE™ and Assistant."
         },
         "intel": {
           "title": "Unified intelligence",
           "body": "Live threat graph across OT, IT, and cloud assets."
         },
         "compliance": {
-          "title": "Audit-ready compliance",
-          "body": "Automated evidence packs for ISO 27001 and NIS2."
+          "title": "Audit-ready operations",
+          "body": "Evidence packs and control mapping for ISO 27001 and NIS2."
         }
       }
     },
     "tactical": {
       "tagline": "The Tactical Overview",
       "title": "From strategy to operational effect",
-      "description": "One platform, five focus areas. Navigate directly to the intelligence you need.",
+      "description": "One platform, five focus areas. Navigate straight to the intelligence you need now.",
     "metrics": {
       "response": "Reduced response time",
       "response_caption": "Average reduction after 6 months with Blackbox EYE™",
@@ -271,7 +271,7 @@
     "operational": {
       "tagline": "Activate the tactical advantage",
       "title": "From intelligence to response—without friction",
-      "description": "Blackbox EYE™ combines AI-driven analysis modules with operational readiness. Our platform is used by organizations with zero tolerance for compromise.",
+      "description": "Blackbox EYE™ pairs analysis modules with operational readiness for organizations with zero tolerance for gaps.",
       "bullets": {
         "penetration": {
           "title": "Continuous penetration testing",
@@ -298,7 +298,7 @@
     },
     "cta": {
       "title": "Ready to scale your resilience?",
-      "description": "Contact our operational team or jump straight to the sections that match your needs.",
+      "description": "Contact our operational team or jump directly to the sections that fit your need.",
       "actions": {
         "cases": "See Documented Impact",
         "pricing": "Request Pricing",
@@ -391,19 +391,20 @@
   "products": {
     "title": "Products",
     "breadcrumb": "Products",
-    "subtitle": "AI-driven cybersecurity solutions",
-    "intro": "Blackbox EYE™ offers a complete suite of specialized modules to protect your organization.",
+    "subtitle": "Operational cybersecurity modules",
+    "intro": "Blackbox EYE™ provides a complete, deployable stack of modules that secure your environment end-to-end.",
     "hero_section": {
       "tagline": "The Platform",
-      "title": "A holistic security strategy in one place",
-      "description": "Every module inside Blackbox EYE™ is a specialized line of defense. Use our AI assistant to generate concrete threat scenarios and see how we neutralize them."
+      "title": "One platform, operational security",
+      "description": "Each module is a defined line of defense. Ask the AI assistant to generate a threat scenario and see how we contain it.",
+      "intro": "Blackbox EYE™ provides a complete, deployable stack of modules that secure your environment end-to-end."
     },
-    "scenario_button": "✨ Generate a Threat Scenario",
-    "key_features_heading": "Key Capabilities",
+    "scenario_button": "Generate a threat scenario",
+    "key_features_heading": "Key capabilities",
     "greyeye": {
       "title": "Blackbox EYE™",
-      "subtitle": "AI Security Assistant",
-      "description": "24/7 AI-driven monitoring and incident response with natural language interface",
+      "subtitle": "AI security assistant",
+      "description": "24/7 monitoring, incident triage, and response guided through natural language.",
       "features": {
         "monitoring": "Real-time threat monitoring",
         "analysis": "Automated incident analysis",
@@ -412,35 +413,35 @@
       }
     },
     "extras": {
-      "title": "Additional Modules & Integrations",
+      "title": "Additional modules & integrations",
       "items": {
         "idmatrix": {
           "title": "ID-Matrix",
-          "body": "Granular access control, live session monitoring, and biometric safeguards."
+          "body": "Granular access control with live session oversight and biometric safeguards."
         },
         "aut": {
           "title": "AUT – Awareness & Training",
-          "body": "Scenario-based awareness training powered by AI and adaptive learning."
+          "body": "Scenario-based awareness training with AI-driven adaptation."
         },
         "bridge": {
           "title": "Operational Bridge",
-          "body": "Integrate our platform with your existing SOC, SIEM, and workflows."
+          "body": "Integrate the platform with your SOC, SIEM, and operational workflows."
         },
         "command": {
           "title": "Live Command Center",
-          "body": "Real-time situation rooms, mission control dashboards, and automated playbooks."
+          "body": "Real-time situation rooms, control dashboards, and automated playbooks."
         }
       }
     },
     "cta": {
-      "title": "Ready to see the modules in action?",
-      "description": "Book a confidential demo and we’ll show how Blackbox EYE™ deploys inside your environment without friction.",
-      "button": "Contact Our Product Team"
+      "title": "Want a working walk-through?",
+      "description": "Book a confidential demo and see how Blackbox EYE™ is deployed without friction in your environment.",
+      "button": "Talk to our product team"
     },
     "pve": {
       "title": "PVE™",
       "subtitle": "Penetration & Vulnerability Engine",
-      "description": "Automated penetration testing and vulnerability scanning",
+      "description": "Automated penetration testing and prioritized vulnerability scanning",
       "features": {
         "scanning": "Continuous vulnerability scanning",
         "pentest": "Automated penetration testing",
@@ -451,7 +452,7 @@
     "idmatrix": {
       "title": "ID-Matrix™",
       "subtitle": "Identity & Access Control",
-      "description": "Enterprise identity management and zero-trust access control",
+      "description": "Enterprise identity control with enforced zero-trust access",
       "features": {
         "identity": "Centralized identity management",
         "mfa": "Multi-factor authentication",
@@ -461,7 +462,7 @@
     "aut": {
       "title": "AUT™",
       "subtitle": "Awareness & Training",
-      "description": "AI-tailored security training and phishing simulation",
+      "description": "AI-tailored security training with realistic phishing simulation",
       "features": {
         "training": "Personalized training",
         "simulation": "Realistic phishing tests",
@@ -473,23 +474,23 @@
     "title": "Case Studies",
     "breadcrumb": "Cases",
     "subtitle": "Documented Impact",
-    "intro": "See how Blackbox EYE™ has helped Danish organizations strengthen their cybersecurity.",
+    "intro": "See how Blackbox EYE™ strengthens security for Danish organizations with measurable outcomes.",
     "hero_section": {
       "tagline": "Documented impact",
-      "title": "Proven value in the real world",
-      "description": "See how we have neutralized critical threats for high-demand clients—and let our AI analyze your own situation.",
+      "title": "Operational results from the field",
+      "description": "Review how we neutralize critical threats for demanding clients—and let our AI assess your own context.",
       "bullets": {
         "evidence": {
-          "title": "Concrete impact",
-          "description": "Access response-time, threat suppression, and resilience metrics for each engagement."
+          "title": "Concrete outcomes",
+          "description": "Access response time, containment, and resilience metrics per engagement."
         },
         "frameworks": {
           "title": "Sector-specific playbooks",
           "description": "Explore how municipalities, enterprises, and critical infrastructure activate Blackbox EYE™."
         },
         "results": {
-          "title": "Modules with outcomes",
-          "description": "Map every documented result directly to the modules and governance paths that delivered it."
+          "title": "Modules linked to outcomes",
+          "description": "Map each documented result directly to the modules and governance paths that delivered it."
         }
       }
     },
@@ -502,20 +503,20 @@
       "municipality": {
         "title": "Municipality with critical infrastructure",
         "challenge": "Unauthorized access to technical installations.",
-        "solution": "ID-Matrix and Blackbox EYE implemented to log every access attempt and deliver weekly reports.",
-        "result": "80% reduction in access breaches."
+        "solution": "ID-Matrix and Blackbox EYE deployed to log every attempt and deliver weekly oversight.",
+        "result": "Marked reduction in unauthorized access."
       },
       "realestate": {
         "title": "Real estate operator",
         "challenge": "Limited oversight across 12 sites and recurring theft.",
-        "solution": "Platform integrated with existing cameras plus mobile access for facility managers.",
-        "result": "65% fewer theft incidents within three months."
+        "solution": "Platform integrated with existing cameras and mobile access for facility managers.",
+        "result": "Noticeably fewer theft incidents in the first quarter."
       },
       "security": {
         "title": "Security firm",
         "challenge": "Manual logbooks and slow response time.",
         "solution": "Blackbox EYE now assists guards with automated documentation and live updates.",
-        "result": "New differentiation lever in the market."
+        "result": "Documented faster response and clearer audit trail."
       }
     },
     "metrics": {
@@ -529,7 +530,7 @@
     "navigator": {
       "eyebrow": "Featured transformations",
       "title": "Pick an industry and see the impact",
-      "subtitle": "We continuously refresh the overview with new KPIs from our deployments.",
+      "subtitle": "The overview is refreshed with new KPIs from active deployments.",
       "impact_label": "Impact over <span>12 months</span>",
       "modules_label": "Core modules",
       "cta": "Schedule a strategic alignment session",
@@ -559,8 +560,8 @@
       }
     },
     "analysis": {
-      "title": "✨ Analyze your situation",
-      "description": "Briefly describe a security challenge inside your organization and our AI consultant will generate a targeted recommendation based on previous cases.",
+      "title": "Analyze your situation",
+      "description": "Describe a security challenge in your organization and our AI consultant will generate a targeted recommendation based on previous cases.",
       "label": "Your challenge",
       "placeholder": "E.g. 'We worry about phishing emails targeting our finance team...'",
       "button": "Request AI Analysis",
@@ -580,9 +581,9 @@
   "pricing": {
     "title": "Pricing",
     "breadcrumb": "Pricing",
-    "subtitle": "Licenses & Subscriptions",
-    "intro": "Solutions tailored to your risk profile",
-    "description": "Blackbox EYE™ offers complete license and subscription solutions – from selected modules to full operational integration. Use our AI security advisor to find the right match.",
+    "subtitle": "Licenses & subscriptions",
+    "intro": "Solutions calibrated to your risk profile",
+    "description": "Blackbox EYE™ offers license and subscription options—from selected modules to full operational integration. Use our AI advisor to find the right fit.",
     "ai_advisor": {
       "title": "AI Security Advisor",
       "industry_label": "Industry",
@@ -652,13 +653,13 @@
       }
     },
     "mvp": {
-      "section_title": "MVP Packages",
+      "section_title": "MVP packages",
       "basis": {
         "badge": "MVP Starter",
         "title": "MVP-Basis",
         "price": "1,799 DKK",
         "period": "per month + VAT",
-        "description": "Essential protection for small teams and startups.",
+        "description": "Essential protection for small teams.",
         "features": {
           "greyeye": "Blackbox EYE AI assistant (limited features)",
           "idmatrix": "Basic ID-Matrix access",
@@ -672,7 +673,7 @@
         "title": "MVP-Pro",
         "price": "3,499 DKK",
         "period": "per month + VAT",
-        "description": "Extended MVP solution for growing businesses.",
+        "description": "Extended coverage for growing teams.",
         "features": {
           "includes": "Everything in MVP-Basis +",
           "greyeye": "Blackbox EYE AI assistant (full features)",
@@ -687,7 +688,7 @@
         "title": "MVP-Premium",
         "price": "5,999 DKK",
         "period": "per month + VAT",
-        "description": "Complete MVP package with priority support.",
+        "description": "Complete package with priority support.",
         "features": {
           "includes": "Everything in MVP-Pro +",
           "pve": "Basic PVE module",
@@ -699,13 +700,13 @@
       }
     },
     "enterprise": {
-      "section_title": "Enterprise Solutions",
-      "section_description": "Scalable solutions for businesses with advanced security and compliance requirements.",
+      "section_title": "Enterprise solutions",
+      "section_description": "Scalable options for organizations with advanced security and compliance requirements.",
       "standard": {
         "title": "Standard",
         "price": "9,900 DKK",
         "period": "per month + VAT",
-        "description": "Effective security protection and digital solutions for daily use.",
+        "description": "Effective protection for daily operations.",
         "features": {
           "greyeye": "Blackbox EYE AI assistant (full access)",
           "idmatrix": "ID-Matrix access control",
@@ -735,7 +736,7 @@
         "title": "Enterprise",
         "price": "39,000 DKK",
         "period": "per month + VAT*",
-        "description": "Comprehensive, customized protection for larger organizations.",
+        "description": "Comprehensive, customized protection for larger environments.",
         "features": {
           "includes": "Everything in Premium +",
           "teams": "Access to specialist teams",
@@ -753,7 +754,7 @@
     },
     "custom": {
       "title": "Should we tailor a solution for you?",
-      "description": "Our experts combine operational experience with AI-driven analysis to deliver precisely the security level you need.",
+      "description": "Our experts combine operational experience with AI analysis to deliver precisely the security level you need.",
       "button": "Talk to Our Advisors"
     }
   },
@@ -763,13 +764,13 @@
       "description": "Generate a mock report in seconds and see how our PVE module prioritizes exposures."
     },
     "hero": {
-      "tagline": "Lead flow",
+      "tagline": "Surface check",
       "title": "Free vulnerability scan in seconds",
       "description": "Enter your domain to receive a surface-level mock report with the top observations. Book a demo for the full PVE assessment."
     },
     "form": {
       "title": "Get your report",
-      "description": "We illustrate how our PVE engine prioritizes findings from publicly available data.",
+      "description": "See how the PVE engine prioritizes findings from publicly available data.",
       "domain_label": "Domain",
       "domain_placeholder": "example.com",
       "email_label": "Work email (optional)",
@@ -808,11 +809,11 @@
     "title": "Contact",
     "breadcrumb": "Contact",
     "subtitle": "Get in touch",
-    "intro": "Have questions about our solutions? Contact our security advisors.",
+    "intro": "Have questions about our solutions? Speak with our security advisors.",
     "hero_section": {
       "tagline": "Confidential dialogue",
-      "title": "Contact us—when only the absolute best will do",
-      "description": "At Blackbox EYE™ uncompromised confidentiality and impenetrable protection are fundamentals. Nothing is left to chance."
+      "title": "Contact us when certainty matters",
+      "description": "At Blackbox EYE™, confidentiality and protection are standard. We keep the conversation precise and secure."
     },
     "form": {
       "name": "Name",

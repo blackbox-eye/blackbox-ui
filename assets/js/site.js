@@ -1,28 +1,176 @@
 'use strict';
 
 // ==========================================
+// LANGUAGE RESOLUTION (client)
+// ==========================================
+const languageResolver = (() => {
+    const STORAGE_KEY = 'bbx_lang';
+    const COOKIE_NAME = 'bbx_lang';
+    const ALLOWED = new Set((window.__BBX_ALLOWED_LANGS__ || ['en', 'da']).map((lang) => String(lang).toLowerCase()));
+    const DEFAULT_LANG = ALLOWED.has('en') ? 'en' : (Array.from(ALLOWED)[0] || 'en');
+
+    const readCookie = (name) => {
+        const match = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/([.$?*|{}()\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'));
+        return match ? decodeURIComponent(match[1]) : null;
+    };
+
+    const persistLang = (lang) => {
+        const normalized = String(lang).toLowerCase();
+        if (!ALLOWED.has(normalized)) {
+            return;
+        }
+
+        try {
+            window.localStorage.setItem(STORAGE_KEY, normalized);
+        } catch (error) {
+            // Ignore storage errors (private mode, etc.)
+        }
+
+        document.cookie = `${COOKIE_NAME}=${normalized};path=/;max-age=31536000;samesite=Lax`;
+        document.documentElement.setAttribute('lang', normalized);
+        document.documentElement.dataset.lang = normalized;
+        if (document.body) {
+            document.body.dataset.lang = normalized;
+        }
+        window.BBX_LANG = normalized;
+    };
+
+    const cleanLangParam = (hadQueryParam) => {
+        if (!hadQueryParam || !window.history || typeof window.history.replaceState !== 'function') {
+            return;
+        }
+        const url = new URL(window.location.href);
+        url.searchParams.delete('lang');
+        window.history.replaceState({}, document.title, url.toString());
+    };
+
+    const resolveLang = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const paramLang = urlParams.get('lang');
+        if (paramLang && ALLOWED.has(paramLang.toLowerCase())) {
+            const normalized = paramLang.toLowerCase();
+            persistLang(normalized);
+            cleanLangParam(true);
+            return normalized;
+        }
+
+        let stored = null;
+        try {
+            stored = window.localStorage.getItem(STORAGE_KEY);
+        } catch (error) {
+            stored = null;
+        }
+        if (stored && ALLOWED.has(stored.toLowerCase())) {
+            const normalized = stored.toLowerCase();
+            persistLang(normalized);
+            return normalized;
+        }
+
+        const cookieLang = readCookie(COOKIE_NAME);
+        if (cookieLang && ALLOWED.has(cookieLang.toLowerCase())) {
+            const normalized = cookieLang.toLowerCase();
+            persistLang(normalized);
+            return normalized;
+        }
+
+        const serverLang = (window.__BBX_INITIAL_LANG__ || document.documentElement.getAttribute('lang') || '').toLowerCase();
+        if (serverLang && ALLOWED.has(serverLang)) {
+            persistLang(serverLang);
+            return serverLang;
+        }
+
+        persistLang(DEFAULT_LANG);
+        return DEFAULT_LANG;
+    };
+
+    let activeLang = resolveLang();
+
+    const setLang = (lang, { reload = false } = {}) => {
+        const normalized = String(lang).toLowerCase();
+        if (!ALLOWED.has(normalized)) {
+            return;
+        }
+        activeLang = normalized;
+        persistLang(normalized);
+        cleanLangParam(false);
+        if (reload) {
+            window.location.reload();
+        }
+    };
+
+    return {
+        getLang: () => activeLang,
+        setLang,
+        persistLang,
+        resolveLang,
+        allowed: () => Array.from(ALLOWED),
+    };
+})();
+
+// ==========================================
 // JAVASCRIPT I18N SYSTEM
 // ==========================================
 const i18n = (() => {
+    const BASE_LANG = 'en';
     let translations = {};
-    const lang = document.documentElement.getAttribute('lang') || 'da';
+    let activeLang = languageResolver.getLang();
+    let loadPromise = null;
 
-    const loadTranslations = async () => {
+    const deepMerge = (base, override) => {
+        const output = Array.isArray(base) ? [...base] : { ...base };
+        Object.keys(override || {}).forEach((key) => {
+            const baseVal = output[key];
+            const overrideVal = override[key];
+            if (overrideVal && typeof overrideVal === 'object' && !Array.isArray(overrideVal)) {
+                output[key] = deepMerge(baseVal && typeof baseVal === 'object' ? baseVal : {}, overrideVal);
+            } else {
+                output[key] = overrideVal;
+            }
+        });
+        return output;
+    };
+
+    const fetchJson = async (path) => {
         try {
-            const response = await fetch(`/lang/${lang}.json`);
+            const response = await fetch(path, { credentials: 'same-origin' });
             if (response.ok) {
-                translations = await response.json();
+                return await response.json();
             }
         } catch (error) {
             console.error('Failed to load translations:', error);
         }
+        return {};
+    };
+
+    const loadTranslations = async (lang = activeLang) => {
+        const targetLang = languageResolver.allowed().includes(lang) ? lang : BASE_LANG;
+
+        if (loadPromise && targetLang === activeLang) {
+            return loadPromise;
+        }
+
+        loadPromise = (async () => {
+            const base = await fetchJson('/lang/en.json');
+            let overlay = {};
+
+            if (targetLang !== BASE_LANG) {
+                overlay = await fetchJson(`/lang/${targetLang}.json`);
+            }
+
+            translations = deepMerge(base, overlay);
+            activeLang = targetLang;
+            languageResolver.persistLang(targetLang);
+            return translations;
+        })();
+
+        return loadPromise;
     };
 
     void loadTranslations();
 
     return {
         t: (key, fallback = '') => {
-            const keys = key.split('.');
+            const keys = String(key).split('.');
             let value = translations;
 
             for (const part of keys) {
@@ -34,11 +182,11 @@ const i18n = (() => {
 
             return typeof value === 'string' ? value : fallback || key;
         },
-        loadTranslations
+        loadTranslations,
     };
 })();
 
-const currencyFormatter = new Intl.NumberFormat('da-DK', {
+const currencyFormatter = new Intl.NumberFormat(languageResolver.getLang() === 'da' ? 'da-DK' : 'en-DK', {
     style: 'currency',
     currency: 'DKK',
     maximumFractionDigits: 0
@@ -50,6 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add('js-enabled');
 
     const docEl = document.documentElement;
+    const bodyEl = document.body;
     const metaColorScheme = document.querySelector('meta[name="color-scheme"]');
     const themeToggleButtons = document.querySelectorAll('[data-theme-toggle]');
     const prefersLight = window.matchMedia('(prefers-color-scheme: light)');
@@ -94,6 +243,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const applyTheme = (theme, { persist = false } = {}) => {
         const nextTheme = theme === 'light' ? 'light' : 'dark';
+        if (bodyEl) {
+            bodyEl.dataset.theme = nextTheme;
+        }
         docEl.dataset.theme = nextTheme;
         docEl.style.colorScheme = nextTheme;
         setColorSchemeMeta(nextTheme);
@@ -109,15 +261,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    const initialTheme = storedTheme || (docEl.dataset.theme === 'light' ? 'light' : 'dark');
+    const initialTheme = storedTheme
+        || (bodyEl && bodyEl.dataset.theme === 'light' ? 'light' : null)
+        || (docEl.dataset.theme === 'light' ? 'light' : 'dark');
     applyTheme(initialTheme);
 
     themeToggleButtons.forEach((button) => {
         button.addEventListener('click', () => {
-            const currentTheme = docEl.dataset.theme === 'light' ? 'light' : 'dark';
+            const currentTheme = (bodyEl && bodyEl.dataset.theme === 'light') || docEl.dataset.theme === 'light' ? 'light' : 'dark';
             const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
             applyTheme(nextTheme, { persist: true });
         });
+    });
+
+    // Language toggles (desktop + mobile)
+    const languageSwitches = document.querySelectorAll('[data-lang-target]');
+    const handleLanguageToggle = (event) => {
+        event.preventDefault();
+        const targetLang = event.currentTarget.getAttribute('data-lang-target');
+        if (!targetLang) {
+            return;
+        }
+        languageResolver.setLang(targetLang, { reload: true });
+    };
+    languageSwitches.forEach((switchEl) => {
+        switchEl.addEventListener('click', handleLanguageToggle);
     });
 
     const handleSystemThemeChange = (event) => {

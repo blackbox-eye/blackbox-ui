@@ -4,11 +4,14 @@ session_start();
 
 // db.php ligger i public_html/ – vi går én mappe op fra includes/
 require __DIR__ . '/../db.php';
+require __DIR__ . '/i18n.php';
+
+$current_language = bbx_get_language();
 
 // (På beskyttede sider kan du tjekke login her eller inde i selve siden)
 ?>
 <!DOCTYPE html>
-<html lang="da">
+<html lang="<?= htmlspecialchars($current_language) ?>" data-lang="<?= htmlspecialchars($current_language) ?>">
 
 <head>
   <meta charset="utf-8">
@@ -36,6 +39,7 @@ require __DIR__ . '/../db.php';
 
   <!-- Hoved-stylesheet -->
   <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/assets/css/theme-overrides.css">
 </head>
 
-<body>
+<body data-theme="dark">

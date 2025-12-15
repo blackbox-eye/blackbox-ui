@@ -5,13 +5,18 @@ require_once __DIR__ . '/graphene-config.php';
 
 $current_language = bbx_get_language();
 
-// Handle language switching via query parameter
-if (isset($_GET['lang']) && in_array($_GET['lang'], ['da', 'en'])) {
-    bbx_set_language($_GET['lang']);
-    // Redirect to remove query parameter from URL
+// Handle language switching via query parameter (priority: query > cookie/localStorage > default EN)
+if (isset($_GET['lang']) && in_array($_GET['lang'], BBX_ALLOWED_LANGS, true)) {
+    $requested_lang = $_GET['lang'];
+    bbx_set_language($requested_lang);
+    $current_language = $requested_lang;
+
+    // Redirect to remove query parameter from URL without breaking deep links
     $redirect_url = strtok($_SERVER['REQUEST_URI'], '?');
     header('Location: ' . $redirect_url);
     exit;
+} else {
+    $current_language = bbx_get_language();
 }
 
 // Load Graphene theme settings
@@ -196,12 +201,7 @@ if (!empty($disable_alphabot)) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="<?= htmlspecialchars($current_language) ?>" class="scroll-smooth" data-theme="dark">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="dark light">
+<html lang="<?= htmlspecialchars($current_language) ?>" data-lang="<?= htmlspecialchars($current_language) ?>" class="scroll-smooth" data-theme="dark">
     <script>
         (function() {
             var storageKey = 'bbx-theme';
@@ -210,12 +210,25 @@ if (!empty($disable_alphabot)) {
             try {
                 storedTheme = window.localStorage.getItem(storageKey);
             } catch (err) {
-                storedTheme = null;
+                // ignore
             }
             var theme = storedTheme === 'light' || storedTheme === 'dark' ? storedTheme : preferred;
             document.documentElement.dataset.theme = theme;
             document.documentElement.style.colorScheme = theme;
+            if (document.body) {
+                document.body.setAttribute('data-theme', theme);
+            } else {
+                document.addEventListener('DOMContentLoaded', function() {
+                    if (document.body) {
+                        document.body.setAttribute('data-theme', theme);
+                    }
+                });
+            }
             window.__BBX_INITIAL_THEME__ = theme;
+
+            // Language bootstrap for client-side resolver
+            window.__BBX_INITIAL_LANG__ = '<?= htmlspecialchars($current_language) ?>';
+            window.__BBX_ALLOWED_LANGS__ = <?= json_encode(BBX_ALLOWED_LANGS, JSON_UNESCAPED_SLASHES) ?>;
         })();
     </script>
     <title><?= htmlspecialchars($page_title) ?></title>
@@ -274,6 +287,7 @@ if (!empty($disable_alphabot)) {
     <link rel="stylesheet" href="/assets/css/tailwind.full.css?v=<?= $css_version ?>">
     <!-- Custom UI components extracted from previous inline styles -->
     <link rel="stylesheet" href="/assets/css/custom-ui.css?v=<?= $css_version ?>">
+    <link rel="stylesheet" href="/assets/css/theme-overrides.css?v=<?= $css_version ?>">
     <!-- Removed redundant inline Tailwind utility overrides -->
 
     <!-- Conditional CSS loading -->
@@ -325,7 +339,7 @@ if ($is_graphene_page) {
 }
 ?>
 
-<body class="<?= implode(' ', $body_classes) ?>" data-graphene-mode="<?= htmlspecialchars($graphene_mode) ?>">
+<body class="<?= implode(' ', $body_classes) ?>" data-graphene-mode="<?= htmlspecialchars($graphene_mode) ?>" data-theme="dark" data-lang="<?= htmlspecialchars($current_language) ?>">
 
     <!-- Skip navigation for keyboard users (WCAG 2.1) - Hidden by default, visible on focus -->
     <a href="#main-content" class="skip-link"><?= t('common.skip_link') ?></a>
@@ -410,10 +424,10 @@ if ($is_graphene_page) {
                             </span>
                         </button>
                         <div class="language-switcher-wrapper flex items-center gap-0.5">
-                            <a href="?lang=da" class="language-switch <?= $current_language === 'da' ? 'is-active' : '' ?>" aria-label="<?= htmlspecialchars(t('header.language.switch_da')) ?>" <?= $current_language === 'da' ? 'aria-current="true"' : '' ?>>
+                            <a href="?lang=da" data-lang-target="da" class="language-switch <?= $current_language === 'da' ? 'is-active' : '' ?>" aria-label="<?= htmlspecialchars(t('header.language.switch_da')) ?>" <?= $current_language === 'da' ? 'aria-current="true"' : '' ?>>
                                 <?= t('header.language.da') ?>
                             </a>
-                            <a href="?lang=en" class="language-switch <?= $current_language === 'en' ? 'is-active' : '' ?>" aria-label="<?= htmlspecialchars(t('header.language.switch_en')) ?>" <?= $current_language === 'en' ? 'aria-current="true"' : '' ?>>
+                            <a href="?lang=en" data-lang-target="en" class="language-switch <?= $current_language === 'en' ? 'is-active' : '' ?>" aria-label="<?= htmlspecialchars(t('header.language.switch_en')) ?>" <?= $current_language === 'en' ? 'aria-current="true"' : '' ?>>
                                 <?= t('header.language.en') ?>
                             </a>
                         </div>
@@ -527,12 +541,14 @@ if ($is_graphene_page) {
             <div class="flex items-center justify-between gap-2 mb-2">
                 <div class="flex items-center gap-1">
                     <a href="?lang=da"
+                        data-lang-target="da"
                         class="language-switch language-switch--drawer <?= $current_language === 'da' ? 'is-active' : '' ?>"
                         aria-label="<?= htmlspecialchars(t('header.language.switch_da')) ?>"
                         <?= $current_language === 'da' ? 'aria-current="true"' : '' ?>>
                         <?= t('header.language.da') ?>
                     </a>
                     <a href="?lang=en"
+                        data-lang-target="en"
                         class="language-switch language-switch--drawer <?= $current_language === 'en' ? 'is-active' : '' ?>"
                         aria-label="<?= htmlspecialchars(t('header.language.switch_en')) ?>"
                         <?= $current_language === 'en' ? 'aria-current="true"' : '' ?>>

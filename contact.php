@@ -30,64 +30,64 @@ $current_lang = bbx_get_language();
 
             <div class="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10">
                 <div class="glass-effect rounded-2xl p-8 lg:col-span-2">
-                    <form id="contact-form" class="space-y-5" data-endpoint="contact-submit.php" novalidate aria-label="<?= htmlspecialchars(t('contact.form.aria_label', 'Kontaktformular')) ?>">
+                    <form id="contact-form" class="space-y-5 bbx-form" data-endpoint="contact-submit.php" novalidate aria-label="<?= htmlspecialchars(t('contact.form.aria_label', 'Kontaktformular')) ?>">
 
                         <!-- Honeypot field - hidden from real users, bots will fill it -->
-                        <div class="bbx-hp" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;">
+                        <div class="bbx-hp" aria-hidden="true">
                             <label for="website">Website</label>
                             <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
                         </div>
 
                         <div>
-                            <label for="name" class="block text-sm font-medium text-gray-300 mb-2">
-                                <?= t('contact.form.name') ?> <span class="text-red-400" aria-hidden="true">*</span>
+                            <label for="name" class="block text-sm mb-2 bbx-form-label">
+                                <?= t('contact.form.name') ?> <span class="bbx-form-required" aria-hidden="true">*</span>
                             </label>
                             <input type="text" id="name" name="name" required
                                 autocomplete="name"
                                 maxlength="100"
                                 aria-required="true"
                                 aria-describedby="name-error"
-                                class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-2" style="--tw-ring-color: var(--primary-accent);">
-                            <p id="name-error" class="mt-1 text-sm text-red-400 hidden" role="alert"></p>
+                                class="bbx-input bbx-form-control text-sm">
+                            <p id="name-error" class="mt-1 text-sm bbx-error bbx-form-error hidden" role="alert"></p>
                         </div>
 
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-300 mb-2">
-                                <?= t('contact.form.email') ?> <span class="text-red-400" aria-hidden="true">*</span>
+                            <label for="email" class="block text-sm mb-2 bbx-form-label">
+                                <?= t('contact.form.email') ?> <span class="bbx-form-required" aria-hidden="true">*</span>
                             </label>
                             <input type="email" id="email" name="email" required
                                 autocomplete="email"
                                 maxlength="254"
                                 aria-required="true"
                                 aria-describedby="email-error"
-                                class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-2" style="--tw-ring-color: var(--primary-accent);">
-                            <p id="email-error" class="mt-1 text-sm text-red-400 hidden" role="alert"></p>
+                                class="bbx-input bbx-form-control text-sm">
+                            <p id="email-error" class="mt-1 text-sm bbx-error bbx-form-error hidden" role="alert"></p>
                         </div>
 
                         <div>
-                            <label for="phone" class="block text-sm font-medium text-gray-300 mb-2">
+                            <label for="phone" class="block text-sm mb-2 bbx-form-label">
                                 <?= t('contact.form.phone_optional') ?>
                             </label>
                             <input type="tel" id="phone" name="phone"
                                 autocomplete="tel"
                                 maxlength="30"
                                 aria-required="false"
-                                class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-2" style="--tw-ring-color: var(--primary-accent);">
+                                class="bbx-input bbx-form-control text-sm">
                         </div>
 
                         <div>
-                            <label for="message" class="block text-sm font-medium text-gray-300 mb-2">
-                                <?= t('contact.form.message') ?> <span class="text-red-400" aria-hidden="true">*</span>
+                            <label for="message" class="block text-sm mb-2 bbx-form-label">
+                                <?= t('contact.form.message') ?> <span class="bbx-form-required" aria-hidden="true">*</span>
                             </label>
                             <textarea id="message" name="message" rows="5" required
                                 maxlength="5000"
                                 aria-required="true"
                                 aria-describedby="message-error message-hint"
-                                class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-2" style="--tw-ring-color: var(--primary-accent);"></textarea>
-                            <p id="message-hint" class="mt-1 text-xs text-gray-500">
+                                class="bbx-input bbx-form-control text-sm"></textarea>
+                            <p id="message-hint" class="mt-1 text-xs bbx-help bbx-form-hint">
                                 <?= $current_lang === 'da' ? 'Maks. 5000 tegn' : 'Max. 5000 characters' ?>
                             </p>
-                            <p id="message-error" class="mt-1 text-sm text-red-400 hidden" role="alert"></p>
+                            <p id="message-error" class="mt-1 text-sm bbx-error bbx-form-error hidden" role="alert"></p>
                         </div>
 
                         <!-- Privacy consent -->
@@ -95,22 +95,22 @@ $current_lang = bbx_get_language();
                             <input type="checkbox" id="privacy-consent" name="privacy_consent" required
                                 aria-required="true"
                                 aria-describedby="privacy-error"
-                                class="mt-1 accent-color" style="accent-color: var(--primary-accent); w-4 h-4">
-                            <label for="privacy-consent" class="text-sm text-gray-300">
+                                class="mt-1 w-4 h-4">
+                            <label for="privacy-consent" class="text-sm text-gray-300 bbx-form-label">
                                 <?= $current_lang === 'da'
-                                    ? 'Jeg accepterer <a href="privacy.php" class="  underline" style="color: var(--primary-accent);" target="_blank">privatlivspolitikken</a> og at mine oplysninger behandles.'
-                                    : 'I accept the <a href="privacy.php" class="  underline" style="color: var(--primary-accent);" target="_blank">privacy policy</a> and consent to my data being processed.' ?>
-                                <span class="text-red-400" aria-hidden="true">*</span>
+                                    ? 'Jeg accepterer <a href="privacy.php" class="bbx-link-accent underline" target="_blank">privatlivspolitikken</a> og at mine oplysninger behandles.'
+                                    : 'I accept the <a href="privacy.php" class="bbx-link-accent underline" target="_blank">privacy policy</a> and consent to my data being processed.' ?>
+                                <span class="bbx-form-required" aria-hidden="true">*</span>
                             </label>
                         </div>
-                        <p id="privacy-error" class="text-sm text-red-400 hidden" role="alert"></p>
+                        <p id="privacy-error" class="text-sm bbx-error bbx-form-error hidden" role="alert"></p>
 
                         <input type="hidden" name="recaptcha_token" id="recaptcha_token" value="">
                         <input type="hidden" name="form_timestamp" value="<?= time() ?>">
 
                         <button type="submit"
                             aria-label="<?= htmlspecialchars(t('contact.form.submit')) ?>"
-                            class="w-full border-2" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); backdrop-filter: blur(8px); font-semibold py-3 rounded-lg  transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            class="w-full bbx-btn bbx-btn-primary"
                             data-sending-text="<?= htmlspecialchars(t('contact.form.sending')) ?>">
                             <?= t('contact.form.submit') ?>
                         </button>

@@ -46,10 +46,10 @@ include 'includes/site-header.php';
           </p>
         </div>
 
-        <form id="vulnerability-scan-form" class="space-y-6" data-endpoint="scan-submit.php" novalidate>
+        <form id="vulnerability-scan-form" class="space-y-6 bbx-form" data-endpoint="scan-submit.php" novalidate>
           <div>
-            <label for="scan-domain" class="block text-sm font-semibold text-gray-200 mb-2">
-              <?= t('free_scan.form.domain_label', 'Domæne') ?>
+            <label for="scan-domain" class="block text-sm font-semibold text-gray-200 mb-2 bbx-form-label">
+              <?= t('free_scan.form.domain_label', 'Domæne') ?> <span class="bbx-form-required" aria-hidden="true">*</span>
             </label>
             <input type="text"
               id="scan-domain"
@@ -57,35 +57,36 @@ include 'includes/site-header.php';
               inputmode="url"
               autocomplete="off"
               required
-              class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm sm:text-base text-gray-100 focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-accent);"
+              aria-required="true"
+              aria-describedby="scan-domain-hint scan-domain-error"
+              class="bbx-input bbx-form-control text-sm sm:text-base"
               placeholder="<?= htmlspecialchars(t('free_scan.form.domain_placeholder', 'example.com')) ?>"
               data-error-message="<?= htmlspecialchars(t('free_scan.validation.domain_required', 'Indtast et domæne.')) ?>"
               data-invalid-message="<?= htmlspecialchars(t('free_scan.validation.domain_invalid', 'Angiv et gyldigt domæne (fx example.com).')) ?>">
-            <p class="text-xs text-gray-500 mt-2">
+            <p id="scan-domain-hint" class="text-xs bbx-help bbx-form-hint mt-2">
               <?= t('free_scan.form.rate_limit_note', 'Maks. 3 gratis scans pr. organisation pr. døgn.') ?>
             </p>
-            <p class="text-sm text-rose-400 mt-2 hidden" data-error-for="scan-domain"></p>
+            <p id="scan-domain-error" class="text-sm bbx-error bbx-form-error mt-2 hidden" data-error-for="scan-domain" role="alert"></p>
           </div>
           <div>
-            <label for="scan-email" class="block text-sm font-semibold text-gray-200 mb-2">
+            <label for="scan-email" class="block text-sm font-semibold text-gray-200 mb-2 bbx-form-label">
               <?= t('free_scan.form.email_label', 'Arbejdsmail (valgfri)') ?>
             </label>
             <input type="email"
               id="scan-email"
               name="email"
               autocomplete="email"
-              class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm sm:text-base text-gray-100 focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-accent);"
+              aria-required="false"
+              aria-describedby="scan-email-error"
+              class="bbx-input bbx-form-control text-sm sm:text-base"
               placeholder="<?= htmlspecialchars(t('free_scan.form.email_placeholder', 'navn@virksomhed.dk')) ?>"
               data-invalid-message="<?= htmlspecialchars(t('free_scan.validation.email_invalid', 'Angiv en gyldig e-mailadresse.')) ?>">
-            <p class="text-sm text-rose-400 mt-2 hidden" data-error-for="scan-email"></p>
+            <p id="scan-email-error" class="text-sm bbx-error bbx-form-error mt-2 hidden" data-error-for="scan-email" role="alert"></p>
           </div>
 
           <div class="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
             <button type="submit"
-              class="inline-flex items-center justify-center font-semibold py-3 px-6 rounded-lg transition-all duration-300 border-2" 
-              style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); backdrop-filter: blur(8px);"
-              onmouseover="this.style.background='rgba(212, 175, 55, 0.2)'; this.style.color='#F4D03F';" 
-              onmouseout="this.style.background='rgba(212, 175, 55, 0.1)'; this.style.color='var(--primary-accent)';"
+              class="inline-flex items-center justify-center font-semibold py-3 px-6 rounded-lg transition-all duration-300 border-2 bbx-btn bbx-btn-primary"
               data-loading-text="<?= htmlspecialchars(t('free_scan.form.loading', 'Analyserer angrebsfladen...')) ?>">
               <?= t('free_scan.form.submit', 'Generér rapport') ?>
             </button>
@@ -94,7 +95,7 @@ include 'includes/site-header.php';
             </div>
           </div>
 
-          <div id="vulnerability-scan-status" class="hidden mt-4 text-sm" role="alert"></div>
+          <div id="vulnerability-scan-status" class="hidden mt-4 text-sm" role="alert" aria-live="polite"></div>
         </form>
 
         <div id="vulnerability-scan-success" class="hidden mt-10 border border-emerald-600/50 bg-emerald-900/30 rounded-xl p-6 text-emerald-100">

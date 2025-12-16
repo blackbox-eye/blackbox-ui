@@ -63,7 +63,14 @@
       "primary_navigation": "Primary navigation",
       "secondary_navigation": "More options"
     },
-    "more": "More"
+    "more": "More",
+    "console": {
+      "title": "Choose console",
+      "gdi": "GDI Console",
+      "gdi_desc": "Data Intelligence",
+      "ts24": "TS24 Console",
+      "ts24_desc": "Intel24 Transport"
+    }
   },
   "agent_access": {
     "meta": {

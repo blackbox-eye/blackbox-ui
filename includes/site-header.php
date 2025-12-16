@@ -378,7 +378,7 @@ if ($is_graphene_page) {
                                     class="nav-chip nav-chip--more more-dropdown-trigger"
                                     aria-haspopup="true"
                                     aria-expanded="false">
-                                    <span><?= t('header.menu.more', 'Mere') ?></span>
+                                    <span><?= t('header.menu.more', 'More') ?></span>
                                     <svg class="more-dropdown-chevron" width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                                     </svg>
@@ -461,19 +461,19 @@ if ($is_graphene_page) {
                             </button>
                             <div class="console-access-menu" role="menu">
                                 <div class="console-menu-header">
-                                    <span><?= t('header.console.title', 'Vælg konsol') ?></span>
+                                    <span><?= t('header.console.title', 'Choose console') ?></span>
                                 </div>
                                 <a href="/agent-access.php" class="console-menu-item" role="menuitem">
                                     <div class="console-menu-item__icon console-menu-item__icon--gdi">GDI</div>
                                     <div class="console-menu-item__content">
-                                        <span class="console-menu-item__title"><?= t('header.console.gdi', 'GDI Konsol') ?></span>
+                                        <span class="console-menu-item__title"><?= t('header.console.gdi', 'GDI Console') ?></span>
                                         <span class="console-menu-item__desc"><?= t('header.console.gdi_desc', 'Data Intelligence') ?></span>
                                     </div>
                                 </a>
                                 <a href="/agent-access.php" class="console-menu-item" role="menuitem">
                                     <div class="console-menu-item__icon console-menu-item__icon--ts24">TS24</div>
                                     <div class="console-menu-item__content">
-                                        <span class="console-menu-item__title"><?= t('header.console.ts24', 'TS24 Konsol') ?></span>
+                                        <span class="console-menu-item__title"><?= t('header.console.ts24', 'TS24 Console') ?></span>
                                         <span class="console-menu-item__desc"><?= t('header.console.ts24_desc', 'Intel24 Transport') ?></span>
                                     </div>
                                 </a>
@@ -558,24 +558,24 @@ if ($is_graphene_page) {
                 <button type="button"
                     class="theme-toggle theme-toggle--mobile"
                     data-theme-toggle
-                    data-theme-label-dark="<?= htmlspecialchars(t('header.theme.label_dark', 'Skift til mørkt tema')) ?>"
-                    data-theme-label-light="<?= htmlspecialchars(t('header.theme.label_light', 'Skift til lyst tema')) ?>"
+                    data-theme-label-dark="<?= htmlspecialchars(t('header.theme.label_dark', 'Switch to dark theme')) ?>"
+                    data-theme-label-light="<?= htmlspecialchars(t('header.theme.label_light', 'Switch to light theme')) ?>"
                     aria-pressed="false"
-                    aria-label="<?= htmlspecialchars(t('header.theme.toggle_label', 'Skift farvetema')) ?>">
+                    aria-label="<?= htmlspecialchars(t('header.theme.toggle_label', 'Toggle color theme')) ?>">
                     <span class="theme-toggle__icon" aria-hidden="true"></span>
                 </button>
             </div>
             <!-- Console Access - Mobile version -->
             <div class="mobile-console-access mb-3">
-                <p class="text-xs text-gray-500 uppercase tracking-wider mb-2"><?= t('header.console.title', 'Vælg konsol') ?></p>
+                <p class="text-xs text-gray-500 uppercase tracking-wider mb-2"><?= t('header.console.title', 'Choose console') ?></p>
                 <div class="flex gap-2">
                     <a href="/agent-access.php" class="mobile-console-btn flex-1">
                         <span class="mobile-console-icon mobile-console-icon--gdi">GDI</span>
-                        <span class="mobile-console-label"><?= t('header.console.gdi', 'GDI Konsol') ?></span>
+                        <span class="mobile-console-label"><?= t('header.console.gdi', 'GDI Console') ?></span>
                     </a>
                     <a href="/agent-access.php" class="mobile-console-btn flex-1">
                         <span class="mobile-console-icon mobile-console-icon--ts24">TS24</span>
-                        <span class="mobile-console-label"><?= t('header.console.ts24', 'TS24 Konsol') ?></span>
+                        <span class="mobile-console-label"><?= t('header.console.ts24', 'TS24 Console') ?></span>
                     </a>
                 </div>
             </div>

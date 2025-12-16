@@ -1014,13 +1014,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         recaptchaLog('Skipping grecaptcha.reset() – no clients registered (expected for v3).');
                     }
                 } else {
-                    const message = result.message || i18n.t('common.form_error_default', 'Der opstod en fejl. Prøv igen senere.');
+                    const message = result.message || i18n.t('common.form_error_default', 'An error occurred. Please try again later.');
                     recaptchaError('Submission failed', message, result);
                     displayMessage('error', message);
                 }
             } catch (error) {
                 recaptchaError('Unexpected submission error', error);
-                displayMessage('error', i18n.t('common.form_error_network', 'Kunne ikke sende forespørgslen. Kontrollér din forbindelse og prøv igen.'));
+                displayMessage('error', i18n.t('common.form_error_network', 'Could not send the request. Check your connection and try again.'));
             } finally {
                 setContactSubmitting(false);
             }
@@ -1177,8 +1177,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const validateScanForm = () => {
             let hasError = false;
             const domainValue = domainInput?.value.trim() || '';
-            const domainRequiredMessage = domainInput?.dataset.errorMessage || i18n.t('free_scan.validation.domain_required', 'Indtast et domæne.');
-            const domainInvalidMessage = domainInput?.dataset.invalidMessage || i18n.t('free_scan.validation.domain_invalid', 'Angiv et gyldigt domæne (fx example.com).');
+            const domainRequiredMessage = domainInput?.dataset.errorMessage || i18n.t('free_scan.validation.domain_required', 'Enter a domain.');
+            const domainInvalidMessage = domainInput?.dataset.invalidMessage || i18n.t('free_scan.validation.domain_invalid', 'Enter a valid domain (e.g. example.com).');
 
             if (!domainValue) {
                 showFieldError(domainInput, domainRequiredMessage);
@@ -1193,7 +1193,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const emailValue = emailInput?.value.trim() || '';
             if (emailValue) {
-                const emailInvalidMessage = emailInput?.dataset.invalidMessage || i18n.t('free_scan.validation.email_invalid', 'Angiv en gyldig e-mailadresse.');
+                const emailInvalidMessage = emailInput?.dataset.invalidMessage || i18n.t('free_scan.validation.email_invalid', 'Enter a valid email address.');
                 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailPattern.test(emailValue)) {
                     showFieldError(emailInput, emailInvalidMessage);
@@ -1220,7 +1220,7 @@ document.addEventListener('DOMContentLoaded', () => {
             resetScanOutput();
 
             if (!validateScanForm()) {
-                updateScanStatus(i18n.t('free_scan.errors.validation', 'Kontrollér felterne og prøv igen.'), 'error');
+                updateScanStatus(i18n.t('free_scan.errors.validation', 'Check the fields and try again.'), 'error');
                 return;
             }
 
@@ -1253,7 +1253,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     renderScanReport(result.report || {});
                 } else {
-                    const message = result.message || i18n.t('free_scan.errors.generic', 'Vi kunne ikke gennemføre scanningen. Prøv igen.');
+                    const message = result.message || i18n.t('free_scan.errors.generic', 'We could not complete the scan. Please try again.');
                     updateScanStatus(message, 'error');
                     if (result.field === 'domain') {
                         showFieldError(domainInput, message);
@@ -1267,7 +1267,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (error) {
                 recaptchaError('Free scan submission error', error);
-                updateScanStatus(i18n.t('free_scan.errors.network', 'Forbindelsen blev afbrudt. Prøv igen.'), 'error');
+                updateScanStatus(i18n.t('free_scan.errors.network', 'Connection was interrupted. Please try again.'), 'error');
             } finally {
                 setScanSubmitting(false);
             }
@@ -1357,11 +1357,11 @@ document.addEventListener('DOMContentLoaded', () => {
             clearFieldError(usersInput);
 
             if (Number.isNaN(usersValue) || usersValue < 1) {
-                const message = usersInput?.dataset.minMessage || usersInput?.dataset.requiredMessage || i18n.t('pricing.calculator.validation.users_min', 'Der skal være mindst 1 bruger.');
+                const message = usersInput?.dataset.minMessage || usersInput?.dataset.requiredMessage || i18n.t('pricing.calculator.validation.users_min', 'There must be at least 1 user.');
                 showFieldError(usersInput, message);
                 return false;
             } else if (usersValue > 10000) {
-                showFieldError(usersInput, i18n.t('pricing.calculator.validation.users_max', 'Kontakt os direkte for over 10.000 brugere.'));
+                showFieldError(usersInput, i18n.t('pricing.calculator.validation.users_max', 'Contact us directly for over 10,000 users.'));
                 return false;
             }
             return true;
@@ -1372,11 +1372,11 @@ document.addEventListener('DOMContentLoaded', () => {
             clearFieldError(endpointsInput);
 
             if (Number.isNaN(endpointsValue) || endpointsValue < 0) {
-                const message = endpointsInput?.dataset.requiredMessage || i18n.t('pricing.calculator.validation.endpoints_required', 'Angiv antal aktive endpoints.');
+                const message = endpointsInput?.dataset.requiredMessage || i18n.t('pricing.calculator.validation.endpoints_required', 'Enter the number of active endpoints.');
                 showFieldError(endpointsInput, message);
                 return false;
             } else if (endpointsValue > 50000) {
-                showFieldError(endpointsInput, i18n.t('pricing.calculator.validation.endpoints_max', 'Kontakt os direkte for over 50.000 endpoints.'));
+                showFieldError(endpointsInput, i18n.t('pricing.calculator.validation.endpoints_max', 'Contact us directly for over 50,000 endpoints.'));
                 return false;
             }
             return true;
@@ -1410,7 +1410,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Validate first - don't clear field errors before checking
             if (!validateCalculator()) {
-                showCalcStatus(i18n.t('pricing.calculator.validation.error', 'Ret de markerede felter for at fortsætte.'), 'error');
+                showCalcStatus(i18n.t('pricing.calculator.validation.error', 'Fix the highlighted fields to continue.'), 'error');
                 return;
             }
 
@@ -1936,7 +1936,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     if (alphaContainer && (!geminiReady || !hasAIConfig)) {
-        markAssistantUnavailable(i18n.t('alphabot.offline_tooltip', 'Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen.'));
+        markAssistantUnavailable(i18n.t('alphabot.offline_tooltip', 'Blackbox EYE Assistant is offline. Contact support to activate the integration.'));
     }
 
     if (alphaContainer && alphaToggleBtn && alphaPanel) {
@@ -1951,7 +1951,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (messagesDiv && inputEl && sendBtn && sendText && sendLoader) {
             const conversation = [
                 { role: 'user', parts: [{ text: AI_CONFIG.ALPHABOT_SYSTEM_PROMPT || '' }] },
-                { role: 'model', parts: [{ text: 'Forstået. Jeg er klar til at assistere med sikkerhedsrelaterede spørgsmål og analyser.' }] }
+                { role: 'model', parts: [{ text: 'Understood. I am ready to assist with security-related questions and analysis.' }] }
             ];
             let isProcessing = false;
             let alphaFocusTrapListener = null;
@@ -1986,7 +1986,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!messagesDiv.dataset.initialized) {
                 const introMessage = assistantReady
                     ? conversation[1]?.parts?.[0]?.text
-                    : i18n.t('alphabot.offline_tooltip', 'Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen.');
+                    : i18n.t('alphabot.offline_tooltip', 'Blackbox EYE Assistant is offline. Contact support to activate the integration.');
                 if (introMessage) {
                     appendMessage('bot', String(introMessage).trim());
                 }
@@ -2082,16 +2082,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         throw new Error(`Blackbox EYE Assistant API error: ${response.status} - ${errorText}`);
                     }
                     const result = await response.json();
-                    const reply = result?.candidates?.[0]?.content?.parts?.[0]?.text || i18n.t('common.alphabot_error', 'Undskyld, jeg kunne ikke generere et svar.');
+                    const reply = result?.candidates?.[0]?.content?.parts?.[0]?.text || i18n.t('common.alphabot_error', 'Sorry, I could not generate a response.');
                     appendMessage('bot', reply.trim());
                     conversation.push({ role: 'model', parts: [{ text: reply.trim() }] });
                 } catch (error) {
                     const fallback = error.name === 'AbortError'
-                        ? i18n.t('common.ai_timeout', 'Foresp\u00f8rgslen tog for lang tid \u2013 pr\u00f8v igen.')
-                        : i18n.t('common.alphabot_connection_error', 'Der opstod en fejl under forbindelsen til Blackbox EYE Assistant. Pr\u00f8v igen senere.');
+                        ? i18n.t('common.ai_timeout', 'The request took too long—please try again.')
+                        : i18n.t('common.alphabot_connection_error', 'An error occurred while connecting to Blackbox EYE Assistant. Please try again later.');
                     appendMessage('bot', fallback);
                     if (error && error.name !== 'AbortError') {
-                        markAssistantUnavailable(i18n.t('alphabot.offline_tooltip', 'Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen.'));
+                        markAssistantUnavailable(i18n.t('alphabot.offline_tooltip', 'Blackbox EYE Assistant is offline. Contact support to activate the integration.'));
                     }
                 } finally {
                     setProcessing(false);
@@ -2101,7 +2101,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const sendMessage = () => {
                 if (isProcessing) return;
                 if (!assistantReady) {
-                    appendMessage('bot', i18n.t('alphabot.offline_tooltip', 'Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen.'));
+                    appendMessage('bot', i18n.t('alphabot.offline_tooltip', 'Blackbox EYE Assistant is offline. Contact support to activate the integration.'));
                     return;
                 }
                 const value = inputEl.value.trim();

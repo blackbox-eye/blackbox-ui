@@ -6,14 +6,15 @@
  * ═══════════════════════════════════════════════════════════════════════════════
  *
  * Provides multilingual support for the Blackbox EYE platform.
- * Supports Danish (da) and English (en) with session-based language switching.
+ * Supports Danish (da) and English (en) with cookie/session-based language switching.
  *
  * Features:
  * - JSON-based translation files (lang/da.json, lang/en.json)
- * - Session-based language persistence
- * - Browser language detection fallback
+ * - Cookie + session language persistence (mirrors localStorage on client)
+ * - Global default: English
+ * - Query-param aware (handled in templates) without breaking links
  * - Fast caching mechanism for performance
- * - Fallback to Danish if translation missing
+ * - Fallback to English when translations are missing
  *
  * Usage:
  *   include 'includes/i18n.php';
@@ -36,34 +37,64 @@ if (session_status() === PHP_SESSION_NONE) {
 // LANGUAGE DETECTION & INITIALIZATION
 // ═══════════════════════════════════════════════════════════════════════════════
 
+const BBX_ALLOWED_LANGS = ['en', 'da'];
+const BBX_DEFAULT_LANG = 'en';
+const BBX_LANG_COOKIE = 'bbx_lang';
+const BBX_LANG_COOKIE_TTL = 31536000; // 365 days
+
+/**
+ * Set language cookie (mirrors localStorage on the client)
+ */
+function bbx_set_language_cookie(string $lang): void
+{
+    if (!in_array($lang, BBX_ALLOWED_LANGS, true)) {
+        return;
+    }
+
+    // Keep cookie accessible to JS (not HttpOnly) for client/server sync
+    setcookie(BBX_LANG_COOKIE, $lang, [
+        'expires' => time() + BBX_LANG_COOKIE_TTL,
+        'path' => '/',
+        'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+        'httponly' => false,
+        'samesite' => 'Lax',
+    ]);
+
+    // Ensure current request also sees the new cookie value
+    $_COOKIE[BBX_LANG_COOKIE] = $lang;
+}
+
 /**
  * Detect user's preferred language
- * Priority: 1) Session, 2) Browser Accept-Language, 3) Default (Danish)
+ * Priority: 1) Session/cookie set by query-param or JS, 2) Default EN
  */
-function bbx_detect_language()
+function bbx_detect_language(): string
 {
-    // 1. Check session
-    if (isset($_SESSION['lang']) && in_array($_SESSION['lang'], ['da', 'en'])) {
-        return $_SESSION['lang'];
+    // Session takes priority (set during this request or previous ones)
+    if (isset($_SESSION['lang']) && in_array($_SESSION['lang'], BBX_ALLOWED_LANGS, true)) {
+        $lang = $_SESSION['lang'];
+        bbx_set_language_cookie($lang);
+        return $lang;
     }
 
-    // 2. Check browser language
-    if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-        $browser_lang = strtolower(substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2));
-        if (in_array($browser_lang, ['da', 'en'])) {
-            $_SESSION['lang'] = $browser_lang;
-            return $browser_lang;
-        }
+    // Cookie mirrors localStorage (set by client or server)
+    if (isset($_COOKIE[BBX_LANG_COOKIE]) && in_array($_COOKIE[BBX_LANG_COOKIE], BBX_ALLOWED_LANGS, true)) {
+        $lang = $_COOKIE[BBX_LANG_COOKIE];
+        $_SESSION['lang'] = $lang;
+        return $lang;
     }
 
-    // 3. Default to Danish
-    $_SESSION['lang'] = 'da';
-    return 'da';
+    // Default to English
+    $_SESSION['lang'] = BBX_DEFAULT_LANG;
+    bbx_set_language_cookie(BBX_DEFAULT_LANG);
+    return BBX_DEFAULT_LANG;
 }
 
 // Initialize language
 $GLOBALS['bbx_current_lang'] = bbx_detect_language();
 $GLOBALS['bbx_translations'] = null;
+$GLOBALS['bbx_translations_lang'] = null;
+$GLOBALS['bbx_base_translations'] = null;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // TRANSLATION LOADING
@@ -73,6 +104,30 @@ $GLOBALS['bbx_translations'] = null;
  * Load translation file for current language
  * Implements caching to avoid repeated file reads
  */
+function bbx_load_base_translations(): array
+{
+    if ($GLOBALS['bbx_base_translations'] !== null) {
+        return $GLOBALS['bbx_base_translations'];
+    }
+
+    $base_path = __DIR__ . '/../lang/en.json';
+    if (!file_exists($base_path)) {
+        error_log('BBX i18n ERROR: Base translation file missing: ' . $base_path);
+        $GLOBALS['bbx_base_translations'] = [];
+        return $GLOBALS['bbx_base_translations'];
+    }
+
+    $json_content = file_get_contents($base_path);
+    $base = json_decode($json_content, true);
+    if ($base === null) {
+        error_log('BBX i18n ERROR: Invalid JSON in base file: ' . $base_path);
+        $base = [];
+    }
+
+    $GLOBALS['bbx_base_translations'] = $base;
+    return $base;
+}
+
 function bbx_load_translations($lang = null)
 {
     if ($lang === null) {
@@ -80,37 +135,40 @@ function bbx_load_translations($lang = null)
     }
 
     // Return cached translations if already loaded
-    if ($GLOBALS['bbx_translations'] !== null && isset($GLOBALS['bbx_translations_lang']) && $GLOBALS['bbx_translations_lang'] === $lang) {
+    if ($GLOBALS['bbx_translations'] !== null && $GLOBALS['bbx_translations_lang'] === $lang) {
         return $GLOBALS['bbx_translations'];
     }
 
-    // Build path to language file
+    $base = bbx_load_base_translations();
+
+    if ($lang === 'en') {
+        $GLOBALS['bbx_translations'] = $base;
+        $GLOBALS['bbx_translations_lang'] = 'en';
+        return $base;
+    }
+
     $lang_file = __DIR__ . '/../lang/' . $lang . '.json';
+    $override = [];
 
-    // Check if file exists
-    if (!file_exists($lang_file)) {
-        // Fallback to Danish if file not found
-        $lang_file = __DIR__ . '/../lang/da.json';
-        if (!file_exists($lang_file)) {
-            error_log("BBX i18n ERROR: Translation file not found: " . $lang_file);
-            return [];
+    if (file_exists($lang_file)) {
+        $json_content = file_get_contents($lang_file);
+        $decoded = json_decode($json_content, true);
+        if ($decoded === null) {
+            error_log('BBX i18n ERROR: Invalid JSON in file: ' . $lang_file);
+        } else {
+            $override = $decoded;
         }
+    } else {
+        error_log('BBX i18n WARNING: Translation file not found: ' . $lang_file . ' (falling back to English)');
     }
 
-    // Load and decode JSON
-    $json_content = file_get_contents($lang_file);
-    $translations = json_decode($json_content, true);
+    // Merge override onto base to guarantee fallback to English keys
+    $merged = array_replace_recursive($base, $override);
 
-    if ($translations === null) {
-        error_log("BBX i18n ERROR: Invalid JSON in file: " . $lang_file);
-        return [];
-    }
-
-    // Cache translations
-    $GLOBALS['bbx_translations'] = $translations;
+    $GLOBALS['bbx_translations'] = $merged;
     $GLOBALS['bbx_translations_lang'] = $lang;
 
-    return $translations;
+    return $merged;
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -132,12 +190,7 @@ function bbx_load_translations($lang = null)
  */
 function bbx_get_text($key, $fallbackOrReplacements = [], $replacements = [])
 {
-    static $translations = null;
-
-    // Load translations on first call
-    if ($translations === null) {
-        $translations = bbx_load_translations();
-    }
+    $translations = bbx_get_translations();
 
     // Determine fallback and replacements based on second argument type
     $fallback = null;
@@ -152,14 +205,14 @@ function bbx_get_text($key, $fallbackOrReplacements = [], $replacements = [])
     $value = $translations;
 
     foreach ($keys as $k) {
-        if (is_array($value) && isset($value[$k])) {
+        if (is_array($value) && array_key_exists($k, $value)) {
             $value = $value[$k];
         } else {
             // Key not found - return fallback if provided, otherwise key
             if ($fallback !== null) {
                 return $fallback;
             }
-            error_log("BBX i18n WARNING: Translation key not found: " . $key);
+            error_log('BBX i18n WARNING: Translation key not found: ' . $key);
             return $key;
         }
     }
@@ -199,13 +252,15 @@ function t($key, $fallbackOrReplacements = [], $replacements = [])
  */
 function bbx_set_language($lang)
 {
-    if (!in_array($lang, ['da', 'en'])) {
+    if (!in_array($lang, BBX_ALLOWED_LANGS, true)) {
         return false;
     }
 
     $_SESSION['lang'] = $lang;
     $GLOBALS['bbx_current_lang'] = $lang;
     $GLOBALS['bbx_translations'] = null; // Clear cache
+    $GLOBALS['bbx_translations_lang'] = null;
+    bbx_set_language_cookie($lang);
 
     return true;
 }
@@ -246,3 +301,17 @@ function bbx_get_language_name($lang = null)
 
 // Preload translations for better performance
 bbx_load_translations();
+
+/**
+ * Retrieve translations for the current language (ensures cache is current)
+ */
+function bbx_get_translations(): array
+{
+    $current = bbx_get_language();
+
+    if ($GLOBALS['bbx_translations'] === null || $GLOBALS['bbx_translations_lang'] !== $current) {
+        return bbx_load_translations($current);
+    }
+
+    return $GLOBALS['bbx_translations'];
+}

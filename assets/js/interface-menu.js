@@ -311,6 +311,8 @@
 
   const STORAGE_KEY = 'blackbox-eye-theme';
   const themeToggle = document.getElementById('themeToggle');
+  const root = document.documentElement;
+  const body = document.body;
 
   // Exit if no toggle button
   if (!themeToggle) {
@@ -338,7 +340,10 @@
    * Apply the theme to the document
    */
   function applyTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
+    root.setAttribute('data-theme', theme);
+    if (body) {
+      body.setAttribute('data-theme', theme);
+    }
 
     // Update toggle button label
     const label = themeToggle.querySelector('.theme-toggle-label');
@@ -354,7 +359,7 @@
    * Toggle between dark and light themes
    */
   function toggleTheme() {
-    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const currentTheme = (body && body.getAttribute('data-theme')) || root.getAttribute('data-theme') || 'dark';
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
     applyTheme(newTheme);

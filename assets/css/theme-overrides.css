@@ -1,0 +1,141 @@
+/* ========================================================
+   Global theme tokens and application (dark/light)
+   ======================================================== */
+
+:root {
+  --bg-primary: var(--page-background, #0c0e14);
+  --bg-secondary: var(--surface-100, rgba(15, 18, 25, 0.95));
+  --bg-elevated: var(--surface-card-bg, rgba(15, 20, 30, 0.85));
+
+  --text-primary: var(--text-high-emphasis, #e8e8e8);
+  --text-secondary: var(--text-medium-emphasis, #a8b0bc);
+  --text-muted: var(--muted, #8a9199);
+
+  --border-subtle: var(--surface-border, rgba(255, 255, 255, 0.06));
+  --border-strong: var(--surface-border-strong, rgba(255, 255, 255, 0.12));
+
+  --accent-primary: var(--bbx-gold, #8a7b6a);
+  --accent-secondary: var(--bbx-gold-light, #a69585);
+
+  --state-hover: color-mix(in srgb, var(--accent-primary) 24%, transparent);
+  --state-active: color-mix(in srgb, var(--accent-primary) 38%, transparent);
+  --state-focus: color-mix(in srgb, var(--accent-primary) 45%, transparent);
+}
+
+/* Default/dark theme */
+html[data-theme="dark"],
+body[data-theme="dark"] {
+  color-scheme: dark;
+  --bg-primary: #0c0e14;
+  --bg-secondary: rgba(15, 18, 25, 0.95);
+  --bg-elevated: rgba(15, 20, 30, 0.85);
+
+  --text-primary: #e8e8e8;
+  --text-secondary: #a8b0bc;
+  --text-muted: #8a9199;
+
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-strong: rgba(255, 255, 255, 0.12);
+
+  --accent-primary: var(--bbx-gold, #8a7b6a);
+  --accent-secondary: var(--bbx-gold-light, #a69585);
+
+  --state-hover: color-mix(in srgb, var(--accent-primary) 24%, transparent);
+  --state-active: color-mix(in srgb, var(--accent-primary) 38%, transparent);
+  --state-focus: color-mix(in srgb, var(--accent-primary) 48%, transparent);
+}
+
+/* Light theme overrides */
+html[data-theme="light"],
+body[data-theme="light"] {
+  color-scheme: light;
+  --bg-primary: #f3f6fb;
+  --bg-secondary: rgba(255, 255, 255, 0.94);
+  --bg-elevated: rgba(255, 255, 255, 0.92);
+
+  --text-primary: #1f2933;
+  --text-secondary: #4b5563;
+  --text-muted: #6b7280;
+
+  --border-subtle: rgba(15, 23, 42, 0.08);
+  --border-strong: rgba(15, 23, 42, 0.18);
+
+  --accent-primary: var(--bbx-gold, #8a7b6a);
+  --accent-secondary: var(--bbx-gold-light, #a69585);
+
+  --state-hover: color-mix(in srgb, var(--accent-primary) 22%, transparent);
+  --state-active: color-mix(in srgb, var(--accent-primary) 32%, transparent);
+  --state-focus: color-mix(in srgb, var(--accent-primary) 42%, transparent);
+}
+
+/* Global application */
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+body[data-theme] .glass-effect,
+body[data-theme] .surface-card,
+body[data-theme] .module-card,
+body[data-theme] .case-card-graphene,
+body[data-theme] .products-extra-card,
+body[data-theme] .products-hero__panel-card,
+body[data-theme] .products-cta__shell,
+body[data-theme] .blog-card,
+body[data-theme] .access-card {
+  background: var(--bg-elevated);
+  border-color: var(--border-subtle);
+  color: var(--text-primary);
+}
+
+body[data-theme] input,
+body[data-theme] textarea,
+body[data-theme] select,
+body[data-theme] option {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-subtle);
+}
+
+body[data-theme] input:focus,
+body[data-theme] textarea:focus,
+body[data-theme] select:focus,
+body[data-theme] button:focus-visible,
+body[data-theme] .header-cta:focus-visible,
+body[data-theme] .nav-chip:focus-visible {
+  outline: 2px solid var(--state-focus);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--state-focus) 45%, transparent);
+  border-color: var(--accent-primary);
+}
+
+body[data-theme] ::placeholder {
+  color: var(--text-muted);
+}
+
+body[data-theme] .btn-primary,
+body[data-theme] .header-cta,
+body[data-theme] .bbx-btn-pill,
+body[data-theme] .module-card__action--primary,
+body[data-theme] .graphene-btn-primary,
+body[data-theme] .graphene-btn-secondary,
+body[data-theme] .demo-slot-pill,
+body[data-theme] .demo-slot-status {
+  border-color: var(--accent-primary);
+}
+
+body[data-theme] .header-cta:hover,
+body[data-theme] .bbx-btn-pill:hover,
+body[data-theme] .module-card__action--primary:hover,
+body[data-theme] .graphene-btn-primary:hover,
+body[data-theme] .graphene-btn-secondary:hover {
+  background: var(--state-hover);
+}
+
+body[data-theme] .header-cta:active,
+body[data-theme] .bbx-btn-pill:active,
+body[data-theme] .module-card__action--primary:active,
+body[data-theme] .graphene-btn-primary:active,
+body[data-theme] .graphene-btn-secondary:active {
+  background: var(--state-active);
+}

@@ -7,7 +7,7 @@
     "menu": {
       "home": "Hjem",
       "about": "Om Os",
-      "products": "Produkter",
+      "description": "Automatiseret penetrationstest og prioriteret sårbarhedsscanning",
       "cases": "Kundecases",
       "pricing": "Priser",
       "contact": "Kontakt",
@@ -153,18 +153,18 @@
     },
     "hero": {
       "badge": "Blackbox EYE™ Sikkerhedsplatform",
-      "headline": "Næste generations sikkerhedsinfrastruktur",
-      "headline_part1": "Næste generations",
-      "headline_part2": "sikkerhedsinfrastruktur",
-      "subheadline": "Drevet af Graphene-arkitektur – samlet trusselsefterretning, AI-drevet respons og operationel opmærksomhed i realtid på tværs af hele din digitale overflade.",
+      "headline": "Sikkerhedsinfrastruktur der agerer med jer",
+      "headline_part1": "Sikkerhedsinfrastruktur",
+      "headline_part2": "der agerer med jer",
+      "subheadline": "Samlet trusselbillede, hurtig inddæmning og ansvarlig respons på tværs af alle forretningsenheder.",
       "tagline_title": "Mission-kritisk dækning",
-      "tagline_highlight": "AI-drevet respons",
-      "tagline_copy": "Blackbox EYE™, PVE™ og AUT synkroniserer mennesker + maskiner på under 50 ms.",
-      "primary_cta": "Anmod om demo",
-      "primary_cta_aria": "Anmod om en demo af Blackbox EYE sikkerhedsplatform",
-      "secondary_cta": "Start gratis sikkerhedstjek",
-      "secondary_cta_aria": "Start den gratis sårbarhedsscanning",
-      "spotlight_cta": "Udforsk platformen",
+      "tagline_highlight": "Koordineret respons",
+      "tagline_copy": "Blackbox EYE™, PVE™ og AUT koordinerer mennesker og automation på under 50 ms.",
+      "primary_cta": "Book live-demo",
+      "primary_cta_aria": "Book en live-demo af Blackbox EYE platformen",
+      "secondary_cta": "Start gratis scan",
+      "secondary_cta_aria": "Start et gratis sårbarhedstjek",
+      "spotlight_cta": "Se platformsoverblik",
       "spotlight_cta_aria": "Åbn platformsoverblikket",
       "cta_bar_label": "Missionsoverblik",
       "cta_bar_hint": "Vælg dit næste skridt",
@@ -191,23 +191,23 @@
       },
       "usps": {
         "ai_response": {
-          "title": "AI-drevet respons",
-          "body": "Blackbox EYE™ + Blackbox EYE Assistant™ orkestrerer afværgning uden ventetid."
+          "title": "Koordineret respons",
+          "body": "Afværge-playbooks der kobler operatører med Blackbox EYE™ og Assistant."
         },
         "intel": {
           "title": "Samlet efterretning",
           "body": "Live trusselgraf på tværs af OT, IT og cloud-aktiver."
         },
         "compliance": {
-          "title": "Audit-klar compliance",
-          "body": "Automatiserede evidenspakker til ISO27001 og NIS2."
+          "title": "Audit-klar drift",
+          "body": "Evidenspakker og kontrolmapping til ISO 27001 og NIS2."
         }
       }
     },
     "tactical": {
       "tagline": "Den taktiske oversigt",
       "title": "Fra strategi til operationel effekt",
-      "description": "Én platform, fem fokusområder. Navigér direkte til den viden du har brug for.",
+      "description": "Én platform, fem fokusområder. Navigér direkte til den viden du har brug for nu.",
       "cards": {
         "about": {
           "title": "Om os",
@@ -239,7 +239,7 @@
     "operational": {
       "tagline": "Aktiver den taktiske fordel",
       "title": "Fra efterretning til respons – uden friktion",
-      "description": "Blackbox EYE™ forener AI-drevne analysemoduler med operationel beredskab. Vores platform anvendes af organisationer, der har nul-tolerance for fejl og kompromittering.",
+      "description": "Blackbox EYE™ kobler analysemoduler med operationel beredskab for organisationer med nul-tolerance for huller.",
       "bullets": {
         "penetration": {
           "title": "Kontinuerlig penetrationstest",
@@ -266,7 +266,7 @@
     },
     "cta": {
       "title": "Klar til at opskalere jeres modstandsdygtighed?",
-      "description": "Kontakt vores operationelle team eller gå direkte til de sektioner, der matcher jeres behov.",
+      "description": "Kontakt vores operationelle team eller gå direkte til de sektioner, der matcher jeres behov nu.",
       "actions": {
         "cases": "Se dokumenteret effekt",
         "pricing": "Få prisoversigt",
@@ -359,19 +359,20 @@
   "products": {
     "title": "Produkter",
     "breadcrumb": "Produkter",
-    "subtitle": "AI-drevne cybersikkerhedsløsninger",
-    "intro": "Blackbox EYE™ tilbyder en komplet suite af specialiserede moduler til at beskytte din organisation.",
+    "subtitle": "Operative cybersikkerhedsmoduler",
+    "intro": "Blackbox EYE™ leverer en fuld, implementerbar pakke af moduler, der sikrer jeres miljø fra ende til anden.",
     "hero_section": {
       "tagline": "Platformen",
-      "title": "En holistisk sikkerhedsstrategi på ét sted",
-      "description": "Hvert modul i Blackbox EYE™ er en specialiseret forsvarslinje. Brug vores AI-assistent til at generere konkrete trussels-scenarier og se, hvordan vi neutraliserer dem."
+      "title": "Én platform, operativ sikkerhed",
+      "description": "Hvert modul er en defineret forsvarslinje. Bed AI-assistenten generere et trussels-scenarie og se, hvordan vi inddæmmer det.",
+      "intro": "Blackbox EYE™ leverer en fuld, implementerbar pakke af moduler, der sikrer jeres miljø fra ende til anden."
     },
-    "scenario_button": "✨ Generer trussels-scenarie",
+    "scenario_button": "Generér trussels-scenarie",
     "key_features_heading": "Nøglefunktioner",
     "greyeye": {
       "title": "Blackbox EYE™",
-      "subtitle": "AI Security Assistant",
-      "description": "24/7 AI-drevet overvågning og incident response med natural language interface",
+      "subtitle": "AI sikkerhedsassistent",
+      "description": "24/7 overvågning, incident-triage og respons styret via naturligt sprog.",
       "features": {
         "monitoring": "Real-time trusselovervågning",
         "analysis": "Automatisk incident-analyse",
@@ -395,19 +396,19 @@
       "items": {
         "idmatrix": {
           "title": "ID-Matrix",
-          "body": "Granulær adgangskontrol, live session-monitorering og biometriske sikkerhedslag."
+          "body": "Granulær adgangskontrol med live session-overvågning og biometriske sikkerhedslag."
         },
         "aut": {
           "title": "AUT – Awareness & Training",
-          "body": "Scenariebaseret awareness-træning drevet af AI og adaptiv læring."
+          "body": "Scenariebaseret awareness-træning med AI-drevet tilpasning."
         },
         "bridge": {
           "title": "Operational Bridge",
-          "body": "Integrer vores platform med jeres eksisterende SOC, SIEM og workflows."
+          "body": "Integrér platformen med jeres SOC, SIEM og operative workflows."
         },
         "command": {
           "title": "Live Command Center",
-          "body": "Real-time situationsrum, mission control dashboards og automatiserede playbooks."
+          "body": "Real-time situationsrum, kontrol-dashboards og automatiserede playbooks."
         }
       }
     },
@@ -419,7 +420,7 @@
     "idmatrix": {
       "title": "ID-Matrix™",
       "subtitle": "Identity & Access Control",
-      "description": "Enterprise identity management og zero-trust adgangskontrol",
+      "description": "Enterprise identity-kontrol med håndhævet zero-trust adgang",
       "features": {
         "identity": "Centraliseret identity management",
         "mfa": "Multi-factor authentication",
@@ -429,7 +430,7 @@
     "aut": {
       "title": "AUT™",
       "subtitle": "Awareness & Training",
-      "description": "AI-tilpasset sikkerhedstræning og phishing simulation",
+      "description": "AI-tilpasset sikkerhedstræning med realistisk phishing-simulation",
       "features": {
         "training": "Personaliseret træning",
         "simulation": "Realistic phishing tests",
@@ -441,15 +442,15 @@
     "title": "Kundecases",
     "breadcrumb": "Kundecases",
     "subtitle": "Dokumenteret effekt",
-    "intro": "Se hvordan Blackbox EYE™ har hjulpet danske organisationer med at styrke deres cybersikkerhed.",
+    "intro": "Se hvordan Blackbox EYE™ styrker sikkerheden hos danske organisationer med målbare resultater.",
     "hero_section": {
       "tagline": "Dokumenteret effekt",
-      "title": "Bevist værdi i den virkelige verden",
-      "description": "Se hvordan vi har neutraliseret kritiske trusler for kunder med høje krav – og lad vores AI analysere din egen situation.",
+      "title": "Operationelle resultater fra felten",
+      "description": "Gennemgå hvordan vi neutraliserer kritiske trusler for krævende kunder – og lad vores AI vurdere jeres kontekst.",
       "bullets": {
         "evidence": {
-          "title": "Konkrete nøgletal",
-          "description": "Få adgang til responstid, trusselsstop og modenhed for hver implementering."
+          "title": "Konkrete resultater",
+          "description": "Få adgang til responstid, inddæmning og robusthed for hver implementering."
         },
         "frameworks": {
           "title": "Branchetilpassede forløb",
@@ -470,20 +471,20 @@
       "municipality": {
         "title": "Kommune med kritisk infrastruktur",
         "challenge": "Uautoriseret adgang til tekniske installationer.",
-        "solution": "ID-Matrix og Blackbox EYE implementeret til at logge al adgang og levere ugentlige rapporter.",
-        "result": "80% reduktion i adgangsbrud."
+        "solution": "ID-Matrix og Blackbox EYE implementeret til at logge alle forsøg og levere ugentlige oversigter.",
+        "result": "Markant færre uautoriserede adgangsforsøg."
       },
       "realestate": {
         "title": "Ejendomsselskab",
         "challenge": "Manglende overblik over 12 bygninger og gentagne tyverier.",
-        "solution": "Platformen integreret med eksisterende kameraer, med mobil adgang for viceværter.",
-        "result": "65% færre tyverier på 3 måneder."
+        "solution": "Platformen integreret med eksisterende kameraer og mobil adgang for drift.",
+        "result": "Mærkbart færre tyverier i første kvartal."
       },
       "security": {
         "title": "Vagtselskab",
         "challenge": "Manuelle logbøger og langsom reaktionstid.",
         "solution": "Blackbox EYE assisterer nu vagter med automatisk dokumentation og live-opdateringer.",
-        "result": "Ny differentieringsfaktor på markedet."
+        "result": "Dokumenteret hurtigere respons og klar audit-trail."
       }
     },
     "metrics": {
@@ -497,7 +498,7 @@
     "navigator": {
       "eyebrow": "Udvalgte transformationer",
       "title": "Vælg en branche og se effekten",
-      "subtitle": "Overblikket opdateres løbende med nye nøgletal fra vores implementeringer.",
+      "subtitle": "Overblikket opdateres med nye nøgletal fra aktive implementeringer.",
       "impact_label": "Impact på <span>12 mdr.</span>",
       "modules_label": "Kerne-moduler",
       "cta": "Planlæg et strategisk matchmøde",
@@ -527,8 +528,8 @@
       }
     },
     "analysis": {
-      "title": "✨ Analysér din egen situation",
-      "description": "Beskriv kort en sikkerhedsudfordring i din organisation, så genererer vores AI-konsulent en målrettet anbefaling baseret på tidligere cases.",
+      "title": "Analysér din situation",
+      "description": "Beskriv en sikkerhedsudfordring i jeres organisation, så genererer vores AI-konsulent en målrettet anbefaling baseret på tidligere cases.",
       "label": "Din udfordring",
       "placeholder": "F.eks. 'Vi er bekymrede for phishing-mails til vores bogholderi...'",
       "button": "Få AI-analyse",
@@ -549,8 +550,8 @@
     "title": "Priser",
     "breadcrumb": "Priser",
     "subtitle": "Licenser & abonnementer",
-    "intro": "Løsninger tilpasset jeres risikoprofil",
-    "description": "Blackbox EYE™ tilbyder komplette licens- og abonnementsløsninger – fra udvalgte moduler til fuld operativ integration. Brug vores AI-sikkerhedsrådgiver til at finde det rigtige match.",
+    "intro": "Løsninger kalibreret til jeres risikoprofil",
+    "description": "Blackbox EYE™ tilbyder licens- og abonnementsløsninger – fra udvalgte moduler til fuld operativ integration. Brug vores AI-rådgiver til at finde det rigtige match.",
     "ai_advisor": {
       "title": "AI Sikkerhedsrådgiver",
       "industry_label": "Branche",
@@ -620,13 +621,13 @@
       }
     },
     "mvp": {
-      "section_title": "MVP Pakker",
+      "section_title": "MVP pakker",
       "basis": {
         "badge": "MVP Starter",
         "title": "MVP-Basis",
         "price": "1.799 DKK",
         "period": "pr. måned + moms",
-        "description": "Grundlæggende beskyttelse til små teams og startups.",
+        "description": "Grundlæggende beskyttelse til små teams.",
         "features": {
           "greyeye": "Blackbox EYE AI-assistent (begrænsede features)",
           "idmatrix": "Basis ID-Matrix adgang",
@@ -640,7 +641,7 @@
         "title": "MVP-Pro",
         "price": "3.499 DKK",
         "period": "pr. måned + moms",
-        "description": "Udvidet MVP-løsning til voksende virksomheder.",
+        "description": "Udvidet dækning til teams i vækst.",
         "features": {
           "includes": "Alt i MVP-Basis +",
           "greyeye": "Blackbox EYE AI-assistent (fulde features)",
@@ -655,7 +656,7 @@
         "title": "MVP-Premium",
         "price": "5.999 DKK",
         "period": "pr. måned + moms",
-        "description": "Komplet MVP-pakke med prioriteret support.",
+        "description": "Komplet pakke med prioriteret support.",
         "features": {
           "includes": "Alt i MVP-Pro +",
           "pve": "Basis PVE modul",
@@ -667,13 +668,13 @@
       }
     },
     "enterprise": {
-      "section_title": "Enterprise Løsninger",
-      "section_description": "Skalerbare løsninger til virksomheder med avancerede sikkerhedsbehov og compliance-krav.",
+      "section_title": "Enterprise løsninger",
+      "section_description": "Skalerbare valg til organisationer med avancerede sikkerheds- og compliancekrav.",
       "standard": {
         "title": "Standard",
         "price": "9.900 DKK",
         "period": "pr. måned + moms",
-        "description": "Effektiv sikkerhedsbeskyttelse og digitale løsninger til daglig brug.",
+        "description": "Effektiv beskyttelse til daglig drift.",
         "features": {
           "greyeye": "Blackbox EYE AI-assistent (fuld adgang)",
           "idmatrix": "ID-Matrix adgangskontrol",
@@ -703,7 +704,7 @@
         "title": "Enterprise",
         "price": "39.000 DKK",
         "period": "pr. måned + moms*",
-        "description": "Helhedsorienteret, skræddersyet beskyttelse for større organisationer.",
+        "description": "Helhedsorienteret, skræddersyet beskyttelse for større miljøer.",
         "features": {
           "includes": "Alt i Premium +",
           "teams": "Adgang til specialteams",
@@ -721,7 +722,7 @@
     },
     "custom": {
       "title": "Skal vi skræddersy en løsning til jer?",
-      "description": "Vores eksperter kombinerer operative erfaringer med AI-drevet analyse for at levere præcis det sikkerhedsniveau, I har brug for.",
+      "description": "Vores eksperter kombinerer operative erfaringer med AI-analyse for at levere præcis det sikkerhedsniveau, I har brug for.",
       "button": "Tal med vores rådgivere"
     }
   },
@@ -731,13 +732,13 @@
       "description": "Få en mock-rapport på sekunder og se hvordan vores PVE-modul prioriterer fundne svagheder."
     },
     "hero": {
-      "tagline": "Lead flow",
+      "tagline": "Overflade-tjek",
       "title": "Gratis sårbarhedstjek på få sekunder",
       "description": "Indtast jeres domæne og få et overflade-scan med de vigtigste observationer. Book en demo for en fuld PVE-rapport."
     },
     "form": {
       "title": "Få din rapport",
-      "description": "Vi viser et eksempel på, hvordan vores PVE prioriterer findings baseret på offentligt tilgængelige data.",
+      "description": "Se et eksempel på, hvordan PVE prioriterer findings baseret på offentligt tilgængelige data.",
       "domain_label": "Domæne",
       "domain_placeholder": "example.com",
       "email_label": "Arbejdsmail (valgfri)",
@@ -776,11 +777,11 @@
     "title": "Kontakt",
     "breadcrumb": "Kontakt",
     "subtitle": "Kom i kontakt med os",
-    "intro": "Har du spørgsmål til vores løsninger? Kontakt vores sikkerhedsrådgivere.",
+    "intro": "Har du spørgsmål til vores løsninger? Tal med vores sikkerhedsrådgivere.",
     "hero_section": {
       "tagline": "Fortrolig dialog",
-      "title": "Kontakt os – når kun det ypperste er acceptabelt",
-      "description": "Hos Blackbox EYE™ er kompromisløs fortrolighed og uigennemtrængelig beskyttelse fundamentet. Intet overlades til tilfældighederne."
+      "title": "Kontakt os, når sikkerhed er afgørende",
+      "description": "Hos Blackbox EYE™ er fortrolighed og beskyttelse standard. Vi holder dialogen præcis og sikker."
     },
     "form": {
       "name": "Navn",

@@ -1,8 +1,8 @@
 {
   "site": {
-      "title": "Vil du se det i drift?",
-      "description": "Book en fortrolig demo og se, hvordan Blackbox EYE™ implementeres uden friktion i jeres miljø.",
-      "button": "Tal med produktteamet"
+    "name": "BLACKBOX EYE™",
+    "tagline": "Enterprise Cyber Operations Platform"
+  },
   "header": {
     "menu": {
       "home": "Hjem",

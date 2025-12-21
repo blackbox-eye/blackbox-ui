@@ -1,4 +1,19 @@
 const { defineConfig, devices } = require('@playwright/test');
+const fs = require('fs');
+const path = require('path');
+
+// Check which browsers are actually installed by looking for binaries
+function isBrowserInstalled(browser) {
+  const cacheDir = path.join(process.env.HOME || '', '.cache', 'ms-playwright');
+  if (!fs.existsSync(cacheDir)) return false;
+  
+  const dirs = fs.readdirSync(cacheDir);
+  return dirs.some(d => d.startsWith(browser));
+}
+
+// Detect installed browsers - chromium required, others optional locally
+const hasFirefox = process.env.CI || (isBrowserInstalled('firefox') && fs.existsSync(path.join(process.env.HOME || '', '.cache', 'ms-playwright', 'firefox-1497', 'firefox', 'firefox')));
+const hasWebkit = process.env.CI || (isBrowserInstalled('webkit') && fs.existsSync(path.join(process.env.HOME || '', '.cache', 'ms-playwright', 'webkit-2227', 'pw_run.sh')));
 
 module.exports = defineConfig({
   testDir: 'tests',
@@ -28,16 +43,17 @@ module.exports = defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] }
     },
-    {
+    // Firefox/WebKit are optional - skip if browsers not installed locally
+    ...(hasFirefox ? [{
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] }
-    },
-    {
+    }] : []),
+    ...(hasWebkit ? [{
       name: 'webkit',
       timeout: 45000,
       retries: 2,
       use: { ...devices['Desktop Safari'], navigationTimeout: 45000 }
-    },
+    }] : []),
     // Note: Edge uses Chromium engine, so chromium tests cover Edge behavior
     // Brave also uses Chromium engine with privacy enhancements
     // For dark mode testing, we can use color-scheme preference

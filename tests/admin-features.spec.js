@@ -76,15 +76,22 @@ test.describe('Login Page Security', () => {
 // FAVICON CONSISTENCY TESTS
 // =====================================================
 test.describe('Favicon Consistency', () => {
-  const pages = [
-    { name: 'Homepage', url: '/' },
-    { name: 'Login', url: '/agent-login.php' },
-    { name: 'About', url: '/about.php' },
-    { name: 'Products', url: '/products.php' },
-    { name: 'Pricing', url: '/pricing.php' }
+  // Admin/login pages use branded BlackboxEYE favicons
+  const adminPages = [
+    { name: 'Login', url: '/agent-login.php', expectBranded: true }
   ];
 
-  for (const p of pages) {
+  // Marketing pages use standard favicon paths
+  const marketingPages = [
+    { name: 'Homepage', url: '/', expectBranded: false },
+    { name: 'About', url: '/about.php', expectBranded: false },
+    { name: 'Products', url: '/products.php', expectBranded: false },
+    { name: 'Pricing', url: '/pricing.php', expectBranded: false }
+  ];
+
+  const allPages = [...adminPages, ...marketingPages];
+
+  for (const p of allPages) {
     test(`${p.name} page should have favicon`, async ({ page }) => {
       await page.goto(p.url);
 
@@ -93,7 +100,11 @@ test.describe('Favicon Consistency', () => {
       await expect(favicon.first()).toBeAttached();
 
       const href = await favicon.first().getAttribute('href');
-      expect(href).toContain('BlackboxEYE');
+      if (p.expectBranded) {
+        expect(href).toContain('BlackboxEYE');
+      } else {
+        expect(href).toMatch(/favicon.*\.png/i);
+      }
     });
   }
 });

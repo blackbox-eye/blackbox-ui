@@ -220,3 +220,6 @@ __marimo__/
 
 # Legacy long-path mappestruktur (skal ikke trackes i Git)
 Blackbox.codes/(OLD) GUI Blackbox UI – Blackbox.codes/
+
+# Local runtime config (do not commit)
+config/graphene-settings.json

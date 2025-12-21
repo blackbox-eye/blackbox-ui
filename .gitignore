@@ -72,6 +72,12 @@ node_modules/
 build/
 dist/
 generate_hash.php
+# Build outputs (CSS bundles)
+assets/css/tailwind.full.css
+assets/css/*.min.css
+
+# pnpm lockfile (repo currently npm-first)
+pnpm-lock.yaml
 
 # Playwright test artifacts
 artifacts/

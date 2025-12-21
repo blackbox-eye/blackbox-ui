@@ -77,6 +77,10 @@ npm test
 npm run build:tailwind
 ```
 
+### 🐉 Kali Playwright setup
+
+For kali-rolling Playwright dependencies (no `--with-deps`) and a one-shot helper script, see [docs/SETUP_KALI.md](docs/SETUP_KALI.md).
+
 ### Available npm Scripts
 
 | Script | Description |

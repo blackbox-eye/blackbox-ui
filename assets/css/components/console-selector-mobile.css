@@ -1,0 +1,553 @@
+/**
+ * Console Selector Mobile-First Styles
+ * Sprint 4: Critical mobile UX pass
+ * 
+ * Target: ≤768px (mobile/tablet portrait)
+ * Philosophy: Native app feel, thumb-friendly, clear hierarchy
+ * 
+ * NON-NEGOTIABLE:
+ * - 48px min touch targets for CTAs
+ * - 40px min touch targets for chips/badges
+ * - 16px minimum padding from card edges
+ * - Single card focus, stacked layout
+ * - Pinned items float to top
+ */
+
+/* ================================================
+   MOBILE BASE RESET (≤768px)
+   ================================================ */
+
+@media (max-width: 768px) {
+  
+  /* ===== QUICK SWITCH - COMPACT MOBILE ===== */
+  .console-selector__quick {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    margin: 0 -1rem 1rem -1rem;
+    background: rgba(10, 14, 20, 0.95);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  
+  .console-selector__quick-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+  
+  .console-selector__quick-select {
+    flex: 1;
+    max-width: 160px;
+    min-height: 40px;
+    padding: 0.5rem 2rem 0.5rem 0.75rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.5rem;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.5)' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.625rem center;
+    cursor: pointer;
+  }
+  
+  .console-selector__quick-select:focus {
+    outline: none;
+    border-color: rgba(46, 204, 113, 0.5);
+    box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.15);
+  }
+  
+  /* ===== GRID - SINGLE COLUMN STACKED ===== */
+  .console-selector__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0;
+  }
+  
+  /* ===== CONSOLE CARD - MOBILE NATIVE FEEL ===== */
+  .console-card {
+    /* Full bleed with proper padding */
+    margin: 0 -0.5rem;
+    padding: 1.25rem 1rem;
+    border-radius: 1rem;
+    
+    /* Remove hover transform on mobile */
+    transform: none !important;
+    
+    /* Native card shadow */
+    box-shadow: 
+      0 1px 3px rgba(0, 0, 0, 0.2),
+      0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .console-card:hover {
+    transform: none !important;
+    box-shadow: 
+      0 1px 3px rgba(0, 0, 0, 0.2),
+      0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Pinned card gets visual priority */
+  .console-card--pinned {
+    border-width: 2px;
+    order: -1; /* Float to top */
+  }
+  
+  .console-card--pinned.console-card--ccs {
+    border-color: rgba(46, 204, 113, 0.4);
+    background: rgba(46, 204, 113, 0.03);
+  }
+  
+  .console-card--pinned.console-card--gdi {
+    border-color: rgba(40, 155, 222, 0.4);
+    background: rgba(40, 155, 222, 0.03);
+  }
+  
+  .console-card--pinned.console-card--intel24 {
+    border-color: rgba(201, 162, 39, 0.4);
+    background: rgba(201, 162, 39, 0.03);
+  }
+  
+  /* Pinned indicator visible on mobile */
+  .console-card--pinned .console-card__pinned {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #fbbf24;
+    margin-left: 0.5rem;
+  }
+  
+  /* ===== CARD HEADER - MOBILE HIERARCHY ===== */
+  .console-card__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  /* Badge - slightly larger on mobile */
+  .console-card__badge {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.65rem;
+  }
+  
+  /* Status chip - touch friendly */
+  .console-card__status {
+    min-height: 28px;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.6rem;
+  }
+  
+  /* Action buttons - 40px touch target */
+  .console-card__fav-btn,
+  .console-card__info-btn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.625rem;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .console-card__info-btn {
+    width: 44px;
+    height: 44px;
+    margin-left: 0.25rem;
+  }
+  
+  /* ===== CARD BODY - MOBILE HIERARCHY ===== */
+  .console-card__body {
+    margin-bottom: 0.75rem;
+  }
+  
+  /* Title - prominent */
+  .console-card__title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    line-height: 1.3;
+  }
+  
+  /* Tagline - single line, truncated */
+  .console-card__tagline {
+    font-size: 0.8rem;
+    margin-bottom: 0.625rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+  
+  /* Requirement badge - touch friendly */
+  .console-card__req-badge {
+    min-height: 32px;
+    padding: 0.375rem 0.625rem;
+    font-size: 0.65rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .console-card__req-badge svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  /* Divider - subtle */
+  .console-card__divider {
+    margin: 0.625rem 0;
+  }
+  
+  /* ===== CHIPS - HORIZONTAL SCROLL ON MOBILE ===== */
+  .console-card__chips {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.375rem;
+    margin: 0 -0.25rem;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+  
+  .console-card__chips::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Chip - 40px touch target */
+  .console-card__chip {
+    flex-shrink: 0;
+    min-height: 32px;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.7rem;
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  /* ===== CTA - 48px TOUCH TARGET (NON-NEGOTIABLE) ===== */
+  .console-card__actions {
+    margin-top: 0.875rem;
+  }
+  
+  .console-card__cta {
+    min-height: 48px;
+    padding: 0.875rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 0.625rem;
+  }
+  
+  .console-card__cta-note {
+    font-size: 0.7rem;
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+  
+  /* Request access link - touch friendly */
+  .console-card__request-link {
+    min-height: 40px;
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    margin-top: 0.625rem;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  /* Disabled CTA state */
+  .console-card__cta.is-disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  
+  /* ===== SLIDEOUT - MOBILE BOTTOM SHEET ===== */
+  .console-card__slideout {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-height: 70vh;
+    border-radius: 1.25rem 1.25rem 0 0;
+    transform: translateY(100%);
+    z-index: 1000;
+    overflow-y: auto;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+  }
+  
+  .console-card__slideout.is-open {
+    transform: translateY(0);
+  }
+  
+  /* Slideout handle for mobile */
+  .console-card__slideout::before {
+    content: '';
+    position: sticky;
+    top: 0;
+    display: block;
+    width: 36px;
+    height: 4px;
+    margin: 0.75rem auto 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+  }
+  
+  .console-card__slideout-header {
+    position: sticky;
+    top: 0;
+    padding: 1rem 1.25rem;
+    background: inherit;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .console-card__slideout-header h4 {
+    font-size: 1rem;
+  }
+  
+  .console-card__slideout-close {
+    min-width: 40px;
+    min-height: 40px;
+    padding: 0.5rem;
+  }
+  
+  .console-card__slideout-body {
+    padding: 1.25rem;
+  }
+  
+  /* Ops bar inside slideout */
+  .console-card__opsbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .console-card__opschip {
+    min-height: 28px;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.65rem;
+    border-radius: 9999px;
+  }
+  
+  /* Hide sparkline charts on mobile */
+  .console-card__minichart {
+    display: none;
+  }
+  
+  /* Readiness section - simplified */
+  .console-card__readiness {
+    margin-top: 1rem;
+    padding: 0.875rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 0.5rem;
+  }
+  
+  .console-card__readiness-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    font-size: 0.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .console-card__readiness-row:last-child {
+    border-bottom: none;
+  }
+  
+  /* Metrics grid - full width on mobile */
+  .console-card__metrics-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  
+  .console-card__metric {
+    padding: 0.75rem;
+  }
+  
+  .console-card__metric-value {
+    font-size: 1.1rem;
+  }
+  
+  .console-card__metric-label {
+    font-size: 0.65rem;
+  }
+  
+  /* ===== RECENT ACTIVITY - MOBILE OPTIMIZED ===== */
+  .console-selector__activity {
+    margin-top: 1.25rem;
+    padding: 1rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  
+  .console-selector__activity-title {
+    font-size: 0.7rem;
+    margin-bottom: 0.75rem;
+    padding: 0 0.25rem;
+  }
+  
+  /* Activity badge */
+  .console-selector__activity-badge {
+    font-size: 0.55rem;
+    padding: 0.125rem 0.375rem;
+    margin-left: 0.375rem;
+  }
+  
+  .console-selector__activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+  
+  /* Activity item - single line */
+  .console-selector__activity-item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.625rem 0.75rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    min-height: 44px;
+  }
+  
+  .console-selector__activity-dot {
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+  }
+  
+  .console-selector__activity-text {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Timestamp - compact */
+  .console-selector__activity-time {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.4);
+    flex-shrink: 0;
+  }
+  
+  /* Empty state */
+  .console-selector__activity-empty {
+    padding: 1.5rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+/* ================================================
+   EXTRA SMALL MOBILE (≤480px)
+   ================================================ */
+
+@media (max-width: 480px) {
+  .console-selector__quick {
+    padding: 0.625rem 0.875rem;
+    margin: 0 -0.75rem 0.875rem -0.75rem;
+  }
+  
+  .console-card {
+    margin: 0 -0.375rem;
+    padding: 1rem 0.875rem;
+    border-radius: 0.875rem;
+  }
+  
+  .console-card__title {
+    font-size: 1rem;
+  }
+  
+  .console-card__tagline {
+    font-size: 0.75rem;
+  }
+  
+  .console-card__cta {
+    min-height: 48px;
+    font-size: 0.85rem;
+  }
+  
+  .console-selector__activity-item {
+    padding: 0.5rem 0.625rem;
+  }
+}
+
+/* ================================================
+   TOUCH DEVICE OPTIMIZATIONS
+   ================================================ */
+
+@media (pointer: coarse) {
+  /* Ensure all interactive elements have proper touch targets */
+  .console-card__fav-btn,
+  .console-card__info-btn,
+  .console-card__slideout-close {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  .console-card__cta {
+    min-height: 48px;
+  }
+  
+  .console-card__chip {
+    min-height: 36px;
+    padding: 0.5rem 0.875rem;
+  }
+  
+  .console-card__req-badge {
+    min-height: 36px;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  /* Disable hover effects on touch */
+  .console-card:hover {
+    transform: none;
+  }
+  
+  .console-card__cta:hover {
+    transform: none;
+  }
+}
+
+/* ================================================
+   REDUCED MOTION
+   ================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .console-card,
+  .console-card__cta,
+  .console-card__slideout,
+  .console-selector__quick-select {
+    transition: none;
+  }
+  
+  .console-card__status-dot {
+    animation: none;
+  }
+  
+  .console-card--highlight {
+    animation: none;
+    border-color: var(--admin-gold);
+  }
+}

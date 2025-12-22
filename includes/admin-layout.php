@@ -105,6 +105,7 @@ function admin_is_active(string $slug, string $current): bool
   <!-- Stylesheets -->
   <link rel="stylesheet" href="/assets/css/tailwind.full.css">
   <link rel="stylesheet" href="/assets/css/admin.css">
+  <link rel="stylesheet" href="/assets/css/components/console-selector-mobile.css" media="(max-width: 768px)">
   <?php include __DIR__ . '/qa-bootstrap.php'; ?>
 </head>
 

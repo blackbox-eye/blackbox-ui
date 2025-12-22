@@ -179,6 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="/assets/css/admin.css">
+    <link rel="stylesheet" href="/assets/css/components/ccs-login-mobile.css" media="(max-width: 768px)">
     <?php include __DIR__ . '/includes/qa-bootstrap.php'; ?>
 </head>
 

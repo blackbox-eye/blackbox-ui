@@ -63,7 +63,15 @@ module.exports = defineConfig({
         ...devices['Desktop Chrome'],
         colorScheme: 'dark'
       }
-    }
+    },
+    // Sprint 4: Mobile WebKit tests (iPhone Safari/Brave)
+    ...(hasWebkit ? [{
+      name: 'webkit-mobile',
+      use: {
+        ...devices['iPhone 14'],
+        hasTouch: true,
+      }
+    }] : []),
   ],
   outputDir: 'artifacts'
 });

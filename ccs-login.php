@@ -98,10 +98,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <!-- Hero / Value Proposition -->
             <section class="ccs-login__hero" aria-labelledby="ccs-hero-title">
                 <h1 id="ccs-hero-title" class="ccs-login__headline">
-                    Welcome to Cross-Currency Settlement — Fiat &amp; Crypto Unified
+                    Cross-Currency Settlement Portal
                 </h1>
                 <p class="ccs-login__subtext">
-                    Institutional-grade settlement infrastructure for multi-asset flows.
+                    Institutional-grade multi-asset settlement. Fiat and digital asset flows unified under one ledger.
                 </p>
                 
                 <!-- Value Props -->
@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <!-- Login Card -->
             <section class="ccs-login__card" aria-labelledby="ccs-login-title">
                 <div class="ccs-login__card-inner">
-                    <h2 id="ccs-login-title" class="ccs-login__card-title">Sign in to CCS</h2>
+                    <h2 id="ccs-login-title" class="ccs-login__card-title">Operator Sign-In</h2>
                     
                     <!-- Error Message -->
                     <?php if ($error): ?>
@@ -208,13 +208,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <a href="contact.php?subject=ccs-support" class="ccs-login__link">Need help?</a>
                     </div>
 
+                    <!-- Step Indicator for flow clarity -->
+                    <div class="ccs-login__step-indicator" data-testid="step-indicator">
+                        <div class="ccs-login__step ccs-login__step--active" data-step="1">
+                            <span class="ccs-login__step-num">1</span>
+                            <span class="ccs-login__step-label">Credentials</span>
+                        </div>
+                        <div class="ccs-login__step-connector" aria-hidden="true"></div>
+                        <div class="ccs-login__step" data-step="2">
+                            <span class="ccs-login__step-num">2</span>
+                            <span class="ccs-login__step-label">Verification</span>
+                        </div>
+                        <div class="ccs-login__step-connector" aria-hidden="true"></div>
+                        <div class="ccs-login__step" data-step="3">
+                            <span class="ccs-login__step-num">3</span>
+                            <span class="ccs-login__step-label">Access</span>
+                        </div>
+                    </div>
+                    
                     <!-- MFA Required Notice (hidden until Step 1 submitted) -->
                     <div class="ccs-login__mfa-notice" data-testid="mfa-notice" hidden>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                             <path d="M9 12l2 2 4-4"/>
                         </svg>
-                        <span>MFA required after login</span>
+                        <span>MFA verification required</span>
                     </div>
                 </div>
 

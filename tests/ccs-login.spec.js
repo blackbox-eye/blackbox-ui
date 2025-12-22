@@ -22,14 +22,13 @@ test.describe('CCS Login Page - Load', () => {
   test('should display the hero headline', async ({ page }) => {
     const headline = page.locator('.ccs-login__headline');
     await expect(headline).toBeVisible();
-    await expect(headline).toContainText('Cross-Currency Settlement');
-    await expect(headline).toContainText('Fiat & Crypto Unified');
+    await expect(headline).toContainText('Cross-Currency Settlement Portal');
   });
 
   test('should display the institutional subtext', async ({ page }) => {
     const subtext = page.locator('.ccs-login__subtext');
     await expect(subtext).toBeVisible();
-    await expect(subtext).toContainText('Institutional-grade settlement infrastructure');
+    await expect(subtext).toContainText('Institutional-grade multi-asset settlement');
   });
 
   test('should display all three value proposition features', async ({ page }) => {
@@ -221,7 +220,7 @@ test.describe('CCS Login Page - MFA Notice', () => {
     // Sprint 3: Changed from full indicator to compact notice
     const mfaNotice = page.locator('[data-testid="mfa-notice"]');
     await expect(mfaNotice).toBeVisible();
-    await expect(mfaNotice).toContainText('MFA required after login');
+    await expect(mfaNotice).toContainText('MFA verification required');
   });
 
   test('should trigger MFA modal on form submit', async ({ page }) => {

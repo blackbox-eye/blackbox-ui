@@ -77,15 +77,15 @@
   },
   "agent_access": {
     "meta": {
-      "title": "Vælg sikker adgang | BLACKBOX EYE™",
-      "description": "Start Blackbox EYE, Intel24 eller CCS konsoller fra et samlet, auditeret adgangspunkt.",
-      "breadcrumb": "Agent Access"
+      "title": "Driftsportal | BLACKBOX EYE™",
+      "description": "Adgang til Blackbox EYE, Intel24 eller CCS konsoller fra et samlet, audit-logget driftspunkt.",
+      "breadcrumb": "Driftsportal"
     },
     "hero": {
-      "eyebrow": "Sikker drift",
-      "title": "Vælg sikker adgang",
-      "lead": "Vælg den konsol du har brug for lige nu – hver opstart arver dit nuværende clearance-niveau og overvåges i realtid.",
-      "audit_notice": "Alle opstart kræver MFA, logges i sikkerhedsjournalen og udløser øjeblikkelige alarmer ved anomalier."
+      "eyebrow": "Driftshub",
+      "title": "Sikker konsoladgang",
+      "lead": "Vælg din konsol nedenfor. Alle sessioner arver aktivt clearance-niveau og logges i realtid.",
+      "audit_notice": "MFA påkrævet · Alle starter logges · Anomalier udløser øjeblikkelige alarmer"
     },
     "cards": {
       "ccs": {

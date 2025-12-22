@@ -76,15 +76,15 @@
   },
   "agent_access": {
     "meta": {
-      "title": "Choose Secure Access | BLACKBOX EYE™",
-      "description": "Launch Blackbox EYE, Intel24 or CCS consoles from a single, audited access hub.",
-      "breadcrumb": "Agent Access"
+      "title": "Operations Portal | BLACKBOX EYE™",
+      "description": "Access Blackbox EYE, Intel24, or CCS consoles from a unified, audit-logged operations hub.",
+      "breadcrumb": "Operations Portal"
     },
     "hero": {
-      "eyebrow": "Secure operations",
-      "title": "Choose secure access",
-      "lead": "Select the console you need right now – each launch inherits your current clearance and is monitored in real time.",
-      "audit_notice": "All launches require MFA, are logged in the security ledger and raise instant alerts on anomalies."
+      "eyebrow": "Operations hub",
+      "title": "Secure console access",
+      "lead": "Select your console below. All sessions inherit active clearance levels and are logged in real time.",
+      "audit_notice": "MFA required · All launches logged · Anomalies trigger instant alerts"
     },
     "cards": {
       "ccs": {

@@ -303,3 +303,65 @@ section[class*="graphene"] {
   color: #c9a227 !important;
   fill: #c9a227 !important;
 }
+
+/* ================================================
+   ALPHABOT ASSISTANT - NO INFINITE PULSE
+   Kill the childish pulsing dot animation.
+   Status: solid color, no movement.
+   ================================================ */
+
+.alphabot-status-dot {
+  animation: none !important;
+}
+
+@keyframes alphabot-pulse {
+  0%, 100% { opacity: 1; }
+}
+
+/* Kill any other infinite assistant animations */
+.alphabot-toggle,
+.alphabot-panel,
+.bbx-command-rail {
+  animation: none !important;
+}
+
+/* ================================================
+   MOBILE DRAWER - NO BLUR, SOLID BACKGROUND
+   Institutional feel, not frosted glass toy.
+   ================================================ */
+
+#mobile-menu {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(17, 17, 20, 0.99) !important;
+}
+
+#mobile-menu-overlay {
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+}
+
+/* ================================================
+   FOOTER OPERATIONAL DOT - NO PULSE
+   ================================================ */
+
+footer .animate-pulse,
+.footer .animate-pulse,
+[class*="operational"] .animate-pulse {
+  animation: none !important;
+}
+
+/* ================================================
+   GLOBAL: REMOVE SCALE ON HOVER (MOBILE)
+   No bouncy/jumpy hover effects on touch.
+   ================================================ */
+
+@media (pointer: coarse) {
+  a:hover,
+  button:hover,
+  .btn:hover,
+  [role="button"]:hover {
+    transform: none !important;
+  }
+}

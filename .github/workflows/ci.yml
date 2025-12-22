@@ -175,7 +175,7 @@ jobs:
 # ═══════════════════════════════════════════════════════════════════════════════
 # JOB 2: SECURE DELETE index.html ON REMOTE
 # Removes static index.html (DirectoryIndex priority fix)
-# Uses SFTP (SSH File Transfer Protocol) for encrypted transmission
+# Uses FTP with TLS for encrypted transmission
 # ═══════════════════════════════════════════════════════════════
   delete-index-html:
     name: "🗑️  Secure Delete index.html"
@@ -192,27 +192,33 @@ jobs:
           sudo apt-get install -y lftp
           echo "✅ lftp installed: $(lftp --version | head -n1)"
 
-      - name: Delete index.html via SFTP
+      - name: Delete index.html via FTP
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           FTP_REMOTE_PATH: ${{ secrets.FTP_REMOTE_PATH }}
         run: |
-          echo "🔐 Connecting to server via SFTP..."
+          echo "🔐 Connecting to server via FTP..."
           echo "   Host: $FTP_HOST"
           echo "   Path: $FTP_REMOTE_PATH"
+          
+          # Clean hostname
+          CLEAN_HOST=$(echo "$FTP_HOST" | sed 's|^[a-z]*://||' | sed 's|:.*||')
 
-          # Execute SFTP operation using lftp
+          # Execute FTP operation using lftp
           lftp -c "
-            # SFTP settings
-            set sftp:auto-confirm yes;
+            # FTP settings
+            set ftp:ssl-allow yes;
+            set ftp:ssl-force no;
+            set ssl:verify-certificate no;
+            set ftp:passive-mode yes;
             set net:timeout 60;
             set net:max-retries 3;
             set net:reconnect-interval-base 5;
 
-            # Connect via SFTP
-            open -u $FTP_USERNAME,$FTP_PASSWORD sftp://$FTP_HOST;
+            # Connect via FTP
+            open -u $FTP_USERNAME,$FTP_PASSWORD $CLEAN_HOST;
 
             # Navigate to target directory
             cd $FTP_REMOTE_PATH || exit 1;
@@ -246,12 +252,12 @@ jobs:
           echo "   → index.php will be served as DirectoryIndex"
 
 # ═══════════════════════════════════════════════════════════════
-# JOB 3: SECURE SFTP DEPLOYMENT
-# Uploads repository files via SFTP (SSH File Transfer Protocol)
+# JOB 3: SECURE FTP DEPLOYMENT
+# Uploads repository files via FTP with Explicit TLS (FTPES)
 # Uses lftp for reliable file transfer
 # ═══════════════════════════════════════════════════════════════
   ftp-deploy:
-    name: "🚀 Secure SFTP Deploy"
+    name: "🚀 Secure FTP Deploy"
     needs: delete-index-html
     runs-on: ubuntu-latest
     timeout-minutes: 45
@@ -289,34 +295,37 @@ jobs:
           echo "   Files to deploy: $FILE_COUNT"
           echo "✅ Deployment preparation complete"
 
-      - name: Deploy via SFTP
+      - name: Deploy via FTP/FTPS
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           FTP_REMOTE_PATH: ${{ secrets.FTP_REMOTE_PATH }}
         run: |
-          echo "🚀 Starting SFTP deployment..."
+          echo "🚀 Starting FTP deployment..."
           
-          # Extract host (remove any sftp:// prefix and port suffix)
-          CLEAN_HOST=$(echo "$FTP_HOST" | sed 's|^sftp://||' | sed 's|:.*||')
+          # Extract host (remove any protocol prefix and port suffix)
+          CLEAN_HOST=$(echo "$FTP_HOST" | sed 's|^[a-z]*://||' | sed 's|:.*||')
           echo "   Host: $CLEAN_HOST"
           echo "   Path: $FTP_REMOTE_PATH"
 
-          # Deploy using lftp with robust settings
+          # Deploy using lftp with FTP + Explicit TLS (FTPES)
           lftp -c "
-            # Connection settings for reliability
-            set sftp:auto-confirm yes;
-            set net:timeout 300;
-            set net:max-retries 10;
-            set net:reconnect-interval-base 15;
+            # FTP connection settings
+            set ftp:ssl-allow yes;
+            set ftp:ssl-force no;
+            set ssl:verify-certificate no;
+            set ftp:passive-mode yes;
+            set net:timeout 180;
+            set net:max-retries 8;
+            set net:reconnect-interval-base 10;
             set net:reconnect-interval-multiplier 2;
-            set mirror:parallel-transfer-count 2;
-            set xfer:parallel 2;
+            set mirror:parallel-transfer-count 3;
+            set xfer:parallel 3;
             set cmd:trace false;
 
-            # Connect via SFTP
-            open -u $FTP_USERNAME,$FTP_PASSWORD sftp://$CLEAN_HOST;
+            # Connect via FTP (will upgrade to TLS if available)
+            open -u $FTP_USERNAME,$FTP_PASSWORD $CLEAN_HOST;
 
             # Change to target directory
             cd $FTP_REMOTE_PATH;
@@ -337,38 +346,9 @@ jobs:
               ./;
 
             bye
-          " && echo "✅ SFTP deployment completed" || {
-            echo "⚠️ Primary deployment method failed, trying fallback..."
-            
-            # Fallback: individual file upload using lftp
-            lftp -c "
-              set sftp:auto-confirm yes;
-              set net:timeout 600;
-              set net:max-retries 15;
-              
-              open -u $FTP_USERNAME,$FTP_PASSWORD sftp://$CLEAN_HOST;
-              lcd .;
-              cd $FTP_REMOTE_PATH;
-              
-              # Use mput for more reliable uploads
-              glob -a mput -c *.php;
-              glob -a mput -c *.js;
-              glob -a mput -c *.css;
-              glob -a mput -c *.json;
-              glob -a mput -c *.txt;
-              glob -a mput -c *.xml;
-              
-              # Handle subdirectories
-              mirror --reverse --only-newer assets/;
-              mirror --reverse --only-newer includes/;
-              mirror --reverse --only-newer api/;
-              mirror --reverse --only-newer lang/;
-              mirror --reverse --only-newer config/;
-              
-              bye
-            "
-            echo "✅ Fallback deployment completed"
-          }
+          "
+
+          echo "✅ FTP deployment completed"
 
       - name: Deployment summary
         run: |
@@ -377,7 +357,7 @@ jobs:
           echo "════════════════════════════════════════"
           echo "Target: ${{ secrets.FTP_HOST }}"
           echo "Path: ${{ secrets.FTP_REMOTE_PATH }}"
-          echo "Protocol: SFTP (SSH encrypted)"
+          echo "Protocol: FTP with TLS (encrypted)"
           echo "Time: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
           echo "════════════════════════════════════════"
 

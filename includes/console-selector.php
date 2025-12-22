@@ -401,6 +401,7 @@ $intel24_has_sso = $intel24_has_sso ?? false;
         e.preventDefault();
         const consoleName = this.getAttribute('data-favorite');
         let favorites = getFavorites();
+        const wasAdded = !favorites.includes(consoleName);
         
         if (favorites.includes(consoleName)) {
           favorites = favorites.filter(function(f) { return f !== consoleName; });
@@ -410,6 +411,16 @@ $intel24_has_sso = $intel24_has_sso ?? false;
         
         saveFavorites(favorites);
         updateFavoriteUI();
+        
+        // Snackbar feedback
+        if (window.bbxSnackbar) {
+          const label = consoleName.toUpperCase();
+          if (wasAdded) {
+            window.bbxSnackbar.success(label + ' added to favourites');
+          } else {
+            window.bbxSnackbar.info(label + ' removed from favourites');
+          }
+        }
       });
     });
     
@@ -467,6 +478,18 @@ $intel24_has_sso = $intel24_has_sso ?? false;
       if (e.key === 'Escape') {
         closeAllSlideouts();
       }
+    });
+    
+    // ===== CONSOLE CTA CLICK FEEDBACK =====
+    selector.querySelectorAll('.console-card__cta').forEach(function(cta) {
+      cta.addEventListener('click', function(e) {
+        const card = this.closest('.console-card');
+        const consoleName = card ? card.getAttribute('data-console') : 'console';
+        
+        if (window.bbxSnackbar) {
+          window.bbxSnackbar.info('Redirecting to ' + consoleName.toUpperCase() + '...');
+        }
+      });
     });
     
     // ===== SMOOTH SCROLL + HIGHLIGHT =====

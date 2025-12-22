@@ -50,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Stylesheets -->
     <link rel="stylesheet" href="/assets/css/marketing.min.css">
     <link rel="stylesheet" href="/assets/css/ccs-login.css">
+    <link rel="stylesheet" href="/assets/css/components/bbx-snackbar.css">
     <?php include __DIR__ . '/includes/qa-bootstrap.php'; ?>
 </head>
 
@@ -359,7 +360,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 strengthText.textContent = label;
             });
         }
+        
+        // Form submit - show MFA modal (mock)
+        const loginForm = document.querySelector('[data-testid="ccs-login-form"]');
+        if (loginForm) {
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Show snackbar for login attempt
+                if (window.bbxSnackbar) {
+                    window.bbxSnackbar.info('Verifying credentials...');
+                }
+                
+                // Open MFA modal if available
+                setTimeout(function() {
+                    if (window.bbxMfa) {
+                        window.bbxMfa.show({
+                            onSuccess: function() {
+                                if (window.bbxSnackbar) {
+                                    window.bbxSnackbar.success('MFA verified! Redirecting...');
+                                }
+                                // Would redirect to dashboard in Sprint 2
+                            },
+                            onCancel: function() {
+                                if (window.bbxSnackbar) {
+                                    window.bbxSnackbar.warning('MFA verification cancelled');
+                                }
+                            }
+                        });
+                    } else {
+                        // No MFA modal - show preview message
+                        if (window.bbxSnackbar) {
+                            window.bbxSnackbar.warning('MFA coming in Sprint 2. Demo code: 123456');
+                        }
+                    }
+                }, 800);
+            });
+        }
     })();
     </script>
+    
+    <!-- Snackbar + MFA -->
+    <script src="/assets/js/bbx-snackbar.js"></script>
+    <?php include __DIR__ . '/includes/mfa-modal.php'; ?>
 </body>
 </html>

@@ -49,6 +49,11 @@ include 'includes/site-header.php';
 ?>
 
 <main id="main-content" class="agent-access-page" tabindex="-1">
+  <!-- Snackbar CSS/JS for feedback -->
+  <link rel="stylesheet" href="/assets/css/components/bbx-snackbar.css">
+  <link rel="stylesheet" href="/assets/css/components/bbx-icons.css">
+  <script src="/assets/js/bbx-snackbar.js" defer></script>
+  
   <section class="access-hero">
     <div class="access-hero__inner">
       <p class="access-hero__eyebrow"><?= t('agent_access.hero.eyebrow') ?></p>

@@ -22,7 +22,7 @@ function bbx_graphene_defaults(): array
     'colors' => [
       'primary' => '#1a73e8',
       'secondary' => '#113c55',
-      'gold' => '#d4af37',
+      'gold' => '#c9a227',
       'accent' => '#e94560',
       'bg_dark' => '#0A1217',
       'bg_light' => '#F5F8FA',
@@ -50,7 +50,7 @@ function bbx_graphene_strong_preset(): array
     'colors' => [
       'primary' => '#2196F3',
       'secondary' => '#0D47A1',
-      'gold' => '#FFD700',
+      'gold' => '#9a7b1f',
       'accent' => '#FF1744',
       'bg_dark' => '#050A0D',
       'bg_light' => '#FFFFFF',

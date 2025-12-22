@@ -1,0 +1,264 @@
+/**
+ * Motion Safety & Animation Control
+ * Sprint 6: Mobile QA & Desktop Polish
+ * 
+ * Global reduced-motion support and animation cleanup.
+ * Enforces prefers-reduced-motion across all components.
+ * Removes "childish" slide/glide animations per brand guidelines.
+ */
+
+/* ================================================
+   GLOBAL REDUCED MOTION OVERRIDE
+   ================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Allow opacity-only transitions (non-distracting) */
+  .fade-safe {
+    transition: opacity 0.15s ease !important;
+  }
+}
+
+/* ================================================
+   CONSOLE CARD HIGHLIGHT - SIMPLIFIED
+   No more bouncing/pulsing animation.
+   Simple border glow that respects reduced motion.
+   ================================================ */
+
+.console-card--highlight {
+  border-color: var(--admin-gold, #c9a227) !important;
+  box-shadow: 
+    0 0 0 1px rgba(201, 162, 39, 0.3),
+    0 0 20px rgba(201, 162, 39, 0.15) !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Animation only for users who want it */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes console-highlight-subtle {
+    0%, 100% {
+      box-shadow: 
+        0 0 0 1px rgba(201, 162, 39, 0.3),
+        0 0 20px rgba(201, 162, 39, 0.15);
+    }
+    50% {
+      box-shadow: 
+        0 0 0 2px rgba(201, 162, 39, 0.5),
+        0 0 30px rgba(201, 162, 39, 0.25);
+    }
+  }
+  
+  .console-card--highlight {
+    animation: console-highlight-subtle 1.5s ease-in-out;
+  }
+}
+
+/* ================================================
+   FEED ITEMS - INSTANT OR SUBTLE FADE
+   Remove slide-in animation, use opacity only.
+   ================================================ */
+
+.live-feed-item--new,
+.live-feed-2__item--entering {
+  animation: none !important;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes feed-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  .live-feed-item--new,
+  .live-feed-2__item--entering {
+    animation: feed-fade-in 0.2s ease-out !important;
+  }
+}
+
+/* ================================================
+   SLIDEOUTS & MODALS - INSTANT OPEN
+   No slide transforms on mobile.
+   ================================================ */
+
+@media (max-width: 768px) {
+  .console-card__slideout {
+    transition: opacity 0.15s ease, visibility 0.15s ease !important;
+    transform: none !important;
+  }
+  
+  .console-card__slideout.is-open {
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .console-card__slideout,
+  .console-modal,
+  .request-modal-overlay,
+  .intel24-modal-overlay {
+    transition: none !important;
+    transform: none !important;
+  }
+  
+  .console-modal__panel {
+    transform: none !important;
+  }
+}
+
+/* ================================================
+   CARD HOVER - DISABLE TRANSLATEY ON MOBILE
+   Remove the "hop" effect on touch devices.
+   ================================================ */
+
+@media (pointer: coarse) {
+  .console-card:hover,
+  .access-card:hover,
+  .glass-effect:hover,
+  .module-card:hover {
+    transform: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .console-card,
+  .access-card,
+  .glass-effect,
+  .module-card {
+    transform: none !important;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease !important;
+  }
+  
+  .console-card:hover,
+  .access-card:hover,
+  .glass-effect:hover,
+  .module-card:hover {
+    transform: none !important;
+  }
+}
+
+/* ================================================
+   STATUS DOT - SUBTLE PULSE OR STATIC
+   ================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .console-card__status-dot,
+  .graphene-floating-badge__icon,
+  .graphene-badge__pulse,
+  .live-feed-2__pulse,
+  .graphene-premium-badge__glow {
+    animation: none !important;
+  }
+}
+
+/* ================================================
+   CTA BUTTONS - NO BOUNCE/TRANSLATE ON MOBILE
+   ================================================ */
+
+@media (max-width: 768px) {
+  .btn-graphene-primary:hover,
+  .btn-graphene-secondary:hover,
+  .graphene-btn-primary:hover,
+  .graphene-btn-secondary:hover,
+  .graphene-cta-primary:hover,
+  .graphene-cta-secondary:hover,
+  .sticky-cta-bar__btn:hover {
+    transform: none !important;
+  }
+}
+
+/* ================================================
+   PAGE SECTIONS - NO SLIDE-IN ANIMATIONS
+   ================================================ */
+
+.page-section,
+.page-section--soft,
+section[class*="graphene"] {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Allow subtle fade-in for non-reduced-motion users */
+  @keyframes section-fade-in {
+    from { opacity: 0.9; }
+    to { opacity: 1; }
+  }
+  
+  .page-section,
+  .page-section--soft {
+    animation: section-fade-in 0.3s ease-out;
+  }
+}
+
+/* ================================================
+   HEADLINE ANIMATIONS - RESPECT USER PREFERENCE
+   ================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .graphene-headline,
+  .graphene-text-shimmer,
+  .graphene-gradient-text {
+    animation: none !important;
+    background-position: 0 !important;
+  }
+  
+  .graphene-hero-title__line--1,
+  .graphene-hero-title__line--2 {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ================================================
+   SCROLL INDICATOR - HIDE IF REDUCED MOTION
+   ================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .graphene-scroll-indicator {
+    display: none !important;
+  }
+}
+
+/* ================================================
+   MOBILE QUICK SWITCH - NO CARD REORDERING ANIMATION
+   Cards simply reorder without visual effect.
+   ================================================ */
+
+@media (max-width: 768px) {
+  .console-selector__grid {
+    transition: none !important;
+  }
+  
+  .console-selector__grid .console-card {
+    transition: opacity 0.15s ease, border-color 0.2s ease !important;
+  }
+}
+
+/* ================================================
+   PINNED STAR ICON - CONSISTENT COLOR
+   #c9a227 (BBX Gold) everywhere.
+   ================================================ */
+
+.console-card__fav-btn.is-favorite,
+.console-card__fav-btn.is-favorite svg {
+  color: #c9a227 !important;
+}
+
+.console-card__fav-btn.is-favorite svg {
+  fill: #c9a227 !important;
+}
+
+:root[data-theme="light"] .console-card__fav-btn.is-favorite,
+:root[data-theme="light"] .console-card__fav-btn.is-favorite svg {
+  color: #c9a227 !important;
+  fill: #c9a227 !important;
+}

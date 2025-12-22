@@ -1,0 +1,275 @@
+/**
+ * Unified Hero Sections - Mobile Polish
+ * Sprint 6: Consistent hero styling across all pages
+ * 
+ * Applies to: index.php, cases.php, products.php, ccs-login.php, agent-access.php, etc.
+ * 
+ * Goals:
+ * - Consistent font scaling with clamp()
+ * - Proper breathing room (spacing)
+ * - Touch-friendly CTAs (48px min)
+ * - Logo consistency (SVG)
+ */
+
+/* ================================================
+   HERO TEXT SCALING - UNIVERSAL
+   ================================================ */
+
+/* Hero headlines - clamp for responsive scaling */
+.hero-gradient-text,
+.graphene-headline,
+.graphene-hero-title,
+.products-hero__title,
+.access-hero__title,
+h1[class*="hero"],
+.ccs-login__headline {
+  font-size: clamp(1.5rem, 5vw + 0.5rem, 3.5rem) !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.02em;
+}
+
+/* Hero subtitles/descriptions */
+.hero-subheadline,
+.graphene-subheadline,
+.graphene-hero-subtitle,
+.products-hero__lede,
+.access-hero__lead,
+.ccs-login__subtext {
+  font-size: clamp(0.875rem, 2.5vw + 0.25rem, 1.25rem) !important;
+  line-height: 1.6 !important;
+}
+
+/* ================================================
+   MOBILE HERO LAYOUT (≤768px)
+   ================================================ */
+
+@media (max-width: 768px) {
+  
+  /* All hero sections - centered on mobile */
+  .graphene-hero__content,
+  .graphene-hero-3d__content,
+  .products-hero__content,
+  .access-hero__inner,
+  .ccs-login__hero {
+    text-align: center !important;
+  }
+  
+  /* Hero padding - mobile optimized */
+  .graphene-hero-3d__content,
+  .graphene-hero__content {
+    padding-top: calc(4rem + env(safe-area-inset-top, 0px)) !important;
+    padding-bottom: 3rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  .access-hero {
+    padding-top: calc(3.5rem + env(safe-area-inset-top, 0px)) !important;
+    padding-bottom: 2rem !important;
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+  
+  /* Hero headline - mobile size */
+  .graphene-headline,
+  .graphene-hero-title,
+  .hero-gradient-text,
+  .products-hero__title,
+  .access-hero__title,
+  h1[class*="hero"] {
+    font-size: clamp(1.75rem, 6vw, 2.5rem) !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  /* Hero subtitle - mobile */
+  .graphene-subheadline,
+  .graphene-hero-subtitle,
+  .hero-subheadline,
+  .products-hero__lede,
+  .access-hero__lead {
+    font-size: clamp(0.9rem, 3.5vw, 1.1rem) !important;
+    margin-bottom: 1.5rem !important;
+    max-width: 100% !important;
+  }
+  
+  /* Hero title lines - fix animation state on mobile */
+  .graphene-hero-title__line--1,
+  .graphene-hero-title__line--2 {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  
+  /* Badge/eyebrow text */
+  .graphene-floating-badge,
+  .graphene-premium-badge,
+  .products-hero__eyebrow,
+  .access-hero__eyebrow {
+    font-size: 0.7rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  /* Hero stats - horizontal scroll or stack */
+  .graphene-stats-glass,
+  .graphene-premium-stats {
+    flex-direction: column !important;
+    gap: 1rem !important;
+    padding-top: 1.25rem !important;
+    margin-bottom: 2rem !important;
+  }
+  
+  .graphene-stat-card {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 1rem !important;
+    width: 100% !important;
+    min-width: auto !important;
+  }
+  
+  .graphene-stat-card__value {
+    font-size: 1.25rem !important;
+    order: 2;
+  }
+  
+  .graphene-premium-stats__divider {
+    display: none !important;
+  }
+  
+  /* Hero USP grid - stack on mobile */
+  .graphene-hero-usps {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.25rem !important;
+    padding: 1.25rem 0 !important;
+  }
+  
+  .graphene-hero-usps__item {
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+    gap: 1rem !important;
+  }
+  
+  .graphene-hero-usps__icon {
+    width: 48px !important;
+    height: 48px !important;
+    flex-shrink: 0 !important;
+  }
+}
+
+/* ================================================
+   HERO CTA BUTTONS - MOBILE (48px min)
+   ================================================ */
+
+@media (max-width: 768px) {
+  /* All hero CTA buttons */
+  .graphene-btn-primary,
+  .graphene-btn-secondary,
+  .graphene-cta-primary,
+  .graphene-cta-secondary,
+  .btn-graphene-primary,
+  .btn-graphene-secondary,
+  .products-hero__cta,
+  .access-hero__cta,
+  .ccs-login__submit {
+    min-height: 48px !important;
+    padding: 0.875rem 1.5rem !important;
+    font-size: 0.95rem !important;
+    width: 100% !important;
+    max-width: 320px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    justify-content: center !important;
+  }
+  
+  /* CTA group - stack vertically */
+  .graphene-cta-group,
+  .hero-ctas,
+  .products-hero__actions {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+    width: 100% !important;
+    max-width: 320px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  
+  /* Spotlight button */
+  .graphene-btn-spotlight {
+    width: 100% !important;
+    max-width: 320px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    min-height: 48px !important;
+  }
+}
+
+/* ================================================
+   EXTRA SMALL SCREENS (≤480px)
+   ================================================ */
+
+@media (max-width: 480px) {
+  .graphene-headline,
+  .graphene-hero-title,
+  .hero-gradient-text,
+  .products-hero__title,
+  .access-hero__title {
+    font-size: 1.625rem !important;
+  }
+  
+  .graphene-subheadline,
+  .graphene-hero-subtitle,
+  .products-hero__lede,
+  .access-hero__lead {
+    font-size: 0.875rem !important;
+  }
+  
+  .graphene-floating-badge__text,
+  .graphene-premium-badge__text {
+    font-size: 0.6rem !important;
+  }
+  
+  /* Even tighter padding */
+  .graphene-hero-3d__content,
+  .graphene-hero__content {
+    padding-left: 0.875rem !important;
+    padding-right: 0.875rem !important;
+  }
+}
+
+/* ================================================
+   CASES PAGE - HERO FIX
+   (Reported as "too large" headings)
+   ================================================ */
+
+.cases-page .hero-gradient-text,
+.cases-page h1 {
+  font-size: clamp(1.5rem, 4vw + 0.5rem, 3rem) !important;
+}
+
+@media (max-width: 768px) {
+  .cases-page .hero-gradient-text,
+  .cases-page h1 {
+    font-size: clamp(1.375rem, 5vw, 2rem) !important;
+  }
+}
+
+/* ================================================
+   LIGHT THEME ADJUSTMENTS
+   ================================================ */
+
+:root[data-theme="light"] {
+  .graphene-headline,
+  .graphene-hero-title,
+  .hero-gradient-text {
+    /* Ensure readable on light backgrounds */
+    filter: none !important;
+  }
+  
+  .graphene-subheadline,
+  .graphene-hero-subtitle {
+    color: rgba(31, 41, 55, 0.85) !important;
+  }
+}

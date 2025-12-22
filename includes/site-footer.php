@@ -279,6 +279,43 @@
         }
     })();
     </script>
+    
+    <?php 
+    // Sprint 6: Include SSO modal globally for mobile drawer SSO buttons
+    include __DIR__ . '/sso-request-modal.php'; 
+    ?>
+    
+    <script>
+    // Sprint 6: Initialize SSO button handlers for mobile drawer
+    (function() {
+        function initMobileSsoButtons() {
+            document.querySelectorAll('[data-sso-request]').forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var consoleName = this.getAttribute('data-sso-request') || 'ccs';
+                    if (window.bbxSsoRequest) {
+                        window.bbxSsoRequest.show({
+                            console: consoleName,
+                            provider: ''
+                        });
+                        // Close mobile drawer when opening SSO modal
+                        var drawer = document.querySelector('.mobile-nav-drawer');
+                        if (drawer) {
+                            drawer.classList.remove('is-open');
+                            drawer.setAttribute('aria-hidden', 'true');
+                        }
+                    }
+                });
+            });
+        }
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initMobileSsoButtons);
+        } else {
+            initMobileSsoButtons();
+        }
+    })();
+    </script>
     </body>
 
     </html>

@@ -288,6 +288,9 @@ if (!empty($disable_alphabot)) {
     <!-- Custom UI components extracted from previous inline styles -->
     <link rel="stylesheet" href="/assets/css/custom-ui.css?v=<?= $css_version ?>">
     <link rel="stylesheet" href="/assets/css/theme-overrides.css?v=<?= $css_version ?>">
+    <!-- Sprint 6: Motion safety (global) + unified hero mobile -->
+    <link rel="stylesheet" href="/assets/css/components/motion-safe.css?v=<?= $css_version ?>">
+    <link rel="stylesheet" href="/assets/css/components/hero-mobile.css?v=<?= $css_version ?>" media="(max-width: 768px)">
     <!-- Removed redundant inline Tailwind utility overrides -->
 
     <!-- Conditional CSS loading -->
@@ -572,22 +575,22 @@ if ($is_graphene_page) {
                     <span class="theme-toggle__icon" aria-hidden="true"></span>
                 </button>
             </div>
-            <!-- Console Access - Mobile version -->
+            <!-- Console Access - Mobile version with SSO triggers -->
             <div class="mobile-console-access mb-3">
                 <p class="text-xs text-gray-500 uppercase tracking-wider mb-2"><?= t('header.console.title', 'Vælg konsol') ?></p>
                 <div class="flex gap-2">
-                    <a href="/agent-access.php#ccs" class="mobile-console-btn flex-1" data-scroll-to="ccs">
+                    <button type="button" class="mobile-console-btn flex-1" data-sso-request="ccs" data-testid="mobile-sso-ccs">
                         <span class="mobile-console-icon mobile-console-icon--ccs">CCS</span>
                         <span class="mobile-console-label"><?= t('header.console.ccs', 'CCS Console') ?></span>
-                    </a>
-                    <a href="/agent-access.php#gdi" class="mobile-console-btn flex-1" data-scroll-to="gdi">
+                    </button>
+                    <button type="button" class="mobile-console-btn flex-1" data-sso-request="gdi" data-testid="mobile-sso-gdi">
                         <span class="mobile-console-icon mobile-console-icon--gdi">GDI</span>
                         <span class="mobile-console-label"><?= t('header.console.gdi', 'GDI Console') ?></span>
-                    </a>
-                    <a href="/agent-access.php#intel24" class="mobile-console-btn flex-1" data-scroll-to="intel24">
+                    </button>
+                    <button type="button" class="mobile-console-btn flex-1" data-sso-request="intel24" data-testid="mobile-sso-intel24">
                         <span class="mobile-console-icon mobile-console-icon--intel24">I24</span>
                         <span class="mobile-console-label"><?= t('header.console.intel24', 'Intel24') ?></span>
-                    </a>
+                    </button>
                 </div>
             </div>
             <div class="mobile-primary-ctas">

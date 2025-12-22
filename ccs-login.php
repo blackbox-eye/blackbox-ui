@@ -226,32 +226,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     
                     <div class="ccs-login__sso-buttons">
                         <button type="button" 
-                                class="ccs-login__sso-btn is-disabled" 
+                                class="ccs-login__sso-btn" 
                                 data-testid="sso-azure"
-                                data-tooltip="Available for approved enterprise tenants. Request access."
+                                data-tooltip="Enterprise SSO via Azure AD"
                                 data-tooltip-pos="top"
                                 data-sso-provider="azure"
-                                aria-describedby="ccs-sso-hint">
-                            <svg class="ccs-login__sso-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                                <path d="M7 11V7a5 5 0 0110 0v4"/>
-                            </svg>
+                                data-sso-request="ccs"
+                                aria-label="Sign in with Azure AD">
                             <svg class="ccs-login__sso-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                 <path d="M11.4 24H0l9.1-15.8L5.7 0h5.7L24 24h-5.7l-2.5-4.3L11.4 24z"/>
                             </svg>
                             <span>Azure AD</span>
                         </button>
                         <button type="button" 
-                                class="ccs-login__sso-btn is-disabled" 
+                                class="ccs-login__sso-btn" 
                                 data-testid="sso-google"
-                                data-tooltip="Available for approved enterprise tenants. Request access."
+                                data-tooltip="Enterprise SSO via Google Workspace"
                                 data-tooltip-pos="top"
                                 data-sso-provider="google"
-                                aria-describedby="ccs-sso-hint">
-                            <svg class="ccs-login__sso-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                                <path d="M7 11V7a5 5 0 0110 0v4"/>
-                            </svg>
+                                data-sso-request="ccs"
+                                aria-label="Sign in with Google Workspace">
                             <svg class="ccs-login__sso-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -263,7 +257,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     
                     <p id="ccs-sso-hint" class="ccs-login__sso-note">
-                        <button type="button" class="ccs-login__sso-link" data-sso-request="ccs" data-testid="sso-request-btn">Request SSO access</button> for your enterprise.
+                        Enterprise SSO available for approved tenants. 
+                        <button type="button" class="ccs-login__sso-link" data-sso-request="ccs" data-testid="sso-request-btn">Request access</button>
                     </p>
                 </div>
             </section>

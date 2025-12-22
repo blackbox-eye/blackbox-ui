@@ -208,9 +208,10 @@
 .ccs-login__headline {
   font-size: 1.5rem;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.4;
   color: #fff;
-  margin: 0 0 0.75rem 0;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.01em;
 }
 
 @media (min-width: 640px) {
@@ -226,9 +227,11 @@
 }
 
 .ccs-login__subtext {
-  font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.7);
-  margin: 0 0 1.5rem 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0 0 1.75rem 0;
+  letter-spacing: 0.01em;
 }
 
 /* Features List */
@@ -650,31 +653,48 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  min-height: 44px;
-  padding: 0.75rem 1rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-height: 48px;
+  padding: 0.875rem 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 0.5rem;
-  color: rgba(255, 255, 255, 0.55);
-  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.85rem;
+  font-weight: 500;
   font-family: inherit;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.ccs-login__sso-btn.is-disabled {
-  border-style: dashed;
-  background: rgba(255, 255, 255, 0.03);
+/* Azure AD branded button */
+.ccs-login__sso-btn[data-sso-provider="azure"] {
+  background: rgba(0, 120, 212, 0.15);
+  border-color: rgba(0, 120, 212, 0.4);
+  color: #60b4ff;
 }
 
-.ccs-login__sso-btn.is-disabled:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.15);
+.ccs-login__sso-btn[data-sso-provider="azure"]:hover {
+  background: rgba(0, 120, 212, 0.25);
+  border-color: rgba(0, 120, 212, 0.6);
+  transform: translateY(-1px);
 }
 
-.ccs-login__sso-btn:not(.is-disabled):hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(46, 204, 113, 0.3);
+/* Google Workspace branded button */
+.ccs-login__sso-btn[data-sso-provider="google"] {
+  background: rgba(234, 67, 53, 0.1);
+  border-color: rgba(234, 67, 53, 0.3);
+  color: #ff8a80;
+}
+
+.ccs-login__sso-btn[data-sso-provider="google"]:hover {
+  background: rgba(234, 67, 53, 0.2);
+  border-color: rgba(234, 67, 53, 0.5);
+  transform: translateY(-1px);
+}
+
+.ccs-login__sso-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.3);
 }
 
 .ccs-login__sso-lock {
@@ -801,19 +821,6 @@
   margin-bottom: 1.25rem;
 }
 
-.ccs-login__cert {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: rgba(255, 255, 255, 0.6);
-  cursor: default;
-  transition: color 0.2s ease;
-}
-
-.ccs-login__cert:hover {
-  color: rgba(255, 255, 255, 0.8);
-}
-
 .ccs-login__cert-icon {
   width: 20px;
   height: 20px;
@@ -831,15 +838,7 @@
   letter-spacing: 0.02em;
 }
 
-/* Ledger Statement */
-.ccs-login__ledger-statement {
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.5);
-  margin: 0 0 1rem 0;
-  padding: 0 1rem;
-}
-
-/* Legal Links (Sprint 2: enhanced contrast) */
+/* Legal Links (Sprint 5: WCAG AA contrast ≥6.0:1 dark, ≥4.5:1 light) */
 .ccs-login__legal {
   display: flex;
   justify-content: center;
@@ -850,7 +849,7 @@
 
 .ccs-login__legal-link {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.85); /* WCAG AA contrast on dark */
   text-decoration: none;
   transition: color 0.2s ease;
 }
@@ -867,14 +866,36 @@
 }
 
 .ccs-login__legal-divider {
-  color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.3);
 }
 
 /* Copyright */
 .ccs-login__copyright {
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6); /* Enhanced contrast */
   margin: 0;
+}
+
+/* Ledger Statement - enhanced contrast */
+.ccs-login__ledger-statement {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7); /* WCAG AA */
+  margin: 0 0 1rem 0;
+  padding: 0 1rem;
+}
+
+/* Cert labels - enhanced */
+.ccs-login__cert {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.8); /* Enhanced from 0.6 */
+  cursor: default;
+  transition: color 0.2s ease;
+}
+
+.ccs-login__cert:hover {
+  color: rgba(255, 255, 255, 0.95);
 }
 
 /* ================================================
@@ -954,4 +975,42 @@
 :root[data-theme="light"] .ccs-login__footer {
   background: rgba(255, 255, 255, 0.9);
   border-top-color: rgba(46, 204, 113, 0.15);
+}
+
+/* Light theme footer WCAG AA contrast (≥4.5:1) */
+:root[data-theme="light"] .ccs-login__legal-link {
+  color: #374151; /* Dark gray for light bg */
+}
+
+:root[data-theme="light"] .ccs-login__legal-link:hover {
+  color: #059669; /* Darker green */
+}
+
+:root[data-theme="light"] .ccs-login__copyright {
+  color: #6b7280;
+}
+
+:root[data-theme="light"] .ccs-login__ledger-statement {
+  color: #4b5563;
+}
+
+:root[data-theme="light"] .ccs-login__cert {
+  color: #374151;
+}
+
+:root[data-theme="light"] .ccs-login__cert:hover {
+  color: #1f2937;
+}
+
+/* Light theme SSO buttons */
+:root[data-theme="light"] .ccs-login__sso-btn[data-sso-provider="azure"] {
+  background: rgba(0, 120, 212, 0.1);
+  border-color: rgba(0, 120, 212, 0.3);
+  color: #0078d4;
+}
+
+:root[data-theme="light"] .ccs-login__sso-btn[data-sso-provider="google"] {
+  background: rgba(234, 67, 53, 0.08);
+  border-color: rgba(234, 67, 53, 0.25);
+  color: #d93025;
 }

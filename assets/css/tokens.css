@@ -141,6 +141,13 @@
   --shadow-focus: 0 0 0 3px var(--color-primary-soft);
 }
 
+/* Global focus-visible treatment for anchors to guarantee visibility */
+:where(a):focus-visible {
+  outline: 2px solid var(--text-gold);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px rgba(232, 197, 71, 0.35);
+}
+
 /* ═══════════════════════════════════════════════════════════════
    FOCUS VISIBLE STYLES - A11y Hardening
    Ensures all interactive elements have visible focus indicators
@@ -150,6 +157,7 @@
 :focus-visible {
   outline: var(--focus-ring-width) solid var(--color-focus-ring);
   outline-offset: var(--focus-ring-offset);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
 }
 
 /* Remove default outline only when using focus-visible */
@@ -171,6 +179,7 @@ a:focus-visible {
   outline: var(--focus-ring-width) solid var(--color-focus-ring);
   outline-offset: var(--focus-ring-offset);
   border-radius: var(--radius-sm);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
 }
 
 /* Input focus styles */
@@ -188,6 +197,7 @@ select:focus-visible {
 [tabindex="0"]:focus-visible {
   outline: var(--focus-ring-width) solid var(--color-focus-ring);
   outline-offset: var(--focus-ring-offset);
+  box-shadow: 0 0 0 4px var(--color-primary-soft);
 }
 
 /* ═══════════════════════════════════════════════════════════════

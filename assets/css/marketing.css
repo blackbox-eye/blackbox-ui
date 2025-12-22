@@ -4228,10 +4228,29 @@ footer a:hover svg {
    -------------------------------------------------------- */
 
 /* Focus states */
+a:focus,
 a:focus-visible,
+button:focus,
 button:focus-visible {
   outline: 2px solid var(--graphene-gold);
   outline-offset: 2px;
+}
+
+/* Ensure dropdown items keep a visible focus ring even when nested in the flyout */
+.more-dropdown-item:focus,
+.more-dropdown-item:focus-visible {
+  outline: 2px solid var(--text-gold) !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 3px rgba(232, 197, 71, 0.35) !important;
+  border-radius: 0.65rem;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="light"] .more-dropdown-item:focus,
+[data-theme="light"] .more-dropdown-item:focus-visible,
+.light .more-dropdown-item:focus,
+.light .more-dropdown-item:focus-visible {
+  background: rgba(15, 23, 42, 0.08);
 }
 
 /* Ensure links have visible hover states */

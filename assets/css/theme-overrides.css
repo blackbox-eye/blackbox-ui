@@ -139,3 +139,124 @@ body[data-theme] .graphene-btn-primary:active,
 body[data-theme] .graphene-btn-secondary:active {
   background: var(--state-active);
 }
+
+/* Contrast overrides for nav, language switcher, cookie banner, and activity badge */
+.nav-link,
+.nav-link:link,
+.nav-link:visited {
+  color: #e5e7eb;
+}
+
+.nav-link:hover,
+.nav-link:focus,
+.nav-link.nav-link-active {
+  color: #ffffff;
+}
+
+.language-switch,
+.language-switch--drawer {
+  color: #e5e7eb;
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.language-switch.is-active,
+.language-switch[aria-current="true"] {
+  color: #0f172a;
+  background: #facc15;
+  border-color: #facc15;
+}
+
+.cookie-banner__btn--accept {
+  background: #facc15;
+  color: #0b0b0b;
+}
+
+.cookie-banner__btn--accept:hover {
+  background: #eab308;
+}
+
+.cookie-banner__btn--decline {
+  background: rgba(255, 255, 255, 0.14);
+  color: #f9fafb;
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.cookie-banner__btn--decline:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.console-selector__activity-badge {
+  background: rgba(20, 83, 45, 0.55);
+  border-color: rgba(52, 211, 153, 0.7);
+  color: #d1fae5;
+}
+
+.console-selector__activity-badge[data-activity-source="local"] {
+  background: rgba(124, 45, 18, 0.55);
+  border-color: rgba(249, 115, 22, 0.7);
+  color: #ffe8d6;
+}
+
+/* High-contrast defaults across marketing surfaces */
+.graphene-page,
+.graphene-section,
+.graphene-page p,
+.graphene-page li,
+.graphene-page span,
+.graphene-page h1,
+.graphene-page h2,
+.graphene-page h3,
+.graphene-page h4,
+.graphene-page h5,
+.graphene-page h6 {
+  color: #f5f7fb;
+}
+
+.nav-link,
+.nav-link:visited {
+  color: #f9fafb;
+}
+
+.language-switch,
+.language-switch--drawer {
+  color: #f9fafb;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.text-gray-200,
+.text-gray-300,
+.text-gray-400,
+.products-hero__lede,
+.products-hero__meta,
+.products-hero__panel-label,
+.alphabot-label,
+.console-selector__activity-text,
+.console-selector__activity-time,
+.console-selector__activity-title {
+  color: #f7f9ff !important;
+}
+
+.console-selector__activity-item {
+  color: #f1f5ff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.console-selector__activity-dot {
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Stronger focus ring override to guarantee visibility */
+:where(body) a:focus-visible,
+:where(body) button:focus-visible,
+:where(body) input:focus-visible,
+:where(body) textarea:focus-visible,
+:where(body) select:focus-visible {
+  outline: 2px solid #facc15;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px rgba(232, 197, 71, 0.35);
+}

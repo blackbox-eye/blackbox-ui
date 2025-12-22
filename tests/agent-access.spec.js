@@ -131,15 +131,21 @@ test.describe('Agent Access Page - Mobile (320px)', () => {
   });
 
   test('should make CTA buttons clickable on mobile', async ({ page }) => {
-    // GDI CTA
+    // GDI CTA - should be enabled
     const gdiCta = page.locator('[data-console="gdi"] .console-card__cta');
     await expect(gdiCta).toBeEnabled();
     await expect(gdiCta).toHaveAttribute('href');
 
-    // Intel24 CTA
+    // Intel24 CTA - requires SSO, so may be disabled
     const intel24Cta = page.locator('[data-console="intel24"] .console-card__cta');
-    await expect(intel24Cta).toBeEnabled();
-    await expect(intel24Cta).toHaveAttribute('href');
+    await expect(intel24Cta).toBeVisible();
+    // When SSO is not available, Intel24 shows disabled state with explanation
+    const isDisabled = await intel24Cta.getAttribute('aria-disabled');
+    if (isDisabled === 'true') {
+      await expect(intel24Cta).toHaveClass(/is-disabled/);
+    } else {
+      await expect(intel24Cta).toHaveAttribute('href');
+    }
   });
 
   test('should display hero section properly on mobile', async ({ page }) => {

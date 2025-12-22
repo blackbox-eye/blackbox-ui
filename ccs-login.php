@@ -203,15 +203,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <a href="contact.php?subject=ccs-support" class="ccs-login__link">Need help?</a>
                     </div>
 
-                    <!-- MFA Placeholder (Sprint 2) -->
-                    <div class="ccs-login__mfa-placeholder" aria-hidden="true" data-testid="mfa-placeholder">
+                    <!-- MFA Step Indicator (Sprint 2) -->
+                    <div class="ccs-login__mfa-step" role="status" aria-live="polite" data-testid="mfa-step">
+                        <div class="ccs-login__mfa-header">
+                            <span class="ccs-login__mfa-badge">Step 2 of 2</span>
+                            <span class="ccs-login__mfa-title">Multi-factor authentication</span>
+                        </div>
                         <div class="ccs-login__mfa-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                             </svg>
                         </div>
-                        <span class="ccs-login__mfa-text">Multi-factor authentication required</span>
+                        <p class="ccs-login__mfa-privacy">
+                            Your second factor is verified in real time and never stored.
+                        </p>
                     </div>
                 </div>
 
@@ -222,14 +228,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     
                     <div class="ccs-login__sso-buttons">
-                        <button type="button" class="ccs-login__sso-btn" disabled aria-disabled="true" data-testid="sso-azure">
-                            <svg class="ccs-login__sso-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <button type="button" 
+                                class="ccs-login__sso-btn is-disabled" 
+                                data-testid="sso-azure"
+                                data-tooltip="Available for approved enterprise tenants. Request access."
+                                data-tooltip-pos="top"
+                                data-sso-provider="azure"
+                                aria-describedby="ccs-sso-hint">
+                            <svg class="ccs-login__sso-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0110 0v4"/>
+                            </svg>
+                            <svg class="ccs-login__sso-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                 <path d="M11.4 24H0l9.1-15.8L5.7 0h5.7L24 24h-5.7l-2.5-4.3L11.4 24z"/>
                             </svg>
                             <span>Azure AD</span>
                         </button>
-                        <button type="button" class="ccs-login__sso-btn" disabled aria-disabled="true" data-testid="sso-google">
-                            <svg class="ccs-login__sso-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <button type="button" 
+                                class="ccs-login__sso-btn is-disabled" 
+                                data-testid="sso-google"
+                                data-tooltip="Available for approved enterprise tenants. Request access."
+                                data-tooltip-pos="top"
+                                data-sso-provider="google"
+                                aria-describedby="ccs-sso-hint">
+                            <svg class="ccs-login__sso-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0110 0v4"/>
+                            </svg>
+                            <svg class="ccs-login__sso-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -239,7 +265,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </button>
                     </div>
                     
-                    <p class="ccs-login__sso-note">SSO available for approved enterprise accounts.</p>
+                    <p id="ccs-sso-hint" class="ccs-login__sso-note">
+                        <a href="contact.php?subject=sso-request&console=ccs" class="ccs-login__sso-link">Request SSO access</a> for your enterprise.
+                    </p>
                 </div>
             </section>
 
@@ -260,26 +288,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <footer class="ccs-login__footer" data-testid="trust-footer">
         <div class="ccs-login__footer-inner">
             
-            <!-- Certifications -->
+            <!-- Certifications (Sprint 2: enhanced tooltips and aria) -->
             <div class="ccs-login__certifications" data-testid="certifications" role="list" aria-label="Security certifications">
-                <div class="ccs-login__cert" role="listitem">
-                    <svg class="ccs-login__cert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <div class="ccs-login__cert" role="listitem" data-tooltip="Payment Card Industry Data Security Standard certified" data-tooltip-pos="top">
+                    <svg class="ccs-login__cert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                         <path d="M9 12l2 2 4-4"/>
                     </svg>
                     <span class="ccs-login__cert-label">PCI DSS</span>
                     <span class="visually-hidden">Payment Card Industry Data Security Standard certified</span>
                 </div>
-                <div class="ccs-login__cert" role="listitem">
-                    <svg class="ccs-login__cert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <div class="ccs-login__cert" role="listitem" data-tooltip="ISO 27001 Information Security Management certified" data-tooltip-pos="top">
+                    <svg class="ccs-login__cert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <circle cx="12" cy="12" r="10"/>
                         <path d="M12 6v6l4 2"/>
                     </svg>
                     <span class="ccs-login__cert-label">ISO 27001</span>
                     <span class="visually-hidden">ISO 27001 Information Security Management certified</span>
                 </div>
-                <div class="ccs-login__cert" role="listitem">
-                    <svg class="ccs-login__cert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <div class="ccs-login__cert" role="listitem" data-tooltip="SOC 2 Type II Service Organization Control certified" data-tooltip-pos="top">
+                    <svg class="ccs-login__cert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <rect x="3" y="3" width="18" height="18" rx="2"/>
                         <path d="M3 9h18M9 21V9"/>
                     </svg>

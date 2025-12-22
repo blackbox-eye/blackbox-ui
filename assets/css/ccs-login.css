@@ -522,22 +522,50 @@
   color: rgba(255, 255, 255, 0.2);
 }
 
-/* MFA Placeholder */
-.ccs-login__mfa-placeholder {
+/* MFA Step Indicator (Sprint 2) */
+.ccs-login__mfa-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0 0 1rem 1rem;
+  background: rgba(46, 204, 113, 0.04);
+}
+
+.ccs-login__mfa-header {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 0.625rem;
-  margin-top: 1.5rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  opacity: 0.4;
+}
+
+.ccs-login__mfa-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  background: rgba(46, 204, 113, 0.15);
+  border: 1px solid rgba(46, 204, 113, 0.3);
+  border-radius: 0.375rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #7cf0ba;
+  text-transform: uppercase;
+}
+
+.ccs-login__mfa-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .ccs-login__mfa-icon {
-  width: 18px;
-  height: 18px;
-  color: rgba(255, 255, 255, 0.5);
+  width: 32px;
+  height: 32px;
+  color: #7cf0ba;
+  opacity: 0.7;
 }
 
 .ccs-login__mfa-icon svg {
@@ -545,9 +573,13 @@
   height: 100%;
 }
 
-.ccs-login__mfa-text {
-  font-size: 0.75rem;
+.ccs-login__mfa-privacy {
+  font-size: 0.7rem;
   color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  margin: 0;
+  max-width: 240px;
+  line-height: 1.4;
 }
 
 /* ================================================
@@ -597,27 +629,63 @@
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 0.5rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.55);
   font-size: 0.8rem;
   font-family: inherit;
-  cursor: not-allowed;
+  cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.ccs-login__sso-btn:disabled {
-  opacity: 0.5;
+.ccs-login__sso-btn.is-disabled {
+  border-style: dashed;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.ccs-login__sso-btn.is-disabled:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.ccs-login__sso-btn:not(.is-disabled):hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(46, 204, 113, 0.3);
+}
+
+.ccs-login__sso-lock {
+  width: 14px;
+  height: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
 }
 
 .ccs-login__sso-icon {
   width: 18px;
   height: 18px;
+  flex-shrink: 0;
 }
 
 .ccs-login__sso-note {
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.45);
   text-align: center;
-  margin: 0.75rem 0 0 0;
+  margin: 0.875rem 0 0 0;
+}
+
+.ccs-login__sso-link {
+  color: #7cf0ba;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.ccs-login__sso-link:hover {
+  text-decoration: underline;
+}
+
+.ccs-login__sso-link:focus-visible {
+  outline: 2px solid #7cf0ba;
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 /* ================================================
@@ -705,13 +773,24 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.6);
+  cursor: default;
+  transition: color 0.2s ease;
+}
+
+.ccs-login__cert:hover {
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .ccs-login__cert-icon {
   width: 20px;
   height: 20px;
   color: #2ecc71;
+  transition: transform 0.2s ease;
+}
+
+.ccs-login__cert:hover .ccs-login__cert-icon {
+  transform: scale(1.1);
 }
 
 .ccs-login__cert-label {
@@ -723,12 +802,12 @@
 /* Ledger Statement */
 .ccs-login__ledger-statement {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.5);
   margin: 0 0 1rem 0;
   padding: 0 1rem;
 }
 
-/* Legal Links */
+/* Legal Links (Sprint 2: enhanced contrast) */
 .ccs-login__legal {
   display: flex;
   justify-content: center;
@@ -738,14 +817,15 @@
 }
 
 .ccs-login__legal-link {
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .ccs-login__legal-link:hover {
   color: #7cf0ba;
+  text-decoration: underline;
 }
 
 .ccs-login__legal-link:focus-visible {
@@ -761,8 +841,32 @@
 /* Copyright */
 .ccs-login__copyright {
   font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.35);
   margin: 0;
+}
+
+/* ================================================
+   REDUCED MOTION (Sprint 2 accessibility)
+   ================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .ccs-login__submit,
+  .ccs-login__sso-btn,
+  .ccs-login__input,
+  .ccs-login__link,
+  .ccs-login__request-btn,
+  .ccs-login__legal-link,
+  .ccs-login__cert,
+  .ccs-login__cert-icon,
+  .ccs-login__strength-fill,
+  .ccs-login__sso-link {
+    transition: none;
+  }
+  
+  .ccs-login__submit:hover,
+  .ccs-login__cert:hover .ccs-login__cert-icon {
+    transform: none;
+  }
 }
 
 /* ================================================

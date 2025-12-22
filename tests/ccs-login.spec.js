@@ -179,39 +179,48 @@ test.describe('CCS Login Page - SSO Section', () => {
     await expect(ssoSection).toContainText('Or continue with');
   });
 
-  test('should display Azure AD button (disabled)', async ({ page }) => {
+  test('should display Azure AD button (disabled state)', async ({ page }) => {
     const azureBtn = page.locator('[data-testid="sso-azure"]');
     await expect(azureBtn).toBeVisible();
     await expect(azureBtn).toContainText('Azure AD');
-    await expect(azureBtn).toBeDisabled();
+    await expect(azureBtn).toHaveClass(/is-disabled/);
   });
 
-  test('should display Google Workspace button (disabled)', async ({ page }) => {
+  test('should display Google Workspace button (disabled state)', async ({ page }) => {
     const googleBtn = page.locator('[data-testid="sso-google"]');
     await expect(googleBtn).toBeVisible();
     await expect(googleBtn).toContainText('Google Workspace');
-    await expect(googleBtn).toBeDisabled();
+    await expect(googleBtn).toHaveClass(/is-disabled/);
   });
 
-  test('should display SSO enterprise note', async ({ page }) => {
+  test('should display SSO request link', async ({ page }) => {
     const note = page.locator('.ccs-login__sso-note');
     await expect(note).toBeVisible();
-    await expect(note).toContainText('SSO available for approved enterprise accounts');
+    await expect(note).toContainText('Request SSO access');
+    const link = note.locator('.ccs-login__sso-link');
+    await expect(link).toHaveAttribute('href', /contact\.php.*sso-request/);
   });
 });
 
 // =====================================================
-// CCS LOGIN - MFA PLACEHOLDER TESTS
+// CCS LOGIN - MFA STEP INDICATOR TESTS (Sprint 2)
 // =====================================================
-test.describe('CCS Login Page - MFA Placeholder', () => {
+test.describe('CCS Login Page - MFA Step Indicator', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/ccs-login.php');
   });
 
-  test('should display MFA placeholder', async ({ page }) => {
-    const mfaPlaceholder = page.locator('[data-testid="mfa-placeholder"]');
-    await expect(mfaPlaceholder).toBeVisible();
-    await expect(mfaPlaceholder).toContainText('Multi-factor authentication required');
+  test('should display MFA step indicator', async ({ page }) => {
+    const mfaStep = page.locator('[data-testid="mfa-step"]');
+    await expect(mfaStep).toBeVisible();
+    await expect(mfaStep).toContainText('Step 2 of 2');
+    await expect(mfaStep).toContainText('Multi-factor authentication');
+  });
+
+  test('should display MFA privacy notice', async ({ page }) => {
+    const privacy = page.locator('.ccs-login__mfa-privacy');
+    await expect(privacy).toBeVisible();
+    await expect(privacy).toContainText('never stored');
   });
 });
 

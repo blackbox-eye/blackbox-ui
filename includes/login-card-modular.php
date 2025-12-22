@@ -172,15 +172,21 @@ $card_id = 'login-card-' . $console;
         </div>
 
         <?php if ($show_mfa): ?>
-        <!-- MFA Placeholder -->
-        <div class="bbx-login-card__mfa-placeholder" aria-hidden="true">
+        <!-- MFA Step Indicator (Sprint 2 enhanced) -->
+        <div class="bbx-login-card__mfa-step" role="status" aria-live="polite" data-mfa-step>
+            <div class="bbx-login-card__mfa-header">
+                <span class="bbx-login-card__mfa-badge">Step 2 of 2</span>
+                <span class="bbx-login-card__mfa-title">Multi-factor authentication</span>
+            </div>
             <div class="bbx-login-card__mfa-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg class="bbx-icon bbx-icon--lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                     <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                 </svg>
             </div>
-            <span class="bbx-login-card__mfa-text">Multi-factor authentication required</span>
+            <p class="bbx-login-card__mfa-privacy">
+                Your second factor is verified in real time and never stored.
+            </p>
         </div>
         <?php endif; ?>
     </div>
@@ -194,19 +200,37 @@ $card_id = 'login-card-' . $console;
         
         <div class="bbx-login-card__sso-buttons">
             <button type="button" 
-                    class="bbx-login-card__sso-btn" 
-                    <?= !$sso_enabled ? 'disabled aria-disabled="true"' : '' ?>
-                    data-tooltip="<?= $sso_enabled ? 'Sign in with Azure AD' : 'Azure AD SSO coming soon' ?>">
-                <svg class="bbx-login-card__sso-icon" viewBox="0 0 24 24" fill="currentColor">
+                    class="bbx-login-card__sso-btn bbx-login-card__sso-btn--azure <?= !$sso_enabled ? 'is-disabled' : '' ?>" 
+                    <?= !$sso_enabled ? '' : '' ?>
+                    data-tooltip="<?= $sso_enabled ? 'Sign in with Azure AD' : 'Available for approved enterprise tenants. Request access.' ?>"
+                    data-tooltip-pos="top"
+                    data-sso-provider="azure"
+                    aria-describedby="sso-status-hint">
+                <?php if (!$sso_enabled): ?>
+                <svg class="bbx-login-card__sso-lock bbx-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0110 0v4"/>
+                </svg>
+                <?php endif; ?>
+                <svg class="bbx-login-card__sso-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="M11.4 24H0l9.1-15.8L5.7 0h5.7L24 24h-5.7l-2.5-4.3L11.4 24z"/>
                 </svg>
                 <span>Azure AD</span>
             </button>
             <button type="button" 
-                    class="bbx-login-card__sso-btn" 
-                    <?= !$sso_enabled ? 'disabled aria-disabled="true"' : '' ?>
-                    data-tooltip="<?= $sso_enabled ? 'Sign in with Google' : 'Google SSO coming soon' ?>">
-                <svg class="bbx-login-card__sso-icon" viewBox="0 0 24 24" fill="currentColor">
+                    class="bbx-login-card__sso-btn bbx-login-card__sso-btn--google <?= !$sso_enabled ? 'is-disabled' : '' ?>" 
+                    <?= !$sso_enabled ? '' : '' ?>
+                    data-tooltip="<?= $sso_enabled ? 'Sign in with Google Workspace' : 'Available for approved enterprise tenants. Request access.' ?>"
+                    data-tooltip-pos="top"
+                    data-sso-provider="google"
+                    aria-describedby="sso-status-hint">
+                <?php if (!$sso_enabled): ?>
+                <svg class="bbx-login-card__sso-lock bbx-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0110 0v4"/>
+                </svg>
+                <?php endif; ?>
+                <svg class="bbx-login-card__sso-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                     <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                     <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -216,7 +240,13 @@ $card_id = 'login-card-' . $console;
             </button>
         </div>
         
-        <p class="bbx-login-card__sso-note">SSO available for approved enterprise accounts.</p>
+        <p id="sso-status-hint" class="bbx-login-card__sso-note">
+            <?php if ($sso_enabled): ?>
+            SSO is enabled for your account.
+            <?php else: ?>
+            <a href="contact.php?subject=sso-request&console=<?= htmlspecialchars($console) ?>" class="bbx-login-card__sso-request-link" data-sso-request>Request SSO access</a> for your enterprise.
+            <?php endif; ?>
+        </p>
     </div>
     <?php endif; ?>
 </section>
@@ -481,32 +511,59 @@ $card_id = 'login-card-' . $console;
     color: rgba(255, 255, 255, 0.2);
 }
 
-/* MFA Placeholder */
-.bbx-login-card__mfa-placeholder {
+/* MFA Step Indicator (Sprint 2 enhanced) */
+.bbx-login-card__mfa-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 0 0 1rem 1rem;
+    background: rgba(var(--login-primary-rgb), 0.04);
+}
+
+.bbx-login-card__mfa-header {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 0.625rem;
-    margin-top: 1.5rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    opacity: 0.4;
 }
 
-.bbx-login-card__mfa-icon {
-    width: 18px;
-    height: 18px;
+.bbx-login-card__mfa-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    background: rgba(var(--login-primary-rgb), 0.15);
+    border: 1px solid rgba(var(--login-primary-rgb), 0.3);
+    border-radius: 0.375rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--login-accent);
+    text-transform: uppercase;
+}
+
+.bbx-login-card__mfa-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.bbx-login-card__mfa-step .bbx-login-card__mfa-icon {
+    width: 32px;
+    height: 32px;
+    color: var(--login-accent);
+    opacity: 0.7;
+}
+
+.bbx-login-card__mfa-privacy {
+    font-size: 0.7rem;
     color: rgba(255, 255, 255, 0.5);
-}
-
-.bbx-login-card__mfa-icon svg {
-    width: 100%;
-    height: 100%;
-}
-
-.bbx-login-card__mfa-text {
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    margin: 0;
+    max-width: 240px;
+    line-height: 1.4;
 }
 
 /* SSO Section */
@@ -560,26 +617,80 @@ $card_id = 'login-card-' . $console;
     transition: all 0.2s ease;
 }
 
-.bbx-login-card__sso-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+.bbx-login-card__sso-btn.is-disabled,
+.bbx-login-card__sso-btn:disabled,
+.bbx-login-card__sso-btn[aria-disabled="true"] {
+    opacity: 0.8;
+    cursor: pointer;
+    border-style: dashed;
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.55);
 }
 
-.bbx-login-card__sso-btn:not(:disabled):hover {
+.bbx-login-card__sso-btn.is-disabled:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.bbx-login-card__sso-btn:not(.is-disabled):hover {
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(var(--login-primary-rgb), 0.3);
+}
+
+.bbx-login-card__sso-lock {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    color: rgba(255, 255, 255, 0.5);
+    flex-shrink: 0;
 }
 
 .bbx-login-card__sso-icon {
     width: 18px;
     height: 18px;
+    flex-shrink: 0;
 }
 
 .bbx-login-card__sso-note {
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.45);
     text-align: center;
-    margin: 0.75rem 0 0 0;
+    margin: 0.875rem 0 0 0;
+}
+
+.bbx-login-card__sso-request-link {
+    color: var(--login-accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.bbx-login-card__sso-request-link:hover {
+    text-decoration: underline;
+}
+
+.bbx-login-card__sso-request-link:focus-visible {
+    outline: 2px solid var(--login-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .bbx-login-card,
+    .bbx-login-card__submit,
+    .bbx-login-card__sso-btn,
+    .bbx-login-card__input,
+    .bbx-login-card__link,
+    .bbx-login-card__strength-fill {
+        transition: none;
+    }
+    
+    .bbx-login-card__submit:hover {
+        transform: none;
+    }
 }
 </style>
 
@@ -638,6 +749,32 @@ $card_id = 'login-card-' . $console;
             
             strengthFill.setAttribute('data-strength', strength);
             strengthText.textContent = label;
+        });
+    });
+
+    // SSO click handling with snackbar feedback and modal trigger
+    document.querySelectorAll('.bbx-login-card__sso-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const isDisabled = this.classList.contains('is-disabled');
+            const provider = this.getAttribute('data-sso-provider') || 'SSO';
+
+            if (window.bbxSnackbar) {
+                if (isDisabled) {
+                    window.bbxSnackbar.info('SSO requires enterprise approval. Use the link below to request access.');
+                } else {
+                    window.bbxSnackbar.success('Redirecting to ' + provider.toUpperCase() + ' sign-in...');
+                }
+            }
+        });
+    });
+
+    // SSO request link handler
+    document.querySelectorAll('[data-sso-request]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (window.bbxSnackbar) {
+                window.bbxSnackbar.info('Opening SSO access request form...');
+            }
         });
     });
 })();

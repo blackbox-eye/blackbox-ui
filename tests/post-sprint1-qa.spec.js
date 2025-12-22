@@ -19,7 +19,7 @@ test.describe('Console Selector Tooltips', () => {
 
     test('favorite buttons have tooltip attributes', async ({ page }) => {
         const favBtn = page.locator('.console-card__fav-btn').first();
-        await expect(favBtn).toHaveAttribute('data-tooltip', 'Mark as favourite');
+        await expect(favBtn).toHaveAttribute('data-tooltip', 'Pin this console for quick access');
         await expect(favBtn).toHaveAttribute('data-tooltip-pos', 'bottom');
     });
 

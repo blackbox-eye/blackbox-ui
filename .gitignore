@@ -72,9 +72,9 @@ node_modules/
 build/
 dist/
 generate_hash.php
-# Build outputs (CSS bundles)
-assets/css/tailwind.full.css
-assets/css/*.min.css
+# Build outputs - MUST be committed for production deployment
+# assets/css/tailwind.full.css  # REQUIRED for production
+# assets/css/*.min.css          # REQUIRED for production
 
 # pnpm lockfile (repo currently npm-first)
 pnpm-lock.yaml

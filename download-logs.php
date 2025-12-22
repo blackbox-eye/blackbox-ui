@@ -3,7 +3,7 @@ session_start();
 require __DIR__ . '/db.php';
 
 if (!isset($_SESSION['agent_id'])) {
-    header('Location: agent-login.php');
+    header('Location: gdi-login.php');
     exit;
 }
 

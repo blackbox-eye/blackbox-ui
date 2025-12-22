@@ -11,7 +11,7 @@ session_start();
 
 // Check authentication
 if (!isset($_SESSION['agent_id'])) {
-  header('Location: agent-login.php');
+  header('Location: gdi-login.php');
   exit;
 }
 

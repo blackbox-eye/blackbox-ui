@@ -95,7 +95,8 @@ if (!function_exists('aig_nav_class')) {
             'demo' => ['label' => t('header.menu.demo'), 'href' => 'demo.php'],
             'free-scan' => ['label' => t('header.menu.free_scan'), 'href' => 'free-scan.php'],
             'faq' => ['label' => 'FAQ', 'href' => 'faq.php'],
-            'agent-login' => ['label' => t('header.cta.agent_login'), 'href' => 'agent-login.php'],
+            'gdi-login' => ['label' => t('header.cta.agent_login'), 'href' => 'gdi-login.php'],
+            'agent-login' => ['label' => t('header.cta.agent_login'), 'href' => 'gdi-login.php'],
             'agent-access' => ['label' => t('agent_access.meta.breadcrumb', 'Agent Access'), 'href' => 'agent-access.php'],
             'dashboard' => ['label' => 'Dashboard', 'href' => 'dashboard.php'],
             'admin' => ['label' => 'Admin', 'href' => 'admin.php'],
@@ -300,7 +301,7 @@ if (!empty($disable_alphabot)) {
     <!-- Conditional CSS loading -->
     <?php
     // Admin pages need admin.css, marketing pages need marketing.css
-    $admin_pages = ['agent-login.php', 'dashboard.php', 'admin.php', 'settings.php'];
+    $admin_pages = ['gdi-login.php', 'agent-login.php', 'dashboard.php', 'admin.php', 'settings.php'];
     $current_script = basename($_SERVER['SCRIPT_NAME']);
     $is_admin_page = in_array($current_script, $admin_pages);
     // Use minified CSS in production (when DEBUG is not set or false)
@@ -471,21 +472,21 @@ if ($is_graphene_page) {
                                 <div class="console-menu-header">
                                     <span><?= t('header.console.title', 'Vælg konsol') ?></span>
                                 </div>
-                                <a href="/ccs-login.php" class="console-menu-item" role="menuitem" data-console-login="ccs">
+                                <a href="/agent-access.php#ccs" class="console-menu-item" role="menuitem" data-console-login="ccs">
                                     <div class="console-menu-item__icon console-menu-item__icon--ccs">CCS</div>
                                     <div class="console-menu-item__content">
                                         <span class="console-menu-item__title"><?= t('header.console.ccs', 'CCS Console') ?></span>
                                         <span class="console-menu-item__desc"><?= t('header.console.ccs_desc', 'Settlement Systems') ?></span>
                                     </div>
                                 </a>
-                                <a href="/agent-login.php" class="console-menu-item" role="menuitem" data-console-login="gdi">
+                                <a href="/agent-access.php#gdi" class="console-menu-item" role="menuitem" data-console-login="gdi">
                                     <div class="console-menu-item__icon console-menu-item__icon--gdi">GDI</div>
                                     <div class="console-menu-item__content">
                                         <span class="console-menu-item__title"><?= t('header.console.gdi', 'GDI Console') ?></span>
                                         <span class="console-menu-item__desc"><?= t('header.console.gdi_desc', 'Data Intelligence') ?></span>
                                     </div>
                                 </a>
-                                <a href="https://intel24.blackbox.codes/login" class="console-menu-item" role="menuitem" data-console-login="intel24" target="_blank" rel="noopener noreferrer">
+                                <a href="/agent-access.php#intel24" class="console-menu-item" role="menuitem" data-console-login="intel24">
                                     <div class="console-menu-item__icon console-menu-item__icon--intel24">I24</div>
                                     <div class="console-menu-item__content">
                                         <span class="console-menu-item__title"><?= t('header.console.intel24', 'Intel24 Console') ?></span>
@@ -584,15 +585,15 @@ if ($is_graphene_page) {
             <div class="mobile-console-access mb-3">
                 <p class="text-xs text-gray-500 uppercase tracking-wider mb-2"><?= t('header.console.title', 'Vælg konsol') ?></p>
                 <div class="flex gap-2">
-                    <a href="/ccs-login.php" class="mobile-console-btn flex-1" data-testid="mobile-login-ccs">
+                    <a href="/agent-access.php#ccs" class="mobile-console-btn flex-1" data-testid="mobile-login-ccs">
                         <span class="mobile-console-icon mobile-console-icon--ccs">CCS</span>
                         <span class="mobile-console-label"><?= t('header.console.ccs', 'CCS Console') ?></span>
                     </a>
-                    <a href="/agent-login.php" class="mobile-console-btn flex-1" data-testid="mobile-login-gdi">
+                    <a href="/agent-access.php#gdi" class="mobile-console-btn flex-1" data-testid="mobile-login-gdi">
                         <span class="mobile-console-icon mobile-console-icon--gdi">GDI</span>
                         <span class="mobile-console-label"><?= t('header.console.gdi', 'GDI Console') ?></span>
                     </a>
-                    <a href="https://intel24.blackbox.codes/login" class="mobile-console-btn flex-1" data-testid="mobile-login-intel24" target="_blank" rel="noopener noreferrer">
+                    <a href="/agent-access.php#intel24" class="mobile-console-btn flex-1" data-testid="mobile-login-intel24">
                         <span class="mobile-console-icon mobile-console-icon--intel24">I24</span>
                         <span class="mobile-console-label"><?= t('header.console.intel24', 'Intel24') ?></span>
                     </a>

@@ -1,6 +1,6 @@
 /**
  * Console Selector Mobile-First Styles
- * Sprint 4: Critical mobile UX pass
+ * Sprint 5: Master mission mobile UX consolidation
  * 
  * Target: ≤768px (mobile/tablet portrait)
  * Philosophy: Native app feel, thumb-friendly, clear hierarchy
@@ -9,8 +9,10 @@
  * - 48px min touch targets for CTAs
  * - 40px min touch targets for chips/badges
  * - 16px minimum padding from card edges
+ * - 24px gap between cards
  * - Single card focus, stacked layout
  * - Pinned items float to top
+ * - Mobile hierarchy: Status → Title → Tagline → Badges → CTA
  */
 
 /* ================================================
@@ -28,7 +30,7 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.75rem 1rem;
-    margin: 0 -1rem 1rem -1rem;
+    margin: 0 -1rem 1.25rem -1rem;
     background: rgba(10, 14, 20, 0.95);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(12px);
@@ -68,18 +70,18 @@
     box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.15);
   }
   
-  /* ===== GRID - SINGLE COLUMN STACKED ===== */
+  /* ===== GRID - SINGLE COLUMN STACKED WITH 24px GAP ===== */
   .console-selector__grid {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.5rem; /* 24px */
     padding: 0;
   }
   
   /* ===== CONSOLE CARD - MOBILE NATIVE FEEL ===== */
   .console-card {
     /* Full bleed with proper padding */
-    margin: 0 -0.5rem;
+    margin: 0;
     padding: 1.25rem 1rem;
     border-radius: 1rem;
     
@@ -132,12 +134,13 @@
   }
   
   /* ===== CARD HEADER - MOBILE HIERARCHY ===== */
+  /* Order: Status → Title (via flex reorder) */
   .console-card__header {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem 0.75rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
   }
   
   /* Badge - slightly larger on mobile */
@@ -146,16 +149,23 @@
     height: 2.5rem;
     border-radius: 0.5rem;
     font-size: 0.65rem;
+    order: 1;
   }
   
-  /* Status chip - touch friendly */
+  /* Status chip - touch friendly, prominent placement */
   .console-card__status {
     min-height: 28px;
     padding: 0.25rem 0.625rem;
-    font-size: 0.6rem;
+    font-size: 0.65rem;
+    order: 2;
   }
   
-  /* Action buttons - 40px touch target */
+  /* Pinned indicator after status */
+  .console-card__pinned {
+    order: 3;
+  }
+  
+  /* Action buttons - 44px touch target (Apple HIG) */
   .console-card__fav-btn,
   .console-card__info-btn {
     min-width: 44px;
@@ -165,12 +175,22 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    order: 10;
   }
   
   .console-card__info-btn {
     width: 44px;
     height: 44px;
     margin-left: 0.25rem;
+  }
+  
+  /* Favorite star icon - dempet accent */
+  .console-card__fav-btn.is-favorite {
+    color: #c9a227; /* Blackbox gold - dempet */
+  }
+  
+  .console-card__fav-btn.is-favorite svg {
+    fill: currentColor;
   }
   
   /* ===== CARD BODY - MOBILE HIERARCHY ===== */
@@ -332,19 +352,48 @@
     padding: 1.25rem;
   }
   
-  /* Ops bar inside slideout */
+  /* ===== OPS BAR - COMPACT MOBILE BADGES ===== */
   .console-card__opsbar {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.375rem;
     margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 0.5rem;
+    /* Sticky within slideout on scroll */
+    position: sticky;
+    top: 0;
+    z-index: 5;
   }
   
   .console-card__opschip {
     min-height: 28px;
-    padding: 0.25rem 0.625rem;
-    font-size: 0.65rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
     border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    white-space: nowrap;
+  }
+  
+  .console-card__opschip--up {
+    background: rgba(46, 204, 113, 0.15);
+    color: #2ecc71;
+  }
+  
+  .console-card__opschip--audit {
+    background: rgba(201, 162, 39, 0.15);
+    color: #c9a227;
+  }
+  
+  .console-card__opschip--mfa {
+    background: rgba(40, 155, 222, 0.15);
+    color: #289bde;
   }
   
   /* Hide sparkline charts on mobile */
@@ -466,11 +515,11 @@
 @media (max-width: 480px) {
   .console-selector__quick {
     padding: 0.625rem 0.875rem;
-    margin: 0 -0.75rem 0.875rem -0.75rem;
+    margin: 0 -0.75rem 1rem -0.75rem;
   }
   
   .console-card {
-    margin: 0 -0.375rem;
+    margin: 0;
     padding: 1rem 0.875rem;
     border-radius: 0.875rem;
   }
@@ -490,6 +539,112 @@
   
   .console-selector__activity-item {
     padding: 0.5rem 0.625rem;
+  }
+}
+
+/* ================================================
+   LIGHT THEME MOBILE (WCAG AA CONTRAST)
+   ================================================ */
+
+@media (max-width: 768px) {
+  :root[data-theme="light"] .console-selector__quick {
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+  }
+  
+  :root[data-theme="light"] .console-selector__quick-label {
+    color: rgba(0, 0, 0, 0.6);
+  }
+  
+  :root[data-theme="light"] .console-selector__quick-select {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.12);
+    color: #1f2937;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(0,0,0,0.5)' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  }
+  
+  :root[data-theme="light"] .console-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 
+      0 1px 3px rgba(0, 0, 0, 0.08),
+      0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+  
+  :root[data-theme="light"] .console-card__title {
+    color: #1f2937;
+  }
+  
+  :root[data-theme="light"] .console-card__tagline {
+    color: #6b7280;
+  }
+  
+  :root[data-theme="light"] .console-card__chip {
+    background: rgba(0, 0, 0, 0.04);
+    color: #374151;
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+  
+  :root[data-theme="light"] .console-card__divider {
+    background: rgba(0, 0, 0, 0.08);
+  }
+  
+  :root[data-theme="light"] .console-card__slideout {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  :root[data-theme="light"] .console-card__slideout::before {
+    background: rgba(0, 0, 0, 0.2);
+  }
+  
+  :root[data-theme="light"] .console-card__slideout-header {
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+  }
+  
+  :root[data-theme="light"] .console-selector__activity {
+    border-top-color: rgba(0, 0, 0, 0.08);
+  }
+  
+  :root[data-theme="light"] .console-selector__activity-item {
+    background: rgba(0, 0, 0, 0.02);
+  }
+  
+  :root[data-theme="light"] .console-selector__activity-time {
+    color: rgba(0, 0, 0, 0.5);
+  }
+  
+  :root[data-theme="light"] .console-selector__activity-text {
+    color: #374151;
+  }
+  
+  /* Pinned card light theme */
+  :root[data-theme="light"] .console-card--pinned.console-card--ccs {
+    border-color: rgba(46, 204, 113, 0.5);
+    background: rgba(46, 204, 113, 0.05);
+  }
+  
+  :root[data-theme="light"] .console-card--pinned.console-card--gdi {
+    border-color: rgba(40, 155, 222, 0.5);
+    background: rgba(40, 155, 222, 0.05);
+  }
+  
+  :root[data-theme="light"] .console-card--pinned.console-card--intel24 {
+    border-color: rgba(201, 162, 39, 0.5);
+    background: rgba(201, 162, 39, 0.05);
+  }
+  
+  :root[data-theme="light"] .console-card__fav-btn.is-favorite {
+    color: #b8941f; /* Darker gold for light theme */
+  }
+  
+  :root[data-theme="light"] .console-card__readiness {
+    background: rgba(0, 0, 0, 0.02);
+  }
+  
+  :root[data-theme="light"] .console-card__readiness-row {
+    border-bottom-color: rgba(0, 0, 0, 0.05);
+    color: #374151;
   }
 }
 
@@ -549,5 +704,178 @@
   .console-card--highlight {
     animation: none;
     border-color: var(--admin-gold);
+  }
+}
+
+/* ================================================
+   NAVIGATION OVERLAY (Mobile Menu Open State)
+   ================================================ */
+
+@media (max-width: 768px) {
+  /* When mobile nav is open, disable card interactions */
+  .nav-open .console-selector__grid {
+    pointer-events: none;
+  }
+  
+  .nav-open .console-card {
+    opacity: 0.5;
+  }
+  
+  /* Backdrop overlay when menu is active */
+  .console-selector__backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 40;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  
+  .nav-open .console-selector__backdrop {
+    display: block;
+    opacity: 1;
+  }
+  
+  :root[data-theme="light"] .nav-open .console-selector__backdrop {
+    background: rgba(255, 255, 255, 0.7);
+  }
+}
+
+/* ================================================
+   SNACKBAR FEEDBACK (Mobile Optimized)
+   ================================================ */
+
+@media (max-width: 768px) {
+  .console-selector__snackbar {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100%);
+    min-width: 200px;
+    max-width: calc(100vw - 2rem);
+    padding: 0.75rem 1.25rem;
+    background: rgba(30, 36, 44, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  }
+  
+  .console-selector__snackbar.is-visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  
+  .console-selector__snackbar--success {
+    border-color: rgba(46, 204, 113, 0.3);
+  }
+  
+  .console-selector__snackbar--success::before {
+    content: '✓';
+    margin-right: 0.5rem;
+    color: #2ecc71;
+  }
+  
+  :root[data-theme="light"] .console-selector__snackbar {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: #1f2937;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* ================================================
+   ACTIVITY SECTION (Mobile Consolidated)
+   ================================================ */
+
+@media (max-width: 768px) {
+  .console-selector__activity {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  
+  .console-selector__activity-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.75rem;
+  }
+  
+  .console-selector__activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .console-selector__activity-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+  }
+  
+  .console-selector__activity-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    opacity: 0.6;
+  }
+  
+  .console-selector__activity-text {
+    flex: 1;
+    color: rgba(255, 255, 255, 0.8);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .console-selector__activity-time {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.4);
+    flex-shrink: 0;
+  }
+  
+  /* No-duplicates state: Hide subsequent same-type entries */
+  .console-selector__activity-item[data-duplicate="true"] {
+    display: none;
+  }
+  
+  :root[data-theme="light"] .console-selector__activity {
+    border-top-color: rgba(0, 0, 0, 0.08);
+  }
+  
+  :root[data-theme="light"] .console-selector__activity-title {
+    color: rgba(0, 0, 0, 0.5);
+  }
+  
+  :root[data-theme="light"] .console-selector__activity-item {
+    background: rgba(0, 0, 0, 0.03);
+  }
+  
+  :root[data-theme="light"] .console-selector__activity-text {
+    color: #374151;
+  }
+  
+  :root[data-theme="light"] .console-selector__activity-time {
+    color: rgba(0, 0, 0, 0.4);
   }
 }

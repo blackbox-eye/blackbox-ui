@@ -134,19 +134,19 @@ $intel24_requires_approval = !$intel24_has_sso;
           <div class="console-card__readiness" aria-label="Session readiness">
             <div class="console-card__readiness-row">
               <span class="console-card__readiness-label">Session status</span>
-              <span class="console-card__readiness-value">Pre-flight checks pending</span>
+              <span class="console-card__readiness-value" data-readiness="session"><?= isset($_SESSION['agent_id']) ? 'Active' : 'Sign-in required' ?></span>
             </div>
             <div class="console-card__readiness-row">
               <span class="console-card__readiness-label">Network</span>
-              <span class="console-card__readiness-value">Secure tunnel ready</span>
+              <span class="console-card__readiness-value" data-readiness="network">Secure tunnel ready</span>
             </div>
             <div class="console-card__readiness-row">
               <span class="console-card__readiness-label">MFA</span>
-              <span class="console-card__readiness-value">Step-up will trigger on login</span>
+              <span class="console-card__readiness-value" data-readiness="mfa"><?= isset($_SESSION['mfa_verified']) ? 'Verified' : 'Required on access' ?></span>
             </div>
           </div>
           
-          <!-- Mini sparkline chart placeholder -->
+          <!-- Mini sparkline chart (7-day trend) -->
           <div class="console-card__minichart" aria-label="Activity chart: 7-day transaction volume">
             <span class="console-card__minichart-label">7-day volume</span>
             <svg viewBox="0 0 100 30" class="console-card__sparkline" aria-hidden="true">
@@ -334,7 +334,7 @@ $intel24_requires_approval = !$intel24_has_sso;
           <p class="console-card__cta-note">Requires clearance / SSO token</p>
           <button type="button" 
                   class="console-card__request-link" 
-                  data-sso-request="intel24"
+                  data-intel24-request="true"
                   data-testid="intel24-request-btn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
@@ -390,6 +390,9 @@ $intel24_requires_approval = !$intel24_has_sso;
 
 <!-- Include SSO Request Modal -->
 <?php include __DIR__ . '/sso-request-modal.php'; ?>
+
+<!-- Include Intel24 Request Modal -->
+<?php include __DIR__ . '/intel24-request-modal.php'; ?>
 
 <script>
 (function() {
@@ -747,6 +750,16 @@ $intel24_requires_approval = !$intel24_has_sso;
               fetchActivity(); // Refresh activity list
             }
           });
+        }
+      });
+    });
+
+    // Intel24 Request modal triggers
+    selector.querySelectorAll('[data-intel24-request]').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (window.bbxIntel24Request) {
+          window.bbxIntel24Request.show();
         }
       });
     });

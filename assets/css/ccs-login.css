@@ -99,28 +99,32 @@
 }
 
 .ccs-login__logo {
-  width: 32px;
-  height: 32px;
+  height: auto;
+  width: auto;
+  max-height: 32px;
   object-fit: contain;
+}
+
+/* Theme-aware logo visibility (same as site-header) */
+.ccs-login__logo--white {
+  display: block;
+}
+
+.ccs-login__logo--black {
+  display: none;
+}
+
+:root[data-theme="light"] .ccs-login__logo--white {
+  display: none;
+}
+
+:root[data-theme="light"] .ccs-login__logo--black {
+  display: block;
 }
 
 @media (min-width: 768px) {
   .ccs-login__logo {
-    width: 40px;
-    height: 40px;
-  }
-}
-
-.ccs-login__logo-text {
-  font-size: 0.9rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #fff;
-}
-
-@media (max-width: 480px) {
-  .ccs-login__logo-text {
-    display: none;
+    max-height: 40px;
   }
 }
 

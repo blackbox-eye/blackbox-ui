@@ -74,11 +74,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Header -->
     <header class="ccs-login__header">
         <a href="/" class="ccs-login__logo-link" aria-label="Blackbox EYE Home">
-            <img src="/assets/logo%20pakker%20BlackboxEYE/blackboxeye_logo_package_full/BlackboxEYE_white_128x128.png" 
-                 alt="Blackbox EYE" 
-                 class="ccs-login__logo"
-                 width="40" height="40">
-            <span class="ccs-login__logo-text">BLACKBOX EYE™</span>
+            <!-- White logo - dark theme (same as site-header.php) -->
+            <img src="/assets/new_logo_white_BBX.svg" 
+                 alt="BLACKBOX EYE™" 
+                 class="ccs-login__logo ccs-login__logo--white"
+                 loading="lazy">
+            <!-- Black logo - light theme -->
+            <img src="/assets/new_logo_black_BBX.svg" 
+                 alt="BLACKBOX EYE™" 
+                 class="ccs-login__logo ccs-login__logo--black"
+                 loading="lazy">
         </a>
         <div class="ccs-login__header-badge">
             <span class="ccs-login__badge ccs-login__badge--ccs">CCS</span>

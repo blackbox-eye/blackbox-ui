@@ -247,8 +247,8 @@ jobs:
 
 # ═══════════════════════════════════════════════════════════════
 # JOB 3: SECURE SFTP DEPLOYMENT
-# Uploads repository files via SFTP (SSH File Transfer Protocol)
-# Uses lftp with mirror for efficient sync
+# Uploads repository files via rsync over SSH (SFTP)
+# Uses sshpass for password authentication
 # ═══════════════════════════════════════════════════════════════
   ftp-deploy:
     name: "🚀 Secure SFTP Deploy"
@@ -262,12 +262,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install lftp
+      - name: Install sshpass and rsync
         run: |
-          echo "📦 Installing lftp..."
+          echo "📦 Installing sshpass and rsync..."
           sudo apt-get update -qq
-          sudo apt-get install -y lftp
-          echo "✅ lftp installed: $(lftp --version | head -n1)"
+          sudo apt-get install -y sshpass rsync
+          echo "✅ sshpass installed: $(sshpass -V 2>&1 | head -n1)"
+          echo "✅ rsync installed: $(rsync --version | head -n1)"
 
       - name: Prepare deployment
         run: |
@@ -282,47 +283,41 @@ jobs:
           echo "   Files: $FILE_COUNT"
           echo "✅ Deployment preparation complete"
 
-      - name: Deploy via SFTP
+      - name: Deploy via rsync over SSH
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           FTP_REMOTE_PATH: ${{ secrets.FTP_REMOTE_PATH }}
         run: |
-          echo "🚀 Starting SFTP deployment..."
+          echo "🚀 Starting rsync deployment over SSH..."
           echo "   Host: $FTP_HOST"
           echo "   Path: $FTP_REMOTE_PATH"
 
-          # Deploy using lftp mirror (efficient sync)
-          lftp -c "
-            # SFTP settings
-            set sftp:auto-confirm yes;
-            set net:timeout 120;
-            set net:max-retries 5;
-            set net:reconnect-interval-base 10;
-            set mirror:parallel-transfer-count 4;
+          # Configure SSH to accept new host keys automatically
+          mkdir -p ~/.ssh
+          echo "StrictHostKeyChecking no" >> ~/.ssh/config
+          echo "UserKnownHostsFile=/dev/null" >> ~/.ssh/config
+          chmod 600 ~/.ssh/config
 
-            # Connect via SFTP
-            open -u $FTP_USERNAME,$FTP_PASSWORD sftp://$FTP_HOST;
+          # Deploy using rsync over SSH with sshpass
+          sshpass -p "$FTP_PASSWORD" rsync -avz --delete \
+            --timeout=300 \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='node_modules/' \
+            --exclude='.vscode/' \
+            --exclude='docs/' \
+            --exclude='.well-known/' \
+            --exclude='artifacts/' \
+            --exclude='tests/' \
+            --exclude='playwright-report/' \
+            --exclude='test-results/' \
+            --exclude='*.md' \
+            -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
+            ./ "${FTP_USERNAME}@${FTP_HOST}:${FTP_REMOTE_PATH}/"
 
-            # Mirror local to remote (upload only changed files)
-            mirror --reverse --delete --verbose=1 \
-              --exclude ^\.git/ \
-              --exclude ^\.github/ \
-              --exclude ^node_modules/ \
-              --exclude ^\.vscode/ \
-              --exclude ^docs/ \
-              --exclude ^\.well-known/ \
-              --exclude ^artifacts/ \
-              --exclude ^tests/ \
-              --exclude ^playwright-report/ \
-              --exclude ^test-results/ \
-              ./ $FTP_REMOTE_PATH;
-
-            bye
-          "
-
-          echo "✅ SFTP deployment completed"
+          echo "✅ rsync deployment completed"
 
       - name: Deployment summary
         run: |
@@ -331,7 +326,7 @@ jobs:
           echo "════════════════════════════════════════"
           echo "Target: ${{ secrets.FTP_HOST }}"
           echo "Path: ${{ secrets.FTP_REMOTE_PATH }}"
-          echo "Protocol: SFTP (SSH encrypted)"
+          echo "Protocol: rsync over SSH (encrypted)"
           echo "Time: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
           echo "════════════════════════════════════════"
 

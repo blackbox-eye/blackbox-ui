@@ -123,7 +123,7 @@ include 'includes/site-header.php';
           </p>
           <p class="access-card__note">
             <?= t('agent_access.cards.ts24.sso_notice') ?>
-            <?php if ($ts24_has_sso): ?>
+            <?php if ($intel24_has_sso): ?>
               <span class="access-card__note-badge"><?= t('agent_access.cards.ts24.sso_ready') ?></span>
             <?php endif; ?>
           </p>

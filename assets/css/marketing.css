@@ -6393,3 +6393,547 @@ a.graphene-btn-secondary:hover,
   border-color: rgba(160, 155, 145, 0.35) !important;
 }
 
+
+/* ============================================
+   Console Selector Component (Marketing Pages)
+   Shared styles for the reusable console selector
+   ============================================ */
+
+/* Console Selector wrapper */
+.console-selector {
+  position: relative;
+}
+
+.console-selector__grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .console-selector__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Console Card Base */
+.console-card {
+  position: relative;
+  background: rgba(7, 11, 18, 0.9);
+  border: 1px solid rgba(var(--bbx-metal-rgb-light), 0.1);
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+  transition: all 0.3s ease;
+  overflow: visible;
+  min-height: 100%;
+}
+
+.console-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45);
+}
+
+/* Hexagon pattern background */
+.console-card__pattern {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  overflow: hidden;
+  opacity: 0.4;
+}
+
+.console-card--ccs .console-card__pattern { color: #2ecc71; }
+.console-card--gdi .console-card__pattern { color: #289bde; }
+.console-card--intel24 .console-card__pattern { color: var(--bbx-gold, #c9a227); }
+
+/* Card highlight animation */
+.console-card--highlight {
+  animation: console-card-pulse 2s ease-out;
+}
+
+@keyframes console-card-pulse {
+  0%, 100% { border-color: rgba(var(--bbx-metal-rgb-light), 0.1); }
+  25%, 75% { border-color: var(--bbx-gold); box-shadow: 0 0 30px rgba(var(--bbx-metal-rgb), 0.3); }
+}
+
+/* Card Header */
+.console-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Badge */
+.console-card__badge {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.console-card__badge--ccs {
+  background: rgba(46, 204, 113, 0.12);
+  border: 1px solid rgba(46, 204, 113, 0.3);
+  color: #7cf0ba;
+}
+
+.console-card__badge--gdi {
+  background: rgba(40, 155, 222, 0.15);
+  border: 1px solid rgba(40, 155, 222, 0.35);
+  color: #59c0ff;
+}
+
+.console-card__badge--intel24 {
+  background: rgba(var(--bbx-metal-rgb-light), 0.1);
+  border: 1px solid rgba(var(--bbx-metal-rgb-light), 0.24);
+  color: var(--bbx-gold);
+}
+
+/* Status chip */
+.console-card__status {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.05);
+}
+
+.console-card__status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  animation: status-blink 2s ease-in-out infinite;
+}
+
+@keyframes status-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.console-card__status--operational .console-card__status-dot {
+  background: #4ade80;
+  box-shadow: 0 0 8px #4ade80;
+}
+
+.console-card__status--available .console-card__status-dot {
+  background: #60a5fa;
+  box-shadow: 0 0 8px #60a5fa;
+}
+
+.console-card__status--operational .console-card__status-text { color: #4ade80; }
+.console-card__status--available .console-card__status-text { color: #60a5fa; }
+
+/* Favorite button */
+.console-card__fav-btn {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  color: rgba(255,255,255,0.4);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.console-card__fav-btn:hover {
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.7);
+}
+
+.console-card__fav-btn.is-favorite {
+  color: #fbbf24;
+  background: rgba(251,191,36,0.1);
+  border-color: rgba(251,191,36,0.3);
+}
+
+.console-card__fav-btn.is-favorite svg {
+  fill: currentColor;
+}
+
+/* Info button */
+.console-card__info-btn {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.console-card__info-btn:hover {
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.8);
+}
+
+/* Card body */
+.console-card__body {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+}
+
+.console-card__title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0 0 0.35rem;
+  color: #fff;
+}
+
+.console-card__tagline {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.55);
+  margin: 0 0 0.625rem;
+}
+
+/* Requirement badge */
+.console-card__req-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.3rem 0.625rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.console-card__req-badge--audit {
+  background: rgba(46, 204, 113, 0.1);
+  border: 1px solid rgba(46, 204, 113, 0.25);
+  color: #7cf0ba;
+}
+
+.console-card__req-badge--vpn {
+  background: rgba(40, 155, 222, 0.1);
+  border: 1px solid rgba(40, 155, 222, 0.25);
+  color: #59c0ff;
+}
+
+.console-card__req-badge--sso {
+  background: rgba(var(--bbx-metal-rgb), 0.1);
+  border: 1px solid rgba(var(--bbx-metal-rgb), 0.25);
+  color: var(--bbx-gold);
+}
+
+.console-card__req-badge--sso.is-active {
+  background: rgba(46, 204, 113, 0.15);
+  border-color: rgba(46, 204, 113, 0.35);
+  color: #7cf0ba;
+}
+
+/* Divider */
+.console-card__divider {
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+  margin: 0.5rem 0;
+}
+
+/* Chips */
+.console-card__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.console-card__chip {
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.65);
+}
+
+.console-card--ccs .console-card__chip {
+  background: rgba(46, 204, 113, 0.08);
+  border-color: rgba(46, 204, 113, 0.2);
+  color: #7cf0ba;
+}
+
+.console-card--gdi .console-card__chip {
+  background: rgba(40, 155, 222, 0.08);
+  border-color: rgba(40, 155, 222, 0.2);
+  color: #59c0ff;
+}
+
+.console-card--intel24 .console-card__chip {
+  background: rgba(var(--bbx-metal-rgb), 0.08);
+  border-color: rgba(var(--bbx-metal-rgb), 0.2);
+  color: var(--bbx-gold);
+}
+
+/* CTA actions */
+.console-card__actions {
+  margin-top: auto;
+  position: relative;
+  z-index: 2;
+}
+
+.console-card__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  min-height: 44px; /* Touch accessibility target */
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0.625rem;
+  transition: all 0.2s ease;
+}
+
+.console-card__cta--ccs {
+  background: linear-gradient(135deg, rgba(46,204,113,0.15), rgba(46,204,113,0.25));
+  border: 1px solid rgba(46,204,113,0.4);
+  color: #7cf0ba;
+}
+
+.console-card__cta--ccs:hover {
+  background: linear-gradient(135deg, rgba(46,204,113,0.25), rgba(46,204,113,0.35));
+  border-color: rgba(46,204,113,0.6);
+}
+
+.console-card__cta--gdi {
+  background: linear-gradient(135deg, rgba(40,155,222,0.15), rgba(40,155,222,0.25));
+  border: 1px solid rgba(40,155,222,0.4);
+  color: #59c0ff;
+}
+
+.console-card__cta--gdi:hover {
+  background: linear-gradient(135deg, rgba(40,155,222,0.25), rgba(40,155,222,0.35));
+  border-color: rgba(40,155,222,0.6);
+}
+
+.console-card__cta--intel24 {
+  background: linear-gradient(135deg, rgba(var(--bbx-metal-rgb),0.15), rgba(var(--bbx-metal-rgb),0.25));
+  border: 1px solid rgba(var(--bbx-metal-rgb),0.4);
+  color: var(--bbx-gold);
+}
+
+.console-card__cta--intel24:hover {
+  background: linear-gradient(135deg, rgba(var(--bbx-metal-rgb),0.25), rgba(var(--bbx-metal-rgb),0.35));
+  border-color: rgba(var(--bbx-metal-rgb),0.6);
+}
+
+/* Slide-out panel */
+.console-card__slideout {
+  position: absolute;
+  bottom: calc(100% + 0.75rem);
+  left: 0;
+  right: 0;
+  background: rgba(10, 14, 20, 0.98);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 0.875rem;
+  padding: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.25s ease;
+  z-index: 50;
+  box-shadow: 0 -15px 50px rgba(0,0,0,0.5);
+}
+
+.console-card__slideout.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.console-card__slideout-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.console-card__slideout-header h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--bbx-gold);
+}
+
+.console-card__slideout-close {
+  background: transparent;
+  border: none;
+  padding: 0.25rem;
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.console-card__slideout-close:hover {
+  color: rgba(255,255,255,0.8);
+}
+
+.console-card__slideout-body {
+  padding: 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.75);
+}
+
+.console-card__slideout-body p {
+  margin: 0 0 0.75rem;
+}
+
+.console-card__slideout-note {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.8rem;
+  padding-top: 0.625rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin-top: 0.625rem !important;
+}
+
+/* Mini sparkline chart */
+.console-card__minichart {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: rgba(255,255,255,0.03);
+  border-radius: 0.5rem;
+}
+
+.console-card__minichart-label {
+  display: block;
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.console-card__sparkline {
+  width: 100%;
+  height: 35px;
+}
+
+.console-card--ccs .console-card__sparkline { color: #7cf0ba; }
+.console-card--gdi .console-card__sparkline { color: #59c0ff; }
+.console-card--intel24 .console-card__sparkline { color: var(--bbx-gold); }
+
+/* Recent Activity Section */
+.console-selector__activity {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.console-selector__activity-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 1rem;
+}
+
+.console-selector__activity-title svg {
+  color: var(--bbx-gold);
+}
+
+.console-selector__activity-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .console-selector__activity-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.console-selector__activity-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.65);
+  padding: 0.75rem;
+  background: rgba(255,255,255,0.02);
+  border-radius: 0.5rem;
+}
+
+.console-selector__activity-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.console-selector__activity-dot--ccs { background: #7cf0ba; }
+.console-selector__activity-dot--gdi { background: #59c0ff; }
+.console-selector__activity-dot--intel24 { background: var(--bbx-gold); }
+
+.console-selector__activity-text strong {
+  color: rgba(255,255,255,0.85);
+}
+
+.console-selector__activity-time {
+  color: rgba(255,255,255,0.4);
+  margin-left: auto;
+  font-size: 0.75rem;
+}
+
+/* Light theme adjustments */
+:root[data-theme="light"] .console-card {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+}
+
+:root[data-theme="light"] .console-card__title {
+  color: #1f2937;
+}
+
+:root[data-theme="light"] .console-card__tagline,
+:root[data-theme="light"] .console-card__chip {
+  color: #6b7280;
+}
+
+:root[data-theme="light"] .console-card__slideout {
+  background: rgba(255,255,255,0.98);
+  border-color: rgba(0,0,0,0.1);
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
+}
+
+:root[data-theme="light"] .console-card__slideout-body {
+  color: #4b5563;
+}
+
+:root[data-theme="light"] .console-selector__activity-item {
+  background: rgba(0,0,0,0.02);
+}

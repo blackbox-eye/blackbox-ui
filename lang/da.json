@@ -37,8 +37,8 @@
       "ccs_desc": "Settlement Systems",
       "gdi": "GDI Konsol",
       "gdi_desc": "Data Intelligence",
-      "ts24": "Intel24 Konsol",
-      "ts24_desc": "Intel24 Intelligence"
+      "intel24": "Intel24 Konsol",
+      "intel24_desc": "Intel24 Intelligence"
     },
     "language": {
       "da": "DA",

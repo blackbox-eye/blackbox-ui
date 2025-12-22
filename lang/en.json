@@ -42,8 +42,8 @@
       "ccs_desc": "Settlement Systems",
       "gdi": "GDI Console",
       "gdi_desc": "Data Intelligence",
-      "ts24": "Intel24 Console",
-      "ts24_desc": "Intel24 Intelligence"
+      "intel24": "Intel24 Console",
+      "intel24_desc": "Intel24 Intelligence"
     },
     "theme": {
       "label_dark": "Switch to dark theme",

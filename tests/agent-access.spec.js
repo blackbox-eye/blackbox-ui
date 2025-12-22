@@ -63,7 +63,7 @@ test.describe('Agent Access Page - i18n', () => {
   });
 
   test('should display translated GDI card title', async ({ page }) => {
-    const gdiTitle = page.locator('[data-console="gdi"] .access-card__title');
+    const gdiTitle = page.locator('[data-console="gdi"] .console-card__title');
     await expect(gdiTitle).toBeVisible();
 
     const text = await gdiTitle.textContent();
@@ -82,7 +82,7 @@ test.describe('Agent Access Page - i18n', () => {
   });
 
   test('should display translated Intel24 card title', async ({ page }) => {
-    const intel24Title = page.locator('[data-console="intel24"] .access-card__title');
+    const intel24Title = page.locator('[data-console="intel24"] .console-card__title');
     await expect(intel24Title).toBeVisible();
 
     const text = await intel24Title.textContent();
@@ -113,7 +113,7 @@ test.describe('Agent Access Page - Mobile (320px)', () => {
   });
 
   test('should display GDI CTA button visible on mobile', async ({ page }) => {
-    const gdiCta = page.locator('[data-console="gdi"] .access-card__cta');
+    const gdiCta = page.locator('[data-console="gdi"] .console-card__cta');
     await expect(gdiCta).toBeVisible();
 
     // Check minimum touch target size (48px recommended)
@@ -122,7 +122,7 @@ test.describe('Agent Access Page - Mobile (320px)', () => {
   });
 
   test('should display Intel24 CTA button visible on mobile', async ({ page }) => {
-    const intel24Cta = page.locator('[data-console="intel24"] .access-card__cta');
+    const intel24Cta = page.locator('[data-console="intel24"] .console-card__cta');
     await expect(intel24Cta).toBeVisible();
 
     // Check minimum touch target size
@@ -132,12 +132,12 @@ test.describe('Agent Access Page - Mobile (320px)', () => {
 
   test('should make CTA buttons clickable on mobile', async ({ page }) => {
     // GDI CTA
-    const gdiCta = page.locator('[data-console="gdi"] .access-card__cta');
+    const gdiCta = page.locator('[data-console="gdi"] .console-card__cta');
     await expect(gdiCta).toBeEnabled();
     await expect(gdiCta).toHaveAttribute('href');
 
     // Intel24 CTA
-    const intel24Cta = page.locator('[data-console="intel24"] .access-card__cta');
+    const intel24Cta = page.locator('[data-console="intel24"] .console-card__cta');
     await expect(intel24Cta).toBeEnabled();
     await expect(intel24Cta).toHaveAttribute('href');
   });

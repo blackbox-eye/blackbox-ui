@@ -199,6 +199,26 @@ function admin_is_active(string $slug, string $current): bool
       <!-- Divider -->
       <div class="command-deck__divider"></div>
 
+      <!-- Console Selector Button -->
+      <div class="command-deck__console-launcher">
+        <button type="button"
+          id="consoleSelectorBtn"
+          class="command-deck__action command-deck__action--consoles"
+          title="Switch console"
+          aria-label="Open console selector"
+          aria-expanded="false"
+          aria-controls="consoleSelectorModal">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+          <span>Switch Console</span>
+        </button>
+      </div>
+
+      <div class="command-deck__divider"></div>
+
       <!-- Quick Actions -->
       <div class="command-deck__actions">
         <!-- Theme Toggle -->
@@ -252,6 +272,53 @@ function admin_is_active(string $slug, string $current): bool
         <?php endif; ?>
       </div>
     </nav>
+
+    <!-- Console Selector Modal -->
+    <div id="consoleSelectorModal" 
+         class="console-modal" 
+         role="dialog" 
+         aria-modal="true" 
+         aria-labelledby="consoleSelectorTitle"
+         aria-hidden="true">
+      <div class="console-modal__backdrop" data-close-modal></div>
+      <div class="console-modal__panel">
+        <div class="console-modal__header">
+          <h2 id="consoleSelectorTitle" class="console-modal__title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+            Switch Console
+          </h2>
+          <button type="button" class="console-modal__close" aria-label="Close console selector" data-close-modal>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+        <div class="console-modal__body">
+          <?php 
+          // Setup console URLs for the selector
+          require_once __DIR__ . '/jwt_helper.php';
+          $gdi_console_url = 'agent-login.php';
+          $ccs_console_url = 'ccs-console.php';
+          $intel24_active_jwt = bbx_current_agent_jwt();
+          $intel24_has_sso = $intel24_active_jwt !== null;
+          $intel24_sso_url = defined('BBX_TS24_CONSOLE_URL') ? BBX_TS24_CONSOLE_URL : bbx_env('TS24_CONSOLE_URL', 'https://intel24.blackbox.codes/sso-login');
+          $intel24_login_url = bbx_env('TS24_LOGIN_URL', 'https://intel24.blackbox.codes/login');
+          if ($intel24_has_sso) {
+            $separator = strpos($intel24_sso_url, '?') === false ? '?' : '&';
+            $intel24_console_url = rtrim($intel24_sso_url, '/') . $separator . 'sso=' . urlencode($intel24_active_jwt);
+          } else {
+            $intel24_console_url = $intel24_login_url;
+          }
+          $console_context = 'modal';
+          include __DIR__ . '/console-selector.php'; 
+          ?>
+        </div>
+      </div>
+    </div>
   <?php endif; ?>
 
   <!-- Main Content Area -->

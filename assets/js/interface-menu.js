@@ -396,3 +396,133 @@
   }
 
 })();
+
+/**
+ * Console Selector Modal Controller
+ *
+ * Handles the console selector modal for switching between CCS, GDI, and Intel24.
+ * Features:
+ * - Modal open/close with animations
+ * - Keyboard accessibility (ESC to close, Tab trapping)
+ * - Focus management
+ * - ARIA attributes
+ */
+(function() {
+  'use strict';
+
+  const modalBtn = document.getElementById('consoleSelectorBtn');
+  const modal = document.getElementById('consoleSelectorModal');
+
+  // Exit if elements don't exist
+  if (!modalBtn || !modal) {
+    return;
+  }
+
+  const closeElements = modal.querySelectorAll('[data-close-modal]');
+  let previousFocus = null;
+
+  /**
+   * Opens the console selector modal
+   */
+  function openModal() {
+    previousFocus = document.activeElement;
+    
+    modal.setAttribute('aria-hidden', 'false');
+    modalBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+
+    // Focus the close button
+    requestAnimationFrame(() => {
+      const closeBtn = modal.querySelector('.console-modal__close');
+      if (closeBtn) {
+        closeBtn.focus();
+      }
+    });
+  }
+
+  /**
+   * Closes the console selector modal
+   */
+  function closeModal() {
+    modal.setAttribute('aria-hidden', 'true');
+    modalBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+
+    // Return focus to trigger button
+    if (previousFocus) {
+      previousFocus.focus();
+    }
+    
+    // Close any open slideouts
+    if (window.bbxConsoleSelector) {
+      window.bbxConsoleSelector.closeAllSlideouts();
+    }
+  }
+
+  /**
+   * Toggle modal state
+   */
+  function toggleModal() {
+    const isOpen = modal.getAttribute('aria-hidden') === 'false';
+    if (isOpen) {
+      closeModal();
+    } else {
+      openModal();
+    }
+  }
+
+  // Event: Open modal button click
+  modalBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    toggleModal();
+  });
+
+  // Event: Close button clicks
+  closeElements.forEach(function(el) {
+    el.addEventListener('click', function(e) {
+      e.preventDefault();
+      closeModal();
+    });
+  });
+
+  // Event: Escape key to close
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') {
+      closeModal();
+    }
+  });
+
+  // Event: Click outside to close (on backdrop)
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal || e.target.classList.contains('console-modal__backdrop')) {
+      closeModal();
+    }
+  });
+
+  // Focus trap within modal
+  modal.addEventListener('keydown', function(e) {
+    if (e.key !== 'Tab') return;
+    if (modal.getAttribute('aria-hidden') === 'true') return;
+
+    const focusableElements = modal.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const firstEl = focusableElements[0];
+    const lastEl = focusableElements[focusableElements.length - 1];
+
+    if (e.shiftKey) {
+      // Shift + Tab
+      if (document.activeElement === firstEl) {
+        e.preventDefault();
+        lastEl.focus();
+      }
+    } else {
+      // Tab
+      if (document.activeElement === lastEl) {
+        e.preventDefault();
+        firstEl.focus();
+      }
+    }
+  });
+
+})();

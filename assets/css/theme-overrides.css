@@ -139,3 +139,63 @@ body[data-theme] .graphene-btn-primary:active,
 body[data-theme] .graphene-btn-secondary:active {
   background: var(--state-active);
 }
+
+/* Contrast overrides for nav, language switcher, cookie banner, and activity badge */
+.nav-link,
+.nav-link:link,
+.nav-link:visited {
+  color: #e5e7eb;
+}
+
+.nav-link:hover,
+.nav-link:focus,
+.nav-link.nav-link-active {
+  color: #ffffff;
+}
+
+.language-switch,
+.language-switch--drawer {
+  color: #e5e7eb;
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.language-switch.is-active,
+.language-switch[aria-current="true"] {
+  color: #0f172a;
+  background: #facc15;
+  border-color: #facc15;
+}
+
+.cookie-banner__btn--accept {
+  background: #facc15;
+  color: #0b0b0b;
+}
+
+.cookie-banner__btn--accept:hover {
+  background: #eab308;
+}
+
+.cookie-banner__btn--decline {
+  background: rgba(255, 255, 255, 0.14);
+  color: #f9fafb;
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.cookie-banner__btn--decline:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.console-selector__activity-badge {
+  background: rgba(20, 83, 45, 0.55);
+  border-color: rgba(52, 211, 153, 0.7);
+  color: #d1fae5;
+}
+
+.console-selector__activity-badge[data-activity-source="local"] {
+  background: rgba(124, 45, 18, 0.55);
+  border-color: rgba(249, 115, 22, 0.7);
+  color: #ffe8d6;
+}

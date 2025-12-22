@@ -33,10 +33,12 @@
     },
     "console": {
       "title": "Vælg konsol",
+      "ccs": "CCS Konsol",
+      "ccs_desc": "Settlement Systems",
       "gdi": "GDI Konsol",
       "gdi_desc": "Data Intelligence",
-      "ts24": "TS24 Konsol",
-      "ts24_desc": "Intel24 Transport"
+      "ts24": "Intel24 Konsol",
+      "ts24_desc": "Intel24 Intelligence"
     },
     "language": {
       "da": "DA",
@@ -76,7 +78,7 @@
   "agent_access": {
     "meta": {
       "title": "Vælg sikker adgang | BLACKBOX EYE™",
-      "description": "Start Blackbox EYE eller TS24 konsollen fra et samlet, auditeret adgangspunkt.",
+      "description": "Start Blackbox EYE, Intel24 eller CCS konsoller fra et samlet, auditeret adgangspunkt.",
       "breadcrumb": "Agent Access"
     },
     "hero": {
@@ -86,6 +88,15 @@
       "audit_notice": "Alle opstart kræver MFA, logges i sikkerhedsjournalen og udløser øjeblikkelige alarmer ved anomalier."
     },
     "cards": {
+      "ccs": {
+        "badge": "CCS",
+        "title": "CCS Settlement Console",
+        "subtitle": "Cross-Currency Settlement Systems",
+        "body_primary": "Forenede afregningsspor for fiat + krypto — bygget som én multi-asset kerne.",
+        "body_secondary": "Styret af House AU1 ⟠. Balanceret af HΛW ⟠. Afregnet som MERIDIAN (MRDN). Udstedt som AEQUA (AEQA).",
+        "requirements": "Kræver CCS-clearing + MFA. Alle launches logges i sikkerhedsledgeren.",
+        "cta": "Åbn CCS konsol"
+      },
       "gdi": {
         "title": "Blackbox EYE Data Intelligence (GDI)",
         "description": "Brug til interne efterforskninger, alert-triage og direkte styring af Blackbox EYE-sensorer på tværs af enklaver.",
@@ -93,12 +104,12 @@
         "meta": "Kræver Blackbox VPN + biometrisk badge"
       },
       "ts24": {
-        "title": "TS24 / Intel24 Intelligence Console",
-        "description": "Felt-telemetri, TS transport-alarmer og taktiske briefinger for TS24 rapid-response teams.",
-        "cta": "Åbn TS24 konsol",
-        "cta_login": "Log ind → TS24 konsol",
-        "meta": "Åbner sikker tstransport.app session",
-        "sso_notice": "SSO-token vedhæftes automatisk efter GDI-login.",
+        "title": "Intel24 Intelligence Console",
+        "description": "Felt-telemetri, Intel24 transport-alarmer og taktiske briefinger for Intel24 rapid-response teams.",
+        "cta": "Åbn Intel24 konsol",
+        "cta_login": "Log ind → Intel24 konsol",
+        "meta": "Åbner sikker intel24.blackbox.codes session",
+        "sso_notice": "SSO-token vedhæftes automatisk efter GDI-login til Intel24.",
         "sso_ready": "SSO klar"
       }
     }

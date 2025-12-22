@@ -36,6 +36,15 @@
       "switch_da": "Switch to Danish",
       "switch_en": "Switch to English"
     },
+    "console": {
+      "title": "Choose console",
+      "ccs": "CCS Console",
+      "ccs_desc": "Settlement Systems",
+      "gdi": "GDI Console",
+      "gdi_desc": "Data Intelligence",
+      "ts24": "Intel24 Console",
+      "ts24_desc": "Intel24 Intelligence"
+    },
     "theme": {
       "label_dark": "Switch to dark theme",
       "label_light": "Switch to light theme",
@@ -68,7 +77,7 @@
   "agent_access": {
     "meta": {
       "title": "Choose Secure Access | BLACKBOX EYE™",
-      "description": "Launch Blackbox EYE or TS24 consoles from a single, audited access hub.",
+      "description": "Launch Blackbox EYE, Intel24 or CCS consoles from a single, audited access hub.",
       "breadcrumb": "Agent Access"
     },
     "hero": {
@@ -78,6 +87,15 @@
       "audit_notice": "All launches require MFA, are logged in the security ledger and raise instant alerts on anomalies."
     },
     "cards": {
+      "ccs": {
+        "badge": "CCS",
+        "title": "CCS Settlement Console",
+        "subtitle": "Cross-Currency Settlement Systems",
+        "body_primary": "Unified settlement rails for fiat + crypto — engineered as a single multi-asset core.",
+        "body_secondary": "Governed by House AU1 ⟠. Balanced by HΛW ⟠. Resolved as MERIDIAN (MRDN). Spent as AEQUA (AEQA).",
+        "requirements": "Requires CCS clearance + MFA. Launches are logged in the security ledger.",
+        "cta": "Open CCS console"
+      },
       "gdi": {
         "title": "Blackbox EYE Data Intelligence (GDI)",
         "description": "Use for internal investigations, alert triage and direct control of Blackbox EYE sensors across enclaves.",
@@ -85,12 +103,12 @@
         "meta": "Requires Blackbox VPN + biometric badge"
       },
       "ts24": {
-        "title": "TS24 / Intel24 Intelligence Console",
-        "description": "Field telemetry, TS transport alerts and tactical briefings for TS24 rapid-response teams with optional SSO hand-off from GDI.",
-        "cta": "Open TS24 console",
-        "cta_login": "Log in → TS24 console",
-        "meta": "Opens secure tstransport.app session",
-        "sso_notice": "Signed-in agents receive a short-lived Blackbox EYE SSO token so TS24 can launch automatically. If the token expires you can continue with your TS24 credentials on the next screen.",
+        "title": "Intel24 Intelligence Console",
+        "description": "Field telemetry, Intel24 transport alerts and tactical briefings for Intel24 rapid-response teams with optional SSO hand-off from GDI.",
+        "cta": "Open Intel24 console",
+        "cta_login": "Log in → Intel24 console",
+        "meta": "Opens secure intel24.blackbox.codes session",
+        "sso_notice": "Signed-in agents receive a short-lived Blackbox EYE SSO token so Intel24 can launch automatically. If the token expires you can continue with your Intel24 credentials on the next screen.",
         "sso_ready": "SSO ready"
       }
     }

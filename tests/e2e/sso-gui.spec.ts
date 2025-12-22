@@ -111,7 +111,7 @@ async function evaluateNavigation(page: Page, target: string) {
   }, target);
 }
 
-async function ensureTs24Route(page: Page) {
+async function ensureIntel24Route(page: Page) {
   await page.context().route(`${TS24_BASE_URL}**`, async (route) => {
     await route.fulfill({
       status: 200,
@@ -135,19 +135,19 @@ test.describe('GUI SSO v1 (QA harness)', () => {
     await attachDiagnostics(testInfo, page);
   });
 
-  test('Core SSO flow issues token, injects storage and redirects to TS24 dashboard', async ({ page }) => {
-    await ensureTs24Route(page);
+  test('Core SSO flow issues token, injects storage and redirects to Intel24 dashboard', async ({ page }) => {
+    await ensureIntel24Route(page);
     await loginAsOperator(page);
 
     await page.goto('/agent-access.php', { waitUntil: 'networkidle' });
 
-    const ts24Button = page.locator('a[data-console-launch="ts24"]');
-    await expect(ts24Button).toHaveAttribute('data-sso-active', 'true');
+    const intel24Button = page.locator('a[data-console-launch="intel24"]');
+    await expect(intel24Button).toHaveAttribute('data-sso-active', 'true');
 
     const redirectStart = Date.now();
     const [popup] = await Promise.all([
       page.waitForEvent('popup'),
-      ts24Button.click()
+      intel24Button.click()
     ]);
 
     await popup.waitForLoadState('domcontentloaded');
@@ -244,30 +244,30 @@ test.describe('GUI SSO v1 (QA harness)', () => {
 
   test('Mobile viewport (iPhone 12) SSO redirect functions', async ({ page, browserName }) => {
     test.skip(browserName !== 'webkit', 'Mobile viewport validation executed on WebKit profile');
-    await ensureTs24Route(page);
+    await ensureIntel24Route(page);
     await page.setViewportSize({ width: 390, height: 844 });
     await loginAsOperator(page);
     await page.goto('/agent-access.php', { waitUntil: 'networkidle' });
-    const ts24Button = page.locator('a[data-console-launch="ts24"]');
-    await expect(ts24Button).toBeVisible();
+    const intel24Button = page.locator('a[data-console-launch="intel24"]');
+    await expect(intel24Button).toBeVisible();
     const [popup] = await Promise.all([
       page.waitForEvent('popup'),
-      ts24Button.click()
+      intel24Button.click()
     ]);
     await popup.waitForLoadState('domcontentloaded');
     expect(popup.url()).toContain(TS24_BASE_URL);
   });
 
   test('Performance budget respected (dashboard paint + redirect timing)', async ({ page }) => {
-    await ensureTs24Route(page);
+    await ensureIntel24Route(page);
     await loginAsOperator(page);
     await page.goto('/agent-access.php', { waitUntil: 'networkidle' });
-    const ts24Button = page.locator('a[data-console-launch="ts24"]');
+    const intel24Button = page.locator('a[data-console-launch="intel24"]');
 
     const clickTime = Date.now();
     const [popup] = await Promise.all([
       page.waitForEvent('popup'),
-      ts24Button.click()
+      intel24Button.click()
     ]);
     await popup.waitForLoadState('load');
     const redirectDuration = Date.now() - clickTime;

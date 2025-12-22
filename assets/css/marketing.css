@@ -3003,6 +3003,16 @@ button.graphene-toggle.is-loading .graphene-toggle__icon {
   }
 }
 
+.access-card--wide {
+  grid-column: span 1;
+}
+
+@media (min-width: 768px) {
+  .access-card--wide {
+    grid-column: span 2;
+  }
+}
+
 .access-card {
   background: rgba(7, 11, 18, 0.9);
   border: 1px solid rgba(var(--bbx-metal-rgb-light), 0.1);
@@ -3048,10 +3058,16 @@ button.graphene-toggle.is-loading .graphene-toggle__icon {
   color: #59c0ff;
 }
 
-.access-card__badge--ts24 {
+.access-card__badge--intel24 {
   background: rgba(var(--bbx-metal-rgb-light), 0.1);
   border: 1px solid rgba(var(--bbx-metal-rgb-light), 0.24);
   color: var(--bbx-gold);
+}
+
+.access-card__badge--ccs {
+  background: rgba(46, 204, 113, 0.12);
+  border: 1px solid rgba(46, 204, 113, 0.3);
+  color: #7cf0ba;
 }
 
 .access-card__title {
@@ -3060,10 +3076,23 @@ button.graphene-toggle.is-loading .graphene-toggle__icon {
   margin-bottom: 0.35rem;
 }
 
+.access-card__subtitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0 0 0.35rem;
+}
+
 .access-card__description {
   color: var(--bbx-text-secondary);
   font-size: 1rem;
   line-height: 1.6;
+}
+
+.access-card__note {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.95rem;
+  margin-top: -0.25rem;
 }
 
 .access-card__meta {
@@ -3086,8 +3115,12 @@ button.graphene-toggle.is-loading .graphene-toggle__icon {
   padding-inline: 1.5rem;
 }
 
-.access-card[data-console='ts24']::after {
+.access-card[data-console='intel24']::after {
   border-color: rgba(var(--bbx-metal-rgb-light), 0.14);
+}
+
+.access-card[data-console='ccs']::after {
+  border-color: rgba(46, 204, 113, 0.22);
 }
 
 :root[data-theme="light"] .access-card {

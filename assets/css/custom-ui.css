@@ -5195,10 +5195,16 @@ a.agent-login-cta {
   border: 1px solid rgba(26, 115, 232, 0.3);
 }
 
-.console-menu-item__icon--ts24 {
+.console-menu-item__icon--intel24 {
   background: rgba(138, 123, 106, 0.15);
   color: rgba(200, 185, 170, 0.9);
   border: 1px solid rgba(138, 123, 106, 0.3);
+}
+
+.console-menu-item__icon--ccs {
+  background: rgba(46, 204, 113, 0.12);
+  color: #7cf0ba;
+  border: 1px solid rgba(46, 204, 113, 0.28);
 }
 
 .console-menu-item__content {
@@ -5435,10 +5441,16 @@ nav[aria-label="Breadcrumb"] {
   border: 1px solid rgba(26, 115, 232, 0.3);
 }
 
-.mobile-console-icon--ts24 {
+.mobile-console-icon--intel24 {
   background: rgba(138, 123, 106, 0.15);
   color: rgba(200, 185, 170, 0.9);
   border: 1px solid rgba(138, 123, 106, 0.3);
+}
+
+.mobile-console-icon--ccs {
+  background: rgba(46, 204, 113, 0.12);
+  color: #7cf0ba;
+  border: 1px solid rgba(46, 204, 113, 0.28);
 }
 
 .mobile-console-label {

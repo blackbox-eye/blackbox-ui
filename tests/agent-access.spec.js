@@ -3,7 +3,7 @@
  *
  * Tests for the agent-access.php page including:
  * - Hero section with translated texts (no raw i18n keys)
- * - GDI and TS24 console cards with proper translations
+ * - CCS hero card plus GDI and Intel24 console cards with proper translations
  * - CTA buttons visibility and accessibility on mobile
  * - Touch target sizes for CTAs
  *
@@ -73,23 +73,30 @@ test.describe('Agent Access Page - i18n', () => {
     expect(text.toLowerCase()).toMatch(/gdi|blackbox|intelligence/i);
   });
 
-  test('should not display raw i18n keys in TS24 card', async ({ page }) => {
-    const ts24Card = await page.locator('[data-console="ts24"]').textContent();
+  test('should not display raw i18n keys in Intel24 card', async ({ page }) => {
+    const intel24Card = await page.locator('[data-console="intel24"]').textContent();
 
-    expect(ts24Card).not.toContain('agent_access.');
-    expect(ts24Card).not.toContain('.cards.');
-    expect(ts24Card).not.toContain('.ts24.');
+    expect(intel24Card).not.toContain('agent_access.');
+    expect(intel24Card).not.toContain('.cards.');
+    expect(intel24Card).not.toContain('.ts24.');
   });
 
-  test('should display translated TS24 card title', async ({ page }) => {
-    const ts24Title = page.locator('[data-console="ts24"] .access-card__title');
-    await expect(ts24Title).toBeVisible();
+  test('should display translated Intel24 card title', async ({ page }) => {
+    const intel24Title = page.locator('[data-console="intel24"] .access-card__title');
+    await expect(intel24Title).toBeVisible();
 
-    const text = await ts24Title.textContent();
+    const text = await intel24Title.textContent();
     expect(text.length).toBeGreaterThan(5);
     expect(text).not.toMatch(/^agent_access/);
-    // Should contain TS24 or Intel24 reference
-    expect(text.toLowerCase()).toMatch(/ts24|intel24|intelligence/i);
+    // Should contain Intel24 reference
+    expect(text.toLowerCase()).toMatch(/intel24|intelligence/i);
+  });
+
+  test('should display CCS card content', async ({ page }) => {
+    const ccsCard = page.locator('[data-console="ccs"]');
+    await expect(ccsCard).toBeVisible();
+    const cardText = await ccsCard.textContent();
+    expect(cardText.length).toBeGreaterThan(20);
   });
 });
 
@@ -114,12 +121,12 @@ test.describe('Agent Access Page - Mobile (320px)', () => {
     expect(box.height).toBeGreaterThanOrEqual(44); // Allow slight tolerance
   });
 
-  test('should display TS24 CTA button visible on mobile', async ({ page }) => {
-    const ts24Cta = page.locator('[data-console="ts24"] .access-card__cta');
-    await expect(ts24Cta).toBeVisible();
+  test('should display Intel24 CTA button visible on mobile', async ({ page }) => {
+    const intel24Cta = page.locator('[data-console="intel24"] .access-card__cta');
+    await expect(intel24Cta).toBeVisible();
 
     // Check minimum touch target size
-    const box = await ts24Cta.boundingBox();
+    const box = await intel24Cta.boundingBox();
     expect(box.height).toBeGreaterThanOrEqual(44);
   });
 
@@ -129,10 +136,10 @@ test.describe('Agent Access Page - Mobile (320px)', () => {
     await expect(gdiCta).toBeEnabled();
     await expect(gdiCta).toHaveAttribute('href');
 
-    // TS24 CTA
-    const ts24Cta = page.locator('[data-console="ts24"] .access-card__cta');
-    await expect(ts24Cta).toBeEnabled();
-    await expect(ts24Cta).toHaveAttribute('href');
+    // Intel24 CTA
+    const intel24Cta = page.locator('[data-console="intel24"] .access-card__cta');
+    await expect(intel24Cta).toBeEnabled();
+    await expect(intel24Cta).toHaveAttribute('href');
   });
 
   test('should display hero section properly on mobile', async ({ page }) => {
@@ -159,10 +166,12 @@ test.describe('Agent Access Page - Desktop', () => {
 
   test('should display both console cards', async ({ page }) => {
     const gdiCard = page.locator('[data-console="gdi"]');
-    const ts24Card = page.locator('[data-console="ts24"]');
+    const intel24Card = page.locator('[data-console="intel24"]');
+    const ccsCard = page.locator('[data-console="ccs"]');
 
     await expect(gdiCard).toBeVisible();
-    await expect(ts24Card).toBeVisible();
+    await expect(intel24Card).toBeVisible();
+    await expect(ccsCard).toBeVisible();
   });
 
   test('should have proper meta title for SEO', async ({ page }) => {

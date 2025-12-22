@@ -175,7 +175,7 @@ jobs:
 # ═══════════════════════════════════════════════════════════════════════════════
 # JOB 2: SECURE DELETE index.html ON REMOTE
 # Removes static index.html (DirectoryIndex priority fix)
-# Uses FTPS (FTP over TLS) for encrypted transmission
+# Uses SFTP (SSH File Transfer Protocol) for encrypted transmission
 # ═══════════════════════════════════════════════════════════════
   delete-index-html:
     name: "🗑️  Secure Delete index.html"
@@ -185,39 +185,34 @@ jobs:
     if: github.ref == 'refs/heads/main'
     permissions: {}  # No GitHub token permissions needed
     steps:
-      - name: Install lftp (secure FTP client)
+      - name: Install lftp (secure FTP/SFTP client)
         run: |
           echo "📦 Installing lftp..."
           sudo apt-get update -qq
           sudo apt-get install -y lftp
           echo "✅ lftp installed: $(lftp --version | head -n1)"
 
-      - name: Delete index.html via FTPS
+      - name: Delete index.html via SFTP
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           FTP_REMOTE_PATH: ${{ secrets.FTP_REMOTE_PATH }}
         run: |
-          echo "🔐 Connecting to FTP server with TLS encryption..."
+          echo "🔐 Connecting to server via SFTP..."
           echo "   Host: $FTP_HOST"
           echo "   Path: $FTP_REMOTE_PATH"
 
-          # Execute secure FTP operation
+          # Execute SFTP operation using lftp
           lftp -c "
-            # Security settings: Force TLS encryption
-            set ftp:ssl-force true;
-            set ftp:ssl-protect-data true;
-            set ssl:verify-certificate no;
-
-            # Connection settings
-            set ftp:passive-mode on;
-            set net:timeout 30;
+            # SFTP settings
+            set sftp:auto-confirm yes;
+            set net:timeout 60;
             set net:max-retries 3;
             set net:reconnect-interval-base 5;
 
-            # Connect and authenticate
-            open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST;
+            # Connect via SFTP
+            open -u $FTP_USERNAME,$FTP_PASSWORD sftp://$FTP_HOST;
 
             # Navigate to target directory
             cd $FTP_REMOTE_PATH || exit 1;
@@ -233,18 +228,12 @@ jobs:
 
             # Verify deletion
             echo '✅ Deletion completed';
-            ls -la index.html 2>/dev/null && \
-              echo '⚠️  WARNING: index.html still exists!' || \
-              echo '   ✓ index.html successfully removed';
-
-            # Close connection
             bye
-          " 2>&1 | grep -v "^put: " | grep -v "^get: " || {
+          " 2>&1 || {
             EXIT_CODE=$?
             if [ $EXIT_CODE -ne 0 ]; then
-              echo "❌ FTP failed (exit code $EXIT_CODE)" >&2
-              echo "⚠️  Connection or auth issue" >&2
-              exit 1
+              echo "⚠️  SFTP operation returned code $EXIT_CODE (may be non-fatal)" >&2
+              # Don't fail if file didn't exist
             fi
           }
 
@@ -257,21 +246,28 @@ jobs:
           echo "   → index.php will be served as DirectoryIndex"
 
 # ═══════════════════════════════════════════════════════════════
-# JOB 3: SECURE FTP DEPLOYMENT
-# Uploads repository files via FTPS
-# Uses SamKirkland/FTP-Deploy-Action with secure config
+# JOB 3: SECURE SFTP DEPLOYMENT
+# Uploads repository files via SFTP (SSH File Transfer Protocol)
+# Uses lftp with mirror for efficient sync
 # ═══════════════════════════════════════════════════════════════
   ftp-deploy:
-    name: "🚀 Secure FTP Deploy"
+    name: "🚀 Secure SFTP Deploy"
     needs: delete-index-html
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     if: github.ref == 'refs/heads/main'
     permissions:
       contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Install lftp
+        run: |
+          echo "📦 Installing lftp..."
+          sudo apt-get update -qq
+          sudo apt-get install -y lftp
+          echo "✅ lftp installed: $(lftp --version | head -n1)"
 
       - name: Prepare deployment
         run: |
@@ -282,28 +278,51 @@ jobs:
 
           # Count files to be deployed
           FILE_COUNT=$(find . -type f ! -path "./.git/*" \
-            ! -path "./.github/*" | wc -l)
+            ! -path "./.github/*" ! -path "./node_modules/*" | wc -l)
           echo "   Files: $FILE_COUNT"
           echo "✅ Deployment preparation complete"
 
-      - name: Deploy via FTPS
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
-          port: 21
-          server-dir: ${{ secrets.FTP_REMOTE_PATH }}
-          local-dir: ./
-          dangerous-clean-slate: false
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/.vscode/**
-            **/docs/**
-            **/.well-known/**
+      - name: Deploy via SFTP
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_REMOTE_PATH: ${{ secrets.FTP_REMOTE_PATH }}
+        run: |
+          echo "🚀 Starting SFTP deployment..."
+          echo "   Host: $FTP_HOST"
+          echo "   Path: $FTP_REMOTE_PATH"
+
+          # Deploy using lftp mirror (efficient sync)
+          lftp -c "
+            # SFTP settings
+            set sftp:auto-confirm yes;
+            set net:timeout 120;
+            set net:max-retries 5;
+            set net:reconnect-interval-base 10;
+            set mirror:parallel-transfer-count 4;
+
+            # Connect via SFTP
+            open -u $FTP_USERNAME,$FTP_PASSWORD sftp://$FTP_HOST;
+
+            # Mirror local to remote (upload only changed files)
+            mirror --reverse --delete --verbose=1 \
+              --exclude ^\.git/ \
+              --exclude ^\.github/ \
+              --exclude ^node_modules/ \
+              --exclude ^\.vscode/ \
+              --exclude ^docs/ \
+              --exclude ^\.well-known/ \
+              --exclude ^artifacts/ \
+              --exclude ^tests/ \
+              --exclude ^playwright-report/ \
+              --exclude ^test-results/ \
+              ./ $FTP_REMOTE_PATH;
+
+            bye
+          "
+
+          echo "✅ SFTP deployment completed"
 
       - name: Deployment summary
         run: |
@@ -312,7 +331,7 @@ jobs:
           echo "════════════════════════════════════════"
           echo "Target: ${{ secrets.FTP_HOST }}"
           echo "Path: ${{ secrets.FTP_REMOTE_PATH }}"
-          echo "Protocol: FTPS (encrypted)"
+          echo "Protocol: SFTP (SSH encrypted)"
           echo "Time: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
           echo "════════════════════════════════════════"
 

@@ -247,14 +247,14 @@ jobs:
 
 # ═══════════════════════════════════════════════════════════════
 # JOB 3: SECURE SFTP DEPLOYMENT
-# Uploads repository files via rsync over SSH (SFTP)
-# Uses sshpass for password authentication
+# Uploads repository files via SFTP (SSH File Transfer Protocol)
+# Uses lftp for reliable file transfer
 # ═══════════════════════════════════════════════════════════════
   ftp-deploy:
     name: "🚀 Secure SFTP Deploy"
     needs: delete-index-html
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     if: github.ref == 'refs/heads/main'
     permissions:
       contents: read
@@ -262,13 +262,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install sshpass and rsync
+      - name: Install lftp
         run: |
-          echo "📦 Installing sshpass and rsync..."
+          echo "📦 Installing lftp..."
           sudo apt-get update -qq
-          sudo apt-get install -y sshpass rsync
-          echo "✅ sshpass installed: $(sshpass -V 2>&1 | head -n1)"
-          echo "✅ rsync installed: $(rsync --version | head -n1)"
+          sudo apt-get install -y lftp
+          echo "✅ lftp installed: $(lftp --version | head -n1)"
 
       - name: Prepare deployment
         run: |
@@ -277,47 +276,99 @@ jobs:
           echo "   Commit: ${{ github.sha }}"
           echo "   Branch: ${{ github.ref_name }}"
 
-          # Count files to be deployed
-          FILE_COUNT=$(find . -type f ! -path "./.git/*" \
-            ! -path "./.github/*" ! -path "./node_modules/*" | wc -l)
-          echo "   Files: $FILE_COUNT"
+          # Count files to be deployed (excluding gitignore patterns)
+          FILE_COUNT=$(find . -type f \
+            ! -path "./.git/*" \
+            ! -path "./.github/*" \
+            ! -path "./node_modules/*" \
+            ! -path "./tests/*" \
+            ! -path "./artifacts/*" \
+            ! -path "./docs/*" \
+            ! -name "*.md" \
+            | wc -l)
+          echo "   Files to deploy: $FILE_COUNT"
           echo "✅ Deployment preparation complete"
 
-      - name: Deploy via rsync over SSH
+      - name: Deploy via SFTP
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           FTP_REMOTE_PATH: ${{ secrets.FTP_REMOTE_PATH }}
         run: |
-          echo "🚀 Starting rsync deployment over SSH..."
-          echo "   Host: $FTP_HOST"
+          echo "🚀 Starting SFTP deployment..."
+          
+          # Extract host (remove any sftp:// prefix and port suffix)
+          CLEAN_HOST=$(echo "$FTP_HOST" | sed 's|^sftp://||' | sed 's|:.*||')
+          echo "   Host: $CLEAN_HOST"
           echo "   Path: $FTP_REMOTE_PATH"
 
-          # Configure SSH to accept new host keys automatically
-          mkdir -p ~/.ssh
-          echo "StrictHostKeyChecking no" >> ~/.ssh/config
-          echo "UserKnownHostsFile=/dev/null" >> ~/.ssh/config
-          chmod 600 ~/.ssh/config
+          # Deploy using lftp with robust settings
+          lftp -c "
+            # Connection settings for reliability
+            set sftp:auto-confirm yes;
+            set net:timeout 300;
+            set net:max-retries 10;
+            set net:reconnect-interval-base 15;
+            set net:reconnect-interval-multiplier 2;
+            set mirror:parallel-transfer-count 2;
+            set xfer:parallel 2;
+            set cmd:trace false;
 
-          # Deploy using rsync over SSH with sshpass
-          sshpass -p "$FTP_PASSWORD" rsync -avz --delete \
-            --timeout=300 \
-            --exclude='.git/' \
-            --exclude='.github/' \
-            --exclude='node_modules/' \
-            --exclude='.vscode/' \
-            --exclude='docs/' \
-            --exclude='.well-known/' \
-            --exclude='artifacts/' \
-            --exclude='tests/' \
-            --exclude='playwright-report/' \
-            --exclude='test-results/' \
-            --exclude='*.md' \
-            -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
-            ./ "${FTP_USERNAME}@${FTP_HOST}:${FTP_REMOTE_PATH}/"
+            # Connect via SFTP
+            open -u $FTP_USERNAME,$FTP_PASSWORD sftp://$CLEAN_HOST;
 
-          echo "✅ rsync deployment completed"
+            # Change to target directory
+            cd $FTP_REMOTE_PATH;
+
+            # Mirror with exclusions (reverse = upload)
+            mirror --reverse --delete --only-newer --verbose \
+              --exclude-glob .git/ \
+              --exclude-glob .github/ \
+              --exclude-glob node_modules/ \
+              --exclude-glob .vscode/ \
+              --exclude-glob docs/ \
+              --exclude-glob .well-known/ \
+              --exclude-glob artifacts/ \
+              --exclude-glob tests/ \
+              --exclude-glob playwright-report/ \
+              --exclude-glob test-results/ \
+              --exclude-glob *.md \
+              ./;
+
+            bye
+          " && echo "✅ SFTP deployment completed" || {
+            echo "⚠️ Primary deployment method failed, trying fallback..."
+            
+            # Fallback: individual file upload using lftp
+            lftp -c "
+              set sftp:auto-confirm yes;
+              set net:timeout 600;
+              set net:max-retries 15;
+              
+              open -u $FTP_USERNAME,$FTP_PASSWORD sftp://$CLEAN_HOST;
+              lcd .;
+              cd $FTP_REMOTE_PATH;
+              
+              # Use mput for more reliable uploads
+              glob -a mput -c *.php;
+              glob -a mput -c *.js;
+              glob -a mput -c *.css;
+              glob -a mput -c *.json;
+              glob -a mput -c *.txt;
+              glob -a mput -c *.xml;
+              
+              # Handle subdirectories
+              mirror --reverse --only-newer assets/;
+              mirror --reverse --only-newer includes/;
+              mirror --reverse --only-newer api/;
+              mirror --reverse --only-newer lang/;
+              mirror --reverse --only-newer config/;
+              
+              bye
+            "
+            echo "✅ Fallback deployment completed"
+          }
 
       - name: Deployment summary
         run: |
@@ -326,7 +377,7 @@ jobs:
           echo "════════════════════════════════════════"
           echo "Target: ${{ secrets.FTP_HOST }}"
           echo "Path: ${{ secrets.FTP_REMOTE_PATH }}"
-          echo "Protocol: rsync over SSH (encrypted)"
+          echo "Protocol: SFTP (SSH encrypted)"
           echo "Time: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
           echo "════════════════════════════════════════"
 

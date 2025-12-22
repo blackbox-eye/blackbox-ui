@@ -15,5 +15,5 @@ if (isset($_GET['qaInvalidate'])) {
   exit;
 }
 
-header('Location: agent-login.php');
+header('Location: gdi-login.php');
 exit;

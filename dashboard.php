@@ -27,7 +27,7 @@ include __DIR__ . '/includes/admin-layout.php';
     /* Dashboard-specific variables */
     .dashboard {
         --dash-critical: #F85149;
-        --dash-warning: #fbbf24;
+        --dash-warning: var(--color-primary, #c9a227);
         --dash-success: #4ade80;
         --dash-info: #60a5fa;
     }

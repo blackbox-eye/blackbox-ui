@@ -1,6 +1,6 @@
 # Build & Deploy Guide
 
-> Last updated: 2025-12-22 (Sprint 2)
+> Last updated: 2025-12-22 (Sprint 7)
 
 ## CSS Build Process
 
@@ -35,7 +35,7 @@ This runs PostCSS with cssnano to minify CSS files.
 Version numbers are controlled in `includes/head.php`:
 
 ```php
-$css_version = '1.6.15';  // Bump when CSS changes
+$css_version = '1.7.0';  // Bump when CSS changes
 ```
 
 Update this version when:
@@ -83,20 +83,75 @@ New component CSS lives in `assets/css/components/`:
 |------|---------|
 | `bbx-icons.css` | Icon system + tooltip styles (Sprint 2: consistent icon styling) |
 | `bbx-snackbar.css` | Toast notification styles |
+| `motion-safe.css` | Global `prefers-reduced-motion` support (Sprint 7) |
+| `hero-mobile.css` | Unified hero section mobile styles with clamp() (Sprint 7) |
+| `console-selector-mobile.css` | Mobile-first console card styles (Sprint 5) |
+| `ccs-login-mobile.css` | CCS login mobile polish (Sprint 6) |
 
-These are **not minified** and loaded on-demand by components that need them.
+These component CSS files are loaded via `site-header.php`:
+- `motion-safe.css` - Always loaded (global animation control)
+- `hero-mobile.css` - Loaded with `media="(max-width: 768px)"`
 
 ---
 
-## Sprint 2 Changes (Auth-UX Polish)
+## Sprint 7 Changes (Final Mobile & Desktop Polish)
 
-### New Features
-- **SSO buttons**: Now clickable with tooltip explaining disabled state, "Request SSO access" link
-- **MFA step indicator**: Shows "Step 2 of 2" with privacy notice
-- **Favorites → Pinned**: Renamed terminology, snackbar says "pinned to quick switch"
-- **Recent Activity**: Dummy API with localStorage, realistic timestamps
-- **Reduced motion**: All animated elements respect `prefers-reduced-motion`
-- **Footer polish**: Enhanced contrast on legal links, tooltips on cert badges
+### Animation Cleanup
+- **No hop/bounce animations**: Console card highlight uses border glow only
+- **Reduced motion**: Global `prefers-reduced-motion` support via `motion-safe.css`
+- **Feed items**: Opacity fade instead of slide-in
+
+### Quick Switch
+- **Pinned star**: Consistent `#c9a227` gold color in both themes
+- **Dropdown styling**: Semi-opaque dark surface with brand accent for selected item
+- **Mobile**: Sticky position, 160px max width, proper touch targets
+
+### SSO & MFA
+- **SSO buttons**: Active buttons in nav drawer triggering modal (not just links)
+- **MFA flow**: Step 1 (Credentials) → Step 2 (MFA modal) → Snackbar confirmation
+
+### Navigation Drawer
+- **Mobile drawer**: SSO buttons with `data-sso-request` triggers
+- **Quick Switch**: Available in both top bar and nav drawer
+- **Global SSO modal**: Included via `site-footer.php`
+
+### Hero Sections
+- **Unified styling**: `clamp()` for responsive font sizing
+- **Mobile**: Centered layout, proper spacing, 48px CTAs
+
+---
+
+## WebKit Testing Setup
+
+WebKit tests require system dependencies. On Ubuntu/Debian:
+
+```bash
+npx playwright install-deps webkit
+```
+
+Run WebKit tests conditionally:
+```bash
+npm test -- --project=webkit
+```
+
+---
+
+## Test Coverage
+
+```bash
+# Run all tests (Chromium only - fastest)
+npm test -- --project=chromium
+
+# Run specific test file
+npm test -- tests/ccs-login.spec.js
+
+# Run with headed browser (debugging)
+npm test -- --headed --project=chromium
+```
+
+Current: **380 Chromium tests passing**
+
+---
 
 ### Backend-Ready Structures
 - `bbx_console_activity` localStorage key (structure matches planned API)

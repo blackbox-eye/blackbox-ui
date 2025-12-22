@@ -1,10 +1,10 @@
 /**
  * Motion Safety & Animation Control
- * Sprint 6: Mobile QA & Desktop Polish
+ * Sprint 7: Final Mobile & Desktop Polish
  * 
  * Global reduced-motion support and animation cleanup.
  * Enforces prefers-reduced-motion across all components.
- * Removes "childish" slide/glide animations per brand guidelines.
+ * Removes "childish" slide/glide/bounce animations per brand guidelines.
  */
 
 /* ================================================
@@ -28,36 +28,44 @@
 }
 
 /* ================================================
-   CONSOLE CARD HIGHLIGHT - SIMPLIFIED
-   No more bouncing/pulsing animation.
-   Simple border glow that respects reduced motion.
+   CONSOLE CARD HIGHLIGHT - NO BOUNCE/PULSE
+   Simple border glow, no animation hop.
    ================================================ */
 
-.console-card--highlight {
-  border-color: var(--admin-gold, #c9a227) !important;
-  box-shadow: 
-    0 0 0 1px rgba(201, 162, 39, 0.3),
-    0 0 20px rgba(201, 162, 39, 0.15) !important;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+/* Override the keyframes animation completely */
+@keyframes console-card-pulse {
+  0%, 100% {
+    border-color: var(--bbx-gold, #c9a227);
+    box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.25), 0 0 20px rgba(201, 162, 39, 0.12);
+  }
 }
 
-/* Animation only for users who want it */
+.console-card--highlight {
+  border-color: var(--bbx-gold, #c9a227) !important;
+  box-shadow: 
+    0 0 0 2px rgba(201, 162, 39, 0.3),
+    0 0 24px rgba(201, 162, 39, 0.15) !important;
+  animation: none !important;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+/* Subtle glow pulse for users who want motion */
 @media (prefers-reduced-motion: no-preference) {
-  @keyframes console-highlight-subtle {
+  @keyframes console-highlight-glow {
     0%, 100% {
       box-shadow: 
-        0 0 0 1px rgba(201, 162, 39, 0.3),
-        0 0 20px rgba(201, 162, 39, 0.15);
+        0 0 0 2px rgba(201, 162, 39, 0.3),
+        0 0 20px rgba(201, 162, 39, 0.12);
     }
     50% {
       box-shadow: 
-        0 0 0 2px rgba(201, 162, 39, 0.5),
-        0 0 30px rgba(201, 162, 39, 0.25);
+        0 0 0 2px rgba(201, 162, 39, 0.45),
+        0 0 28px rgba(201, 162, 39, 0.2);
     }
   }
   
   .console-card--highlight {
-    animation: console-highlight-subtle 1.5s ease-in-out;
+    animation: console-highlight-glow 1.5s ease-in-out !important;
   }
 }
 

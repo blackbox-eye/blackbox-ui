@@ -60,81 +60,98 @@ include 'includes/site-header.php';
   </section>
 
   <section class="access-console" aria-label="<?= htmlspecialchars(t('agent_access.hero.title')) ?>">
-    <div class="access-console__grid">
-      <article class="access-card access-card--wide access-card--ccs" data-console="ccs">
-        <div class="access-card__badge access-card__badge--ccs" aria-hidden="true">
-          <span><?= t('agent_access.cards.ccs.badge') ?></span>
+    <div class="access-console__grid access-console__grid--equal">
+      <!-- CCS Card -->
+      <article id="ccs" class="access-card access-card--ccs" data-console="ccs">
+        <div class="access-card__header">
+          <div class="access-card__badge access-card__badge--ccs" aria-hidden="true">
+            <span><?= t('agent_access.cards.ccs.badge') ?></span>
+          </div>
+          <button type="button" class="access-card__info-btn" aria-label="More info about CCS" data-tooltip-target="ccs-tooltip">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          </button>
         </div>
         <div class="access-card__body">
           <h2 class="access-card__title"><?= t('agent_access.cards.ccs.title') ?></h2>
-          <p class="access-card__subtitle"><?= t('agent_access.cards.ccs.subtitle') ?></p>
-          <p class="access-card__description">
-            <?= t('agent_access.cards.ccs.body_primary') ?>
-          </p>
-          <p class="access-card__description">
-            <?= t('agent_access.cards.ccs.body_secondary') ?>
-          </p>
-          <p class="access-card__note"><?= t('agent_access.cards.ccs.requirements') ?></p>
-          <ul class="access-card__meta" aria-label="<?= htmlspecialchars(t('agent_access.cards.ccs.title')) ?>">
-            <li><?= t('agent_access.cards.ccs.subtitle') ?></li>
-            <li><?= t('agent_access.hero.audit_notice') ?></li>
-          </ul>
+          <p class="access-card__tagline"><?= t('agent_access.cards.ccs.subtitle') ?></p>
+          <div class="access-card__chips">
+            <span class="access-card__chip">Multi-Asset</span>
+            <span class="access-card__chip">Settlement</span>
+            <span class="access-card__chip">MFA Required</span>
+          </div>
         </div>
         <div class="access-card__actions">
           <a href="<?= htmlspecialchars($ccs_console_url) ?>"
-            class="access-card__cta bbx-btn-pill"
+            class="access-card__cta bbx-btn-pill access-card__cta--ccs"
             data-console-launch="ccs">
             <?= t('agent_access.cards.ccs.cta') ?>
           </a>
         </div>
+        <!-- Expandable details -->
+        <div id="ccs-tooltip" class="access-card__tooltip" role="tooltip" hidden>
+          <p><?= t('agent_access.cards.ccs.body_primary') ?></p>
+          <p><?= t('agent_access.cards.ccs.body_secondary') ?></p>
+          <p class="access-card__tooltip-note"><?= t('agent_access.cards.ccs.requirements') ?></p>
+        </div>
       </article>
 
-      <article class="access-card" data-console="gdi">
-        <div class="access-card__badge access-card__badge--gdi" aria-hidden="true">
-          <span>GDI</span>
+      <!-- GDI Card -->
+      <article id="gdi" class="access-card access-card--gdi" data-console="gdi">
+        <div class="access-card__header">
+          <div class="access-card__badge access-card__badge--gdi" aria-hidden="true">
+            <span>GDI</span>
+          </div>
+          <button type="button" class="access-card__info-btn" aria-label="More info about GDI" data-tooltip-target="gdi-tooltip">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          </button>
         </div>
         <div class="access-card__body">
           <h2 class="access-card__title"><?= t('agent_access.cards.gdi.title') ?></h2>
-          <p class="access-card__description">
-            <?= t('agent_access.cards.gdi.description') ?>
-          </p>
-          <ul class="access-card__meta" aria-label="<?= htmlspecialchars(t('agent_access.cards.gdi.title')) ?>">
-            <li><?= t('agent_access.cards.gdi.meta') ?></li>
-            <li><?= t('agent_access.hero.audit_notice') ?></li>
-          </ul>
+          <p class="access-card__tagline">Data Intelligence Platform</p>
+          <div class="access-card__chips">
+            <span class="access-card__chip">Investigations</span>
+            <span class="access-card__chip">Alert Triage</span>
+            <span class="access-card__chip">VPN + Badge</span>
+          </div>
         </div>
         <div class="access-card__actions">
           <a href="<?= htmlspecialchars($gdi_console_url) ?>"
-            class="access-card__cta bbx-btn-pill"
+            class="access-card__cta bbx-btn-pill access-card__cta--gdi"
             data-console-launch="gdi">
             <?= t('agent_access.cards.gdi.cta') ?>
           </a>
         </div>
+        <div id="gdi-tooltip" class="access-card__tooltip" role="tooltip" hidden>
+          <p><?= t('agent_access.cards.gdi.description') ?></p>
+          <p class="access-card__tooltip-note"><?= t('agent_access.cards.gdi.meta') ?></p>
+        </div>
       </article>
 
-      <article class="access-card" data-console="intel24">
-        <div class="access-card__badge access-card__badge--intel24" aria-hidden="true">
-          <span>Intel24</span>
+      <!-- Intel24 Card -->
+      <article id="intel24" class="access-card access-card--intel24" data-console="intel24">
+        <div class="access-card__header">
+          <div class="access-card__badge access-card__badge--intel24" aria-hidden="true">
+            <span>I24</span>
+          </div>
+          <?php if ($intel24_has_sso): ?>
+            <span class="access-card__sso-badge">SSO Ready</span>
+          <?php endif; ?>
+          <button type="button" class="access-card__info-btn" aria-label="More info about Intel24" data-tooltip-target="intel24-tooltip">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          </button>
         </div>
         <div class="access-card__body">
           <h2 class="access-card__title"><?= t('agent_access.cards.ts24.title') ?></h2>
-          <p class="access-card__description">
-            <?= t('agent_access.cards.ts24.description') ?>
-          </p>
-          <p class="access-card__note">
-            <?= t('agent_access.cards.ts24.sso_notice') ?>
-            <?php if ($intel24_has_sso): ?>
-              <span class="access-card__note-badge"><?= t('agent_access.cards.ts24.sso_ready') ?></span>
-            <?php endif; ?>
-          </p>
-          <ul class="access-card__meta" aria-label="<?= htmlspecialchars(t('agent_access.cards.ts24.title')) ?>">
-            <li><?= t('agent_access.cards.ts24.meta') ?></li>
-            <li><?= t('agent_access.hero.audit_notice') ?></li>
-          </ul>
+          <p class="access-card__tagline">Rapid Response Intelligence</p>
+          <div class="access-card__chips">
+            <span class="access-card__chip">Telemetry</span>
+            <span class="access-card__chip">Transport Alerts</span>
+            <span class="access-card__chip">Tactical Briefs</span>
+          </div>
         </div>
         <div class="access-card__actions">
           <a href="<?= htmlspecialchars($intel24_console_url) ?>"
-            class="access-card__cta bbx-btn-pill"
+            class="access-card__cta bbx-btn-pill access-card__cta--intel24"
             data-console-launch="intel24"
             target="_blank"
             rel="noopener"
@@ -142,9 +159,62 @@ include 'includes/site-header.php';
             <?= t('agent_access.cards.ts24.cta') ?>
           </a>
         </div>
+        <div id="intel24-tooltip" class="access-card__tooltip" role="tooltip" hidden>
+          <p><?= t('agent_access.cards.ts24.description') ?></p>
+          <p><?= t('agent_access.cards.ts24.sso_notice') ?></p>
+          <p class="access-card__tooltip-note"><?= t('agent_access.cards.ts24.meta') ?></p>
+        </div>
       </article>
     </div>
   </section>
+
+  <script>
+  // Smooth scroll animation for anchor navigation
+  document.addEventListener('DOMContentLoaded', function() {
+    // Handle hash on page load
+    if (window.location.hash) {
+      const targetId = window.location.hash.substring(1);
+      const targetCard = document.getElementById(targetId);
+      if (targetCard) {
+        setTimeout(function() {
+          targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          targetCard.classList.add('access-card--highlight');
+          setTimeout(function() {
+            targetCard.classList.remove('access-card--highlight');
+          }, 2000);
+        }, 100);
+      }
+    }
+
+    // Info button tooltip toggle
+    document.querySelectorAll('.access-card__info-btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('data-tooltip-target');
+        const tooltip = document.getElementById(targetId);
+        if (tooltip) {
+          const isHidden = tooltip.hasAttribute('hidden');
+          // Close all tooltips first
+          document.querySelectorAll('.access-card__tooltip').forEach(function(t) {
+            t.setAttribute('hidden', '');
+          });
+          if (isHidden) {
+            tooltip.removeAttribute('hidden');
+          }
+        }
+      });
+    });
+
+    // Close tooltips when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.access-card__info-btn') && !e.target.closest('.access-card__tooltip')) {
+        document.querySelectorAll('.access-card__tooltip').forEach(function(t) {
+          t.setAttribute('hidden', '');
+        });
+      }
+    });
+  });
+  </script>
 </main>
 
 <?php include 'includes/site-footer.php'; ?>

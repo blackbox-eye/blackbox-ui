@@ -463,25 +463,25 @@ if ($is_graphene_page) {
                                 <div class="console-menu-header">
                                     <span><?= t('header.console.title', 'Vælg konsol') ?></span>
                                 </div>
-                                <a href="/ccs-console.php" class="console-menu-item" role="menuitem">
+                                <a href="/agent-access.php#ccs" class="console-menu-item" role="menuitem" data-scroll-to="ccs">
                                     <div class="console-menu-item__icon console-menu-item__icon--ccs">CCS</div>
                                     <div class="console-menu-item__content">
                                         <span class="console-menu-item__title"><?= t('header.console.ccs', 'CCS Console') ?></span>
                                         <span class="console-menu-item__desc"><?= t('header.console.ccs_desc', 'Settlement Systems') ?></span>
                                     </div>
                                 </a>
-                                <a href="/agent-access.php" class="console-menu-item" role="menuitem">
+                                <a href="/agent-access.php#gdi" class="console-menu-item" role="menuitem" data-scroll-to="gdi">
                                     <div class="console-menu-item__icon console-menu-item__icon--gdi">GDI</div>
                                     <div class="console-menu-item__content">
                                         <span class="console-menu-item__title"><?= t('header.console.gdi', 'GDI Console') ?></span>
                                         <span class="console-menu-item__desc"><?= t('header.console.gdi_desc', 'Data Intelligence') ?></span>
                                     </div>
                                 </a>
-                                <a href="/agent-access.php?launch=intel24" class="console-menu-item" role="menuitem">
+                                <a href="/agent-access.php#intel24" class="console-menu-item" role="menuitem" data-scroll-to="intel24">
                                     <div class="console-menu-item__icon console-menu-item__icon--intel24">I24</div>
                                     <div class="console-menu-item__content">
-                                        <span class="console-menu-item__title"><?= t('header.console.ts24', 'Intel24 Console') ?></span>
-                                        <span class="console-menu-item__desc"><?= t('header.console.ts24_desc', 'Intel24 Intelligence') ?></span>
+                                        <span class="console-menu-item__title"><?= t('header.console.intel24', 'Intel24 Console') ?></span>
+                                        <span class="console-menu-item__desc"><?= t('header.console.intel24_desc', 'Intel24 Intelligence') ?></span>
                                     </div>
                                 </a>
                             </div>
@@ -576,17 +576,17 @@ if ($is_graphene_page) {
             <div class="mobile-console-access mb-3">
                 <p class="text-xs text-gray-500 uppercase tracking-wider mb-2"><?= t('header.console.title', 'Vælg konsol') ?></p>
                 <div class="flex gap-2">
-                    <a href="/ccs-console.php" class="mobile-console-btn flex-1">
+                    <a href="/agent-access.php#ccs" class="mobile-console-btn flex-1" data-scroll-to="ccs">
                         <span class="mobile-console-icon mobile-console-icon--ccs">CCS</span>
                         <span class="mobile-console-label"><?= t('header.console.ccs', 'CCS Console') ?></span>
                     </a>
-                    <a href="/agent-access.php" class="mobile-console-btn flex-1">
+                    <a href="/agent-access.php#gdi" class="mobile-console-btn flex-1" data-scroll-to="gdi">
                         <span class="mobile-console-icon mobile-console-icon--gdi">GDI</span>
                         <span class="mobile-console-label"><?= t('header.console.gdi', 'GDI Console') ?></span>
                     </a>
-                    <a href="/agent-access.php?launch=intel24" class="mobile-console-btn flex-1">
+                    <a href="/agent-access.php#intel24" class="mobile-console-btn flex-1" data-scroll-to="intel24">
                         <span class="mobile-console-icon mobile-console-icon--intel24">I24</span>
-                        <span class="mobile-console-label"><?= t('header.console.ts24', 'Intel24') ?></span>
+                        <span class="mobile-console-label"><?= t('header.console.intel24', 'Intel24') ?></span>
                     </a>
                 </div>
             </div>

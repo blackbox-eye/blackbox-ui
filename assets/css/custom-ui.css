@@ -5103,7 +5103,8 @@ a.agent-login-cta {
   transition: transform 0.2s ease;
 }
 
-.console-access-dropdown[aria-expanded="true"] .console-chevron {
+/* Use button's aria-expanded for state (a11y compliant) */
+.console-access-trigger[aria-expanded="true"] .console-chevron {
   transform: rotate(180deg);
 }
 
@@ -5132,7 +5133,9 @@ a.agent-login-cta {
   pointer-events: none;
 }
 
-.console-access-dropdown[aria-expanded="true"] .console-access-menu {
+/* Use button's aria-expanded for menu visibility (a11y compliant) */
+.console-access-trigger[aria-expanded="true"] + .console-access-menu,
+.console-access-trigger[aria-expanded="true"] ~ .console-access-menu {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
@@ -5144,9 +5147,8 @@ a.agent-login-cta {
   transform: scale(0.98);
 }
 
-/* Alternative: Use :focus-within on parent */
-.console-access-dropdown:focus-within .console-access-menu,
-#login-dropdown-container[aria-expanded="true"] .console-access-menu {
+/* Focus-within fallback for keyboard navigation */
+.console-access-dropdown:focus-within .console-access-menu {
   opacity: 1 !important;
   visibility: visible !important;
   transform: translateY(0) !important;

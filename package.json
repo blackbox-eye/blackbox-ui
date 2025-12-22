@@ -17,6 +17,7 @@
     "qa:gui:ci": "cross-env QA_MODE=1 playwright test tests/e2e/sso-gui.spec.ts --reporter=line"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
     "@playwright/test": "^1.56.1",
     "autoprefixer": "^10.4.22",
     "cross-env": "^7.0.3",

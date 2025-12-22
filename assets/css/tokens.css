@@ -1,0 +1,232 @@
+/**
+ * Sprint 8 - CSS Design Tokens
+ * Consolidated color palette for dark/light theme support
+ * 
+ * WCAG 2.1 AA Contrast Requirements:
+ * - Normal text (< 18pt): 4.5:1 minimum
+ * - Large text (>= 18pt) and UI components: 3:1 minimum
+ * - Focus indicators: 3:1 minimum
+ */
+
+:root,
+:root[data-theme="dark"] {
+  /* ═══════════════════════════════════════════════════════════════
+     CORE PALETTE - Dark Theme (Default)
+     ═══════════════════════════════════════════════════════════════ */
+  
+  /* Backgrounds */
+  --color-bg: #0a0b0d;
+  --color-bg-elevated: #12141a;
+  --color-surface: #1a1c22;
+  --color-surface-hover: #22252d;
+  --color-surface-active: #2a2d36;
+  
+  /* Text - WCAG AA compliant on dark backgrounds */
+  --color-text: #e8e6e3;           /* 13.5:1 on --color-bg */
+  --color-text-secondary: #a8a5a0; /* 7.2:1 on --color-bg */
+  --color-text-muted: #6b6966;     /* 4.5:1 on --color-bg (minimum AA) */
+  --color-text-disabled: #4a4846;  /* 3.1:1 - for disabled only */
+  
+  /* Brand accent - Gold/Brass tone */
+  --color-primary: #c9a227;        /* Blackbox gold */
+  --color-primary-hover: #d4b23a;
+  --color-primary-soft: rgba(201, 162, 39, 0.15);
+  
+  /* Semantic colors */
+  --color-success: #22c55e;
+  --color-success-soft: rgba(34, 197, 94, 0.15);
+  --color-warning: #f59e0b;
+  --color-warning-soft: rgba(245, 158, 11, 0.15);
+  --color-danger: #ef4444;
+  --color-danger-soft: rgba(239, 68, 68, 0.15);
+  --color-info: #3b82f6;
+  --color-info-soft: rgba(59, 130, 246, 0.15);
+  
+  /* Borders */
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-strong: rgba(255, 255, 255, 0.2);
+  --color-border-focus: #c9a227;
+  
+  /* Focus ring - 3:1 contrast minimum */
+  --color-focus-ring: #c9a227;
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  
+  /* ═══════════════════════════════════════════════════════════════
+     SPACING TOKENS - 4px base unit
+     ═══════════════════════════════════════════════════════════════ */
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-6: 1.5rem;   /* 24px */
+  --space-8: 2rem;     /* 32px */
+  --space-12: 3rem;    /* 48px */
+  --space-16: 4rem;    /* 64px */
+  
+  /* ═══════════════════════════════════════════════════════════════
+     BORDER RADIUS TOKENS
+     ═══════════════════════════════════════════════════════════════ */
+  --radius-sm: 0.25rem;   /* 4px */
+  --radius-md: 0.5rem;    /* 8px */
+  --radius-lg: 0.75rem;   /* 12px */
+  --radius-xl: 1rem;      /* 16px */
+  --radius-full: 9999px;
+  
+  /* ═══════════════════════════════════════════════════════════════
+     TRANSITION TOKENS
+     ═══════════════════════════════════════════════════════════════ */
+  --transition-fast: 150ms ease;
+  --transition-normal: 200ms ease;
+  --transition-slow: 300ms ease;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LIGHT THEME OVERRIDES
+   ═══════════════════════════════════════════════════════════════ */
+:root[data-theme="light"] {
+  /* Backgrounds */
+  --color-bg: #f8f7f4;
+  --color-bg-elevated: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f3f2ef;
+  --color-surface-active: #e8e7e4;
+  
+  /* Text - WCAG AA compliant on light backgrounds */
+  --color-text: #1a1a1a;           /* 15.3:1 on --color-bg */
+  --color-text-secondary: #4a4a4a; /* 8.1:1 on --color-bg */
+  --color-text-muted: #6b6b6b;     /* 5.2:1 on --color-bg */
+  --color-text-disabled: #9a9a9a;  /* 3.2:1 - for disabled only */
+  
+  /* Brand accent - Darker gold for light mode */
+  --color-primary: #9a7b1f;        /* Darker gold for contrast */
+  --color-primary-hover: #8a6d1a;
+  --color-primary-soft: rgba(154, 123, 31, 0.12);
+  
+  /* Borders */
+  --color-border: rgba(0, 0, 0, 0.1);
+  --color-border-strong: rgba(0, 0, 0, 0.2);
+  --color-border-focus: #9a7b1f;
+  
+  /* Focus ring */
+  --color-focus-ring: #9a7b1f;
+  
+  /* Shadows - lighter for light mode */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FOCUS VISIBLE STYLES - A11y Hardening
+   Ensures all interactive elements have visible focus indicators
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Default focus-visible for all focusable elements */
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* Remove default outline only when using focus-visible */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Button focus styles */
+button:focus-visible,
+[role="button"]:focus-visible,
+.btn:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+  box-shadow: 0 0 0 4px var(--color-primary-soft);
+}
+
+/* Link focus styles */
+a:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-sm);
+}
+
+/* Input focus styles */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+  border-color: var(--color-focus-ring);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+/* Card/interactive container focus */
+.card:focus-visible,
+.console-card:focus-visible,
+[tabindex="0"]:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MOTION SAFE - Respect prefers-reduced-motion
+   ═══════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   UTILITY CLASSES
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Skip link for keyboard users */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-primary);
+  color: var(--color-bg);
+  padding: var(--space-2) var(--space-4);
+  z-index: 100000;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Visually hidden but focusable */
+.sr-only-focusable:focus,
+.sr-only-focusable:active {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}

@@ -260,27 +260,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="ccs-login__footer-inner">
             
             <!-- Certifications -->
-            <div class="ccs-login__certifications" data-testid="certifications">
-                <div class="ccs-login__cert">
-                    <svg class="ccs-login__cert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <div class="ccs-login__certifications" data-testid="certifications" role="list" aria-label="Security certifications">
+                <div class="ccs-login__cert" role="listitem">
+                    <svg class="ccs-login__cert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                         <path d="M9 12l2 2 4-4"/>
                     </svg>
                     <span class="ccs-login__cert-label">PCI DSS</span>
+                    <span class="visually-hidden">Payment Card Industry Data Security Standard certified</span>
                 </div>
-                <div class="ccs-login__cert">
-                    <svg class="ccs-login__cert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <div class="ccs-login__cert" role="listitem">
+                    <svg class="ccs-login__cert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                         <circle cx="12" cy="12" r="10"/>
                         <path d="M12 6v6l4 2"/>
                     </svg>
                     <span class="ccs-login__cert-label">ISO 27001</span>
+                    <span class="visually-hidden">ISO 27001 Information Security Management certified</span>
                 </div>
-                <div class="ccs-login__cert">
-                    <svg class="ccs-login__cert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <div class="ccs-login__cert" role="listitem">
+                    <svg class="ccs-login__cert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                         <rect x="3" y="3" width="18" height="18" rx="2"/>
                         <path d="M3 9h18M9 21V9"/>
                     </svg>
                     <span class="ccs-login__cert-label">SOC 2</span>
+                    <span class="visually-hidden">SOC 2 Type II Service Organization Control certified</span>
                 </div>
             </div>
 

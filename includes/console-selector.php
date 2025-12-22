@@ -53,8 +53,10 @@ $intel24_has_sso = $intel24_has_sso ?? false;
                 class="console-card__fav-btn" 
                 aria-label="Add CCS to favorites" 
                 aria-pressed="false"
-                data-favorite="ccs">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                data-favorite="ccs"
+                data-tooltip="Mark as favourite"
+                data-tooltip-pos="bottom">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
           </svg>
         </button>
@@ -62,9 +64,11 @@ $intel24_has_sso = $intel24_has_sso ?? false;
                 class="console-card__info-btn" 
                 aria-label="Show detailed information about CCS" 
                 aria-expanded="false"
-                data-slideout-target="ccs-slideout">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                data-slideout-target="ccs-slideout"
+                data-tooltip="More information"
+                data-tooltip-pos="bottom">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
           </svg>
         </button>
       </div>
@@ -121,6 +125,18 @@ $intel24_has_sso = $intel24_has_sso ?? false;
               <circle cx="100" cy="8" r="3" fill="currentColor"/>
             </svg>
           </div>
+          
+          <!-- Additional metrics -->
+          <div class="console-card__metrics-grid">
+            <div class="console-card__metric">
+              <span class="console-card__metric-value" data-metric="avg-settlement-time">1.8s</span>
+              <span class="console-card__metric-label">Avg settlement</span>
+            </div>
+            <div class="console-card__metric">
+              <span class="console-card__metric-value" data-metric="fiat-crypto-ratio">62/38</span>
+              <span class="console-card__metric-label">Fiat/Crypto %</span>
+            </div>
+          </div>
         </div>
       </div>
     </article>
@@ -143,8 +159,10 @@ $intel24_has_sso = $intel24_has_sso ?? false;
                 class="console-card__fav-btn" 
                 aria-label="Add GDI to favorites" 
                 aria-pressed="false"
-                data-favorite="gdi">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                data-favorite="gdi"
+                data-tooltip="Mark as favourite"
+                data-tooltip-pos="bottom">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
           </svg>
         </button>
@@ -152,9 +170,11 @@ $intel24_has_sso = $intel24_has_sso ?? false;
                 class="console-card__info-btn" 
                 aria-label="Show detailed information about GDI" 
                 aria-expanded="false"
-                data-slideout-target="gdi-slideout">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                data-slideout-target="gdi-slideout"
+                data-tooltip="More information"
+                data-tooltip-pos="bottom">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
           </svg>
         </button>
       </div>
@@ -230,8 +250,10 @@ $intel24_has_sso = $intel24_has_sso ?? false;
                 class="console-card__fav-btn" 
                 aria-label="Add Intel24 to favorites" 
                 aria-pressed="false"
-                data-favorite="intel24">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                data-favorite="intel24"
+                data-tooltip="Mark as favourite"
+                data-tooltip-pos="bottom">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
           </svg>
         </button>
@@ -239,9 +261,11 @@ $intel24_has_sso = $intel24_has_sso ?? false;
                 class="console-card__info-btn" 
                 aria-label="Show detailed information about Intel24" 
                 aria-expanded="false"
-                data-slideout-target="intel24-slideout">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                data-slideout-target="intel24-slideout"
+                data-tooltip="More information"
+                data-tooltip-pos="bottom">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
           </svg>
         </button>
       </div>

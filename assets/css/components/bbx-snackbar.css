@@ -1,0 +1,282 @@
+/**
+ * Blackbox EYE Snackbar/Toast System
+ * 
+ * Provides non-blocking notifications for user feedback.
+ * Supports success, error, warning, and info types.
+ * 
+ * Usage:
+ * window.bbxSnackbar.show('Message text', { type: 'success', duration: 3000 });
+ * window.bbxSnackbar.success('Operation completed!');
+ * window.bbxSnackbar.error('Something went wrong');
+ */
+
+/* ================================================
+   SNACKBAR CONTAINER
+   ================================================ */
+
+.bbx-snackbar-container {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10001;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  pointer-events: none;
+  max-width: calc(100% - 2rem);
+  width: 400px;
+}
+
+@media (max-width: 480px) {
+  .bbx-snackbar-container {
+    bottom: 1rem;
+    width: calc(100% - 2rem);
+  }
+}
+
+/* ================================================
+   SNACKBAR ITEM
+   ================================================ */
+
+.bbx-snackbar {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  background: rgba(15, 20, 28, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  color: #fff;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.bbx-snackbar.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.bbx-snackbar.is-exiting {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.95);
+}
+
+/* Icon */
+.bbx-snackbar__icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.bbx-snackbar__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Content */
+.bbx-snackbar__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.bbx-snackbar__message {
+  margin: 0;
+  word-wrap: break-word;
+}
+
+/* Dismiss button */
+.bbx-snackbar__dismiss {
+  background: transparent;
+  border: none;
+  padding: 0.25rem;
+  margin: -0.25rem -0.25rem -0.25rem 0.25rem;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.5);
+  transition: color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.bbx-snackbar__dismiss:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.bbx-snackbar__dismiss svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+/* Progress bar */
+.bbx-snackbar__progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0 0 0.75rem 0.75rem;
+  overflow: hidden;
+}
+
+.bbx-snackbar__progress-bar {
+  height: 100%;
+  width: 100%;
+  transform-origin: left;
+  transition: transform linear;
+}
+
+/* ================================================
+   SNACKBAR TYPES
+   ================================================ */
+
+/* Success */
+.bbx-snackbar--success {
+  border-color: rgba(46, 204, 113, 0.3);
+}
+
+.bbx-snackbar--success .bbx-snackbar__icon {
+  color: #2ecc71;
+}
+
+.bbx-snackbar--success .bbx-snackbar__progress-bar {
+  background: #2ecc71;
+}
+
+/* Error */
+.bbx-snackbar--error {
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.bbx-snackbar--error .bbx-snackbar__icon {
+  color: #ef4444;
+}
+
+.bbx-snackbar--error .bbx-snackbar__progress-bar {
+  background: #ef4444;
+}
+
+/* Warning */
+.bbx-snackbar--warning {
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.bbx-snackbar--warning .bbx-snackbar__icon {
+  color: #f59e0b;
+}
+
+.bbx-snackbar--warning .bbx-snackbar__progress-bar {
+  background: #f59e0b;
+}
+
+/* Info */
+.bbx-snackbar--info {
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.bbx-snackbar--info .bbx-snackbar__icon {
+  color: #3b82f6;
+}
+
+.bbx-snackbar--info .bbx-snackbar__progress-bar {
+  background: #3b82f6;
+}
+
+/* ================================================
+   LIGHT THEME
+   ================================================ */
+
+:root[data-theme="light"] .bbx-snackbar {
+  background: rgba(255, 255, 255, 0.98);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #1f2937;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+:root[data-theme="light"] .bbx-snackbar__dismiss {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+:root[data-theme="light"] .bbx-snackbar__dismiss:hover {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+:root[data-theme="light"] .bbx-snackbar__progress {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* ================================================
+   UI MICROINTERACTIONS
+   ================================================ */
+
+/* Hover lift effect for cards */
+.bbx-hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bbx-hover-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Slide-in animation (use with animation-delay) */
+@keyframes bbx-slide-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bbx-slide-in {
+  animation: bbx-slide-in-up 0.4s ease forwards;
+  opacity: 0;
+}
+
+.bbx-slide-in:nth-child(1) { animation-delay: 0.05s; }
+.bbx-slide-in:nth-child(2) { animation-delay: 0.1s; }
+.bbx-slide-in:nth-child(3) { animation-delay: 0.15s; }
+.bbx-slide-in:nth-child(4) { animation-delay: 0.2s; }
+.bbx-slide-in:nth-child(5) { animation-delay: 0.25s; }
+
+/* Fade scale animation */
+@keyframes bbx-fade-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.bbx-fade-scale {
+  animation: bbx-fade-scale 0.3s ease forwards;
+}
+
+/* Pulse attention animation */
+@keyframes bbx-pulse-attention {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(46, 204, 113, 0); }
+}
+
+.bbx-pulse-attention {
+  animation: bbx-pulse-attention 2s ease infinite;
+}
+
+/* Button press feedback */
+.bbx-btn-press:active {
+  transform: scale(0.97);
+}

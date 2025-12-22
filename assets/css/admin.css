@@ -3887,9 +3887,9 @@ body {
 }
 
 .console-card--intel24 .console-card__chip {
-  background: rgba(201, 162, 39, 0.08);
-  border-color: rgba(201, 162, 39, 0.2);
-  color: #e8c547;
+  background: rgba(232, 197, 71, 0.12);
+  border-color: rgba(232, 197, 71, 0.28);
+  color: #f5d86a;
 }
 
 /* CTA actions */
@@ -4053,6 +4053,41 @@ body {
 .console-card--ccs .console-card__sparkline { color: #7cf0ba; }
 .console-card--gdi .console-card__sparkline { color: #59c0ff; }
 .console-card--intel24 .console-card__sparkline { color: #e8c547; }
+
+/* Metrics grid inside slideout */
+.console-card__metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.625rem;
+  margin-top: 0.75rem;
+}
+
+.console-card__metric {
+  background: rgba(255,255,255,0.03);
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.625rem;
+  text-align: center;
+}
+
+.console-card__metric-value {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.125rem;
+}
+
+.console-card__metric-label {
+  display: block;
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.console-card--ccs .console-card__metric-value { color: #7cf0ba; }
+.console-card--gdi .console-card__metric-value { color: #59c0ff; }
+.console-card--intel24 .console-card__metric-value { color: #f5d86a; }
 
 /* Recent Activity Section */
 .console-selector__activity {

@@ -38,8 +38,8 @@ $protectedRoutes = [
 ];
 
 $routerConfig = [
-  'loginRoute' => '/agent-login.php',
-  'fallbackRoute' => '/agent-login.php',
+  'loginRoute' => '/gdi-login.php',
+  'fallbackRoute' => '/gdi-login.php',
   'protectedRoutes' => $protectedRoutes,
   'ts24Entry' => defined('BBX_TS24_CONSOLE_URL') ? BBX_TS24_CONSOLE_URL : 'https://intel24.blackbox.codes/sso-login',
   'expectedIssuer' => BBX_SITE_BASE_URL,

@@ -9,7 +9,18 @@
 
 session_start();
 require_once __DIR__ . '/includes/env.php';
-require_once __DIR__ . '/db.php';
+
+// Resilient DB bootstrap: fall back to example config instead of fatal
+$dbFile = __DIR__ . '/db.php';
+if (file_exists($dbFile)) {
+    require_once $dbFile;
+} else {
+    error_log('BBX LOGIN WARNING: db.php missing, using stub config (no DB connection)');
+    require_once __DIR__ . '/db.php.example';
+    if (!defined('BBX_DB_CONNECTED')) {
+        define('BBX_DB_CONNECTED', false);
+    }
+}
 require_once __DIR__ . '/includes/logging.php';
 require_once __DIR__ . '/includes/jwt_helper.php';
 require_once __DIR__ . '/includes/sso_audit.php';

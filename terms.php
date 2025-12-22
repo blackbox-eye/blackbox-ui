@@ -166,7 +166,7 @@ include __DIR__ . '/includes/site-header.php';
       </section>
 
       <!-- Contact -->
-      <section class="p-6 rounded-xl border" style="background: rgba(212, 175, 55, 0.1); border-color: rgba(212, 175, 55, 0.3);">
+      <section class="p-6 rounded-xl border" style="background: rgba(232, 197, 71, 0.14); border-color: rgba(212, 175, 55, 0.3);">
         <h2 class="text-xl font-bold " style="color: var(--primary-accent); mb-4">Kontakt</h2>
         <p class="text-gray-300 leading-relaxed mb-4">
           For spørgsmål om disse vilkår, kontakt venligst:

@@ -21,9 +21,9 @@ $current_lang = bbx_get_language();
     <section class="py-20 sm:py-24 section-fade-in page-section">
         <div class="container mx-auto px-4">
             <div class="text-center max-w-2xl mx-auto mb-12">
-                <p class=" uppercase tracking-widest text-sm font-semibold mb-4" style="color: var(--primary-accent);"><?= t('contact.hero_section.tagline') ?></p>
+                <p class=" uppercase tracking-widest text-sm font-semibold mb-4" style="color: var(--text-gold);"><?= t('contact.hero_section.tagline') ?></p>
                 <h1 class="text-3xl sm:text-5xl font-bold mb-6"><?= t('contact.hero_section.title') ?></h1>
-                <p class="text-gray-300 text-base sm:text-lg">
+                <p class="text-gray-200 text-base sm:text-lg">
                     <?= t('contact.hero_section.description') ?>
                 </p>
             </div>
@@ -39,7 +39,7 @@ $current_lang = bbx_get_language();
                         </div>
 
                         <div>
-                            <label for="name" class="block text-sm font-medium text-gray-300 mb-2">
+                            <label for="name" class="block text-sm font-medium text-gray-200 mb-2">
                                 <?= t('contact.form.name') ?> <span class="text-red-400" aria-hidden="true">*</span>
                             </label>
                             <input type="text" id="name" name="name" required
@@ -47,12 +47,12 @@ $current_lang = bbx_get_language();
                                 maxlength="100"
                                 aria-required="true"
                                 aria-describedby="name-error"
-                                class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-2" style="--tw-ring-color: var(--primary-accent);">
+                                class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-2" style="--tw-ring-color: var(--text-gold);">
                             <p id="name-error" class="mt-1 text-sm text-red-400 hidden" role="alert"></p>
                         </div>
 
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-300 mb-2">
+                            <label for="email" class="block text-sm font-medium text-gray-200 mb-2">
                                 <?= t('contact.form.email') ?> <span class="text-red-400" aria-hidden="true">*</span>
                             </label>
                             <input type="email" id="email" name="email" required
@@ -60,31 +60,31 @@ $current_lang = bbx_get_language();
                                 maxlength="254"
                                 aria-required="true"
                                 aria-describedby="email-error"
-                                class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-2" style="--tw-ring-color: var(--primary-accent);">
+                                class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-2" style="--tw-ring-color: var(--text-gold);">
                             <p id="email-error" class="mt-1 text-sm text-red-400 hidden" role="alert"></p>
                         </div>
 
                         <div>
-                            <label for="phone" class="block text-sm font-medium text-gray-300 mb-2">
+                            <label for="phone" class="block text-sm font-medium text-gray-200 mb-2">
                                 <?= t('contact.form.phone_optional') ?>
                             </label>
                             <input type="tel" id="phone" name="phone"
                                 autocomplete="tel"
                                 maxlength="30"
                                 aria-required="false"
-                                class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-2" style="--tw-ring-color: var(--primary-accent);">
+                                class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-2" style="--tw-ring-color: var(--text-gold);">
                         </div>
 
                         <div>
-                            <label for="message" class="block text-sm font-medium text-gray-300 mb-2">
+                            <label for="message" class="block text-sm font-medium text-gray-200 mb-2">
                                 <?= t('contact.form.message') ?> <span class="text-red-400" aria-hidden="true">*</span>
                             </label>
                             <textarea id="message" name="message" rows="5" required
                                 maxlength="5000"
                                 aria-required="true"
                                 aria-describedby="message-error message-hint"
-                                class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-2" style="--tw-ring-color: var(--primary-accent);"></textarea>
-                            <p id="message-hint" class="mt-1 text-xs text-gray-500">
+                                class="block w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-2" style="--tw-ring-color: var(--text-gold);"></textarea>
+                            <p id="message-hint" class="mt-1 text-xs text-gray-300">
                                 <?= $current_lang === 'da' ? 'Maks. 5000 tegn' : 'Max. 5000 characters' ?>
                             </p>
                             <p id="message-error" class="mt-1 text-sm text-red-400 hidden" role="alert"></p>
@@ -95,11 +95,11 @@ $current_lang = bbx_get_language();
                             <input type="checkbox" id="privacy-consent" name="privacy_consent" required
                                 aria-required="true"
                                 aria-describedby="privacy-error"
-                                class="mt-1 accent-color" style="accent-color: var(--primary-accent); w-4 h-4">
-                            <label for="privacy-consent" class="text-sm text-gray-300">
+                                class="mt-1 accent-color" style="accent-color: var(--text-gold); w-4 h-4">
+                            <label for="privacy-consent" class="text-sm text-gray-200">
                                 <?= $current_lang === 'da'
-                                    ? 'Jeg accepterer <a href="privacy.php" class="  underline" style="color: var(--primary-accent);" target="_blank">privatlivspolitikken</a> og at mine oplysninger behandles.'
-                                    : 'I accept the <a href="privacy.php" class="  underline" style="color: var(--primary-accent);" target="_blank">privacy policy</a> and consent to my data being processed.' ?>
+                                    ? 'Jeg accepterer <a href="privacy.php" class="  underline" style="color: var(--text-gold);" target="_blank">privatlivspolitikken</a> og at mine oplysninger behandles.'
+                                    : 'I accept the <a href="privacy.php" class="  underline" style="color: var(--text-gold);" target="_blank">privacy policy</a> and consent to my data being processed.' ?>
                                 <span class="text-red-400" aria-hidden="true">*</span>
                             </label>
                         </div>
@@ -110,7 +110,7 @@ $current_lang = bbx_get_language();
 
                         <button type="submit"
                             aria-label="<?= htmlspecialchars(t('contact.form.submit')) ?>"
-                            class="w-full border-2" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); backdrop-filter: blur(8px); font-semibold py-3 rounded-lg  transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            class="w-full border-2" style="background: rgba(232, 197, 71, 0.14); border-color: var(--text-gold); color: var(--text-gold); backdrop-filter: blur(8px); font-semibold py-3 rounded-lg  transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             data-sending-text="<?= htmlspecialchars(t('contact.form.sending')) ?>">
                             <?= t('contact.form.submit') ?>
                         </button>
@@ -134,41 +134,41 @@ $current_lang = bbx_get_language();
 
                 <aside class="glass-effect rounded-2xl p-8 space-y-8">
                     <div>
-                        <h2 class="text-xl font-semibold  mb-2" style="color: var(--primary-accent);"><?= t('contact.details.direct.title') ?></h2>
-                        <p class="text-gray-300 text-sm"><?= t('contact.details.direct.email') ?></p>
-                        <p class="text-gray-300 text-sm"><?= t('contact.details.direct.phone') ?></p>
+                        <h2 class="text-xl font-semibold  mb-2" style="color: var(--text-gold);"><?= t('contact.details.direct.title') ?></h2>
+                        <p class="text-gray-200 text-sm"><?= t('contact.details.direct.email') ?></p>
+                        <p class="text-gray-200 text-sm"><?= t('contact.details.direct.phone') ?></p>
                     </div>
                     <div>
-                        <h2 class="text-xl font-semibold  mb-2" style="color: var(--primary-accent);"><?= t('contact.details.offices.title') ?></h2>
-                        <p class="text-gray-400 text-sm mb-4">
+                        <h2 class="text-xl font-semibold  mb-2" style="color: var(--text-gold);"><?= t('contact.details.offices.title') ?></h2>
+                        <p class="text-gray-300 text-sm mb-4">
                             <strong class="text-gray-200"><?= t('contact.details.offices.switzerland') ?></strong><br>
                             <?= t('contact.details.offices.switzerland_address') ?>
                         </p>
                         <div class="border-t border-gray-700/50 pt-4">
-                            <p class="text-gray-400 text-sm">
+                            <p class="text-gray-300 text-sm">
                                 <strong class="text-gray-200"><?= t('contact.details.offices.uae') ?></strong><br>
                                 <span class="text-xs" style="color: rgba(212, 175, 55, 0.8);" dir="rtl"><?= t('footer.offices.uae_company_ar') ?></span><br>
-                                <span class="text-gray-500 text-xs">(<?= t('footer.offices.uae_company_en') ?>)</span><br>
+                                <span class="text-gray-300 text-xs">(<?= t('footer.offices.uae_company_en') ?>)</span><br>
                                 <?= t('contact.details.offices.uae_address') ?><br>
-                                <span class="text-gray-300"><?= t('footer.offices.uae_phone') ?></span>
+                                <span class="text-gray-200"><?= t('footer.offices.uae_phone') ?></span>
                             </p>
                         </div>
                     </div>
                     <div>
-                        <h2 class="text-xl font-semibold  mb-2" style="color: var(--primary-accent);"><?= t('contact.details.secure.title') ?></h2>
-                        <p class="text-gray-300 text-sm mb-3"><?= t('contact.details.secure.body') ?></p>
+                        <h2 class="text-xl font-semibold  mb-2" style="color: var(--text-gold);"><?= t('contact.details.secure.title') ?></h2>
+                        <p class="text-gray-200 text-sm mb-3"><?= t('contact.details.secure.body') ?></p>
 
                         <!-- PGP Key Info -->
                         <div class="mt-4 p-4 bg-gray-800/40 rounded-lg border border-gray-700">
-                            <p class="text-xs text-gray-400 mb-2">
-                                <strong class="text-gray-300">PGP <?= $current_lang === 'da' ? 'Fingeraftryk' : 'Fingerprint' ?>:</strong>
+                            <p class="text-xs text-gray-300 mb-2">
+                                <strong class="text-gray-200">PGP <?= $current_lang === 'da' ? 'Fingeraftryk' : 'Fingerprint' ?>:</strong>
                             </p>
-                            <code class="text-xs  break-all font-mono" style="color: var(--primary-accent);">
+                            <code class="text-xs  break-all font-mono" style="color: var(--text-gold);">
                                 B4C2 3A91 5E7D 8F12 A6D0 9C4B E7F3 2D86 1A5C 0E9B
                             </code>
                             <div class="mt-3">
                                 <a href="/pgp-key.asc"
-                                    class="inline-flex items-center text-xs  " style="color: var(--primary-accent);"
+                                    class="inline-flex items-center text-xs  " style="color: var(--text-gold);"
                                     download="blackbox-eye-pgp.asc">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
@@ -186,7 +186,7 @@ $current_lang = bbx_get_language();
     <section class="py-16 sm:py-20 bg-gray-900/40 section-fade-in page-section page-section--soft">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-3xl sm:text-4xl font-bold mb-4"><?= t('contact.cta.title') ?></h2>
-            <p class="text-gray-400 max-w-2xl mx-auto mb-8"><?= t('contact.cta.description') ?></p>
+            <p class="text-gray-300 max-w-2xl mx-auto mb-8"><?= t('contact.cta.description') ?></p>
             <a href="mailto:ops@blackbox.codes" class="header-cta header-cta--pill header-cta--primary">
                 <span class="header-cta__label"><?= t('contact.cta.button') ?></span>
             </a>

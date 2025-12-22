@@ -51,33 +51,34 @@ document.addEventListener('DOMContentLoaded', () => {
 	const consoleMenu = document.querySelector('.console-access-menu');
 
 	if (consoleTrigger && consoleDropdown) {
-		// Initialize aria-expanded
-		consoleDropdown.setAttribute('aria-expanded', 'false');
+		// Initialize aria-expanded on BUTTON only (ARIA compliant - aria-expanded is invalid on div)
 		consoleTrigger.setAttribute('aria-expanded', 'false');
+		// Use CSS class for styling hooks instead of aria-expanded on container
+		consoleDropdown.classList.remove('is-open');
 
 		consoleTrigger.addEventListener('click', (e) => {
 			e.preventDefault();
 			e.stopPropagation();
-			const isExpanded = consoleDropdown.getAttribute('aria-expanded') === 'true';
+			const isExpanded = consoleTrigger.getAttribute('aria-expanded') === 'true';
 			const newState = isExpanded ? 'false' : 'true';
-			consoleDropdown.setAttribute('aria-expanded', newState);
 			consoleTrigger.setAttribute('aria-expanded', newState);
+			consoleDropdown.classList.toggle('is-open', newState === 'true');
 			console.log('Console dropdown toggled:', newState);
 		});
 
 		// Close on outside click
 		document.addEventListener('click', (e) => {
 			if (!consoleDropdown.contains(e.target)) {
-				consoleDropdown.setAttribute('aria-expanded', 'false');
 				consoleTrigger.setAttribute('aria-expanded', 'false');
+				consoleDropdown.classList.remove('is-open');
 			}
 		});
 
 		// Close on escape
 		document.addEventListener('keydown', (e) => {
 			if (e.key === 'Escape') {
-				consoleDropdown.setAttribute('aria-expanded', 'false');
 				consoleTrigger.setAttribute('aria-expanded', 'false');
+				consoleDropdown.classList.remove('is-open');
 			}
 		});
 	}

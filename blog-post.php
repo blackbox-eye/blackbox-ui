@@ -30,7 +30,7 @@ if (!$post) {
       <div class="max-w-2xl mx-auto text-center py-16">
         <h1 class="text-4xl font-bold mb-6"><?= t('blog.post.not_found') ?></h1>
         <p class="text-xl text-gray-400 mb-8"><?= t('blog.post.not_found_desc') ?></p>
-        <a href="blog.php" class="inline-block px-6 py-3 border-2" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); text-black font-semibold rounded-lg hover:bg-amber-500 transition-colors">
+        <a href="blog.php" class="inline-block px-6 py-3 border-2" style="background: rgba(232, 197, 71, 0.14); border-color: var(--primary-accent); color: var(--primary-accent); text-black font-semibold rounded-lg hover:bg-amber-500 transition-colors">
           <?= t('blog.post.back_to_blog') ?>
         </a>
       </div>
@@ -235,7 +235,7 @@ include 'includes/site-header.php';
   }
 
   .prose-invert h2 {
-    color: #fbbf24;
+    color: var(--text-gold, var(--color-primary));
     font-size: 1.875rem;
     font-weight: 700;
     margin-top: 2rem;
@@ -243,7 +243,7 @@ include 'includes/site-header.php';
   }
 
   .prose-invert h3 {
-    color: #fbbf24;
+    color: var(--text-gold, var(--color-primary));
     font-size: 1.5rem;
     font-weight: 600;
     margin-top: 1.5rem;
@@ -271,12 +271,12 @@ include 'includes/site-header.php';
   }
 
   .prose-invert a {
-    color: #fbbf24;
+    color: var(--text-gold, var(--color-primary));
     text-decoration: underline;
   }
 
   .prose-invert a:hover {
-    color: #f59e0b;
+    color: var(--color-primary, #c9a227);
   }
 </style>
 

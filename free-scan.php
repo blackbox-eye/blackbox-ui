@@ -83,9 +83,9 @@ include 'includes/site-header.php';
           <div class="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
             <button type="submit"
               class="inline-flex items-center justify-center font-semibold py-3 px-6 rounded-lg transition-all duration-300 border-2" 
-              style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); backdrop-filter: blur(8px);"
+              style="background: rgba(232, 197, 71, 0.14); border-color: var(--primary-accent); color: var(--primary-accent); backdrop-filter: blur(8px);"
               onmouseover="this.style.background='rgba(212, 175, 55, 0.2)'; this.style.color='#F4D03F';" 
-              onmouseout="this.style.background='rgba(212, 175, 55, 0.1)'; this.style.color='var(--primary-accent)';"
+              onmouseout="this.style.background='rgba(232, 197, 71, 0.14)'; this.style.color='var(--primary-accent)';"
               data-loading-text="<?= htmlspecialchars(t('free_scan.form.loading', 'Analyserer angrebsfladen...')) ?>">
               <?= t('free_scan.form.submit', 'Generér rapport') ?>
             </button>

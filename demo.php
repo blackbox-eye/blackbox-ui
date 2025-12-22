@@ -67,15 +67,15 @@ $demo_slots = [
                 <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
                     <a href="#demo-booking" 
                        class="inline-flex items-center justify-center font-semibold py-3 px-8 rounded-lg transition-all duration-300 border-2" 
-                       style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); backdrop-filter: blur(8px);"
+                       style="background: rgba(232, 197, 71, 0.14); border-color: var(--primary-accent); color: var(--primary-accent); backdrop-filter: blur(8px);"
                        onmouseover="this.style.background='rgba(212, 175, 55, 0.2)'; this.style.color='#F4D03F';" 
-                       onmouseout="this.style.background='rgba(212, 175, 55, 0.1)'; this.style.color='var(--primary-accent)';">
+                       onmouseout="this.style.background='rgba(232, 197, 71, 0.14)'; this.style.color='var(--primary-accent)';">
                         <?= t('demo.hero.primary_cta', 'Book demo slot') ?>
                     </a>
                     <button type="button" 
                             class="inline-flex items-center justify-center font-semibold py-3 px-8 rounded-lg transition-all duration-300 border-2" 
                             style="background: rgba(255, 255, 255, 0.04); border-color: rgba(212, 175, 55, 0.3); color: var(--text-high-emphasis); backdrop-filter: blur(8px);"
-                            onmouseover="this.style.background='rgba(212, 175, 55, 0.1)'; this.style.borderColor='var(--primary-accent)'; this.style.color='var(--primary-accent)';" 
+                            onmouseover="this.style.background='rgba(232, 197, 71, 0.14)'; this.style.borderColor='var(--primary-accent)'; this.style.color='var(--primary-accent)';" 
                             onmouseout="this.style.background='rgba(255, 255, 255, 0.04)'; this.style.borderColor='rgba(212, 175, 55, 0.3)'; this.style.color='var(--text-high-emphasis)';"
                             data-calendly-launch="popup" data-calendly-url="<?= htmlspecialchars(BBX_CALENDLY_URL) ?>">
                         <?= t('demo.hero.secondary_cta', 'Åbn booking i popup') ?>
@@ -267,15 +267,15 @@ $demo_slots = [
             <div class="flex flex-col sm:flex-row justify-center gap-4">
                 <a href="contact.php" 
                    class="inline-flex items-center justify-center font-semibold py-3 px-8 rounded-lg transition-all duration-300 border-2" 
-                   style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); backdrop-filter: blur(8px);"
+                   style="background: rgba(232, 197, 71, 0.14); border-color: var(--primary-accent); color: var(--primary-accent); backdrop-filter: blur(8px);"
                    onmouseover="this.style.background='rgba(212, 175, 55, 0.2)'; this.style.color='#F4D03F';" 
-                   onmouseout="this.style.background='rgba(212, 175, 55, 0.1)'; this.style.color='var(--primary-accent)';">
+                   onmouseout="this.style.background='rgba(232, 197, 71, 0.14)'; this.style.color='var(--primary-accent)';">
                     <?= t('demo.cta.contact', 'Kontakt os') ?>
                 </a>
                 <a href="pricing.php" 
                    class="inline-flex items-center justify-center font-semibold py-3 px-8 rounded-lg transition-all duration-300 border-2" 
                    style="background: rgba(255, 255, 255, 0.04); border-color: rgba(212, 175, 55, 0.3); color: var(--text-high-emphasis); backdrop-filter: blur(8px);"
-                   onmouseover="this.style.background='rgba(212, 175, 55, 0.1)'; this.style.borderColor='var(--primary-accent)'; this.style.color='var(--primary-accent)';" 
+                   onmouseover="this.style.background='rgba(232, 197, 71, 0.14)'; this.style.borderColor='var(--primary-accent)'; this.style.color='var(--primary-accent)';" 
                    onmouseout="this.style.background='rgba(255, 255, 255, 0.04)'; this.style.borderColor='rgba(212, 175, 55, 0.3)'; this.style.color='var(--text-high-emphasis)';">
                     <?= t('demo.cta.pricing', 'Se priser') ?>
                 </a>

@@ -52,6 +52,8 @@ include 'includes/site-header.php';
   <!-- Snackbar CSS/JS for feedback -->
   <link rel="stylesheet" href="/assets/css/components/bbx-snackbar.css">
   <link rel="stylesheet" href="/assets/css/components/bbx-icons.css">
+  <!-- Sprint 8: Mobile console card layout fix -->
+  <link rel="stylesheet" href="/assets/css/components/console-selector-mobile.css" media="(max-width: 768px)">
   <script src="/assets/js/bbx-snackbar.js" defer></script>
   
   <section class="access-hero">

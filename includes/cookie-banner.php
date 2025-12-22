@@ -164,7 +164,7 @@ $texts = $banner_texts[$banner_lang] ?? $banner_texts['en'];
 
   .cookie-banner__btn--decline {
     background: transparent;
-    color: var(--text-medium-emphasis, #B0B8C6);
+    color: rgba(255, 255, 255, 0.87);
     border: 1px solid var(--surface-border, rgba(255, 255, 255, 0.12));
   }
 

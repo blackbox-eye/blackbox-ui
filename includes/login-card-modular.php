@@ -451,7 +451,7 @@ $card_id = 'login-card-' . $console;
 }
 
 .bbx-login-card__strength-fill[data-strength="1"] { width: 33%; background: #ef4444; }
-.bbx-login-card__strength-fill[data-strength="2"] { width: 66%; background: #f59e0b; }
+.bbx-login-card__strength-fill[data-strength="2"] { width: 66%; background: var(--color-primary, #c9a227); }
 .bbx-login-card__strength-fill[data-strength="3"] { width: 100%; background: var(--login-primary); }
 
 .bbx-login-card__strength-text {

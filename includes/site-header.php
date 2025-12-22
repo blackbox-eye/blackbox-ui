@@ -285,12 +285,16 @@ if (!empty($disable_alphabot)) {
 
     <!-- Local compiled Tailwind CSS (v3 build) -->
     <link rel="stylesheet" href="/assets/css/tailwind.full.css?v=<?= $css_version ?>">
+    <!-- Sprint 8: Design Tokens (must load before component styles) -->
+    <link rel="stylesheet" href="/assets/css/tokens.css?v=<?= $css_version ?>">
     <!-- Custom UI components extracted from previous inline styles -->
     <link rel="stylesheet" href="/assets/css/custom-ui.css?v=<?= $css_version ?>">
     <link rel="stylesheet" href="/assets/css/theme-overrides.css?v=<?= $css_version ?>">
     <!-- Sprint 6: Motion safety (global) + unified hero mobile -->
     <link rel="stylesheet" href="/assets/css/components/motion-safe.css?v=<?= $css_version ?>">
     <link rel="stylesheet" href="/assets/css/components/hero-mobile.css?v=<?= $css_version ?>" media="(max-width: 768px)">
+    <!-- Sprint 8: Mobile nav scaling + touch targets -->
+    <link rel="stylesheet" href="/assets/css/components/mobile-nav-scale.css?v=<?= $css_version ?>">
     <!-- Removed redundant inline Tailwind utility overrides -->
 
     <!-- Conditional CSS loading -->
@@ -447,40 +451,41 @@ if ($is_graphene_page) {
                             <span class="theme-toggle__icon" aria-hidden="true"></span>
                         </button>
                         <!-- Console Access Dropdown - Sprint 1.6 QA: New fold-out menu -->
-                        <div class="console-access-dropdown" id="login-dropdown-container" data-dropdown aria-expanded="false">
+                        <div class="console-access-dropdown" id="login-dropdown-container" data-dropdown>
                             <button type="button" 
                                 id="login-dropdown-btn"
                                 class="console-access-trigger header-cta header-cta--pill items-center gap-1.5"
-                                aria-haspopup="true"
+                                aria-haspopup="menu"
                                 aria-expanded="false"
-                                onclick="(function(e){e.preventDefault();e.stopPropagation();var d=document.getElementById('login-dropdown-container');var isOpen=d.getAttribute('aria-expanded')==='true';d.setAttribute('aria-expanded',isOpen?'false':'true');this.setAttribute('aria-expanded',isOpen?'false':'true');console.log('INLINE CLICK - new state:',!isOpen)}).call(this,event)">
+                                aria-controls="login-dropdown-menu"
+                                onclick="(function(e){e.preventDefault();e.stopPropagation();var btn=this;var isOpen=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',isOpen?'false':'true');btn.parentElement.classList.toggle('is-open',!isOpen)}).call(this,event)">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                 </svg>
                                 <span class="header-cta__label"><?= t('header.cta.login', 'Login') ?></span>
-                                <svg class="console-chevron w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="console-chevron w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </button>
-                            <div class="console-access-menu" role="menu">
+                            <div class="console-access-menu" id="login-dropdown-menu" role="menu" aria-labelledby="login-dropdown-btn">
                                 <div class="console-menu-header">
                                     <span><?= t('header.console.title', 'Vælg konsol') ?></span>
                                 </div>
-                                <a href="/agent-access.php#ccs" class="console-menu-item" role="menuitem" data-scroll-to="ccs">
+                                <a href="/ccs-login.php" class="console-menu-item" role="menuitem" data-console-login="ccs">
                                     <div class="console-menu-item__icon console-menu-item__icon--ccs">CCS</div>
                                     <div class="console-menu-item__content">
                                         <span class="console-menu-item__title"><?= t('header.console.ccs', 'CCS Console') ?></span>
                                         <span class="console-menu-item__desc"><?= t('header.console.ccs_desc', 'Settlement Systems') ?></span>
                                     </div>
                                 </a>
-                                <a href="/agent-access.php#gdi" class="console-menu-item" role="menuitem" data-scroll-to="gdi">
+                                <a href="/agent-login.php" class="console-menu-item" role="menuitem" data-console-login="gdi">
                                     <div class="console-menu-item__icon console-menu-item__icon--gdi">GDI</div>
                                     <div class="console-menu-item__content">
                                         <span class="console-menu-item__title"><?= t('header.console.gdi', 'GDI Console') ?></span>
                                         <span class="console-menu-item__desc"><?= t('header.console.gdi_desc', 'Data Intelligence') ?></span>
                                     </div>
                                 </a>
-                                <a href="/agent-access.php#intel24" class="console-menu-item" role="menuitem" data-scroll-to="intel24">
+                                <a href="https://intel24.blackbox.codes/login" class="console-menu-item" role="menuitem" data-console-login="intel24" target="_blank" rel="noopener noreferrer">
                                     <div class="console-menu-item__icon console-menu-item__icon--intel24">I24</div>
                                     <div class="console-menu-item__content">
                                         <span class="console-menu-item__title"><?= t('header.console.intel24', 'Intel24 Console') ?></span>
@@ -575,22 +580,22 @@ if ($is_graphene_page) {
                     <span class="theme-toggle__icon" aria-hidden="true"></span>
                 </button>
             </div>
-            <!-- Console Access - Mobile version with SSO triggers -->
+            <!-- Console Access - Mobile version with direct login links (Sprint 8 fix) -->
             <div class="mobile-console-access mb-3">
                 <p class="text-xs text-gray-500 uppercase tracking-wider mb-2"><?= t('header.console.title', 'Vælg konsol') ?></p>
                 <div class="flex gap-2">
-                    <button type="button" class="mobile-console-btn flex-1" data-sso-request="ccs" data-testid="mobile-sso-ccs">
+                    <a href="/ccs-login.php" class="mobile-console-btn flex-1" data-testid="mobile-login-ccs">
                         <span class="mobile-console-icon mobile-console-icon--ccs">CCS</span>
                         <span class="mobile-console-label"><?= t('header.console.ccs', 'CCS Console') ?></span>
-                    </button>
-                    <button type="button" class="mobile-console-btn flex-1" data-sso-request="gdi" data-testid="mobile-sso-gdi">
+                    </a>
+                    <a href="/agent-login.php" class="mobile-console-btn flex-1" data-testid="mobile-login-gdi">
                         <span class="mobile-console-icon mobile-console-icon--gdi">GDI</span>
                         <span class="mobile-console-label"><?= t('header.console.gdi', 'GDI Console') ?></span>
-                    </button>
-                    <button type="button" class="mobile-console-btn flex-1" data-sso-request="intel24" data-testid="mobile-sso-intel24">
+                    </a>
+                    <a href="https://intel24.blackbox.codes/login" class="mobile-console-btn flex-1" data-testid="mobile-login-intel24" target="_blank" rel="noopener noreferrer">
                         <span class="mobile-console-icon mobile-console-icon--intel24">I24</span>
                         <span class="mobile-console-label"><?= t('header.console.intel24', 'Intel24') ?></span>
-                    </button>
+                    </a>
                 </div>
             </div>
             <div class="mobile-primary-ctas">

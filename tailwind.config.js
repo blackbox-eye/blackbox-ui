@@ -27,8 +27,8 @@ module.exports = {
       },
       colors: {
         brand: {
-          gold: '#FFC700',
-          goldDark: '#d4af37'
+          gold: '#c9a227',
+          goldDark: '#9a7b1f'
         },
         amber: {
           400: '#fbbf24',

@@ -319,8 +319,8 @@ include 'includes/site-header.php';
 
         <div class="container mx-auto px-4 relative z-10">
             <div class="max-w-4xl mx-auto text-center">
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-6 backdrop-blur-sm" style="background: rgba(212, 175, 55, 0.1); border-color: rgba(212, 175, 55, 0.3);">
-                    <div class="w-2 h-2 rounded-full border-2 animate-pulse motion-reduce:animate-none" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent);" aria-hidden="true"></div>
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border mb-6 backdrop-blur-sm" style="background: rgba(232, 197, 71, 0.14); border-color: rgba(212, 175, 55, 0.3);">
+                    <div class="w-2 h-2 rounded-full border-2 animate-pulse motion-reduce:animate-none" style="background: rgba(232, 197, 71, 0.14); border-color: var(--primary-accent);" aria-hidden="true"></div>
                     <span class="text-xs uppercase tracking-widest font-bold" style="color: var(--primary-accent);"><?= t('about.hero_section.tagline') ?></span>
                 </div>
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black mb-6 leading-tight">

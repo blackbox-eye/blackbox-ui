@@ -242,13 +242,13 @@ include 'includes/site-header.php';
         <!-- Right: Quick stats (compact pills) -->
         <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500">
           <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-gray-800/50">
-            <svg class="w-3.5 h-3.5 " style="color: var(--primary-accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-3.5 h-3.5 " style="color: var(--text-gold);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
             26. nov 2025
           </span>
           <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-gray-800/50">
-            <svg class="w-3.5 h-3.5 " style="color: var(--primary-accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-3.5 h-3.5 " style="color: var(--text-gold);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"></path>
             </svg>
             5 regioner
@@ -271,10 +271,10 @@ include 'includes/site-header.php';
           <h2 class="text-2xl font-bold mb-4 text-white">
             Bloggen er midlertidigt utilgængelig
           </h2>
-          <p class="text-gray-300 mb-6">
+          <p class="text-gray-200 mb-6">
             <?= htmlspecialchars($blog_error_message) ?>
           </p>
-          <a href="contact.php" class="inline-flex items-center gap-2 px-6 py-3 border-2" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); text-black font-semibold rounded-lg hover:bg-amber-500 transition-colors">
+          <a href="contact.php" class="inline-flex items-center gap-2 px-6 py-3 border-2" style="background: rgba(232, 197, 71, 0.14); border-color: var(--text-gold); color: var(--text-gold); text-black font-semibold rounded-lg hover:bg-opacity-90 transition-colors">
             Kontakt support
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -344,7 +344,7 @@ include 'includes/site-header.php';
               </svg>
             </div>
             <p class="text-xl text-gray-400 mb-6"><?= t('blog.empty.message') ?></p>
-            <a href="blog.php" class="inline-block px-6 py-3 border-2" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); text-black font-semibold rounded-lg hover:bg-amber-500 transition-colors">
+            <a href="blog.php" class="inline-block px-6 py-3 border-2" style="background: rgba(232, 197, 71, 0.14); border-color: var(--text-gold); color: var(--text-gold); text-black font-semibold rounded-lg hover:bg-opacity-90 transition-colors">
               <?= t('blog.empty.back') ?>
             </a>
           </div>
@@ -386,7 +386,7 @@ include 'includes/site-header.php';
 
                   <!-- Title -->
                   <h3 class="blog-card__title">
-                    <a href="<?= bbx_get_blog_post_url($post['slug']) ?>" class="hover:" style="color: var(--primary-accent); transition-colors">
+                    <a href="<?= bbx_get_blog_post_url($post['slug']) ?>" class="hover:" style="color: var(--text-gold); transition-colors">
                       <?= htmlspecialchars($post['title']) ?>
                     </a>
                   </h3>
@@ -438,7 +438,7 @@ include 'includes/site-header.php';
         <div class="flex items-center justify-between mb-6">
           <div class="flex items-center gap-3">
             <div class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
-              <svg class="w-4 h-4 " style="color: var(--primary-accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-4 h-4 " style="color: var(--text-gold);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
               </svg>
             </div>
@@ -525,13 +525,13 @@ include 'includes/site-header.php';
 
             <div class="relative z-10 text-center">
               <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl " style="background: rgba(212, 175, 55, 0.15); mb-6">
-                <svg class="w-8 h-8 " style="color: var(--primary-accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-8 h-8 " style="color: var(--text-gold);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                 </svg>
               </div>
 
               <h3 class="text-2xl sm:text-3xl font-bold mb-4"><?= t('blog.newsletter.title') ?></h3>
-              <p class="text-gray-300 mb-8 max-w-xl mx-auto"><?= t('blog.newsletter.description') ?></p>
+              <p class="text-gray-200 mb-8 max-w-xl mx-auto"><?= t('blog.newsletter.description') ?></p>
 
               <form id="blog-newsletter-form" class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
                 <input type="email"
@@ -540,7 +540,7 @@ include 'includes/site-header.php';
                   required
                   class="flex-1 bg-gray-800/80 border border-gray-700 rounded-xl px-5 py-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all">
                 <button type="submit"
-                  class="px-8 py-4 border-2" style="background: rgba(212, 175, 55, 0.1); border-color: var(--primary-accent); color: var(--primary-accent); text-black font-bold rounded-xl hover:bg-amber-500 transition-all hover:scale-105 whitespace-nowrap">
+                  class="px-8 py-4 border-2" style="background: rgba(232, 197, 71, 0.14); border-color: var(--text-gold); color: var(--text-gold); text-black font-bold rounded-xl hover:bg-opacity-90 transition-all hover:scale-105 whitespace-nowrap">
                   <?= t('blog.newsletter.button') ?>
                 </button>
               </form>
@@ -593,7 +593,7 @@ include 'includes/site-header.php';
   }
 
   .blog-filter-pill:hover {
-    border-color: var(--primary-accent);
+    border-color: var(--text-gold);
     color: var(--text-high-emphasis);
     background: rgba(255, 199, 0, 0.08);
   }
@@ -616,7 +616,7 @@ include 'includes/site-header.php';
   }
 
   .blog-card:hover {
-    border-color: var(--primary-accent);
+    border-color: var(--text-gold);
     transform: translateY(-4px);
     box-shadow: 0 20px 40px -20px rgba(255, 199, 0, 0.2);
   }
@@ -645,7 +645,7 @@ include 'includes/site-header.php';
     font-size: 0.75rem;
     font-weight: 600;
     background: var(--primary-accent-soft);
-    color: var(--primary-accent);
+    color: var(--text-gold);
     margin-bottom: 0.75rem;
   }
 
@@ -683,7 +683,7 @@ include 'includes/site-header.php';
     gap: 0.5rem;
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--primary-accent);
+    color: var(--text-gold);
   }
 
   .region-badge {
@@ -698,7 +698,7 @@ include 'includes/site-header.php';
     letter-spacing: 0.08em;
     text-transform: uppercase;
     background: rgba(255, 199, 0, 0.12);
-    color: var(--primary-accent);
+    color: var(--text-gold);
     border: 1px solid rgba(255, 199, 0, 0.32);
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
@@ -745,7 +745,7 @@ include 'includes/site-header.php';
   .news-region-tab.is-active {
     background: rgba(255, 199, 0, 0.12);
     border-color: rgba(255, 199, 0, 0.45);
-    color: var(--primary-accent);
+    color: var(--text-gold);
     font-weight: 600;
   }
 
@@ -812,9 +812,9 @@ include 'includes/site-header.php';
   }
 
   .news-card__severity-badge[data-severity="high"] {
-    background: rgba(251, 191, 36, 0.15);
-    color: #fbbf24;
-    border: 1px solid rgba(251, 191, 36, 0.3);
+    background: var(--color-primary-soft, rgba(201, 162, 39, 0.15));
+    color: var(--text-gold, var(--color-primary));
+    border: 1px solid var(--color-primary-soft, rgba(201, 162, 39, 0.3));
   }
 
   .news-card__severity-badge[data-severity="medium"] {
@@ -838,7 +838,7 @@ include 'includes/site-header.php';
   .news-card__source {
     font-size: 0.7rem;
     font-weight: 600;
-    color: var(--primary-accent);
+    color: var(--text-gold);
   }
 
   .news-card__date {
@@ -881,7 +881,7 @@ include 'includes/site-header.php';
     border-radius: 0.375rem;
     font-size: 0.7rem;
     font-weight: 600;
-    color: var(--primary-accent);
+    color: var(--text-gold);
     background: var(--primary-accent-soft);
     transition: background-color 0.15s ease, gap 0.15s ease;
   }
@@ -909,7 +909,7 @@ include 'includes/site-header.php';
 
   .news-card--high .news-card__severity {
     background: rgba(251, 191, 36, 0.15);
-    color: #fbbf24;
+color: var(--text-gold, var(--color-primary));
   }
 
   .news-card--medium .news-card__severity {
@@ -936,7 +936,7 @@ include 'includes/site-header.php';
     margin-top: 0.75rem;
     font-size: 0.8rem;
     font-weight: 600;
-    color: var(--primary-accent);
+    color: var(--text-gold);
     transition: gap 0.2s ease;
   }
 

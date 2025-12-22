@@ -64,20 +64,20 @@ $case_navigator = [
     <section class="py-20 sm:py-24 section-fade-in page-section">
         <div class="container mx-auto px-4">
             <div class="text-center max-w-3xl mx-auto mb-12">
-                <p class=" uppercase tracking-widest text-sm font-semibold mb-4" style="color: var(--primary-accent);"><?= t('cases.hero_section.tagline') ?></p>
+                <p class=" uppercase tracking-widest text-sm font-semibold mb-4" style="color: var(--text-gold);"><?= t('cases.hero_section.tagline') ?></p>
                 <h1 class="text-3xl sm:text-5xl font-bold mb-6"><?= t('cases.hero_section.title') ?></h1>
-                <p class="text-gray-300 text-base sm:text-lg">
+                <p class="text-gray-200 text-base sm:text-lg">
                     <?= t('cases.hero_section.description') ?>
                 </p>
                 <ul class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
                     <?php foreach (['evidence', 'frameworks', 'results'] as $bullet_key): ?>
                         <li class="surface-card p-5 flex items-start gap-3">
-                            <span class=" mt-1" style="color: var(--primary-accent);" aria-hidden="true">
+                            <span class=" mt-1" style="color: var(--text-gold);" aria-hidden="true">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                     <polyline points="20 6 9 17 4 12"></polyline>
                                 </svg>
                             </span>
-                            <span class="text-sm text-gray-300">
+                            <span class="text-sm text-gray-200">
                                 <strong class="text-white block text-base mb-1"><?= t('cases.hero_section.bullets.' . $bullet_key . '.title') ?></strong>
                                 <?= t('cases.hero_section.bullets.' . $bullet_key . '.description') ?>
                             </span>
@@ -180,11 +180,11 @@ $case_navigator = [
         <div class="container mx-auto px-4">
             <div class="max-w-3xl mx-auto glass-effect rounded-3xl p-6 sm:p-8 lg:p-10">
                 <h2 class="text-2xl sm:text-3xl font-bold text-center mb-6"><?= t('cases.analysis.title') ?></h2>
-                <p class="text-center text-gray-300 mb-8">
+                <p class="text-center text-gray-200 mb-8">
                     <?= t('cases.analysis.description') ?>
                 </p>
                 <div class="space-y-4">
-                    <label for="case-input" class="block text-sm font-medium text-gray-300 mb-2"><?= t('cases.analysis.label') ?></label>
+                    <label for="case-input" class="block text-sm font-medium text-gray-200 mb-2"><?= t('cases.analysis.label') ?></label>
                     <textarea id="case-input" rows="4" class="w-full bg-gray-800/60 border border-gray-700 rounded-lg px-4 py-3 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-2" style="--tw-ring-color: var(--primary-accent);" placeholder="<?= htmlspecialchars(t('cases.analysis.placeholder')) ?>"></textarea>
                     <button id="analyze-case-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors" data-loading-text="<?= htmlspecialchars(t('cases.analysis.loading')) ?>">
                         <?= t('cases.analysis.button') ?>
@@ -194,7 +194,7 @@ $case_navigator = [
                     <div class="border-t border-gray-700 pt-6">
                         <div id="case-analysis-loader" class="flex flex-col items-center justify-center text-center">
                             <div class="spinner"></div>
-                            <p class="mt-4 text-gray-300" data-loading-text="<?= htmlspecialchars(t('cases.analysis.loading')) ?>"><?= t('cases.analysis.loading') ?></p>
+                            <p class="mt-4 text-gray-200" data-loading-text="<?= htmlspecialchars(t('cases.analysis.loading')) ?>"><?= t('cases.analysis.loading') ?></p>
                         </div>
                         <div id="case-analysis-result" class="hidden prose prose-invert max-w-none text-gray-200 text-sm sm:text-base" aria-live="polite"></div>
                     </div>

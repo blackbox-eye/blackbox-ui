@@ -180,7 +180,7 @@ include 'includes/site-header.php';
             <div class="text-center max-w-3xl mx-auto mb-12">
                 <p class="text-[var(--bbx-gold)] uppercase tracking-widest text-sm font-semibold mb-3"><?= t('home.tactical.tagline') ?></p>
                 <h2 class="text-3xl sm:text-4xl font-bold mb-4"><?= t('home.tactical.title') ?></h2>
-                <p class="text-gray-400 text-base sm:text-lg">
+                <p class="text-gray-300 text-base sm:text-lg">
                     <?= t('home.tactical.description') ?>
                 </p>
             </div>
@@ -197,7 +197,7 @@ include 'includes/site-header.php';
                     $card_key = 'home.tactical.cards.' . $card['key'];
                 ?>
                     <article class="glass-effect rounded-2xl p-6 flex flex-col">
-                        <span class="text-xs uppercase tracking-widest text-gray-400 mb-3"><?= htmlspecialchars($card['number']) ?></span>
+                        <span class="text-xs uppercase tracking-widest text-gray-300 mb-3"><?= htmlspecialchars($card['number']) ?></span>
                         <h3 class="text-2xl font-semibold mb-3 text-white"><?= t($card_key . '.title') ?></h3>
                         <p class="text-gray-300 flex-grow"><?= t($card_key . '.body') ?></p>
                         <a href="<?= htmlspecialchars($card['href']) ?>" class="mt-6 inline-flex items-center text-[var(--bbx-gold)] font-semibold hover:text-[var(--bbx-gold-light)] transition-colors">

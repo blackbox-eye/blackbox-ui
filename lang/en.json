@@ -1090,5 +1090,17 @@
       "save_success": "Graphene settings saved successfully!",
       "save_error": "Failed to save settings. Please try again."
     }
+  },
+  "time": {
+    "just_now": "Just now",
+    "minute_ago": "1 min ago",
+    "minutes_ago": "{n} min ago",
+    "hour_ago": "1 hour ago",
+    "hours_ago": "{n} hours ago",
+    "yesterday": "Yesterday",
+    "day_ago": "1 day ago",
+    "days_ago": "{n} days ago",
+    "week_ago": "1 week ago",
+    "weeks_ago": "{n} weeks ago"
   }
 }

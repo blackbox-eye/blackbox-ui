@@ -612,6 +612,20 @@ $intel24_requires_approval = !$intel24_has_sso;
     const activityEmpty = selector.querySelector('.console-selector__activity-empty');
     const activitySourceBadge = selector.querySelector('[data-activity-source]');
 
+    // i18n time strings (injected from PHP)
+    const timeStrings = {
+      just_now: <?= json_encode(t('time.just_now', 'Just now')) ?>,
+      minute_ago: <?= json_encode(t('time.minute_ago', '1 min ago')) ?>,
+      minutes_ago: <?= json_encode(t('time.minutes_ago', '{n} min ago')) ?>,
+      hour_ago: <?= json_encode(t('time.hour_ago', '1 hour ago')) ?>,
+      hours_ago: <?= json_encode(t('time.hours_ago', '{n} hours ago')) ?>,
+      yesterday: <?= json_encode(t('time.yesterday', 'Yesterday')) ?>,
+      day_ago: <?= json_encode(t('time.day_ago', '1 day ago')) ?>,
+      days_ago: <?= json_encode(t('time.days_ago', '{n} days ago')) ?>,
+      week_ago: <?= json_encode(t('time.week_ago', '1 week ago')) ?>,
+      weeks_ago: <?= json_encode(t('time.weeks_ago', '{n} weeks ago')) ?>
+    };
+
     function formatRelativeTime(timestamp) {
       const now = Date.now();
       const diff = now - timestamp;
@@ -621,13 +635,15 @@ $intel24_requires_approval = !$intel24_has_sso;
       const days = Math.floor(hours / 24);
       const weeks = Math.floor(days / 7);
 
-      if (seconds < 60) return 'Just now';
-      if (minutes < 60) return minutes + ' minute' + (minutes > 1 ? 's' : '') + ' ago';
-      if (hours < 24) return hours + ' hour' + (hours > 1 ? 's' : '') + ' ago';
-      if (days === 1) return 'Yesterday';
-      if (days < 7) return days + ' day' + (days > 1 ? 's' : '') + ' ago';
-      if (weeks === 1) return '1 week ago';
-      return weeks + ' weeks ago';
+      if (seconds < 60) return timeStrings.just_now;
+      if (minutes === 1) return timeStrings.minute_ago;
+      if (minutes < 60) return timeStrings.minutes_ago.replace('{n}', minutes);
+      if (hours === 1) return timeStrings.hour_ago;
+      if (hours < 24) return timeStrings.hours_ago.replace('{n}', hours);
+      if (days === 1) return timeStrings.yesterday;
+      if (days < 7) return timeStrings.days_ago.replace('{n}', days);
+      if (weeks === 1) return timeStrings.week_ago;
+      return timeStrings.weeks_ago.replace('{n}', weeks);
     }
 
     function getActivity() {

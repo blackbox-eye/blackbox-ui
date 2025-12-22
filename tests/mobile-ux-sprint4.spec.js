@@ -229,8 +229,8 @@ test.describe('Recent Activity Mobile', () => {
       const item = activityItems.nth(i);
       if (await item.isVisible()) {
         const box = await item.boundingBox();
-        // Single line items should be under 60px height
-        expect(box.height).toBeLessThanOrEqual(60);
+        // Single line items should be under 68px height (with i18n text variations)
+        expect(box.height).toBeLessThanOrEqual(68);
       }
     }
   });

@@ -1051,5 +1051,17 @@
       "save_success": "Graphene indstillinger gemt!",
       "save_error": "Kunne ikke gemme indstillinger. Prøv venligst igen."
     }
+  },
+  "time": {
+    "just_now": "Lige nu",
+    "minute_ago": "1 min siden",
+    "minutes_ago": "{n} min siden",
+    "hour_ago": "1 time siden",
+    "hours_ago": "{n} timer siden",
+    "yesterday": "I går",
+    "day_ago": "1 dag siden",
+    "days_ago": "{n} dage siden",
+    "week_ago": "1 uge siden",
+    "weeks_ago": "{n} uger siden"
   }
 }

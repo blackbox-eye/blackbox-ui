@@ -97,7 +97,6 @@ test.describe('A11y - Focus Visibility', () => {
         // Check for visible focus indicator
         const hasOutline = outlineWidth > 0 && outlineStyle !== 'none';
         const hasBoxShadow = boxShadow && boxShadow !== 'none';
-        const hasBorderChange = styles.borderColor !== 'rgb(0, 0, 0)'; // crude check
         
         return {
           tag: el.tagName,

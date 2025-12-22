@@ -179,24 +179,29 @@ test.describe('CCS Login Page - SSO Section', () => {
     await expect(ssoSection).toContainText('Or continue with');
   });
 
-  test('should display Azure AD button (disabled state)', async ({ page }) => {
+  test('should display Azure AD button (active with brand color)', async ({ page }) => {
     const azureBtn = page.locator('[data-testid="sso-azure"]');
     await expect(azureBtn).toBeVisible();
     await expect(azureBtn).toContainText('Azure AD');
-    await expect(azureBtn).toHaveClass(/is-disabled/);
+    // Sprint 5: SSO buttons are now active (not disabled)
+    await expect(azureBtn).toHaveAttribute('data-sso-provider', 'azure');
+    await expect(azureBtn).toHaveAttribute('data-sso-request', 'ccs');
   });
 
-  test('should display Google Workspace button (disabled state)', async ({ page }) => {
+  test('should display Google Workspace button (active with brand color)', async ({ page }) => {
     const googleBtn = page.locator('[data-testid="sso-google"]');
     await expect(googleBtn).toBeVisible();
     await expect(googleBtn).toContainText('Google Workspace');
-    await expect(googleBtn).toHaveClass(/is-disabled/);
+    // Sprint 5: SSO buttons are now active (not disabled)
+    await expect(googleBtn).toHaveAttribute('data-sso-provider', 'google');
+    await expect(googleBtn).toHaveAttribute('data-sso-request', 'ccs');
   });
 
   test('should display SSO request link', async ({ page }) => {
     const note = page.locator('.ccs-login__sso-note');
     await expect(note).toBeVisible();
-    await expect(note).toContainText('Request SSO access');
+    // Sprint 5: Updated text
+    await expect(note).toContainText('Enterprise SSO available');
     // Sprint 3: Changed from <a> to <button> with modal trigger
     const btn = page.locator('[data-testid="sso-request-btn"]');
     await expect(btn).toBeVisible();
@@ -326,7 +331,8 @@ test.describe('CCS Login Page - Mobile (375px)', () => {
     const header = page.locator('.ccs-login__header');
     await expect(header).toBeVisible();
     
-    const logo = page.locator('.ccs-login__logo');
+    // Sprint 5: Now has white/black logo variants, use first visible
+    const logo = page.locator('.ccs-login__logo--white');
     await expect(logo).toBeVisible();
   });
 });

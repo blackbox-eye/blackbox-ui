@@ -874,6 +874,7 @@ body.alphabot-locked {
 }
 
 .nav-chip:hover,
+.nav-chip:focus,
 .nav-chip:focus-visible {
   color: var(--text-high-emphasis);
   background: color-mix(in srgb, var(--primary-accent) 12%, transparent);
@@ -882,6 +883,7 @@ body.alphabot-locked {
   transform: translateY(-1px);
 }
 
+.nav-chip:focus,
 .nav-chip:focus-visible {
   outline: 2px solid var(--outline-color);
   outline-offset: 2px;

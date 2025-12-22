@@ -153,6 +153,20 @@ body[data-theme] .graphene-btn-secondary:active {
   color: #ffffff;
 }
 
+.nav-chip:focus,
+.nav-chip:focus-visible {
+  outline: 2px solid var(--text-gold) !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 3px rgba(232, 197, 71, 0.35) !important;
+}
+
+.more-dropdown-item:focus,
+.more-dropdown-item:focus-visible {
+  outline: 2px solid var(--text-gold) !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 3px rgba(232, 197, 71, 0.35) !important;
+}
+
 .language-switch,
 .language-switch--drawer {
   color: #e5e7eb;

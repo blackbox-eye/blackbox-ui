@@ -619,14 +619,39 @@
         });
     }
 
-    // Form submission
+    // DEMO_MODE: Set to true to always return success (for demos/testing)
+    const DEMO_MODE = true;
+    
+    // Validation messages (not generic)
+    const VALIDATION_MESSAGES = {
+        company_required: 'Company name is required',
+        email_required: 'Work email is required',
+        email_invalid: 'Please enter a valid work email address',
+        service_unavailable: 'Service unavailable. Please try again later.',
+        network_error: 'Connection failed. Check your network and retry.'
+    };
+    
+    function validateForm(data) {
+        if (!data.company || data.company.trim().length < 2) {
+            return VALIDATION_MESSAGES.company_required;
+        }
+        if (!data.email || data.email.trim().length < 5) {
+            return VALIDATION_MESSAGES.email_required;
+        }
+        // Basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(data.email)) {
+            return VALIDATION_MESSAGES.email_invalid;
+        }
+        return null; // Valid
+    }
+
+    // Form submission with proper validation
     if (form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             
             const submitBtn = form.querySelector('[type="submit"]');
-            if (submitBtn) submitBtn.classList.add('bbx-modal__btn--loading');
-            if (submitBtn) submitBtn.disabled = true;
             if (errorEl) errorEl.hidden = true;
 
             const formData = new FormData(form);
@@ -634,13 +659,43 @@
             formData.forEach(function(value, key) {
                 data[key] = value;
             });
+            
+            // Client-side validation first
+            const validationError = validateForm(data);
+            if (validationError) {
+                showError(validationError);
+                return;
+            }
+            
+            // Show loading state
+            if (submitBtn) submitBtn.classList.add('bbx-modal__btn--loading');
+            if (submitBtn) submitBtn.disabled = true;
+
+            // DEMO MODE: Always succeed after brief delay
+            if (DEMO_MODE) {
+                setTimeout(function() {
+                    if (submitBtn) submitBtn.classList.remove('bbx-modal__btn--loading');
+                    if (submitBtn) submitBtn.disabled = false;
+                    const demoRequestId = 'SSO-DEMO-' + Date.now().toString(36).toUpperCase();
+                    showSuccess(demoRequestId);
+                    if (window.bbxSnackbar) {
+                        window.bbxSnackbar.success('SSO request received. Ref: ' + demoRequestId);
+                    }
+                }, 800);
+                return;
+            }
 
             fetch('/api/sso-request.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data),
             })
-            .then(function(res) { return res.json(); })
+            .then(function(res) { 
+                if (!res.ok) {
+                    throw new Error('HTTP ' + res.status);
+                }
+                return res.json(); 
+            })
             .then(function(result) {
                 if (submitBtn) submitBtn.classList.remove('bbx-modal__btn--loading');
                 if (submitBtn) submitBtn.disabled = false;
@@ -651,13 +706,14 @@
                         window.bbxSnackbar.success('SSO request received. Ref: ' + result.request_id);
                     }
                 } else {
-                    showError(result.error || 'Request failed. Please try again.');
+                    showError(result.error || VALIDATION_MESSAGES.service_unavailable);
                 }
             })
             .catch(function(err) {
                 if (submitBtn) submitBtn.classList.remove('bbx-modal__btn--loading');
                 if (submitBtn) submitBtn.disabled = false;
-                showError('Network error. Please check your connection.');
+                // Specific error message instead of generic
+                showError(err.message.includes('HTTP') ? VALIDATION_MESSAGES.service_unavailable : VALIDATION_MESSAGES.network_error);
             });
         });
     }

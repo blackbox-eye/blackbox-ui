@@ -1,11 +1,24 @@
 /**
  * Motion Safety & Animation Control
- * Sprint 7: Final Mobile & Desktop Polish
+ * Sprint 7: Final Mobile & Desktop Polish (QA Pass)
  * 
  * Global reduced-motion support and animation cleanup.
  * Enforces prefers-reduced-motion across all components.
  * Removes "childish" slide/glide/bounce animations per brand guidelines.
  */
+
+/* ================================================
+   ANCHOR NAVIGATION - NO JUMP
+   ================================================ */
+
+/* Scroll offset for fixed header (prevents content hiding behind header) */
+[id] {
+  scroll-margin-top: 100px;
+}
+
+.console-card[id] {
+  scroll-margin-top: 120px;
+}
 
 /* ================================================
    GLOBAL REDUCED MOTION OVERRIDE
@@ -29,12 +42,16 @@
 
 /* ================================================
    CONSOLE CARD HIGHLIGHT - NO BOUNCE/PULSE
-   Simple border glow, no animation hop.
+   Simple border glow, 1x fade only (<=250ms).
    ================================================ */
 
-/* Override the keyframes animation completely */
+/* Override the keyframes animation completely - single run only */
 @keyframes console-card-pulse {
-  0%, 100% {
+  from {
+    border-color: transparent;
+    box-shadow: 0 0 0 0 rgba(201, 162, 39, 0);
+  }
+  to {
     border-color: var(--bbx-gold, #c9a227);
     box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.25), 0 0 20px rgba(201, 162, 39, 0.12);
   }
@@ -45,8 +62,15 @@
   box-shadow: 
     0 0 0 2px rgba(201, 162, 39, 0.3),
     0 0 24px rgba(201, 162, 39, 0.15) !important;
-  animation: none !important;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
+  animation: console-card-pulse 0.25s ease forwards !important;
+  animation-iteration-count: 1 !important;
+}
+
+/* Kill ALL infinite pulse animations globally */
+[class*="pulse"][style*="infinite"],
+.animate-pulse,
+[class*="infinite"] {
+  animation-iteration-count: 1 !important;
 }
 
 /* Subtle glow pulse for users who want motion */
@@ -73,6 +97,15 @@
    FEED ITEMS - INSTANT OR SUBTLE FADE
    Remove slide-in animation, use opacity only.
    ================================================ */
+
+/* Override status indicator pulses to 1x run */
+.console-card__status-dot,
+[class*="status-pulse"],
+[class*="pulse-dot"],
+.ccs-pulse {
+  animation-iteration-count: 1 !important;
+  animation-duration: 0.5s !important;
+}
 
 .live-feed-item--new,
 .live-feed-2__item--entering {

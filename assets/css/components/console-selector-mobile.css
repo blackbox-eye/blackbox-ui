@@ -879,3 +879,68 @@
     color: rgba(0, 0, 0, 0.4);
   }
 }
+
+/* ================================================
+   EXTRA SMALL SCREENS (375px iPhone / 320px)
+   ================================================ */
+
+@media (max-width: 375px) {
+  /* Ensure single column stacked layout */
+  .console-selector__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  
+  /* Card: tighter padding for small screens */
+  .console-card {
+    padding: 1rem 0.875rem;
+  }
+  
+  /* Title: slightly smaller */
+  .console-card__title {
+    font-size: 0.95rem;
+  }
+  
+  /* CTA: enforce 48px min-height */
+  .console-card__cta {
+    min-height: 48px;
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+  }
+  
+  /* Chips: enforce 40px min-height */
+  .console-card__chip {
+    min-height: 40px;
+    padding: 0.5rem 0.625rem;
+    font-size: 0.65rem;
+  }
+  
+  /* Quick switch: tighter */
+  .console-selector__quick {
+    padding: 0.625rem 0.875rem;
+    margin: 0 -0.875rem 1rem -0.875rem;
+  }
+  
+  .console-selector__quick-select {
+    min-height: 40px;
+    max-width: 140px;
+    font-size: 0.8rem;
+  }
+  
+  /* Activity section: compact */
+  .console-selector__activity {
+    padding: 1rem 0.875rem;
+    margin: 0 -0.875rem;
+  }
+  
+  .console-selector__activity-item {
+    padding: 0.5rem 0.625rem;
+    font-size: 0.75rem;
+    gap: 0.5rem;
+  }
+  
+  .console-selector__activity-time {
+    font-size: 0.65rem;
+  }
+}

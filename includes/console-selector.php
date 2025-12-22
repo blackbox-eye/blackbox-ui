@@ -675,8 +675,17 @@ $intel24_requires_approval = !$intel24_has_sso;
 
       // Sort by most recent first
       activity.sort(function(a, b) { return b.timestamp - a.timestamp; });
+      
+      // Deduplicate: Keep only most recent entry per console (prevents repetitive look)
+      var seenConsoles = {};
+      var uniqueActivity = activity.filter(function(item) {
+        var key = item.console || 'system';
+        if (seenConsoles[key]) return false;
+        seenConsoles[key] = true;
+        return true;
+      });
 
-      activityList.innerHTML = activity.slice(0, 5).map(function(item) {
+      activityList.innerHTML = uniqueActivity.slice(0, 5).map(function(item) {
         var consoleName = item.console || 'system';
         var actionLabel = item.action === 'mfa_success' ? 'Authenticated to' : 
                           item.action === 'sso_request' ? 'SSO requested for' : 'Last used';

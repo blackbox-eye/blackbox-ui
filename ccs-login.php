@@ -208,8 +208,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <a href="contact.php?subject=ccs-support" class="ccs-login__link">Need help?</a>
                     </div>
 
-                    <!-- MFA Required Notice (Step 2 triggered on login) -->
-                    <div class="ccs-login__mfa-notice" data-testid="mfa-notice">
+                    <!-- MFA Required Notice (hidden until Step 1 submitted) -->
+                    <div class="ccs-login__mfa-notice" data-testid="mfa-notice" hidden>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                             <path d="M9 12l2 2 4-4"/>
@@ -424,6 +424,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Validate inputs
                 const email = document.getElementById('ccs-email');
                 const password = document.getElementById('ccs-password');
+                const mfaNotice = document.querySelector('[data-testid="mfa-notice"]');
                 
                 if (!email.value || !password.value) {
                     if (window.bbxSnackbar) {
@@ -436,6 +437,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (submitBtn) {
                     submitBtn.disabled = true;
                     submitBtn.textContent = 'Verifying...';
+                }
+                
+                // Show MFA notice (Step 2 coming)
+                if (mfaNotice) {
+                    mfaNotice.hidden = false;
                 }
                 
                 if (window.bbxSnackbar) {

@@ -197,30 +197,39 @@ test.describe('CCS Login Page - SSO Section', () => {
     const note = page.locator('.ccs-login__sso-note');
     await expect(note).toBeVisible();
     await expect(note).toContainText('Request SSO access');
-    const link = note.locator('.ccs-login__sso-link');
-    await expect(link).toHaveAttribute('href', /contact\.php.*sso-request/);
+    // Sprint 3: Changed from <a> to <button> with modal trigger
+    const btn = page.locator('[data-testid="sso-request-btn"]');
+    await expect(btn).toBeVisible();
+    await expect(btn).toHaveAttribute('data-sso-request', 'ccs');
   });
 });
 
 // =====================================================
-// CCS LOGIN - MFA STEP INDICATOR TESTS (Sprint 2)
+// CCS LOGIN - MFA NOTICE TESTS (Sprint 3)
 // =====================================================
-test.describe('CCS Login Page - MFA Step Indicator', () => {
+test.describe('CCS Login Page - MFA Notice', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/ccs-login.php');
   });
 
-  test('should display MFA step indicator', async ({ page }) => {
-    const mfaStep = page.locator('[data-testid="mfa-step"]');
-    await expect(mfaStep).toBeVisible();
-    await expect(mfaStep).toContainText('Step 2 of 2');
-    await expect(mfaStep).toContainText('Multi-factor authentication');
+  test('should display MFA notice badge', async ({ page }) => {
+    // Sprint 3: Changed from full indicator to compact notice
+    const mfaNotice = page.locator('[data-testid="mfa-notice"]');
+    await expect(mfaNotice).toBeVisible();
+    await expect(mfaNotice).toContainText('MFA required after login');
   });
 
-  test('should display MFA privacy notice', async ({ page }) => {
-    const privacy = page.locator('.ccs-login__mfa-privacy');
-    await expect(privacy).toBeVisible();
-    await expect(privacy).toContainText('never stored');
+  test('should trigger MFA modal on form submit', async ({ page }) => {
+    // Fill form
+    await page.fill('[data-testid="ccs-email-input"]', 'test@example.com');
+    await page.fill('[data-testid="ccs-password-input"]', 'testpassword');
+    
+    // Submit and wait for MFA modal
+    await page.click('[data-testid="ccs-submit-btn"]');
+    
+    // MFA modal should appear after credential verification (1s delay)
+    const mfaModal = page.locator('#bbx-mfa-modal');
+    await expect(mfaModal).toHaveAttribute('aria-hidden', 'false', { timeout: 3000 });
   });
 });
 

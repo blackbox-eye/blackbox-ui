@@ -203,21 +203,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <a href="contact.php?subject=ccs-support" class="ccs-login__link">Need help?</a>
                     </div>
 
-                    <!-- MFA Step Indicator (Sprint 2) -->
-                    <div class="ccs-login__mfa-step" role="status" aria-live="polite" data-testid="mfa-step">
-                        <div class="ccs-login__mfa-header">
-                            <span class="ccs-login__mfa-badge">Step 2 of 2</span>
-                            <span class="ccs-login__mfa-title">Multi-factor authentication</span>
-                        </div>
-                        <div class="ccs-login__mfa-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                            </svg>
-                        </div>
-                        <p class="ccs-login__mfa-privacy">
-                            Your second factor is verified in real time and never stored.
-                        </p>
+                    <!-- MFA Required Notice (Step 2 triggered on login) -->
+                    <div class="ccs-login__mfa-notice" data-testid="mfa-notice">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <path d="M9 12l2 2 4-4"/>
+                        </svg>
+                        <span>MFA required after login</span>
                     </div>
                 </div>
 
@@ -266,7 +258,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     
                     <p id="ccs-sso-hint" class="ccs-login__sso-note">
-                        <a href="contact.php?subject=sso-request&console=ccs" class="ccs-login__sso-link">Request SSO access</a> for your enterprise.
+                        <button type="button" class="ccs-login__sso-link" data-sso-request="ccs" data-testid="sso-request-btn">Request SSO access</button> for your enterprise.
                     </p>
                 </div>
             </section>
@@ -340,7 +332,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     (function() {
         'use strict';
         
-        // Password visibility toggle
+        // ===== SSO REQUEST MODAL TRIGGERS =====
+        document.querySelectorAll('[data-sso-request]').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                var consoleName = this.getAttribute('data-sso-request') || 'ccs';
+                var provider = this.getAttribute('data-sso-provider') || '';
+                if (window.bbxSsoRequest) {
+                    window.bbxSsoRequest.show({
+                        console: consoleName,
+                        provider: provider,
+                        onSuccess: function(result) {
+                            // Activity logged by modal
+                        }
+                    });
+                }
+            });
+        });
+
+        // SSO buttons also trigger request modal
+        document.querySelectorAll('.ccs-login__sso-btn.is-disabled').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                var provider = this.getAttribute('data-sso-provider') || '';
+                if (window.bbxSsoRequest) {
+                    window.bbxSsoRequest.show({
+                        console: 'ccs',
+                        provider: provider
+                    });
+                }
+            });
+        });
+        
+        // ===== PASSWORD VISIBILITY TOGGLE =====
         const passwordToggle = document.querySelector('.ccs-login__password-toggle');
         const passwordInput = document.getElementById('ccs-password');
         const showIcon = document.querySelector('.ccs-login__eye-icon--show');
@@ -389,26 +413,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             });
         }
         
-        // Form submit - show MFA modal (mock)
+        // ===== LOGIN FORM - MFA TRIGGER =====
         const loginForm = document.querySelector('[data-testid="ccs-login-form"]');
+        const submitBtn = loginForm ? loginForm.querySelector('.ccs-login__submit') : null;
+        
         if (loginForm) {
             loginForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                // Show snackbar for login attempt
+                // Validate inputs
+                const email = document.getElementById('ccs-email');
+                const password = document.getElementById('ccs-password');
+                
+                if (!email.value || !password.value) {
+                    if (window.bbxSnackbar) {
+                        window.bbxSnackbar.warning('Please enter email and password');
+                    }
+                    return;
+                }
+                
+                // Show loading state
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Verifying...';
+                }
+                
                 if (window.bbxSnackbar) {
                     window.bbxSnackbar.info('Verifying credentials...');
                 }
                 
-                // Open MFA modal if available
+                // Simulate credential check, then show MFA modal
                 setTimeout(function() {
+                    // Reset button
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Log in';
+                    }
+                    
+                    // Open MFA modal (Step 2 of 2)
                     if (window.bbxMfa) {
                         window.bbxMfa.show({
-                            onSuccess: function() {
+                            onSuccess: function(code) {
                                 if (window.bbxSnackbar) {
-                                    window.bbxSnackbar.success('MFA verified! Redirecting...');
+                                    window.bbxSnackbar.success('Authenticated — CCS ready');
                                 }
-                                // Would redirect to dashboard in Sprint 2
+                                
+                                // Log activity to server
+                                fetch('/api/console-activity.php', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+                                        console: 'ccs',
+                                        action: 'mfa_success',
+                                        timestamp: Date.now()
+                                    })
+                                }).catch(function() {});
+                                
+                                // Redirect to agent-access with CCS selected
+                                setTimeout(function() {
+                                    window.location.href = '/agent-access.php#ccs';
+                                }, 1200);
                             },
                             onCancel: function() {
                                 if (window.bbxSnackbar) {
@@ -417,19 +481,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             }
                         });
                     } else {
-                        // No MFA modal - show preview message
+                        // Fallback if MFA modal not loaded
                         if (window.bbxSnackbar) {
-                            window.bbxSnackbar.warning('MFA coming in Sprint 2. Demo code: 123456');
+                            window.bbxSnackbar.warning('MFA modal not available. Demo code: 123456');
                         }
                     }
-                }, 800);
+                }, 1000);
             });
         }
     })();
     </script>
     
-    <!-- Snackbar + MFA -->
+    <!-- Snackbar + MFA + SSO Request -->
     <script src="/assets/js/bbx-snackbar.js"></script>
     <?php include __DIR__ . '/includes/mfa-modal.php'; ?>
+    <?php include __DIR__ . '/includes/sso-request-modal.php'; ?>
 </body>
 </html>

@@ -332,6 +332,16 @@ $intel24_requires_approval = !$intel24_has_sso;
         </a>
         <?php if ($intel24_requires_approval): ?>
           <p class="console-card__cta-note">Requires clearance / SSO token</p>
+          <button type="button" 
+                  class="console-card__request-link" 
+                  data-sso-request="intel24"
+                  data-testid="intel24-request-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0110 0v4"/>
+            </svg>
+            Request Intel24 access
+          </button>
         <?php endif; ?>
       </div>
       
@@ -362,20 +372,24 @@ $intel24_requires_approval = !$intel24_has_sso;
     
   </div>
   
-  <!-- Recent Activity Section (Sprint 2: dummy API ready) -->
+  <!-- Recent Activity Section (Sprint 3: server-side API) -->
   <section class="console-selector__activity" aria-labelledby="recent-activity-heading" data-recent-activity>
     <h4 id="recent-activity-heading" class="console-selector__activity-title">
       <svg class="bbx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
       </svg>
       Recent Activity
+      <span class="console-selector__activity-badge" data-activity-source title="Activity source">local</span>
     </h4>
     <ul class="console-selector__activity-list" role="list" data-activity-list aria-live="polite">
-      <!-- Populated by JS from dummy API / localStorage -->
+      <!-- Populated by JS from server API / localStorage fallback -->
     </ul>
     <p class="console-selector__activity-empty" hidden>No recent activity</p>
   </section>
 </div>
+
+<!-- Include SSO Request Modal -->
+<?php include __DIR__ . '/sso-request-modal.php'; ?>
 
 <script>
 (function() {
@@ -589,10 +603,11 @@ $intel24_requires_approval = !$intel24_has_sso;
       });
     }
 
-    // ===== RECENT ACTIVITY DUMMY API (Sprint 2) =====
+    // ===== RECENT ACTIVITY SERVER API (Sprint 3) =====
     const ACTIVITY_KEY = 'bbx_console_activity';
     const activityList = selector.querySelector('[data-activity-list]');
     const activityEmpty = selector.querySelector('.console-selector__activity-empty');
+    const activitySourceBadge = selector.querySelector('[data-activity-source]');
 
     function formatRelativeTime(timestamp) {
       const now = Date.now();
@@ -638,11 +653,16 @@ $intel24_requires_approval = !$intel24_has_sso;
       ];
     }
 
-    function renderActivity() {
+    function renderActivity(activity, source) {
       if (!activityList) return;
-      const activity = getActivity();
       
-      if (!activity.length) {
+      // Update source badge
+      if (activitySourceBadge) {
+        activitySourceBadge.textContent = source || 'local';
+        activitySourceBadge.title = source === 'server' ? 'Activity from server' : 'Activity from local storage';
+      }
+      
+      if (!activity || !activity.length) {
         activityList.innerHTML = '';
         if (activityEmpty) activityEmpty.hidden = false;
         return;
@@ -654,27 +674,82 @@ $intel24_requires_approval = !$intel24_has_sso;
       activity.sort(function(a, b) { return b.timestamp - a.timestamp; });
 
       activityList.innerHTML = activity.slice(0, 5).map(function(item) {
+        var consoleName = item.console || 'system';
+        var actionLabel = item.action === 'mfa_success' ? 'Authenticated to' : 
+                          item.action === 'sso_request' ? 'SSO requested for' : 'Last used';
         return '<li class="console-selector__activity-item" role="listitem">' +
-          '<span class="console-selector__activity-dot console-selector__activity-dot--' + item.console + '" aria-hidden="true"></span>' +
-          '<span class="console-selector__activity-text">Last used <strong>' + item.console.toUpperCase() + '</strong></span>' +
+          '<span class="console-selector__activity-dot console-selector__activity-dot--' + consoleName + '" aria-hidden="true"></span>' +
+          '<span class="console-selector__activity-text">' + actionLabel + ' <strong>' + consoleName.toUpperCase() + '</strong></span>' +
           '<time class="console-selector__activity-time" datetime="' + new Date(item.timestamp).toISOString() + '">' + formatRelativeTime(item.timestamp) + '</time>' +
         '</li>';
       }).join('');
     }
 
-    function recordActivity(consoleName) {
-      const activity = getActivity();
-      // Update or add entry for this console
-      const existing = activity.find(function(a) { return a.console === consoleName; });
-      if (existing) {
-        existing.timestamp = Date.now();
-        existing.action = 'login';
-      } else {
-        activity.push({ console: consoleName, timestamp: Date.now(), action: 'login' });
-      }
-      saveActivity(activity);
-      renderActivity();
+    // Fetch activity from server API with localStorage fallback
+    function fetchActivity() {
+      fetch('/api/console-activity.php')
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (data.events && data.events.length) {
+            renderActivity(data.events, 'server');
+            // Cache to localStorage
+            try {
+              localStorage.setItem(ACTIVITY_KEY, JSON.stringify(data.events));
+            } catch (e) {}
+          } else {
+            // No server events, fall back to local
+            renderActivity(getActivity(), 'local');
+          }
+        })
+        .catch(function() {
+          // Server unavailable, use localStorage
+          renderActivity(getActivity(), 'local');
+        });
     }
+
+    function recordActivity(consoleName, action) {
+      var event = { console: consoleName, timestamp: Date.now(), action: action || 'login' };
+      
+      // Post to server
+      fetch('/api/console-activity.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(event),
+      }).then(function() {
+        fetchActivity(); // Refresh from server
+      }).catch(function() {
+        // Fallback to localStorage
+        var activity = getActivity();
+        var existing = activity.find(function(a) { return a.console === consoleName; });
+        if (existing) {
+          existing.timestamp = Date.now();
+          existing.action = action || 'login';
+        } else {
+          activity.unshift(event);
+        }
+        saveActivity(activity);
+        renderActivity(activity, 'local');
+      });
+    }
+
+    // SSO Request modal triggers
+    selector.querySelectorAll('[data-sso-request]').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        var consoleName = this.getAttribute('data-sso-request') || 'ccs';
+        if (window.bbxSsoRequest) {
+          window.bbxSsoRequest.show({
+            console: consoleName,
+            onSuccess: function(result) {
+              if (window.bbxSnackbar) {
+                window.bbxSnackbar.success('SSO request received. Ref: ' + result.request_id);
+              }
+              fetchActivity(); // Refresh activity list
+            }
+          });
+        }
+      });
+    });
 
     // Record activity on CTA click
     selector.querySelectorAll('.console-card__cta').forEach(function(cta) {
@@ -682,13 +757,13 @@ $intel24_requires_approval = !$intel24_has_sso;
         const card = this.closest('.console-card');
         const consoleName = card ? card.getAttribute('data-console') : null;
         if (consoleName) {
-          recordActivity(consoleName);
+          recordActivity(consoleName, 'login');
         }
       });
     });
 
-    // Initialize activity on load
-    renderActivity();
+    // Initialize activity from server (with fallback)
+    fetchActivity();
     
     // ===== SMOOTH SCROLL + HIGHLIGHT =====
     function getCardTarget(cardId) {

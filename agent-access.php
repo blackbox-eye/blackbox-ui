@@ -11,7 +11,7 @@ $meta_og_title = $page_title;
 $meta_og_description = $meta_description;
 
 $gdi_console_url = 'agent-login.php';
-$ccs_console_url = 'ccs-console.php';
+$ccs_console_url = 'ccs-login.php';
 
 // Check if user is logged in
 $is_logged_in = isset($_SESSION['agent_id']) && !empty($_SESSION['agent_id']);

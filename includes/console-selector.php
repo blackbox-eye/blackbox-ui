@@ -17,7 +17,7 @@ $console_context = $console_context ?? 'page';
 $is_modal = $console_context === 'modal';
 
 // Default URLs if not set
-$ccs_console_url = $ccs_console_url ?? 'ccs-console.php';
+$ccs_console_url = $ccs_console_url ?? 'ccs-login.php';
 $gdi_console_url = $gdi_console_url ?? 'agent-login.php';
 $intel24_console_url = $intel24_console_url ?? 'https://intel24.blackbox.codes/login';
 $intel24_has_sso = $intel24_has_sso ?? false;

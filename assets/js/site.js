@@ -1606,7 +1606,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (requests.length >= limit) {
             if (loaderElement) loaderElement.classList.add('hidden');
             if (resultElement) {
-                resultElement.innerHTML = `<p class="text-yellow-400">${i18n.t('common.ai_rate_limit', 'For mange foresp\u00f8rgsler. Vent et \u00f8jeblik og pr\u00f8v igen.')}</p>`;
+                resultElement.innerHTML = `<p style="color: var(--text-gold);">${i18n.t('common.ai_rate_limit', 'For mange foresp\u00f8rgsler. Vent et \u00f8jeblik og pr\u00f8v igen.')}</p>`;
                 resultElement.classList.remove('hidden');
             }
             return;
@@ -2120,6 +2120,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alphaOverlay?.classList.add('visible');
                 alphaOverlay?.setAttribute('aria-hidden', 'false');
                 alphaPanel.setAttribute('aria-hidden', 'false');
+                alphaPanel.removeAttribute('inert');
                 alphaPanel.setAttribute('aria-modal', 'true');
                 setAlphaBodyLock(true);
                 setAlphaInert(true);
@@ -2138,6 +2139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alphaOverlay?.classList.remove('visible');
                 alphaOverlay?.setAttribute('aria-hidden', 'true');
                 alphaPanel.setAttribute('aria-hidden', 'true');
+                alphaPanel.setAttribute('inert', '');
                 alphaPanel.setAttribute('aria-modal', 'false');
                 setAlphaBodyLock(false);
                 setAlphaInert(false);

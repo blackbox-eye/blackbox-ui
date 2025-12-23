@@ -180,21 +180,22 @@ h1[class*="hero"],
     font-size: 1.0625rem !important; /* 17px - readable text */
     font-weight: 600 !important;
     width: 100% !important;
-    max-width: 320px !important;
+    max-width: 360px !important;
     margin-left: auto !important;
     margin-right: auto !important;
     justify-content: center !important;
+    border-radius: 0.625rem !important;
   }
   
-  /* CTA group - stack vertically */
+  /* CTA group - stack vertically with more gap */
   .graphene-cta-group,
   .hero-ctas,
   .products-hero__actions {
     flex-direction: column !important;
     align-items: stretch !important;
-    gap: 0.75rem !important;
+    gap: 1rem !important;
     width: 100% !important;
-    max-width: 320px !important;
+    max-width: 360px !important;
     margin-left: auto !important;
     margin-right: auto !important;
   }

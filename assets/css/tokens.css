@@ -99,6 +99,25 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   MOBILE SCALE UPLIFT - Phase 2 P0-1
+   Makes 100% zoom feel like 75-80% of original scale
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  :root {
+    /* Base font-size bump: 16px → 18px (112.5%) for ~12.5% larger text */
+    font-size: 112.5%;
+    
+    /* Tighter spacing for better proportions at larger scale */
+    --space-1: 0.25rem;   /* 4.5px */
+    --space-2: 0.4375rem; /* 7px */
+    --space-3: 0.625rem;  /* 10px */
+    --space-4: 0.875rem;  /* 14px */
+    --space-6: 1.25rem;   /* 20px */
+    --space-8: 1.75rem;   /* 28px */
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
    LIGHT THEME OVERRIDES
    ═══════════════════════════════════════════════════════════════ */
 :root[data-theme="light"] {

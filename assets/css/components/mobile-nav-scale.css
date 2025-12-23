@@ -393,7 +393,8 @@
 
 .console-menu-item__desc {
   font-size: 0.8125rem;
-  color: var(--color-text-muted, #6b6966);
+  /* Improved contrast for WCAG AA */
+  color: var(--color-text-muted, #9a9590);
 }
 
 /* ═══════════════════════════════════════════════════════════════

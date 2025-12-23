@@ -160,6 +160,62 @@ body {
   }
 }
 
-/* ════ FOUC PREVENTION ════ */
-html:not([data-theme]) { visibility: hidden; }
-html[data-theme] { visibility: visible; }
+/* ════ FOUC PREVENTION (SAFE) ════ */
+/* Don't hide content - use opacity transition instead */
+html { opacity: 1; }
+html.fouc-prevent { opacity: 0; transition: opacity 0.1s ease; }
+html[data-theme].fouc-prevent { opacity: 1; }
+
+/* ════ MOBILE DRAWER CRITICAL (prevent layout shift) ════ */
+@media (max-width: 1023px) {
+  /* Drawer panel - use dvh for iOS notch safety */
+  #mobile-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    height: 100vh;
+    height: 100dvh;
+    width: 80vw;
+    max-width: 320px;
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: translateX(100%);
+    padding-top: env(safe-area-inset-top, 0);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  
+  /* Drawer nav area - scrollable */
+  #mobile-menu nav {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 1rem;
+  }
+  
+  /* Drawer footer - sticky bottom, not absolute */
+  #mobile-menu > div:last-child {
+    flex-shrink: 0;
+    position: relative;
+    margin-top: auto;
+  }
+  
+  /* Burger button - explicit size to prevent flash */
+  .header-burger {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  /* Header icons - explicit dimensions */
+  .header-logo-link img,
+  .header-logo-link svg {
+    height: 32px;
+    width: auto;
+    max-width: 160px;
+  }
+}

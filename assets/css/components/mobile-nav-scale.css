@@ -80,14 +80,53 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MOBILE MENU DRAWER SCALING
+   MOBILE MENU DRAWER - FULL HEIGHT + SAFE AREAS
    ═══════════════════════════════════════════════════════════════ */
 
 #mobile-menu {
+  /* Dimensions */
   width: 80vw;
-  max-width: 320px; /* Increased from 256px (16rem) */
+  max-width: 320px;
+  height: 100vh;
+  height: 100dvh; /* iOS Safari notch-safe */
+  
+  /* Layout - flexbox for proper section stacking */
+  display: flex;
+  flex-direction: column;
+  
+  /* Safe areas for notch devices */
+  padding-top: env(safe-area-inset-top, 0);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  
+  /* Theme */
   background: var(--color-surface, #1a1c22);
   border-left: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+}
+
+/* Drawer header - fixed height */
+#mobile-menu > div:first-child {
+  flex-shrink: 0;
+}
+
+/* Drawer nav - scrollable, takes remaining space */
+#mobile-menu nav {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  /* Remove old max-height - flexbox handles it now */
+  max-height: none !important;
+  padding-bottom: 1rem;
+}
+
+/* Drawer footer actions - sticky at bottom */
+#mobile-menu > div:last-child {
+  flex-shrink: 0;
+  position: relative; /* Not absolute - prevents overlap */
+  margin-top: auto;
+  /* Extra bottom padding for home indicator on iPhone */
+  padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0));
 }
 
 #mobile-menu-heading {

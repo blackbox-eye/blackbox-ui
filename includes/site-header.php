@@ -579,7 +579,7 @@ if ($is_graphene_page) {
             </button>
         </div>
         <!-- Navigation links (left-aligned, compact) -->
-        <nav class="px-3 py-3 overflow-y-auto" style="max-height: calc(100vh - 180px);" aria-label="<?= htmlspecialchars(t('header.mobile.primary_navigation')) ?>">
+        <nav class="px-3 py-3" aria-label="<?= htmlspecialchars(t('header.mobile.primary_navigation')) ?>">
             <ul class="flex flex-col space-y-0.5" role="list">
                 <?php foreach ($nav_links as $index => $link): ?>
                     <li>
@@ -609,8 +609,8 @@ if ($is_graphene_page) {
                 </ul>
             </div>
         </nav>
-        <!-- Footer actions (compact) -->
-        <div class="absolute bottom-0 left-0 right-0 px-3 py-3 border-t border-gray-800/50 bg-gray-900/95">
+        <!-- Footer actions (compact, sticky bottom via flexbox) -->
+        <div class="px-3 py-3 border-t border-gray-800/50 bg-gray-900/95">
             <!-- Theme + Language row -->
             <div class="flex items-center justify-between gap-2 mb-2">
                 <div class="flex items-center gap-1">

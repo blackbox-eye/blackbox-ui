@@ -142,6 +142,7 @@
 }
 
 /* Global focus-visible treatment for anchors to guarantee visibility */
+:where(a):focus,
 :where(a):focus-visible {
   outline: 2px solid var(--text-gold);
   outline-offset: 3px;

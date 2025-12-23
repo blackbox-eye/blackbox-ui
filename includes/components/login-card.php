@@ -8,11 +8,11 @@
  *
  * Variabler der kan sættes før include:
  * - $error: Fejlbesked der skal vises
- * - $login_action: Form action URL (standard: agent-login.php)
+ * - $login_action: Form action URL (standard: gdi-login.php)
  */
 
 $error = $error ?? null;
-$login_action = $login_action ?? 'agent-login.php';
+$login_action = $login_action ?? 'gdi-login.php';
 ?>
 <div class="login-card">
   <!-- Powered by badge -->

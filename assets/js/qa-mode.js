@@ -172,7 +172,7 @@
       fetch('/logout.php?qaInvalidate=1', { credentials: 'include' })
         .catch(() => null)
         .finally(() => {
-          window.location.assign('/agent-login.php');
+          window.location.assign('/gdi-login.php');
         });
     });
   }

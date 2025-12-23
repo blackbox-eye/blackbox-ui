@@ -10,7 +10,7 @@
 
 session_start();
 if (empty($_SESSION['agent_id'])) {
-    header('Location: agent-login.php');
+    header('Location: gdi-login.php');
     exit;
 }
 

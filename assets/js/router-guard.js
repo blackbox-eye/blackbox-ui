@@ -9,8 +9,8 @@
   }
 
   const DEFAULT_CONFIG = {
-    loginRoute: '/agent-login.php',
-    fallbackRoute: '/agent-login.php',
+    loginRoute: '/gdi-login.php',
+    fallbackRoute: '/gdi-login.php',
     protectedRoutes: ['/dashboard.php', '/admin.php', '/settings.php', '/api-keys.php', '/intel-vault.php', '/download-logs.php', '/access-requests.php'],
     ts24Entry: 'https://intel24.blackbox.codes/sso-login',
     expectedIssuer: window.location.origin,

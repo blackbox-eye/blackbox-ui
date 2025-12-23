@@ -12,7 +12,7 @@ require __DIR__ . '/db.php';
 
 // Redirect if not logged in
 if (!isset($_SESSION['agent_id'])) {
-  header('Location: agent-login.php');
+  header('Location: gdi-login.php');
   exit;
 }
 

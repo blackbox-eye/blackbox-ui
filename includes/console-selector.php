@@ -18,7 +18,7 @@ $is_modal = $console_context === 'modal';
 
 // Default URLs if not set
 $ccs_console_url = $ccs_console_url ?? 'ccs-login.php';
-$gdi_console_url = $gdi_console_url ?? 'agent-login.php';
+$gdi_console_url = $gdi_console_url ?? 'gdi-login.php';
 $intel24_console_url = $intel24_console_url ?? 'https://intel24.blackbox.codes/login';
 $intel24_has_sso = $intel24_has_sso ?? false;
 $intel24_requires_approval = !$intel24_has_sso;
@@ -602,7 +602,7 @@ $intel24_requires_approval = !$intel24_has_sso;
 
     if (quickSwitch) {
       quickSwitch.addEventListener('change', function() {
-        highlightCard(this.value);
+        selectConsole(this.value, { updateHash: true, focus: true });
       });
     }
 
@@ -808,6 +808,33 @@ $intel24_requires_approval = !$intel24_has_sso;
       return document.getElementById(cardId) || document.getElementById('modal-' + cardId);
     }
 
+    function updateHash(consoleId) {
+      var nextHash = '#' + consoleId;
+      if (window.location.hash === nextHash) return;
+      if (history.replaceState) {
+        history.replaceState(null, '', nextHash);
+      } else {
+        window.location.hash = consoleId;
+      }
+    }
+
+    function focusCard(cardId) {
+      const card = getCardTarget(cardId);
+      if (!card) return;
+      const focusable = card.querySelector('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      const target = focusable || card;
+      const hadTabindex = target.hasAttribute('tabindex');
+      if (!hadTabindex) {
+        target.setAttribute('tabindex', '-1');
+      }
+      target.focus({ preventScroll: true });
+      setTimeout(function() {
+        if (!hadTabindex) {
+          target.removeAttribute('tabindex');
+        }
+      }, 300);
+    }
+
     function highlightCard(cardId) {
       const card = getCardTarget(cardId);
       if (!card) return;
@@ -819,18 +846,40 @@ $intel24_requires_approval = !$intel24_has_sso;
         card.classList.remove('console-card--highlight');
       }, 2000);
     }
+
+    function selectConsole(consoleId, options) {
+      const opts = Object.assign({ focus: false, updateHash: false }, options || {});
+      if (quickSwitch && Array.from(quickSwitch.options).some(function(opt) { return opt.value === consoleId; })) {
+        quickSwitch.value = consoleId;
+      }
+      if (opts.updateHash) {
+        updateHash(consoleId);
+      }
+      highlightCard(consoleId);
+      if (opts.focus) {
+        focusCard(consoleId);
+      }
+    }
     
     // Handle hash on load
-    if (window.location.hash) {
-      const targetId = window.location.hash.substring(1);
+    var initialHash = window.location.hash ? window.location.hash.substring(1) : '';
+    if (initialHash) {
       setTimeout(function() {
-        highlightCard(targetId);
+        selectConsole(initialHash, { focus: true });
       }, 150);
     }
+    
+    window.addEventListener('hashchange', function() {
+      var targetId = window.location.hash.substring(1);
+      if (targetId) {
+        selectConsole(targetId, { focus: true });
+      }
+    });
     
     // Expose for external use (e.g., from admin modal)
     window.bbxConsoleSelector = {
       highlightCard: highlightCard,
+      selectConsole: selectConsole,
       closeAllSlideouts: closeAllSlideouts
     };
   }

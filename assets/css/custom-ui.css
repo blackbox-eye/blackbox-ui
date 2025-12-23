@@ -874,6 +874,7 @@ body.alphabot-locked {
 }
 
 .nav-chip:hover,
+.nav-chip:focus,
 .nav-chip:focus-visible {
   color: var(--text-high-emphasis);
   background: color-mix(in srgb, var(--primary-accent) 12%, transparent);
@@ -882,6 +883,7 @@ body.alphabot-locked {
   transform: translateY(-1px);
 }
 
+.nav-chip:focus,
 .nav-chip:focus-visible {
   outline: 2px solid var(--outline-color);
   outline-offset: 2px;
@@ -5754,3 +5756,172 @@ a.btn-graphene-secondary:hover {
   display: none !important;
 }
 
+/* ==============================================================
+   A11Y CONTRAST HARDGATE FIXES (WCAG AA) – appended Sprint 8
+   Must be at end of file to override all prior declarations
+   Theme-aware: dark mode uses light text, light mode uses dark text
+   ============================================================== */
+
+/* ---- DARK THEME (default) ---- */
+
+/* case-navigator elements */
+.case-navigator-tab__label,
+.case-navigator-tab__industry,
+.case-navigator-impact__label,
+.case-navigator-impact__label span,
+.case-navigator-impact__value,
+.case-navigator-modules__label,
+.case-navigator-card p,
+.case-navigator-card li {
+  color: #f3f4f6 !important;
+}
+
+/* header-cta__label */
+.header-cta__label {
+  color: #f3f4f6 !important;
+}
+
+/* alphabot-label – ensure high contrast on dark surface */
+.alphabot-label {
+  color: #f3f4f6 !important;
+}
+
+/* console-selector activity elements */
+.console-selector__activity-text,
+.console-selector__activity-time,
+.console-selector__activity-text strong {
+  color: #f3f4f6 !important;
+}
+
+/* products-hero text elements */
+.products-hero__title,
+.products-hero__lede,
+.products-hero__meta {
+  color: #f3f4f6 !important;
+}
+
+/* Module card spans and list items */
+.module-card span,
+.module-card li,
+.products-extra-card span,
+.products-extra-card li {
+  color: #e5e7eb !important;
+}
+
+/* products-hero__panel-card is always dark bg regardless of theme */
+.products-hero__panel-card span,
+.products-hero__panel-card li,
+.products-hero__panel-label,
+.products-hero__modules span,
+.products-hero__modules li {
+  color: #f3f4f6 !important;
+}
+
+/* All Tailwind gray text classes: boost to high contrast */
+.text-gray-200,
+.text-gray-300,
+.text-gray-400,
+.text-gray-500,
+.text-gray-600 {
+  color: #e5e7eb !important;
+}
+
+/* Cookie banner buttons: AA compliant */
+.cookie-banner__btn--accept,
+#cookie-accept-btn {
+  background: #facc15 !important;
+  color: #0a0a0a !important;
+  border-color: #facc15 !important;
+}
+.cookie-banner__btn--accept:hover,
+#cookie-accept-btn:hover {
+  background: #eab308 !important;
+}
+.cookie-banner__btn--decline,
+#cookie-decline-btn {
+  background: rgba(10, 12, 16, 0.96) !important;
+  color: #f3f4f6 !important;
+  border: 1px solid rgba(255, 255, 255, 0.32) !important;
+}
+.cookie-banner__btn--decline:hover,
+#cookie-decline-btn:hover {
+  background: rgba(15, 18, 24, 0.98) !important;
+  border-color: rgba(255, 255, 255, 0.48) !important;
+}
+
+/* Blue-400 text override for AA */
+.text-blue-400 {
+  color: #93c5fd !important;
+}
+
+/* ---- LIGHT THEME OVERRIDES ---- */
+
+:root[data-theme="light"] .case-navigator-tab__label,
+:root[data-theme="light"] .case-navigator-tab__industry,
+:root[data-theme="light"] .case-navigator-impact__label,
+:root[data-theme="light"] .case-navigator-impact__label span,
+:root[data-theme="light"] .case-navigator-impact__value,
+:root[data-theme="light"] .case-navigator-modules__label,
+:root[data-theme="light"] .case-navigator-card p,
+:root[data-theme="light"] .case-navigator-card li {
+  color: #1f2937 !important;
+}
+
+:root[data-theme="light"] .header-cta__label {
+  color: #1f2937 !important;
+}
+
+:root[data-theme="light"] .alphabot-label {
+  color: #1f2937 !important;
+}
+
+:root[data-theme="light"] .console-selector__activity-text,
+:root[data-theme="light"] .console-selector__activity-time,
+:root[data-theme="light"] .console-selector__activity-text strong {
+  color: #1f2937 !important;
+}
+
+:root[data-theme="light"] .products-hero__title,
+:root[data-theme="light"] .products-hero__lede,
+:root[data-theme="light"] .products-hero__meta {
+  color: #1f2937 !important;
+}
+
+:root[data-theme="light"] .module-card span,
+:root[data-theme="light"] .module-card li,
+:root[data-theme="light"] .products-extra-card span,
+:root[data-theme="light"] .products-extra-card li {
+  color: #374151 !important;
+}
+
+/* products-hero__panel-card is always dark bg, keep light text */
+:root[data-theme="light"] .products-hero__panel-card span,
+:root[data-theme="light"] .products-hero__panel-card li,
+:root[data-theme="light"] .products-hero__panel-label,
+:root[data-theme="light"] .products-hero__modules span,
+:root[data-theme="light"] .products-hero__modules li {
+  color: #f3f4f6 !important;
+}
+
+:root[data-theme="light"] .text-gray-200,
+:root[data-theme="light"] .text-gray-300,
+:root[data-theme="light"] .text-gray-400,
+:root[data-theme="light"] .text-gray-500,
+:root[data-theme="light"] .text-gray-600 {
+  color: #374151 !important;
+}
+
+:root[data-theme="light"] .cookie-banner__btn--decline,
+:root[data-theme="light"] #cookie-decline-btn {
+  background: rgba(255, 255, 255, 0.96) !important;
+  color: #1f2937 !important;
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+}
+:root[data-theme="light"] .cookie-banner__btn--decline:hover,
+:root[data-theme="light"] #cookie-decline-btn:hover {
+  background: rgba(245, 245, 245, 0.98) !important;
+  border-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+:root[data-theme="light"] .text-blue-400 {
+  color: #2563eb !important;

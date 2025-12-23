@@ -3593,7 +3593,7 @@ button.graphene-toggle.is-loading .graphene-toggle__icon {
 }
 
 .text-gray-400 {
-  color: #9ca3af !important;
+  color: #e5e7eb !important;
 }
 
 /* Hero subheadline - better contrast */
@@ -3672,7 +3672,7 @@ footer {
 
 footer .text-gray-400,
 footer .text-gray-500 {
-  color: #9ca3af !important;
+  color: #e5e7eb !important;
 }
 
 footer .text-xs {
@@ -3995,7 +3995,7 @@ footer a:hover svg {
   align-items: center;
   gap: 0.5rem;
   font-size: 0.6875rem;
-  color: #9ca3af;
+  color: #d1d5db;
 }
 
 .live-feed-2__meta span {
@@ -4008,7 +4008,7 @@ footer a:hover svg {
 .live-feed-2__ip,
 .live-feed-2__ports,
 .live-feed-2__pattern {
-  color: #9ca3af;
+  color: #d1d5db;
 }
 
 .live-feed-2__status {
@@ -4082,7 +4082,7 @@ footer a:hover svg {
 }
 
 .text-gray-400 {
-  color: #9ca3af !important;
+  color: #e5e7eb !important;
 }
 
 /* Ensure white text is truly white */
@@ -4099,7 +4099,7 @@ footer {
 
 footer .text-gray-400,
 footer .text-gray-500 {
-  color: #9ca3af !important;
+  color: #e5e7eb !important;
 }
 
 footer .text-gray-300 {
@@ -5996,7 +5996,7 @@ button:focus-visible {
 }
 
 .case-metric-value {
-  color: var(--gfx-gold) !important;
+  color: var(--bbx-gold-light) !important;
 }
 
 .case-navigator {
@@ -6061,11 +6061,11 @@ main .grid.grid-cols-1.lg\:grid-cols-3 .glass-effect:hover {
 }
 
 main .grid.grid-cols-1.lg\:grid-cols-3 .glass-effect h2 {
-  color: var(--gfx-gold) !important;
+  color: var(--text-gold) !important;
 }
 
 main .grid.grid-cols-1.lg\:grid-cols-3 .glass-effect .text-amber-400 {
-  color: var(--gfx-gold) !important;
+  color: var(--text-gold) !important;
 }
 
 /* Remove emoji usage */

@@ -10,7 +10,7 @@ $meta_description = t('agent_access.meta.description');
 $meta_og_title = $page_title;
 $meta_og_description = $meta_description;
 
-$gdi_console_url = 'agent-login.php';
+$gdi_console_url = 'gdi-login.php';
 $ccs_console_url = 'ccs-login.php';
 
 // Check if user is logged in
@@ -86,9 +86,11 @@ include 'includes/site-header.php';
     if (history.replaceState) {
       history.replaceState(null, null, window.location.pathname + '#<?= $default_console ?>');
     }
-    // Highlight the default card
+    // Highlight and focus the default card to sync quick switch
     setTimeout(function() {
-      if (window.bbxConsoleSelector) {
+      if (window.bbxConsoleSelector && window.bbxConsoleSelector.selectConsole) {
+        window.bbxConsoleSelector.selectConsole('<?= $default_console ?>', { focus: true, updateHash: true });
+      } else if (window.bbxConsoleSelector) {
         window.bbxConsoleSelector.highlightCard('<?= $default_console ?>');
       }
     }, 200);

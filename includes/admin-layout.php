@@ -302,7 +302,7 @@ function admin_is_active(string $slug, string $current): bool
           <?php 
           // Setup console URLs for the selector
           require_once __DIR__ . '/jwt_helper.php';
-          $gdi_console_url = 'agent-login.php';
+          $gdi_console_url = 'gdi-login.php';
           $ccs_console_url = 'ccs-console.php';
           $intel24_active_jwt = bbx_current_agent_jwt();
           $intel24_has_sso = $intel24_active_jwt !== null;

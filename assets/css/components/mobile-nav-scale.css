@@ -1,26 +1,25 @@
 /**
- * Sprint 8 - Mobile Navigation Scaling & Touch Targets
+ * Sprint 9 P0 - Mobile Navigation Scaling & Touch Targets
+ * TARGET: Default 100% feels like DDG Tekst-zoom 130%
  * 
  * WCAG 2.1 AA Touch Target Requirements:
- * - Minimum 44×44px recommended, 48×48px optimal
+ * - Minimum 44×44px recommended, 48×48px optimal, 52px+ for DDG 130% feel
  * - Adequate spacing between interactive elements
- * 
- * Visual Scale: +20% for typography, spacing, touch areas
  */
 
 /* ═══════════════════════════════════════════════════════════════
-   MOBILE NAV LINK SCALING - Priority A.2
+   MOBILE NAV LINK SCALING - DDG 130% EQUIVALENT
    ═══════════════════════════════════════════════════════════════ */
 
 /* Primary navigation links in mobile drawer */
 .nav-link-mobile {
   display: flex;
   align-items: center;
-  min-height: 52px; /* WCAG touch target */
-  padding: 0.875rem 1rem; /* 14px 16px - increased from 0.65rem */
-  font-size: 1.125rem; /* 18px - +20% from 15px */
+  min-height: 56px; /* LARGE touch target */
+  padding: 1rem 1.125rem; /* Generous padding */
+  font-size: 1.1875rem; /* 19px+ - clearly readable */
   font-weight: 600;
-  line-height: 1.4;
+  line-height: 1.35;
   color: var(--color-text-secondary, #a8a5a0);
   text-decoration: none;
   border-radius: var(--radius-md, 0.5rem);

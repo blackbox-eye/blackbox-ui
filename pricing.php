@@ -1,7 +1,8 @@
 <?php
 require_once __DIR__ . '/includes/i18n.php';
 $current_page = 'pricing';
-$page_title = t('pricing.title') . ' | ' . t('site.name');
+$page_title = t('pricing.meta.title');
+$meta_description = t('pricing.meta.description');
 include 'includes/site-header.php';
 ?>
 

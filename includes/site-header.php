@@ -203,6 +203,7 @@ if (!empty($disable_alphabot)) {
 ?>
 <!DOCTYPE html>
 <html lang="<?= htmlspecialchars($current_language) ?>" data-lang="<?= htmlspecialchars($current_language) ?>" class="scroll-smooth" data-theme="dark">
+<head>
     <script>
         (function() {
             var storageKey = 'bbx-theme';
@@ -233,6 +234,7 @@ if (!empty($disable_alphabot)) {
         })();
     </script>
     <title><?= htmlspecialchars($page_title) ?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="description" content="<?= htmlspecialchars($meta_description) ?>">
     <meta name="keywords" content="<?= htmlspecialchars($meta_keywords) ?>">
     <meta name="author" content="<?= htmlspecialchars($meta_author) ?>">
@@ -276,7 +278,33 @@ if (!empty($disable_alphabot)) {
     <meta name="twitter:image" content="<?= htmlspecialchars($meta_og_image) ?>">
     <meta name="twitter:site" content="@blackboxeye">
 
-    <?php $css_version = '1.6.18'; // Cache-bust version - increment on CSS changes ?>
+    <?php
+    /**
+     * Sprint 9 Batch 4: Cache-proof asset versioning
+     * Uses filemtime() for automatic cache invalidation when files change.
+     * No manual version bumps required - deploys immediately bust cache.
+     */
+    
+    /**
+     * Get cache-busting version for an asset file.
+     * Returns filemtime hash for automatic invalidation on file changes.
+     * Falls back to static version if file doesn't exist.
+     */
+    function bbx_asset_version(string $path): string {
+        static $asset_base = null;
+        if ($asset_base === null) {
+            $asset_base = __DIR__ . '/../assets';
+        }
+        $full_path = $asset_base . '/' . ltrim($path, '/');
+        if (file_exists($full_path)) {
+            return substr(md5((string)filemtime($full_path)), 0, 8);
+        }
+        return '1.6.20'; // Fallback version
+    }
+    
+    // Legacy compat: keep $css_version for any remaining static refs
+    $css_version = '1.6.20';
+    ?>
 
     <link rel="icon" type="image/svg+xml" href="/assets/icon_box.svg?v=<?= $css_version ?>">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png?v=<?= $css_version ?>">
@@ -284,19 +312,40 @@ if (!empty($disable_alphabot)) {
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png?v=<?= $css_version ?>">
     <link rel="shortcut icon" href="/assets/favicon.ico?v=<?= $css_version ?>">
 
-    <!-- Local compiled Tailwind CSS (v3 build) -->
-    <link rel="stylesheet" href="/assets/css/tailwind.full.css?v=<?= $css_version ?>">
-    <!-- Sprint 8: Design Tokens (must load before component styles) -->
-    <link rel="stylesheet" href="/assets/css/tokens.css?v=<?= $css_version ?>">
-    <!-- Custom UI components extracted from previous inline styles -->
-    <link rel="stylesheet" href="/assets/css/custom-ui.css?v=<?= $css_version ?>">
-    <link rel="stylesheet" href="/assets/css/theme-overrides.css?v=<?= $css_version ?>">
+    <!-- Sprint 9: Critical CSS inlined for FCP/LCP (above-the-fold styles) -->
+    <style id="critical-css"><?php include __DIR__ . '/../assets/css/critical.css'; ?></style>
+
+    <!-- Sprint 9: Preload key fonts for LCP improvement -->
+    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff2" as="font" type="font/woff2" crossorigin>
+
+    <!-- Non-critical CSS: async load via preload + onload swap (filemtime-based versioning) -->
+    <link rel="preload" href="/assets/css/tailwind.full.css?v=<?= bbx_asset_version('css/tailwind.full.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/tailwind.full.css?v=<?= bbx_asset_version('css/tailwind.full.css') ?>"></noscript>
+
+    <link rel="preload" href="/assets/css/tokens.css?v=<?= bbx_asset_version('css/tokens.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/tokens.css?v=<?= bbx_asset_version('css/tokens.css') ?>"></noscript>
+
+    <link rel="preload" href="/assets/css/custom-ui.css?v=<?= bbx_asset_version('css/custom-ui.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/custom-ui.css?v=<?= bbx_asset_version('css/custom-ui.css') ?>"></noscript>
+
+    <link rel="preload" href="/assets/css/theme-overrides.css?v=<?= bbx_asset_version('css/theme-overrides.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/theme-overrides.css?v=<?= bbx_asset_version('css/theme-overrides.css') ?>"></noscript>
+
     <!-- Sprint 6: Motion safety (global) + unified hero mobile -->
-    <link rel="stylesheet" href="/assets/css/components/motion-safe.css?v=<?= $css_version ?>">
-    <link rel="stylesheet" href="/assets/css/components/hero-mobile.css?v=<?= $css_version ?>" media="(max-width: 768px)">
+    <link rel="preload" href="/assets/css/components/motion-safe.css?v=<?= bbx_asset_version('css/components/motion-safe.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/components/motion-safe.css?v=<?= bbx_asset_version('css/components/motion-safe.css') ?>"></noscript>
+
+    <!-- Sprint 9: Async load remaining component CSS -->
+    <link rel="preload" href="/assets/css/components/hero-mobile.css?v=<?= bbx_asset_version('css/components/hero-mobile.css') ?>" as="style" media="(max-width: 768px)" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/components/hero-mobile.css?v=<?= bbx_asset_version('css/components/hero-mobile.css') ?>" media="(max-width: 768px)"></noscript>
+
+    <!-- Sprint 9 P0: Mobile baseline - aggressive UX overrides -->
+    <link rel="preload" href="/assets/css/components/mobile-baseline.css?v=<?= bbx_asset_version('css/components/mobile-baseline.css') ?>" as="style" media="(max-width: 768px)" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/components/mobile-baseline.css?v=<?= bbx_asset_version('css/components/mobile-baseline.css') ?>" media="(max-width: 768px)"></noscript>
+
     <!-- Sprint 8: Mobile nav scaling + touch targets -->
-    <link rel="stylesheet" href="/assets/css/components/mobile-nav-scale.css?v=<?= $css_version ?>">
-    <!-- Removed redundant inline Tailwind utility overrides -->
+    <link rel="preload" href="/assets/css/components/mobile-nav-scale.css?v=<?= bbx_asset_version('css/components/mobile-nav-scale.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/components/mobile-nav-scale.css?v=<?= bbx_asset_version('css/components/mobile-nav-scale.css') ?>"></noscript>
 
     <!-- Conditional CSS loading -->
     <?php
@@ -307,14 +356,18 @@ if (!empty($disable_alphabot)) {
     // Use minified CSS in production (when DEBUG is not set or false)
     $use_minified = !defined('BBX_DEBUG_RECAPTCHA') || !BBX_DEBUG_RECAPTCHA;
     $css_suffix = $use_minified ? '.min.css' : '.css';
+    $admin_css_path = 'css/admin' . $css_suffix;
+    $marketing_css_path = 'css/marketing' . $css_suffix;
 
     if ($is_admin_page): ?>
-        <link rel="stylesheet" href="/assets/css/admin<?= $css_suffix ?>?v=<?= $css_version ?>">
+        <link rel="preload" href="/assets/css/admin<?= $css_suffix ?>?v=<?= bbx_asset_version($admin_css_path) ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/assets/css/admin<?= $css_suffix ?>?v=<?= bbx_asset_version($admin_css_path) ?>"></noscript>
     <?php else: ?>
-        <link rel="stylesheet" href="/assets/css/marketing<?= $css_suffix ?>?v=<?= $css_version ?>">
+        <link rel="preload" href="/assets/css/marketing<?= $css_suffix ?>?v=<?= bbx_asset_version($marketing_css_path) ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/assets/css/marketing<?= $css_suffix ?>?v=<?= bbx_asset_version($marketing_css_path) ?>"></noscript>
     <?php endif; ?>
 
-    <script src="config.js"></script>
+    <script src="config.js?v=<?= bbx_asset_version('../config.js') ?>" defer></script>
     <?php if (BBX_RECAPTCHA_SITE_KEY !== ''): ?>
         <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(BBX_RECAPTCHA_SITE_KEY) ?>" async defer></script>
     <?php endif; ?>
@@ -323,9 +376,9 @@ if (!empty($disable_alphabot)) {
         window.BBX_SITE_BASE_URL = "<?= htmlspecialchars(BBX_SITE_BASE_URL) ?>";
         window.RECAPTCHA_DEBUG = <?= BBX_DEBUG_RECAPTCHA ? 'true' : 'false' ?>;
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Chakra+Petch:wght@700&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <!-- Fonts: preconnect already in early head, use media=print trick for async -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Chakra+Petch:wght@700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" crossorigin="anonymous">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Chakra+Petch:wght@700&display=swap" rel="stylesheet" crossorigin="anonymous"></noscript>
 
     <script type="application/ld+json">
         <?= json_encode($default_structured_data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) ?>
@@ -362,12 +415,16 @@ if ($is_graphene_page) {
                             <img src="<?= htmlspecialchars($bbx_logo_white) ?>"
                                 alt="BLACKBOX EYE™"
                                 class="header-logo header-logo--white"
-                                loading="lazy">
+                                width="140"
+                                height="32"
+                                loading="eager">
                             <!-- Black logo - visible on light backgrounds (light theme) -->
                             <img src="<?= htmlspecialchars($bbx_logo_black) ?>"
                                 alt="BLACKBOX EYE™"
                                 class="header-logo header-logo--black"
-                                loading="lazy">
+                                width="140"
+                                height="32"
+                                loading="eager">
                         </a>
                     </div>
                     <nav class="main-nav header-nav hidden lg:block" aria-label="<?= htmlspecialchars(t('header.desktop.primary_navigation', 'Primær navigation')) ?>">

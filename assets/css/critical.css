@@ -1,0 +1,175 @@
+/**
+ * Sprint 9 - Critical CSS (Above-the-fold)
+ * Inlined in <head> to eliminate render-blocking
+ * Contains: theme tokens, layout essentials, hero structure
+ */
+
+/* ════ CORE THEME TOKENS ════ */
+:root,
+:root[data-theme="dark"] {
+  --color-bg: #0a0b0d;
+  --color-bg-elevated: #12141a;
+  --color-surface: #1a1c22;
+  --color-text: #e8e6e3;
+  --color-text-secondary: #a8a5a0;
+  --color-primary: #c9a227;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --text-gold: #e8c547;
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --color-bg: #f8f7f4;
+  --color-bg-elevated: #ffffff;
+  --color-surface: #ffffff;
+  --color-text: #1a1a1a;
+  --color-text-secondary: #4a4a4a;
+  --color-primary: #9a7b1f;
+  --color-border: rgba(0, 0, 0, 0.1);
+  --text-gold: #9a7b1f;
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+  color-scheme: light;
+}
+
+/* ════ BASE RESET ════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ════ LAYOUT CONTAINER ════ */
+.container { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
+@media (min-width: 640px) { .container { padding: 0 1.5rem; } }
+@media (min-width: 1024px) { .container { padding: 0 2rem; } }
+
+/* ════ HEADER (fixed, above-fold) ════ */
+#main-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  background: rgba(10, 11, 13, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-border);
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+[data-theme="light"] #main-header {
+  background: rgba(248, 247, 244, 0.92);
+}
+
+.header-shell { padding: 0.75rem 0; }
+.header-grid { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.header-brand { flex-shrink: 0; }
+.header-logo-link { display: flex; align-items: center; text-decoration: none; }
+.header-logo-link img { height: 2rem; width: auto; }
+
+/* ════ HERO SECTION (LCP target) ════ */
+.graphene-hero-3d {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: var(--color-bg);
+}
+
+.graphene-hero-3d__fallback {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-elevated) 100%);
+  z-index: 0;
+}
+
+.graphene-hero-3d__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.graphene-hero-3d__content {
+  position: relative;
+  z-index: 20;
+  padding: 8rem 1.5rem 4rem;
+  max-width: 80rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Hero title - reserve space to prevent CLS */
+.graphene-hero-title {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  min-height: 2.4em; /* Reserve space */
+}
+
+.graphene-hero-subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  color: var(--color-text-secondary);
+  max-width: 36rem;
+  margin-bottom: 2rem;
+  min-height: 3em; /* Reserve space */
+}
+
+/* ════ SKIP LINK (a11y) ════ */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 9999;
+  padding: 0.75rem 1rem;
+  background: var(--color-primary);
+  color: #000;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: top 0.2s;
+}
+.skip-link:focus { top: 1rem; }
+
+/* ════ MOBILE SCALE UPLIFT (Sprint 9 P0) ════ */
+/* Target: Default 100% feels like DDG Tekst-zoom 130% */
+@media (max-width: 768px) {
+  :root { 
+    font-size: 125%; /* 20px base for large phones/tablets */
+  }
+  .graphene-hero-3d__content { 
+    padding: 7.5rem 1.5rem 4.5rem; /* Extra breathing room */
+  }
+  .graphene-hero-title { 
+    min-height: 2.6em;
+    font-size: 2.25rem !important; /* 45px - prominent headline */
+    line-height: 1.15 !important;
+    letter-spacing: -0.02em !important;
+  }
+  .graphene-hero-subtitle {
+    font-size: 1.1875rem !important; /* 19px+ minimum */
+    line-height: 1.65 !important;
+  }
+}
+
+/* Small phones - extra aggressive */
+@media (max-width: 430px) {
+  :root { 
+    font-size: 130%; /* 20.8px - matches DDG 130% feel */
+  }
+  .graphene-hero-title { 
+    font-size: 2rem !important; /* Scale back slightly for narrow screens */
+  }
+}
+
+/* ════ FOUC PREVENTION ════ */
+html:not([data-theme]) { visibility: hidden; }
+html[data-theme] { visibility: visible; }

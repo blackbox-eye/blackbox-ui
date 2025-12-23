@@ -489,6 +489,10 @@
     }
   },
   "cases": {
+    "meta": {
+      "title": "Case Studies & Documented Impact | BLACKBOX EYE™",
+      "description": "Review real-world outcomes from Danish municipalities, enterprises, and critical infrastructure. See how Blackbox EYE™ delivers measurable security results."
+    },
     "title": "Case Studies",
     "breadcrumb": "Cases",
     "subtitle": "Documented Impact",
@@ -597,6 +601,10 @@
     }
   },
   "pricing": {
+    "meta": {
+      "title": "Pricing & Subscriptions | BLACKBOX EYE™",
+      "description": "Explore Blackbox EYE™ licensing options from tactical modules to full enterprise integration. Use our AI advisor to find the right security investment."
+    },
     "title": "Pricing",
     "breadcrumb": "Pricing",
     "subtitle": "Licenses & subscriptions",

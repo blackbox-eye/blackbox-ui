@@ -140,22 +140,33 @@ body {
 .skip-link:focus { top: 1rem; }
 
 /* ════ MOBILE SCALE UPLIFT (Sprint 9 P0) ════ */
-/* Aggressive mobile baseline - real device tested */
+/* Target: Default 100% feels like DDG Tekst-zoom 130% */
 @media (max-width: 768px) {
   :root { 
-    font-size: 118.75%; /* 19px base - feels comfortable at arm's length */
+    font-size: 125%; /* 20px base for large phones/tablets */
   }
   .graphene-hero-3d__content { 
-    padding: 7rem 1.25rem 4rem; /* More breathing room */
+    padding: 7.5rem 1.5rem 4.5rem; /* Extra breathing room */
   }
   .graphene-hero-title { 
-    min-height: 2.8em;
-    font-size: 2rem !important; /* Force larger headline */
-    line-height: 1.2 !important;
+    min-height: 2.6em;
+    font-size: 2.25rem !important; /* 45px - prominent headline */
+    line-height: 1.15 !important;
+    letter-spacing: -0.02em !important;
   }
   .graphene-hero-subtitle {
-    font-size: 1.125rem !important; /* 18px minimum */
+    font-size: 1.1875rem !important; /* 19px+ minimum */
     line-height: 1.65 !important;
+  }
+}
+
+/* Small phones - extra aggressive */
+@media (max-width: 430px) {
+  :root { 
+    font-size: 130%; /* 20.8px - matches DDG 130% feel */
+  }
+  .graphene-hero-title { 
+    font-size: 2rem !important; /* Scale back slightly for narrow screens */
   }
 }
 

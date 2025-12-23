@@ -99,15 +99,15 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MOBILE SCALE UPLIFT - Phase 2 P0-1
-   Makes 100% zoom feel like 75-80% of original scale
+   MOBILE SCALE UPLIFT - Sprint 9 P0 "DDG 130% EQUIVALENT"
+   Target: Default 100% zoom feels like DDG Tekst-zoom 130%
    ═══════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
   :root {
-    /* Sprint 9 P0: Aggressive mobile scale - 19px base for real-device comfort */
-    font-size: 118.75%;
+    /* 125% = 20px base - significant uplift for tablets/large phones */
+    font-size: 125%;
     
-    /* INCREASED spacing for mobile - more breathing room */
+    /* GENEROUS spacing for mobile - more breathing room */
     --space-1: 0.3125rem;  /* 5px */
     --space-2: 0.5rem;     /* 8px */
     --space-3: 0.75rem;    /* 12px */
@@ -116,6 +116,14 @@
     --space-8: 2rem;       /* 32px */
     --space-12: 3.5rem;    /* 56px */
     --space-16: 5rem;      /* 80px */
+  }
+}
+
+/* Small phones - extra aggressive scaling */
+@media (max-width: 430px) {
+  :root {
+    /* 130% = 20.8px base - matches DDG 130% tekst-zoom feel */
+    font-size: 130%;
   }
 }
 

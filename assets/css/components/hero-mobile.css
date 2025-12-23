@@ -54,44 +54,44 @@ h1[class*="hero"],
     text-align: center !important;
   }
   
-  /* Hero padding - mobile optimized (Sprint 9 P0: MORE SPACE) */
+  /* Hero padding - mobile optimized (Sprint 9 P0: DDG 130% FEEL) */
   .graphene-hero-3d__content,
   .graphene-hero__content {
-    padding-top: calc(5rem + env(safe-area-inset-top, 0px)) !important;
-    padding-bottom: 4rem !important;
-    padding-left: 1.25rem !important;
-    padding-right: 1.25rem !important;
+    padding-top: calc(6rem + env(safe-area-inset-top, 0px)) !important;
+    padding-bottom: 5rem !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
   }
   
   .access-hero {
-    padding-top: calc(3.5rem + env(safe-area-inset-top, 0px)) !important;
-    padding-bottom: 2rem !important;
-    padding-left: 1.25rem !important;
-    padding-right: 1.25rem !important;
+    padding-top: calc(4.5rem + env(safe-area-inset-top, 0px)) !important;
+    padding-bottom: 3rem !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
   }
   
-  /* Hero headline - mobile size (Sprint 9 P0: LARGER) */
+  /* Hero headline - mobile size (Sprint 9 P0: DDG 130% EQUIVALENT) */
   .graphene-headline,
   .graphene-hero-title,
   .hero-gradient-text,
   .products-hero__title,
   .access-hero__title,
   h1[class*="hero"] {
-    font-size: clamp(2rem, 7vw, 3rem) !important; /* Bigger headlines */
-    margin-bottom: 1.25rem !important;
-    letter-spacing: -0.025em !important;
+    font-size: clamp(2.25rem, 8vw, 3.25rem) !important; /* Much bigger */
+    margin-bottom: 1.5rem !important;
+    letter-spacing: -0.03em !important;
   }
   
-  /* Hero subtitle - mobile (Sprint 9 P0: MORE READABLE) */
+  /* Hero subtitle - mobile (Sprint 9 P0: DDG 130% EQUIVALENT) */
   .graphene-subheadline,
   .graphene-hero-subtitle,
   .hero-subheadline,
   .products-hero__lede,
   .access-hero__lead {
-    font-size: clamp(1.0625rem, 4vw, 1.25rem) !important; /* Min 17px */
-    margin-bottom: 2rem !important; /* More space before CTA */
+    font-size: clamp(1.125rem, 4.5vw, 1.375rem) !important; /* Min 18px */
+    margin-bottom: 2.5rem !important; /* More space before CTA */
     max-width: 100% !important;
-    line-height: 1.7 !important;
+    line-height: 1.75 !important;
   }
   
   /* Hero title lines - fix animation state on mobile */
@@ -161,11 +161,11 @@ h1[class*="hero"],
 }
 
 /* ================================================
-   HERO CTA BUTTONS - MOBILE (48px min)
+   HERO CTA BUTTONS - MOBILE (Sprint 9 P0: DDG 130% FEEL)
    ================================================ */
 
 @media (max-width: 768px) {
-  /* All hero CTA buttons (Sprint 9 P0: LARGER + MORE PROMINENT) */
+  /* All hero CTA buttons - LARGE and PROMINENT */
   .graphene-btn-primary,
   .graphene-btn-secondary,
   .graphene-cta-primary,
@@ -175,26 +175,27 @@ h1[class*="hero"],
   .products-hero__cta,
   .access-hero__cta,
   .ccs-login__submit {
-    min-height: 52px !important; /* Bigger touch target */
-    padding: 1rem 1.75rem !important; /* More padding */
-    font-size: 1.0625rem !important; /* 17px - readable */
+    min-height: 56px !important; /* Bigger touch target */
+    padding: 1.125rem 2rem !important; /* Generous padding */
+    font-size: 1.125rem !important; /* 18px - clearly readable */
     font-weight: 600 !important;
     width: 100% !important;
-    max-width: 340px !important;
+    max-width: 360px !important;
     margin-left: auto !important;
     margin-right: auto !important;
     justify-content: center !important;
+    border-radius: 0.625rem !important;
   }
   
-  /* CTA group - stack vertically */
+  /* CTA group - stack vertically with more gap */
   .graphene-cta-group,
   .hero-ctas,
   .products-hero__actions {
     flex-direction: column !important;
     align-items: stretch !important;
-    gap: 0.75rem !important;
+    gap: 1rem !important;
     width: 100% !important;
-    max-width: 320px !important;
+    max-width: 360px !important;
     margin-left: auto !important;
     margin-right: auto !important;
   }

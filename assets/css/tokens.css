@@ -141,6 +141,7 @@
   --shadow-focus: 0 0 0 3px var(--color-primary-soft);
 }
 
+<<<<<<< HEAD
 /* Global focus-visible treatment for anchors - keyboard only */
 :where(a):focus-visible {
   outline: 2px solid color-mix(in srgb, var(--text-gold) 65%, transparent);
@@ -152,6 +153,14 @@
 :where(a):focus:not(:focus-visible) {
   outline: none;
   box-shadow: none;
+=======
+/* Global focus-visible treatment for anchors to guarantee visibility */
+:where(a):focus,
+:where(a):focus-visible {
+  outline: 2px solid var(--text-gold);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px rgba(232, 197, 71, 0.35);
+>>>>>>> origin/main
 }
 
 /* ═══════════════════════════════════════════════════════════════

@@ -882,6 +882,7 @@ body.alphabot-locked {
 }
 
 .nav-chip:focus-visible {
+.nav-chip:focus-visible {
   color: var(--text-high-emphasis);
   background: color-mix(in srgb, var(--primary-accent) 12%, transparent);
   border-color: color-mix(in srgb, var(--primary-accent) 25%, var(--nav-chip-border));

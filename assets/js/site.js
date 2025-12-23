@@ -197,6 +197,13 @@ const THEME_STORAGE_KEY = 'bbx-theme';
 document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add('js-enabled');
 
+    // P0-5: Enable transitions after first paint to prevent FOUC
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            document.body.classList.add('fouc-ready');
+        });
+    });
+
     const docEl = document.documentElement;
     const bodyEl = document.body;
     const metaColorScheme = document.querySelector('meta[name="color-scheme"]');
@@ -643,6 +650,22 @@ document.addEventListener('DOMContentLoaded', () => {
         actionButtons.forEach((button) => {
             button.addEventListener('click', persistDismissal, { once: true });
         });
+
+        // P0-1: Dock sticky CTA when footer is visible to prevent overlap
+        const footer = document.querySelector('footer, .site-footer');
+        if (footer) {
+            const stickyFooterObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (isDismissed()) return;
+                    if (entry.isIntersecting) {
+                        stickyCtaBar.classList.add('is-docked');
+                    } else {
+                        stickyCtaBar.classList.remove('is-docked');
+                    }
+                });
+            }, { threshold: 0.05 });
+            stickyFooterObserver.observe(footer);
+        }
     }
 
     // Graphene CTA bar: mobile-first, visible by default (hide only when dismissed)
@@ -723,17 +746,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         return;
                     }
                     if (entry.isIntersecting) {
-                        // Footer is visible - hide the CTA bar
+                        // Footer is visible - dock the CTA bar
+                        grapheneCtaBar.classList.add('is-docked');
                         grapheneCtaBar.setAttribute('data-footer-visible', 'true');
-                        grapheneCtaBar.style.opacity = '0';
-                        grapheneCtaBar.style.pointerEvents = 'none';
-                        grapheneCtaBar.style.transform = 'translateX(-50%) translateY(20px)';
                     } else {
                         // Footer not visible - show the CTA bar
+                        grapheneCtaBar.classList.remove('is-docked');
                         grapheneCtaBar.removeAttribute('data-footer-visible');
-                        grapheneCtaBar.style.opacity = '';
-                        grapheneCtaBar.style.pointerEvents = '';
-                        grapheneCtaBar.style.transform = '';
                     }
                     scheduleBottomCtaOffset();
                 });

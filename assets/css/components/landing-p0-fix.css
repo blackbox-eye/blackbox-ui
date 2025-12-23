@@ -1,0 +1,569 @@
+/**
+ * LANDING PAGE P0 FIXES
+ * Branch: fix/landing-p0-stability
+ * Date: 2025-12-23
+ * 
+ * Fixes:
+ * P0-1: Sticky CTA bar layering (solid bg, z-index contract, footer non-overlap)
+ * P0-2: Burger menu drawer (35-40% width, no backdrop blur, all items visible)
+ * P0-3: AI Assistant overlay (no blur, light dim only)
+ * P0-4: Light mode overlay glitches (force dark surfaces)
+ * P0-5: FOUC prevention (critical sizing)
+ * 
+ * z-index contract:
+ * - drawer-overlay: 39
+ * - drawer: 40
+ * - sticky-cta: 70
+ * - cookie-banner: 80
+ * - modals: 90
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   P0-1: STICKY CTA BAR — SOLID, STABLE, NO OVERLAP
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Force solid background, no transparency, no blur */
+.sticky-cta-bar,
+[data-component="sticky-cta"],
+#sticky-cta,
+.graphene-cta-bar {
+  /* SOLID background - zero alpha */
+  background: #0a0b0d !important;
+  background-color: #0a0b0d !important;
+  
+  /* NO blur effects */
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  
+  /* Subtle gold accent border */
+  border: 1px solid rgba(201, 162, 39, 0.2) !important;
+  border-bottom: none !important;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.6) !important;
+  
+  /* Fixed z-index: 70 (below cookie:80, above drawer:40) */
+  z-index: 70 !important;
+  
+  /* Always opaque, no flickering */
+  opacity: 1 !important;
+  
+  /* No transform effects that cause stacking issues */
+  transform: none !important;
+  will-change: auto !important;
+  
+  /* Ensure clickable */
+  pointer-events: auto !important;
+}
+
+/* Mobile sticky CTA positioning */
+@media (max-width: 900px) {
+  .sticky-cta-bar,
+  [data-component="sticky-cta"],
+  #sticky-cta,
+  .graphene-cta-bar {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+    
+    /* Safe area padding for notched devices */
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0)) !important;
+  }
+  
+  /* Add bottom padding to main content to prevent footer overlap */
+  main,
+  #main-content {
+    padding-bottom: 90px !important; /* sticky CTA height + buffer */
+  }
+  
+  /* Footer bottom padding for legal row visibility */
+  footer,
+  .site-footer {
+    padding-bottom: calc(100px + env(safe-area-inset-bottom, 0)) !important;
+  }
+}
+
+/* Hide sticky CTA when scrolled to absolute footer to prevent overlap */
+.sticky-cta-bar.is-docked,
+[data-component="sticky-cta"].is-docked,
+.graphene-cta-bar.is-docked {
+  transform: translateY(100%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* CTA buttons inside sticky bar - ensure dark theme */
+.sticky-cta-bar__btn,
+.sticky-cta-bar__btn--primary,
+.sticky-cta-bar__btn--ghost,
+.sticky-cta-bar__btn--secondary,
+.graphene-cta-bar__btn {
+  background: rgba(30, 28, 26, 0.95) !important;
+  border-color: rgba(201, 162, 39, 0.25) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.sticky-cta-bar__btn--primary,
+.graphene-cta-bar__btn--primary {
+  background: linear-gradient(135deg, rgba(201, 162, 39, 0.15), rgba(201, 162, 39, 0.08)) !important;
+  border-color: rgba(201, 162, 39, 0.35) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   P0-2: BURGER MENU DRAWER — COMPACT WIDTH, MATTE BLACK, ALL ITEMS VISIBLE
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Drawer overlay - light dim, NO blur */
+#mobile-menu-overlay {
+  /* Remove backdrop blur entirely */
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  
+  /* Very light dim only */
+  background: rgba(0, 0, 0, 0.35) !important;
+  
+  /* z-index contract: 39 */
+  z-index: 39 !important;
+}
+
+#mobile-menu-overlay.active {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Drawer panel - 35-40% width, matte black */
+#mobile-menu {
+  /* Width: 35-40% capped between 240-280px */
+  width: min(40vw, 280px) !important;
+  min-width: 240px !important;
+  max-width: 280px !important;
+  
+  /* MATTE BLACK - solid, no blur, no transparency */
+  background: #0a0b0d !important;
+  background-color: #0a0b0d !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  
+  /* Height with safe areas */
+  height: 100dvh !important;
+  padding-top: env(safe-area-inset-top, 0) !important;
+  padding-bottom: env(safe-area-inset-bottom, 0) !important;
+  
+  /* z-index contract: 40 */
+  z-index: 40 !important;
+  
+  /* Clean border */
+  border-left: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 0 !important;
+  
+  /* Layout - flexbox for proper stacking */
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Drawer visible state */
+#mobile-menu.active,
+#mobile-menu[aria-hidden="false"] {
+  transform: translateX(0) !important;
+}
+
+/* Drawer hidden state */
+#mobile-menu:not(.active),
+#mobile-menu[aria-hidden="true"] {
+  transform: translateX(100%) !important;
+}
+
+/* Drawer header - compact */
+#mobile-menu > div:first-child {
+  flex-shrink: 0 !important;
+  padding: 0.625rem 0.75rem !important;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+#mobile-menu-heading {
+  font-size: 0.625rem !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Close button - minimum 44px touch target */
+#mobile-menu-close {
+  min-width: 44px !important;
+  min-height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+#mobile-menu-close:hover,
+#mobile-menu-close:focus-visible {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #fff !important;
+}
+
+/* Navigation section - scrollable if needed */
+#mobile-menu nav {
+  flex: 1 1 auto !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  padding: 0.5rem 0.625rem !important;
+  
+  /* Smooth internal scroll */
+  scroll-behavior: smooth !important;
+  overscroll-behavior: contain !important;
+}
+
+/* Hide scrollbar but allow scroll */
+#mobile-menu nav::-webkit-scrollbar {
+  width: 3px !important;
+}
+
+#mobile-menu nav::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+#mobile-menu nav::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 3px !important;
+}
+
+/* Nav link list - compact gaps */
+#mobile-menu nav ul {
+  gap: 0.125rem !important;
+}
+
+/* Nav links - compact, accessible */
+.nav-link-mobile {
+  display: flex !important;
+  align-items: center !important;
+  padding: 0.5rem 0.625rem !important;
+  font-size: 0.8125rem !important; /* 13px */
+  line-height: 1.3 !important;
+  min-height: 44px !important; /* WCAG touch target */
+  color: rgba(255, 255, 255, 0.85) !important;
+  background: transparent !important;
+  border-radius: 6px !important;
+  text-decoration: none !important;
+}
+
+.nav-link-mobile:hover,
+.nav-link-mobile:focus-visible {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #fff !important;
+}
+
+.nav-link-mobile.is-active {
+  background: rgba(201, 162, 39, 0.12) !important;
+  color: rgba(201, 162, 39, 0.95) !important;
+}
+
+/* Secondary nav links - slightly smaller */
+.nav-link-mobile--secondary {
+  font-size: 0.75rem !important; /* 12px */
+  min-height: 40px !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.nav-link-mobile--secondary:hover,
+.nav-link-mobile--secondary:focus-visible {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Drawer footer - compact, sticky at bottom */
+#mobile-menu > div:last-child {
+  flex-shrink: 0 !important;
+  padding: 0.5rem 0.625rem !important;
+  background: rgba(0, 0, 0, 0.2) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Language switch in drawer - compact */
+.language-switch--drawer {
+  padding: 0.25rem 0.5rem !important;
+  font-size: 0.6875rem !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  border-radius: 4px !important;
+}
+
+.language-switch--drawer.is-active {
+  background: rgba(201, 162, 39, 0.15) !important;
+  border-color: rgba(201, 162, 39, 0.3) !important;
+  color: rgba(201, 162, 39, 0.95) !important;
+}
+
+/* Console access buttons in drawer - compact */
+.mobile-console-access {
+  margin-bottom: 0.5rem !important;
+}
+
+.mobile-console-btn {
+  min-height: 44px !important;
+  padding: 0.375rem !important;
+  font-size: 0.625rem !important;
+  background: rgba(20, 20, 20, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Theme toggle in drawer */
+.theme-toggle--mobile {
+  min-width: 44px !important;
+  min-height: 44px !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   P0-3: AI ASSISTANT — NO BLUR, LIGHT DIM ONLY, DARK PANEL
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Assistant overlay - NO blur, light dim */
+.alphabot-overlay,
+#alphabot-overlay {
+  /* NO backdrop blur */
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  
+  /* Very light dim (0.15 as specified) */
+  background: rgba(0, 0, 0, 0.15) !important;
+  
+  /* z-index below drawer but above content */
+  z-index: 35 !important;
+}
+
+.alphabot-overlay.visible,
+#alphabot-overlay.visible {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Assistant container positioning */
+.alphabot-widget,
+#alphabot-container {
+  /* Ensure it doesn't overlap drawer close or sticky CTA */
+  z-index: 45 !important;
+}
+
+/* Assistant panel - constrained size, dark, internal scroll */
+.alphabot-panel,
+#alphabot-panel {
+  /* Size constraints */
+  max-width: 340px !important;
+  max-height: 45vh !important;
+  width: min(340px, calc(100vw - 2rem)) !important;
+  
+  /* DARK background - no light panels */
+  background: #0d0e10 !important;
+  background-color: #0d0e10 !important;
+  
+  /* NO blur */
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  
+  /* Internal scroll for messages */
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior: contain !important;
+  
+  /* Dark border */
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 12px !important;
+  
+  /* Shadow for elevation */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Assistant panel header - dark */
+.alphabot-panel-header {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Assistant messages area - dark */
+.alphabot-messages,
+.alphabot-panel__messages {
+  background: transparent !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Assistant input - dark */
+.alphabot-input,
+.alphabot-panel__input {
+  background: rgba(20, 20, 20, 0.8) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+}
+
+/* Ensure assistant toggle stays dark */
+.alphabot-toggle {
+  background: rgba(13, 15, 17, 0.95) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   P0-4: LIGHT MODE GLITCH PREVENTION — FORCE DARK SURFACES
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Prevent any white/light backgrounds on overlays in dark mode */
+:root:not([data-theme="light"]) #mobile-menu,
+:root:not([data-theme="light"]) #mobile-menu-overlay,
+:root:not([data-theme="light"]) .alphabot-panel,
+:root:not([data-theme="light"]) .alphabot-overlay,
+:root:not([data-theme="light"]) .sticky-cta-bar,
+:root:not([data-theme="light"]) .cookie-banner {
+  /* Block any inherited light backgrounds */
+  background-color: #0a0b0d !important;
+}
+
+/* Override any tailwind gray-900/98 or similar that might flash light */
+:root:not([data-theme="light"]) .bg-gray-900\/98,
+:root:not([data-theme="light"]) .bg-gray-900\/95 {
+  background-color: #0a0b0d !important;
+}
+
+/* Explicitly handle light mode (user toggle) - allow light styling */
+:root[data-theme="light"] #mobile-menu {
+  background: #fafafa !important;
+  border-left-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+:root[data-theme="light"] .nav-link-mobile {
+  color: rgba(0, 0, 0, 0.85) !important;
+}
+
+:root[data-theme="light"] .nav-link-mobile:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+
+:root[data-theme="light"] .nav-link-mobile.is-active {
+  background: rgba(201, 162, 39, 0.1) !important;
+  color: #8b6914 !important;
+}
+
+:root[data-theme="light"] .sticky-cta-bar,
+:root[data-theme="light"] [data-component="sticky-cta"] {
+  background: #fafafa !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   P0-5: FOUC PREVENTION — CRITICAL SIZING + TRANSITION CONTROL
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Prevent icon/logo size flash by setting explicit dimensions */
+.header-logo,
+.header-logo img,
+.header-logo svg {
+  width: auto !important;
+  height: 32px !important;
+  max-height: 32px !important;
+}
+
+@media (min-width: 768px) {
+  .header-logo,
+  .header-logo img,
+  .header-logo svg {
+    height: 40px !important;
+    max-height: 40px !important;
+  }
+}
+
+/* Prevent burger icon size flash */
+.header-burger,
+#mobile-menu-button {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
+}
+
+.header-burger svg {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+/* Prevent sticky CTA flash - set initial state */
+.sticky-cta-bar,
+.graphene-cta-bar {
+  /* Start hidden on load, JS shows after paint */
+  visibility: visible !important;
+}
+
+/* Drawer initial state - hidden until JS */
+#mobile-menu {
+  visibility: visible !important;
+  transform: translateX(100%) !important;
+}
+
+#mobile-menu.active {
+  transform: translateX(0) !important;
+}
+
+/* Overlay initial state */
+#mobile-menu-overlay {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+#mobile-menu-overlay.active {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Selective transition disabling - only for elements that cause FOUC */
+.no-fouc-transition {
+  transition: none !important;
+}
+
+/* Re-enable transitions after first paint (JS adds this class) */
+.fouc-ready .sticky-cta-bar,
+.fouc-ready #mobile-menu,
+.fouc-ready #mobile-menu-overlay {
+  transition: transform 0.2s ease, opacity 0.2s ease !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   COOKIE BANNER — z-index contract enforcement
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.cookie-banner,
+[data-component="cookie-banner"] {
+  z-index: 80 !important;
+  background: #0a0b0d !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* When cookie banner is open, adjust sticky CTA */
+body.cookie-banner-open .sticky-cta-bar,
+body.cookie-banner-open [data-component="sticky-cta"] {
+  /* Move sticky CTA above cookie banner height */
+  bottom: 80px !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   MODAL z-index contract
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.modal,
+[role="dialog"][aria-modal="true"]:not(#mobile-menu) {
+  z-index: 90 !important;
+}
+
+.modal-overlay,
+.modal-backdrop {
+  z-index: 89 !important;
+}

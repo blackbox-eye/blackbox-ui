@@ -543,4 +543,55 @@ test.describe('Landing P0 Sanity', () => {
     });
     expect(drawerVisible).toBe(false);
   });
+
+  test('no light-mode surfaces in dark mode', async ({ page }) => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+    
+    // Force dark mode for test
+    await page.evaluate(() => {
+      document.documentElement.dataset.theme = 'dark';
+      document.body.dataset.theme = 'dark';
+    });
+    await page.waitForTimeout(100);
+    
+    // Check key overlays for light backgrounds
+    const lightSurfaces = await page.evaluate(() => {
+      const elements = document.querySelectorAll(
+        '#mobile-menu, #mobile-menu-overlay, .sticky-cta-bar, .cookie-banner'
+      );
+      for (const el of elements) {
+        const bg = window.getComputedStyle(el).backgroundColor;
+        // Parse RGB values - light surfaces have high values
+        const match = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+        if (match) {
+          const [, r, g, b] = match.map(Number);
+          // If all channels > 200, it's too light for dark mode
+          if (r > 200 && g > 200 && b > 200) return true;
+        }
+      }
+      return false;
+    });
+    expect(lightSurfaces).toBe(false);
+  });
+
+  test('z-index contract: sticky CTA at 60, no conflicts', async ({ page }) => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+    await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.5));
+    await page.waitForTimeout(300);
+    
+    const stickyBar = page.locator('.sticky-cta-bar, .graphene-cta-bar').first();
+    if (await stickyBar.count() > 0) {
+      const zIndex = await stickyBar.evaluate(el => {
+        return parseInt(window.getComputedStyle(el).zIndex, 10);
+      });
+      expect(zIndex).toBe(60);
+    }
+  });
+
+  test('alphabot-overlay div should not exist in DOM', async ({ page }) => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+    
+    const overlayCount = await page.locator('#alphabot-overlay').count();
+    expect(overlayCount).toBe(0);
+  });
 });

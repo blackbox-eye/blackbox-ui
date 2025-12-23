@@ -278,7 +278,31 @@ if (!empty($disable_alphabot)) {
     <meta name="twitter:image" content="<?= htmlspecialchars($meta_og_image) ?>">
     <meta name="twitter:site" content="@blackboxeye">
 
-    <?php $css_version = '1.6.19'; // Cache-bust version - increment on CSS changes ?>
+    <?php
+    /**
+     * Sprint 9 Batch 4: Cache-proof asset versioning
+     * Uses filemtime() for automatic cache invalidation when files change.
+     * No manual version bumps required - deploys immediately bust cache.
+     */
+    $asset_base = __DIR__ . '/../assets';
+    
+    /**
+     * Get cache-busting version for an asset file.
+     * Returns filemtime hash for automatic invalidation on file changes.
+     * Falls back to static version if file doesn't exist.
+     */
+    function bbx_asset_version(string $path): string {
+        global $asset_base;
+        $full_path = $asset_base . '/' . ltrim($path, '/');
+        if (file_exists($full_path)) {
+            return substr(md5(filemtime($full_path)), 0, 8);
+        }
+        return '1.6.20'; // Fallback version
+    }
+    
+    // Legacy compat: keep $css_version for any remaining static refs
+    $css_version = '1.6.20';
+    ?>
 
     <link rel="icon" type="image/svg+xml" href="/assets/icon_box.svg?v=<?= $css_version ?>">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png?v=<?= $css_version ?>">
@@ -292,30 +316,30 @@ if (!empty($disable_alphabot)) {
     <!-- Sprint 9: Preload key fonts for LCP improvement -->
     <link rel="preload" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff2" as="font" type="font/woff2" crossorigin>
 
-    <!-- Non-critical CSS: async load via preload + onload swap -->
-    <link rel="preload" href="/assets/css/tailwind.full.css?v=<?= $css_version ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/assets/css/tailwind.full.css?v=<?= $css_version ?>"></noscript>
+    <!-- Non-critical CSS: async load via preload + onload swap (filemtime-based versioning) -->
+    <link rel="preload" href="/assets/css/tailwind.full.css?v=<?= bbx_asset_version('css/tailwind.full.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/tailwind.full.css?v=<?= bbx_asset_version('css/tailwind.full.css') ?>"></noscript>
 
-    <link rel="preload" href="/assets/css/tokens.css?v=<?= $css_version ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/assets/css/tokens.css?v=<?= $css_version ?>"></noscript>
+    <link rel="preload" href="/assets/css/tokens.css?v=<?= bbx_asset_version('css/tokens.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/tokens.css?v=<?= bbx_asset_version('css/tokens.css') ?>"></noscript>
 
-    <link rel="preload" href="/assets/css/custom-ui.css?v=<?= $css_version ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/assets/css/custom-ui.css?v=<?= $css_version ?>"></noscript>
+    <link rel="preload" href="/assets/css/custom-ui.css?v=<?= bbx_asset_version('css/custom-ui.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/custom-ui.css?v=<?= bbx_asset_version('css/custom-ui.css') ?>"></noscript>
 
-    <link rel="preload" href="/assets/css/theme-overrides.css?v=<?= $css_version ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/assets/css/theme-overrides.css?v=<?= $css_version ?>"></noscript>
+    <link rel="preload" href="/assets/css/theme-overrides.css?v=<?= bbx_asset_version('css/theme-overrides.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/theme-overrides.css?v=<?= bbx_asset_version('css/theme-overrides.css') ?>"></noscript>
 
     <!-- Sprint 6: Motion safety (global) + unified hero mobile -->
-    <link rel="preload" href="/assets/css/components/motion-safe.css?v=<?= $css_version ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/assets/css/components/motion-safe.css?v=<?= $css_version ?>"></noscript>
+    <link rel="preload" href="/assets/css/components/motion-safe.css?v=<?= bbx_asset_version('css/components/motion-safe.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/components/motion-safe.css?v=<?= bbx_asset_version('css/components/motion-safe.css') ?>"></noscript>
 
     <!-- Sprint 9: Async load remaining component CSS -->
-    <link rel="preload" href="/assets/css/components/hero-mobile.css?v=<?= $css_version ?>" as="style" media="(max-width: 768px)" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/assets/css/components/hero-mobile.css?v=<?= $css_version ?>" media="(max-width: 768px)"></noscript>
+    <link rel="preload" href="/assets/css/components/hero-mobile.css?v=<?= bbx_asset_version('css/components/hero-mobile.css') ?>" as="style" media="(max-width: 768px)" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/components/hero-mobile.css?v=<?= bbx_asset_version('css/components/hero-mobile.css') ?>" media="(max-width: 768px)"></noscript>
 
     <!-- Sprint 8: Mobile nav scaling + touch targets -->
-    <link rel="preload" href="/assets/css/components/mobile-nav-scale.css?v=<?= $css_version ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/assets/css/components/mobile-nav-scale.css?v=<?= $css_version ?>"></noscript>
+    <link rel="preload" href="/assets/css/components/mobile-nav-scale.css?v=<?= bbx_asset_version('css/components/mobile-nav-scale.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/components/mobile-nav-scale.css?v=<?= bbx_asset_version('css/components/mobile-nav-scale.css') ?>"></noscript>
 
     <!-- Conditional CSS loading -->
     <?php
@@ -326,16 +350,18 @@ if (!empty($disable_alphabot)) {
     // Use minified CSS in production (when DEBUG is not set or false)
     $use_minified = !defined('BBX_DEBUG_RECAPTCHA') || !BBX_DEBUG_RECAPTCHA;
     $css_suffix = $use_minified ? '.min.css' : '.css';
+    $admin_css_path = 'css/admin' . $css_suffix;
+    $marketing_css_path = 'css/marketing' . $css_suffix;
 
     if ($is_admin_page): ?>
-        <link rel="preload" href="/assets/css/admin<?= $css_suffix ?>?v=<?= $css_version ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/assets/css/admin<?= $css_suffix ?>?v=<?= $css_version ?>"></noscript>
+        <link rel="preload" href="/assets/css/admin<?= $css_suffix ?>?v=<?= bbx_asset_version($admin_css_path) ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/assets/css/admin<?= $css_suffix ?>?v=<?= bbx_asset_version($admin_css_path) ?>"></noscript>
     <?php else: ?>
-        <link rel="preload" href="/assets/css/marketing<?= $css_suffix ?>?v=<?= $css_version ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/assets/css/marketing<?= $css_suffix ?>?v=<?= $css_version ?>"></noscript>
+        <link rel="preload" href="/assets/css/marketing<?= $css_suffix ?>?v=<?= bbx_asset_version($marketing_css_path) ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/assets/css/marketing<?= $css_suffix ?>?v=<?= bbx_asset_version($marketing_css_path) ?>"></noscript>
     <?php endif; ?>
 
-    <script src="config.js" defer></script>
+    <script src="config.js?v=<?= bbx_asset_version('../config.js') ?>" defer></script>
     <?php if (BBX_RECAPTCHA_SITE_KEY !== ''): ?>
         <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(BBX_RECAPTCHA_SITE_KEY) ?>" async defer></script>
     <?php endif; ?>

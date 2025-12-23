@@ -68,9 +68,9 @@ ExpiresDefault "access plus 1 week"
 
 # Cache-Control Headers
 <IfModule mod_headers.c>
-# CSS and JavaScript
+# CSS and JavaScript - long cache, versioned URLs handle invalidation
 <FilesMatch "\.(css|js)$">
-Header set Cache-Control "public, max-age=2592000, immutable"
+Header set Cache-Control "public, max-age=31536000, immutable"
 </FilesMatch>
 
 # Images
@@ -83,9 +83,10 @@ Header set Cache-Control "public, max-age=31536000, immutable"
 Header set Cache-Control "public, max-age=31536000, immutable"
 </FilesMatch>
 
-# HTML (short cache for dynamic content)
+# HTML/PHP - no-cache to ensure fresh asset URLs are always fetched
+# Sprint 9 Batch 4: Critical for cache-proof versioning to work
 <FilesMatch "\.(html|php)$">
-Header set Cache-Control "public, max-age=3600, must-revalidate"
+Header set Cache-Control "no-cache, must-revalidate"
 </FilesMatch>
 
 # Security Headers

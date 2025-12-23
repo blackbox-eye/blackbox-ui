@@ -223,7 +223,23 @@
     <script src="assets/js/site.min.js?v=<?= htmlspecialchars($asset_version) ?>" defer></script>
     <script src="script.js" defer></script>
     <?php if (isset($current_page) && $current_page === 'home'): ?>
-        <script type="module" src="assets/js/graphene-hero.js"></script>
+        <!-- Sprint 9: Defer heavy 3D hero to idle time for better INP -->
+        <script>
+        (function() {
+            function loadGrapheneHero() {
+                var script = document.createElement('script');
+                script.type = 'module';
+                script.src = 'assets/js/graphene-hero.js';
+                document.body.appendChild(script);
+            }
+            // Use requestIdleCallback if available, otherwise setTimeout
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(loadGrapheneHero, { timeout: 2000 });
+            } else {
+                setTimeout(loadGrapheneHero, 100);
+            }
+        })();
+        </script>
     <?php endif; ?>
     
     <!-- Login Dropdown - CRITICAL FIX -->

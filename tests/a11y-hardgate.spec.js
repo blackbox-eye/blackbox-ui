@@ -315,4 +315,91 @@ test.describe('Mobile Drawer - Layout & Scroll', () => {
       expect(footerBottom).toBeLessThanOrEqual(drawerBottom + 20);
     }
   });
+  
+  test('drawer should have compact width (max 280px or min 240px for usability)', async ({ page }) => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(300);
+    
+    // Open drawer
+    await page.locator('#mobile-menu-button').click();
+    await page.waitForTimeout(200);
+    
+    const drawer = page.locator('#mobile-menu');
+    const drawerBox = await drawer.boundingBox();
+    
+    // Drawer width should be between 240px (min for usability) and 280px (max for compactness)
+    // On very small screens, min-width: 240px ensures touch targets remain accessible
+    expect(drawerBox.width).toBeGreaterThanOrEqual(220); // Allow small tolerance
+    expect(drawerBox.width).toBeLessThanOrEqual(300); // Max with tolerance
+  });
+});
+
+/**
+ * Sprint 10: Sticky CTA Bar Tests
+ */
+test.describe('Sticky CTA Bar - Stability', () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+  
+  test('sticky CTA should have solid background (no blur)', async ({ page }) => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+    
+    // Scroll to trigger sticky CTA visibility
+    await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.5));
+    await page.waitForTimeout(500);
+    
+    // Check sticky CTA or graphene CTA bar
+    const stickyBar = page.locator('.sticky-cta-bar, .graphene-cta-bar').first();
+    
+    // Verify it has solid background (backdrop-filter should be none)
+    const backdropFilter = await stickyBar.evaluate(el => {
+      const style = window.getComputedStyle(el);
+      return style.backdropFilter || style.webkitBackdropFilter;
+    });
+    
+    expect(backdropFilter).toBe('none');
+  });
+  
+  test('sticky CTA should maintain z-index above content', async ({ page }) => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+    
+    await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.5));
+    await page.waitForTimeout(500);
+    
+    const stickyBar = page.locator('.sticky-cta-bar, .graphene-cta-bar').first();
+    
+    const zIndex = await stickyBar.evaluate(el => {
+      const style = window.getComputedStyle(el);
+      return parseInt(style.zIndex, 10);
+    });
+    
+    // Should be at least 70 to be above other content
+    expect(zIndex).toBeGreaterThanOrEqual(70);
+  });
+});
+
+/**
+ * Sprint 10: Console Selector Alignment
+ */
+test.describe('Console Selector - Alignment', () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+  
+  test('console buttons in drawer should be centered', async ({ page }) => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(300);
+    
+    // Open drawer
+    await page.locator('#mobile-menu-button').click();
+    await page.waitForTimeout(200);
+    
+    // Find console buttons container
+    const consoleContainer = page.locator('.mobile-console-access > div').first();
+    
+    if (await consoleContainer.isVisible()) {
+      const justifyContent = await consoleContainer.evaluate(el => {
+        return window.getComputedStyle(el).justifyContent;
+      });
+      
+      expect(justifyContent).toBe('center');
+    }
+  });
 });

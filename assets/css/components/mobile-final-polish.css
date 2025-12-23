@@ -1,0 +1,387 @@
+/**
+ * Sprint 10 - FINAL MOBILE UI POLISH
+ * Target: All remaining visual inconsistencies across mobile and minimal desktop
+ * 
+ * Issues Fixed:
+ * A) Sticky CTA Bar ("Pick Your Next Action") - z-index, solid background, no blur
+ * B) Mobile Drawer - narrower width (40%), compact, matte black
+ * C) Console Selector - centered alignment
+ * D) Login Page - 80% visual scale
+ * E) Hero CTA alignment
+ */
+
+/* ═══════════════════════════════════════════════════════════════
+   A) STICKY CTA BAR - SOLID, STABLE, NO BLUR
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Override all blur/transparency on sticky CTA */
+.sticky-cta-bar,
+[data-component="sticky-cta"],
+.graphene-cta-bar {
+  /* SOLID background - NO blur, NO transparency */
+  background: #0a0b0d !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  
+  /* Subtle border for definition */
+  border: 1px solid rgba(201, 162, 39, 0.25) !important;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5) !important;
+  
+  /* Fixed z-index - always on top */
+  z-index: 75 !important;
+  
+  /* Remove all transitions that cause glitches */
+  transition: none !important;
+  
+  /* Always visible when active (no fade) */
+  opacity: 1 !important;
+  transform: none !important;
+  pointer-events: auto !important;
+}
+
+/* Ensure visibility states work correctly */
+.sticky-cta-bar[data-visible="true"],
+[data-component="sticky-cta"][data-visible="true"],
+.graphene-cta-bar[data-visible="true"] {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.sticky-cta-bar[data-hidden="true"],
+[data-component="sticky-cta"][data-hidden="true"],
+.graphene-cta-bar[data-hidden="true"] {
+  display: none !important;
+}
+
+/* Mobile-specific sticky bar layout */
+@media (max-width: 768px) {
+  .graphene-cta-bar {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    transform: none !important;
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: none !important;
+    padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0)) !important;
+    margin: 0 !important;
+  }
+  
+  .graphene-cta-bar__actions {
+    flex-direction: row !important;
+    gap: 0.5rem !important;
+  }
+  
+  .graphene-cta-bar__label {
+    font-size: 0.6875rem !important;
+    margin-bottom: 0.375rem !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   B) MOBILE DRAWER - NARROWER, COMPACT, MATTE BLACK
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1023px) {
+  #mobile-menu {
+    /* Narrower width: 40% instead of 70-80% */
+    width: 40vw !important;
+    max-width: 280px !important;
+    min-width: 240px !important;
+    
+    /* MATTE BLACK - no blur, no transparency */
+    background: #0a0b0d !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    
+    /* Clean border */
+    border-left: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+  
+  /* Compact nav links */
+  #mobile-menu .nav-link-mobile {
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.8125rem !important; /* 13px */
+    min-height: 40px !important;
+    line-height: 1.3 !important;
+  }
+  
+  #mobile-menu .nav-link-mobile--secondary {
+    padding: 0.4rem 0.75rem !important;
+    font-size: 0.75rem !important; /* 12px */
+    min-height: 36px !important;
+  }
+  
+  /* Drawer header compact */
+  #mobile-menu > div:first-child {
+    padding: 0.625rem 0.75rem !important;
+  }
+  
+  #mobile-menu-heading {
+    font-size: 0.625rem !important; /* 10px */
+  }
+  
+  /* Close button smaller */
+  #mobile-menu-close {
+    min-width: 36px !important;
+    min-height: 36px !important;
+  }
+  
+  /* Navigation section - no scroll needed for standard heights */
+  #mobile-menu nav {
+    padding: 0.5rem !important;
+  }
+  
+  #mobile-menu nav ul {
+    gap: 0.125rem !important;
+  }
+  
+  /* Footer section compact */
+  #mobile-menu > div:last-child {
+    padding: 0.5rem 0.75rem !important;
+  }
+  
+  /* Language toggles compact */
+  .language-switch--drawer {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.6875rem !important; /* 11px */
+    min-width: 36px !important;
+    min-height: 36px !important;
+  }
+  
+  /* Console buttons compact */
+  .mobile-console-access {
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .mobile-console-access > p {
+    font-size: 0.5625rem !important; /* 9px */
+    margin-bottom: 0.375rem !important;
+  }
+  
+  .mobile-console-btn {
+    min-height: 48px !important;
+    padding: 0.375rem !important;
+    font-size: 0.625rem !important;
+  }
+  
+  .mobile-console-icon {
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 0.625rem !important;
+  }
+  
+  /* CTA buttons in drawer compact */
+  .mobile-primary-ctas {
+    gap: 0.375rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  .mobile-primary-ctas .header-cta {
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.75rem !important;
+    min-height: 36px !important;
+  }
+  
+  /* Theme toggle compact */
+  .theme-toggle--mobile {
+    width: 36px !important;
+    height: 36px !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   C) CONSOLE SELECTOR - CENTERED ALIGNMENT
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Console chooser cards */
+.console-selector,
+.console-card-grid,
+[class*="console-selector"] {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 1rem !important;
+}
+
+.console-card,
+.console-selector__card {
+  flex: 0 1 auto !important;
+  max-width: 200px !important;
+}
+
+/* Mobile console buttons in drawer */
+.mobile-console-access > div {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+}
+
+/* Agent access page console selector */
+@media (max-width: 768px) {
+  .console-selector,
+  .console-card-grid {
+    flex-wrap: wrap !important;
+    gap: 0.75rem !important;
+  }
+  
+  .console-card {
+    width: calc(50% - 0.375rem) !important;
+    max-width: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   D) LOGIN PAGE - 80% VISUAL SCALE
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Apply to CCS and GDI login pages */
+@media (max-width: 768px) {
+  .ccs-login,
+  .gdi-login,
+  [class*="login-page"],
+  body[data-page="login"] main {
+    /* Container scaling */
+    max-width: 340px !important;
+    margin: 0 auto !important;
+    padding: 1rem !important;
+  }
+  
+  /* Login headline smaller */
+  .ccs-login__headline,
+  .gdi-login__headline,
+  .login-card__title {
+    font-size: 1.5rem !important; /* ~24px */
+    line-height: 1.2 !important;
+    margin-bottom: 0.75rem !important;
+  }
+  
+  .ccs-login__subtext,
+  .gdi-login__subtext,
+  .login-card__subtitle {
+    font-size: 0.875rem !important; /* 14px */
+    line-height: 1.4 !important;
+  }
+  
+  /* Form elements compact */
+  .login-card input,
+  .ccs-login input,
+  .gdi-login input {
+    padding: 0.625rem 0.75rem !important;
+    font-size: 0.9375rem !important; /* 15px */
+  }
+  
+  .login-card label,
+  .ccs-login label,
+  .gdi-login label {
+    font-size: 0.75rem !important; /* 12px */
+    margin-bottom: 0.25rem !important;
+  }
+  
+  /* Submit button */
+  .login-card button[type="submit"],
+  .ccs-login button[type="submit"],
+  .gdi-login button[type="submit"] {
+    padding: 0.75rem 1rem !important;
+    font-size: 0.875rem !important;
+    min-height: 44px !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   E) HERO CTA ALIGNMENT
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  /* Ensure hero CTAs are aligned */
+  .graphene-cta-group,
+  .hero-cta-group,
+  [class*="hero"] .cta-group {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+    width: 100% !important;
+    max-width: 320px !important;
+    margin: 0 auto !important;
+  }
+  
+  .graphene-cta-group .graphene-btn-primary,
+  .graphene-cta-group .graphene-btn-secondary,
+  .hero-cta-group a,
+  .hero-cta-group button {
+    width: 100% !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+  
+  /* Mission control module (index page) */
+  .graphene-mission-control,
+  [role="region"][aria-label*="Mission"] {
+    text-align: center !important;
+  }
+  
+  .graphene-mission-control__actions,
+  [role="region"][aria-label*="Mission"] .graphene-btn-primary,
+  [role="region"][aria-label*="Mission"] .graphene-btn-secondary {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DESKTOP MINIMUM WIDTH SAFETY
+   ═══════════════════════════════════════════════════════════════ */
+
+/* When desktop browser is narrowed to mobile width */
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* Ensure drawer still works at tablet widths */
+  #mobile-menu {
+    width: 35vw !important;
+    max-width: 320px !important;
+  }
+  
+  /* Sticky bar full width on narrow desktop */
+  .graphene-cta-bar {
+    width: calc(100% - 2rem) !important;
+    max-width: 600px !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Z-INDEX LAYERING (GLOBAL)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Establish clear z-index hierarchy */
+:root {
+  --z-drawer-overlay: 39;
+  --z-drawer: 40;
+  --z-sticky-cta: 75;
+  --z-cookie-banner: 80;
+  --z-modal: 90;
+}
+
+#mobile-menu-overlay {
+  z-index: var(--z-drawer-overlay) !important;
+}
+
+#mobile-menu {
+  z-index: var(--z-drawer) !important;
+}
+
+.sticky-cta-bar,
+[data-component="sticky-cta"],
+.graphene-cta-bar {
+  z-index: var(--z-sticky-cta) !important;
+}
+
+.cookie-banner {
+  z-index: var(--z-cookie-banner) !important;
+}

@@ -347,6 +347,10 @@ if (!empty($disable_alphabot)) {
     <link rel="preload" href="/assets/css/components/mobile-nav-scale.css?v=<?= bbx_asset_version('css/components/mobile-nav-scale.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/assets/css/components/mobile-nav-scale.css?v=<?= bbx_asset_version('css/components/mobile-nav-scale.css') ?>"></noscript>
 
+    <!-- Sprint 10: Final mobile UI polish (sticky bar, drawer, console, login) -->
+    <link rel="preload" href="/assets/css/components/mobile-final-polish.css?v=<?= bbx_asset_version('css/components/mobile-final-polish.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/components/mobile-final-polish.css?v=<?= bbx_asset_version('css/components/mobile-final-polish.css') ?>"></noscript>
+
     <!-- Conditional CSS loading -->
     <?php
     // Admin pages need admin.css, marketing pages need marketing.css

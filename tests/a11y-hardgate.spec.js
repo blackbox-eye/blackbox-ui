@@ -236,3 +236,83 @@ test.describe('A11y - Keyboard Navigation', () => {
     expect(violations).toBeLessThanOrEqual(2);
   });
 });
+
+/**
+ * Sprint 10: Mobile Drawer Sanity Tests
+ * Ensures drawer is scrollable and all menu items are accessible
+ */
+test.describe('Mobile Drawer - Layout & Scroll', () => {
+  test.use({ viewport: { width: 390, height: 844 } }); // iPhone 14 Pro
+  
+  test('drawer should be scrollable and show all menu items', async ({ page }) => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(300);
+    
+    // Open mobile menu
+    const burgerButton = page.locator('#mobile-menu-button');
+    await burgerButton.click();
+    await page.waitForTimeout(200);
+    
+    // Check drawer is visible
+    const drawer = page.locator('#mobile-menu');
+    await expect(drawer).toBeVisible();
+    
+    // Check that nav section exists and is scrollable
+    const navSection = drawer.locator('nav');
+    await expect(navSection).toBeVisible();
+    
+    // Verify key menu items are present
+    const aboutLink = drawer.locator('a[href*="about"]');
+    const contactLink = drawer.locator('a[href*="contact"]');
+    const pricingLink = drawer.locator('a[href*="pricing"]');
+    
+    await expect(aboutLink.first()).toBeVisible();
+    await expect(pricingLink.first()).toBeVisible();
+    
+    // Scroll to contact link if needed and verify it's reachable
+    await contactLink.first().scrollIntoViewIfNeeded();
+    await expect(contactLink.first()).toBeVisible();
+    
+    // Check CTA buttons at bottom
+    const demoBtn = drawer.locator('a[href*="demo"]').first();
+    const scanBtn = drawer.locator('a[href*="free-scan"]').first();
+    
+    await expect(demoBtn).toBeVisible();
+    await expect(scanBtn).toBeVisible();
+    
+    // Close drawer
+    const closeBtn = page.locator('#mobile-menu-close');
+    await closeBtn.click();
+    await page.waitForTimeout(300);
+    
+    // Verify drawer is hidden (check transform or aria-hidden)
+    const drawerHidden = await drawer.getAttribute('aria-hidden');
+    expect(drawerHidden).toBe('true');
+  });
+  
+  test('drawer should not have content clipped at bottom', async ({ page }) => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(300);
+    
+    // Open mobile menu
+    await page.locator('#mobile-menu-button').click();
+    await page.waitForTimeout(200);
+    
+    const drawer = page.locator('#mobile-menu');
+    
+    // Get drawer and footer section bounding boxes
+    const drawerBox = await drawer.boundingBox();
+    const footerSection = drawer.locator('div').last();
+    const footerBox = await footerSection.boundingBox();
+    
+    // Footer should be fully visible within drawer
+    expect(footerBox).not.toBeNull();
+    if (footerBox && drawerBox) {
+      const footerBottom = footerBox.y + footerBox.height;
+      const drawerBottom = drawerBox.y + drawerBox.height;
+      
+      // Footer bottom should not exceed drawer bottom (allowing 20px for safe area)
+      expect(footerBottom).toBeLessThanOrEqual(drawerBottom + 20);
+    }
+  });
+});

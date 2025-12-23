@@ -1,0 +1,373 @@
+{
+  "version": "1.1",
+  "updated": "2025-12-23",
+  "tiers": {
+    "A": {
+      "name": "Critical Public",
+      "priority": "critical",
+      "qaRequired": ["G0", "G1", "G2", "G3", "G4", "G5"],
+      "routes": [
+        {
+          "url": "/",
+          "file": "index.php",
+          "description": "Homepage with 3D graphene hero, primary CTAs",
+          "includes": ["site-header.php", "site-footer.php"],
+          "css": ["tailwind.full.css", "tokens.css", "custom-ui.css", "theme-overrides.css", "motion-safe.css", "hero-mobile.css", "mobile-nav-scale.css", "marketing.min.css"],
+          "js": ["site.min.js", "graphene-hero.js"],
+          "auth": false,
+          "i18n": true,
+          "testFiles": ["a11y-hardgate.spec.js", "light-dark-audit.spec.js", "qa-final.spec.js", "graphene-3d-hero.spec.js"]
+        },
+        {
+          "url": "/about.php",
+          "file": "about.php",
+          "description": "Company mission, team, values",
+          "includes": ["site-header.php", "site-footer.php"],
+          "css": ["marketing.min.css"],
+          "js": ["site.min.js"],
+          "auth": false,
+          "i18n": true,
+          "testFiles": ["a11y-hardgate.spec.js", "light-dark-audit.spec.js"]
+        },
+        {
+          "url": "/products.php",
+          "file": "products.php",
+          "description": "Product modules (PVE, EYE, IDMatrix, AUT)",
+          "includes": ["site-header.php", "site-footer.php"],
+          "css": ["marketing.min.css"],
+          "js": ["site.min.js"],
+          "auth": false,
+          "i18n": true,
+          "testFiles": ["a11y-hardgate.spec.js", "light-dark-audit.spec.js", "marketing-landing.spec.js"]
+        },
+        {
+          "url": "/cases.php",
+          "file": "cases.php",
+          "description": "Case studies with metrics",
+          "includes": ["site-header.php", "site-footer.php"],
+          "css": ["marketing.min.css"],
+          "js": ["site.min.js"],
+          "auth": false,
+          "i18n": true,
+          "testFiles": ["a11y-hardgate.spec.js", "light-dark-audit.spec.js"]
+        },
+        {
+          "url": "/pricing.php",
+          "file": "pricing.php",
+          "description": "Pricing calculator with AI advisor",
+          "includes": ["site-header.php", "site-footer.php"],
+          "css": ["marketing.min.css"],
+          "js": ["site.min.js"],
+          "auth": false,
+          "i18n": true,
+          "testFiles": ["a11y-hardgate.spec.js", "light-dark-audit.spec.js"]
+        },
+        {
+          "url": "/contact.php",
+          "file": "contact.php",
+          "description": "Contact form with reCAPTCHA v3",
+          "includes": ["site-header.php", "site-footer.php", "env.php"],
+          "css": ["marketing.min.css"],
+          "js": ["site.min.js"],
+          "auth": false,
+          "i18n": true,
+          "recaptcha": true,
+          "testFiles": ["a11y-hardgate.spec.js", "qa-final.spec.js"]
+        },
+        {
+          "url": "/demo.php",
+          "file": "demo.php",
+          "description": "Demo booking (Calendly integration)",
+          "includes": ["site-header.php", "site-footer.php"],
+          "css": ["marketing.min.css"],
+          "js": ["site.min.js"],
+          "auth": false,
+          "i18n": true,
+          "testFiles": ["a11y-hardgate.spec.js"]
+        },
+        {
+          "url": "/free-scan.php",
+          "file": "free-scan.php",
+          "description": "Free vulnerability scan form",
+          "includes": ["site-header.php", "site-footer.php"],
+          "css": ["marketing.min.css"],
+          "js": ["site.min.js"],
+          "auth": false,
+          "i18n": true,
+          "testFiles": ["a11y-hardgate.spec.js"]
+        }
+      ]
+    },
+    "B": {
+      "name": "Agent Portal",
+      "priority": "high",
+      "qaRequired": ["G0", "G1", "G2", "G3"],
+      "routes": [
+        {
+          "url": "/agent-access.php",
+          "file": "agent-access.php",
+          "description": "Console selector hub (GDI, CCS, Intel24)",
+          "includes": ["site-header.php", "site-footer.php", "console-selector.php", "jwt_helper.php"],
+          "css": ["marketing.min.css", "bbx-snackbar.css", "bbx-icons.css", "console-selector-mobile.css"],
+          "js": ["site.min.js", "bbx-snackbar.js"],
+          "auth": "jwt_optional",
+          "i18n": true,
+          "testFiles": ["agent-access.spec.js", "mobile-ux-sprint5.spec.js"]
+        },
+        {
+          "url": "/gdi-login.php",
+          "file": "gdi-login.php",
+          "description": "GDI login with MFA (password + PIN + token)",
+          "includes": ["env.php", "header.php", "logging.php", "jwt_helper.php", "sso_audit.php"],
+          "css": ["custom standalone"],
+          "js": ["password-toggle.js"],
+          "auth": false,
+          "i18n": false,
+          "mfa": true,
+          "testFiles": ["ccs-login.spec.js"]
+        },
+        {
+          "url": "/ccs-login.php",
+          "file": "ccs-login.php",
+          "description": "CCS login portal (hexagon pattern)",
+          "includes": ["env.php", "i18n.php"],
+          "css": ["marketing.min.css", "ccs-login.css", "bbx-snackbar.css"],
+          "js": ["site.min.js", "bbx-snackbar.js"],
+          "auth": false,
+          "i18n": true,
+          "noindex": true,
+          "testFiles": ["ccs-login.spec.js"]
+        },
+        {
+          "url": "/ccs-console.php",
+          "file": "ccs-console.php",
+          "description": "CCS operational console",
+          "includes": ["site-header.php", "site-footer.php", "env.php"],
+          "css": ["marketing.min.css", "bbx-snackbar.css"],
+          "js": ["site.min.js"],
+          "auth": "session",
+          "i18n": true,
+          "testFiles": []
+        },
+        {
+          "url": "/faq.php",
+          "file": "faq.php",
+          "description": "FAQ with AI search",
+          "includes": ["site-header.php", "site-footer.php", "db.php"],
+          "css": ["marketing.min.css"],
+          "js": ["site.min.js"],
+          "auth": false,
+          "i18n": true,
+          "testFiles": ["a11y-hardgate.spec.js"]
+        },
+        {
+          "url": "/blog.php",
+          "file": "blog.php",
+          "description": "Blog listing with categories",
+          "includes": ["site-header.php", "site-footer.php", "blog-functions.php", "db.php"],
+          "css": ["marketing.min.css"],
+          "js": ["site.min.js"],
+          "auth": false,
+          "i18n": true,
+          "testFiles": ["a11y-hardgate.spec.js"]
+        },
+        {
+          "url": "/privacy.php",
+          "file": "privacy.php",
+          "description": "Privacy policy (DA/EN)",
+          "includes": ["site-header.php", "site-footer.php", "env.php"],
+          "css": ["marketing.min.css"],
+          "js": ["site.min.js"],
+          "auth": false,
+          "i18n": true,
+          "noindex": true,
+          "testFiles": []
+        },
+        {
+          "url": "/terms.php",
+          "file": "terms.php",
+          "description": "Terms & conditions",
+          "includes": ["site-header.php", "site-footer.php", "env.php"],
+          "css": ["marketing.min.css"],
+          "js": ["site.min.js"],
+          "auth": false,
+          "i18n": true,
+          "testFiles": []
+        }
+      ]
+    },
+    "C": {
+      "name": "Admin Panel",
+      "priority": "medium",
+      "qaRequired": ["G0", "G1", "G3"],
+      "routes": [
+        {
+          "url": "/dashboard.php",
+          "file": "dashboard.php",
+          "description": "Command center with alerts",
+          "includes": ["admin-layout.php", "admin-footer.php"],
+          "css": ["admin.min.css"],
+          "js": ["interface-menu.js"],
+          "auth": "session",
+          "adminOnly": false,
+          "testFiles": ["dashboard-accessibility.spec.js", "dashboard-dynamic.spec.js"]
+        },
+        {
+          "url": "/admin.php",
+          "file": "admin.php",
+          "description": "User/agent management",
+          "includes": ["admin-layout.php", "admin-footer.php", "db.php"],
+          "css": ["admin.min.css"],
+          "js": [],
+          "auth": "session",
+          "adminOnly": true,
+          "testFiles": ["admin-features.spec.js", "admin-redesign.spec.js"]
+        },
+        {
+          "url": "/settings.php",
+          "file": "settings.php",
+          "description": "Personal settings (PIN, ghost mode)",
+          "includes": ["admin-layout.php", "admin-footer.php", "db.php"],
+          "css": ["admin.min.css"],
+          "js": [],
+          "auth": "session",
+          "adminOnly": false,
+          "testFiles": []
+        },
+        {
+          "url": "/api-keys.php",
+          "file": "api-keys.php",
+          "description": "API key management",
+          "includes": ["admin-layout.php", "admin-footer.php", "apikey-helper.php", "db.php"],
+          "css": ["admin.min.css"],
+          "js": [],
+          "auth": "session",
+          "adminOnly": false,
+          "testFiles": []
+        },
+        {
+          "url": "/intel-vault.php",
+          "file": "intel-vault.php",
+          "description": "Encrypted document vault",
+          "includes": ["admin-layout.php", "admin-footer.php", "vault-encryption.php", "db.php"],
+          "css": ["admin.min.css"],
+          "js": [],
+          "auth": "session",
+          "adminOnly": false,
+          "testFiles": []
+        }
+      ]
+    },
+    "D": {
+      "name": "API & Utilities",
+      "priority": "low",
+      "qaRequired": ["G0"],
+      "routes": [
+        {
+          "url": "/api/contact-submit.php",
+          "file": "api/contact-submit.php",
+          "description": "Contact form handler",
+          "response": "json",
+          "method": "POST"
+        },
+        {
+          "url": "/api/scan-submit.php",
+          "file": "api/scan-submit.php",
+          "description": "Free scan handler",
+          "response": "json",
+          "method": "POST"
+        },
+        {
+          "url": "/api/faq-search.php",
+          "file": "api/faq-search.php",
+          "description": "FAQ search endpoint",
+          "response": "json",
+          "method": "GET"
+        },
+        {
+          "url": "/logout.php",
+          "file": "logout.php",
+          "description": "Session termination",
+          "response": "redirect"
+        },
+        {
+          "url": "/sitemap.php",
+          "file": "sitemap.php",
+          "description": "Dynamic XML sitemap",
+          "response": "xml"
+        }
+      ]
+    }
+  },
+  "cssStack": {
+    "marketing": {
+      "loadOrder": [
+        "tailwind.full.css",
+        "tokens.css",
+        "custom-ui.css",
+        "theme-overrides.css",
+        "components/motion-safe.css",
+        "components/hero-mobile.css",
+        "components/mobile-nav-scale.css",
+        "marketing.min.css"
+      ],
+      "conditionalMedia": {
+        "hero-mobile.css": "(max-width: 768px)"
+      }
+    },
+    "admin": {
+      "loadOrder": [
+        "admin.min.css"
+      ],
+      "conditionalLoad": {
+        "qa-mode.css": "QA mode enabled"
+      }
+    }
+  },
+  "breakpoints": {
+    "xs": "480px",
+    "sm": "640px",
+    "md": "768px",
+    "lg": "1024px",
+    "xl": "1280px"
+  },
+  "i18n": {
+    "supportedLanguages": ["da", "en"],
+    "default": "en",
+    "detectionPriority": ["query", "cookie", "browser", "default"],
+    "translationFiles": ["lang/da.json", "lang/en.json"]
+  },
+  "qaGates": {
+    "G0": {
+      "name": "Build Gate",
+      "checks": ["css_build", "no_lint_errors"]
+    },
+    "G1": {
+      "name": "Accessibility Gate",
+      "checks": ["axe_core", "keyboard_nav", "focus_visible", "color_contrast", "touch_targets"]
+    },
+    "G2": {
+      "name": "Visual Regression Gate",
+      "checks": ["light_mode", "dark_mode", "mobile_375", "desktop_1280"]
+    },
+    "G3": {
+      "name": "Functional Gate",
+      "checks": ["contact_form", "language_switch", "theme_toggle", "mobile_menu"]
+    },
+    "G4": {
+      "name": "Performance Gate",
+      "checks": ["lcp_under_2.5s", "cls_under_0.1", "css_size_under_100kb"]
+    },
+    "G5": {
+      "name": "Security Gate",
+      "checks": ["csp_headers", "no_inline_js", "recaptcha_v3", "xss_prevention"]
+    }
+  },
+  "testSuites": {
+    "a11y": ["tests/a11y-hardgate.spec.js"],
+    "visual": ["tests/light-dark-audit.spec.js", "tests/visual.spec.js"],
+    "mobile": ["tests/mobile-ux-sprint4.spec.js", "tests/mobile-ux-sprint5.spec.js"],
+    "functional": ["tests/qa-final.spec.js", "tests/ccs-login.spec.js"],
+    "admin": ["tests/admin-features.spec.js", "tests/dashboard-accessibility.spec.js"]
+  }
+}

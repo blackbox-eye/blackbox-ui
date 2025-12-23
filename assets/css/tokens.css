@@ -99,6 +99,25 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   MOBILE SCALE UPLIFT - Phase 2 P0-1
+   Makes 100% zoom feel like 75-80% of original scale
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  :root {
+    /* Base font-size bump: 16px → 18px (112.5%) for ~12.5% larger text */
+    font-size: 112.5%;
+    
+    /* Tighter spacing for better proportions at larger scale */
+    --space-1: 0.25rem;   /* 4.5px */
+    --space-2: 0.4375rem; /* 7px */
+    --space-3: 0.625rem;  /* 10px */
+    --space-4: 0.875rem;  /* 14px */
+    --space-6: 1.25rem;   /* 20px */
+    --space-8: 1.75rem;   /* 28px */
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
    LIGHT THEME OVERRIDES
    ═══════════════════════════════════════════════════════════════ */
 :root[data-theme="light"] {
@@ -143,7 +162,7 @@
 
 /* Global focus-visible treatment for anchors - keyboard only */
 :where(a):focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--text-gold) 65%, transparent);
+  outline: 2px solid color-mix(in srgb, var(--text-gold, #c9a227) 65%, transparent);
   outline-offset: 3px;
   box-shadow: 0 0 0 3px rgba(166, 149, 133, 0.25);
 }
@@ -152,12 +171,6 @@
 :where(a):focus:not(:focus-visible) {
   outline: none;
   box-shadow: none;
-/* Global focus-visible treatment for anchors to guarantee visibility */
-:where(a):focus,
-:where(a):focus-visible {
-  outline: 2px solid var(--text-gold);
-  outline-offset: 3px;
-  box-shadow: 0 0 0 3px rgba(232, 197, 71, 0.35);
 }
 
 /* ═══════════════════════════════════════════════════════════════

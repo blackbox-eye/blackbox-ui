@@ -23,7 +23,7 @@
 .access-hero__title,
 h1[class*="hero"],
 .ccs-login__headline {
-  font-size: clamp(1.5rem, 5vw + 0.5rem, 3.5rem) !important;
+  font-size: clamp(1.75rem, 5vw + 0.5rem, 3.5rem) !important;
   line-height: 1.15 !important;
   letter-spacing: -0.02em;
 }
@@ -35,7 +35,7 @@ h1[class*="hero"],
 .products-hero__lede,
 .access-hero__lead,
 .ccs-login__subtext {
-  font-size: clamp(0.875rem, 2.5vw + 0.25rem, 1.25rem) !important;
+  font-size: clamp(1rem, 2.5vw + 0.25rem, 1.25rem) !important;
   line-height: 1.6 !important;
 }
 
@@ -77,7 +77,7 @@ h1[class*="hero"],
   .products-hero__title,
   .access-hero__title,
   h1[class*="hero"] {
-    font-size: clamp(1.75rem, 6vw, 2.5rem) !important;
+    font-size: clamp(1.875rem, 6vw, 2.75rem) !important;
     margin-bottom: 1rem !important;
   }
   
@@ -87,7 +87,7 @@ h1[class*="hero"],
   .hero-subheadline,
   .products-hero__lede,
   .access-hero__lead {
-    font-size: clamp(0.9rem, 3.5vw, 1.1rem) !important;
+    font-size: clamp(1rem, 3.5vw, 1.2rem) !important;
     margin-bottom: 1.5rem !important;
     max-width: 100% !important;
   }
@@ -216,19 +216,19 @@ h1[class*="hero"],
   .hero-gradient-text,
   .products-hero__title,
   .access-hero__title {
-    font-size: 1.625rem !important;
+    font-size: 1.75rem !important;
   }
   
   .graphene-subheadline,
   .graphene-hero-subtitle,
   .products-hero__lede,
   .access-hero__lead {
-    font-size: 0.875rem !important;
+    font-size: 0.9375rem !important;
   }
   
   .graphene-floating-badge__text,
   .graphene-premium-badge__text {
-    font-size: 0.6rem !important;
+    font-size: 0.65rem !important;
   }
   
   /* Even tighter padding */

@@ -4287,7 +4287,6 @@ footer a:hover svg {
 
 /* Focus states - keyboard only via :focus-visible */
 a:focus-visible,
-button:focus,
 button:focus-visible {
   outline: 2px solid color-mix(in srgb, var(--graphene-gold) 70%, transparent);
   outline-offset: 2px;

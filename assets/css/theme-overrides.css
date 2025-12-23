@@ -177,6 +177,19 @@ body[data-theme] .graphene-btn-secondary:active {
   box-shadow: none !important;
 }
 
+/* language-switch base */
+.language-switch,
+.language-switch--drawer {
+  color: #e5e7eb;
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.more-dropdown-item:focus:not(:focus-visible) {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 /* language-switch base - consolidated with A11y overrides below */
 .language-switch.is-active,
 .language-switch[aria-current="true"] {
@@ -238,7 +251,7 @@ body[data-theme] .graphene-btn-secondary:active {
   color: #f9fafb;
 }
 
-/* language-switch defined in A11y section below with !important */
+/* language-switch additional overrides */
 .language-switch,
 .language-switch--drawer {
   color: #f9fafb;

@@ -339,6 +339,10 @@ if (!empty($disable_alphabot)) {
     <link rel="preload" href="/assets/css/components/hero-mobile.css?v=<?= bbx_asset_version('css/components/hero-mobile.css') ?>" as="style" media="(max-width: 768px)" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/assets/css/components/hero-mobile.css?v=<?= bbx_asset_version('css/components/hero-mobile.css') ?>" media="(max-width: 768px)"></noscript>
 
+    <!-- Sprint 9 P0: Mobile baseline - aggressive UX overrides -->
+    <link rel="preload" href="/assets/css/components/mobile-baseline.css?v=<?= bbx_asset_version('css/components/mobile-baseline.css') ?>" as="style" media="(max-width: 768px)" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/components/mobile-baseline.css?v=<?= bbx_asset_version('css/components/mobile-baseline.css') ?>" media="(max-width: 768px)"></noscript>
+
     <!-- Sprint 8: Mobile nav scaling + touch targets -->
     <link rel="preload" href="/assets/css/components/mobile-nav-scale.css?v=<?= bbx_asset_version('css/components/mobile-nav-scale.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/assets/css/components/mobile-nav-scale.css?v=<?= bbx_asset_version('css/components/mobile-nav-scale.css') ?>"></noscript>

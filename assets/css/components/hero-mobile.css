@@ -54,13 +54,13 @@ h1[class*="hero"],
     text-align: center !important;
   }
   
-  /* Hero padding - mobile optimized */
+  /* Hero padding - mobile optimized (Sprint 9 P0: MORE SPACE) */
   .graphene-hero-3d__content,
   .graphene-hero__content {
-    padding-top: calc(4rem + env(safe-area-inset-top, 0px)) !important;
-    padding-bottom: 3rem !important;
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
+    padding-top: calc(5rem + env(safe-area-inset-top, 0px)) !important;
+    padding-bottom: 4rem !important;
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
   }
   
   .access-hero {
@@ -70,26 +70,28 @@ h1[class*="hero"],
     padding-right: 1.25rem !important;
   }
   
-  /* Hero headline - mobile size */
+  /* Hero headline - mobile size (Sprint 9 P0: LARGER) */
   .graphene-headline,
   .graphene-hero-title,
   .hero-gradient-text,
   .products-hero__title,
   .access-hero__title,
   h1[class*="hero"] {
-    font-size: clamp(1.875rem, 6vw, 2.75rem) !important;
-    margin-bottom: 1rem !important;
+    font-size: clamp(2rem, 7vw, 3rem) !important; /* Bigger headlines */
+    margin-bottom: 1.25rem !important;
+    letter-spacing: -0.025em !important;
   }
   
-  /* Hero subtitle - mobile */
+  /* Hero subtitle - mobile (Sprint 9 P0: MORE READABLE) */
   .graphene-subheadline,
   .graphene-hero-subtitle,
   .hero-subheadline,
   .products-hero__lede,
   .access-hero__lead {
-    font-size: clamp(1rem, 3.5vw, 1.2rem) !important;
-    margin-bottom: 1.5rem !important;
+    font-size: clamp(1.0625rem, 4vw, 1.25rem) !important; /* Min 17px */
+    margin-bottom: 2rem !important; /* More space before CTA */
     max-width: 100% !important;
+    line-height: 1.7 !important;
   }
   
   /* Hero title lines - fix animation state on mobile */
@@ -163,7 +165,7 @@ h1[class*="hero"],
    ================================================ */
 
 @media (max-width: 768px) {
-  /* All hero CTA buttons */
+  /* All hero CTA buttons (Sprint 9 P0: LARGER + MORE PROMINENT) */
   .graphene-btn-primary,
   .graphene-btn-secondary,
   .graphene-cta-primary,
@@ -173,11 +175,12 @@ h1[class*="hero"],
   .products-hero__cta,
   .access-hero__cta,
   .ccs-login__submit {
-    min-height: 48px !important;
-    padding: 0.875rem 1.5rem !important;
-    font-size: 0.95rem !important;
+    min-height: 52px !important; /* Bigger touch target */
+    padding: 1rem 1.75rem !important; /* More padding */
+    font-size: 1.0625rem !important; /* 17px - readable */
+    font-weight: 600 !important;
     width: 100% !important;
-    max-width: 320px !important;
+    max-width: 340px !important;
     margin-left: auto !important;
     margin-right: auto !important;
     justify-content: center !important;

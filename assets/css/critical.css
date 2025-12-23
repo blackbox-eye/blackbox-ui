@@ -139,11 +139,24 @@ body {
 }
 .skip-link:focus { top: 1rem; }
 
-/* ════ MOBILE SCALE UPLIFT ════ */
+/* ════ MOBILE SCALE UPLIFT (Sprint 9 P0) ════ */
+/* Aggressive mobile baseline - real device tested */
 @media (max-width: 768px) {
-  :root { font-size: 112.5%; }
-  .graphene-hero-3d__content { padding: 6rem 1rem 3rem; }
-  .graphene-hero-title { min-height: 3em; }
+  :root { 
+    font-size: 118.75%; /* 19px base - feels comfortable at arm's length */
+  }
+  .graphene-hero-3d__content { 
+    padding: 7rem 1.25rem 4rem; /* More breathing room */
+  }
+  .graphene-hero-title { 
+    min-height: 2.8em;
+    font-size: 2rem !important; /* Force larger headline */
+    line-height: 1.2 !important;
+  }
+  .graphene-hero-subtitle {
+    font-size: 1.125rem !important; /* 18px minimum */
+    line-height: 1.65 !important;
+  }
 }
 
 /* ════ FOUC PREVENTION ════ */

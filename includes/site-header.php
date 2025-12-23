@@ -417,10 +417,11 @@ if ($is_graphene_page) {
                     <div class="header-actions bbx-header-right">
                         <!-- CTAs removed from header - clean navigation only -->
                         <!-- Demo/Scan links available in MERE dropdown and mobile menu -->
+                        <!-- Graphene mode toggle hidden - moved to settings/footer per P0.3 -->
                         <button
                             id="graphene-mode-toggle"
                             type="button"
-                            class="graphene-toggle-btn inline-flex"
+                            class="graphene-toggle-btn inline-flex hidden"
                             data-current-mode="<?= htmlspecialchars($graphene_mode) ?>"
                             aria-pressed="<?= $graphene_mode === 'strong' ? 'true' : 'false' ?>"
                             aria-label="<?= htmlspecialchars(t('header.graphene.toggle_label', 'Skift Graphene-mode')) ?>">

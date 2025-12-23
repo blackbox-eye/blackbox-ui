@@ -342,11 +342,15 @@
   color: var(--bbx-text-primary);
 }
 
-.nav-link:focus {
+.nav-link:focus-visible {
   color: var(--bbx-text-primary);
-  outline: 2px solid var(--bbx-gold);
+  outline: 2px solid color-mix(in srgb, var(--bbx-gold) 60%, transparent);
   outline-offset: 2px;
   border-radius: 0.75rem;
+}
+
+.nav-link:focus:not(:focus-visible) {
+  outline: none;
 }
 
 /* Active page styling */
@@ -400,11 +404,15 @@
   color: var(--bbx-text-primary);
 }
 
-.nav-link-mobile:focus {
+.nav-link-mobile:focus-visible {
   color: var(--bbx-text-primary);
-  outline: 2px solid var(--bbx-gold);
+  outline: 2px solid color-mix(in srgb, var(--bbx-gold) 60%, transparent);
   outline-offset: 2px;
   border-radius: 0.75rem;
+}
+
+.nav-link-mobile:focus:not(:focus-visible) {
+  outline: none;
 }
 
 /* Secondary mobile links (drawer utilities) */
@@ -879,9 +887,13 @@ body.js-enabled .section-fade-in.visible {
   box-shadow: 0 16px 34px -18px rgba(var(--bbx-metal-rgb), 0.45);
 }
 
-.btn-primary:focus {
-  outline: 2px solid var(--bbx-gold-light);
+.btn-primary:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--bbx-gold-light) 70%, transparent);
   outline-offset: 2px;
+}
+
+.btn-primary:focus:not(:focus-visible) {
+  outline: none;
 }
 
 .btn-secondary {
@@ -900,9 +912,13 @@ body.js-enabled .section-fade-in.visible {
   box-shadow: 0 12px 26px -18px rgba(var(--bbx-metal-rgb), 0.28);
 }
 
-.btn-secondary:focus {
-  outline: 2px solid var(--bbx-gold-light);
+.btn-secondary:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--bbx-gold-light) 70%, transparent);
   outline-offset: 2px;
+}
+
+.btn-secondary:focus:not(:focus-visible) {
+  outline: none;
 }
 
 /* Larger CTA variants */
@@ -1220,9 +1236,13 @@ body.js-enabled .section-fade-in.visible {
   box-shadow: 0 16px 38px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(var(--bbx-metal-rgb-light), 0.18);
 }
 
-.btn-graphene-primary:focus {
-  outline: 2px solid var(--graphene-primary);
+.btn-graphene-primary:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--graphene-primary) 70%, transparent);
   outline-offset: 3px;
+}
+
+.btn-graphene-primary:focus:not(:focus-visible) {
+  outline: none;
 }
 
 .btn-graphene-secondary {
@@ -1249,9 +1269,13 @@ body.js-enabled .section-fade-in.visible {
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
 }
 
-.btn-graphene-secondary:focus {
-  outline: 2px solid var(--bbx-gold);
+.btn-graphene-secondary:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--bbx-gold) 65%, transparent);
   outline-offset: 3px;
+}
+
+.btn-graphene-secondary:focus:not(:focus-visible) {
+  outline: none;
 }
 
 /* --------------------------------------------------------
@@ -2135,9 +2159,9 @@ footer .group:hover {
   --graphene-gold: var(--bbx-gold);
   --graphene-accent: #FF1744;
   --graphene-bg-dark: #050A0D;
-  --graphene-bg-light: #FFFFFF;
+  --graphene-bg-light: #f8f7f4; /* Warm off-white, matches tokens.css light mode */
   --graphene-text: #FFFFFF;
-  --graphene-text-light: #1A1A2E;
+  --graphene-text-light: #1f2937; /* Proper dark text for light mode */
   --graphene-glow: 0 0 40px rgba(33, 150, 243, 0.3);
   --graphene-border: rgba(33, 150, 243, 0.3);
 }
@@ -3812,6 +3836,40 @@ footer a:hover svg {
   background-color: #f8fafc;
 }
 
+/* P0.4: Hero text colors for light mode */
+:root[data-theme="light"] .graphene-hero-subtitle {
+  color: #4b5563; /* Gray-600 - good contrast on light bg */
+}
+
+:root[data-theme="light"] .graphene-hero-tagline__title {
+  color: #1f2937; /* Gray-800 - dark for readability */
+}
+
+:root[data-theme="light"] .graphene-hero-tagline__highlight {
+  color: #9a7b1f; /* Darker gold for light mode */
+}
+
+:root[data-theme="light"] .graphene-hero-tagline__copy {
+  color: #4b5563; /* Gray-600 */
+}
+
+:root[data-theme="light"] .graphene-hero-title {
+  color: #1f2937; /* Dark gray for main title */
+}
+
+:root[data-theme="light"] .graphene-hero-title__line {
+  color: #1f2937;
+}
+
+/* Hero 3D section light mode */
+:root[data-theme="light"] .graphene-hero-3d {
+  background-color: #f8fafc;
+}
+
+:root[data-theme="light"] .graphene-hero-3d::before {
+  opacity: 0.3; /* Reduce gradient overlay in light mode */
+}
+
 :root[data-theme="light"] .graphene-gradient-text {
   background: linear-gradient(135deg, #1e3a5f 0%, var(--graphene-gold) 50%, #1e3a5f 100%);
   -webkit-background-clip: text;
@@ -4227,30 +4285,38 @@ footer a:hover svg {
    10. ACCESSIBILITY IMPROVEMENTS
    -------------------------------------------------------- */
 
-/* Focus states */
-a:focus,
+/* Focus states - keyboard only via :focus-visible */
 a:focus-visible,
-button:focus,
 button:focus-visible {
-  outline: 2px solid var(--graphene-gold);
+  outline: 2px solid color-mix(in srgb, var(--graphene-gold) 70%, transparent);
   outline-offset: 2px;
 }
 
-/* Ensure dropdown items keep a visible focus ring even when nested in the flyout */
-.more-dropdown-item:focus,
+/* Remove outline on mouse click */
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Ensure dropdown items keep a visible focus ring - keyboard only */
 .more-dropdown-item:focus-visible {
-  outline: 2px solid var(--text-gold) !important;
-  outline-offset: 3px !important;
-  box-shadow: 0 0 0 3px rgba(232, 197, 71, 0.35) !important;
+  outline: 2px solid color-mix(in srgb, var(--text-gold) 65%, transparent) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 3px rgba(166, 149, 133, 0.25) !important;
   border-radius: 0.65rem;
   background: rgba(255, 255, 255, 0.08);
 }
 
-[data-theme="light"] .more-dropdown-item:focus,
+/* Remove focus ring on mouse click for dropdown items */
+.more-dropdown-item:focus:not(:focus-visible) {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 [data-theme="light"] .more-dropdown-item:focus-visible,
-.light .more-dropdown-item:focus,
 .light .more-dropdown-item:focus-visible {
   background: rgba(15, 23, 42, 0.08);
+  outline-color: color-mix(in srgb, var(--text-gold) 55%, transparent) !important;
 }
 
 /* Ensure links have visible hover states */

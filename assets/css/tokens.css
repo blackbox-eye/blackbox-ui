@@ -141,12 +141,17 @@
   --shadow-focus: 0 0 0 3px var(--color-primary-soft);
 }
 
-/* Global focus-visible treatment for anchors to guarantee visibility */
-:where(a):focus,
+/* Global focus-visible treatment for anchors - keyboard only */
 :where(a):focus-visible {
-  outline: 2px solid var(--text-gold);
+  outline: 2px solid color-mix(in srgb, var(--text-gold) 65%, transparent);
   outline-offset: 3px;
-  box-shadow: 0 0 0 3px rgba(232, 197, 71, 0.35);
+  box-shadow: 0 0 0 3px rgba(166, 149, 133, 0.25);
+}
+
+/* Remove focus outline on mouse click */
+:where(a):focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
 }
 
 /* ═══════════════════════════════════════════════════════════════

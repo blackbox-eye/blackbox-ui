@@ -239,6 +239,12 @@ body[data-theme] .graphene-btn-secondary:active {
 }
 
 /* language-switch defined in A11y section below with !important */
+.language-switch,
+.language-switch--drawer {
+  color: #f9fafb;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.28);
+}
 
 .text-gray-200,
 .text-gray-300,

@@ -881,6 +881,7 @@ body.alphabot-locked {
   transform: translateY(-1px);
 }
 
+.nav-chip:focus,
 .nav-chip:focus-visible {
   color: var(--text-high-emphasis);
   background: color-mix(in srgb, var(--primary-accent) 12%, transparent);

@@ -45,6 +45,10 @@ test.describe('A11y Hard Gate - Critical & Serious Violations', () => {
         if (document.body) {
           document.body.setAttribute('data-theme', 'dark');
         }
+      // Ensure dark theme is applied
+      await browserPage.evaluate(() => {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.body?.setAttribute('data-theme', 'dark');
       });
       
       // Wait for dynamic content

@@ -383,12 +383,16 @@ if ($is_graphene_page) {
                             <img src="<?= htmlspecialchars($bbx_logo_white) ?>"
                                 alt="BLACKBOX EYE™"
                                 class="header-logo header-logo--white"
-                                loading="lazy">
+                                width="140"
+                                height="32"
+                                loading="eager">
                             <!-- Black logo - visible on light backgrounds (light theme) -->
                             <img src="<?= htmlspecialchars($bbx_logo_black) ?>"
                                 alt="BLACKBOX EYE™"
                                 class="header-logo header-logo--black"
-                                loading="lazy">
+                                width="140"
+                                height="32"
+                                loading="eager">
                         </a>
                     </div>
                     <nav class="main-nav header-nav hidden lg:block" aria-label="<?= htmlspecialchars(t('header.desktop.primary_navigation', 'Primær navigation')) ?>">

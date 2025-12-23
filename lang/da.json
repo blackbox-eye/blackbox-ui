@@ -450,6 +450,10 @@
     }
   },
   "cases": {
+    "meta": {
+      "title": "Kundecases & Dokumenteret Effekt | BLACKBOX EYE™",
+      "description": "Se faktiske resultater fra danske kommuner, virksomheder og kritisk infrastruktur. Oplev hvordan Blackbox EYE™ leverer målbare sikkerhedsresultater."
+    },
     "title": "Kundecases",
     "breadcrumb": "Kundecases",
     "subtitle": "Dokumenteret effekt",
@@ -558,6 +562,10 @@
     }
   },
   "pricing": {
+    "meta": {
+      "title": "Priser & Abonnementer | BLACKBOX EYE™",
+      "description": "Udforsk Blackbox EYE™ licensmuligheder fra taktiske moduler til fuld enterprise-integration. Brug vores AI-rådgiver til at finde den rigtige sikkerhedsinvestering."
+    },
     "title": "Priser",
     "breadcrumb": "Priser",
     "subtitle": "Licenser & abonnementer",

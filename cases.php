@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/includes/i18n.php';
 $current_page = 'cases';
-$page_title = t('cases.hero_section.title') . ' | ' . t('site.name');
-$meta_description = t('cases.hero_section.description');
+$page_title = t('cases.meta.title');
+$meta_description = t('cases.meta.description');
 include 'includes/site-header.php';
 
 $case_metrics = [

@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__ . '/includes/i18n.php';
+$disable_alphabot = true; // Landing isolation: do not mount assistant by default
+$show_alphabot = false;
 $current_page = 'home';
 $page_title = t('home.meta.title');
 $meta_description = t('home.meta.description');

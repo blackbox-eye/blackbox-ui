@@ -201,6 +201,12 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
             document.body.classList.add('fouc-ready');
+
+            // Landing isolation: release gate after first paint
+            if (document.body.classList.contains('landing-gate')) {
+                document.body.classList.add('landing-ready');
+                document.body.classList.remove('landing-gate');
+            }
         });
     });
 

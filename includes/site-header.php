@@ -406,6 +406,16 @@ if ($is_graphene_page) {
     // Add graphene mode class (standard or strong)
     $body_classes[] = $graphene_body_class;
 }
+
+// Page slug class for scoped overrides
+if (!empty($current_page)) {
+    $body_classes[] = 'page-' . $current_page;
+}
+
+// Landing isolation gate (prevents FOUC/ghost UI on first paint)
+if ($current_page === 'home' || $current_page === 'index') {
+    $body_classes[] = 'landing-gate';
+}
 ?>
 
 <body class="<?= implode(' ', $body_classes) ?>" data-graphene-mode="<?= htmlspecialchars($graphene_mode) ?>" data-theme="dark" data-lang="<?= htmlspecialchars($current_language) ?>">

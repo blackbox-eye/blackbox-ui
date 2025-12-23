@@ -174,49 +174,51 @@
         </div>
     </aside>
 
-    <div class="bbx-command-rail<?= empty($show_alphabot) ? ' bbx-command-rail--cta-only' : '' ?>">
-        <?php if (!empty($show_alphabot)): ?>
-            <div id="alphabot-container" class="alphabot-widget" data-component="alphabot" aria-live="polite">
-                <button type="button"
-                    id="alphabot-toggle-btn"
-                    class="alphabot-toggle"
-                    aria-expanded="false"
-                    aria-controls="alphabot-panel"
-                    aria-label="Åbn Blackbox EYE Assistant sikkerhedsassistent">
-                    <span class="alphabot-status-dot" aria-hidden="true"></span>
-                    <span class="alphabot-label"><?= t('alphabot.title') ?></span>
-                </button>
-                <section id="alphabot-panel"
-                    class="alphabot-panel"
-                    role="dialog"
-                    aria-modal="false"
-                    aria-hidden="true"
-                    inert
-                    aria-label="<?= htmlspecialchars(t('alphabot.subtitle')) ?>">
-                    <div class="alphabot-panel-header">
-                        <div>
-                            <p class="alphabot-panel-title"><?= t('alphabot.title') ?></p>
-                            <p class="alphabot-panel-subtitle"><?= t('alphabot.panel_tagline') ?></p>
+    <?php if (empty($disable_alphabot)): ?>
+        <div class="bbx-command-rail<?= empty($show_alphabot) ? ' bbx-command-rail--cta-only' : '' ?>">
+            <?php if (!empty($show_alphabot)): ?>
+                <div id="alphabot-container" class="alphabot-widget" data-component="alphabot" aria-live="polite">
+                    <button type="button"
+                        id="alphabot-toggle-btn"
+                        class="alphabot-toggle"
+                        aria-expanded="false"
+                        aria-controls="alphabot-panel"
+                        aria-label="Åbn Blackbox EYE Assistant sikkerhedsassistent">
+                        <span class="alphabot-status-dot" aria-hidden="true"></span>
+                        <span class="alphabot-label"><?= t('alphabot.title') ?></span>
+                    </button>
+                    <section id="alphabot-panel"
+                        class="alphabot-panel"
+                        role="dialog"
+                        aria-modal="false"
+                        aria-hidden="true"
+                        inert
+                        aria-label="<?= htmlspecialchars(t('alphabot.subtitle')) ?>">
+                        <div class="alphabot-panel-header">
+                            <div>
+                                <p class="alphabot-panel-title"><?= t('alphabot.title') ?></p>
+                                <p class="alphabot-panel-subtitle"><?= t('alphabot.panel_tagline') ?></p>
+                            </div>
+                            <button type="button" id="alphabot-close-btn" class="alphabot-close-btn" aria-label="<?= htmlspecialchars(t('common.close')) ?>">&times;</button>
                         </div>
-                        <button type="button" id="alphabot-close-btn" class="alphabot-close-btn" aria-label="<?= htmlspecialchars(t('common.close')) ?>">&times;</button>
-                    </div>
-                    <div id="alphabot-messages" class="alphabot-messages" role="log" aria-live="polite" aria-label="<?= htmlspecialchars(t('alphabot.subtitle')) ?>"></div>
-                    <div class="alphabot-input-group">
-                        <label for="alphabot-input" class="sr-only"><?= t('alphabot.subtitle') ?></label>
-                        <textarea id="alphabot-input"
-                            rows="2"
-                            placeholder="<?= htmlspecialchars(t('alphabot.placeholder')) ?>"
-                            aria-describedby="alphabot-hint"></textarea>
-                        <button type="button" id="alphabot-send-btn" class="alphabot-send-btn" disabled>
-                            <span id="send-text"><?= t('alphabot.send') ?></span>
-                            <span id="send-loader" class="hidden ai-spinner" aria-hidden="true"></span>
-                        </button>
-                    </div>
-                    <p id="alphabot-hint" class="text-xs text-gray-400 mt-2"><?= t('alphabot.hint') ?></p>
-                </section>
-            </div>
-        <?php endif; ?>
-    </div>
+                        <div id="alphabot-messages" class="alphabot-messages" role="log" aria-live="polite" aria-label="<?= htmlspecialchars(t('alphabot.subtitle')) ?>"></div>
+                        <div class="alphabot-input-group">
+                            <label for="alphabot-input" class="sr-only"><?= t('alphabot.subtitle') ?></label>
+                            <textarea id="alphabot-input"
+                                rows="2"
+                                placeholder="<?= htmlspecialchars(t('alphabot.placeholder')) ?>"
+                                aria-describedby="alphabot-hint"></textarea>
+                            <button type="button" id="alphabot-send-btn" class="alphabot-send-btn" disabled>
+                                <span id="send-text"><?= t('alphabot.send') ?></span>
+                                <span id="send-loader" class="hidden ai-spinner" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                        <p id="alphabot-hint" class="text-xs text-gray-400 mt-2"><?= t('alphabot.hint') ?></p>
+                    </section>
+                </div>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
     <?php $asset_version = isset($css_version) ? $css_version : '1.6.15'; ?>
     <script src="assets/js/router-guard.js" defer></script>
     <script src="assets/js/qa-mode.js" defer></script>

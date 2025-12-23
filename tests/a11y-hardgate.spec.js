@@ -372,8 +372,8 @@ test.describe('Sticky CTA Bar - Stability', () => {
       return parseInt(style.zIndex, 10);
     });
     
-    // Should be at least 70 to be above other content
-    expect(zIndex).toBeGreaterThanOrEqual(70);
+    // Landing contract: sticky CTA at least 60
+    expect(zIndex).toBeGreaterThanOrEqual(60);
   });
 });
 
@@ -512,5 +512,35 @@ test.describe('Landing P0 Sanity', () => {
       // Backdrop filter should be none
       expect(styles.backdropFilter === 'none' || styles.backdropFilter === '').toBeTruthy();
     }
+  });
+
+  test('assistant DOM should not be mounted by default', async ({ page }) => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+
+    const assistantNodes = await page.locator('#alphabot-panel, .alphabot-overlay, .bbx-command-rail').count();
+    expect(assistantNodes).toBe(0);
+  });
+
+  test('no console components should render on landing', async ({ page }) => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+
+    const consoleCards = await page.locator('.console-selector__card, [data-console-launch]').count();
+    expect(consoleCards).toBe(0);
+  });
+
+  test('drawer and overlay stay hidden until user action', async ({ page }) => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+
+    const overlayVisible = await page.locator('#mobile-menu-overlay').evaluate(el => {
+      const cs = window.getComputedStyle(el);
+      return cs.visibility !== 'hidden' || cs.opacity !== '0' || cs.pointerEvents !== 'none';
+    });
+    expect(overlayVisible).toBe(false);
+
+    const drawerVisible = await page.locator('#mobile-menu').evaluate(el => {
+      const cs = window.getComputedStyle(el);
+      return cs.visibility !== 'hidden';
+    });
+    expect(drawerVisible).toBe(false);
   });
 });

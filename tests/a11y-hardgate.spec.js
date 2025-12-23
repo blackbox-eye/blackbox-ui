@@ -8,7 +8,7 @@ const AxeBuilder = require('@axe-core/playwright').default;
  * Pages tested: landing, login, ccs-console, agent-access
  */
 
-const BASE_URL = process.env.BASE_URL || 'https://blackbox.codes';
+const BASE_URL = process.env.BASE_URL || 'http://localhost:8000';
 
 // Pages to test for accessibility
 const PAGES_TO_TEST = [
@@ -34,14 +34,21 @@ test.describe('A11y Hard Gate - Critical & Serious Violations', () => {
       
       await browserPage.goto(`${BASE_URL}${page.path}`, { waitUntil: 'domcontentloaded' });
       
-      // Ensure dark theme is applied
+      // Wait for page to fully render
+      await browserPage.waitForTimeout(300);
+      
+      // Ensure dark theme is applied without corrupting existing attributes
       await browserPage.evaluate(() => {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        document.body?.setAttribute('data-theme', 'dark');
+        if (document.documentElement) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+        if (document.body) {
+          document.body.setAttribute('data-theme', 'dark');
+        }
       });
       
       // Wait for dynamic content
-      await browserPage.waitForTimeout(500);
+      await browserPage.waitForTimeout(200);
       
       const accessibilityScanResults = await new AxeBuilder({ page: browserPage })
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])

@@ -54,44 +54,44 @@ h1[class*="hero"],
     text-align: center !important;
   }
   
-  /* Hero padding - mobile optimized (Sprint 9 P0: DDG 130% FEEL) */
+  /* Hero padding - COMPACT, premium (no inflation) */
   .graphene-hero-3d__content,
   .graphene-hero__content {
-    padding-top: calc(6rem + env(safe-area-inset-top, 0px)) !important;
-    padding-bottom: 5rem !important;
-    padding-left: 1.5rem !important;
-    padding-right: 1.5rem !important;
+    padding-top: calc(4.5rem + env(safe-area-inset-top, 0px)) !important;
+    padding-bottom: 3rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
   }
   
   .access-hero {
-    padding-top: calc(4.5rem + env(safe-area-inset-top, 0px)) !important;
-    padding-bottom: 3rem !important;
-    padding-left: 1.5rem !important;
-    padding-right: 1.5rem !important;
+    padding-top: calc(3.5rem + env(safe-area-inset-top, 0px)) !important;
+    padding-bottom: 2rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
   }
   
-  /* Hero headline - mobile size (Sprint 9 P0: DDG 130% EQUIVALENT) */
+  /* Hero headline - TEXT ONLY (DDG 130% text feel) */
   .graphene-headline,
   .graphene-hero-title,
   .hero-gradient-text,
   .products-hero__title,
   .access-hero__title,
   h1[class*="hero"] {
-    font-size: clamp(2.25rem, 8vw, 3.25rem) !important; /* Much bigger */
-    margin-bottom: 1.5rem !important;
-    letter-spacing: -0.03em !important;
+    font-size: clamp(2.1rem, 7vw, 3rem) !important; /* ~34px min */
+    margin-bottom: 1rem !important;
+    letter-spacing: -0.025em !important;
   }
   
-  /* Hero subtitle - mobile (Sprint 9 P0: DDG 130% EQUIVALENT) */
+  /* Hero subtitle - TEXT ONLY (18px readable) */
   .graphene-subheadline,
   .graphene-hero-subtitle,
   .hero-subheadline,
   .products-hero__lede,
   .access-hero__lead {
-    font-size: clamp(1.125rem, 4.5vw, 1.375rem) !important; /* Min 18px */
-    margin-bottom: 2.5rem !important; /* More space before CTA */
+    font-size: clamp(1.0625rem, 4vw, 1.25rem) !important; /* 17-20px */
+    margin-bottom: 1.5rem !important;
     max-width: 100% !important;
-    line-height: 1.75 !important;
+    line-height: 1.55 !important;
   }
   
   /* Hero title lines - fix animation state on mobile */
@@ -165,7 +165,7 @@ h1[class*="hero"],
    ================================================ */
 
 @media (max-width: 768px) {
-  /* All hero CTA buttons - LARGE and PROMINENT */
+  /* CTA buttons - TEXT larger, height/padding COMPACT */
   .graphene-btn-primary,
   .graphene-btn-secondary,
   .graphene-cta-primary,
@@ -175,27 +175,26 @@ h1[class*="hero"],
   .products-hero__cta,
   .access-hero__cta,
   .ccs-login__submit {
-    min-height: 56px !important; /* Bigger touch target */
-    padding: 1.125rem 2rem !important; /* Generous padding */
-    font-size: 1.125rem !important; /* 18px - clearly readable */
+    min-height: 48px !important; /* Standard touch target */
+    padding: 0.75rem 1.5rem !important; /* Compact */
+    font-size: 1.0625rem !important; /* 17px - readable text */
     font-weight: 600 !important;
     width: 100% !important;
-    max-width: 360px !important;
+    max-width: 320px !important;
     margin-left: auto !important;
     margin-right: auto !important;
     justify-content: center !important;
-    border-radius: 0.625rem !important;
   }
   
-  /* CTA group - stack vertically with more gap */
+  /* CTA group - stack vertically */
   .graphene-cta-group,
   .hero-ctas,
   .products-hero__actions {
     flex-direction: column !important;
     align-items: stretch !important;
-    gap: 1rem !important;
+    gap: 0.75rem !important;
     width: 100% !important;
-    max-width: 360px !important;
+    max-width: 320px !important;
     margin-left: auto !important;
     margin-right: auto !important;
   }
@@ -206,7 +205,7 @@ h1[class*="hero"],
     max-width: 320px !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    min-height: 48px !important;
+    min-height: 44px !important;
   }
 }
 

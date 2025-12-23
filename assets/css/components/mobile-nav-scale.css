@@ -1,23 +1,21 @@
 /**
- * Sprint 9 P0 - Mobile Navigation Scaling & Touch Targets
- * TARGET: Default 100% feels like DDG Tekst-zoom 130%
+ * Sprint 9 FINAL - Mobile Navigation (TEXT-ONLY, NO LAYOUT ZOOM)
  * 
- * WCAG 2.1 AA Touch Target Requirements:
- * - Minimum 44×44px recommended, 48×48px optimal, 52px+ for DDG 130% feel
- * - Adequate spacing between interactive elements
+ * WCAG 2.1 AA Touch Target: 44×44px minimum
+ * Text scaled for readability, heights kept compact
  */
 
 /* ═══════════════════════════════════════════════════════════════
-   MOBILE NAV LINK SCALING - DDG 130% EQUIVALENT
+   MOBILE NAV LINK - TEXT SIZE ONLY
    ═══════════════════════════════════════════════════════════════ */
 
 /* Primary navigation links in mobile drawer */
 .nav-link-mobile {
   display: flex;
   align-items: center;
-  min-height: 56px; /* LARGE touch target */
-  padding: 1rem 1.125rem; /* Generous padding */
-  font-size: 1.1875rem; /* 19px+ - clearly readable */
+  min-height: 48px; /* Standard WCAG touch target */
+  padding: 0.75rem 1rem; /* Compact */
+  font-size: 1.0625rem; /* 17px - readable */
   font-weight: 600;
   line-height: 1.35;
   color: var(--color-text-secondary, #a8a5a0);

@@ -284,7 +284,6 @@ if (!empty($disable_alphabot)) {
      * Uses filemtime() for automatic cache invalidation when files change.
      * No manual version bumps required - deploys immediately bust cache.
      */
-    $asset_base = __DIR__ . '/../assets';
     
     /**
      * Get cache-busting version for an asset file.
@@ -292,10 +291,13 @@ if (!empty($disable_alphabot)) {
      * Falls back to static version if file doesn't exist.
      */
     function bbx_asset_version(string $path): string {
-        global $asset_base;
+        static $asset_base = null;
+        if ($asset_base === null) {
+            $asset_base = __DIR__ . '/../assets';
+        }
         $full_path = $asset_base . '/' . ltrim($path, '/');
         if (file_exists($full_path)) {
-            return substr(md5(filemtime($full_path)), 0, 8);
+            return substr(md5((string)filemtime($full_path)), 0, 8);
         }
         return '1.6.20'; // Fallback version
     }

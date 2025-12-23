@@ -27,7 +27,18 @@ const PAGES_TO_TEST = [
 test.describe('A11y Hard Gate - Critical & Serious Violations', () => {
   for (const page of PAGES_TO_TEST) {
     test(`${page.name} should have no critical/serious a11y violations`, async ({ page: browserPage }) => {
+      // Set localStorage to force dark theme before navigation
+      await browserPage.addInitScript(() => {
+        window.localStorage.setItem('bbx-theme', 'dark');
+      });
+      
       await browserPage.goto(`${BASE_URL}${page.path}`, { waitUntil: 'domcontentloaded' });
+      
+      // Ensure dark theme is applied
+      await browserPage.evaluate(() => {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.body?.setAttribute('data-theme', 'dark');
+      });
       
       // Wait for dynamic content
       await browserPage.waitForTimeout(500);

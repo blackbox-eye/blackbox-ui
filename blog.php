@@ -274,7 +274,7 @@ include 'includes/site-header.php';
           <p class="text-gray-200 mb-6">
             <?= htmlspecialchars($blog_error_message) ?>
           </p>
-          <a href="contact.php" class="inline-flex items-center gap-2 px-6 py-3 border-2" style="background: rgba(232, 197, 71, 0.14); border-color: var(--text-gold); color: var(--text-gold); text-black font-semibold rounded-lg hover:bg-opacity-90 transition-colors">
+          <a href="contact.php" class="inline-flex items-center gap-2 px-6 py-3 border-2 rounded-lg font-semibold transition-colors" style="background: rgba(10, 12, 16, 0.96); border-color: rgba(255, 255, 255, 0.22); color: #f3f4f6;">
             Kontakt support
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>

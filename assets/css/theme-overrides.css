@@ -274,3 +274,192 @@ body[data-theme] .graphene-btn-secondary:active {
   outline-offset: 3px;
   box-shadow: 0 0 0 3px rgba(232, 197, 71, 0.35);
 }
+
+/* ==============================================================
+   A11y contrast fixes – WCAG AA (no hue shift / no new tokens)
+   ============================================================== */
+
+/* graphene-toggle-btn: darker surface behind light text for AA contrast */
+button.graphene-toggle,
+.graphene-toggle-btn {
+  background: rgba(10, 12, 16, 0.96) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  color: #f3f4f6 !important;
+}
+button.graphene-toggle:hover,
+.graphene-toggle-btn:hover {
+  background: rgba(15, 18, 24, 0.98) !important;
+  border-color: rgba(255, 255, 255, 0.32) !important;
+}
+button.graphene-toggle[aria-pressed="true"],
+.graphene-toggle-btn[aria-pressed="true"] {
+  background: rgba(15, 18, 24, 0.98) !important;
+  border-color: rgba(180, 155, 110, 0.55) !important;
+  color: #f9fafb !important;
+}
+.graphene-toggle__text {
+  color: #f3f4f6 !important;
+}
+
+/* language-switch: ensure AA with dark surface + light text */
+.language-switch,
+.language-switch--drawer {
+  background: rgba(10, 12, 16, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  color: #f3f4f6 !important;
+}
+.language-switch:hover,
+.language-switch--drawer:hover {
+  background: rgba(15, 18, 24, 0.98) !important;
+  border-color: rgba(255, 255, 255, 0.36) !important;
+}
+
+/* Blog hero CTA inline-flex button: darker bg to pass AA */
+.blog-hero__cta,
+.blog-hero a.graphene-btn-primary,
+.blog-hero a.graphene-btn-secondary {
+  background: rgba(10, 12, 16, 0.96) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  color: #f3f4f6 !important;
+}
+.blog-hero__cta:hover,
+.blog-hero a.graphene-btn-primary:hover,
+.blog-hero a.graphene-btn-secondary:hover {
+  background: rgba(15, 18, 24, 0.98) !important;
+  border-color: rgba(255, 255, 255, 0.36) !important;
+}
+
+/* products-hero: ensure AA white text on dark surface */
+.products-hero__title,
+.products-hero__lede,
+.products-hero__meta {
+  color: #f3f4f6 !important;
+}
+
+/* All Tailwind gray text classes: boost to high contrast */
+.text-gray-200,
+.text-gray-300,
+.text-gray-400,
+.text-gray-500,
+.text-gray-600 {
+  color: #e5e7eb !important;
+}
+
+/* Case navigator elements */
+.case-navigator-tab__label,
+.case-navigator-tab__industry,
+.case-navigator-impact__label,
+.case-navigator-impact__value,
+.case-navigator-modules__label,
+.case-navigator-card p,
+.case-navigator-card li {
+  color: #f3f4f6 !important;
+}
+
+/* header-cta__label */
+.header-cta__label {
+  color: #f3f4f6 !important;
+}
+
+/* alphabot-label */
+.alphabot-label {
+  color: #f3f4f6 !important;
+}
+
+/* console-selector activity elements */
+.console-selector__activity-text,
+.console-selector__activity-time,
+.console-selector__activity-text strong {
+  color: #f3f4f6 !important;
+}
+
+/* console-selector activity badge: darker bg + lighter text */
+.console-selector__activity-badge {
+  background: rgba(10, 50, 30, 0.85) !important;
+  color: #d1fae5 !important;
+}
+.console-selector__activity-badge[data-activity-source="local"] {
+  background: rgba(100, 40, 15, 0.85) !important;
+  color: #ffe8d6 !important;
+}
+
+/* FAQ + general inline-flex CTAs with border-2 */
+a.inline-flex[class*="border-2"],
+button.inline-flex[class*="border-2"] {
+  background: rgba(10, 12, 16, 0.96) !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+  color: #f3f4f6 !important;
+}
+a.inline-flex[class*="border-2"]:hover,
+button.inline-flex[class*="border-2"]:hover {
+  background: rgba(15, 18, 24, 0.98) !important;
+  border-color: rgba(255, 255, 255, 0.36) !important;
+}
+
+/* Cookie banner buttons: AA compliant */
+.cookie-banner__btn--accept,
+#cookie-accept-btn {
+  background: #facc15 !important;
+  color: #0a0a0a !important;
+  border-color: #facc15 !important;
+}
+.cookie-banner__btn--accept:hover,
+#cookie-accept-btn:hover {
+  background: #eab308 !important;
+}
+.cookie-banner__btn--decline,
+#cookie-decline-btn {
+  background: rgba(10, 12, 16, 0.96) !important;
+  color: #f3f4f6 !important;
+  border: 1px solid rgba(255, 255, 255, 0.32) !important;
+}
+.cookie-banner__btn--decline:hover,
+#cookie-decline-btn:hover {
+  background: rgba(15, 18, 24, 0.98) !important;
+  border-color: rgba(255, 255, 255, 0.48) !important;
+}
+
+/* Products card spans and list items */
+.module-card span,
+.module-card li,
+.products-extra-card span,
+.products-extra-card li {
+  color: #e5e7eb !important;
+}
+
+/* Buttons with inline gold background style: override to dark surface */
+button[style*="rgba(232, 197, 71"],
+button[style*="background: rgba(232"] {
+  background: rgba(10, 12, 16, 0.96) !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+  color: #f3f4f6 !important;
+}
+
+/* Blue-400 text override for AA */
+.text-blue-400 {
+  color: #93c5fd !important;
+}
+
+/* Inline style gold text h2/h3 need to be overridden via attribute selectors */
+h2[style*="color: #D6B25E"],
+h2[style*="color: var(--text-gold)"],
+h3[style*="color: #D6B25E"],
+h3[style*="color: var(--text-gold)"] {
+  color: #f3f4f6 !important;
+}
+
+/* code with gold style */
+code[style*="color: var(--text-gold)"] {
+  color: #f3f4f6 !important;
+}
+
+/* links with gold style */
+a[style*="color: var(--text-gold)"] {
+  color: #f3f4f6 !important;
+}
+
+/* spans with gold rgba style */
+span[style*="color: rgba(212, 175, 55"] {
+  color: #e5e7eb !important;
+}
+

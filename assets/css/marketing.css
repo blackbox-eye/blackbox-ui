@@ -195,6 +195,11 @@
     padding-bottom: calc(6.75rem + env(safe-area-inset-bottom));
   }
 
+  /* P0 fix: Remove body padding when sticky CTA is dismissed */
+  body.sticky-cta-dismissed {
+    padding-bottom: 0 !important;
+  }
+
   body:not(.js-enabled) .sticky-cta-bar {
     display: block;
     transform: translate3d(0, 0, 0);

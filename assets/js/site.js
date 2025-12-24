@@ -597,6 +597,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const hideBar = () => {
             stickyCtaBar.setAttribute('data-hidden', 'true');
             stickyCtaBar.removeAttribute('data-visible');
+            // P0 fix: Remove body padding when sticky CTA is dismissed
+            document.body.classList.add('sticky-cta-dismissed');
             scheduleStickyCtaLayout();
         };
 
@@ -648,10 +650,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        closeButton?.addEventListener('click', () => {
+        // P0 fix: Handle both click AND touch events for mobile browsers
+        const handleDismiss = (event) => {
+            event.preventDefault();
+            event.stopPropagation();
             hideBar();
             persistDismissal();
-        });
+        };
+
+        closeButton?.addEventListener('click', handleDismiss);
+        closeButton?.addEventListener('touchend', handleDismiss, { passive: false });
 
         actionButtons.forEach((button) => {
             button.addEventListener('click', persistDismissal, { once: true });

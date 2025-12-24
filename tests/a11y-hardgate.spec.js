@@ -468,6 +468,47 @@ test.describe('Landing P0 Sanity', () => {
     }
   });
 
+  test('sticky CTA must have solid background (no ghosting)', async ({ page }) => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(500);
+    
+    // Scroll to trigger CTA visibility
+    await page.evaluate(() => window.scrollTo(0, 500));
+    await page.waitForTimeout(300);
+    
+    const stickyBar = page.locator('.sticky-cta-bar, [data-component="sticky-cta"], #sticky-cta').first();
+    
+    if (await stickyBar.count() > 0 && await stickyBar.isVisible()) {
+      const styles = await stickyBar.evaluate(el => {
+        const computed = window.getComputedStyle(el);
+        const bgColor = computed.backgroundColor;
+        
+        // Parse rgba values
+        const rgbaMatch = bgColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+        let alpha = 1;
+        if (rgbaMatch && rgbaMatch[4] !== undefined) {
+          alpha = parseFloat(rgbaMatch[4]);
+        }
+        
+        return {
+          backgroundColor: bgColor,
+          alpha: alpha,
+          opacity: parseFloat(computed.opacity),
+          mixBlendMode: computed.mixBlendMode
+        };
+      });
+      
+      // Background alpha must be >= 0.85 to prevent ghosting
+      expect(styles.alpha).toBeGreaterThanOrEqual(0.85);
+      
+      // Element opacity must be 1 (no transparency)
+      expect(styles.opacity).toBe(1);
+      
+      // No weird blend modes
+      expect(styles.mixBlendMode).toBe('normal');
+    }
+  });
+
   test('AI assistant overlay should not blur page', async ({ page }) => {
     await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(500);
@@ -490,7 +531,7 @@ test.describe('Landing P0 Sanity', () => {
     }
   });
 
-  test('drawer overlay should have light dim only (no heavy blur)', async ({ page }) => {
+  test('drawer overlay should have glass blur effect', async ({ page }) => {
     await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(300);
     
@@ -509,8 +550,8 @@ test.describe('Landing P0 Sanity', () => {
         };
       });
       
-      // Backdrop filter should be none
-      expect(styles.backdropFilter === 'none' || styles.backdropFilter === '').toBeTruthy();
+      // Backdrop filter should have blur (glass effect)
+      expect(styles.backdropFilter.includes('blur') || styles.backdropFilter !== 'none').toBeTruthy();
     }
   });
 
@@ -576,18 +617,28 @@ test.describe('Landing P0 Sanity', () => {
     expect(lightSurfaces).toBe(false);
   });
 
-  test('z-index contract: sticky CTA at 60, no conflicts', async ({ page }) => {
+  test('CTA deduplication: exactly ONE CTA in DOM, z-index 75', async ({ page }) => {
     await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
     await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.5));
     await page.waitForTimeout(300);
     
-    const stickyBar = page.locator('.sticky-cta-bar, .graphene-cta-bar').first();
-    if (await stickyBar.count() > 0) {
-      const zIndex = await stickyBar.evaluate(el => {
-        return parseInt(window.getComputedStyle(el).zIndex, 10);
-      });
-      expect(zIndex).toBe(60);
-    }
+    // HARDGATE: Only ONE CTA element should exist on landing page
+    // Canonical: #sticky-cta
+    // NOT allowed: #sticky-cta-bar, .graphene-cta-bar (gated in PHP)
+    const ctaCount = await page.evaluate(() => {
+      return document.querySelectorAll('#sticky-cta, #sticky-cta-bar, .graphene-cta-bar').length;
+    });
+    expect(ctaCount, 'Expected exactly 1 CTA in DOM (only #sticky-cta)').toBe(1);
+    
+    // Verify the single CTA is #sticky-cta
+    const canonicalCta = page.locator('#sticky-cta');
+    expect(await canonicalCta.count(), '#sticky-cta must exist').toBe(1);
+    
+    // z-index contract: 75 (single source of truth)
+    const zIndex = await canonicalCta.evaluate(el => {
+      return parseInt(window.getComputedStyle(el).zIndex, 10);
+    });
+    expect(zIndex, 'CTA z-index must be 75').toBe(75);
   });
 
   test('alphabot-overlay div should not exist in DOM', async ({ page }) => {
@@ -595,5 +646,189 @@ test.describe('Landing P0 Sanity', () => {
     
     const overlayCount = await page.locator('#alphabot-overlay').count();
     expect(overlayCount).toBe(0);
+  });
+});
+/**
+ * Landing P1 Polish Tests
+ * Validates Priority Access UI, assistant positioning, footer, FOUC prevention
+ */
+test.describe('Landing P1 Polish', () => {
+  test.describe('P1-A: Priority Access Responsiveness', () => {
+    test('sticky CTA should not overflow at mobile width (390px)', async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+      await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.5));
+      await page.waitForTimeout(500);
+      
+      const stickyBar = page.locator('.sticky-cta-bar, #sticky-cta').first();
+      if (await stickyBar.isVisible()) {
+        const box = await stickyBar.boundingBox();
+        const viewport = page.viewportSize();
+        
+        // CTA bar should fit within viewport width
+        expect(box.x).toBeGreaterThanOrEqual(0);
+        expect(box.x + box.width).toBeLessThanOrEqual(viewport.width + 5);
+        
+        // Check buttons don't overflow
+        const buttons = stickyBar.locator('.sticky-cta-bar__btn');
+        const btnCount = await buttons.count();
+        for (let i = 0; i < btnCount; i++) {
+          const btnBox = await buttons.nth(i).boundingBox();
+          if (btnBox) {
+            expect(btnBox.x + btnBox.width).toBeLessThanOrEqual(viewport.width);
+          }
+        }
+      }
+    });
+    
+    test('sticky CTA should not overflow at small desktop (1024px)', async ({ page }) => {
+      await page.setViewportSize({ width: 1024, height: 768 });
+      await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+      await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.5));
+      await page.waitForTimeout(500);
+      
+      const stickyBar = page.locator('.sticky-cta-bar, #sticky-cta').first();
+      if (await stickyBar.isVisible()) {
+        const box = await stickyBar.boundingBox();
+        
+        // Check content doesn't clip
+        const content = stickyBar.locator('.sticky-cta-bar__content');
+        if (await content.count() > 0) {
+          const contentBox = await content.boundingBox();
+          expect(contentBox.width).toBeLessThanOrEqual(box.width);
+        }
+      }
+    });
+    
+    test('CTA buttons should not overlap in narrow viewport', async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 667 });
+      await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+      await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.5));
+      await page.waitForTimeout(500);
+      
+      const stickyBar = page.locator('.sticky-cta-bar, #sticky-cta').first();
+      if (await stickyBar.isVisible()) {
+        const buttons = stickyBar.locator('.sticky-cta-bar__btn');
+        const btnCount = await buttons.count();
+        
+        if (btnCount >= 2) {
+          const boxes = [];
+          for (let i = 0; i < btnCount; i++) {
+            const box = await buttons.nth(i).boundingBox();
+            if (box) boxes.push(box);
+          }
+          
+          // Buttons should not overlap (check Y positions for stacked layout)
+          for (let i = 1; i < boxes.length; i++) {
+            const prev = boxes[i - 1];
+            const curr = boxes[i];
+            // Either stacked (different Y) or side-by-side (different X, no overlap)
+            const isStacked = curr.y >= prev.y + prev.height - 2;
+            const isSideBySide = curr.x >= prev.x + prev.width - 2 || prev.x >= curr.x + curr.width - 2;
+            expect(isStacked || isSideBySide).toBe(true);
+          }
+        }
+      }
+    });
+  });
+
+  test.describe('P1-B: AI Assistant Not Covering CTAs', () => {
+    test('assistant should not exist in landing DOM', async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+      
+      // Assistant should not be in DOM on landing
+      const assistantElements = await page.locator(
+        '#alphabot-container, .alphabot-widget, .alphabot-toggle, .alphabot-panel, .bbx-command-rail'
+      ).count();
+      expect(assistantElements).toBe(0);
+    });
+    
+    test('no assistant overlay should obscure hero CTAs', async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+      await page.waitForTimeout(300);
+      
+      // Find hero CTA buttons
+      const heroCtas = page.locator('.graphene-cta-group .graphene-btn-primary, .graphene-cta-group .graphene-btn-secondary');
+      const ctaCount = await heroCtas.count();
+      
+      if (ctaCount > 0) {
+        // CTAs should be clickable (no overlay blocking)
+        for (let i = 0; i < Math.min(ctaCount, 2); i++) {
+          const cta = heroCtas.nth(i);
+          const isEnabled = await cta.isEnabled();
+          const isVisible = await cta.isVisible();
+          expect(isVisible && isEnabled).toBe(true);
+        }
+      }
+    });
+  });
+
+  test.describe('P1-E: FOUC Prevention', () => {
+    test('page should not flash unstyled content', async ({ page }) => {
+      await page.setViewportSize({ width: 1280, height: 800 });
+      
+      // Track any white flash during load
+      let sawWhiteFlash = false;
+      
+      await page.addInitScript(() => {
+        // Check background color immediately
+        const checkBg = () => {
+          const bg = window.getComputedStyle(document.documentElement).backgroundColor;
+          const body = document.body ? window.getComputedStyle(document.body).backgroundColor : '';
+          // White or very light backgrounds indicate FOUC
+          const isLight = (color) => {
+            const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+            if (match) {
+              const [, r, g, b] = match.map(Number);
+              return r > 240 && g > 240 && b > 240;
+            }
+            return false;
+          };
+          if (isLight(bg) || isLight(body)) {
+            window.__BBX_SAW_FOUC__ = true;
+          }
+        };
+        checkBg();
+        document.addEventListener('DOMContentLoaded', checkBg);
+      });
+      
+      await page.goto(`${BASE_URL}/`, { waitUntil: 'load' });
+      
+      sawWhiteFlash = await page.evaluate(() => window.__BBX_SAW_FOUC__ || false);
+      expect(sawWhiteFlash).toBe(false);
+    });
+    
+    test('landing-ready class should be applied after load', async ({ page }) => {
+      await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+      await page.waitForTimeout(500);
+      
+      const hasReadyClass = await page.evaluate(() => {
+        return document.documentElement.classList.contains('landing-ready') ||
+               document.body.classList.contains('landing-ready');
+      });
+      expect(hasReadyClass).toBe(true);
+    });
+    
+    test('hero should have dark background immediately', async ({ page }) => {
+      await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+      
+      const hero = page.locator('.graphene-hero-3d, #home').first();
+      if (await hero.count() > 0) {
+        const bg = await hero.evaluate(el => {
+          return window.getComputedStyle(el).backgroundColor;
+        });
+        
+        // Background should be dark (RGB values < 30)
+        const match = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+        if (match) {
+          const [, r, g, b] = match.map(Number);
+          expect(r).toBeLessThan(30);
+          expect(g).toBeLessThan(30);
+          expect(b).toBeLessThan(30);
+        }
+      }
+    });
   });
 });

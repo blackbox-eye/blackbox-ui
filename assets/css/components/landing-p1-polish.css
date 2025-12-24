@@ -1,0 +1,596 @@
+/**
+ * LANDING PAGE P1/P2 POLISH
+ * Sprint: Landing Polish Phase
+ * Date: 2025-12-24
+ * 
+ * P1-A: Priority Access UI / toggle responsiveness
+ * P1-B: AI assistant widget narrow viewport behavior
+ * P1-C: Navigation / Console UI menu polish
+ * P2-D: Footer premium layout
+ * P1-E: FOUC prevention (first-paint gate)
+ * 
+ * Scoped to .page-home (landing only)
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   P1-A: PRIORITY ACCESS / STICKY CTA RESPONSIVENESS
+   Fix text wrapping, overflow, clipping at 360-430px, 900-1100px, desktop
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Base CTA bar content - responsive flex */
+.page-home .sticky-cta-bar__content {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 0.75rem !important;
+  padding: 0.875rem 1rem !important;
+}
+
+/* Eyebrow text - prevent overflow */
+.page-home .sticky-cta-bar__eyebrow {
+  font-size: clamp(0.625rem, 2vw, 0.75rem) !important;
+  letter-spacing: 0.1em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 100% !important;
+  margin-bottom: 0.25rem !important;
+}
+
+/* Title text - responsive sizing */
+.page-home .sticky-cta-bar__title {
+  font-size: clamp(0.875rem, 3vw, 1rem) !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  margin: 0 !important;
+}
+
+/* Copy section - allow shrink */
+.page-home .sticky-cta-bar__copy {
+  flex: 1 1 auto !important;
+  min-width: 120px !important;
+  max-width: 280px !important;
+}
+
+/* Actions container - responsive */
+.page-home .sticky-cta-bar__actions {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.5rem !important;
+  align-items: center !important;
+}
+
+/* Buttons - prevent overlap and overflow */
+.page-home .sticky-cta-bar__btn {
+  flex: 0 1 auto !important;
+  min-width: 100px !important;
+  max-width: 180px !important;
+  padding: 0.625rem 0.875rem !important;
+  font-size: clamp(0.8125rem, 2.5vw, 0.9375rem) !important;
+  white-space: nowrap !important;
+  border-radius: var(--graphene-radius, 8px) !important;
+}
+
+.page-home .sticky-cta-bar__btn svg {
+  flex-shrink: 0 !important;
+  width: 1rem !important;
+  height: 1rem !important;
+}
+
+/* Close button - fixed position, accessible */
+.page-home .sticky-cta-bar__close {
+  position: absolute !important;
+  top: 0.5rem !important;
+  right: 0.5rem !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  z-index: 1 !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   MOBILE (360-430px) — Stack layout, full-width buttons
+   ════════════════════════════════════════════════════════════════ */
+@media (max-width: 430px) {
+  .page-home .sticky-cta-bar__content {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.625rem !important;
+    padding: 0.75rem 0.875rem 1rem !important;
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0)) !important;
+  }
+  
+  .page-home .sticky-cta-bar__copy {
+    max-width: 100% !important;
+    text-align: center !important;
+  }
+  
+  .page-home .sticky-cta-bar__eyebrow {
+    text-align: center !important;
+  }
+  
+  .page-home .sticky-cta-bar__title {
+    text-align: center !important;
+    font-size: 0.9375rem !important;
+  }
+  
+  .page-home .sticky-cta-bar__actions {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+  
+  .page-home .sticky-cta-bar__btn {
+    width: 100% !important;
+    max-width: none !important;
+    justify-content: center !important;
+    padding: 0.75rem 1rem !important;
+  }
+  
+  /* Ensure close button doesn't overlap text */
+  .page-home .sticky-cta-bar__close {
+    top: 0.375rem !important;
+    right: 0.375rem !important;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   SMALL DESKTOP (900-1100px) — Two-column, compact
+   ════════════════════════════════════════════════════════════════ */
+@media (min-width: 431px) and (max-width: 1100px) {
+  .page-home .sticky-cta-bar__content {
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 1rem !important;
+    padding: 0.875rem 1.25rem !important;
+  }
+  
+  .page-home .sticky-cta-bar__copy {
+    flex: 0 1 240px !important;
+    max-width: 240px !important;
+    text-align: left !important;
+  }
+  
+  .page-home .sticky-cta-bar__actions {
+    flex: 1 1 auto !important;
+    flex-direction: row !important;
+    justify-content: flex-end !important;
+    gap: 0.5rem !important;
+  }
+  
+  .page-home .sticky-cta-bar__btn {
+    min-width: 110px !important;
+    max-width: 150px !important;
+    padding: 0.625rem 0.75rem !important;
+    font-size: 0.8125rem !important;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   LARGE DESKTOP (1100px+) — Full layout
+   ════════════════════════════════════════════════════════════════ */
+@media (min-width: 1101px) {
+  .page-home .sticky-cta-bar__content {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 1.5rem !important;
+    padding: 1rem 1.5rem !important;
+  }
+  
+  .page-home .sticky-cta-bar__copy {
+    flex: 0 1 320px !important;
+    max-width: 320px !important;
+  }
+  
+  .page-home .sticky-cta-bar__btn {
+    min-width: 140px !important;
+    max-width: 180px !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.9375rem !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   P1-B: AI ASSISTANT — NARROW VIEWPORT BEHAVIOR
+   Ensure assistant doesn't cover CTAs, respects safe areas
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* AI assistant is HIDDEN on landing via PHP guards, but add belt-and-suspenders CSS */
+.page-home #alphabot-container,
+.page-home .alphabot-widget,
+.page-home .alphabot-toggle,
+.page-home .alphabot-panel,
+.page-home .alphabot-overlay,
+.page-home #alphabot-overlay,
+.page-home .bbx-command-rail {
+  /* Hard disabled on landing - should not exist in DOM */
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* If assistant ever renders (edge case), ensure it doesn't block hero */
+@media (max-width: 768px) {
+  .page-home .alphabot-toggle,
+  .page-home .alphabot-widget {
+    /* Push to safe corner, never overlap hero CTAs */
+    bottom: calc(100px + env(safe-area-inset-bottom, 0)) !important;
+    right: env(safe-area-inset-right, 1rem) !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   P1-C: NAVIGATION / CONSOLE UI MENU POLISH
+   Clean display of Console UI choices in drawer
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Console access buttons in drawer - clean grid */
+.page-home .mobile-console-access {
+  padding: 0.5rem 0 !important;
+}
+
+.page-home .mobile-console-access > p {
+  font-size: 0.625rem !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* Console button container - even spacing */
+.page-home .mobile-console-access > div {
+  display: flex !important;
+  gap: 0.375rem !important;
+  justify-content: center !important;
+}
+
+/* Individual console buttons - compact, readable */
+.page-home .mobile-console-btn {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 0.25rem !important;
+  padding: 0.5rem 0.375rem !important;
+  min-width: 60px !important;
+  max-width: 80px !important;
+  min-height: 56px !important;
+  background: rgba(20, 20, 22, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 8px !important;
+  text-decoration: none !important;
+  transition: background 0.15s ease, border-color 0.15s ease !important;
+}
+
+.page-home .mobile-console-btn:hover,
+.page-home .mobile-console-btn:focus-visible {
+  background: rgba(30, 30, 32, 0.95) !important;
+  border-color: rgba(201, 162, 39, 0.25) !important;
+}
+
+/* Console icon badge */
+.page-home .mobile-console-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 28px !important;
+  height: 20px !important;
+  font-size: 0.5rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  border-radius: 4px !important;
+  text-transform: uppercase !important;
+}
+
+.page-home .mobile-console-icon--ccs {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(59, 130, 246, 0.15)) !important;
+  color: #93c5fd !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+}
+
+.page-home .mobile-console-icon--gdi {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(16, 185, 129, 0.15)) !important;
+  color: #6ee7b7 !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+
+.page-home .mobile-console-icon--intel24 {
+  background: linear-gradient(135deg, rgba(201, 162, 39, 0.3), rgba(201, 162, 39, 0.15)) !important;
+  color: #fcd34d !important;
+  border: 1px solid rgba(201, 162, 39, 0.3) !important;
+}
+
+/* Console label */
+.page-home .mobile-console-label {
+  font-size: 0.5625rem !important; /* 9px */
+  font-weight: 500 !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  text-align: center !important;
+  line-height: 1.2 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/* Header console dropdown - desktop */
+.page-home .console-access-dropdown {
+  position: relative !important;
+}
+
+.page-home .console-access-menu {
+  min-width: 200px !important;
+  padding: 0.5rem !important;
+  background: rgba(12, 14, 18, 0.98) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+.page-home .console-menu-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.625rem !important;
+  padding: 0.625rem 0.75rem !important;
+  border-radius: 8px !important;
+  text-decoration: none !important;
+  transition: background 0.15s ease !important;
+}
+
+.page-home .console-menu-item:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+.page-home .console-menu-item__icon {
+  width: 32px !important;
+  height: 22px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0.625rem !important;
+  font-weight: 700 !important;
+  border-radius: 4px !important;
+}
+
+.page-home .console-menu-item__title {
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+  display: block !important;
+}
+
+.page-home .console-menu-item__desc {
+  font-size: 0.6875rem !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  display: block !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   P2-D: FOOTER POLISH — PREMIUM LAYOUT
+   Better spacing, alignment, hierarchy, mobile stacking
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Footer container */
+.page-home footer,
+.page-home .site-footer {
+  background: linear-gradient(180deg, rgba(10, 11, 13, 0.95) 0%, #050506 100%) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Footer inner container */
+.page-home footer > .container,
+.page-home .site-footer > .container {
+  padding-top: 3rem !important;
+  padding-bottom: 2rem !important;
+}
+
+/* Footer grid - refined spacing */
+.page-home footer .grid {
+  gap: 2rem 1.5rem !important;
+}
+
+@media (min-width: 1024px) {
+  .page-home footer .grid {
+    gap: 2.5rem 3rem !important;
+  }
+}
+
+/* Brand section */
+.page-home footer h4 {
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
+  margin-bottom: 0.75rem !important;
+}
+
+/* Section headings - gold accent */
+.page-home footer h4[style*="primary-accent"],
+.page-home footer .text-sm.font-bold {
+  color: rgba(201, 162, 39, 0.85) !important;
+  font-size: 0.6875rem !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Footer links */
+.page-home footer a:not(.group) {
+  color: rgba(255, 255, 255, 0.7) !important;
+  transition: color 0.15s ease !important;
+}
+
+.page-home footer a:not(.group):hover {
+  color: rgba(201, 162, 39, 0.95) !important;
+}
+
+/* Social icons - premium hover */
+.page-home footer .group {
+  width: 44px !important;
+  height: 44px !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 10px !important;
+  transition: all 0.2s ease !important;
+}
+
+.page-home footer .group:hover {
+  background: rgba(201, 162, 39, 0.15) !important;
+  border-color: rgba(201, 162, 39, 0.3) !important;
+  transform: translateY(-2px) !important;
+}
+
+.page-home footer .group svg {
+  color: rgba(255, 255, 255, 0.6) !important;
+  transition: color 0.2s ease !important;
+}
+
+.page-home footer .group:hover svg {
+  color: rgba(201, 162, 39, 0.95) !important;
+}
+
+/* Follow us / social section */
+.page-home footer .flex.gap-4 {
+  gap: 0.75rem !important;
+}
+
+/* Footer bottom - legal row */
+.page-home footer .border-t {
+  margin-top: 2rem !important;
+  padding-top: 1.5rem !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+.page-home footer .text-xs {
+  font-size: 0.6875rem !important;
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+
+/* Operational status badge */
+.page-home footer .inline-flex.items-center {
+  background: rgba(201, 162, 39, 0.08) !important;
+  border: 1px solid rgba(201, 162, 39, 0.15) !important;
+  padding: 0.375rem 0.75rem !important;
+  border-radius: 6px !important;
+}
+
+.page-home footer .animate-pulse {
+  animation: bbx-pulse 2s ease-in-out infinite !important;
+}
+
+@keyframes bbx-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Mobile footer stacking */
+@media (max-width: 640px) {
+  .page-home footer .grid {
+    gap: 1.5rem !important;
+  }
+  
+  .page-home footer .text-center {
+    text-align: left !important;
+  }
+  
+  .page-home footer .justify-center {
+    justify-content: flex-start !important;
+  }
+  
+  /* Legal row - stack on mobile */
+  .page-home footer .flex-col.sm\\:flex-row {
+    align-items: flex-start !important;
+    gap: 0.75rem !important;
+  }
+  
+  .page-home footer .flex.items-center.gap-4 {
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   P1-E: FOUC PREVENTION — FIRST-PAINT GATE
+   Zero visible flash of unstyled/incorrect layout
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Critical: Gate class hides page until styles applied */
+html.landing-gate,
+body.landing-gate {
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Landing ready: reveal with smooth transition */
+html.landing-ready,
+body.landing-ready,
+.page-home.landing-ready {
+  visibility: visible !important;
+  opacity: 1 !important;
+  transition: opacity 0.1s ease-out !important;
+}
+
+/* Inline critical: prevent any flash during initial parse */
+html:not(.js-enabled) .page-home,
+html:not(.landing-ready) .page-home {
+  /* Ensure dark background immediately */
+  background-color: #0a0b0d !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Pre-render placeholder states */
+.page-home .graphene-hero-3d {
+  /* Solid fallback until canvas loads */
+  background-color: #0a0b0d !important;
+}
+
+/* Header skeleton - prevent flash */
+.page-home .site-header,
+.page-home header {
+  background-color: rgba(10, 11, 13, 0.98) !important;
+  min-height: 60px !important;
+}
+
+/* Prevent logo/icon size flash */
+.page-home img[src*="logo"],
+.page-home .header-logo {
+  width: auto !important;
+  height: 32px !important;
+  max-height: 40px !important;
+}
+
+/* Prevent CTA button flash */
+.page-home .graphene-btn-primary,
+.page-home .graphene-btn-secondary,
+.page-home .graphene-btn-spotlight {
+  /* Explicit dimensions to prevent reflow */
+  min-height: 48px !important;
+}
+
+/* Prevent font flash */
+.page-home {
+  font-display: swap;
+}
+
+/* No-JS fallback: show content immediately if JS fails */
+html:not(.js-enabled) body.landing-gate,
+html:not(.js-enabled) .page-home {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ANIMATIONS - Reduced motion support
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  .page-home .landing-ready,
+  .page-home .sticky-cta-bar,
+  .page-home .sticky-cta-bar__btn,
+  .page-home footer .group {
+    transition: none !important;
+    animation: none !important;
+  }
+}

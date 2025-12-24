@@ -231,6 +231,29 @@ if (!empty($disable_alphabot)) {
             // Language bootstrap for client-side resolver
             window.__BBX_INITIAL_LANG__ = '<?= htmlspecialchars($current_language) ?>';
             window.__BBX_ALLOWED_LANGS__ = <?= json_encode(BBX_ALLOWED_LANGS, JSON_UNESCAPED_SLASHES) ?>;
+            
+            // P1-E: FOUC Prevention - Add landing-gate class before paint
+            // This prevents any flash of unstyled content on landing page
+            <?php if ($current_page === 'home' || $current_page === 'index'): ?>
+            document.documentElement.classList.add('landing-gate');
+            // Release gate after critical CSS and fonts load
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(function() {
+                    requestAnimationFrame(function() {
+                        document.documentElement.classList.remove('landing-gate');
+                        document.documentElement.classList.add('landing-ready');
+                    });
+                });
+            } else {
+                // Fallback: release after DOMContentLoaded
+                document.addEventListener('DOMContentLoaded', function() {
+                    requestAnimationFrame(function() {
+                        document.documentElement.classList.remove('landing-gate');
+                        document.documentElement.classList.add('landing-ready');
+                    });
+                });
+            }
+            <?php endif; ?>
         })();
     </script>
     <title><?= htmlspecialchars($page_title) ?></title>
@@ -354,6 +377,10 @@ if (!empty($disable_alphabot)) {
     <!-- P0 Landing Page Stability Fixes (sticky CTA, drawer, assistant, FOUC) -->
     <link rel="preload" href="/assets/css/components/landing-p0-fix.css?v=<?= bbx_asset_version('css/components/landing-p0-fix.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/assets/css/components/landing-p0-fix.css?v=<?= bbx_asset_version('css/components/landing-p0-fix.css') ?>"></noscript>
+
+    <!-- P1/P2 Landing Page Polish (Priority Access, footer, FOUC gate) -->
+    <link rel="preload" href="/assets/css/components/landing-p1-polish.css?v=<?= bbx_asset_version('css/components/landing-p1-polish.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/components/landing-p1-polish.css?v=<?= bbx_asset_version('css/components/landing-p1-polish.css') ?>"></noscript>
 
     <!-- Conditional CSS loading -->
     <?php

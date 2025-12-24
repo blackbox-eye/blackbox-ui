@@ -1,4 +1,9 @@
-    <!-- Sticky CTA Bar for Mobile/Tablet - Shows on scroll -->
+<?php
+// Determine if this is the landing page (page-home)
+$is_landing_page = (basename($_SERVER['SCRIPT_NAME'] ?? '') === 'index.php');
+?>
+    <?php if (!$is_landing_page): ?>
+    <!-- Sticky CTA Bar for Mobile/Tablet - Shows on scroll (NOT on landing - #sticky-cta is canonical there) -->
     <div id="sticky-cta-bar" class="sticky-cta-bar" role="navigation" aria-label="<?= t('header.mobile.quick_actions', 'Quick actions') ?>">
         <a href="demo.php" class="sticky-cta-bar__btn sticky-cta-bar__btn--primary">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -14,6 +19,7 @@
             <?= t('home.hero.secondary_cta', 'Free Scan') ?>
         </a>
     </div>
+    <?php endif; ?>
 
     <footer class="bg-gradient-to-b from-gray-900/50 to-black border-t border-gray-800/50 mt-24 sm:mt-28 lg:mt-32 section-fade-in">
         <div class="container mx-auto px-4 py-16 sm:py-20 lg:py-24">

@@ -77,43 +77,7 @@
   height: 1rem !important;
 }
 
-/* Close button - fixed position, accessible */
-.page-home .sticky-cta-bar__close {
-  position: absolute !important;
-  top: 0.5rem !important;
-  right: 0.5rem !important;
-  width: 36px !important;
-  height: 36px !important;
-  min-width: 36px !important;
-  min-height: 36px !important;
-  z-index: 10 !important;
-  background: rgba(255, 255, 255, 0.12) !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
-  border-radius: 50% !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  cursor: pointer !important;
-  touch-action: manipulation !important;
-  -webkit-tap-highlight-color: transparent !important;
-}
-
-.page-home .sticky-cta-bar__close svg {
-  width: 16px !important;
-  height: 16px !important;
-  color: rgba(255, 255, 255, 0.85) !important;
-  stroke-width: 2.5 !important;
-}
-
-.page-home .sticky-cta-bar__close:hover,
-.page-home .sticky-cta-bar__close:focus {
-  background: rgba(255, 255, 255, 0.2) !important;
-  border-color: rgba(255, 255, 255, 0.4) !important;
-}
-
-.page-home .sticky-cta-bar__close:active {
-  transform: scale(0.95) !important;
-}
+/* Close button styles are in marketing.css - no overrides needed */
 
 /* ════════════════════════════════════════════════════════════════
    MOBILE (360-430px) — Stack layout, full-width buttons
@@ -151,23 +115,6 @@
     max-width: none !important;
     justify-content: center !important;
     padding: 0.75rem 1rem !important;
-  }
-  
-  /* Close button - prominent on mobile for easy dismiss */
-  .page-home .sticky-cta-bar__close {
-    top: 0.5rem !important;
-    right: 0.5rem !important;
-    width: 40px !important;
-    height: 40px !important;
-    min-width: 40px !important;
-    min-height: 40px !important;
-    background: rgba(255, 255, 255, 0.15) !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  }
-  
-  .page-home .sticky-cta-bar__close svg {
-    width: 18px !important;
-    height: 18px !important;
   }
 }
 
@@ -510,13 +457,8 @@ footer .flex.gap-3 {
   gap: 0.625rem !important;
 }
 
-/* Footer bottom padding for sticky CTA - mobile only */
-@media (max-width: 1023px) {
-  footer,
-  .site-footer {
-    padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px)) !important;
-  }
-}
+/* Footer: NO padding compensation for sticky CTA */
+/* Sticky CTA overlays content visually, not structurally */
 
 /* Footer bottom - legal row */
 .page-home footer .border-t {

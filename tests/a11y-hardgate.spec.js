@@ -531,17 +531,19 @@ test.describe('Landing P0 Sanity', () => {
   test('drawer and overlay stay hidden until user action', async ({ page }) => {
     await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
 
-    const overlayVisible = await page.locator('#mobile-menu-overlay').evaluate(el => {
+    const overlayHidden = await page.locator('#mobile-menu-overlay').evaluate(el => {
       const cs = window.getComputedStyle(el);
-      return cs.visibility !== 'hidden' || cs.opacity !== '0' || cs.pointerEvents !== 'none';
+      // Overlay must be hidden: visibility=hidden AND opacity=0 AND pointer-events=none
+      return cs.visibility === 'hidden' && cs.opacity === '0' && cs.pointerEvents === 'none';
     });
-    expect(overlayVisible).toBe(false);
+    expect(overlayHidden).toBe(true);
 
-    const drawerVisible = await page.locator('#mobile-menu').evaluate(el => {
+    const drawerHidden = await page.locator('#mobile-menu').evaluate(el => {
       const cs = window.getComputedStyle(el);
-      return cs.visibility !== 'hidden';
+      // Drawer must be hidden: visibility=hidden AND pointer-events=none
+      return cs.visibility === 'hidden' && cs.pointerEvents === 'none';
     });
-    expect(drawerVisible).toBe(false);
+    expect(drawerHidden).toBe(true);
   });
 
   test('no light-mode surfaces in dark mode', async ({ page }) => {

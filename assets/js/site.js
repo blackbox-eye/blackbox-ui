@@ -650,16 +650,20 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        // P0 fix: Handle both click AND touch events for mobile browsers
+        // P0 fix: Handle click, touch AND pointer events for maximum mobile compatibility
         const handleDismiss = (event) => {
             event.preventDefault();
             event.stopPropagation();
+            event.stopImmediatePropagation();
             hideBar();
             persistDismissal();
         };
 
-        closeButton?.addEventListener('click', handleDismiss);
-        closeButton?.addEventListener('touchend', handleDismiss, { passive: false });
+        if (closeButton) {
+            closeButton.addEventListener('click', handleDismiss);
+            closeButton.addEventListener('touchstart', handleDismiss, { passive: false });
+            closeButton.addEventListener('pointerdown', handleDismiss, { passive: false });
+        }
 
         actionButtons.forEach((button) => {
             button.addEventListener('click', persistDismissal, { once: true });

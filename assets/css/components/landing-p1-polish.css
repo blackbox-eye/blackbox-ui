@@ -454,58 +454,68 @@
 }
 
 /* Footer links */
-.page-home footer a:not(.group) {
+.page-home footer a:not(.social-icon-link) {
   color: rgba(255, 255, 255, 0.7) !important;
   transition: color 0.15s ease !important;
 }
 
-.page-home footer a:not(.group):hover {
+.page-home footer a:not(.social-icon-link):hover {
   color: rgba(201, 162, 39, 0.95) !important;
 }
 
 /* Social icons - subtle, refined styling */
-.page-home footer .group {
-  width: 38px !important;
-  height: 38px !important;
-  background: rgba(255, 255, 255, 0.03) !important;
-  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+.social-icon-link {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 36px !important;
+  height: 36px !important;
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
   border-radius: 50% !important;
   transition: all 0.2s ease !important;
 }
 
-.page-home footer .group:hover {
-  background: rgba(201, 162, 39, 0.1) !important;
-  border-color: rgba(201, 162, 39, 0.25) !important;
-  transform: translateY(-1px) !important;
+.social-icon-link:hover {
+  background: rgba(201, 162, 39, 0.08) !important;
+  border-color: rgba(201, 162, 39, 0.35) !important;
 }
 
-.page-home footer .group svg {
-  width: 18px !important;
-  height: 18px !important;
-  color: rgba(255, 255, 255, 0.5) !important;
+.social-icon-svg {
+  width: 16px !important;
+  height: 16px !important;
+  color: rgba(255, 255, 255, 0.55) !important;
   transition: color 0.2s ease !important;
 }
 
-.page-home footer .group:hover svg {
-  color: rgba(201, 162, 39, 0.9) !important;
+.social-icon-link:hover .social-icon-svg {
+  color: rgba(201, 162, 39, 0.95) !important;
 }
 
-/* Mobile: even more subtle social icons */
+/* Mobile: slightly smaller social icons */
 @media (max-width: 767px) {
-  .page-home footer .group {
-    width: 36px !important;
-    height: 36px !important;
+  .social-icon-link {
+    width: 34px !important;
+    height: 34px !important;
   }
   
-  .page-home footer .group svg {
-    width: 16px !important;
-    height: 16px !important;
+  .social-icon-svg {
+    width: 15px !important;
+    height: 15px !important;
   }
 }
 
-/* Follow us / social section */
-.page-home footer .flex.gap-4 {
-  gap: 0.75rem !important;
+/* Follow us / social section - tighter gap */
+footer .flex.gap-3 {
+  gap: 0.625rem !important;
+}
+
+/* Footer bottom padding for sticky CTA - mobile only */
+@media (max-width: 1023px) {
+  footer,
+  .site-footer {
+    padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
 }
 
 /* Footer bottom - legal row */

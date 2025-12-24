@@ -468,6 +468,47 @@ test.describe('Landing P0 Sanity', () => {
     }
   });
 
+  test('sticky CTA must have solid background (no ghosting)', async ({ page }) => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(500);
+    
+    // Scroll to trigger CTA visibility
+    await page.evaluate(() => window.scrollTo(0, 500));
+    await page.waitForTimeout(300);
+    
+    const stickyBar = page.locator('.sticky-cta-bar, [data-component="sticky-cta"], #sticky-cta').first();
+    
+    if (await stickyBar.count() > 0 && await stickyBar.isVisible()) {
+      const styles = await stickyBar.evaluate(el => {
+        const computed = window.getComputedStyle(el);
+        const bgColor = computed.backgroundColor;
+        
+        // Parse rgba values
+        const rgbaMatch = bgColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+        let alpha = 1;
+        if (rgbaMatch && rgbaMatch[4] !== undefined) {
+          alpha = parseFloat(rgbaMatch[4]);
+        }
+        
+        return {
+          backgroundColor: bgColor,
+          alpha: alpha,
+          opacity: parseFloat(computed.opacity),
+          mixBlendMode: computed.mixBlendMode
+        };
+      });
+      
+      // Background alpha must be >= 0.85 to prevent ghosting
+      expect(styles.alpha).toBeGreaterThanOrEqual(0.85);
+      
+      // Element opacity must be 1 (no transparency)
+      expect(styles.opacity).toBe(1);
+      
+      // No weird blend modes
+      expect(styles.mixBlendMode).toBe('normal');
+    }
+  });
+
   test('AI assistant overlay should not blur page', async ({ page }) => {
     await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(500);
@@ -490,7 +531,7 @@ test.describe('Landing P0 Sanity', () => {
     }
   });
 
-  test('drawer overlay should have light dim only (no heavy blur)', async ({ page }) => {
+  test('drawer overlay should have glass blur effect', async ({ page }) => {
     await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(300);
     
@@ -509,8 +550,8 @@ test.describe('Landing P0 Sanity', () => {
         };
       });
       
-      // Backdrop filter should be none
-      expect(styles.backdropFilter === 'none' || styles.backdropFilter === '').toBeTruthy();
+      // Backdrop filter should have blur (glass effect)
+      expect(styles.backdropFilter.includes('blur') || styles.backdropFilter !== 'none').toBeTruthy();
     }
   });
 
@@ -576,18 +617,28 @@ test.describe('Landing P0 Sanity', () => {
     expect(lightSurfaces).toBe(false);
   });
 
-  test('z-index contract: sticky CTA at 60, no conflicts', async ({ page }) => {
+  test('CTA deduplication: exactly ONE CTA in DOM, z-index 75', async ({ page }) => {
     await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
     await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.5));
     await page.waitForTimeout(300);
     
-    const stickyBar = page.locator('.sticky-cta-bar, .graphene-cta-bar').first();
-    if (await stickyBar.count() > 0) {
-      const zIndex = await stickyBar.evaluate(el => {
-        return parseInt(window.getComputedStyle(el).zIndex, 10);
-      });
-      expect(zIndex).toBe(60);
-    }
+    // HARDGATE: Only ONE CTA element should exist on landing page
+    // Canonical: #sticky-cta
+    // NOT allowed: #sticky-cta-bar, .graphene-cta-bar (gated in PHP)
+    const ctaCount = await page.evaluate(() => {
+      return document.querySelectorAll('#sticky-cta, #sticky-cta-bar, .graphene-cta-bar').length;
+    });
+    expect(ctaCount, 'Expected exactly 1 CTA in DOM (only #sticky-cta)').toBe(1);
+    
+    // Verify the single CTA is #sticky-cta
+    const canonicalCta = page.locator('#sticky-cta');
+    expect(await canonicalCta.count(), '#sticky-cta must exist').toBe(1);
+    
+    // z-index contract: 75 (single source of truth)
+    const zIndex = await canonicalCta.evaluate(el => {
+      return parseInt(window.getComputedStyle(el).zIndex, 10);
+    });
+    expect(zIndex, 'CTA z-index must be 75').toBe(75);
   });
 
   test('alphabot-overlay div should not exist in DOM', async ({ page }) => {

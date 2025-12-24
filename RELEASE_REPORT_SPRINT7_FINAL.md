@@ -79,6 +79,41 @@ The solution uses `lftp` with passive FTP mode and TLS negotiation, which is com
 
 ---
 
+## 🎯 CTA Deduplication & Sticky Bar Stabilization
+
+**Date:** 2025-12-24
+
+### Problem Solved
+Landing page had **3 conflicting CTA elements** causing z-index conflicts and test failures:
+- `#sticky-cta-bar` (site-footer.php)
+- `.graphene-cta-bar` (index.php hero)
+- `#sticky-cta` (site-footer.php - canonical)
+
+### Root Fix Applied
+
+| Layer | Change | File |
+|-------|--------|------|
+| **PHP Gating** | `#sticky-cta-bar` hidden on landing | `includes/site-footer.php` |
+| **PHP Removal** | `.graphene-cta-bar` removed from landing DOM | `index.php` |
+| **CSS Contract** | `z-index: 75` single source of truth | `landing-p0-fix.css` |
+| **Test Hardgate** | DOM count === 1 AND z-index === 75 | `a11y-hardgate.spec.js` |
+
+### Priority Access – Sticky Bottom Utility Bar
+
+The canonical CTA (`#sticky-cta`) provides:
+- **Primary CTA:** "Book Demo" button
+- **Secondary CTA:** "Call Us" button (tel: link)
+- **Dismiss button (×):** Hides bar for session (sessionStorage)
+- **z-index: 75** (above content, below reCAPTCHA badge)
+
+### Verification
+```bash
+npx playwright test tests/a11y-hardgate.spec.js --grep "Landing"
+# 40 tests passing (1 known flaky unrelated to CTA)
+```
+
+---
+
 ## 📝 Remaining Items (Max 2)
 
 1. **Touch target test flakiness** - 1 flaky test for info buttons (48px vs 40px threshold)

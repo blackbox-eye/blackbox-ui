@@ -82,17 +82,7 @@ include 'includes/site-header.php';
                     </a>
                 </div>
 
-                <div class="graphene-cta-bar" role="region" aria-label="<?= t('home.hero.cta_bar_label') ?>" data-visible="true">
-                    <p class="graphene-cta-bar__label"><?= t('home.hero.cta_bar_hint') ?></p>
-                    <div class="graphene-cta-bar__actions">
-                        <a href="demo.php" class="graphene-btn-primary graphene-btn-primary--compact" aria-label="<?= t('home.hero.primary_cta_aria') ?>">
-                            <span class="graphene-btn__text"><?= t('home.hero.primary_cta') ?></span>
-                        </a>
-                        <a href="free-scan.php" class="graphene-btn-secondary graphene-btn-secondary--compact" aria-label="<?= t('home.hero.secondary_cta_aria') ?>">
-                            <span class="graphene-btn__text"><?= t('home.hero.secondary_cta') ?></span>
-                        </a>
-                    </div>
-                </div>
+                <!-- NOTE: .graphene-cta-bar removed - #sticky-cta is the canonical CTA on landing -->
 
                 <?php
                 $hero_usps = [

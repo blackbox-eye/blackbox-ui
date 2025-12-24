@@ -580,109 +580,67 @@ document.addEventListener('DOMContentLoaded', () => {
     const stickyCtaBar = document.querySelector('[data-component="sticky-cta"]');
     if (stickyCtaBar) {
         const STORAGE_KEY = 'bbxStickyCtaDismissed';
-        const SCROLL_THRESHOLD = 0.35; // 35% of viewport scroll before showing
+        const SCROLL_THRESHOLD = 0.35;
         const closeButton = stickyCtaBar.querySelector('[data-sticky-cta-close]');
-        const actionButtons = stickyCtaBar.querySelectorAll('.sticky-cta-bar__btn');
-        let stickyCtaHasShown = false;
 
-        const setStickyCtaLayout = () => {
-            const isVisible = stickyCtaBar.getAttribute('data-visible') === 'true' && !stickyCtaBar.hasAttribute('data-hidden');
-            document.body.classList.toggle('has-sticky-cta', isVisible);
-
-            scheduleBottomCtaOffset();
-        };
-
-        const scheduleStickyCtaLayout = scheduleBottomCtaOffset;
-
-        const hideBar = () => {
-            stickyCtaBar.setAttribute('data-hidden', 'true');
-            stickyCtaBar.removeAttribute('data-visible');
-            // P0 fix: Remove body padding when sticky CTA is dismissed
-            document.body.classList.add('sticky-cta-dismissed');
-            scheduleStickyCtaLayout();
-        };
-
-        const showBar = () => {
-            if (stickyCtaBar.hasAttribute('data-hidden')) {
-                stickyCtaBar.removeAttribute('data-hidden');
-            }
-            stickyCtaBar.setAttribute('data-visible', 'true');
-            stickyCtaHasShown = true;
-            scheduleStickyCtaLayout();
-        };
-
+        // Check if already dismissed this session
         const isDismissed = () => {
             try {
                 return window.sessionStorage.getItem(STORAGE_KEY) === '1';
-            } catch (error) {
+            } catch (e) {
                 return false;
             }
         };
 
-        const checkScrollThreshold = () => {
-            if (stickyCtaHasShown || isDismissed()) {
-                return;
-            }
-            const scrollY = window.scrollY || window.pageYOffset;
-            const viewportHeight = window.innerHeight;
-            if (scrollY > viewportHeight * SCROLL_THRESHOLD) {
-                window.requestAnimationFrame(showBar);
-            }
+        // FINAL: Hide = display:none via class
+        const hideBar = () => {
+            stickyCtaBar.classList.remove('is-visible');
+            stickyCtaBar.classList.add('is-dismissed');
         };
 
-        // Start hidden, only show after scroll threshold
-        if (isDismissed()) {
-            hideBar();
-        } else {
-            hideBar(); // Initially hidden
-            window.addEventListener('scroll', checkScrollThreshold, { passive: true });
-            // Check immediately in case page already scrolled (e.g., anchor navigation)
-            checkScrollThreshold();
-        }
+        // FINAL: Show = display:block via class
+        const showBar = () => {
+            if (isDismissed()) return;
+            stickyCtaBar.classList.remove('is-dismissed');
+            stickyCtaBar.classList.add('is-visible');
+        };
 
-        scheduleStickyCtaLayout();
-
+        // Persist dismissal in sessionStorage
         const persistDismissal = () => {
             try {
                 window.sessionStorage.setItem(STORAGE_KEY, '1');
-            } catch (error) {
+            } catch (e) {
                 // Ignore storage failures
             }
         };
 
-        // P0 fix: Handle click, touch AND pointer events for maximum mobile compatibility
-        const handleDismiss = (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            event.stopImmediatePropagation();
+        // FINAL: Single click handler - works on all browsers
+        const handleDismiss = () => {
             hideBar();
             persistDismissal();
         };
 
-        if (closeButton) {
-            closeButton.addEventListener('click', handleDismiss);
-            closeButton.addEventListener('touchstart', handleDismiss, { passive: false });
-            closeButton.addEventListener('pointerdown', handleDismiss, { passive: false });
+        // If already dismissed, ensure it stays hidden
+        if (isDismissed()) {
+            hideBar();
+        } else {
+            // Show after scroll threshold
+            let hasShown = false;
+            const checkScroll = () => {
+                if (hasShown || isDismissed()) return;
+                const scrollY = window.scrollY || window.pageYOffset;
+                if (scrollY > window.innerHeight * SCROLL_THRESHOLD) {
+                    showBar();
+                    hasShown = true;
+                }
+            };
+            window.addEventListener('scroll', checkScroll, { passive: true });
+            checkScroll(); // Check immediately
         }
 
-        actionButtons.forEach((button) => {
-            button.addEventListener('click', persistDismissal, { once: true });
-        });
-
-        // P0-1: Dock sticky CTA when footer is visible to prevent overlap
-        const footer = document.querySelector('footer, .site-footer');
-        if (footer) {
-            const stickyFooterObserver = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (isDismissed()) return;
-                    if (entry.isIntersecting) {
-                        stickyCtaBar.classList.add('is-docked');
-                    } else {
-                        stickyCtaBar.classList.remove('is-docked');
-                    }
-                });
-            }, { threshold: 0.05 });
-            stickyFooterObserver.observe(footer);
+        // FINAL: One event listener - click works on all mobile browsers
+        if (closeButton) {
+            closeButton.addEventListener('click', handleDismiss);
         }
     }
 

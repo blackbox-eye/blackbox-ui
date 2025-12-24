@@ -1,32 +1,83 @@
 /**
  * LANDING PAGE P0 FIXES
  * Branch: fix/landing-p0-stability
- * Date: 2025-12-23
+ * Date: 2025-12-23 (Updated: Sprint Polish)
  * 
  * Fixes:
  * P0-1: Sticky CTA bar layering (solid bg, z-index contract, footer non-overlap)
- * P0-2: Burger menu drawer (35-40% width, no backdrop blur, all items visible)
- * P0-3: AI Assistant overlay (no blur, light dim only)
- * P0-4: Light mode overlay glitches (force dark surfaces)
- * P0-5: FOUC prevention (critical sizing)
+ * P0-2: Burger menu drawer (reduced height, proper spacing, smooth close)
+ * P0-3: AI Assistant widget (HIDDEN on landing page - no DOM, no blur, no block)
+ * P0-4: Light mode glitch elimination (dark-mode-only for landing)
+ * P0-5: FOUC prevention (critical sizing, landing-gate)
+ * P0-6: Hero section & CTA tightening (centered, balanced, consistent)
  * 
- * z-index contract:
- * - drawer-overlay: 39
+ * z-index contract (ENFORCED):
+ * - Background/content: 0-10
+ * - drawer-overlay: 30
  * - drawer: 40
- * - sticky-cta: 70
+ * - sticky-cta: 60
+ * - reCAPTCHA badge: 70
  * - cookie-banner: 80
  * - modals: 90
+ * - AI assistant: HIDDEN (not rendered)
  */
 
 /* ═══════════════════════════════════════════════════════════════════════════════
    P0-1: STICKY CTA BAR — SOLID, STABLE, NO OVERLAP
    ═══════════════════════════════════════════════════════════════════════════════ */
 
+/* Landing first-paint gate to prevent FOUC/ghost UI */
+body.landing-gate.page-home {
+  opacity: 0;
+  visibility: hidden;
+}
+
+body.page-home.landing-ready {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.12s ease;
+}
+
+/* Base stacking for landing */
+.page-home #main-content,
+.page-home main,
+.page-home body {
+  position: relative;
+  z-index: 0;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   AI ASSISTANT — HARD DISABLED ON LANDING (REMOVED FROM DOM)
+   ════════════════════════════════════════════════════════════════ */
+
+/* Belt-and-suspenders CSS hiding (PHP guards prevent DOM render) */
+.page-home #alphabot-container,
+.page-home .alphabot-overlay,
+.page-home #alphabot-overlay,
+.page-home .alphabot-widget,
+.page-home .alphabot-toggle,
+.page-home .alphabot-panel,
+.page-home .bbx-command-rail {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   STICKY CTA BAR — ALWAYS PINNED, SOLID, NO OVERLAP
+   ════════════════════════════════════════════════════════════════ */
+
 /* Force solid background, no transparency, no blur */
-.sticky-cta-bar,
-[data-component="sticky-cta"],
-#sticky-cta,
-.graphene-cta-bar {
+.page-home .sticky-cta-bar,
+.page-home [data-component="sticky-cta"],
+.page-home #sticky-cta,
+.page-home .graphene-cta-bar {
   /* SOLID background - zero alpha */
   background: #0a0b0d !important;
   background-color: #0a0b0d !important;
@@ -40,8 +91,8 @@
   border-bottom: none !important;
   box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.6) !important;
   
-  /* Fixed z-index: 70 (below cookie:80, above drawer:40) */
-  z-index: 70 !important;
+  /* Fixed z-index: 60 (contract) */
+  z-index: 60 !important;
   
   /* Always opaque, no flickering */
   opacity: 1 !important;
@@ -52,38 +103,62 @@
   
   /* Ensure clickable */
   pointer-events: auto !important;
+  
+  /* ALWAYS fixed at bottom */
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
 }
 
-/* Mobile sticky CTA positioning */
+/* Mobile sticky CTA positioning — ALL DEVICES */
 @media (max-width: 900px) {
-  .sticky-cta-bar,
-  [data-component="sticky-cta"],
-  #sticky-cta,
-  .graphene-cta-bar {
-    position: fixed !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
+  .page-home .sticky-cta-bar,
+  .page-home [data-component="sticky-cta"],
+  .page-home #sticky-cta,
+  .page-home .graphene-cta-bar {
     width: 100% !important;
     max-width: none !important;
     border-radius: 0 !important;
     border-left: none !important;
     border-right: none !important;
     
-    /* Safe area padding for notched devices */
+    /* Safe area padding for iOS notched devices */
     padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0)) !important;
+    padding-left: calc(0.75rem + env(safe-area-inset-left, 0)) !important;
+    padding-right: calc(0.75rem + env(safe-area-inset-right, 0)) !important;
   }
   
   /* Add bottom padding to main content to prevent footer overlap */
-  main,
-  #main-content {
-    padding-bottom: 90px !important; /* sticky CTA height + buffer */
+  .page-home main,
+  .page-home #main-content {
+    padding-bottom: 100px !important; /* sticky CTA height + buffer */
   }
   
   /* Footer bottom padding for legal row visibility */
-  footer,
-  .site-footer {
-    padding-bottom: calc(100px + env(safe-area-inset-bottom, 0)) !important;
+  .page-home footer,
+  .page-home .site-footer {
+    padding-bottom: calc(110px + env(safe-area-inset-bottom, 0)) !important;
+  }
+}
+
+/* Ensure reCAPTCHA badge doesn't overlap sticky CTA */
+.page-home .grecaptcha-badge {
+  z-index: 70 !important;
+  bottom: calc(80px + env(safe-area-inset-bottom, 0)) !important;
+}
+
+/* When cookie banner is visible, shift sticky CTA up */
+.page-home.cookie-banner-open .sticky-cta-bar,
+.page-home.cookie-banner-open [data-component="sticky-cta"],
+.page-home.cookie-banner-open #sticky-cta {
+  bottom: 72px !important; /* Cookie banner height */
+}
+
+@media (max-width: 768px) {
+  .page-home.cookie-banner-open .sticky-cta-bar,
+  .page-home.cookie-banner-open [data-component="sticky-cta"] {
+    bottom: calc(72px + env(safe-area-inset-bottom, 0)) !important;
   }
 }
 
@@ -114,31 +189,40 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
-   P0-2: BURGER MENU DRAWER — COMPACT WIDTH, MATTE BLACK, ALL ITEMS VISIBLE
+   P0-2: BURGER MENU DRAWER — REDUCED HEIGHT, NO SCROLL, SMOOTH CLOSE
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* Drawer overlay - light dim, NO blur */
-#mobile-menu-overlay {
+.page-home #mobile-menu-overlay {
   /* Remove backdrop blur entirely */
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
   
   /* Very light dim only */
-  background: rgba(0, 0, 0, 0.35) !important;
+  background: rgba(0, 0, 0, 0.45) !important;
   
-  /* z-index contract: 39 */
-  z-index: 39 !important;
+  /* z-index contract: 30 */
+  z-index: 30 !important;
+  
+  /* Hidden by default */
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  
+  /* Smooth transition */
+  transition: opacity 0.25s ease-out, visibility 0.25s ease-out !important;
 }
 
-#mobile-menu-overlay.active {
+.page-home #mobile-menu-overlay.active {
   opacity: 1 !important;
   pointer-events: auto !important;
+  visibility: visible !important;
 }
 
-/* Drawer panel - 35-40% width, matte black */
-#mobile-menu {
-  /* Width: 35-40% capped between 240-280px */
-  width: min(40vw, 280px) !important;
+/* Drawer panel - REDUCED HEIGHT, compact, matte black */
+.page-home #mobile-menu {
+  /* Width: compact 280px max */
+  width: min(75vw, 280px) !important;
   min-width: 240px !important;
   max-width: 280px !important;
   
@@ -148,52 +232,65 @@
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
   
-  /* Height with safe areas */
-  height: 100dvh !important;
-  padding-top: env(safe-area-inset-top, 0) !important;
-  padding-bottom: env(safe-area-inset-bottom, 0) !important;
+  /* REDUCED HEIGHT - auto height, not full viewport */
+  height: auto !important;
+  max-height: calc(100dvh - 80px) !important; /* Leave space for header */
+  min-height: 300px !important;
+  
+  /* Position from top with header offset */
+  top: 60px !important;
+  bottom: auto !important;
+  right: 0 !important;
+  
+  /* Safe area padding */
+  padding-top: 0.75rem !important;
+  padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0)) !important;
   
   /* z-index contract: 40 */
   z-index: 40 !important;
   
   /* Clean border */
   border-left: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-radius: 0 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 0 0 0 12px !important;
   
-  /* Layout - flexbox for proper stacking */
+  /* Layout - NO scroll by default */
   display: flex !important;
   flex-direction: column !important;
+  overflow: hidden !important;
+  
+  /* Hidden state */
+  transform: translateX(100%) !important;
+  visibility: hidden !important;
+  
+  /* Smooth transition */
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.3s ease !important;
 }
 
 /* Drawer visible state */
-#mobile-menu.active,
-#mobile-menu[aria-hidden="false"] {
+.page-home #mobile-menu.active,
+.page-home #mobile-menu[aria-hidden="false"] {
   transform: translateX(0) !important;
-}
-
-/* Drawer hidden state */
-#mobile-menu:not(.active),
-#mobile-menu[aria-hidden="true"] {
-  transform: translateX(100%) !important;
+  visibility: visible !important;
 }
 
 /* Drawer header - compact */
-#mobile-menu > div:first-child {
+.page-home #mobile-menu > div:first-child {
   flex-shrink: 0 !important;
-  padding: 0.625rem 0.75rem !important;
+  padding: 0.5rem 0.75rem !important;
   background: transparent !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
 }
 
-#mobile-menu-heading {
-  font-size: 0.625rem !important;
+.page-home #mobile-menu-heading {
+  font-size: 0.6rem !important;
   letter-spacing: 0.1em !important;
   text-transform: uppercase !important;
   color: rgba(255, 255, 255, 0.4) !important;
 }
 
 /* Close button - minimum 44px touch target */
-#mobile-menu-close {
+.page-home #mobile-menu-close {
   min-width: 44px !important;
   min-height: 44px !important;
   display: flex !important;
@@ -204,83 +301,81 @@
   color: rgba(255, 255, 255, 0.6) !important;
 }
 
-#mobile-menu-close:hover,
-#mobile-menu-close:focus-visible {
+.page-home #mobile-menu-close:hover,
+.page-home #mobile-menu-close:focus-visible {
   background: rgba(255, 255, 255, 0.08) !important;
   color: #fff !important;
 }
 
-/* Navigation section - scrollable if needed */
-#mobile-menu nav {
+/* Navigation section - compact, NO scroll on small screens */
+.page-home #mobile-menu nav {
   flex: 1 1 auto !important;
   overflow-y: auto !important;
   overflow-x: hidden !important;
   -webkit-overflow-scrolling: touch !important;
   padding: 0.5rem 0.625rem !important;
   
-  /* Smooth internal scroll */
-  scroll-behavior: smooth !important;
+  /* Contain scroll within drawer */
   overscroll-behavior: contain !important;
 }
 
-/* Hide scrollbar but allow scroll */
-#mobile-menu nav::-webkit-scrollbar {
-  width: 3px !important;
+/* Hide scrollbar for cleaner look */
+.page-home #mobile-menu nav::-webkit-scrollbar {
+  width: 2px !important;
 }
 
-#mobile-menu nav::-webkit-scrollbar-track {
+.page-home #mobile-menu nav::-webkit-scrollbar-track {
   background: transparent !important;
 }
 
-#mobile-menu nav::-webkit-scrollbar-thumb {
+.page-home #mobile-menu nav::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.1) !important;
-  border-radius: 3px !important;
+  border-radius: 2px !important;
 }
 
-/* Nav link list - compact gaps */
-#mobile-menu nav ul {
+/* Nav link list - tight gaps, aligned with hero typography */
+.page-home #mobile-menu nav ul {
   gap: 0.125rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
-/* Nav links - compact, accessible */
-.nav-link-mobile {
+/* Nav links - compact, hero-aligned typography */
+.page-home .nav-link-mobile {
   display: flex !important;
   align-items: center !important;
   padding: 0.5rem 0.625rem !important;
-  font-size: 0.8125rem !important; /* 13px */
+  font-size: 0.8125rem !important; /* 13px - matches hero body text */
+  font-weight: 500 !important;
   line-height: 1.3 !important;
-  min-height: 44px !important; /* WCAG touch target */
+  min-height: 42px !important; /* Slightly smaller than WCAG 44px, still accessible */
   color: rgba(255, 255, 255, 0.85) !important;
   background: transparent !important;
   border-radius: 6px !important;
   text-decoration: none !important;
+  letter-spacing: 0.01em !important;
 }
 
-.nav-link-mobile:hover,
-.nav-link-mobile:focus-visible {
+.page-home .nav-link-mobile:hover,
+.page-home .nav-link-mobile:focus-visible {
   background: rgba(255, 255, 255, 0.06) !important;
   color: #fff !important;
 }
 
-.nav-link-mobile.is-active {
+.page-home .nav-link-mobile.is-active {
   background: rgba(201, 162, 39, 0.12) !important;
   color: rgba(201, 162, 39, 0.95) !important;
 }
 
-/* Secondary nav links - slightly smaller */
-.nav-link-mobile--secondary {
-  font-size: 0.75rem !important; /* 12px */
-  min-height: 40px !important;
+/* Secondary nav links - smaller */
+.page-home .nav-link-mobile--secondary {
+  font-size: 0.75rem !important;
+  min-height: 38px !important;
   color: rgba(255, 255, 255, 0.6) !important;
 }
 
-.nav-link-mobile--secondary:hover,
-.nav-link-mobile--secondary:focus-visible {
-  color: rgba(255, 255, 255, 0.85) !important;
-}
-
 /* Drawer footer - compact, sticky at bottom */
-#mobile-menu > div:last-child {
+.page-home #mobile-menu > div:last-child {
   flex-shrink: 0 !important;
   padding: 0.5rem 0.625rem !important;
   background: rgba(0, 0, 0, 0.2) !important;
@@ -288,7 +383,7 @@
 }
 
 /* Language switch in drawer - compact */
-.language-switch--drawer {
+.page-home .language-switch--drawer {
   padding: 0.25rem 0.5rem !important;
   font-size: 0.6875rem !important;
   min-width: 36px !important;
@@ -299,18 +394,25 @@
   border-radius: 4px !important;
 }
 
-.language-switch--drawer.is-active {
+.page-home .language-switch--drawer.is-active {
   background: rgba(201, 162, 39, 0.15) !important;
   border-color: rgba(201, 162, 39, 0.3) !important;
   color: rgba(201, 162, 39, 0.95) !important;
 }
 
+/* Prevent body scroll when drawer is open */
+body.mobile-menu-open.page-home {
+  overflow: hidden !important;
+  position: fixed !important;
+  width: 100% !important;
+}
+
 /* Console access buttons in drawer - compact */
-.mobile-console-access {
+.page-home .mobile-console-access {
   margin-bottom: 0.5rem !important;
 }
 
-.mobile-console-btn {
+.page-home .mobile-console-btn {
   min-height: 44px !important;
   padding: 0.375rem !important;
   font-size: 0.625rem !important;
@@ -319,144 +421,78 @@
 }
 
 /* Theme toggle in drawer */
-.theme-toggle--mobile {
+.page-home .theme-toggle--mobile {
   min-width: 44px !important;
   min-height: 44px !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
-   P0-3: AI ASSISTANT — NO BLUR, LIGHT DIM ONLY, DARK PANEL
+   P0-3: AI ASSISTANT — COMPLETELY HIDDEN ON LANDING (NO DOM RENDER)
+   Note: PHP guards prevent DOM render. These CSS rules are belt-and-suspenders.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-/* Assistant overlay - NO blur, light dim */
-.alphabot-overlay,
-#alphabot-overlay {
-  /* NO backdrop blur */
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
-  
-  /* Very light dim (0.15 as specified) */
-  background: rgba(0, 0, 0, 0.15) !important;
-  
-  /* z-index below drawer but above content */
-  z-index: 35 !important;
+/* Already defined above - no additional rules needed since assistant is not rendered */
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   P0-4: DARK MODE ONLY — NO LIGHT MODE GLITCHES ON LANDING
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* FORCE dark mode on landing page - override any light theme */
+.page-home,
+.page-home *,
+html:has(.page-home) {
+  color-scheme: dark !important;
 }
 
-.alphabot-overlay.visible,
-#alphabot-overlay.visible {
-  opacity: 1 !important;
-  pointer-events: auto !important;
+/* Force dark theme attribute if somehow set to light */
+html:has(.page-home)[data-theme="light"] {
+  --surface-card-bg: rgba(17, 24, 39, 0.98) !important;
+  --text-high-emphasis: #EAEAEA !important;
+  --text-medium-emphasis: #B0B8C6 !important;
 }
 
-/* Assistant container positioning */
-.alphabot-widget,
-#alphabot-container {
-  /* Ensure it doesn't overlap drawer close or sticky CTA */
-  z-index: 45 !important;
-}
-
-/* Assistant panel - constrained size, dark, internal scroll */
-.alphabot-panel,
-#alphabot-panel {
-  /* Size constraints */
-  max-width: 340px !important;
-  max-height: 45vh !important;
-  width: min(340px, calc(100vw - 2rem)) !important;
-  
-  /* DARK background - no light panels */
-  background: #0d0e10 !important;
-  background-color: #0d0e10 !important;
-  
-  /* NO blur */
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
-  
-  /* Internal scroll for messages */
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  overscroll-behavior: contain !important;
-  
-  /* Dark border */
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-radius: 12px !important;
-  
-  /* Shadow for elevation */
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
-}
-
-/* Assistant panel header - dark */
-.alphabot-panel-header {
-  background: rgba(0, 0, 0, 0.3) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
-}
-
-/* Assistant messages area - dark */
-.alphabot-messages,
-.alphabot-panel__messages {
-  background: transparent !important;
+/* Prevent any white/light backgrounds on overlays */
+.page-home #mobile-menu,
+.page-home #mobile-menu-overlay,
+.page-home .sticky-cta-bar,
+.page-home [data-component="sticky-cta"],
+.page-home .cookie-banner,
+.page-home #cookie-banner {
+  /* Block any inherited light backgrounds */
+  background-color: #0a0b0d !important;
   color: rgba(255, 255, 255, 0.9) !important;
 }
 
-/* Assistant input - dark */
-.alphabot-input,
-.alphabot-panel__input {
-  background: rgba(20, 20, 20, 0.8) !important;
-  border-color: rgba(255, 255, 255, 0.1) !important;
-  color: #fff !important;
-}
-
-/* Ensure assistant toggle stays dark */
-.alphabot-toggle {
-  background: rgba(13, 15, 17, 0.95) !important;
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════════
-   P0-4: LIGHT MODE GLITCH PREVENTION — FORCE DARK SURFACES
-   ═══════════════════════════════════════════════════════════════════════════════ */
-
-/* Prevent any white/light backgrounds on overlays in dark mode */
-:root:not([data-theme="light"]) #mobile-menu,
-:root:not([data-theme="light"]) #mobile-menu-overlay,
-:root:not([data-theme="light"]) .alphabot-panel,
-:root:not([data-theme="light"]) .alphabot-overlay,
-:root:not([data-theme="light"]) .sticky-cta-bar,
-:root:not([data-theme="light"]) .cookie-banner {
-  /* Block any inherited light backgrounds */
+/* Override any tailwind gray classes that might flash light */
+.page-home .bg-gray-900\/98,
+.page-home .bg-gray-900\/95,
+.page-home .bg-gray-800\/50,
+.page-home .bg-white,
+.page-home [class*="bg-white"] {
   background-color: #0a0b0d !important;
 }
 
-/* Override any tailwind gray-900/98 or similar that might flash light */
-:root:not([data-theme="light"]) .bg-gray-900\/98,
-:root:not([data-theme="light"]) .bg-gray-900\/95 {
+/* Ensure text stays light on dark backgrounds */
+.page-home .text-gray-900,
+.page-home .text-black,
+.page-home [class*="text-gray-9"] {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Hide theme toggle on landing - we're dark-mode-only */
+.page-home .theme-toggle:not(.theme-toggle--mobile) {
+  /* Keep mobile toggle but ensure it doesn't cause light flash */
+}
+
+/* Force hero section to stay dark */
+.page-home .graphene-hero-3d,
+.page-home .graphene-hero,
+.page-home #home {
   background-color: #0a0b0d !important;
 }
 
-/* Explicitly handle light mode (user toggle) - allow light styling */
-:root[data-theme="light"] #mobile-menu {
-  background: #fafafa !important;
-  border-left-color: rgba(0, 0, 0, 0.08) !important;
-}
-
-:root[data-theme="light"] .nav-link-mobile {
-  color: rgba(0, 0, 0, 0.85) !important;
-}
-
-:root[data-theme="light"] .nav-link-mobile:hover {
-  background: rgba(0, 0, 0, 0.04) !important;
-}
-
-:root[data-theme="light"] .nav-link-mobile.is-active {
-  background: rgba(201, 162, 39, 0.1) !important;
-  color: #8b6914 !important;
-}
-
-:root[data-theme="light"] .sticky-cta-bar,
-:root[data-theme="light"] [data-component="sticky-cta"] {
-  background: #fafafa !important;
-  border-color: rgba(0, 0, 0, 0.1) !important;
-  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.1) !important;
+.page-home .graphene-hero-3d__fallback {
+  background: radial-gradient(ellipse at center, #0d0f12 0%, #0a0b0d 100%) !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
@@ -464,61 +500,73 @@
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* Prevent icon/logo size flash by setting explicit dimensions */
-.header-logo,
-.header-logo img,
-.header-logo svg {
+.page-home .header-logo,
+.page-home .header-logo img,
+.page-home .header-logo svg {
   width: auto !important;
   height: 32px !important;
   max-height: 32px !important;
 }
 
 @media (min-width: 768px) {
-  .header-logo,
-  .header-logo img,
-  .header-logo svg {
+  .page-home .header-logo,
+  .page-home .header-logo img,
+  .page-home .header-logo svg {
     height: 40px !important;
     max-height: 40px !important;
   }
 }
 
 /* Prevent burger icon size flash */
-.header-burger,
-#mobile-menu-button {
+.page-home .header-burger,
+.page-home #mobile-menu-button {
   width: 44px !important;
   height: 44px !important;
   min-width: 44px !important;
   min-height: 44px !important;
 }
 
-.header-burger svg {
+.page-home .header-burger svg {
   width: 24px !important;
   height: 24px !important;
 }
 
 /* Prevent sticky CTA flash - set initial state */
-.sticky-cta-bar,
-.graphene-cta-bar {
+.page-home .sticky-cta-bar,
+.page-home .graphene-cta-bar {
   /* Start hidden on load, JS shows after paint */
   visibility: visible !important;
 }
 
-/* Drawer initial state - hidden until JS */
-#mobile-menu {
-  visibility: visible !important;
+/* Drawer initial state - HIDDEN until user opens */
+.page-home #mobile-menu {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
   transform: translateX(100%) !important;
 }
 
-#mobile-menu.active {
+.page-home #mobile-menu.active,
+.page-home #mobile-menu.is-open,
+.page-home #mobile-menu[data-open="true"],
+.page-home #mobile-menu[aria-hidden="false"] {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
   transform: translateX(0) !important;
 }
 
-/* Overlay initial state */
-#mobile-menu-overlay {
+/* Overlay initial state - HIDDEN until user opens */
+.page-home #mobile-menu-overlay {
+  visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
 }
 
-#mobile-menu-overlay.active {
+.page-home #mobile-menu-overlay.active,
+.page-home #mobile-menu-overlay.is-open,
+.page-home #mobile-menu-overlay[data-open="true"] {
+  visibility: visible !important;
   opacity: 1 !important;
   pointer-events: auto !important;
 }
@@ -529,9 +577,9 @@
 }
 
 /* Re-enable transitions after first paint (JS adds this class) */
-.fouc-ready .sticky-cta-bar,
-.fouc-ready #mobile-menu,
-.fouc-ready #mobile-menu-overlay {
+.fouc-ready .page-home .sticky-cta-bar,
+.fouc-ready .page-home #mobile-menu,
+.fouc-ready .page-home #mobile-menu-overlay {
   transition: transform 0.2s ease, opacity 0.2s ease !important;
 }
 
@@ -539,31 +587,201 @@
    COOKIE BANNER — z-index contract enforcement
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-.cookie-banner,
-[data-component="cookie-banner"] {
+.page-home .cookie-banner,
+.page-home #cookie-banner,
+.page-home [data-component="cookie-banner"] {
   z-index: 80 !important;
   background: #0a0b0d !important;
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
-}
-
-/* When cookie banner is open, adjust sticky CTA */
-body.cookie-banner-open .sticky-cta-bar,
-body.cookie-banner-open [data-component="sticky-cta"] {
-  /* Move sticky CTA above cookie banner height */
-  bottom: 80px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
    MODAL z-index contract
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-.modal,
-[role="dialog"][aria-modal="true"]:not(#mobile-menu) {
+.page-home .modal,
+.page-home [role="dialog"][aria-modal="true"]:not(#mobile-menu) {
   z-index: 90 !important;
 }
 
-.modal-overlay,
-.modal-backdrop {
+.page-home .modal-overlay,
+.page-home .modal-backdrop {
   z-index: 89 !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   P0-6: HERO SECTION & CTA TIGHTENING
+   Centered, balanced, consistent across breakpoints
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Hero content wrapper - centered */
+.page-home .graphene-hero-3d__content,
+.page-home .graphene-hero-3d__content-inner {
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Hero headline - balanced scaling */
+.page-home .graphene-hero-title {
+  font-size: clamp(2rem, 5vw + 0.5rem, 3.5rem) !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.02em !important;
+  margin-bottom: 0.75rem !important;
+  text-align: center !important;
+  max-width: 100% !important;
+}
+
+.page-home .graphene-hero-title__line {
+  display: block !important;
+  text-align: center !important;
+}
+
+.page-home .graphene-hero-title__line--1 {
+  font-size: inherit !important;
+}
+
+.page-home .graphene-hero-title__line--2 {
+  font-size: clamp(1.75rem, 4.5vw + 0.25rem, 3rem) !important;
+}
+
+/* Hero subtitle - readable, centered */
+.page-home .graphene-hero-subtitle {
+  font-size: clamp(1rem, 2.5vw + 0.1rem, 1.25rem) !important;
+  line-height: 1.6 !important;
+  max-width: 38rem !important;
+  margin: 0 auto 1.5rem auto !important;
+  text-align: center !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Hero tagline */
+.page-home .graphene-hero-tagline {
+  text-align: center !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.page-home .graphene-hero-tagline__title,
+.page-home .graphene-hero-tagline__copy {
+  text-align: center !important;
+}
+
+/* CTA Group - centered, balanced */
+.page-home .graphene-cta-group {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  margin-bottom: 1.5rem !important;
+  width: 100% !important;
+  max-width: 500px !important;
+}
+
+/* Primary CTA button */
+.page-home .graphene-btn-primary,
+.page-home .graphene-btn-spotlight {
+  min-height: 48px !important;
+  padding: 0.875rem 1.5rem !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  text-align: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+}
+
+/* Secondary CTA button */
+.page-home .graphene-btn-secondary {
+  min-height: 48px !important;
+  padding: 0.875rem 1.5rem !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  text-align: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+}
+
+/* Mobile CTA sizing */
+@media (max-width: 768px) {
+  .page-home .graphene-cta-group {
+    flex-direction: column !important;
+    gap: 0.625rem !important;
+  }
+  
+  .page-home .graphene-btn-primary,
+  .page-home .graphene-btn-secondary,
+  .page-home .graphene-btn-spotlight {
+    width: 100% !important;
+    max-width: 280px !important;
+    min-height: 52px !important;
+  }
+  
+  .page-home .graphene-hero-title {
+    font-size: clamp(1.75rem, 6vw, 2.5rem) !important;
+  }
+  
+  .page-home .graphene-hero-title__line--2 {
+    font-size: clamp(1.5rem, 5vw, 2.25rem) !important;
+  }
+  
+  .page-home .graphene-hero-subtitle {
+    font-size: 1rem !important;
+    padding: 0 0.5rem !important;
+  }
+}
+
+/* Ultra-narrow (≤480px) */
+@media (max-width: 480px) {
+  .page-home .graphene-hero-3d__content {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  .page-home .graphene-cta-group {
+    gap: 0.5rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  .page-home .graphene-btn-primary,
+  .page-home .graphene-btn-secondary {
+    min-height: 48px !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.9375rem !important;
+  }
+}
+
+/* Hero in-page CTA bar (graphene-cta-bar) - hide on desktop, show on mobile */
+.page-home .graphene-cta-bar {
+  display: none !important;
+}
+
+@media (max-width: 900px) {
+  /* Show the in-hero CTA bar on mobile (if used) */
+  .page-home .graphene-cta-bar[data-visible="true"] {
+    display: flex !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   Z-INDEX HIERARCHY SUMMARY (ENFORCED)
+   ═══════════════════════════════════════════════════════════════════════════════
+   
+   Layer                    z-index    Description
+   ─────────────────────────────────────────────────────────
+   Background/Content       0-10       Main content, hero
+   Drawer Overlay           30         Semi-transparent backdrop
+   Drawer Panel             40         Mobile navigation drawer
+   Sticky CTA Bar           60         Bottom action bar
+   reCAPTCHA Badge          70         Google reCAPTCHA
+   Cookie Banner            80         GDPR consent
+   Modals                   90         Dialogs, confirmations
+   AI Assistant             HIDDEN     Not rendered on landing
+   ─────────────────────────────────────────────────────────
+   
+   ═══════════════════════════════════════════════════════════════════════════════ */

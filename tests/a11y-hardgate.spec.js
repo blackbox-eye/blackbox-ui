@@ -372,8 +372,8 @@ test.describe('Sticky CTA Bar - Stability', () => {
       return parseInt(style.zIndex, 10);
     });
     
-    // Should be at least 70 to be above other content
-    expect(zIndex).toBeGreaterThanOrEqual(70);
+    // Landing contract: sticky CTA at least 60
+    expect(zIndex).toBeGreaterThanOrEqual(60);
   });
 });
 
@@ -512,5 +512,88 @@ test.describe('Landing P0 Sanity', () => {
       // Backdrop filter should be none
       expect(styles.backdropFilter === 'none' || styles.backdropFilter === '').toBeTruthy();
     }
+  });
+
+  test('assistant DOM should not be mounted by default', async ({ page }) => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+
+    const assistantNodes = await page.locator('#alphabot-panel, .alphabot-overlay, .bbx-command-rail').count();
+    expect(assistantNodes).toBe(0);
+  });
+
+  test('no console components should render on landing', async ({ page }) => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+
+    const consoleCards = await page.locator('.console-selector__card, [data-console-launch]').count();
+    expect(consoleCards).toBe(0);
+  });
+
+  test('drawer and overlay stay hidden until user action', async ({ page }) => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+
+    const overlayHidden = await page.locator('#mobile-menu-overlay').evaluate(el => {
+      const cs = window.getComputedStyle(el);
+      // Overlay must be hidden: visibility=hidden AND opacity=0 AND pointer-events=none
+      return cs.visibility === 'hidden' && cs.opacity === '0' && cs.pointerEvents === 'none';
+    });
+    expect(overlayHidden).toBe(true);
+
+    const drawerHidden = await page.locator('#mobile-menu').evaluate(el => {
+      const cs = window.getComputedStyle(el);
+      // Drawer must be hidden: visibility=hidden AND pointer-events=none
+      return cs.visibility === 'hidden' && cs.pointerEvents === 'none';
+    });
+    expect(drawerHidden).toBe(true);
+  });
+
+  test('no light-mode surfaces in dark mode', async ({ page }) => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+    
+    // Force dark mode for test
+    await page.evaluate(() => {
+      document.documentElement.dataset.theme = 'dark';
+      document.body.dataset.theme = 'dark';
+    });
+    await page.waitForTimeout(100);
+    
+    // Check key overlays for light backgrounds
+    const lightSurfaces = await page.evaluate(() => {
+      const elements = document.querySelectorAll(
+        '#mobile-menu, #mobile-menu-overlay, .sticky-cta-bar, .cookie-banner'
+      );
+      for (const el of elements) {
+        const bg = window.getComputedStyle(el).backgroundColor;
+        // Parse RGB values - light surfaces have high values
+        const match = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+        if (match) {
+          const [, r, g, b] = match.map(Number);
+          // If all channels > 200, it's too light for dark mode
+          if (r > 200 && g > 200 && b > 200) return true;
+        }
+      }
+      return false;
+    });
+    expect(lightSurfaces).toBe(false);
+  });
+
+  test('z-index contract: sticky CTA at 60, no conflicts', async ({ page }) => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+    await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.5));
+    await page.waitForTimeout(300);
+    
+    const stickyBar = page.locator('.sticky-cta-bar, .graphene-cta-bar').first();
+    if (await stickyBar.count() > 0) {
+      const zIndex = await stickyBar.evaluate(el => {
+        return parseInt(window.getComputedStyle(el).zIndex, 10);
+      });
+      expect(zIndex).toBe(60);
+    }
+  });
+
+  test('alphabot-overlay div should not exist in DOM', async ({ page }) => {
+    await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+    
+    const overlayCount = await page.locator('#alphabot-overlay').count();
+    expect(overlayCount).toBe(0);
   });
 });

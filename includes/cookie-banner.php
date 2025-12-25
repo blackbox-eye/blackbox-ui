@@ -203,7 +203,9 @@ $texts = $banner_texts[$banner_lang] ?? $banner_texts['en'];
     'use strict';
 
     var CONSENT_KEY = 'bbx_cookie_consent';
+    var CONSENT_COOKIE = 'bbx_consent';
     var CONSENT_VERSION = '1';
+    var COOKIE_DAYS = 365;
 
     var banner = document.getElementById('cookie-banner');
     var acceptBtn = document.getElementById('cookie-accept-btn');
@@ -211,21 +213,65 @@ $texts = $banner_texts[$banner_lang] ?? $banner_texts['en'];
 
     if (!banner) return;
 
-    // Check existing consent
+    // Cookie helpers for fallback
+    function setCookie(name, value, days) {
+      var expires = '';
+      if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = '; expires=' + date.toUTCString();
+      }
+      var secure = location.protocol === 'https:' ? '; Secure' : '';
+      document.cookie = name + '=' + encodeURIComponent(value) + expires + '; path=/' + secure + '; SameSite=Lax';
+    }
+
+    function getCookie(name) {
+      var nameEQ = name + '=';
+      var ca = document.cookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
+      }
+      return null;
+    }
+
+    // Check existing consent (localStorage primary, cookie fallback)
     function getConsent() {
+      var consent = null;
+      
+      // Try localStorage first
       try {
         var stored = localStorage.getItem(CONSENT_KEY);
         if (stored) {
           var parsed = JSON.parse(stored);
           if (parsed.version === CONSENT_VERSION) {
-            return parsed;
+            consent = parsed;
           }
         }
       } catch (e) {}
-      return null;
+      
+      // Fallback to cookie if localStorage failed or missing
+      if (!consent) {
+        try {
+          var cookieVal = getCookie(CONSENT_COOKIE);
+          if (cookieVal) {
+            var parsed = JSON.parse(cookieVal);
+            if (parsed.version === CONSENT_VERSION) {
+              consent = parsed;
+              // Sync back to localStorage if available
+              try {
+                localStorage.setItem(CONSENT_KEY, cookieVal);
+              } catch (e) {}
+            }
+          }
+        } catch (e) {}
+      }
+      
+      return consent;
     }
 
-    // Save consent
+    // Save consent to both localStorage and cookie
     function setConsent(level) {
       var consent = {
         version: CONSENT_VERSION,
@@ -233,9 +279,15 @@ $texts = $banner_texts[$banner_lang] ?? $banner_texts['en'];
         timestamp: new Date().toISOString(),
         categories: level === 'all' ? ['essential', 'analytics', 'marketing'] : ['essential']
       };
+      var consentStr = JSON.stringify(consent);
+      
+      // Save to localStorage
       try {
-        localStorage.setItem(CONSENT_KEY, JSON.stringify(consent));
+        localStorage.setItem(CONSENT_KEY, consentStr);
       } catch (e) {}
+      
+      // Save to cookie as fallback
+      setCookie(CONSENT_COOKIE, consentStr, COOKIE_DAYS);
 
       // Fire custom event for analytics integration
       window.dispatchEvent(new CustomEvent('bbx:consent', {
@@ -251,11 +303,14 @@ $texts = $banner_texts[$banner_lang] ?? $banner_texts['en'];
       }
     }
 
-    // Show banner
+    // Show banner with visible class for CSS
     function showBanner() {
       banner.hidden = false;
       banner.setAttribute('data-visible', 'true');
+      banner.classList.add('is-visible');
+      banner.classList.remove('is-hidden');
       document.body.classList.add('cookie-banner-open');
+      document.body.classList.add('cookie-banner-visible');
       // Focus first button for accessibility
       setTimeout(function() {
         acceptBtn.focus();
@@ -265,10 +320,13 @@ $texts = $banner_texts[$banner_lang] ?? $banner_texts['en'];
     // Hide banner
     function hideBanner() {
       banner.setAttribute('data-visible', 'false');
+      banner.classList.remove('is-visible');
+      banner.classList.add('is-hidden');
+      document.body.classList.remove('cookie-banner-open');
+      document.body.classList.remove('cookie-banner-visible');
       setTimeout(function() {
         banner.hidden = true;
-      }, 300);
-      document.body.classList.remove('cookie-banner-open');
+      }, 350);
     }
 
     // Handle accept
@@ -283,11 +341,14 @@ $texts = $banner_texts[$banner_lang] ?? $banner_texts['en'];
       hideBanner();
     });
 
-    // Check on load
+    // Check on load - deterministic behavior
     var existingConsent = getConsent();
     if (!existingConsent) {
       // Show banner after short delay for better UX
       setTimeout(showBanner, 1000);
+    } else {
+      // Ensure banner stays hidden
+      banner.classList.add('is-hidden');
     }
 
     // Expose for external use
@@ -297,7 +358,12 @@ $texts = $banner_texts[$banner_lang] ?? $banner_texts['en'];
         var c = getConsent();
         return c && c.categories && c.categories.indexOf('analytics') !== -1;
       },
-      showBanner: showBanner
+      showBanner: showBanner,
+      hideBanner: hideBanner,
+      clearConsent: function() {
+        try { localStorage.removeItem(CONSENT_KEY); } catch(e) {}
+        setCookie(CONSENT_COOKIE, '', -1);
+      }
     };
   })();
 </script>

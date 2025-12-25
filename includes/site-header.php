@@ -386,6 +386,10 @@ if (!empty($disable_alphabot)) {
     <link rel="preload" href="/assets/css/components/sticky-cta.css?v=<?= bbx_asset_version('css/components/sticky-cta.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/assets/css/components/sticky-cta.css?v=<?= bbx_asset_version('css/components/sticky-cta.css') ?>"></noscript>
 
+    <!-- Liquid Glass System - Cross-browser glass/blur effects (must load last to override) -->
+    <link rel="preload" href="/assets/css/components/liquid-glass.css?v=<?= bbx_asset_version('css/components/liquid-glass.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/components/liquid-glass.css?v=<?= bbx_asset_version('css/components/liquid-glass.css') ?>"></noscript>
+
     <!-- Conditional CSS loading -->
     <?php
     // Admin pages need admin.css, marketing pages need marketing.css

@@ -1,0 +1,444 @@
+/**
+ * ============================================================================
+ * LIQUID GLASS SYSTEM - Cross-Browser Parity Foundation
+ * ============================================================================
+ * 
+ * Single source of truth for all glass/blur/translucency effects.
+ * Provides consistent rendering across:
+ *   - Safari iOS (all versions)
+ *   - Brave Browser (iOS/Desktop)
+ *   - DuckDuckGo Browser (iOS)
+ *   - Chrome/Chromium (Desktop/Mobile)
+ *   - Firefox (Desktop/Mobile)
+ * 
+ * Z-INDEX CONTRACT (strictly enforced):
+ *   0-10   : Background elements
+ *   30     : Drawer overlay (bbx-drawer-overlay)
+ *   40     : Drawer panel
+ *   75     : Sticky CTA bar
+ *   80     : reCAPTCHA badge
+ *   85     : Cookie consent banner
+ *   90     : Modal overlays
+ *   100+   : Critical system UI
+ * 
+ * @version 2.0.0
+ * @author BlackBox Eye Engineering
+ */
+
+/* =========================================================================
+   CSS CUSTOM PROPERTIES - Glass Design Tokens
+   ========================================================================= */
+:root {
+  /* Glass background colors */
+  --bbx-glass-bg: rgba(6, 10, 14, 0.55);
+  --bbx-glass-bg-strong: rgba(6, 10, 14, 0.72);
+  --bbx-glass-bg-light: rgba(6, 10, 14, 0.38);
+  
+  /* Glass border styling */
+  --bbx-glass-border: rgba(255, 255, 255, 0.08);
+  --bbx-glass-border-strong: rgba(255, 255, 255, 0.14);
+  
+  /* Blur and saturation values */
+  --bbx-glass-blur: 18px;
+  --bbx-glass-blur-light: 12px;
+  --bbx-glass-blur-strong: 24px;
+  --bbx-glass-sat: 1.25;
+  
+  /* Fallback solid colors for no-blur browsers */
+  --bbx-glass-fallback: rgba(10, 14, 20, 0.92);
+  --bbx-glass-fallback-strong: rgba(8, 12, 18, 0.96);
+  
+  /* Shadow tokens for glass surfaces */
+  --bbx-glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  --bbx-glass-shadow-strong: 0 12px 48px rgba(0, 0, 0, 0.45);
+}
+
+/* Light theme adjustments */
+:root[data-theme="light"] {
+  --bbx-glass-bg: rgba(255, 255, 255, 0.65);
+  --bbx-glass-bg-strong: rgba(255, 255, 255, 0.82);
+  --bbx-glass-bg-light: rgba(255, 255, 255, 0.45);
+  --bbx-glass-border: rgba(15, 23, 42, 0.08);
+  --bbx-glass-border-strong: rgba(15, 23, 42, 0.14);
+  --bbx-glass-fallback: rgba(248, 250, 252, 0.96);
+  --bbx-glass-fallback-strong: rgba(255, 255, 255, 0.98);
+  --bbx-glass-shadow: 0 8px 32px rgba(15, 23, 42, 0.12);
+  --bbx-glass-shadow-strong: 0 12px 48px rgba(15, 23, 42, 0.18);
+}
+
+/* =========================================================================
+   GLASS SURFACE BASE CLASSES
+   ========================================================================= */
+
+/**
+ * Base glass surface - use for cards, panels, floating UI
+ * Includes @supports fallback for browsers without backdrop-filter
+ */
+.bbx-glass {
+  background: var(--bbx-glass-fallback);
+  border: 1px solid var(--bbx-glass-border);
+  box-shadow: var(--bbx-glass-shadow);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .bbx-glass {
+    -webkit-backdrop-filter: blur(var(--bbx-glass-blur)) saturate(var(--bbx-glass-sat));
+    backdrop-filter: blur(var(--bbx-glass-blur)) saturate(var(--bbx-glass-sat));
+    background: var(--bbx-glass-bg);
+  }
+}
+
+/**
+ * Strong glass surface - use for headers, navigation, important UI
+ */
+.bbx-glass--strong {
+  background: var(--bbx-glass-fallback-strong);
+  border: 1px solid var(--bbx-glass-border-strong);
+  box-shadow: var(--bbx-glass-shadow-strong);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .bbx-glass--strong {
+    -webkit-backdrop-filter: blur(var(--bbx-glass-blur-strong)) saturate(var(--bbx-glass-sat));
+    backdrop-filter: blur(var(--bbx-glass-blur-strong)) saturate(var(--bbx-glass-sat));
+    background: var(--bbx-glass-bg-strong);
+  }
+}
+
+/**
+ * Light glass surface - use for subtle overlays, secondary panels
+ */
+.bbx-glass--light {
+  background: var(--bbx-glass-fallback);
+  border: 1px solid var(--bbx-glass-border);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .bbx-glass--light {
+    -webkit-backdrop-filter: blur(var(--bbx-glass-blur-light)) saturate(var(--bbx-glass-sat));
+    backdrop-filter: blur(var(--bbx-glass-blur-light)) saturate(var(--bbx-glass-sat));
+    background: var(--bbx-glass-bg-light);
+  }
+}
+
+/* =========================================================================
+   DRAWER OVERLAY - Critical Cross-Browser Fix
+   ========================================================================= */
+
+/**
+ * Mobile drawer overlay - NEVER shows solid black
+ * This is the critical fix for DuckDuckGo/Firefox rendering issues
+ */
+.bbx-drawer-overlay,
+#mobile-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  
+  /* Fallback: semi-transparent solid color (never pure black) */
+  background: rgba(8, 12, 18, 0.75);
+}
+
+/* Enhanced blur when supported */
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .bbx-drawer-overlay,
+  #mobile-menu-overlay {
+    -webkit-backdrop-filter: blur(var(--bbx-glass-blur-light));
+    backdrop-filter: blur(var(--bbx-glass-blur-light));
+    background: rgba(8, 12, 18, 0.55);
+  }
+}
+
+/* Active state */
+.bbx-drawer-overlay.is-active,
+.bbx-drawer-overlay.is-visible,
+.bbx-drawer-overlay.active,
+#mobile-menu-overlay.active,
+#mobile-menu-overlay.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Light theme overlay */
+:root[data-theme="light"] .bbx-drawer-overlay,
+:root[data-theme="light"] #mobile-menu-overlay {
+  background: rgba(248, 250, 252, 0.65);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  :root[data-theme="light"] .bbx-drawer-overlay,
+  :root[data-theme="light"] #mobile-menu-overlay {
+    background: rgba(248, 250, 252, 0.45);
+  }
+}
+
+/* =========================================================================
+   COOKIE CONSENT BANNER - Deterministic Visibility
+   ========================================================================= */
+
+/**
+ * Cookie banner glass styling with proper z-index
+ * z-index: 85 ensures it sits above sticky CTA (75) but below modals (90)
+ */
+.cookie-banner,
+#cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 85;
+  transform: translateY(100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: 
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.35s ease,
+    visibility 0.35s ease;
+  
+  /* Glass fallback */
+  background: var(--bbx-glass-fallback-strong);
+  border-top: 1px solid var(--bbx-glass-border);
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.25);
+  
+  /* Safe area padding for iOS */
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .cookie-banner,
+  #cookie-banner {
+    -webkit-backdrop-filter: blur(var(--bbx-glass-blur-strong));
+    backdrop-filter: blur(var(--bbx-glass-blur-strong));
+    background: var(--bbx-glass-bg-strong);
+  }
+}
+
+/* Visible state */
+.cookie-banner.is-visible,
+.cookie-banner[data-visible="true"],
+#cookie-banner.is-visible,
+#cookie-banner[data-visible="true"] {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Hidden state - ensure clean exit */
+.cookie-banner.is-hidden,
+.cookie-banner[data-visible="false"],
+#cookie-banner.is-hidden,
+#cookie-banner[data-visible="false"] {
+  transform: translateY(100%);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Light theme */
+:root[data-theme="light"] .cookie-banner,
+:root[data-theme="light"] #cookie-banner {
+  box-shadow: 0 -8px 32px rgba(15, 23, 42, 0.08);
+}
+
+/* =========================================================================
+   STICKY CTA BAR - Glass Enhancement
+   ========================================================================= */
+
+/**
+ * Sticky CTA bar with glass effect
+ * z-index: 75 - below cookie banner, above content
+ */
+.sticky-cta-bar,
+[data-component="sticky-cta"] {
+  z-index: 75;
+  
+  /* Glass fallback */
+  background: var(--bbx-glass-fallback-strong);
+  border: 1px solid var(--bbx-glass-border-strong);
+  box-shadow: var(--bbx-glass-shadow-strong);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .sticky-cta-bar,
+  [data-component="sticky-cta"] {
+    -webkit-backdrop-filter: blur(var(--bbx-glass-blur));
+    backdrop-filter: blur(var(--bbx-glass-blur));
+    background: var(--bbx-glass-bg-strong);
+  }
+}
+
+/* =========================================================================
+   GLOBAL OVERFLOW CONTROL - Prevent Horizontal Scrollbars
+   ========================================================================= */
+
+/**
+ * Strict overflow control for landing page
+ * Prevents ANY horizontal scrollbar from appearing
+ */
+html {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+  position: relative;
+}
+
+/* Ensure main content respects bounds */
+main,
+#main-content,
+.page-wrapper {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* Fix common overflow culprits */
+.container,
+.wrapper,
+section {
+  max-width: 100%;
+}
+
+/* Prevent 100vw from causing horizontal scroll due to scrollbar width */
+.full-width-fix {
+  width: 100%;
+  max-width: 100vw;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* =========================================================================
+   ALPHABOT / AI ASSISTANT - Glass Container
+   ========================================================================= */
+
+/**
+ * AI Assistant widget glass styling
+ * Uses glass effect for consistent cross-browser appearance
+ */
+.alphabot-container,
+.alphabot-widget {
+  z-index: 2147483647;
+}
+
+.alphabot-toggle {
+  background: var(--bbx-glass-fallback-strong);
+  border: 1px solid var(--bbx-glass-border-strong);
+  box-shadow: var(--bbx-glass-shadow);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .alphabot-toggle {
+    -webkit-backdrop-filter: blur(var(--bbx-glass-blur));
+    backdrop-filter: blur(var(--bbx-glass-blur));
+    background: var(--bbx-glass-bg-strong);
+  }
+}
+
+.alphabot-panel {
+  background: var(--bbx-glass-fallback-strong);
+  border: 1px solid var(--bbx-glass-border-strong);
+  box-shadow: var(--bbx-glass-shadow-strong);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .alphabot-panel {
+    -webkit-backdrop-filter: blur(var(--bbx-glass-blur-strong));
+    backdrop-filter: blur(var(--bbx-glass-blur-strong));
+    background: var(--bbx-glass-bg-strong);
+  }
+}
+
+/* =========================================================================
+   HEADER GLASS EFFECT
+   ========================================================================= */
+
+/**
+ * Main header glass effect
+ * Consistent blur across all browsers
+ */
+#main-header {
+  background: var(--bbx-glass-fallback-strong);
+  border-bottom: 1px solid var(--bbx-glass-border);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  #main-header {
+    -webkit-backdrop-filter: blur(20px) saturate(var(--bbx-glass-sat));
+    backdrop-filter: blur(20px) saturate(var(--bbx-glass-sat));
+    background: var(--bbx-glass-bg-strong);
+  }
+}
+
+/* =========================================================================
+   FOOTER SPACING FIX
+   ========================================================================= */
+
+/**
+ * Eliminate extra footer space
+ * Prevents unexpected gaps at bottom of page
+ */
+footer,
+.site-footer {
+  margin-bottom: 0;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* When sticky CTA is visible, add appropriate spacing */
+body.sticky-cta-visible footer,
+body.sticky-cta-visible .site-footer {
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* When cookie banner is visible */
+body.cookie-banner-visible footer,
+body.cookie-banner-visible .site-footer {
+  padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* =========================================================================
+   REDUCED MOTION SUPPORT
+   ========================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .bbx-drawer-overlay,
+  #mobile-menu-overlay,
+  .cookie-banner,
+  #cookie-banner,
+  .alphabot-panel {
+    transition: opacity 0.1s ease, visibility 0.1s ease !important;
+  }
+  
+  .cookie-banner,
+  #cookie-banner {
+    transform: none !important;
+  }
+}
+
+/* =========================================================================
+   PRINT STYLES - Remove glass effects for printing
+   ========================================================================= */
+
+@media print {
+  .bbx-glass,
+  .bbx-glass--strong,
+  .bbx-glass--light,
+  .bbx-drawer-overlay,
+  #mobile-menu-overlay,
+  .cookie-banner,
+  #cookie-banner,
+  .sticky-cta-bar,
+  .alphabot-widget {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background: white !important;
+    box-shadow: none !important;
+  }
+}

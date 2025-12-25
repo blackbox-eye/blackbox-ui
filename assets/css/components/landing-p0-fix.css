@@ -751,6 +751,39 @@ html:has(.page-home)[data-theme="light"] {
   border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
+/* Cookie banner must be clickable; prevent Alphabot/command-rail intercept */
+body.cookie-banner-open .bbx-command-rail,
+.page-home.cookie-banner-open .bbx-command-rail {
+  z-index: 60 !important;
+  pointer-events: none !important;
+}
+
+body.cookie-banner-open .alphabot-widget,
+body.cookie-banner-open .alphabot-toggle,
+body.cookie-banner-open .alphabot-panel,
+.page-home.cookie-banner-open .alphabot-widget,
+.page-home.cookie-banner-open .alphabot-toggle,
+.page-home.cookie-banner-open .alphabot-panel {
+  pointer-events: none !important;
+}
+
+/* Ensure cookie banner remains fully interactive */
+body.cookie-banner-open .cookie-banner,
+body.cookie-banner-open #cookie-banner,
+body.cookie-banner-open [data-component="cookie-banner"],
+.page-home.cookie-banner-open .cookie-banner,
+.page-home.cookie-banner-open #cookie-banner {
+  pointer-events: auto !important;
+  z-index: 100 !important;
+}
+
+body.cookie-banner-open .cookie-banner *,
+body.cookie-banner-open #cookie-banner *,
+.page-home.cookie-banner-open .cookie-banner *,
+.page-home.cookie-banner-open #cookie-banner * {
+  pointer-events: auto !important;
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════════
    MODAL z-index contract
    ═══════════════════════════════════════════════════════════════════════════════ */

@@ -236,21 +236,23 @@ if (!empty($disable_alphabot)) {
             // This prevents any flash of unstyled content on landing page
             <?php if ($current_page === 'home' || $current_page === 'index'): ?>
             document.documentElement.classList.add('landing-gate');
+            document.documentElement.classList.remove('landing-ready');
+
+            var releaseLandingGate = function releaseLandingGate() {
+                document.documentElement.classList.remove('landing-gate');
+                document.documentElement.classList.add('landing-ready');
+                window.dispatchEvent(new Event('bbx:landing-ready'));
+            };
+
             // Release gate after critical CSS and fonts load
             if (document.fonts && document.fonts.ready) {
                 document.fonts.ready.then(function() {
-                    requestAnimationFrame(function() {
-                        document.documentElement.classList.remove('landing-gate');
-                        document.documentElement.classList.add('landing-ready');
-                    });
+                    requestAnimationFrame(releaseLandingGate);
                 });
             } else {
                 // Fallback: release after DOMContentLoaded
                 document.addEventListener('DOMContentLoaded', function() {
-                    requestAnimationFrame(function() {
-                        document.documentElement.classList.remove('landing-gate');
-                        document.documentElement.classList.add('landing-ready');
-                    });
+                    requestAnimationFrame(releaseLandingGate);
                 });
             }
             <?php endif; ?>

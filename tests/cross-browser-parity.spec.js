@@ -128,6 +128,28 @@ test.describe('Cross-Browser Parity - Landing Page', () => {
         }
       }
     });
+
+    test('drawer uses viewport height with contained scroll', async ({ page }) => {
+      await page.setViewportSize(VIEWPORTS.mobile);
+
+      const menuToggle = page.locator('.header-burger, [aria-label*="menu"], [aria-controls="mobile-menu"]').first();
+      await expect(menuToggle).toBeVisible({ timeout: 5000 });
+      await menuToggle.click();
+      await page.waitForTimeout(400);
+
+      const drawer = page.locator('#mobile-menu').first();
+      await expect(drawer).toBeVisible();
+
+      const drawerBox = await drawer.boundingBox();
+      const viewport = page.viewportSize();
+
+      if (drawerBox && viewport) {
+        expect(drawerBox.height).toBeGreaterThanOrEqual(viewport.height - 80);
+      }
+
+      const overflowY = await drawer.evaluate((el) => window.getComputedStyle(el).overflowY);
+      expect(['auto', 'scroll', 'overlay']).toContain(overflowY);
+    });
   });
 
   test.describe('Cookie Consent Determinism', () => {
@@ -192,6 +214,18 @@ test.describe('Cross-Browser Parity - Landing Page', () => {
       const consentCookie = cookies.find(c => c.name === 'bbx_consent');
       expect(consentCookie).toBeTruthy();
     });
+
+    test('cookie banner respects stacking contract', async ({ page, context }) => {
+      await context.clearCookies();
+      await page.evaluate(() => localStorage.clear());
+
+      await page.goto(BASE_URL, { waitUntil: 'networkidle' });
+      const banner = page.locator('#cookie-banner');
+      await expect(banner).toBeVisible({ timeout: 3000 });
+
+      const bannerZ = await banner.evaluate(el => parseInt(window.getComputedStyle(el).zIndex) || 0);
+      expect(bannerZ).toBeGreaterThanOrEqual(85);
+    });
   });
 
   test.describe('AI Assistant (Alphabot) Visibility', () => {
@@ -206,6 +240,11 @@ test.describe('Cross-Browser Parity - Landing Page', () => {
       // Check if alphabot element exists in DOM
       const exists = await alphabotWidget.count() > 0;
       expect(exists).toBe(true);
+
+      // Should not be forcibly hidden
+      if (exists) {
+        await expect(alphabotWidget).toBeVisible();
+      }
     });
 
     test('alphabot toggle is clickable', async ({ page }) => {
@@ -224,6 +263,45 @@ test.describe('Cross-Browser Parity - Landing Page', () => {
         // Panel should appear
         const panel = page.locator('.alphabot-panel');
         await expect(panel).toBeVisible({ timeout: 2000 });
+      }
+    });
+
+    test('alphabot panel layout is not collapsed', async ({ page }) => {
+      const alphabotToggle = page.locator('.alphabot-toggle').first();
+      await page.waitForLoadState('networkidle');
+
+      if (await alphabotToggle.isVisible()) {
+        await alphabotToggle.click();
+        const panel = page.locator('.alphabot-panel').first();
+        await expect(panel).toBeVisible({ timeout: 2000 });
+
+        const box = await panel.boundingBox();
+        expect(box?.height || 0).toBeGreaterThan(200);
+        expect(box?.width || 0).toBeGreaterThan(200);
+      }
+    });
+
+    test('alphabot overlay uses blur or transparency', async ({ page }) => {
+      const alphabotToggle = page.locator('.alphabot-toggle').first();
+      await page.waitForLoadState('networkidle');
+
+      if (await alphabotToggle.isVisible()) {
+        await alphabotToggle.click();
+        const overlay = page.locator('.alphabot-overlay, #alphabot-overlay').first();
+        await expect(overlay).toBeVisible({ timeout: 2000 });
+
+        const styles = await overlay.evaluate((el) => {
+          const computed = window.getComputedStyle(el);
+          return {
+            opacity: parseFloat(computed.opacity || '1'),
+            backdrop: computed.backdropFilter || computed.webkitBackdropFilter || 'none',
+            background: computed.backgroundColor,
+          };
+        });
+
+        const hasBlur = styles.backdrop && styles.backdrop !== 'none';
+        const hasTransparency = styles.background.includes('rgba') || styles.opacity < 1;
+        expect(hasBlur || hasTransparency).toBe(true);
       }
     });
   });
@@ -306,6 +384,22 @@ test.describe('Cross-Browser Parity - Landing Page', () => {
   });
 
   test.describe('Sticky CTA Z-Index Contract', () => {
+    test('sticky CTA appears after ~30% scroll', async ({ page, context }) => {
+      await context.clearCookies();
+      await page.evaluate(() => {
+        sessionStorage.removeItem('bbxStickyCtaDismissed');
+        localStorage.clear();
+      });
+
+      await page.goto(BASE_URL, { waitUntil: 'networkidle' });
+      const stickyCta = page.locator('[data-component="sticky-cta"]');
+
+      await page.evaluate(() => {
+        window.scrollTo(0, window.innerHeight * 0.32);
+      });
+
+      await expect(stickyCta).toHaveAttribute('data-visible', 'true', { timeout: 1500 });
+    });
     
     test('sticky CTA is below cookie banner', async ({ page, context }) => {
       await context.clearCookies();
@@ -328,6 +422,7 @@ test.describe('Cross-Browser Parity - Landing Page', () => {
           return parseInt(window.getComputedStyle(el).zIndex) || 0;
         });
         
+          expect(bannerZIndex).toBeGreaterThanOrEqual(85);
         expect(bannerZIndex).toBeGreaterThan(stickyZIndex);
       }
     });

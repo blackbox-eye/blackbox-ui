@@ -76,7 +76,7 @@ $texts = $banner_texts[$banner_lang] ?? $banner_texts['en'];
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 70;
+    z-index: 85;
     padding: 1rem;
     padding-bottom: calc(1rem + env(safe-area-inset-bottom));
     background: var(--surface-card-bg, rgba(17, 24, 39, 0.98));

@@ -80,28 +80,12 @@
    Ensure assistant doesn't cover CTAs, respects safe areas
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-/* AI assistant is HIDDEN on landing via PHP guards, but add belt-and-suspenders CSS */
-.page-home #alphabot-container,
-.page-home .alphabot-widget,
-.page-home .alphabot-toggle,
-.page-home .alphabot-panel,
-.page-home .alphabot-overlay,
-.page-home #alphabot-overlay,
-.page-home .bbx-command-rail {
-  /* Hard disabled on landing - should not exist in DOM */
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-
-/* If assistant ever renders (edge case), ensure it doesn't block hero */
+/* AI assistant: align to safe corner without blocking hero CTAs */
 @media (max-width: 768px) {
-  .page-home .alphabot-toggle,
-  .page-home .alphabot-widget {
-    /* Push to safe corner, never overlap hero CTAs */
-    bottom: calc(100px + env(safe-area-inset-bottom, 0)) !important;
-    right: env(safe-area-inset-right, 1rem) !important;
+  .page-home .alphabot-widget,
+  .page-home .alphabot-toggle {
+    bottom: calc(1.5rem + var(--bbx-sticky-cta-height, 0px) + env(safe-area-inset-bottom, 0px)) !important;
+    right: max(1rem, env(safe-area-inset-right, 1rem)) !important;
   }
 }
 

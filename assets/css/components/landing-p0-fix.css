@@ -81,26 +81,47 @@ body.page-home.landing-ready {
 }
 
 /* ════════════════════════════════════════════════════════════════
-   AI ASSISTANT — HARD DISABLED ON LANDING (REMOVED FROM DOM)
+   AI ASSISTANT — VISIBLE ON LANDING WITH GLASS + SAFE AREAS
    ════════════════════════════════════════════════════════════════ */
 
-/* Belt-and-suspenders CSS hiding (PHP guards prevent DOM render) */
-.page-home #alphabot-container,
+.page-home .bbx-command-rail,
+.page-home .alphabot-widget {
+  position: fixed !important;
+  right: max(1rem, env(safe-area-inset-right, 1rem)) !important;
+  bottom: calc(1.25rem + var(--bbx-sticky-cta-height, 0px) + env(safe-area-inset-bottom, 0px)) !important;
+  z-index: 95 !important;
+  isolation: isolate !important;
+}
+
+.page-home .alphabot-toggle {
+  z-index: 96 !important;
+}
+
 .page-home .alphabot-overlay,
-.page-home #alphabot-overlay,
-.page-home .alphabot-widget,
-.page-home .alphabot-toggle,
-.page-home .alphabot-panel,
-.page-home .bbx-command-rail {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-  opacity: 0 !important;
-  width: 0 !important;
-  height: 0 !important;
-  overflow: hidden !important;
-  position: absolute !important;
-  left: -9999px !important;
+.page-home #alphabot-overlay {
+  z-index: 92 !important;
+  background: rgba(8, 12, 18, 0.65) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.2) !important;
+  backdrop-filter: blur(16px) saturate(1.2) !important;
+}
+
+.page-home .alphabot-panel {
+  z-index: 96 !important;
+  max-height: min(70vh, 680px) !important;
+  width: min(22rem, calc(100vw - 2.5rem)) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55) !important;
+}
+
+@media (max-width: 768px) {
+  .page-home .alphabot-widget {
+    right: max(0.75rem, env(safe-area-inset-right, 0.75rem)) !important;
+    bottom: calc(1rem + var(--bbx-sticky-cta-height, 0px) + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .page-home .alphabot-panel {
+    max-height: 72vh !important;
+    border-radius: 1.25rem 1.25rem 0 0 !important;
+  }
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -358,18 +379,18 @@ body.page-home aside#sticky-cta:not([hidden]):not([data-hidden="true"]) {
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
   
-  /* REDUCED HEIGHT - auto height, not full viewport */
-  height: auto !important;
-  max-height: calc(100dvh - 80px) !important; /* Leave space for header */
-  min-height: 300px !important;
+  /* Full-height drawer with safe-area padding */
+  height: calc(100dvh - env(safe-area-inset-top, 0px)) !important;
+  max-height: calc(100dvh - env(safe-area-inset-top, 0px)) !important;
+  min-height: 320px !important;
   
-  /* Position from top with header offset */
-  top: 60px !important;
-  bottom: auto !important;
+  /* Position from top with safe-area offset */
+  top: env(safe-area-inset-top, 0px) !important;
+  bottom: env(safe-area-inset-bottom, 0px) !important;
   right: 0 !important;
   
   /* Safe area padding */
-  padding-top: 0.75rem !important;
+  padding-top: calc(0.75rem + env(safe-area-inset-top, 0px)) !important;
   padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0)) !important;
   
   /* z-index contract: 40 */

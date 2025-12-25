@@ -197,15 +197,26 @@ const THEME_STORAGE_KEY = 'bbx-theme';
 document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add('js-enabled');
 
+    const releaseLandingBody = () => {
+        if (!document.body.classList.contains('landing-gate')) {
+            return;
+        }
+        document.body.classList.add('landing-ready');
+        document.body.classList.remove('landing-gate');
+    };
+
     // P0-5: Enable transitions after first paint to prevent FOUC
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
             document.body.classList.add('fouc-ready');
 
-            // Landing isolation: release gate after first paint
+            // Landing isolation: release gate only after head gate signals ready
             if (document.body.classList.contains('landing-gate')) {
-                document.body.classList.add('landing-ready');
-                document.body.classList.remove('landing-gate');
+                if (document.documentElement.classList.contains('landing-ready')) {
+                    releaseLandingBody();
+                } else {
+                    window.addEventListener('bbx:landing-ready', releaseLandingBody, { once: true });
+                }
             }
         });
     });
@@ -583,7 +594,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const stickyCtaBar = document.querySelector('[data-component="sticky-cta"]');
     if (stickyCtaBar) {
         const STORAGE_KEY = 'bbxStickyCtaDismissed';
-        const SCROLL_THRESHOLD = 0.35; // Show after 35% viewport scroll
+        const SCROLL_THRESHOLD = 0.30; // Show after 30% viewport scroll for parity
         const closeButton = stickyCtaBar.querySelector('[data-sticky-cta-close]');
         const ctaButtons = stickyCtaBar.querySelectorAll('.sticky-cta-bar__btn, .sticky-cta-bar__cta');
         let hasBeenShown = false;

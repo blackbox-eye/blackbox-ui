@@ -1985,12 +1985,23 @@ body.mobile-menu-open .alphabot-overlay {
 .sticky-cta.visible { opacity:1; transform:translateY(0); pointer-events:auto; }
 .sticky-cta:hover { transform:translateY(-2px) scale(1.05); background:var(--cta-background-hover); box-shadow:0 15px 30px rgba(0,0,0,.4),0 0 30px color-mix(in srgb, var(--primary-accent) 45%, transparent); }
 /* Blackbox EYE Assistant widget - GRAPHENE STYLE (Nov 2025 QA) */
-:root { --bbx-sticky-cta-height: 0px; }
-.bbx-command-rail { position:fixed; bottom:calc(1.5rem + 22px); right:1.5rem; z-index:2147483647; display:flex; flex-direction:column; gap:1rem; align-items:flex-end; isolation:isolate; transform:translateZ(0); }
-.alphabot-overlay { position:fixed; inset:0; background:rgba(8,13,20,0.85); opacity:0; pointer-events:none; transition:opacity 0.25s ease; z-index:2147483646; }
+:root { --bbx-sticky-cta-height: 0px; --bbx-z-alphabot: 96; --bbx-z-alphabot-overlay: 92; }
+.bbx-command-rail { position:fixed; bottom:calc(1.5rem + env(safe-area-inset-bottom, 0px) + var(--bbx-sticky-cta-height)); right:max(1.5rem, env(safe-area-inset-right, 1.5rem)); z-index:var(--bbx-z-alphabot); display:flex; flex-direction:column; gap:1rem; align-items:flex-end; isolation:isolate; transform:translateZ(0); }
+.alphabot-overlay { position:fixed; inset:0; background:var(--bbx-glass-overlay-fallback, rgba(0, 0, 0, 0.65)); opacity:0; pointer-events:none; transition:opacity 0.25s ease; z-index:var(--bbx-z-alphabot-overlay); }
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .alphabot-overlay {
+    -webkit-backdrop-filter: blur(var(--bbx-glass-blur, 18px)) saturate(var(--bbx-glass-sat, 1.25));
+    backdrop-filter: blur(var(--bbx-glass-blur, 18px)) saturate(var(--bbx-glass-sat, 1.25));
+    background: var(--bbx-glass-overlay, var(--bbx-glass-bg, rgba(6, 10, 14, 0.55)));
+  }
+}
+:root[data-theme="light"] .alphabot-overlay { background: var(--bbx-glass-overlay-fallback, rgba(248, 250, 252, 0.78)); }
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  :root[data-theme="light"] .alphabot-overlay { background: var(--bbx-glass-overlay, var(--bbx-glass-bg)); }
+}
 .alphabot-overlay.visible { opacity:1; pointer-events:auto; }
 
-.alphabot-widget { position:relative; display:flex; flex-direction:column; align-items:flex-end; min-width:15rem; z-index:2147483647; }
+.alphabot-widget { position:relative; display:flex; flex-direction:column; align-items:flex-end; min-width:15rem; z-index:var(--bbx-z-alphabot); }
 .alphabot-toggle {
   display:inline-flex;
   align-items:center;
@@ -2004,7 +2015,7 @@ body.mobile-menu-open .alphabot-overlay {
   letter-spacing:.02em;
   box-shadow:0 8px 24px rgba(0,0,0,.45), 0 0 0 1px rgba(138, 123, 106, 0.12);
   transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
-  max-width: min(22rem, calc(100vw - 2.5rem));
+  max-width: min(20rem, calc(100vw - 3rem));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2022,7 +2033,7 @@ body.mobile-menu-open .alphabot-overlay {
 .alphabot-status-dot { width:0.6rem; height:0.6rem; border-radius:999px; background:#22c55e; box-shadow:0 0 8px rgba(34,197,94,.7), 0 0 16px rgba(34,197,94,.35); animation:alphabot-pulse 2s ease-in-out infinite; }
 @keyframes alphabot-pulse { 0%,100%{opacity:1;} 50%{opacity:0.7;} }
 .alphabot-widget.alphabot-offline .alphabot-status-dot { background:#f87171; box-shadow:0 0 8px rgba(248,113,113,.6); animation:none; }
-.alphabot-panel { position:absolute; bottom:100%; right:0; margin-bottom:1rem; width:min(22rem,calc(100vw - 4rem)); max-height:60vh; background:linear-gradient(135deg, rgba(13,15,17,.98), rgba(20,22,26,.98)); border:1px solid rgba(138, 123, 106, 0.25); border-radius:8px; padding:1.25rem; box-shadow:0 20px 45px rgba(0,0,0,.55), 0 0 0 1px rgba(138, 123, 106, 0.1); opacity:0; transform:translate3d(0,10px,0); pointer-events:none; transition:opacity .25s ease, transform .25s ease; display:flex; flex-direction:column; }
+.alphabot-panel { position:absolute; bottom:100%; right:0; margin-bottom:1.25rem; width:min(24rem,calc(100vw - 3rem)); max-height:68vh; background:linear-gradient(135deg, rgba(13,15,17,.98), rgba(20,22,26,.98)); border:1px solid rgba(138, 123, 106, 0.25); border-radius:8px; padding:1.25rem; box-shadow:0 20px 45px rgba(0,0,0,.55), 0 0 0 1px rgba(138, 123, 106, 0.1); opacity:0; transform:translate3d(0,10px,0); pointer-events:none; transition:opacity .25s ease, transform .25s ease; display:flex; flex-direction:column; }
 .alphabot-widget.open .alphabot-panel { opacity:1; transform:translate3d(0,0,0); pointer-events:auto; }
 .alphabot-widget.alphabot-offline .alphabot-toggle { cursor:not-allowed; opacity:0.65; }
 .alphabot-widget.alphabot-offline .alphabot-toggle:hover,
@@ -2064,7 +2075,7 @@ body.mobile-menu-open .alphabot-overlay {
 @media (prefers-reduced-motion: reduce){#mobile-menu,#mobile-menu-overlay,.alphabot-toggle,.alphabot-panel{transition:none!important;} .sticky-cta{transition:opacity .1s ease!important; transform:none!important;} .sticky-cta.visible{transform:none!important;} }
 /* Responsive tweaks for command rail and alphabot */
 @media (max-width:768px){
-  .bbx-command-rail{position:fixed; right:max(1rem, env(safe-area-inset-right, 0px)); bottom:calc(1rem + env(safe-area-inset-bottom,0px) + var(--bbx-sticky-cta-height)); width:auto; gap:1rem; align-items:flex-end;}
+  .bbx-command-rail{position:fixed; right:max(1.25rem, env(safe-area-inset-right, 1.25rem)); bottom:calc(1.25rem + env(safe-area-inset-bottom,0px) + var(--bbx-sticky-cta-height)); width:auto; gap:1rem; align-items:flex-end;}
   .sticky-cta{position:fixed; left:1rem; right:1rem; bottom:1rem; justify-content:center; font-size:1rem; border-radius:1rem;}
   .alphabot-widget{position:relative; bottom:auto; right:auto; min-width:0;}
   .alphabot-toggle{background:rgba(13,15,17,.98); padding:0.625rem 0.875rem; font-size:0.875rem; max-width:min(14rem, 55vw);}
@@ -5746,12 +5757,12 @@ a.btn-graphene-secondary:hover {
 
 .alphabot-widget {
   min-width: 0 !important;
-  z-index: 2147483647 !important;
+  z-index: var(--bbx-z-alphabot, 96) !important;
   position: relative !important;
 }
 
 .alphabot-toggle {
-  z-index: 2147483647 !important;
+  z-index: var(--bbx-z-alphabot, 96) !important;
   position: relative !important;
 }
 

@@ -620,10 +620,10 @@ if ($current_page === 'home' || $current_page === 'index') {
     </header>
 
     <!-- Mobile menu overlay (hidden by default, JS toggles via class) -->
-    <div id="mobile-menu-overlay" class="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[39] opacity-0 pointer-events-none transition-opacity duration-200" data-menu-overlay></div>
+    <div id="mobile-menu-overlay" class="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[39] opacity-0 pointer-events-none transition-opacity duration-200 bbx-drawer-overlay" data-menu-overlay></div>
 
     <!-- Mobile menu drawer (compact design) -->
-    <div id="mobile-menu" class="lg:hidden fixed top-0 right-0 bottom-0 w-64 max-w-[70vw] bg-gray-900/98 backdrop-blur-md z-40 shadow-2xl border-l border-gray-800/50 translate-x-full transition-transform duration-200" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-heading" aria-hidden="true">
+    <div id="mobile-menu" class="lg:hidden fixed top-0 right-0 bottom-0 w-64 max-w-[70vw] bg-gray-900/98 backdrop-blur-md z-40 shadow-2xl border-l border-gray-800/50 translate-x-full transition-transform duration-200 bbx-glass bbx-glass--strong" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-heading" aria-hidden="true">
         <!-- Compact header -->
         <div class="flex justify-between items-center px-4 py-3 border-b border-gray-800/50">
             <span id="mobile-menu-heading" class="text-sm font-semibold text-gray-400 uppercase tracking-wider"><?= t('header.mobile.navigation') ?></span>

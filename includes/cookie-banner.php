@@ -79,17 +79,33 @@ $texts = $banner_texts[$banner_lang] ?? $banner_texts['en'];
     z-index: 85;
     padding: 1rem;
     padding-bottom: calc(1rem + env(safe-area-inset-bottom));
-    background: var(--surface-card-bg, rgba(17, 24, 39, 0.98));
-    border-top: 1px solid var(--surface-border, rgba(255, 255, 255, 0.08));
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.3);
+    background: var(--bbx-glass-fallback, rgba(10, 14, 20, 0.92));
+    border-top: 1px solid var(--bbx-glass-border, rgba(255, 255, 255, 0.08));
+    backdrop-filter: blur(18px) saturate(1.25);
+    -webkit-backdrop-filter: blur(18px) saturate(1.25);
+    box-shadow: var(--bbx-glass-shadow, 0 8px 32px rgba(0, 0, 0, 0.35));
     transform: translateY(100%);
-    transition: transform 0.3s ease-out;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    .cookie-banner {
+      background: var(--bbx-glass-bg, rgba(6, 10, 14, 0.55));
+    }
   }
 
   .cookie-banner[data-visible="true"] {
     transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .cookie-banner.is-visible {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
   }
 
   .cookie-banner__content {

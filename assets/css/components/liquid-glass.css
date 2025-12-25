@@ -178,6 +178,86 @@
 }
 
 /* =========================================================================
+   DRAWER PANEL - Glass Effect with Full Height
+   ========================================================================= */
+
+/**
+ * Mobile drawer panel with proper glass styling
+ * - 100dvh height (dynamic viewport height for mobile)
+ * - Sticky header
+ * - Contained scroll
+ * - Glass effect with fallback
+ */
+#mobile-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  
+  /* Full dynamic viewport height */
+  height: 100dvh;
+  height: 100vh; /* Fallback for browsers without dvh support */
+  max-height: 100dvh;
+  max-height: 100vh; /* Fallback */
+  
+  /* Glass effect fallback */
+  background: var(--bbx-glass-fallback-strong);
+  border-left: 1px solid var(--bbx-glass-border-strong);
+  box-shadow: var(--bbx-glass-shadow-strong);
+  
+  /* Contained scroll */
+  overflow-y: auto;
+  overflow-x: hidden;
+  
+  /* Safe areas for notches/home indicator */
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  
+  display: flex;
+  flex-direction: column;
+}
+
+/* Glass effect when supported */
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  #mobile-menu {
+    -webkit-backdrop-filter: blur(var(--bbx-glass-blur-strong)) saturate(var(--bbx-glass-sat));
+    backdrop-filter: blur(var(--bbx-glass-blur-strong)) saturate(var(--bbx-glass-sat));
+    background: var(--bbx-glass-bg-strong);
+  }
+}
+
+/* Sticky header in drawer */
+#mobile-menu > div:first-child {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bbx-glass-fallback-strong);
+  backdrop-filter: blur(var(--bbx-glass-blur-strong));
+  -webkit-backdrop-filter: blur(var(--bbx-glass-blur-strong));
+  border-bottom: 1px solid var(--bbx-glass-border);
+}
+
+/* Scrollable navigation area */
+#mobile-menu nav {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Footer actions - stick to bottom */
+#mobile-menu > div:last-child {
+  position: sticky;
+  bottom: 0;
+  background: var(--bbx-glass-fallback-strong);
+  backdrop-filter: blur(var(--bbx-glass-blur-strong));
+  -webkit-backdrop-filter: blur(var(--bbx-glass-blur-strong));
+  border-top: 1px solid var(--bbx-glass-border);
+}
+
+/* =========================================================================
    COOKIE CONSENT BANNER - Deterministic Visibility
    ========================================================================= */
 

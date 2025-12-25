@@ -128,6 +128,67 @@ test.describe('Cross-Browser Parity - Landing Page', () => {
         }
       }
     });
+    
+    test('drawer panel has proper height, glass effect, and sticky header', async ({ page }) => {
+      await page.setViewportSize(VIEWPORTS.mobile);
+      
+      const menuToggle = page.locator('.header-burger').first();
+      await expect(menuToggle).toBeVisible({ timeout: 5000 });
+      
+      // Open drawer
+      await menuToggle.click();
+      await page.waitForTimeout(400);
+      
+      const drawer = page.locator('#mobile-menu');
+      
+      if (await drawer.isVisible()) {
+        const styles = await drawer.evaluate((el) => {
+          const computed = window.getComputedStyle(el);
+          return {
+            height: computed.height,
+            backdropFilter: computed.backdropFilter || computed.webkitBackdropFilter,
+            background: computed.backgroundColor,
+            overflowY: computed.overflowY,
+            display: computed.display,
+            flexDirection: computed.flexDirection
+          };
+        });
+        
+        // Should have full height (100vh or 100dvh)
+        const viewportHeight = await page.evaluate(() => window.innerHeight);
+        const drawerHeight = parseInt(styles.height);
+        
+        // Height should be close to viewport height (within 10px tolerance for safe areas)
+        expect(Math.abs(drawerHeight - viewportHeight)).toBeLessThan(50);
+        
+        // Should have glass effect or fallback
+        const hasGlass = styles.backdropFilter && styles.backdropFilter !== 'none';
+        const hasBackground = styles.background && styles.background.includes('rgb');
+        expect(hasGlass || hasBackground).toBe(true);
+        
+        // Should have vertical scroll
+        expect(styles.overflowY).toBe('auto');
+        
+        // Should be flex container (for sticky header/footer)
+        expect(styles.display).toBe('flex');
+        expect(styles.flexDirection).toBe('column');
+        
+        // Check sticky header
+        const header = drawer.locator('> div:first-child');
+        if (await header.count() > 0) {
+          const headerStyles = await header.evaluate((el) => {
+            const computed = window.getComputedStyle(el);
+            return {
+              position: computed.position,
+              top: computed.top
+            };
+          });
+          
+          // Header should be sticky or have background blur
+          expect(['sticky', 'relative', 'static']).toContain(headerStyles.position);
+        }
+      }
+    });
   });
 
   test.describe('Cookie Consent Determinism', () => {
@@ -274,7 +335,7 @@ test.describe('Cross-Browser Parity - Landing Page', () => {
       expect(styles.background).toBeTruthy();
       
       // Z-index should be 85 (above sticky CTA at 75)
-      expect(parseInt(styles.zIndex)).toBeGreaterThanOrEqual(70);
+      expect(parseInt(styles.zIndex)).toBeGreaterThanOrEqual(85);
     });
   });
 

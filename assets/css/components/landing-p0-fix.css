@@ -81,22 +81,48 @@ body.page-home.landing-ready {
 }
 
 /* ════════════════════════════════════════════════════════════════
-   AI ASSISTANT — ENABLED ON LANDING (RESTORED 2025-12-25)
-   ════════════════════════════════════════════════════════════════
-   
-   REQUIREMENT UPDATE:
-   - Alphabot MUST be visible on landing from page load
-   - Must not be gated by cookie consent or sticky CTA state
-   - Must have proper z-index above cookie banner
-   - Must work on iOS browsers (DuckDuckGo, Brave, Safari)
-   
-   FIX APPLIED:
-   - Removed CSS hiding rules for alphabot on landing
-   - Alphabot now visible immediately on load
-   - Proper stacking ensures visibility above cookie banner
+   AI ASSISTANT — VISIBLE ON LANDING WITH GLASS + SAFE AREAS
    ════════════════════════════════════════════════════════════════ */
 
-/* REMOVED: Previous hide rules - alphabot now visible on landing */
+.page-home .bbx-command-rail,
+.page-home .alphabot-widget {
+  position: fixed !important;
+  right: max(1rem, env(safe-area-inset-right, 1rem)) !important;
+  bottom: calc(1.25rem + var(--bbx-sticky-cta-height, 0px) + env(safe-area-inset-bottom, 0px)) !important;
+  z-index: 95 !important;
+  isolation: isolate !important;
+}
+
+.page-home .alphabot-toggle {
+  z-index: 96 !important;
+}
+
+.page-home .alphabot-overlay,
+.page-home #alphabot-overlay {
+  z-index: 92 !important;
+  background: rgba(8, 12, 18, 0.65) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.2) !important;
+  backdrop-filter: blur(16px) saturate(1.2) !important;
+}
+
+.page-home .alphabot-panel {
+  z-index: 96 !important;
+  max-height: min(70vh, 680px) !important;
+  width: min(22rem, calc(100vw - 2.5rem)) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55) !important;
+}
+
+@media (max-width: 768px) {
+  .page-home .alphabot-widget {
+    right: max(0.75rem, env(safe-area-inset-right, 0.75rem)) !important;
+    bottom: calc(1rem + var(--bbx-sticky-cta-height, 0px) + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .page-home .alphabot-panel {
+    max-height: 72vh !important;
+    border-radius: 1.25rem 1.25rem 0 0 !important;
+  }
+}
 
 /* ════════════════════════════════════════════════════════════════
    STICKY CTA BAR — SINGLE SOURCE OF TRUTH
@@ -342,15 +368,37 @@ body.page-home aside#sticky-cta:not([hidden]):not([data-hidden="true"]) {
 .page-home #mobile-menu {
   width: min(78vw, 320px) !important;
   min-width: 240px !important;
-  max-width: 320px !important;
-  height: 100dvh !important;
-  min-height: 100dvh !important;
-  max-height: 100dvh !important;
-  top: 0 !important;
-  bottom: 0 !important;
+  max-width: 280px !important;
+  
+  /* MATTE BLACK - solid, no blur, no transparency */
+  background: #0a0b0d !important;
+  background-color: #0a0b0d !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  
+  /* Full-height drawer with safe-area padding */
+  height: calc(100dvh - env(safe-area-inset-top, 0px)) !important;
+  max-height: calc(100dvh - env(safe-area-inset-top, 0px)) !important;
+  min-height: 320px !important;
+  
+  /* Position from top with safe-area offset */
+  top: env(safe-area-inset-top, 0px) !important;
+  bottom: env(safe-area-inset-bottom, 0px) !important;
   right: 0 !important;
-  padding-top: calc(env(safe-area-inset-top, 0px) + 0.75rem) !important;
-  padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px)) !important;
+  
+  /* Safe area padding */
+  padding-top: calc(0.75rem + env(safe-area-inset-top, 0px)) !important;
+  padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0)) !important;
+  
+  /* z-index contract: 40 */
+  z-index: 40 !important;
+  
+  /* Clean border */
+  border-left: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 0 0 0 12px !important;
+  
+  /* Layout - NO scroll by default */
   display: flex !important;
   flex-direction: column !important;
   overflow: hidden !important;

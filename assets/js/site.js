@@ -583,7 +583,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const stickyCtaBar = document.querySelector('[data-component="sticky-cta"]');
     if (stickyCtaBar) {
         const STORAGE_KEY = 'bbxStickyCtaDismissed';
-        const SCROLL_THRESHOLD = 0.35; // Show after 35% viewport scroll
+        const SCROLL_THRESHOLD = 0.30; // Show after ~30% viewport scroll for consistent priority access timing
         const closeButton = stickyCtaBar.querySelector('[data-sticky-cta-close]');
         const ctaButtons = stickyCtaBar.querySelectorAll('.sticky-cta-bar__btn, .sticky-cta-bar__cta');
         let hasBeenShown = false;

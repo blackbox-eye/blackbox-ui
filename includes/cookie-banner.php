@@ -76,20 +76,30 @@ $texts = $banner_texts[$banner_lang] ?? $banner_texts['en'];
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 70;
+    z-index: 85;
     padding: 1rem;
     padding-bottom: calc(1rem + env(safe-area-inset-bottom));
-    background: var(--surface-card-bg, rgba(17, 24, 39, 0.98));
-    border-top: 1px solid var(--surface-border, rgba(255, 255, 255, 0.08));
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: var(--bbx-glass-fallback-strong, rgba(10, 14, 20, 0.96));
+    border-top: 1px solid var(--bbx-glass-border, rgba(255, 255, 255, 0.08));
     box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.3);
     transform: translateY(100%);
-    transition: transform 0.3s ease-out;
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out, visibility 0.3s ease-out;
+  }
+
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    .cookie-banner {
+      backdrop-filter: blur(var(--bbx-glass-blur-strong, 14px)) saturate(var(--bbx-glass-sat, 1.2));
+      -webkit-backdrop-filter: blur(var(--bbx-glass-blur-strong, 14px)) saturate(var(--bbx-glass-sat, 1.2));
+      background: var(--bbx-glass-bg-strong, rgba(6, 10, 14, 0.72));
+    }
   }
 
   .cookie-banner[data-visible="true"] {
     transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
   }
 
   .cookie-banner__content {
@@ -175,9 +185,9 @@ $texts = $banner_texts[$banner_lang] ?? $banner_texts['en'];
 
   /* Light mode overrides */
   :root[data-theme="light"] .cookie-banner {
-    background: rgba(255, 255, 255, 0.98);
+    background: rgba(255, 255, 255, 0.96);
     border-top-color: rgba(15, 23, 42, 0.1);
-    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -8px 32px rgba(15, 23, 42, 0.12);
   }
 
   :root[data-theme="light"] .cookie-banner__title {
@@ -309,6 +319,7 @@ $texts = $banner_texts[$banner_lang] ?? $banner_texts['en'];
       banner.setAttribute('data-visible', 'true');
       banner.classList.add('is-visible');
       banner.classList.remove('is-hidden');
+      banner.setAttribute('aria-hidden', 'false');
       document.body.classList.add('cookie-banner-open');
       document.body.classList.add('cookie-banner-visible');
       // Focus first button for accessibility
@@ -322,6 +333,7 @@ $texts = $banner_texts[$banner_lang] ?? $banner_texts['en'];
       banner.setAttribute('data-visible', 'false');
       banner.classList.remove('is-visible');
       banner.classList.add('is-hidden');
+      banner.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('cookie-banner-open');
       document.body.classList.remove('cookie-banner-visible');
       setTimeout(function() {
@@ -344,11 +356,13 @@ $texts = $banner_texts[$banner_lang] ?? $banner_texts['en'];
     // Check on load - deterministic behavior
     var existingConsent = getConsent();
     if (!existingConsent) {
-      // Show banner after short delay for better UX
-      setTimeout(showBanner, 1000);
+      // Deterministic show: next frame after load to avoid FOUC
+      requestAnimationFrame(function() { setTimeout(showBanner, 250); });
     } else {
       // Ensure banner stays hidden
       banner.classList.add('is-hidden');
+      banner.setAttribute('aria-hidden', 'true');
+      banner.hidden = true;
     }
 
     // Expose for external use

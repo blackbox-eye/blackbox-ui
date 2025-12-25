@@ -164,6 +164,57 @@
   pointer-events: auto;
 }
 
+/* =========================================================================
+   DRAWER PANEL - Full Height + Glass
+   ========================================================================= */
+
+#mobile-menu,
+.mobile-nav-drawer {
+  height: 100dvh;
+  min-height: 100dvh;
+  max-height: 100dvh;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 0.75rem);
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  background: var(--bbx-glass-fallback-strong);
+  border-left: 1px solid var(--bbx-glass-border-strong);
+  box-shadow: var(--bbx-glass-shadow-strong);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  #mobile-menu,
+  .mobile-nav-drawer {
+    -webkit-backdrop-filter: blur(var(--bbx-glass-blur)) saturate(var(--bbx-glass-sat));
+    backdrop-filter: blur(var(--bbx-glass-blur)) saturate(var(--bbx-glass-sat));
+    background: var(--bbx-glass-bg-strong);
+  }
+}
+
+#mobile-menu nav,
+.mobile-nav-drawer nav {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-drawer-header,
+#mobile-menu .mobile-drawer-header,
+.mobile-nav-drawer .mobile-drawer-header,
+#mobile-menu > div:first-child {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: rgba(8, 12, 18, 0.9);
+  border-bottom: 1px solid var(--bbx-glass-border-strong);
+}
+
 /* Light theme overlay */
 :root[data-theme="light"] .bbx-drawer-overlay,
 :root[data-theme="light"] #mobile-menu-overlay {

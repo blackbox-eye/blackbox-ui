@@ -81,26 +81,48 @@ body.page-home.landing-ready {
 }
 
 /* ════════════════════════════════════════════════════════════════
-   AI ASSISTANT — HARD DISABLED ON LANDING (REMOVED FROM DOM)
+   AI ASSISTANT — VISIBLE AT LOAD (Decoupled from cookie/CTA)
    ════════════════════════════════════════════════════════════════ */
 
-/* Belt-and-suspenders CSS hiding (PHP guards prevent DOM render) */
+/* 
+ * AU1 FIX: Alphabot MUST be visible from page load
+ * - Not gated by cookie consent or CTA state
+ * - z-index: 95 (above modals at 90, within contract)
+ * - Proper pointer-events and visibility
+ */
+.page-home .bbx-command-rail,
 .page-home #alphabot-container,
+.page-home .alphabot-widget {
+  /* Ensure visibility */
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  
+  /* Maintain proper positioning - z-index 95 (contract: drawer 30, panel 40, sticky 75, cookie 85, modals 90) */
+  position: fixed !important;
+  z-index: 95 !important;
+}
+
+/* Alphabot overlay - properly styled when panel opens */
 .page-home .alphabot-overlay,
-.page-home #alphabot-overlay,
-.page-home .alphabot-widget,
-.page-home .alphabot-toggle,
-.page-home .alphabot-panel,
-.page-home .bbx-command-rail {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
+.page-home #alphabot-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(8, 13, 20, 0.85) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  z-index: 2147483646 !important;
   opacity: 0 !important;
-  width: 0 !important;
-  height: 0 !important;
-  overflow: hidden !important;
-  position: absolute !important;
-  left: -9999px !important;
+  pointer-events: none !important;
+  transition: opacity 0.25s ease !important;
+}
+
+/* When alphabot panel is open */
+.page-home .alphabot-overlay.visible,
+.page-home #alphabot-overlay.visible {
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }
 
 /* ════════════════════════════════════════════════════════════════

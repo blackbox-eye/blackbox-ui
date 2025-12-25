@@ -140,43 +140,51 @@ $is_landing_page = (basename($_SERVER['SCRIPT_NAME'] ?? '') === 'index.php');
         <div id="alphabot-overlay" class="alphabot-overlay" aria-hidden="true"></div>
     <?php endif; ?>
 
+    <!-- ═══════════════════════════════════════════════════════════════
+         STICKY CTA BAR - Best Practice Mobile Implementation
+         Structure: 2-row stacked layout
+         Row 1: Label text (left) + Dismiss X (right)  
+         Row 2: CTA buttons side-by-side
+         ═══════════════════════════════════════════════════════════════ -->
     <aside id="sticky-cta"
         class="sticky-cta-bar"
         data-component="sticky-cta"
+        hidden
+        data-hidden="true"
         role="region"
         aria-live="polite"
         aria-label="<?= htmlspecialchars(t('cta_bar.region_label')) ?>">
-        <div class="sticky-cta-bar__content">
-            <div class="sticky-cta-bar__copy">
-                <p class="sticky-cta-bar__eyebrow"><?= t('cta_bar.eyebrow') ?></p>
-                <p class="sticky-cta-bar__title"><?= t('cta_bar.title') ?></p>
-            </div>
-            <div class="sticky-cta-bar__actions" role="group" aria-label="<?= htmlspecialchars(t('cta_bar.region_label')) ?>">
-                <a href="demo.php"
-                    class="sticky-cta-bar__btn sticky-cta-bar__btn--primary"
-                    aria-label="<?= htmlspecialchars(t('cta_bar.primary_aria')) ?>">
-                    <span><?= t('cta_bar.primary') ?></span>
-                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                        <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </a>
-                <a href="tel:+4531330033"
-                    class="sticky-cta-bar__btn sticky-cta-bar__btn--ghost"
-                    aria-label="<?= htmlspecialchars(t('cta_bar.secondary_aria')) ?>">
-                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                        <path d="M4.5 3.5c-.8 1.7-.8 3.8.2 5.7 1.6 3.1 4.5 6 7.6 7.6 1.9 1 4 1 5.7.2l1.8 1.8a1.5 1.5 0 01-.6 2.5c-2.6.7-5.7.1-8.7-1.6s-5.6-4.1-7.3-6.9c-1.7-3-2.3-6.1-1.6-8.7A1.5 1.5 0 014.5 2l2 1.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <span><?= t('cta_bar.secondary') ?></span>
-                </a>
+        
+        <!-- Row 1: Label + Dismiss -->
+        <div class="sticky-cta-bar__row sticky-cta-bar__row--header">
+            <div class="sticky-cta-bar__label">
+                <span class="sticky-cta-bar__eyebrow"><?= t('cta_bar.eyebrow') ?></span>
+                <span class="sticky-cta-bar__title"><?= t('cta_bar.title') ?></span>
             </div>
             <button type="button"
-                class="sticky-cta-bar__close"
+                class="sticky-cta-bar__dismiss"
                 data-sticky-cta-close
                 aria-label="<?= htmlspecialchars(t('cta_bar.dismiss')) ?>">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M6 6l12 12M18 6l-12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <path d="M18 6L6 18M6 6l12 12"/>
                 </svg>
             </button>
+        </div>
+        
+        <!-- Row 2: CTA Buttons -->
+        <div class="sticky-cta-bar__row sticky-cta-bar__row--actions">
+            <a href="demo.php" class="sticky-cta-bar__cta sticky-cta-bar__cta--primary">
+                <?= t('cta_bar.primary') ?>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <path d="M5 12h14M13 6l6 6-6 6"/>
+                </svg>
+            </a>
+            <a href="tel:+4531330033" class="sticky-cta-bar__cta sticky-cta-bar__cta--secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+                </svg>
+                <?= t('cta_bar.secondary') ?>
+            </a>
         </div>
     </aside>
 

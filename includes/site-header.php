@@ -381,6 +381,10 @@ if (!empty($disable_alphabot)) {
     <!-- P1/P2 Landing Page Polish (Priority Access, footer, FOUC gate) -->
     <link rel="preload" href="/assets/css/components/landing-p1-polish.css?v=<?= bbx_asset_version('css/components/landing-p1-polish.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/assets/css/components/landing-p1-polish.css?v=<?= bbx_asset_version('css/components/landing-p1-polish.css') ?>"></noscript>
+    
+    <!-- Sticky CTA Component (canonical styles - overrides marketing.css) -->
+    <link rel="preload" href="/assets/css/components/sticky-cta.css?v=<?= bbx_asset_version('css/components/sticky-cta.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/components/sticky-cta.css?v=<?= bbx_asset_version('css/components/sticky-cta.css') ?>"></noscript>
 
     <!-- Conditional CSS loading -->
     <?php

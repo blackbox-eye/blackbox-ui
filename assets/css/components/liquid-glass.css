@@ -168,19 +168,6 @@
   pointer-events: auto;
 }
 
-/* Light theme overlay */
-:root[data-theme="light"] .bbx-drawer-overlay,
-:root[data-theme="light"] #mobile-menu-overlay {
-  background: rgba(248, 250, 252, 0.65);
-}
-
-@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-  :root[data-theme="light"] .bbx-drawer-overlay,
-  :root[data-theme="light"] #mobile-menu-overlay {
-    background: rgba(248, 250, 252, 0.45);
-  }
-}
-
 /* =========================================================================
    COOKIE CONSENT BANNER - Deterministic Visibility
    ========================================================================= */

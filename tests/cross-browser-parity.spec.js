@@ -83,20 +83,17 @@ test.describe('Cross-Browser Parity - Landing Page', () => {
           return window.getComputedStyle(el).backgroundColor;
         });
         
-        // Parse rgba values - should NOT be solid black (0,0,0,1)
+          // Parse rgba values - must never be solid black (0,0,0,1) and must keep transparency
         const rgbaMatch = bgColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
         
         if (rgbaMatch) {
           const [, r, g, b, a = '1'] = rgbaMatch;
           const alpha = parseFloat(a);
           
-          // If it's completely solid (alpha=1), the R/G/B must not all be zero (pure black)
-          // Allow very dark colors as long as there's SOME transparency OR not pure black
+          // Require transparency and no pure black
           const isPureBlack = parseInt(r) === 0 && parseInt(g) === 0 && parseInt(b) === 0;
-          const hasTransparency = alpha < 1;
-          
-          // Either has transparency OR is not pure black
-          expect(hasTransparency || !isPureBlack).toBe(true);
+          expect(alpha).toBeLessThan(1);
+          expect(isPureBlack).toBe(false);
         }
       }
     });

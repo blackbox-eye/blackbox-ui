@@ -345,37 +345,28 @@ body.page-home aside#sticky-cta:not([hidden]):not([data-hidden="true"]) {
    P0-2: BURGER MENU DRAWER — REDUCED HEIGHT, NO SCROLL, SMOOTH CLOSE
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-/* Drawer overlay - dim + blur (iOS-style glass) */
+/* Drawer overlay - glass, never solid black */
 .page-home #mobile-menu-overlay {
-  /* ═══ OVERLAY BLUR FIX: Restore glass effect ═══ */
-  -webkit-backdrop-filter: blur(12px) saturate(1.2) !important;
-  backdrop-filter: blur(12px) saturate(1.2) !important;
-  
-  /* Semi-transparent dark with blur */
-  background: rgba(0, 0, 0, 0.4) !important;
-  
-  /* z-index contract: 30 */
   z-index: 30 !important;
-  
-  /* Hidden by default */
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
-  
-  /* Smooth transition */
+  background: rgba(8, 12, 18, 0.65) !important;
+  -webkit-backdrop-filter: blur(var(--bbx-glass-blur-light)) saturate(var(--bbx-glass-sat)) !important;
+  backdrop-filter: blur(var(--bbx-glass-blur-light)) saturate(var(--bbx-glass-sat)) !important;
   transition: opacity 0.25s ease-out, visibility 0.25s ease-out, backdrop-filter 0.25s ease-out !important;
 }
 
 .page-home #mobile-menu-overlay.active {
   opacity: 1 !important;
+  visibility: visible !important;
   pointer-events: auto !important;
   visibility: visible !important;
 }
 
-/* Drawer panel - REDUCED HEIGHT, compact, matte black */
+/* Drawer panel - full viewport, glass fallback */
 .page-home #mobile-menu {
-  /* Width: compact 280px max */
-  width: min(75vw, 280px) !important;
+  width: min(78vw, 320px) !important;
   min-width: 240px !important;
   max-width: 280px !important;
   
@@ -411,13 +402,21 @@ body.page-home aside#sticky-cta:not([hidden]):not([data-hidden="true"]) {
   display: flex !important;
   flex-direction: column !important;
   overflow: hidden !important;
-  
-  /* Hidden state */
+  z-index: 40 !important;
+  background: var(--bbx-glass-fallback-strong) !important;
+  border-left: 1px solid var(--bbx-glass-border-strong) !important;
+  box-shadow: var(--bbx-glass-shadow-strong) !important;
   transform: translateX(100%) !important;
   visibility: hidden !important;
-  
-  /* Smooth transition */
   transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.3s ease !important;
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .page-home #mobile-menu {
+    -webkit-backdrop-filter: blur(var(--bbx-glass-blur)) saturate(var(--bbx-glass-sat)) !important;
+    backdrop-filter: blur(var(--bbx-glass-blur)) saturate(var(--bbx-glass-sat)) !important;
+    background: var(--bbx-glass-bg-strong) !important;
+  }
 }
 
 /* Drawer visible state */
@@ -428,10 +427,14 @@ body.page-home aside#sticky-cta:not([hidden]):not([data-hidden="true"]) {
 }
 
 /* Drawer header - compact */
-.page-home #mobile-menu > div:first-child {
+.page-home #mobile-menu > div:first-child,
+.page-home #mobile-menu .mobile-drawer-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1 !important;
   flex-shrink: 0 !important;
   padding: 0.5rem 0.75rem !important;
-  background: transparent !important;
+  background: rgba(8, 12, 18, 0.9) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
 }
 
@@ -466,9 +469,7 @@ body.page-home aside#sticky-cta:not([hidden]):not([data-hidden="true"]) {
   overflow-y: auto !important;
   overflow-x: hidden !important;
   -webkit-overflow-scrolling: touch !important;
-  padding: 0.5rem 0.625rem !important;
-  
-  /* Contain scroll within drawer */
+  padding: 0.5rem 0.625rem calc(1rem + env(safe-area-inset-bottom, 0px)) !important;
   overscroll-behavior: contain !important;
 }
 
@@ -530,8 +531,8 @@ body.page-home aside#sticky-cta:not([hidden]):not([data-hidden="true"]) {
 /* Drawer footer - compact, sticky at bottom */
 .page-home #mobile-menu > div:last-child {
   flex-shrink: 0 !important;
-  padding: 0.5rem 0.625rem !important;
-  background: rgba(0, 0, 0, 0.2) !important;
+  padding: 0.75rem 0.625rem calc(0.75rem + env(safe-area-inset-bottom, 0px)) !important;
+  background: rgba(8, 12, 18, 0.85) !important;
   border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
 }
 

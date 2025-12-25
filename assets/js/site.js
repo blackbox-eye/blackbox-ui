@@ -194,8 +194,121 @@ const currencyFormatter = new Intl.NumberFormat(languageResolver.getLang() === '
 
 const THEME_STORAGE_KEY = 'bbx-theme';
 
+// ==========================================
+// DEBUG UI FLAG (enable with ?debugUI=1)
+// ==========================================
+const DEBUG_UI = new URLSearchParams(window.location.search).has('debugUI');
+
+// ==========================================
+// iOS SCROLL-LOCK FAILSAFE
+// Idempotent function to kill scroll-lock on iOS Brave/DuckDuckGo
+// ==========================================
+let savedScrollY = 0;
+
+const unlockBodyScroll = (reason = 'unknown') => {
+    const body = document.body;
+    const isLocked =
+        body.classList.contains('mobile-menu-open') ||
+        body.style.overflow === 'hidden' ||
+        getComputedStyle(body).overflow === 'hidden';
+
+    if (!isLocked) {
+        return; // Idempotent: nothing to do
+    }
+
+    // Restore scroll position from saved value or parsed from body.style.top
+    let scrollY = savedScrollY;
+    if (!scrollY && body.style.top) {
+        const parsed = parseInt(body.style.top, 10);
+        if (!isNaN(parsed)) {
+            scrollY = Math.abs(parsed);
+        }
+    }
+
+    // Remove all scroll-lock classes
+    body.classList.remove('mobile-menu-open');
+
+    // Clear all inline styles that could lock scroll
+    body.style.overflow = '';
+    body.style.position = '';
+    body.style.top = '';
+    body.style.width = '';
+
+    // Restore scroll position
+    if (scrollY > 0) {
+        window.scrollTo(0, scrollY);
+    }
+
+    savedScrollY = 0;
+
+    if (DEBUG_UI) {
+        console.info('[unlockBodyScroll] Scroll unlocked. Reason:', reason);
+    }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add('js-enabled');
+
+    // ==========================================
+    // DEFENSIVE SCROLL-LOCK EVENT LISTENERS
+    // Protects against iOS Brave/DuckDuckGo scroll-lock bugs
+    // ==========================================
+    window.addEventListener('pageshow', (event) => {
+        // bfcache restoration can leave body locked
+        if (event.persisted) {
+            unlockBodyScroll('pageshow-bfcache');
+        } else {
+            unlockBodyScroll('pageshow');
+        }
+    });
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+            unlockBodyScroll('visibilitychange');
+        }
+    });
+
+    window.addEventListener('orientationchange', () => {
+        setTimeout(() => unlockBodyScroll('orientationchange'), 100);
+    });
+
+    window.addEventListener('resize', (() => {
+        let resizeTimer = null;
+        return () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => unlockBodyScroll('resize'), 150);
+        };
+    })());
+
+    window.addEventListener('hashchange', () => {
+        unlockBodyScroll('hashchange');
+    });
+
+    // Touchstart failsafe: if body is locked but no overlay is visible, unlock
+    document.addEventListener('touchstart', () => {
+        const body = document.body;
+        const isLocked =
+            body.classList.contains('mobile-menu-open') ||
+            body.style.overflow === 'hidden';
+
+        if (!isLocked) {
+            return;
+        }
+
+        // Check if any overlay is actually visible
+        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+        const drawerOverlay = document.querySelector('.bbx-drawer-overlay');
+        const anyExpanded = document.querySelector('[aria-expanded="true"]');
+
+        const overlayVisible =
+            (mobileMenuOverlay && mobileMenuOverlay.classList.contains('active')) ||
+            (drawerOverlay && getComputedStyle(drawerOverlay).display !== 'none') ||
+            anyExpanded;
+
+        if (!overlayVisible) {
+            unlockBodyScroll('touchstart-failsafe');
+        }
+    }, { passive: true });
 
     const releaseLandingBody = () => {
         if (!document.body.classList.contains('landing-gate')) {
@@ -397,6 +510,9 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const openMobileMenu = () => {
+            // Save scroll position for restoration on close
+            savedScrollY = window.scrollY || window.pageYOffset || 0;
+            
             lastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
             mobileMenu.classList.add('active');
             mobileMenu.setAttribute('aria-hidden', 'false');
@@ -428,6 +544,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 lastFocusedElement.focus();
                 lastFocusedElement = null;
             }
+
+            // iOS scroll-lock failsafe: ensure body is fully unlocked after close
+            setTimeout(() => {
+                requestAnimationFrame(() => {
+                    unlockBodyScroll('after-close');
+                });
+            }, 0);
         };
 
         mobileMenuButton.addEventListener('click', () => {

@@ -32,6 +32,13 @@ function boxesOverlap(box1, box2) {
   );
 }
 
+async function gotoHome(page) {
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+  await page.locator('body').waitFor({ state: 'visible' });
+  await page.locator('#main-header, header#main-header, main').first().waitFor({ state: 'visible', timeout: 8000 });
+}
+
 // =====================================================
 // STICKY CTA BAR - STRUCTURE TESTS
 // =====================================================
@@ -44,9 +51,7 @@ test.describe('Sticky CTA Bar Structure', () => {
         sessionStorage.removeItem('bbxStickyCtaDismissed');
       } catch (e) {}
     });
-    await page.goto('/');
-    // Wait for JS to initialize
-    await page.waitForTimeout(500);
+    await gotoHome(page);
     
     // Accept cookie banner if present (it blocks pointer events)
     const cookieAcceptBtn = page.locator('#cookie-accept, .cookie-banner__btn--accept, [data-cookie-accept]');
@@ -57,7 +62,8 @@ test.describe('Sticky CTA Bar Structure', () => {
     
     // Scroll to trigger sticky CTA visibility (JS shows after 35% of viewport height)
     await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.4));
-    await page.waitForTimeout(300);
+    const stickyBar = page.locator('#sticky-cta, [data-component="sticky-cta"]');
+    await stickyBar.waitFor({ state: 'visible', timeout: 5000 });
   });
 
   test('sticky CTA bar should be visible after scroll trigger', async ({ page }) => {
@@ -134,8 +140,7 @@ test.describe('Sticky CTA Bar Structure', () => {
     
     try {
       // Initial navigation
-      await page.goto('/');
-      await page.waitForTimeout(500);
+      await gotoHome(page);
       
       // Accept cookie banner if present
       const cookieAcceptBtn = page.locator('#cookie-accept, .cookie-banner__btn--accept, [data-cookie-accept]');
@@ -146,9 +151,8 @@ test.describe('Sticky CTA Bar Structure', () => {
       
       // Scroll to trigger sticky CTA
       await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.4));
-      await page.waitForTimeout(300);
-      
       const stickyBar = page.locator('#sticky-cta, [data-component="sticky-cta"]');
+      await stickyBar.waitFor({ state: 'visible', timeout: 5000 });
       const closeBtn = page.locator('.sticky-cta-bar__dismiss');
 
       await expect(stickyBar).toBeVisible();
@@ -166,8 +170,9 @@ test.describe('Sticky CTA Bar Structure', () => {
       expect(wasDismissed).toBe(true);
 
       // Reload page (sessionStorage persists)
-      await page.reload({ waitUntil: 'networkidle' });
-      await page.waitForTimeout(800);
+      await page.reload({ waitUntil: 'domcontentloaded' });
+      await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+      await page.locator('#main-header, header#main-header, main').first().waitFor({ state: 'visible', timeout: 8000 });
       
       // Accept cookie banner if it reappears after reload
       if (await cookieAcceptBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
@@ -177,7 +182,6 @@ test.describe('Sticky CTA Bar Structure', () => {
       
       // Scroll to potentially trigger CTA (should NOT show since dismissed)
       await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.5));
-      await page.waitForTimeout(500);
 
       // Should still be hidden (dismissed state persisted in sessionStorage)
       await expect(stickyBar).not.toBeVisible();
@@ -205,8 +209,7 @@ test.describe('Sticky CTA Bar - iPhone Viewport', () => {
         sessionStorage.removeItem('bbxStickyCtaDismissed');
       } catch (e) {}
     });
-    await page.goto('/');
-    await page.waitForTimeout(500);
+    await gotoHome(page);
     
     // Accept cookie banner if present (it blocks pointer events)
     const cookieAcceptBtn = page.locator('#cookie-accept, .cookie-banner__btn--accept, [data-cookie-accept]');
@@ -217,7 +220,8 @@ test.describe('Sticky CTA Bar - iPhone Viewport', () => {
     
     // Scroll to trigger sticky CTA visibility
     await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.4));
-    await page.waitForTimeout(300);
+    const stickyBar = page.locator('#sticky-cta, [data-component="sticky-cta"]');
+    await stickyBar.waitFor({ state: 'visible', timeout: 5000 });
   });
 
   test('dismiss button should NOT overlap any CTA on iPhone viewport', async ({ page }) => {
@@ -286,8 +290,7 @@ test.describe('Sticky CTA Bar - 2-Row Stacked Layout', () => {
         sessionStorage.removeItem('bbxStickyCtaDismissed');
       } catch (e) {}
     });
-    await page.goto('/');
-    await page.waitForTimeout(500);
+    await gotoHome(page);
     
     // Accept cookie banner if present (it blocks pointer events)
     const cookieAcceptBtn = page.locator('#cookie-accept, .cookie-banner__btn--accept, [data-cookie-accept]');
@@ -298,7 +301,8 @@ test.describe('Sticky CTA Bar - 2-Row Stacked Layout', () => {
     
     // Scroll to trigger sticky CTA visibility
     await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.4));
-    await page.waitForTimeout(300);
+    const stickyBar = page.locator('#sticky-cta, [data-component="sticky-cta"]');
+    await stickyBar.waitFor({ state: 'visible', timeout: 5000 });
   });
 
   test('header row should use flexbox with space-between', async ({ page }) => {

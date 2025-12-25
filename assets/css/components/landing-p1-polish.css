@@ -13,167 +13,65 @@
  */
 
 /* ═══════════════════════════════════════════════════════════════════════════════
-   P1-A: PRIORITY ACCESS / STICKY CTA RESPONSIVENESS
-   Fix text wrapping, overflow, clipping at 360-430px, 900-1100px, desktop
+   P1-A: PRIORITY ACCESS / STICKY CTA
+   Best practice implementation - all base styles in marketing.css
+   This file only contains page-specific overrides if needed
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-/* Base CTA bar content - responsive flex */
-.page-home .sticky-cta-bar__content {
-  display: flex !important;
-  align-items: center !important;
-  flex-wrap: wrap !important;
-  gap: 0.75rem !important;
-  padding: 0.875rem 1rem !important;
-}
-
-/* Eyebrow text - prevent overflow */
-.page-home .sticky-cta-bar__eyebrow {
-  font-size: clamp(0.625rem, 2vw, 0.75rem) !important;
-  letter-spacing: 0.1em !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  max-width: 100% !important;
-  margin-bottom: 0.25rem !important;
-}
-
-/* Title text - responsive sizing */
-.page-home .sticky-cta-bar__title {
-  font-size: clamp(0.875rem, 3vw, 1rem) !important;
-  font-weight: 600 !important;
-  line-height: 1.3 !important;
-  margin: 0 !important;
-}
-
-/* Copy section - allow shrink */
-.page-home .sticky-cta-bar__copy {
-  flex: 1 1 auto !important;
-  min-width: 120px !important;
-  max-width: 280px !important;
-}
-
-/* Actions container - responsive */
-.page-home .sticky-cta-bar__actions {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 0.5rem !important;
-  align-items: center !important;
-}
-
-/* Buttons - prevent overlap and overflow */
-.page-home .sticky-cta-bar__btn {
-  flex: 0 1 auto !important;
-  min-width: 100px !important;
-  max-width: 180px !important;
-  padding: 0.625rem 0.875rem !important;
-  font-size: clamp(0.8125rem, 2.5vw, 0.9375rem) !important;
-  white-space: nowrap !important;
-  border-radius: var(--graphene-radius, 8px) !important;
-}
-
-.page-home .sticky-cta-bar__btn svg {
-  flex-shrink: 0 !important;
-  width: 1rem !important;
-  height: 1rem !important;
-}
-
-/* Close button styles are in marketing.css - no overrides needed */
+/* No overrides needed - marketing.css has complete implementation */
 
 /* ════════════════════════════════════════════════════════════════
-   MOBILE (360-430px) — Stack layout, full-width buttons
+   MOBILE (360-430px) — Stack: Copy+X row, then Actions row
    ════════════════════════════════════════════════════════════════ */
 @media (max-width: 430px) {
-  .page-home .sticky-cta-bar__content {
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 0.625rem !important;
-    padding: 0.75rem 0.875rem 1rem !important;
-    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0)) !important;
-  }
-  
-  .page-home .sticky-cta-bar__copy {
-    max-width: 100% !important;
-    text-align: center !important;
-  }
-  
-  .page-home .sticky-cta-bar__eyebrow {
-    text-align: center !important;
-  }
-  
-  .page-home .sticky-cta-bar__title {
-    text-align: center !important;
-    font-size: 0.9375rem !important;
-  }
-  
-  .page-home .sticky-cta-bar__actions {
-    flex-direction: column !important;
-    width: 100% !important;
-  }
-  
-  .page-home .sticky-cta-bar__btn {
-    width: 100% !important;
-    max-width: none !important;
-    justify-content: center !important;
-    padding: 0.75rem 1rem !important;
-  }
-}
-
-/* ════════════════════════════════════════════════════════════════
-   SMALL DESKTOP (900-1100px) — Two-column, compact
-   ════════════════════════════════════════════════════════════════ */
-@media (min-width: 431px) and (max-width: 1100px) {
-  .page-home .sticky-cta-bar__content {
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    gap: 1rem !important;
-    padding: 0.875rem 1.25rem !important;
-  }
-  
-  .page-home .sticky-cta-bar__copy {
-    flex: 0 1 240px !important;
-    max-width: 240px !important;
-    text-align: left !important;
-  }
-  
-  .page-home .sticky-cta-bar__actions {
-    flex: 1 1 auto !important;
-    flex-direction: row !important;
-    justify-content: flex-end !important;
+  .page-home .sticky-cta-bar__grid {
+    grid-template-columns: 1fr 44px !important;
+    grid-template-rows: auto auto !important;
     gap: 0.5rem !important;
   }
   
+  .page-home .sticky-cta-bar__copy {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+  }
+  
+  .page-home .sticky-cta-bar__close {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+  }
+  
+  .page-home .sticky-cta-bar__actions {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.4rem !important;
+  }
+  
   .page-home .sticky-cta-bar__btn {
-    min-width: 110px !important;
-    max-width: 150px !important;
-    padding: 0.625rem 0.75rem !important;
-    font-size: 0.8125rem !important;
+    padding: 0.6rem 0.5rem !important;
+    font-size: 0.72rem !important;
   }
 }
 
 /* ════════════════════════════════════════════════════════════════
-   LARGE DESKTOP (1100px+) — Full layout
+   TABLET+ (431px+) — Single row: Copy | CTAs | X
    ════════════════════════════════════════════════════════════════ */
-@media (min-width: 1101px) {
-  .page-home .sticky-cta-bar__content {
-    flex-direction: row !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    gap: 1.5rem !important;
-    padding: 1rem 1.5rem !important;
+@media (min-width: 431px) {
+  .page-home .sticky-cta-bar__grid {
+    grid-template-columns: auto 1fr 44px !important;
+    gap: 0.75rem !important;
   }
   
-  .page-home .sticky-cta-bar__copy {
-    flex: 0 1 320px !important;
-    max-width: 320px !important;
+  .page-home .sticky-cta-bar__actions {
+    display: flex !important;
+    gap: 0.5rem !important;
+    justify-content: flex-end !important;
   }
   
   .page-home .sticky-cta-bar__btn {
-    min-width: 140px !important;
-    max-width: 180px !important;
-    padding: 0.75rem 1rem !important;
-    font-size: 0.9375rem !important;
+    padding: 0.6rem 0.875rem !important;
+    font-size: 0.78rem !important;
   }
 }
 

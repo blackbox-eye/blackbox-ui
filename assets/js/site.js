@@ -577,14 +577,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('resize', scheduleBottomCtaOffset, { passive: true });
 
+    // === STICKY CTA BAR ===
+    // Best practice: scroll-triggered visibility, dismiss on tap, sessionStorage persistence
+    // Uses hidden attribute + data-hidden for CSS visibility control
     const stickyCtaBar = document.querySelector('[data-component="sticky-cta"]');
     if (stickyCtaBar) {
         const STORAGE_KEY = 'bbxStickyCtaDismissed';
-        const SCROLL_THRESHOLD = 0.35;
+        const SCROLL_THRESHOLD = 0.35; // Show after 35% viewport scroll
         const closeButton = stickyCtaBar.querySelector('[data-sticky-cta-close]');
+        const ctaButtons = stickyCtaBar.querySelectorAll('.sticky-cta-bar__btn, .sticky-cta-bar__cta');
+        let hasBeenShown = false;
+        let isCurrentlyDismissed = false; // Local state for this session
 
         // Check if already dismissed this session
-        const isDismissed = () => {
+        const checkDismissed = () => {
             try {
                 return window.sessionStorage.getItem(STORAGE_KEY) === '1';
             } catch (e) {
@@ -592,17 +598,35 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        // FINAL: Hide = display:none via class
-        const hideBar = () => {
+        // Force hide - uses multiple methods for maximum browser compatibility
+        const forceHide = () => {
+            stickyCtaBar.hidden = true;
+            stickyCtaBar.setAttribute('hidden', '');
+            stickyCtaBar.setAttribute('data-hidden', 'true');
+            stickyCtaBar.setAttribute('aria-hidden', 'true');
+            stickyCtaBar.removeAttribute('data-visible');
             stickyCtaBar.classList.remove('is-visible');
             stickyCtaBar.classList.add('is-dismissed');
+            isCurrentlyDismissed = true;
+            scheduleBottomCtaOffset();
         };
 
-        // FINAL: Show = display:block via class
+        // Show = visible state (only if not dismissed)
         const showBar = () => {
-            if (isDismissed()) return;
-            stickyCtaBar.classList.remove('is-dismissed');
+            // CRITICAL: Never show if dismissed
+            if (isCurrentlyDismissed || checkDismissed()) {
+                forceHide();
+                return;
+            }
+            stickyCtaBar.hidden = false;
+            stickyCtaBar.removeAttribute('hidden');
+            stickyCtaBar.removeAttribute('data-hidden');
+            stickyCtaBar.removeAttribute('aria-hidden');
+            stickyCtaBar.setAttribute('data-visible', 'true');
             stickyCtaBar.classList.add('is-visible');
+            stickyCtaBar.classList.remove('is-dismissed');
+            hasBeenShown = true;
+            scheduleBottomCtaOffset();
         };
 
         // Persist dismissal in sessionStorage
@@ -614,33 +638,66 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        // FINAL: Single click handler - works on all browsers
-        const handleDismiss = () => {
-            hideBar();
+        // Scroll handler: show after threshold (only if not dismissed)
+        const handleScroll = () => {
+            // Double-check dismissal state on every scroll
+            if (hasBeenShown || isCurrentlyDismissed || checkDismissed()) return;
+            const scrollY = window.scrollY || window.pageYOffset;
+            if (scrollY > window.innerHeight * SCROLL_THRESHOLD) {
+                window.requestAnimationFrame(showBar);
+            }
+        };
+
+        // Initialize: check dismissal FIRST
+        isCurrentlyDismissed = checkDismissed();
+        if (isCurrentlyDismissed) {
+            // CRITICAL: Force hide immediately and don't register scroll listener
+            forceHide();
+        } else {
+            // Start hidden, wait for scroll to show
+            forceHide();
+            isCurrentlyDismissed = false; // Reset since we just hid for initial state
+            window.addEventListener('scroll', handleScroll, { passive: true });
+            // Check initial scroll position
+            handleScroll();
+        }
+        scheduleBottomCtaOffset();
+
+        // Dismiss handler with pointerdown for better mobile support
+        const handleDismiss = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            forceHide();
             persistDismissal();
         };
 
-        // If already dismissed, ensure it stays hidden
-        if (isDismissed()) {
-            hideBar();
-        } else {
-            // Show after scroll threshold
-            let hasShown = false;
-            const checkScroll = () => {
-                if (hasShown || isDismissed()) return;
-                const scrollY = window.scrollY || window.pageYOffset;
-                if (scrollY > window.innerHeight * SCROLL_THRESHOLD) {
-                    showBar();
-                    hasShown = true;
-                }
-            };
-            window.addEventListener('scroll', checkScroll, { passive: true });
-            checkScroll(); // Check immediately
+        // Event listeners on close button
+        if (closeButton) {
+            // pointerdown for immediate response (before click)
+            closeButton.addEventListener('pointerdown', handleDismiss, { passive: false });
+            // Fallback click for older browsers
+            closeButton.addEventListener('click', handleDismiss, { passive: false });
         }
 
-        // FINAL: One event listener - click works on all mobile browsers
-        if (closeButton) {
-            closeButton.addEventListener('click', handleDismiss);
+        // Track CTA clicks for analytics (once per session)
+        ctaButtons.forEach(btn => {
+            btn.addEventListener('click', persistDismissal, { once: true });
+        });
+
+        // Footer docking behavior
+        const footer = document.querySelector('footer, .site-footer');
+        if (footer) {
+            const footerObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (isCurrentlyDismissed || checkDismissed()) return;
+                    if (entry.isIntersecting) {
+                        stickyCtaBar.classList.add('is-docked');
+                    } else {
+                        stickyCtaBar.classList.remove('is-docked');
+                    }
+                });
+            }, { threshold: 0.05 });
+            footerObserver.observe(footer);
         }
     }
 

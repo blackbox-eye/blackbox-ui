@@ -134,13 +134,28 @@ body.page-home #sticky-cta-bar {
 }
 
 /* ═══ STEP 2: Style the ONE TRUE CTA (#sticky-cta) ═══ */
-.page-home #sticky-cta,
-.page-home aside#sticky-cta,
-.page-home [data-component="sticky-cta"],
-.page-home aside.sticky-cta-bar[data-component="sticky-cta"],
-body.page-home #sticky-cta,
-body.page-home aside#sticky-cta {
-  /* DISPLAY: Always visible */
+
+/* Hidden state - highest priority selectors using both hidden attribute and data-hidden */
+.page-home #sticky-cta[hidden],
+.page-home #sticky-cta[data-hidden="true"],
+.page-home [data-component="sticky-cta"][hidden],
+.page-home [data-component="sticky-cta"][data-hidden="true"],
+body.page-home #sticky-cta[hidden],
+body.page-home #sticky-cta[data-hidden="true"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
+
+/* Visible state - only applies when NOT hidden (neither hidden attr nor data-hidden) */
+.page-home #sticky-cta:not([hidden]):not([data-hidden="true"]),
+.page-home aside#sticky-cta:not([hidden]):not([data-hidden="true"]),
+.page-home [data-component="sticky-cta"]:not([hidden]):not([data-hidden="true"]),
+.page-home aside.sticky-cta-bar[data-component="sticky-cta"]:not([hidden]):not([data-hidden="true"]),
+body.page-home #sticky-cta:not([hidden]):not([data-hidden="true"]),
+body.page-home aside#sticky-cta:not([hidden]):not([data-hidden="true"]) {
+  /* DISPLAY: Visible only when not hidden */
   display: flex !important;
   visibility: visible !important;
   

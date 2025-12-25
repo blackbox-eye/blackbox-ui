@@ -1,0 +1,357 @@
+/**
+ * Sticky CTA Bar - Canonical Component Styles
+ * 
+ * SINGLE SOURCE OF TRUTH for sticky CTA styling.
+ * All other .sticky-cta-bar rules in marketing.css are deprecated.
+ * 
+ * Structure (2-row stacked layout):
+ * ┌─────────────────────────────────────────────────────┐
+ * │ Row 1: [Label text.....................] [X close] │
+ * │ Row 2: [Primary CTA btn] [Secondary CTA btn]       │
+ * └─────────────────────────────────────────────────────┘
+ * 
+ * Z-index contract (highest to lowest):
+ * - Cookie banner: 200
+ * - Mobile drawer overlay: 100
+ * - Alphabot/chat: 80
+ * - Sticky CTA: 75
+ * - Header: 50
+ * - Page content: 0
+ */
+
+/* ═══════════════════════════════════════════════════════════════════
+   BASE STYLES - Hidden by default, shown via JS
+   ═══════════════════════════════════════════════════════════════════ */
+.sticky-cta-bar,
+[data-component="sticky-cta"] {
+  /* Position: fixed at bottom */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 75;
+  
+  /* Hidden by default - JS shows after scroll threshold */
+  display: none;
+  
+  /* Safe area padding for iOS notch/home indicator */
+  padding: 0.875rem 1rem;
+  padding-bottom: calc(0.875rem + env(safe-area-inset-bottom, 0));
+  
+  /* 2-row flex layout */
+  flex-direction: column;
+  gap: 0.625rem;
+  
+  /* Visual styling */
+  background: linear-gradient(
+    135deg,
+    rgba(12, 14, 20, 0.97) 0%,
+    rgba(24, 20, 12, 0.98) 50%,
+    rgba(12, 14, 20, 0.97) 100%
+  );
+  border-top: 1px solid rgba(201, 162, 39, 0.25);
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+
+/* Native hidden attribute - highest priority */
+.sticky-cta-bar[hidden],
+[data-component="sticky-cta"][hidden] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Data attribute hidden state */
+.sticky-cta-bar[data-hidden="true"],
+[data-component="sticky-cta"][data-hidden="true"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Class-based dismissed state */
+.sticky-cta-bar.is-dismissed,
+[data-component="sticky-cta"].is-dismissed {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   VISIBLE STATES - Show when scroll threshold reached
+   ═══════════════════════════════════════════════════════════════════ */
+.sticky-cta-bar[data-visible="true"]:not([hidden]):not([data-hidden="true"]):not(.is-dismissed),
+[data-component="sticky-cta"][data-visible="true"]:not([hidden]):not([data-hidden="true"]):not(.is-dismissed),
+.sticky-cta-bar.is-visible:not([hidden]):not([data-hidden="true"]):not(.is-dismissed) {
+  display: flex !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ROW 1: HEADER ROW (Label + Dismiss button)
+   ═══════════════════════════════════════════════════════════════════ */
+.sticky-cta-bar__row--header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+/* Label container (eyebrow + title) */
+.sticky-cta-bar__label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  flex: 1;
+  min-width: 0; /* Allow text truncation */
+}
+
+.sticky-cta-bar__eyebrow {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(201, 162, 39, 0.85);
+  line-height: 1.2;
+}
+
+.sticky-cta-bar__title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Dismiss/Close button - 44x44 minimum touch target */
+.sticky-cta-bar__dismiss {
+  /* Touch target: 44x44px minimum */
+  min-width: 44px;
+  min-height: 44px;
+  width: 44px;
+  height: 44px;
+  
+  /* Flex centering for icon */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Visual styling */
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  
+  /* Reset button styles */
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  
+  /* Transitions */
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  
+  /* Ensure it's not positioned absolute (the bug we're fixing) */
+  position: relative;
+  flex-shrink: 0;
+}
+
+.sticky-cta-bar__dismiss:hover,
+.sticky-cta-bar__dismiss:focus {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.sticky-cta-bar__dismiss:active {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(0.95);
+}
+
+.sticky-cta-bar__dismiss:focus-visible {
+  outline: 2px solid rgba(201, 162, 39, 0.8);
+  outline-offset: 2px;
+}
+
+.sticky-cta-bar__dismiss svg {
+  width: 20px;
+  height: 20px;
+  pointer-events: none; /* Ensure clicks pass through to button */
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ROW 2: ACTIONS ROW (CTA buttons side-by-side)
+   ═══════════════════════════════════════════════════════════════════ */
+.sticky-cta-bar__row--actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+/* CTA Button base styles */
+.sticky-cta-bar__cta {
+  /* Flex for centering */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  
+  /* Sizing */
+  flex: 1;
+  min-height: 44px;
+  padding: 0.625rem 1rem;
+  
+  /* Typography */
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  
+  /* Border radius */
+  border-radius: 8px;
+  
+  /* Transitions */
+  transition: all 0.2s ease;
+  
+  /* Remove tap highlight */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sticky-cta-bar__cta:focus-visible {
+  outline: 2px solid rgba(201, 162, 39, 0.8);
+  outline-offset: 2px;
+}
+
+.sticky-cta-bar__cta svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* Primary CTA button */
+.sticky-cta-bar__cta--primary {
+  background: linear-gradient(135deg, rgba(201, 162, 39, 0.2), rgba(201, 162, 39, 0.12));
+  border: 1px solid rgba(201, 162, 39, 0.4);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.sticky-cta-bar__cta--primary:hover {
+  background: linear-gradient(135deg, rgba(201, 162, 39, 0.3), rgba(201, 162, 39, 0.2));
+  border-color: rgba(201, 162, 39, 0.6);
+  transform: translateY(-1px);
+}
+
+/* Secondary CTA button */
+.sticky-cta-bar__cta--secondary {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.sticky-cta-bar__cta--secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   FOOTER DOCKING - Hide when footer is visible
+   ═══════════════════════════════════════════════════════════════════ */
+.sticky-cta-bar.is-docked,
+[data-component="sticky-cta"].is-docked {
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   DESKTOP - HIDE STICKY CTA (use hero CTAs instead)
+   ═══════════════════════════════════════════════════════════════════ */
+@media (min-width: 1025px) {
+  .sticky-cta-bar,
+  [data-component="sticky-cta"] {
+    display: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE ADJUSTMENTS
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  /* Body padding when sticky CTA is visible */
+  body.has-sticky-cta {
+    padding-bottom: calc(var(--bbx-sticky-cta-height, 120px) + env(safe-area-inset-bottom, 0));
+  }
+}
+
+@media (max-width: 480px) {
+  .sticky-cta-bar,
+  [data-component="sticky-cta"] {
+    padding: 0.75rem;
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0));
+    gap: 0.5rem;
+  }
+  
+  .sticky-cta-bar__title {
+    font-size: 0.8125rem;
+  }
+  
+  .sticky-cta-bar__cta {
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LIGHT THEME
+   ═══════════════════════════════════════════════════════════════════ */
+:root[data-theme="light"] .sticky-cta-bar,
+:root[data-theme="light"] [data-component="sticky-cta"] {
+  background: linear-gradient(
+    135deg,
+    rgba(248, 249, 250, 0.98) 0%,
+    rgba(255, 255, 255, 0.99) 100%
+  );
+  border-top-color: rgba(201, 162, 39, 0.2);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme="light"] .sticky-cta-bar__eyebrow {
+  color: rgba(139, 114, 36, 0.9);
+}
+
+:root[data-theme="light"] .sticky-cta-bar__title {
+  color: rgba(31, 41, 55, 0.95);
+}
+
+:root[data-theme="light"] .sticky-cta-bar__dismiss {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: rgba(55, 65, 81, 0.8);
+}
+
+:root[data-theme="light"] .sticky-cta-bar__dismiss:hover {
+  background: rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.15);
+  color: rgba(31, 41, 55, 0.95);
+}
+
+:root[data-theme="light"] .sticky-cta-bar__cta--primary {
+  background: linear-gradient(135deg, rgba(139, 114, 36, 0.15), rgba(139, 114, 36, 0.1));
+  border-color: rgba(139, 114, 36, 0.35);
+  color: rgba(31, 41, 55, 0.95);
+}
+
+:root[data-theme="light"] .sticky-cta-bar__cta--secondary {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.12);
+  color: rgba(55, 65, 81, 0.9);
+}

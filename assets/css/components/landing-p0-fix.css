@@ -219,6 +219,12 @@ body.page-home aside#sticky-cta:not([hidden]):not([data-hidden="true"]) {
   
   /* Ensure clickable */
   pointer-events: auto !important;
+  
+  /* ALWAYS fixed at bottom */
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
 }
 
 /* ═══ STEP 3: Mobile CTA positioning ═══ */

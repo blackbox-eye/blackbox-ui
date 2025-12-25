@@ -401,10 +401,11 @@ section {
 /**
  * AI Assistant widget glass styling
  * Uses glass effect for consistent cross-browser appearance
+ * z-index: 95 (above modals at 90, within contract)
  */
 .alphabot-container,
 .alphabot-widget {
-  z-index: 2147483647;
+  z-index: 95;
 }
 
 .alphabot-toggle {

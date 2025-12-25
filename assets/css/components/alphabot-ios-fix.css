@@ -1,0 +1,378 @@
+/* ════════════════════════════════════════════════════════════════
+   ALPHABOT (AI ASSISTANT) — iOS CROSS-BROWSER FIX
+   ════════════════════════════════════════════════════════════════
+   
+   CRITICAL FIXES (2025-12-25):
+   
+   Issue 1: Alphabot not visible on page load (iPhone/DuckDuckGo)
+   - Was hidden behind cookie consent flow
+   - Was gated by sticky CTA state machine
+   
+   Issue 2: Panel styling collapse when opened (iOS browsers)
+   - Liquid-glass system not applied correctly
+   - Global CSS overrides breaking layout
+   
+   Solution:
+   - Decouple alphabot from cookie/CTA logic
+   - Ensure proper z-index stacking
+   - Apply stable liquid-glass styling
+   - Test on iOS: DuckDuckGo, Brave, Safari
+   
+   ════════════════════════════════════════════════════════════════ */
+
+/* ═══ ALPHABOT Z-INDEX & STACKING ═══ */
+
+/* Ensure alphabot rail and overlay have correct stacking order */
+.bbx-command-rail {
+  position: fixed !important;
+  z-index: 2147483647 !important; /* Maximum z-index */
+  pointer-events: none !important; /* Allow clicks through to children */
+}
+
+/* Re-enable pointer events for alphabot widget */
+.alphabot-widget {
+  pointer-events: auto !important;
+  z-index: 2147483647 !important;
+}
+
+/* Alphabot overlay should be below widget but above everything else */
+.alphabot-overlay,
+#alphabot-overlay {
+  z-index: 2147483646 !important;
+  pointer-events: none !important;
+}
+
+.alphabot-overlay.visible,
+#alphabot-overlay.visible {
+  pointer-events: auto !important;
+}
+
+/* Alphabot toggle must be visible and clickable */
+.alphabot-toggle {
+  position: relative !important;
+  z-index: 2147483647 !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+/* Ensure alphabot is above cookie banner (z-index: 80) */
+body.cookie-banner-open .bbx-command-rail,
+body.cookie-banner-open .alphabot-widget,
+body.cookie-banner-open .alphabot-toggle {
+  z-index: 2147483647 !important; /* Stay on top */
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Cookie banner should not block alphabot */
+.cookie-banner {
+  z-index: 80 !important; /* Below alphabot */
+}
+
+
+/* ═══ ALPHABOT PANEL — LIQUID GLASS SYSTEM ═══ */
+
+.alphabot-panel {
+  /* Liquid-glass backdrop */
+  -webkit-backdrop-filter: blur(16px) !important;
+  backdrop-filter: blur(16px) !important;
+  
+  /* Stable background with opacity */
+  background: linear-gradient(135deg, 
+    rgba(13, 15, 17, 0.98),
+    rgba(20, 22, 26, 0.98)
+  ) !important;
+  
+  /* Border with gold accent */
+  border: 1px solid rgba(138, 123, 106, 0.25) !important;
+  border-radius: 8px !important;
+  
+  /* Proper sizing - prevent collapse */
+  min-width: 22rem !important;
+  width: min(22rem, calc(100vw - 4rem)) !important;
+  max-height: 60vh !important;
+  min-height: 280px !important;
+  
+  /* Flexbox for stable layout */
+  display: flex !important;
+  flex-direction: column !important;
+  
+  /* Spacing */
+  padding: 1.25rem !important;
+  
+  /* Shadow for depth */
+  box-shadow: 
+    0 20px 45px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(138, 123, 106, 0.1) !important;
+  
+  /* Smooth transitions */
+  transition: opacity 0.25s ease, transform 0.25s ease !important;
+  
+  /* Position */
+  position: absolute !important;
+  bottom: 100% !important;
+  right: 0 !important;
+  margin-bottom: 1rem !important;
+  
+  /* Initial hidden state */
+  opacity: 0 !important;
+  transform: translate3d(0, 10px, 0) !important;
+  pointer-events: none !important;
+  
+  /* Force GPU acceleration */
+  will-change: opacity, transform !important;
+  transform: translateZ(0) !important;
+}
+
+/* Open state */
+.alphabot-widget.open .alphabot-panel {
+  opacity: 1 !important;
+  transform: translate3d(0, 0, 0) !important;
+  pointer-events: auto !important;
+}
+
+/* Panel header - stable layout */
+.alphabot-panel-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: flex-start !important;
+  margin-bottom: 1rem !important;
+  flex-shrink: 0 !important;
+}
+
+/* Messages area - scrollable */
+.alphabot-messages {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.75rem !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  margin-bottom: 1rem !important;
+  min-height: 80px !important;
+  max-height: 40vh !important;
+  
+  /* Smooth scrolling on iOS */
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* Input group - fixed at bottom */
+.alphabot-input-group {
+  display: flex !important;
+  gap: 0.5rem !important;
+  margin-top: auto !important;
+  flex-shrink: 0 !important;
+}
+
+/* Input field - stable styling */
+#alphabot-input {
+  flex: 1 !important;
+  min-width: 0 !important;
+  resize: none !important;
+  background: var(--form-field-bg) !important;
+  border: 1px solid var(--form-field-border) !important;
+  border-radius: 0.75rem !important;
+  padding: 0.75rem 1rem !important;
+  color: var(--form-field-text) !important;
+  font-size: 0.9375rem !important;
+  line-height: 1.5 !important;
+  
+  /* iOS-specific fixes */
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+}
+
+/* Send button - stable styling */
+.alphabot-send-btn {
+  background: var(--cta-background) !important;
+  border: none !important;
+  border-radius: 0.75rem !important;
+  color: var(--cta-contrast) !important;
+  font-weight: 600 !important;
+  padding: 0.75rem 1.25rem !important;
+  min-height: 44px !important; /* iOS tap target */
+  flex-shrink: 0 !important;
+  cursor: pointer !important;
+  
+  /* iOS-specific fixes */
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+}
+
+.alphabot-send-btn:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+
+/* ═══ MOBILE LAYOUT (iOS-specific) ═══ */
+
+@media (max-width: 768px) {
+  /* Full-width panel on mobile */
+  .alphabot-panel {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    
+    /* Full mobile dimensions */
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+    max-height: 70vh !important;
+    min-height: 280px !important;
+    
+    /* Rounded top corners only */
+    border-radius: 1.25rem 1.25rem 0 0 !important;
+    border-width: 1px 0 0 0 !important;
+    border-top: 2px solid color-mix(in srgb, var(--primary-accent) 22%, transparent) !important;
+    
+    /* Adjust padding for safe area */
+    padding: 1.25rem clamp(1rem, 4vw, 1.5rem) calc(1.25rem + env(safe-area-inset-bottom, 0px)) !important;
+    
+    /* Slide up transition */
+    transform: translateY(110%) !important;
+    margin-bottom: 0 !important;
+    
+    /* Enhanced shadow for mobile */
+    box-shadow: 0 -20px 55px rgba(0, 0, 0, 0.65) !important;
+  }
+  
+  /* Open state on mobile */
+  .alphabot-widget.open .alphabot-panel {
+    transform: translateY(0) !important;
+  }
+  
+  /* Adjust toggle for mobile */
+  .alphabot-toggle {
+    background: rgba(13, 15, 17, 0.98) !important;
+    font-size: 0.875rem !important;
+    max-width: min(14rem, 55vw) !important;
+    padding: 0.625rem 0.875rem !important;
+  }
+  
+  /* Hide label on very small screens */
+  .alphabot-label {
+    display: none !important;
+  }
+  
+  /* Adjust messages height on mobile */
+  .alphabot-messages {
+    flex: 1 !important;
+    max-height: none !important;
+    min-height: 100px !important;
+    margin-bottom: 0.75rem !important;
+  }
+  
+  /* Larger tap targets on mobile */
+  #alphabot-input {
+    font-size: 1rem !important;
+    padding: 0.875rem 1rem !important;
+    min-height: 48px !important;
+  }
+  
+  .alphabot-send-btn {
+    font-size: 1rem !important;
+    padding: 0.875rem 1.5rem !important;
+    min-height: 48px !important;
+  }
+}
+
+
+/* ═══ iOS-SPECIFIC FIXES ═══ */
+
+/* Fix for iOS Safari/DuckDuckGo viewport height */
+@supports (-webkit-touch-callout: none) {
+  .alphabot-panel {
+    /* Use -webkit-fill-available for iOS */
+    max-height: calc(70vh - env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* Prevent zoom on iOS when focusing input */
+@media (max-width: 768px) {
+  #alphabot-input,
+  .alphabot-send-btn {
+    font-size: 16px !important; /* Prevents iOS zoom */
+  }
+}
+
+/* Fix for iOS backdrop-filter fallback */
+@supports not (backdrop-filter: blur(16px)) {
+  .alphabot-panel {
+    background: rgba(13, 15, 17, 0.95) !important;
+  }
+}
+
+/* Fix for iOS scroll momentum */
+.alphabot-messages {
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+}
+
+/* Fix for iOS button appearance */
+.alphabot-toggle,
+.alphabot-send-btn,
+.alphabot-close-btn {
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}
+
+
+/* ═══ LIGHT THEME SUPPORT ═══ */
+
+:root[data-theme="light"] .alphabot-panel {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border-color: rgba(15, 23, 42, 0.1) !important;
+  box-shadow: 0 25px 55px rgba(15, 23, 42, 0.2) !important;
+}
+
+:root[data-theme="light"] .alphabot-toggle {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(15, 23, 42, 0.1) !important;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15) !important;
+}
+
+
+/* ═══ ENSURE VISIBILITY FROM START ═══ */
+
+/* Never hide alphabot due to cookie banner state */
+body.cookie-banner-open .bbx-command-rail,
+body.cookie-banner-open .alphabot-widget,
+body.cookie-banner-open .alphabot-toggle,
+body[data-cookie-consent] .bbx-command-rail,
+body[data-cookie-consent] .alphabot-widget,
+body[data-cookie-consent] .alphabot-toggle {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Never hide alphabot due to sticky CTA state */
+body.has-sticky-cta .bbx-command-rail,
+body.has-sticky-cta .alphabot-widget,
+body.has-sticky-cta .alphabot-toggle,
+body[data-sticky-cta-visible] .bbx-command-rail,
+body[data-sticky-cta-visible] .alphabot-widget,
+body[data-sticky-cta-visible] .alphabot-toggle {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Alphabot should always be visible on landing */
+.page-home .bbx-command-rail,
+.page-home .alphabot-widget,
+.page-home .alphabot-toggle {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}

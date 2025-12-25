@@ -354,6 +354,55 @@ if (!empty($disable_alphabot)) {
     <link rel="preload" href="/assets/css/theme-overrides.css?v=<?= bbx_asset_version('css/theme-overrides.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/assets/css/theme-overrides.css?v=<?= bbx_asset_version('css/theme-overrides.css') ?>"></noscript>
 
+    <!-- Deterministic CSS order: base -> marketing -> components -> glass (last) -->
+    <?php
+    // Admin pages need admin.css, marketing pages need marketing.css
+    $admin_pages = ['gdi-login.php', 'agent-login.php', 'dashboard.php', 'admin.php', 'settings.php'];
+    $current_script = basename($_SERVER['SCRIPT_NAME']);
+    $is_admin_page = in_array($current_script, $admin_pages);
+    // Use minified CSS in production (when DEBUG is not set or false)
+    $use_minified = !defined('BBX_DEBUG_RECAPTCHA') || !BBX_DEBUG_RECAPTCHA;
+    $css_suffix = $use_minified ? '.min.css' : '.css';
+    $admin_css_path = 'css/admin' . $css_suffix;
+    $marketing_css_path = 'css/marketing' . $css_suffix;
+
+    if ($is_admin_page): ?>
+        <link rel="preload" href="/assets/css/admin<?= $css_suffix ?>?v=<?= bbx_asset_version($admin_css_path) ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/assets/css/admin<?= $css_suffix ?>?v=<?= bbx_asset_version($admin_css_path) ?>"></noscript>
+    <?php else: ?>
+        <link rel="preload" href="/assets/css/marketing<?= $css_suffix ?>?v=<?= bbx_asset_version($marketing_css_path) ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/assets/css/marketing<?= $css_suffix ?>?v=<?= bbx_asset_version($marketing_css_path) ?>"></noscript>
+    <?php endif; ?>
+
+    <!-- Inline landing gate (pre-render) to prevent FOUC before async CSS swaps -->
+    <style id="landing-gate-guard">
+        body.landing-gate { opacity: 0; visibility: hidden; }
+        body.landing-ready { opacity: 1; visibility: visible; }
+    </style>
+    <script>
+        (function() {
+            function releaseLandingGate() {
+                var body = document.body;
+                if (!body || !body.classList.contains('landing-gate')) return;
+                body.classList.add('landing-ready');
+                body.classList.remove('landing-gate');
+            }
+            var fireRelease = function() {
+                requestAnimationFrame(function() { requestAnimationFrame(releaseLandingGate); });
+            };
+            if (document.readyState === 'loading') {
+                document.addEventListener('readystatechange', function onReady() {
+                    if (document.readyState === 'interactive') {
+                        document.removeEventListener('readystatechange', onReady);
+                        fireRelease();
+                    }
+                });
+            } else {
+                fireRelease();
+            }
+        })();
+    </script>
+
     <!-- Sprint 6: Motion safety (global) + unified hero mobile -->
     <link rel="preload" href="/assets/css/components/motion-safe.css?v=<?= bbx_asset_version('css/components/motion-safe.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/assets/css/components/motion-safe.css?v=<?= bbx_asset_version('css/components/motion-safe.css') ?>"></noscript>
@@ -378,6 +427,10 @@ if (!empty($disable_alphabot)) {
     <link rel="preload" href="/assets/css/components/landing-p0-fix.css?v=<?= bbx_asset_version('css/components/landing-p0-fix.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/assets/css/components/landing-p0-fix.css?v=<?= bbx_asset_version('css/components/landing-p0-fix.css') ?>"></noscript>
 
+    <!-- Alphabot iOS Cross-Browser Fix (2025-12-25) - Decouple from cookie/CTA state -->
+    <link rel="preload" href="/assets/css/components/alphabot-ios-fix.css?v=<?= bbx_asset_version('css/components/alphabot-ios-fix.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/components/alphabot-ios-fix.css?v=<?= bbx_asset_version('css/components/alphabot-ios-fix.css') ?>"></noscript>
+
     <!-- P1/P2 Landing Page Polish (Priority Access, footer, FOUC gate) -->
     <link rel="preload" href="/assets/css/components/landing-p1-polish.css?v=<?= bbx_asset_version('css/components/landing-p1-polish.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/assets/css/components/landing-p1-polish.css?v=<?= bbx_asset_version('css/components/landing-p1-polish.css') ?>"></noscript>
@@ -389,26 +442,6 @@ if (!empty($disable_alphabot)) {
     <!-- Liquid Glass System - Cross-browser glass/blur effects (must load last to override) -->
     <link rel="preload" href="/assets/css/components/liquid-glass.css?v=<?= bbx_asset_version('css/components/liquid-glass.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/assets/css/components/liquid-glass.css?v=<?= bbx_asset_version('css/components/liquid-glass.css') ?>"></noscript>
-
-    <!-- Conditional CSS loading -->
-    <?php
-    // Admin pages need admin.css, marketing pages need marketing.css
-    $admin_pages = ['gdi-login.php', 'agent-login.php', 'dashboard.php', 'admin.php', 'settings.php'];
-    $current_script = basename($_SERVER['SCRIPT_NAME']);
-    $is_admin_page = in_array($current_script, $admin_pages);
-    // Use minified CSS in production (when DEBUG is not set or false)
-    $use_minified = !defined('BBX_DEBUG_RECAPTCHA') || !BBX_DEBUG_RECAPTCHA;
-    $css_suffix = $use_minified ? '.min.css' : '.css';
-    $admin_css_path = 'css/admin' . $css_suffix;
-    $marketing_css_path = 'css/marketing' . $css_suffix;
-
-    if ($is_admin_page): ?>
-        <link rel="preload" href="/assets/css/admin<?= $css_suffix ?>?v=<?= bbx_asset_version($admin_css_path) ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/assets/css/admin<?= $css_suffix ?>?v=<?= bbx_asset_version($admin_css_path) ?>"></noscript>
-    <?php else: ?>
-        <link rel="preload" href="/assets/css/marketing<?= $css_suffix ?>?v=<?= bbx_asset_version($marketing_css_path) ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/assets/css/marketing<?= $css_suffix ?>?v=<?= bbx_asset_version($marketing_css_path) ?>"></noscript>
-    <?php endif; ?>
 
     <script src="config.js?v=<?= bbx_asset_version('../config.js') ?>" defer></script>
     <?php if (BBX_RECAPTCHA_SITE_KEY !== ''): ?>
@@ -618,12 +651,12 @@ if ($current_page === 'home' || $current_page === 'index') {
     </header>
 
     <!-- Mobile menu overlay (hidden by default, JS toggles via class) -->
-    <div id="mobile-menu-overlay" class="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[39] opacity-0 pointer-events-none transition-opacity duration-200 bbx-drawer-overlay" data-menu-overlay></div>
+    <div id="mobile-menu-overlay" class="bbx-drawer-overlay lg:hidden transition-opacity duration-200" data-menu-overlay></div>
 
     <!-- Mobile menu drawer (compact design) -->
-    <div id="mobile-menu" class="lg:hidden fixed top-0 right-0 bottom-0 w-64 max-w-[70vw] bg-gray-900/98 backdrop-blur-md z-40 shadow-2xl border-l border-gray-800/50 translate-x-full transition-transform duration-200 bbx-glass bbx-glass--strong" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-heading" aria-hidden="true">
+    <div id="mobile-menu" class="bbx-drawer-panel lg:hidden mobile-nav-drawer fixed top-0 right-0 bottom-0 w-64 max-w-[70vw] translate-x-full transition-transform duration-200" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-heading" aria-hidden="true">
         <!-- Compact header -->
-        <div class="flex justify-between items-center px-4 py-3 border-b border-gray-800/50">
+        <div class="mobile-drawer-header flex justify-between items-center px-4 py-3 border-b border-gray-800/50">
             <span id="mobile-menu-heading" class="text-sm font-semibold text-gray-400 uppercase tracking-wider"><?= t('header.mobile.navigation') ?></span>
             <button id="mobile-menu-close" class="text-gray-400 hover:text-white p-1.5 -mr-1 rounded-lg hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 transition-colors" style="--tw-ring-color: var(--primary-accent);" aria-label="<?= htmlspecialchars(t('header.mobile.close_menu')) ?>">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">

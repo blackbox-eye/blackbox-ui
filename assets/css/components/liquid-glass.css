@@ -164,6 +164,57 @@
   pointer-events: auto;
 }
 
+/* =========================================================================
+   DRAWER PANEL - Full Height + Glass
+   ========================================================================= */
+
+#mobile-menu,
+.mobile-nav-drawer {
+  height: 100dvh;
+  min-height: 100dvh;
+  max-height: 100dvh;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 0.75rem);
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  background: var(--bbx-glass-fallback-strong);
+  border-left: 1px solid var(--bbx-glass-border-strong);
+  box-shadow: var(--bbx-glass-shadow-strong);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  #mobile-menu,
+  .mobile-nav-drawer {
+    -webkit-backdrop-filter: blur(var(--bbx-glass-blur)) saturate(var(--bbx-glass-sat));
+    backdrop-filter: blur(var(--bbx-glass-blur)) saturate(var(--bbx-glass-sat));
+    background: var(--bbx-glass-bg-strong);
+  }
+}
+
+#mobile-menu nav,
+.mobile-nav-drawer nav {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-drawer-header,
+#mobile-menu .mobile-drawer-header,
+.mobile-nav-drawer .mobile-drawer-header,
+#mobile-menu > div:first-child {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: rgba(8, 12, 18, 0.9);
+  border-bottom: 1px solid var(--bbx-glass-border-strong);
+}
+
 /* Light theme overlay */
 :root[data-theme="light"] .bbx-drawer-overlay,
 :root[data-theme="light"] #mobile-menu-overlay {
@@ -175,86 +226,6 @@
   :root[data-theme="light"] #mobile-menu-overlay {
     background: rgba(248, 250, 252, 0.45);
   }
-}
-
-/* =========================================================================
-   DRAWER PANEL - Glass Effect with Full Height
-   ========================================================================= */
-
-/**
- * Mobile drawer panel with proper glass styling
- * - 100dvh height (dynamic viewport height for mobile)
- * - Sticky header
- * - Contained scroll
- * - Glass effect with fallback
- */
-#mobile-menu {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 40;
-  
-  /* Full dynamic viewport height */
-  height: 100dvh;
-  height: 100vh; /* Fallback for browsers without dvh support */
-  max-height: 100dvh;
-  max-height: 100vh; /* Fallback */
-  
-  /* Glass effect fallback */
-  background: var(--bbx-glass-fallback-strong);
-  border-left: 1px solid var(--bbx-glass-border-strong);
-  box-shadow: var(--bbx-glass-shadow-strong);
-  
-  /* Contained scroll */
-  overflow-y: auto;
-  overflow-x: hidden;
-  
-  /* Safe areas for notches/home indicator */
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-right: env(safe-area-inset-right, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  
-  display: flex;
-  flex-direction: column;
-}
-
-/* Glass effect when supported */
-@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-  #mobile-menu {
-    -webkit-backdrop-filter: blur(var(--bbx-glass-blur-strong)) saturate(var(--bbx-glass-sat));
-    backdrop-filter: blur(var(--bbx-glass-blur-strong)) saturate(var(--bbx-glass-sat));
-    background: var(--bbx-glass-bg-strong);
-  }
-}
-
-/* Sticky header in drawer */
-#mobile-menu > div:first-child {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: var(--bbx-glass-fallback-strong);
-  backdrop-filter: blur(var(--bbx-glass-blur-strong));
-  -webkit-backdrop-filter: blur(var(--bbx-glass-blur-strong));
-  border-bottom: 1px solid var(--bbx-glass-border);
-}
-
-/* Scrollable navigation area */
-#mobile-menu nav {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Footer actions - stick to bottom */
-#mobile-menu > div:last-child {
-  position: sticky;
-  bottom: 0;
-  background: var(--bbx-glass-fallback-strong);
-  backdrop-filter: blur(var(--bbx-glass-blur-strong));
-  -webkit-backdrop-filter: blur(var(--bbx-glass-blur-strong));
-  border-top: 1px solid var(--bbx-glass-border);
 }
 
 /* =========================================================================
@@ -401,11 +372,10 @@ section {
 /**
  * AI Assistant widget glass styling
  * Uses glass effect for consistent cross-browser appearance
- * z-index: 95 (above modals at 90, within contract)
  */
 .alphabot-container,
 .alphabot-widget {
-  z-index: 95;
+  z-index: 2147483647;
 }
 
 .alphabot-toggle {

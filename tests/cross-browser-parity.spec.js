@@ -83,20 +83,17 @@ test.describe('Cross-Browser Parity - Landing Page', () => {
           return window.getComputedStyle(el).backgroundColor;
         });
         
-        // Parse rgba values - should NOT be solid black (0,0,0,1)
+          // Parse rgba values - must never be solid black (0,0,0,1) and must keep transparency
         const rgbaMatch = bgColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
         
         if (rgbaMatch) {
           const [, r, g, b, a = '1'] = rgbaMatch;
           const alpha = parseFloat(a);
           
-          // If it's completely solid (alpha=1), the R/G/B must not all be zero (pure black)
-          // Allow very dark colors as long as there's SOME transparency OR not pure black
+          // Require transparency and no pure black
           const isPureBlack = parseInt(r) === 0 && parseInt(g) === 0 && parseInt(b) === 0;
-          const hasTransparency = alpha < 1;
-          
-          // Either has transparency OR is not pure black
-          expect(hasTransparency || !isPureBlack).toBe(true);
+          expect(alpha).toBeLessThan(1);
+          expect(isPureBlack).toBe(false);
         }
       }
     });
@@ -128,66 +125,49 @@ test.describe('Cross-Browser Parity - Landing Page', () => {
         }
       }
     });
-    
-    test('drawer panel has proper height, glass effect, and sticky header', async ({ page }) => {
+  });
+
+  test.describe('Drawer Glass + Height', () => {
+    test('drawer fills viewport and scrolls internally', async ({ page }) => {
       await page.setViewportSize(VIEWPORTS.mobile);
-      
-      const menuToggle = page.locator('.header-burger').first();
+      const menuToggle = page.locator('.header-burger, [aria-label*="menu"], [aria-controls="mobile-menu"]').first();
       await expect(menuToggle).toBeVisible({ timeout: 5000 });
-      
-      // Open drawer
       await menuToggle.click();
       await page.waitForTimeout(400);
-      
-      const drawer = page.locator('#mobile-menu');
-      
-      if (await drawer.isVisible()) {
-        const styles = await drawer.evaluate((el) => {
-          const computed = window.getComputedStyle(el);
-          return {
-            height: computed.height,
-            backdropFilter: computed.backdropFilter || computed.webkitBackdropFilter,
-            background: computed.backgroundColor,
-            overflowY: computed.overflowY,
-            display: computed.display,
-            flexDirection: computed.flexDirection
-          };
-        });
-        
-        // Should have full height (100vh or 100dvh)
-        const viewportHeight = await page.evaluate(() => window.innerHeight);
-        const drawerHeight = parseInt(styles.height);
-        
-        // Height should be close to viewport height (within 10px tolerance for safe areas)
-        expect(Math.abs(drawerHeight - viewportHeight)).toBeLessThan(50);
-        
-        // Should have glass effect or fallback
-        const hasGlass = styles.backdropFilter && styles.backdropFilter !== 'none';
-        const hasBackground = styles.background && styles.background.includes('rgb');
-        expect(hasGlass || hasBackground).toBe(true);
-        
-        // Should have vertical scroll
-        expect(styles.overflowY).toBe('auto');
-        
-        // Should be flex container (for sticky header/footer)
-        expect(styles.display).toBe('flex');
-        expect(styles.flexDirection).toBe('column');
-        
-        // Check sticky header
-        const header = drawer.locator('> div:first-child');
-        if (await header.count() > 0) {
-          const headerStyles = await header.evaluate((el) => {
-            const computed = window.getComputedStyle(el);
-            return {
-              position: computed.position,
-              top: computed.top
-            };
-          });
-          
-          // Header should be sticky or have background blur
-          expect(['sticky', 'relative', 'static']).toContain(headerStyles.position);
-        }
-      }
+
+      const drawer = page.locator('#mobile-menu').first();
+      const nav = drawer.locator('nav').first();
+      const viewportHeight = await page.evaluate(() => window.innerHeight);
+
+      const drawerMetrics = await drawer.evaluate((el) => {
+        const rect = el.getBoundingClientRect();
+        const style = window.getComputedStyle(el);
+        return {
+          height: rect.height,
+          top: rect.top,
+          overflowY: style.overflowY,
+          background: style.backgroundColor,
+        };
+      });
+
+      expect(drawerMetrics.height).toBeGreaterThanOrEqual(viewportHeight - 4);
+      expect(drawerMetrics.top).toBe(0);
+      expect(['auto', 'scroll']).toContain(drawerMetrics.overflowY);
+
+      const navOverflow = await nav.evaluate((el) => window.getComputedStyle(el).overflowY);
+      expect(['auto', 'scroll']).toContain(navOverflow);
+
+      const headerPosition = await drawer.locator('.mobile-drawer-header, #mobile-menu > div:first-child').first().evaluate((el) => {
+        return window.getComputedStyle(el).position;
+      });
+      expect(headerPosition).toBe('sticky');
+
+      const drawerBgAlpha = await drawer.evaluate((el) => {
+        const bg = window.getComputedStyle(el).backgroundColor;
+        const match = bg.match(/rgba?\(\d+,\s*\d+,\s*\d+(?:,\s*([\d.]+))?\)/);
+        return match ? parseFloat(match[1] || '1') : 1;
+      });
+      expect(drawerBgAlpha).toBeLessThan(1);
     });
   });
 

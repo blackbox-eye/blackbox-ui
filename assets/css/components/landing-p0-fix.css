@@ -27,14 +27,16 @@
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* Landing first-paint gate to prevent FOUC/ghost UI */
+/* CRITICAL FIX: Do NOT block scroll or pointer events - only control opacity */
 body.landing-gate.page-home {
   opacity: 0;
-  visibility: hidden;
+  /* REMOVED: visibility: hidden - was blocking scroll interaction */
+  pointer-events: auto !important; /* Ensure scroll works immediately */
 }
 
 body.page-home.landing-ready {
   opacity: 1;
-  visibility: visible;
+  /* REMOVED: visibility: visible - not needed */
   transition: opacity 0.12s ease;
 }
 

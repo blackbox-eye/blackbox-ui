@@ -34,7 +34,13 @@
 
 /* ════ BASE RESET ════ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { 
+  scroll-behavior: smooth; 
+  -webkit-text-size-adjust: 100%;
+  /* CRITICAL FIX #2: Ensure scroll is NEVER blocked on load */
+  overflow-y: auto !important;
+  overflow-x: hidden;
+}
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: var(--color-bg);
@@ -42,6 +48,9 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
+  /* CRITICAL FIX #2: Body must allow scroll by default */
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* ════ LAYOUT CONTAINER ════ */

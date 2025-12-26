@@ -147,8 +147,14 @@ async function collectIntel() {
   fs.writeFileSync(outputPath, JSON.stringify(allPosts, null, 2));
   console.log(`📝 Saved to: ${outputPath}`);
   
-  // Save count for workflow
-  fs.writeFileSync('/tmp/intel_count.txt', allPosts.length.toString());
+  // Save count for workflow (GitHub Actions specific)
+  // Note: Only works in CI environment; harmless in local dev
+  try {
+    fs.writeFileSync('/tmp/intel_count.txt', allPosts.length.toString());
+  } catch (err) {
+    // Ignore error in Windows/local environments
+    console.warn('⚠️  Could not write to /tmp (not a Unix system?)');
+  }
   
   return allPosts;
 }

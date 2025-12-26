@@ -37,6 +37,8 @@ $total_pages = 0;
 $data_source = 'none'; // Track data source: 'database', 'json', or 'none'
 
 // Check if database is available before attempting queries
+// Note: BBX_DB_CONNECTED is defined in db.php. If db.php doesn't exist,
+// this constant will be undefined and the check will return false (intended behavior)
 $db_available = defined('BBX_DB_CONNECTED') && BBX_DB_CONNECTED === true;
 
 try {

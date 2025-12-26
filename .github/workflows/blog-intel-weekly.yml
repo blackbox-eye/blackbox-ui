@@ -62,7 +62,13 @@ jobs:
         run: |
           echo "🔍 Collecting intel from RSS/Atom feeds..."
           node scripts/blog-intel/collect-feeds.js
-          echo "collected_count=$(cat /tmp/intel_count.txt 2>/dev/null || echo 0)" >> $GITHUB_OUTPUT
+          # Read count from temp file if available (Unix systems)
+          if [ -f /tmp/intel_count.txt ]; then
+            echo "collected_count=$(cat /tmp/intel_count.txt)" >> $GITHUB_OUTPUT
+          else
+            # Fallback: count from generated JSON
+            echo "collected_count=$(node -e "console.log(require('./data/blog/.collected-raw.json').length)" 2>/dev/null || echo 0)" >> $GITHUB_OUTPUT
+          fi
 
       - name: Normalize data
         run: |

@@ -277,7 +277,7 @@ test.describe('Blog filters and interactions (desktop)', () => {
       const icon = linkWithIcon.locator('svg');
       
       // Icon might be in title or read button
-      expect(icon.count()).resolves.toBeGreaterThanOrEqual(0);
+      expect(await icon.count()).toBeGreaterThanOrEqual(0);
     }
   });
 });

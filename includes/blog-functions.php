@@ -20,7 +20,9 @@ require_once __DIR__ . '/i18n.php';
  */
 function bbx_load_blog_posts_json(): array
 {
-  $json_path = __DIR__ . '/../data/blog/posts.json';
+  // Use configurable data directory (can be overridden via constant)
+  $data_dir = defined('BBX_DATA_DIR') ? BBX_DATA_DIR : __DIR__ . '/../data';
+  $json_path = $data_dir . '/blog/posts.json';
   
   if (!file_exists($json_path)) {
     error_log('[Blog] posts.json not found at: ' . $json_path);

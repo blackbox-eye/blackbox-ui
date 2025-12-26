@@ -2,14 +2,168 @@
 
 /**
  * Blog Functions - Helper functions for blog CMS
- * Blackbox EYE - Sprint 4
+ * Blackbox EYE - Sprint 5 + Intel Engine
  *
- * @version 1.0
- * @date 2025-11-23
+ * @version 2.0
+ * @date 2025-12-26
+ * 
+ * Supports both database-driven (legacy) and JSON-driven (new) blog posts.
  */
 
 require_once __DIR__ . '/env.php';
 require_once __DIR__ . '/i18n.php';
+
+/**
+ * Load blog posts from JSON file (new data-driven approach)
+ *
+ * @return array Parsed posts data or empty structure
+ */
+function bbx_load_blog_posts_json(): array
+{
+  // Use configurable data directory (can be overridden via constant)
+  $data_dir = defined('BBX_DATA_DIR') ? BBX_DATA_DIR : __DIR__ . '/../data';
+  $json_path = $data_dir . '/blog/posts.json';
+  
+  if (!file_exists($json_path)) {
+    error_log('[Blog] posts.json not found at: ' . $json_path);
+    return [
+      'version' => '1.0.0',
+      'generated_at' => null,
+      'pipeline_version' => null,
+      'metadata' => ['total_posts' => 0, 'regions' => [], 'date_range' => ['earliest' => null, 'latest' => null]],
+      'posts' => []
+    ];
+  }
+  
+  $json_content = file_get_contents($json_path);
+  $data = json_decode($json_content, true);
+  
+  if (json_last_error() !== JSON_ERROR_NONE) {
+    error_log('[Blog] Failed to parse posts.json: ' . json_last_error_msg());
+    return [
+      'version' => '1.0.0',
+      'generated_at' => null,
+      'pipeline_version' => null,
+      'metadata' => ['total_posts' => 0, 'regions' => [], 'date_range' => ['earliest' => null, 'latest' => null]],
+      'posts' => []
+    ];
+  }
+  
+  return $data;
+}
+
+/**
+ * Get blog posts from JSON with pagination and filtering
+ *
+ * @param int $page Current page number
+ * @param int $per_page Posts per page
+ * @param string|null $region Filter by region
+ * @param string|null $tag Filter by tag
+ * @return array Array of blog posts
+ */
+function bbx_get_blog_posts_from_json(int $page = 1, int $per_page = 10, ?string $region = null, ?string $tag = null): array
+{
+  $data = bbx_load_blog_posts_json();
+  $posts = $data['posts'] ?? [];
+  
+  // Apply filters
+  if ($region !== null) {
+    $posts = array_filter($posts, function($post) use ($region) {
+      return isset($post['region']) && $post['region'] === $region;
+    });
+  }
+  
+  if ($tag !== null) {
+    $posts = array_filter($posts, function($post) use ($tag) {
+      return isset($post['tags']) && in_array($tag, $post['tags']);
+    });
+  }
+  
+  // Sort by published_at descending
+  usort($posts, function($a, $b) {
+    $time_a = isset($a['published_at']) ? strtotime($a['published_at']) : 0;
+    $time_b = isset($b['published_at']) ? strtotime($b['published_at']) : 0;
+    return $time_b - $time_a;
+  });
+  
+  // Paginate
+  $offset = ($page - 1) * $per_page;
+  return array_slice($posts, $offset, $per_page);
+}
+
+/**
+ * Get total count of posts from JSON
+ *
+ * @param string|null $region Filter by region
+ * @param string|null $tag Filter by tag
+ * @return int Total count
+ */
+function bbx_get_blog_posts_json_count(?string $region = null, ?string $tag = null): int
+{
+  $data = bbx_load_blog_posts_json();
+  $posts = $data['posts'] ?? [];
+  
+  // Apply filters
+  if ($region !== null) {
+    $posts = array_filter($posts, function($post) use ($region) {
+      return isset($post['region']) && $post['region'] === $region;
+    });
+  }
+  
+  if ($tag !== null) {
+    $posts = array_filter($posts, function($post) use ($tag) {
+      return isset($post['tags']) && in_array($tag, $post['tags']);
+    });
+  }
+  
+  return count($posts);
+}
+
+/**
+ * Get all unique tags from JSON posts
+ *
+ * @return array Array of tags
+ */
+function bbx_get_blog_tags_from_json(): array
+{
+  $data = bbx_load_blog_posts_json();
+  $posts = $data['posts'] ?? [];
+  $tags = [];
+  
+  foreach ($posts as $post) {
+    if (isset($post['tags']) && is_array($post['tags'])) {
+      $tags = array_merge($tags, $post['tags']);
+    }
+  }
+  
+  $tags = array_unique($tags);
+  sort($tags);
+  
+  return $tags;
+}
+
+/**
+ * Get all unique regions from JSON posts
+ *
+ * @return array Array of regions
+ */
+function bbx_get_blog_regions_from_json(): array
+{
+  $data = bbx_load_blog_posts_json();
+  $posts = $data['posts'] ?? [];
+  $regions = [];
+  
+  foreach ($posts as $post) {
+    if (isset($post['region'])) {
+      $regions[] = $post['region'];
+    }
+  }
+  
+  $regions = array_unique($regions);
+  sort($regions);
+  
+  return $regions;
+}
 
 /**
  * Ensure that a PDO instance is available before running queries.

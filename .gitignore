@@ -94,6 +94,12 @@ playwright-libs/
 .lighthouseci/*.json
 !.lighthouseci/assertions.json
 
+# Blog Intel Pipeline - Intermediate Files
+data/blog/.collected-raw.json
+data/blog/.normalized.json
+data/blog/.deduped.json
+data/blog/.enriched.json
+
 # ────────────────────────────────────────────────────────────────────────────────
 # --- GitHub/CI artefakter ---
 .github/*

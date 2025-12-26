@@ -10,7 +10,11 @@
 
 require_once __DIR__ . '/includes/i18n.php';
 require_once __DIR__ . '/includes/blog-functions.php';
-require_once __DIR__ . '/db.php';
+
+// Gracefully handle missing db.php (fail-open pattern)
+if (file_exists(__DIR__ . '/db.php')) {
+  require_once __DIR__ . '/db.php';
+}
 
 $current_page = 'blog';
 $page_title = t('blog.meta.title');
@@ -20,6 +24,8 @@ $meta_description = t('blog.meta.description');
 $posts_per_page = 9;
 $current_page_num = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 $category_filter = isset($_GET['category']) ? $_GET['category'] : null;
+$region_filter = isset($_GET['region']) ? $_GET['region'] : null;
+$tag_filter = isset($_GET['tag']) ? $_GET['tag'] : null;
 
 // Get posts
 $blog_data_error = false;
@@ -28,26 +34,69 @@ $posts = [];
 $categories = [];
 $total_posts = 0;
 $total_pages = 0;
+$data_source = 'none'; // Track data source: 'database', 'json', or 'none'
+
+// Check if database is available before attempting queries
+// Note: BBX_DB_CONNECTED is defined in db.php. If db.php doesn't exist,
+// this constant will be undefined and the check will return false (intended behavior)
+$db_available = defined('BBX_DB_CONNECTED') && BBX_DB_CONNECTED === true;
 
 try {
-  $posts = bbx_get_blog_posts($current_page_num, $posts_per_page, $category_filter);
-  $total_posts = bbx_get_blog_posts_count($category_filter);
-  $total_pages = $total_posts > 0 ? (int) ceil($total_posts / $posts_per_page) : 0;
-  $categories = bbx_get_blog_categories();
+  if ($db_available) {
+    // Try database first (legacy support)
+    $posts = bbx_get_blog_posts($current_page_num, $posts_per_page, $category_filter);
+    $total_posts = bbx_get_blog_posts_count($category_filter);
+    $total_pages = $total_posts > 0 ? (int) ceil($total_posts / $posts_per_page) : 0;
+    $categories = bbx_get_blog_categories();
+    $data_source = 'database';
+    
+    // Ensure we have a good set of categories - add fallbacks if database has few
+    $default_categories = [
+      'Cybersecurity',
+      'Ransomware',
+      'AI & Machine Learning',
+      'Threat Intelligence',
+      'Compliance & GDPR',
+      'Cloud Security'
+    ];
 
-  // Ensure we have a good set of categories - add fallbacks if database has few
-  $default_categories = [
-    'Cybersecurity',
-    'Ransomware',
-    'AI & Machine Learning',
-    'Threat Intelligence',
-    'Compliance & GDPR',
-    'Cloud Security'
-  ];
-
-  // Merge existing categories with defaults, keeping unique values
-  if (count($categories) < 3) {
-    $categories = array_unique(array_merge($categories, $default_categories));
+    // Merge existing categories with defaults, keeping unique values
+    if (count($categories) < 3) {
+      $categories = array_unique(array_merge($categories, $default_categories));
+    }
+  } else {
+    // Fall back to JSON data (new intel engine)
+    error_log('[Blog] Database not available - using JSON data source');
+    
+    // Use tag filter instead of category for JSON posts
+    $filter_param = $category_filter ?? $tag_filter;
+    
+    $posts = bbx_get_blog_posts_from_json($current_page_num, $posts_per_page, $region_filter, $filter_param);
+    $total_posts = bbx_get_blog_posts_json_count($region_filter, $filter_param);
+    $total_pages = $total_posts > 0 ? (int) ceil($total_posts / $posts_per_page) : 0;
+    $categories = bbx_get_blog_tags_from_json(); // Use tags as categories
+    $data_source = 'json';
+    
+    // Transform JSON posts to match expected structure
+    $posts = array_map(function($post) {
+      return [
+        'id' => $post['id'] ?? uniqid(),
+        'slug' => $post['id'] ?? uniqid(),
+        'title' => $post['title'] ?? 'Untitled',
+        'excerpt' => $post['excerpt'] ?? '',
+        'featured_image' => null, // JSON posts don't have images yet
+        'category' => !empty($post['tags']) ? $post['tags'][0] : 'Intel',
+        'tags' => $post['tags'] ?? [],
+        'author' => $post['source'] ?? 'Intel Engine',
+        'publish_date' => $post['published_at'] ?? date('Y-m-d H:i:s'),
+        'views' => 0,
+        'url' => $post['url'] ?? '#',
+        'source' => $post['source'] ?? '',
+        'severity' => $post['risk_level'] ?? 'medium',
+        'region' => $post['region'] ?? 'global',
+        'country' => $post['country'] ?? ''
+      ];
+    }, $posts);
   }
 } catch (Throwable $e) {
   $blog_data_error = true;
@@ -264,15 +313,23 @@ include 'includes/site-header.php';
     </div>
   </section>
 
-  <?php if ($blog_data_error): ?>
+  <?php if ($blog_data_error || !$db_available): ?>
     <section class="py-16">
       <div class="container mx-auto px-4">
         <div class="glass-effect rounded-2xl p-8 text-center border border-red-500/30">
           <h2 class="text-2xl font-bold mb-4 text-white">
-            Bloggen er midlertidigt utilgængelig
+            <?php if (!$db_available): ?>
+              Blog er i gang med at blive opdateret
+            <?php else: ?>
+              Bloggen er midlertidigt utilgængelig
+            <?php endif; ?>
           </h2>
           <p class="text-gray-200 mb-6">
-            <?= htmlspecialchars($blog_error_message) ?>
+            <?php if (!$db_available): ?>
+              Vores blog-motor skifter fra database til et nyt, hurtigere system. Den vil snart være tilbage med friske cybersecurity-nyheder!
+            <?php else: ?>
+              <?= htmlspecialchars($blog_error_message) ?>
+            <?php endif; ?>
           </p>
           <a href="contact.php" class="inline-flex items-center gap-2 px-6 py-3 border-2 rounded-lg font-semibold transition-colors" style="background: rgba(10, 12, 16, 0.96); border-color: rgba(255, 255, 255, 0.22); color: #f3f4f6;">
             Kontakt support
@@ -386,9 +443,24 @@ include 'includes/site-header.php';
 
                   <!-- Title -->
                   <h3 class="blog-card__title">
-                    <a href="<?= bbx_get_blog_post_url($post['slug']) ?>" class="hover:" style="color: var(--text-gold); transition-colors">
-                      <?= htmlspecialchars($post['title']) ?>
-                    </a>
+                    <?php if ($data_source === 'json' && !empty($post['url'])): ?>
+                      <!-- External link for JSON posts -->
+                      <a href="<?= htmlspecialchars($post['url']) ?>" 
+                         target="_blank" 
+                         rel="noopener noreferrer" 
+                         class="hover:" 
+                         style="color: var(--text-gold); transition-colors">
+                        <?= htmlspecialchars($post['title']) ?>
+                        <svg class="w-3.5 h-3.5 inline-block ml-1 -mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                      </a>
+                    <?php else: ?>
+                      <!-- Internal link for database posts -->
+                      <a href="<?= bbx_get_blog_post_url($post['slug']) ?>" class="hover:" style="color: var(--text-gold); transition-colors">
+                        <?= htmlspecialchars($post['title']) ?>
+                      </a>
+                    <?php endif; ?>
                   </h3>
 
                   <!-- Excerpt -->
@@ -401,21 +473,49 @@ include 'includes/site-header.php';
                   <!-- Meta Footer -->
                   <div class="blog-card__meta">
                     <div class="flex items-center gap-4 text-sm text-gray-500">
-                      <span><?= bbx_format_blog_date($post['publish_date']) ?></span>
-                      <span class="flex items-center gap-1">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                        </svg>
-                        <?= number_format($post['views']) ?>
-                      </span>
+                      <?php if ($data_source === 'json'): ?>
+                        <!-- JSON posts: show source and date -->
+                        <span class="font-semibold" style="color: var(--text-gold);"><?= htmlspecialchars($post['source']) ?></span>
+                        <span><?= bbx_format_blog_date($post['publish_date']) ?></span>
+                        <?php if (!empty($post['severity'])): ?>
+                          <span class="text-xs px-2 py-0.5 rounded-full <?= 
+                            $post['severity'] === 'critical' ? 'bg-red-500/20 text-red-400' : 
+                            ($post['severity'] === 'high' ? 'bg-amber-500/20 text-amber-400' : 
+                            ($post['severity'] === 'medium' ? 'bg-blue-500/20 text-blue-400' : 'bg-gray-500/20 text-gray-400'))
+                          ?>">
+                            <?= strtoupper($post['severity']) ?>
+                          </span>
+                        <?php endif; ?>
+                      <?php else: ?>
+                        <!-- Database posts: show date and views -->
+                        <span><?= bbx_format_blog_date($post['publish_date']) ?></span>
+                        <span class="flex items-center gap-1">
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                          </svg>
+                          <?= number_format($post['views']) ?>
+                        </span>
+                      <?php endif; ?>
                     </div>
-                    <a href="<?= bbx_get_blog_post_url($post['slug']) ?>" class="blog-card__read-more">
-                      <?= t('blog.read_more') ?>
-                      <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                      </svg>
-                    </a>
+                    <?php if ($data_source === 'json' && !empty($post['url'])): ?>
+                      <a href="<?= htmlspecialchars($post['url']) ?>" 
+                         target="_blank" 
+                         rel="noopener noreferrer" 
+                         class="blog-card__read-more">
+                        <?= t('blog.read_source', 'Læs kilde') ?>
+                        <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                      </a>
+                    <?php else: ?>
+                      <a href="<?= bbx_get_blog_post_url($post['slug']) ?>" class="blog-card__read-more">
+                        <?= t('blog.read_more') ?>
+                        <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                      </a>
+                    <?php endif; ?>
                   </div>
                 </div>
               </article>

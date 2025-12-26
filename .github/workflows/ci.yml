@@ -579,10 +579,57 @@ jobs:
             echo "⚠️  Contact HTTP $HTTP_CODE (may not exist)"
           fi
 
-      - name: Test 5 - Verify index.html is NOT served
+      - name: Test 5 - Blog page healthcheck (P0)
         run: |
           echo "════════════════════════════════════════"
-          echo "🧪 TEST 5: index.html Removal Verification"
+          echo "🧪 TEST 5: Blog Page Healthcheck (P0)"
+          echo "════════════════════════════════════════"
+          URL="$SITE_URL/blog.php"
+          echo "Target: $URL"
+
+          # Retry logic for cache propagation
+          MAX_RETRIES=3
+          RETRY_COUNT=0
+          HTTP_CODE="000"
+          
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            HTTP_CODE=$(curl -s -o /tmp/blog_response.txt -w "%{http_code}" \
+              -L "$URL" || echo "000")
+            
+            if [ "$HTTP_CODE" = "200" ]; then
+              break
+            fi
+            
+            RETRY_COUNT=$((RETRY_COUNT + 1))
+            if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+              echo "⏳ Retry $RETRY_COUNT/$MAX_RETRIES after HTTP $HTTP_CODE"
+              sleep 5
+            fi
+          done
+          
+          echo "HTTP Status: $HTTP_CODE"
+
+          if [ "$HTTP_CODE" = "200" ]; then
+            echo "✅ Blog page returns HTTP 200 (PASSED)"
+            
+            # Additional validation: Check content is HTML
+            if grep -qi "<!DOCTYPE\|<html" /tmp/blog_response.txt; then
+              echo "✅ Valid HTML content detected"
+            else
+              echo "⚠️  Response does not look like HTML"
+            fi
+          else
+            echo "❌ Blog page returned HTTP $HTTP_CODE (FAILED)" >&2
+            echo ""
+            echo "Response headers and content:" >&2
+            cat /tmp/blog_response.txt | head -50 >&2
+            exit 1
+          fi
+
+      - name: Test 6 - Verify index.html is NOT served
+        run: |
+          echo "════════════════════════════════════════"
+          echo "🧪 TEST 6: index.html Removal Verification"
           echo "════════════════════════════════════════"
           URL="$SITE_URL/index.html"
           echo "Target: $URL"
@@ -605,7 +652,7 @@ jobs:
       - name: Test 6 - Verify index.php is served at root
         run: |
           echo "════════════════════════════════════════"
-          echo "🧪 TEST 6: DirectoryIndex Verification"
+          echo "🧪 TEST 7: DirectoryIndex Verification"
           echo "════════════════════════════════════════"
           echo "Verifying index.php is served..."
 
@@ -651,6 +698,7 @@ jobs:
           echo "✅ Test Results:"
           echo "   ✓ Root endpoint accessible"
           echo "   ✓ Additional pages tested"
+          echo "   ✓ Blog page healthcheck (HTTP 200)"
           echo "   ✓ index.html removal verified"
           echo "   ✓ index.php DirectoryIndex confirmed"
           echo ""

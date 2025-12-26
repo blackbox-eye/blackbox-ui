@@ -10,7 +10,11 @@
 
 require_once __DIR__ . '/includes/i18n.php';
 require_once __DIR__ . '/includes/blog-functions.php';
-require_once __DIR__ . '/db.php';
+
+// Gracefully handle missing db.php (fail-open pattern)
+if (file_exists(__DIR__ . '/db.php')) {
+  require_once __DIR__ . '/db.php';
+}
 
 $current_page = 'blog';
 $page_title = t('blog.meta.title');
@@ -29,25 +33,35 @@ $categories = [];
 $total_posts = 0;
 $total_pages = 0;
 
+// Check if database is available before attempting queries
+$db_available = defined('BBX_DB_CONNECTED') && BBX_DB_CONNECTED === true;
+
 try {
-  $posts = bbx_get_blog_posts($current_page_num, $posts_per_page, $category_filter);
-  $total_posts = bbx_get_blog_posts_count($category_filter);
-  $total_pages = $total_posts > 0 ? (int) ceil($total_posts / $posts_per_page) : 0;
-  $categories = bbx_get_blog_categories();
+  if ($db_available) {
+    $posts = bbx_get_blog_posts($current_page_num, $posts_per_page, $category_filter);
+    $total_posts = bbx_get_blog_posts_count($category_filter);
+    $total_pages = $total_posts > 0 ? (int) ceil($total_posts / $posts_per_page) : 0;
+    $categories = bbx_get_blog_categories();
+  } else {
+    // No database available - show graceful fallback
+    error_log('[Blog] Database not available - showing fallback UI');
+  }
 
   // Ensure we have a good set of categories - add fallbacks if database has few
-  $default_categories = [
-    'Cybersecurity',
-    'Ransomware',
-    'AI & Machine Learning',
-    'Threat Intelligence',
-    'Compliance & GDPR',
-    'Cloud Security'
-  ];
+  if ($db_available) {
+    $default_categories = [
+      'Cybersecurity',
+      'Ransomware',
+      'AI & Machine Learning',
+      'Threat Intelligence',
+      'Compliance & GDPR',
+      'Cloud Security'
+    ];
 
-  // Merge existing categories with defaults, keeping unique values
-  if (count($categories) < 3) {
-    $categories = array_unique(array_merge($categories, $default_categories));
+    // Merge existing categories with defaults, keeping unique values
+    if (count($categories) < 3) {
+      $categories = array_unique(array_merge($categories, $default_categories));
+    }
   }
 } catch (Throwable $e) {
   $blog_data_error = true;
@@ -264,15 +278,23 @@ include 'includes/site-header.php';
     </div>
   </section>
 
-  <?php if ($blog_data_error): ?>
+  <?php if ($blog_data_error || !$db_available): ?>
     <section class="py-16">
       <div class="container mx-auto px-4">
         <div class="glass-effect rounded-2xl p-8 text-center border border-red-500/30">
           <h2 class="text-2xl font-bold mb-4 text-white">
-            Bloggen er midlertidigt utilgængelig
+            <?php if (!$db_available): ?>
+              Blog er i gang med at blive opdateret
+            <?php else: ?>
+              Bloggen er midlertidigt utilgængelig
+            <?php endif; ?>
           </h2>
           <p class="text-gray-200 mb-6">
-            <?= htmlspecialchars($blog_error_message) ?>
+            <?php if (!$db_available): ?>
+              Vores blog-motor skifter fra database til et nyt, hurtigere system. Den vil snart være tilbage med friske cybersecurity-nyheder!
+            <?php else: ?>
+              <?= htmlspecialchars($blog_error_message) ?>
+            <?php endif; ?>
           </p>
           <a href="contact.php" class="inline-flex items-center gap-2 px-6 py-3 border-2 rounded-lg font-semibold transition-colors" style="background: rgba(10, 12, 16, 0.96); border-color: rgba(255, 255, 255, 0.22); color: #f3f4f6;">
             Kontakt support

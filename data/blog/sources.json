@@ -1,0 +1,253 @@
+{
+  "$schema": "sources-schema",
+  "version": "1.0.0",
+  "last_updated": "2025-12-26T16:30:00Z",
+  "regions": {
+    "denmark": {
+      "name": "Danmark",
+      "short": "DK",
+      "sources": [
+        {
+          "id": "samsik",
+          "name": "SAMSIK (Sammenslutningen af Sikkerhedschefer i Kommunerne)",
+          "type": "official",
+          "url": "https://samsik.dk",
+          "rss": null,
+          "country": "DK",
+          "language": "da",
+          "tags": ["government", "municipalities", "DDoS", "official"],
+          "seed_articles": [
+            {
+              "date": "2025-11-13",
+              "title": "DDoS bølge mod virksomheder/kommuner/myndigheder",
+              "url": "https://samsik.dk/nyhed/ddos-boelge-mod-virksomheder-kommuner-myndigheder",
+              "excerpt": "DDoS angreb rammer kommuner og virksomheder i stor stil",
+              "severity": "high",
+              "tags": ["DDoS", "municipalities", "critical-infrastructure"]
+            },
+            {
+              "date": "2025-11-17",
+              "title": "DDoS mod politiske partiers websites op mod valget",
+              "url": "https://samsik.dk/nyhed/ddos-mod-politiske-partier-valg",
+              "excerpt": "Politiske partiers hjemmesider ramt af koordinerede DDoS angreb før valget",
+              "severity": "critical",
+              "tags": ["DDoS", "election", "political"]
+            }
+          ]
+        },
+        {
+          "id": "dk-nyt",
+          "name": "DK Nyt",
+          "type": "news",
+          "url": "https://dknyt.dk",
+          "rss": null,
+          "country": "DK",
+          "language": "da",
+          "tags": ["news", "election"],
+          "seed_articles": [
+            {
+              "date": "2025-11-08",
+              "title": "Fælles trusselsvurdering: sandsynligt med pro-russiske DDoS",
+              "url": "https://dknyt.dk/trusselsvurdering-pro-russiske-ddos-valg",
+              "excerpt": "Danske sikkerhedsmyndigheder vurderer det som sandsynligt med pro-russiske DDoS angreb op mod valget",
+              "severity": "high",
+              "tags": ["DDoS", "election", "russia", "threat-assessment"]
+            }
+          ]
+        },
+        {
+          "id": "danske-kommuner",
+          "name": "Danske Kommuner",
+          "type": "official",
+          "url": "https://www.kl.dk",
+          "rss": null,
+          "country": "DK",
+          "language": "da",
+          "tags": ["government", "municipalities"],
+          "seed_articles": [
+            {
+              "date": "2025-11-11",
+              "title": "Kommuner ramt: Vejle 5–10 min + Helsingør nævnt",
+              "url": "https://www.kl.dk/nyheder/vejle-helsingor-ddos-angreb",
+              "excerpt": "Vejle Kommune var offline i 5-10 minutter, Helsingør også berørt af DDoS angreb",
+              "severity": "medium",
+              "tags": ["DDoS", "municipalities", "Vejle", "Helsingør"]
+            },
+            {
+              "date": "2025-11-13",
+              "title": "Efter angreb: forvent flere frem mod valgdagen",
+              "url": "https://www.kl.dk/nyheder/forvent-flere-ddos-angreb-valg",
+              "excerpt": "Efter de seneste DDoS angreb advarer eksperter om flere angreb op til valgdagen",
+              "severity": "high",
+              "tags": ["DDoS", "election", "forecast"]
+            }
+          ]
+        },
+        {
+          "id": "cfcs-mssb",
+          "name": "CFCS / MSSB (Center for Cybersikkerhed)",
+          "type": "official",
+          "url": "https://www.cfcs.dk",
+          "rss": null,
+          "country": "DK",
+          "language": "da",
+          "tags": ["government", "cybersecurity", "official"],
+          "seed_articles": [
+            {
+              "date": "2025-11-25",
+              "title": "MSSB: Cybertruslen mod Danmark er alvorlig",
+              "url": "https://www.cfcs.dk/trusselsvurdering-2025",
+              "excerpt": "Center for Cybersikkerhed vurderer truslen mod Danmark som alvorlig",
+              "severity": "critical",
+              "tags": ["threat-assessment", "critical-infrastructure", "national-security"]
+            },
+            {
+              "date": "2025-11-28",
+              "title": "MSSB: Forhandlinger om ny cyberstrategi 2026–2029",
+              "url": "https://www.cfcs.dk/cyberstrategi-2026-2029",
+              "excerpt": "Regeringen indleder forhandlinger om Danmarks nye nationale cybersikkerhedsstrategi",
+              "severity": "low",
+              "tags": ["strategy", "policy", "national-security"]
+            }
+          ]
+        },
+        {
+          "id": "danske-vandvaerker",
+          "name": "Danske Vandværker",
+          "type": "industry",
+          "url": "https://www.danva.dk",
+          "rss": null,
+          "country": "DK",
+          "language": "da",
+          "tags": ["critical-infrastructure", "water", "OT"],
+          "seed_articles": [
+            {
+              "date": "2025-11-24",
+              "title": "Ministerbesøg + konsekvenser af cyberangreb",
+              "url": "https://www.danva.dk/ministerbesoeg-cyberangreb-konsekvenser",
+              "excerpt": "Minister besøger vandværk efter cyberangreb for at diskutere konsekvenser og fremtidig sikkerhed",
+              "severity": "medium",
+              "tags": ["OT", "critical-infrastructure", "water", "government"]
+            },
+            {
+              "date": "2025-12-03",
+              "title": "Vandværk øver reaktioner efter angreb",
+              "url": "https://www.danva.dk/oevelse-cyberangreb-reaktion",
+              "excerpt": "Danske vandværker gennemfører øvelser i kølvandet på cyberangreb",
+              "severity": "low",
+              "tags": ["OT", "training", "incident-response", "water"]
+            }
+          ]
+        },
+        {
+          "id": "dansk-erhverv",
+          "name": "Dansk Erhverv",
+          "type": "industry",
+          "url": "https://www.danskerhverv.dk",
+          "rss": null,
+          "country": "DK",
+          "language": "da",
+          "tags": ["business", "SME"],
+          "seed_articles": [
+            {
+              "date": "2025-12-10",
+              "title": "Bekymring for cyberangreb stiger",
+              "url": "https://www.danskerhverv.dk/bekymring-cyberangreb-stiger",
+              "excerpt": "Ny undersøgelse viser stigende bekymring blandt danske virksomheder for cyberangreb",
+              "severity": "medium",
+              "tags": ["survey", "awareness", "SME"]
+            },
+            {
+              "date": "2025-12-16",
+              "title": "Forbered din virksomhed på cyberangreb",
+              "url": "https://www.danskerhverv.dk/forbered-virksomhed-cyberangreb",
+              "excerpt": "Dansk Erhverv udgiver guide til at forberede virksomheder på cyberangreb",
+              "severity": "low",
+              "tags": ["guidance", "SME", "preparedness"]
+            },
+            {
+              "date": "2025-12-17",
+              "title": "Nordisk-baltisk cybersamarbejde forankres i DK",
+              "url": "https://www.danskerhverv.dk/nordisk-baltisk-cyber-samarbejde-dk",
+              "excerpt": "Danmark bliver hub for nordisk-baltisk cybersikkerhedssamarbejde",
+              "severity": "low",
+              "tags": ["cooperation", "nordic", "baltic", "international"]
+            }
+          ]
+        },
+        {
+          "id": "sikkerdigital",
+          "name": "Sikkerdigital.dk",
+          "type": "news",
+          "url": "https://sikkerdigital.dk",
+          "rss": null,
+          "country": "DK",
+          "language": "da",
+          "tags": ["news", "awareness"],
+          "seed_articles": [
+            {
+              "date": "2025-11-17",
+              "title": "Ugevarsel + DDoS rammer kommuner/virksomheder",
+              "url": "https://sikkerdigital.dk/ugevarsel-ddos-kommuner-virksomheder",
+              "excerpt": "Sikkerdigital's ugentlige varsel: DDoS angreb rammer både kommuner og private virksomheder",
+              "severity": "high",
+              "tags": ["DDoS", "weekly-brief", "municipalities", "business"]
+            }
+          ]
+        },
+        {
+          "id": "dstny",
+          "name": "Dstny (Telecom)",
+          "type": "vendor",
+          "url": "https://dstny.dk",
+          "rss": null,
+          "country": "DK",
+          "language": "da",
+          "tags": ["telecom", "DDoS-protection"],
+          "seed_articles": [
+            {
+              "date": "2025-11-13",
+              "title": "Beskyttelse mod DDoS",
+              "url": "https://dstny.dk/loesninger/ddos-beskyttelse",
+              "excerpt": "Dstny lancerer nye løsninger til beskyttelse mod DDoS angreb",
+              "severity": "low",
+              "tags": ["DDoS", "protection", "telecom", "vendor"]
+            }
+          ]
+        }
+      ]
+    },
+    "nordic": {
+      "name": "Norden",
+      "short": "NO",
+      "sources": []
+    },
+    "europe": {
+      "name": "Europa",
+      "short": "EU",
+      "sources": []
+    },
+    "switzerland": {
+      "name": "Schweiz",
+      "short": "CH",
+      "sources": []
+    },
+    "uae": {
+      "name": "UAE",
+      "short": "AE",
+      "sources": []
+    },
+    "global": {
+      "name": "Global",
+      "short": "GL",
+      "sources": []
+    }
+  },
+  "robots_compliance": {
+    "respect_robots_txt": true,
+    "respect_paywalls": true,
+    "max_excerpt_length": 240,
+    "metadata_only_for_restricted": true,
+    "note": "For sites blocking robots: only collect metadata (title, date, source, URL) + official RSS summaries. Never scrape full articles."
+  }
+}

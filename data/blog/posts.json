@@ -1,0 +1,15 @@
+{
+  "$schema": "posts-schema",
+  "version": "1.0.0",
+  "generated_at": "2025-12-26T16:30:00Z",
+  "pipeline_version": "1.0.0-alpha",
+  "metadata": {
+    "total_posts": 0,
+    "regions": [],
+    "date_range": {
+      "earliest": null,
+      "latest": null
+    }
+  },
+  "posts": []
+}

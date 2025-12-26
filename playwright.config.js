@@ -22,15 +22,17 @@ module.exports = defineConfig({
   // The PHP built-in server is effectively single-threaded; high parallelism can
   // cause request backlogs and test timeouts. Keep CI stable by limiting workers.
   workers: process.env.CI ? 1 : undefined,
-  // Multi-reporter: line for terminal, JSON for shim parsing
+  // Multi-reporter: line for terminal, JSON for shim parsing, HTML for artifacts
   reporter: [
     ['line'],
-    ['json', { outputFile: 'artifacts/test-results.json' }]
+    ['json', { outputFile: 'artifacts/test-results.json' }],
+    ['html', { outputFolder: 'artifacts/playwright-report', open: 'never' }]
   ],
   use: {
     baseURL: process.env.BASE_URL || 'http://localhost:8000',
     headless: true,
-    screenshot: 'only-on-failure'
+    screenshot: 'on', // Always capture screenshots
+    trace: 'retain-on-failure'
   },
   webServer: {
     command: 'php -S localhost:8000',
@@ -43,12 +45,12 @@ module.exports = defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] }
     },
-    // Firefox/WebKit are optional - skip if browsers not installed locally
-    ...(hasFirefox ? [{
+    // Firefox/WebKit are optional locally but REQUIRED in CI
+    ...(hasFirefox || process.env.CI ? [{
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] }
     }] : []),
-    ...(hasWebkit ? [{
+    ...(hasWebkit || process.env.CI ? [{
       name: 'webkit',
       timeout: 45000,
       retries: 2,
@@ -65,7 +67,7 @@ module.exports = defineConfig({
       }
     },
     // Sprint 4: Mobile WebKit tests (iPhone Safari/Brave)
-    ...(hasWebkit ? [{
+    ...(hasWebkit || process.env.CI ? [{
       name: 'webkit-mobile',
       use: {
         ...devices['iPhone 14'],
@@ -73,5 +75,5 @@ module.exports = defineConfig({
       }
     }] : []),
   ],
-  outputDir: 'artifacts'
+  outputDir: 'artifacts/test-results'
 });

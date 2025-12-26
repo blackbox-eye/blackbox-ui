@@ -37,9 +37,6 @@
 html { 
   scroll-behavior: smooth; 
   -webkit-text-size-adjust: 100%;
-  /* CRITICAL FIX #2: Ensure scroll is NEVER blocked on load */
-  overflow-y: auto !important;
-  overflow-x: hidden;
 }
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -48,7 +45,15 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
-  /* CRITICAL FIX #2: Body must allow scroll by default */
+}
+
+/* CRITICAL FIX #2: Ensure scroll is available on landing page from first load */
+/* Only apply to non-modal, non-drawer-open states to preserve legitimate scroll locks */
+html:not(.modal-open):not(.drawer-open) { 
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+body:not(.mobile-menu-open):not(.alphabot-locked):not(.modal-open) {
   overflow-y: auto;
   overflow-x: hidden;
 }

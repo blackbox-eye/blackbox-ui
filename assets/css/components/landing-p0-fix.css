@@ -133,10 +133,12 @@ body.page-home.landing-ready {
   }
 
   /* CRITICAL FIX #1: Mobile panel must be full-width at bottom */
+  /* Note: position:fixed is correct here for bottom sheet UI pattern */
+  /* This provides better UX than position:absolute and is standard for mobile modals */
   .page-home .alphabot-panel {
     max-height: 72vh !important;
     border-radius: 1.25rem 1.25rem 0 0 !important;
-    /* Ensure panel slides up from bottom correctly */
+    /* Full-width bottom sheet positioning */
     left: 0 !important;
     right: 0 !important;
     bottom: 0 !important;

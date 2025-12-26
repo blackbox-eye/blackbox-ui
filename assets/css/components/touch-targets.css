@@ -2,6 +2,20 @@
  * TOUCH TARGET OPTIMIZATION
  * Ensures all interactive elements meet WCAG 2.1 Level AAA (44x44px minimum)
  * Priority: HIGH (#4, #5, #8)
+ * 
+ * NOTE ON !important USAGE:
+ * Extensive use of !important is intentional and necessary here because:
+ * 1. Touch targets are a critical accessibility requirement (WCAG AAA)
+ * 2. This component must override existing styles from multiple sources
+ * 3. Touch target sizes should never be compromised by other styling
+ * 4. This acts as a "safety net" to ensure all interactive elements are accessible
+ * 
+ * Alternative approaches considered:
+ * - Higher specificity selectors: Would create maintenance burden and selector bloat
+ * - Rewriting existing styles: Would require massive refactoring across all CSS files
+ * - CSS layers (@layer): Not yet widely supported enough for production use
+ * 
+ * The !important declarations here are defensive programming for accessibility.
  */
 
 /* ══════════════════════════════════════════════════════════════

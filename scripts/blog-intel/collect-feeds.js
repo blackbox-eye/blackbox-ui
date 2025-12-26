@@ -85,7 +85,35 @@ async function parseFeed(source, regionKey) {
       
       // Extract excerpt from content/description
       let excerpt = item.contentSnippet || item.description || '';
-      excerpt = excerpt.replace(/<[^>]*>/g, '').trim(); // Strip HTML
+      
+      // Security-first sanitization: Convert to safe plain text only
+      // This data will be stored in JSON and rendered by blog.php with htmlspecialchars()
+      
+      // Remove all HTML tags
+      excerpt = excerpt.replace(/<[^>]*>/g, ' ');
+      
+      // Decode HTML entities to readable characters
+      const entityMap = {
+        '&amp;': '&',
+        '&lt;': '<',
+        '&gt;': '>',
+        '&quot;': '"',
+        '&#39;': "'",
+        '&#0?39;': "'",
+        '&apos;': "'",
+        '&nbsp;': ' '
+      };
+      for (const [entity, char] of Object.entries(entityMap)) {
+        excerpt = excerpt.replace(new RegExp(entity, 'g'), char);
+      }
+      
+      // After decoding entities, remove any remaining < or > characters
+      // This prevents XSS from incomplete tags or decoded entities
+      excerpt = excerpt.replace(/[<>]/g, '');
+      
+      // Normalize whitespace
+      excerpt = excerpt.replace(/\s+/g, ' ').trim();
+      
       if (excerpt.length > 240) {
         excerpt = excerpt.substring(0, 237) + '...';
       }

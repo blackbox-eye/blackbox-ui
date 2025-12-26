@@ -8,11 +8,17 @@ const viewports = [
   { name: 'desktop-large', width: 1440, height: 900 }
 ];
 
+async function gotoHome(page) {
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+  await page.locator('header, main, body').first().waitFor({ state: 'visible', timeout: 8000 });
+}
+
 for (const vp of viewports) {
   test(`homepage ${vp.name} (${vp.width}x${vp.height})`, async ({ page, browserName }) => {
     await page.setViewportSize({ width: vp.width, height: vp.height });
     // Use baseURL from config (supports both localhost and production)
-    await page.goto('/', { waitUntil: 'networkidle' });
+    await gotoHome(page);
 
     // Take full page screenshot
     const filename = `artifacts/${browserName}-${vp.name}-${vp.width}x${vp.height}.png`;

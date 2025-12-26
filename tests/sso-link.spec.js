@@ -23,9 +23,10 @@ async function loginAsTestAgent(page) {
   await page.fill('#pin', AGENT_PIN);
 
   await Promise.all([
-    page.waitForURL('**/dashboard.php', { waitUntil: 'networkidle' }),
+    page.waitForURL('**/dashboard.php', { timeout: 10000 }),
     page.locator('button.login-card__submit').click()
   ]);
+  await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
 }
 
 test.describe('Intel24 SSO link', () => {
@@ -39,7 +40,8 @@ test.describe('Intel24 SSO link', () => {
   test('Agent Access Intel24 button contains ?sso= token', async ({ page }) => {
     await loginAsTestAgent(page);
 
-    await page.goto('/agent-access.php', { waitUntil: 'networkidle' });
+    await page.goto('/agent-access.php', { waitUntil: 'domcontentloaded' });
+    await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
 
     const intel24Link = page.locator('a[data-console-launch="intel24"]');
     await expect(intel24Link).toBeVisible();

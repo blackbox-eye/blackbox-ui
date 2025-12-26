@@ -50,11 +50,13 @@ include 'includes/site-header.php';
 
 <main id="main-content" class="agent-access-page" tabindex="-1">
   <!-- Snackbar CSS/JS for feedback -->
-  <link rel="stylesheet" href="/assets/css/components/bbx-snackbar.css">
-  <link rel="stylesheet" href="/assets/css/components/bbx-icons.css">
+  <link rel="stylesheet" href="/assets/css/components/bbx-snackbar.css?v=<?= bbx_asset_version('css/components/bbx-snackbar.css') ?>">
+  <link rel="stylesheet" href="/assets/css/components/bbx-icons.css?v=<?= bbx_asset_version('css/components/bbx-icons.css') ?>">
   <!-- Sprint 8: Mobile console card layout fix -->
-  <link rel="stylesheet" href="/assets/css/components/console-selector-mobile.css" media="(max-width: 768px)">
-  <script src="/assets/js/bbx-snackbar.js" defer></script>
+  <link rel="stylesheet" href="/assets/css/components/console-selector-mobile.css?v=<?= bbx_asset_version('css/components/console-selector-mobile.css') ?>" media="(max-width: 768px)">
+  <!-- P0 Mobile Fix: Agent access specific mobile layout fixes -->
+  <link rel="stylesheet" href="/assets/css/components/agent-access-mobile.css?v=<?= bbx_asset_version('css/components/agent-access-mobile.css') ?>" media="(max-width: 1024px)">
+  <script src="/assets/js/bbx-snackbar.js?v=<?= bbx_asset_version('js/bbx-snackbar.js') ?>" defer></script>
   
   <section class="access-hero">
     <div class="access-hero__inner">

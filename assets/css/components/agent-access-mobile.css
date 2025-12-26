@@ -1,0 +1,95 @@
+/**
+ * Agent Access Page - Mobile Layout Fixes
+ * P0 Fix: Ensure stable layout on mobile with proper spacing and no overlays
+ */
+
+/* Agent access page container */
+.agent-access-page {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Ensure access-console section has proper padding bottom on mobile when sticky CTA is visible */
+@media (max-width: 1024px) {
+  body.has-sticky-cta .agent-access-page .access-console {
+    /* Add padding to prevent sticky CTA from covering console cards */
+    padding-bottom: calc(var(--bbx-sticky-cta-height, 120px) + env(safe-area-inset-bottom, 0px) + 1rem);
+  }
+}
+
+/* Console selector wrapper on agent-access */
+.agent-access-page .console-selector {
+  position: relative;
+  z-index: 1;
+  /* Ensure it respects parent width */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Hero section should not overlap with console selector */
+.agent-access-page .access-hero {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .agent-access-page .access-hero {
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Ensure console cards don't get covered by sticky elements */
+@media (max-width: 768px) {
+  .agent-access-page .console-card {
+    /* Ensure proper stacking */
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Quick switch should not overlay hero */
+  .agent-access-page .console-selector__quick {
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+  }
+}
+
+/* Safe area insets for iOS devices */
+@media (max-width: 768px) {
+  .agent-access-page {
+    /* Ensure content respects safe areas */
+    padding-left: max(1rem, env(safe-area-inset-left, 0px));
+    padding-right: max(1rem, env(safe-area-inset-right, 0px));
+  }
+  
+  /* Bottom safe area handled by sticky CTA component */
+  body:not(.has-sticky-cta) .agent-access-page {
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* Prevent horizontal scroll on mobile */
+@media (max-width: 768px) {
+  .agent-access-page,
+  .agent-access-page .access-console,
+  .agent-access-page .console-selector,
+  .agent-access-page .console-selector__grid {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+}
+
+/* iPad / tablet specific adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .agent-access-page {
+    padding-left: max(2rem, env(safe-area-inset-left, 0px));
+    padding-right: max(2rem, env(safe-area-inset-right, 0px));
+  }
+  
+  /* Ensure sticky CTA spacing on tablets */
+  body.has-sticky-cta .agent-access-page .access-console {
+    padding-bottom: calc(var(--bbx-sticky-cta-height, 100px) + env(safe-area-inset-bottom, 0px) + 2rem);
+  }
+}

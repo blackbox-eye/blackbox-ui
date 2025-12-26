@@ -234,6 +234,7 @@ if (!empty($disable_alphabot)) {
             
             // P1-E: FOUC Prevention - Add landing-gate class before paint
             // This prevents any flash of unstyled content on landing page
+            // CRITICAL FIX #2: Gate only controls OPACITY, not visibility/scroll
             <?php if ($current_page === 'home' || $current_page === 'index'): ?>
             document.documentElement.classList.add('landing-gate');
             document.documentElement.classList.remove('landing-ready');
@@ -244,16 +245,15 @@ if (!empty($disable_alphabot)) {
                 window.dispatchEvent(new Event('bbx:landing-ready'));
             };
 
-            // Release gate after critical CSS and fonts load
-            if (document.fonts && document.fonts.ready) {
-                document.fonts.ready.then(function() {
-                    requestAnimationFrame(releaseLandingGate);
-                });
-            } else {
-                // Fallback: release after DOMContentLoaded
+            // CRITICAL FIX: Release gate on DOMContentLoaded, don't wait for fonts
+            // This ensures scroll works immediately while still preventing FOUC
+            if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', function() {
                     requestAnimationFrame(releaseLandingGate);
-                });
+                }, { once: true });
+            } else {
+                // Already loaded, release immediately
+                requestAnimationFrame(releaseLandingGate);
             }
             <?php endif; ?>
         })();
@@ -377,9 +377,10 @@ if (!empty($disable_alphabot)) {
     <?php endif; ?>
 
     <!-- Inline landing gate (pre-render) to prevent FOUC before async CSS swaps -->
+    <!-- CRITICAL FIX #2: Do NOT block scroll - only control opacity for visual smoothness -->
     <style id="landing-gate-guard">
-        body.landing-gate { opacity: 0; visibility: hidden; }
-        body.landing-ready { opacity: 1; visibility: visible; }
+        body.landing-gate { opacity: 0; /* NO visibility:hidden - was blocking scroll! */ }
+        body.landing-ready { opacity: 1; transition: opacity 0.15s ease; }
     </style>
     <script>
         (function() {
@@ -389,16 +390,13 @@ if (!empty($disable_alphabot)) {
                 body.classList.add('landing-ready');
                 body.classList.remove('landing-gate');
             }
+            // CRITICAL FIX: Release gate IMMEDIATELY on DOMContentLoaded, don't wait for fonts
+            // Fonts can load in background without blocking scroll
             var fireRelease = function() {
                 requestAnimationFrame(function() { requestAnimationFrame(releaseLandingGate); });
             };
             if (document.readyState === 'loading') {
-                document.addEventListener('readystatechange', function onReady() {
-                    if (document.readyState === 'interactive') {
-                        document.removeEventListener('readystatechange', onReady);
-                        fireRelease();
-                    }
-                });
+                document.addEventListener('DOMContentLoaded', fireRelease, { once: true });
             } else {
                 fireRelease();
             }
@@ -440,6 +438,10 @@ if (!empty($disable_alphabot)) {
     <!-- Sticky CTA Component (canonical styles - overrides marketing.css) -->
     <link rel="preload" href="/assets/css/components/sticky-cta.css?v=<?= bbx_asset_version('css/components/sticky-cta.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/assets/css/components/sticky-cta.css?v=<?= bbx_asset_version('css/components/sticky-cta.css') ?>"></noscript>
+
+    <!-- Touch Targets Optimization - Ensures 44x44px minimum for all interactive elements -->
+    <link rel="preload" href="/assets/css/components/touch-targets.css?v=<?= bbx_asset_version('css/components/touch-targets.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/components/touch-targets.css?v=<?= bbx_asset_version('css/components/touch-targets.css') ?>"></noscript>
 
     <!-- Liquid Glass System - Cross-browser glass/blur effects (must load last to override) -->
     <link rel="preload" href="/assets/css/components/liquid-glass.css?v=<?= bbx_asset_version('css/components/liquid-glass.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">

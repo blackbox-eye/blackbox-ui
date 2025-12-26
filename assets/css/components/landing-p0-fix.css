@@ -27,14 +27,16 @@
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* Landing first-paint gate to prevent FOUC/ghost UI */
+/* CRITICAL FIX: Do NOT block scroll or pointer events - only control opacity */
 body.landing-gate.page-home {
   opacity: 0;
-  visibility: hidden;
+  /* REMOVED: visibility: hidden - was blocking scroll interaction */
+  pointer-events: auto !important; /* Ensure scroll works immediately */
 }
 
 body.page-home.landing-ready {
   opacity: 1;
-  visibility: visible;
+  /* REMOVED: visibility: visible - not needed */
   transition: opacity 0.12s ease;
 }
 
@@ -82,6 +84,7 @@ body.page-home.landing-ready {
 
 /* ════════════════════════════════════════════════════════════════
    AI ASSISTANT — VISIBLE ON LANDING WITH GLASS + SAFE AREAS
+   CRITICAL FIX #1: Ensure panel is visible and interactive when open
    ════════════════════════════════════════════════════════════════ */
 
 .page-home .bbx-command-rail,
@@ -97,6 +100,7 @@ body.page-home.landing-ready {
   z-index: 96 !important;
 }
 
+/* CRITICAL FIX #1: Overlay must be BELOW the panel */
 .page-home .alphabot-overlay,
 .page-home #alphabot-overlay {
   z-index: 92 !important;
@@ -105,11 +109,21 @@ body.page-home.landing-ready {
   backdrop-filter: blur(16px) saturate(1.2) !important;
 }
 
+/* CRITICAL FIX #1: Panel must be ABOVE overlay with proper visibility */
 .page-home .alphabot-panel {
   z-index: 96 !important;
   max-height: min(70vh, 680px) !important;
   width: min(22rem, calc(100vw - 2.5rem)) !important;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55) !important;
+  /* Ensure panel is visible when open */
+  isolation: isolate !important;
+}
+
+/* CRITICAL FIX #1: When open, ensure panel is fully visible and interactive */
+.page-home .alphabot-widget.open .alphabot-panel {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
 }
 
 @media (max-width: 768px) {
@@ -118,9 +132,26 @@ body.page-home.landing-ready {
     bottom: calc(1rem + var(--bbx-sticky-cta-height, 0px) + env(safe-area-inset-bottom, 0px)) !important;
   }
 
+  /* CRITICAL FIX #1: Mobile panel must be full-width at bottom */
+  /* Note: position:fixed is correct here for bottom sheet UI pattern */
+  /* This provides better UX than position:absolute and is standard for mobile modals */
   .page-home .alphabot-panel {
     max-height: 72vh !important;
     border-radius: 1.25rem 1.25rem 0 0 !important;
+    /* Full-width bottom sheet positioning */
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    position: fixed !important;
+  }
+  
+  /* CRITICAL FIX #1: When open on mobile, panel must be visible */
+  .page-home .alphabot-widget.open .alphabot-panel {
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
   }
 }
 

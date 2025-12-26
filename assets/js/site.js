@@ -250,6 +250,25 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add('js-enabled');
 
     // ==========================================
+    // CRITICAL FIX #2: IMMEDIATE SCROLL UNLOCK ON LANDING PAGE
+    // Ensure scroll works from first pixel, no delays
+    // ==========================================
+    const isLandingPage = document.body.classList.contains('page-home') || 
+                          document.body.classList.contains('page-index');
+    
+    if (isLandingPage) {
+        // Force unlock scroll immediately on landing page
+        unlockBodyScroll('landing-page-init');
+        // Also ensure html/body don't have overflow hidden
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+        
+        if (DEBUG_UI) {
+            console.info('[Landing Page] Scroll unlocked immediately on DOMContentLoaded');
+        }
+    }
+
+    // ==========================================
     // DEFENSIVE SCROLL-LOCK EVENT LISTENERS
     // Protects against iOS Brave/DuckDuckGo scroll-lock bugs
     // ==========================================

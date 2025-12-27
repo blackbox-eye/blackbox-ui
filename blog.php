@@ -28,12 +28,23 @@ $region_filter = isset($_GET['region']) ? $_GET['region'] : null;
 $tag_filter = isset($_GET['tag']) ? $_GET['tag'] : null;
 
 // Get posts
+// Default categories (static fallback)
+$default_categories = [
+  'Cybersecurity',
+  'Ransomware',
+  'AI & Machine Learning',
+  'Threat Intelligence',
+  'Compliance & GDPR',
+  'Cloud Security'
+];
+
 $blog_data_error = false;
 $blog_error_message = '';
 $posts = [];
-$categories = [];
+$categories = $default_categories; // Start with defaults
 $total_posts = 0;
 $total_pages = 0;
+<<<<<<< Updated upstream
 $data_source = 'none'; // Track data source: 'database', 'json', or 'none'
 
 // Check if database is available before attempting queries
@@ -97,12 +108,31 @@ try {
         'country' => $post['country'] ?? ''
       ];
     }, $posts);
+=======
+$db_available = defined('BBX_DB_CONNECTED') && BBX_DB_CONNECTED === true;
+
+// Only attempt DB queries if database is connected
+if ($db_available) {
+  try {
+    $posts = bbx_get_blog_posts($current_page_num, $posts_per_page, $category_filter);
+    $total_posts = bbx_get_blog_posts_count($category_filter);
+    $total_pages = $total_posts > 0 ? (int) ceil($total_posts / $posts_per_page) : 0;
+    $db_categories = bbx_get_blog_categories();
+
+    // Merge DB categories with defaults if too few
+    if (count($db_categories) >= 3) {
+      $categories = $db_categories;
+    } else {
+      $categories = array_unique(array_merge($db_categories, $default_categories));
+    }
+  } catch (Throwable $e) {
+    // DB error - log it but continue with static content
+    error_log('[Blog] DB query failed, falling back to static content: ' . $e->getMessage());
+    // Keep $posts empty and $categories as defaults - page still works with news_items
+>>>>>>> Stashed changes
   }
-} catch (Throwable $e) {
-  $blog_data_error = true;
-  $blog_error_message = t('common.form_error_default', 'Vi kunne ikke hente blogindholdet lige nu. Prøv igen senere eller kontakt support.');
-  error_log('[Blog] Failed to render blog.php: ' . $e->getMessage());
 }
+// Note: No error state shown - the curated news section always displays regardless of DB
 
 // Structured data for BlogPosting list
 $structured_data = [
@@ -313,6 +343,7 @@ include 'includes/site-header.php';
     </div>
   </section>
 
+<<<<<<< Updated upstream
   <?php if ($blog_data_error || !$db_available): ?>
     <section class="py-16">
       <div class="container mx-auto px-4">
@@ -342,6 +373,8 @@ include 'includes/site-header.php';
     </section>
   <?php else: ?>
 
+=======
+>>>>>>> Stashed changes
     <!-- Unified Sticky Navigation: Improved Filter + Region Tabs -->
     <nav class="sticky top-16 z-30 bg-[var(--page-background)]/95 backdrop-blur-lg border-b border-gray-800/50" aria-label="Blog navigation">
       <div class="container mx-auto px-4">
@@ -651,7 +684,6 @@ include 'includes/site-header.php';
         </div>
       </div>
     </section>
-  <?php endif; ?>
 </main>
 
 <style>

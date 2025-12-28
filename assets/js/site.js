@@ -237,6 +237,96 @@ const DEBUG_UI = new URLSearchParams(window.location.search).has("debugUI");
 // ==========================================
 let savedScrollY = 0;
 
+const OVERLAY_CLASS_LIST = [
+  "mobile-menu-open",
+  "alphabot-locked",
+  "modal-open",
+  "drawer-open",
+];
+
+const hasVisibleOverlay = () => {
+  const candidates = [
+    document.getElementById("mobile-menu-overlay"),
+    document.querySelector(".bbx-drawer-overlay"),
+    document.getElementById("alphabot-overlay"),
+    document.querySelector(
+      '.modal.is-open, [role="dialog"][aria-hidden="false"]'
+    ),
+  ];
+
+  return candidates.some((el) => isElementVisible(el));
+};
+
+const clearStaleLockClasses = () => {
+  document.body.classList.remove(...OVERLAY_CLASS_LIST);
+  document.documentElement.classList.remove("modal-open", "drawer-open");
+};
+
+const isElementVisible = (el) => {
+  if (!el) return false;
+  const style = getComputedStyle(el);
+  return (
+    style.display !== "none" &&
+    style.visibility !== "hidden" &&
+    style.opacity !== "0" &&
+    style.pointerEvents !== "none"
+  );
+};
+
+const isAnyOverlayOpen = () => {
+  const body = document.body;
+  const html = document.documentElement;
+  const classLock = OVERLAY_CLASS_LIST.some(
+    (cls) => body.classList.contains(cls) || html.classList.contains(cls)
+  );
+
+  const visible = hasVisibleOverlay();
+
+  if (classLock && !visible) {
+    clearStaleLockClasses();
+    return false;
+  }
+
+  if (classLock || visible) {
+    return true;
+  }
+
+  return false;
+};
+
+const isBodyLikelyLocked = () => {
+  const body = document.body;
+  const html = document.documentElement;
+  const bodyStyle = getComputedStyle(body);
+  const htmlStyle = getComputedStyle(html);
+
+  const overflowLocked =
+    body.style.overflow === "hidden" ||
+    bodyStyle.overflow === "hidden" ||
+    bodyStyle.overflowY === "hidden" ||
+    htmlStyle.overflow === "hidden" ||
+    htmlStyle.overflowY === "hidden";
+
+  const positionLocked =
+    body.style.position === "fixed" ||
+    bodyStyle.position === "fixed" ||
+    htmlStyle.position === "fixed";
+
+  const touchLocked =
+    bodyStyle.touchAction === "none" || htmlStyle.touchAction === "none";
+
+  return overflowLocked || positionLocked || touchLocked;
+};
+
+const forceHardUnlockIfSafe = (reason = "hard-guard") => {
+  if (!isAnyOverlayOpen()) {
+    clearStaleLockClasses();
+    if (isBodyLikelyLocked()) {
+      unlockBodyScroll(reason);
+    }
+  }
+};
+
 const unlockBodyScroll = (reason = "unknown") => {
   const body = document.body;
   const html = document.documentElement;
@@ -436,6 +526,38 @@ function initDebugPanel() {
 document.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add("js-enabled");
 
+  // Hard-guard: strip any stale lock classes/styles on first paint
+  document.body.classList.remove(
+    "mobile-menu-open",
+    "alphabot-locked",
+    "modal-open",
+    "drawer-open"
+  );
+  document.documentElement.classList.remove("modal-open", "drawer-open");
+  forceHardUnlockIfSafe("domcontentloaded-hard-guard");
+
+  // Ensure Alphabot control surfaces stay clickable and above content
+  const alphabotToggle = document.querySelector(".alphabot-toggle");
+  const alphabotRail = document.querySelector(".bbx-command-rail");
+  [alphabotToggle, alphabotRail].forEach((el) => {
+    if (el) {
+      el.style.setProperty("pointer-events", "auto", "important");
+      el.style.setProperty("z-index", "2147483000", "important");
+      el.style.position = el.style.position || "fixed";
+    }
+  });
+
+  // Retry unlock a few times in case late scripts reapply lock classes
+  let unlockAttempts = 0;
+  const unlockInterval = window.setInterval(() => {
+    clearStaleLockClasses();
+    forceHardUnlockIfSafe("interval-hard-guard");
+    unlockAttempts += 1;
+    if (unlockAttempts >= 5) {
+      window.clearInterval(unlockInterval);
+    }
+  }, 600);
+
   // Initialize debug panel if enabled
   initDebugPanel();
 
@@ -450,6 +572,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (isLandingPage) {
     // Force unlock scroll immediately on landing page
     unlockBodyScroll("landing-page-init");
+    forceHardUnlockIfSafe("landing-page-hard-guard");
     // Also ensure html/body don't have overflow hidden
     document.documentElement.style.overflow = "";
     document.body.style.overflow = "";
@@ -469,15 +592,22 @@ document.addEventListener("DOMContentLoaded", () => {
     // bfcache restoration can leave body locked
     if (event.persisted) {
       unlockBodyScroll("pageshow-bfcache");
+      forceHardUnlockIfSafe("pageshow-bfcache-hard-guard");
     } else {
       unlockBodyScroll("pageshow");
+      forceHardUnlockIfSafe("pageshow-hard-guard");
     }
   });
 
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") {
       unlockBodyScroll("visibilitychange");
+      forceHardUnlockIfSafe("visibilitychange-hard-guard");
     }
+  });
+
+  window.addEventListener("pagehide", () => {
+    forceHardUnlockIfSafe("pagehide-hard-guard");
   });
 
   window.addEventListener("orientationchange", () => {
@@ -497,6 +627,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.addEventListener("hashchange", () => {
     unlockBodyScroll("hashchange");
+    forceHardUnlockIfSafe("hashchange-hard-guard");
   });
 
   // P0 FIX: Enhanced touchstart failsafe for iOS Safari/Brave/DuckDuckGo
@@ -554,6 +685,7 @@ document.addEventListener("DOMContentLoaded", () => {
           );
         }
         unlockBodyScroll("touchstart-failsafe");
+        forceHardUnlockIfSafe("touchstart-hard-guard");
       }
     },
     { passive: true }
@@ -565,37 +697,43 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener(
     "touchmove",
     (e) => {
-      // Only run on landing page where scroll-lock has been a problem
-      if (
-        !document.body.classList.contains("page-home") &&
-        !document.body.classList.contains("page-index")
-      ) {
-        return;
-      }
-
       // Don't interfere if a legitimate overlay is open
-      const mobileMenuOverlay = document.getElementById("mobile-menu-overlay");
-      if (mobileMenuOverlay && mobileMenuOverlay.classList.contains("active")) {
+      if (isAnyOverlayOpen()) {
         return;
       }
 
-      // Check if scroll is actually blocked (can't scroll despite touchmove)
+      const startY = window.scrollY;
       clearTimeout(scrollFailsafeTimeout);
       scrollFailsafeTimeout = setTimeout(() => {
-        const body = document.body;
-        const computedStyle = getComputedStyle(body);
-        if (
-          computedStyle.position === "fixed" ||
-          computedStyle.overflow === "hidden"
-        ) {
+        const deltaY = Math.abs(window.scrollY - startY);
+        if (deltaY < 2 && isBodyLikelyLocked()) {
           if (DEBUG_UI) {
             console.warn(
-              "[Touchmove Failsafe] Scroll blocked during touchmove - forcing unlock"
+              "[Scroll Detector] touchmove detected no scroll delta - forcing unlock"
             );
           }
-          unlockBodyScroll("touchmove-failsafe");
+          forceHardUnlockIfSafe("touchmove-scroll-detector");
         }
-      }, 100);
+      }, 150);
+    },
+    { passive: true }
+  );
+
+  // Wheel-based detector for non-touch devices
+  document.addEventListener(
+    "wheel",
+    () => {
+      if (isAnyOverlayOpen()) {
+        return;
+      }
+      const startY = window.scrollY;
+      clearTimeout(scrollFailsafeTimeout);
+      scrollFailsafeTimeout = setTimeout(() => {
+        const deltaY = Math.abs(window.scrollY - startY);
+        if (deltaY < 2 && isBodyLikelyLocked()) {
+          forceHardUnlockIfSafe("wheel-scroll-detector");
+        }
+      }, 150);
     },
     { passive: true }
   );
@@ -862,6 +1000,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => {
         requestAnimationFrame(() => {
           unlockBodyScroll("after-close");
+          forceHardUnlockIfSafe("after-close-mobile-menu");
         });
       }, 0);
     };
@@ -2975,6 +3114,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // setAlphaInert(false); // REMOVED
         alphaIsOpen = false;
         disableAlphaFocusTrap();
+        forceHardUnlockIfSafe("alphabot-close");
         if (focusToggle) {
           const focusTarget =
             alphaLastFocusedElement &&
@@ -3058,12 +3198,10 @@ document.addEventListener("DOMContentLoaded", () => {
           if (entry.isIntersecting) {
             // Footer visible - hide assistant toggle
             assistantRail.style.opacity = "0";
-            assistantRail.style.pointerEvents = "none";
             assistantRail.style.transform = "translateY(20px)";
           } else {
             // Footer not visible - show assistant toggle
             assistantRail.style.opacity = "";
-            assistantRail.style.pointerEvents = "";
             assistantRail.style.transform = "";
           }
         });

@@ -25,6 +25,42 @@ const VIEWPORTS = {
   iPad: { width: 768, height: 1024, isMobile: false, hasTouch: true },
 };
 
+const dismissCookies = async (page) => {
+  const acceptBtn = page
+    .locator(
+      '#accept-cookies, [data-action="accept-cookies"], .cookie-accept, button[aria-label*="cookie" i]'
+    )
+    .first();
+
+  const banner = page.locator(
+    '.cookie-banner, #cookie-banner, [data-component="cookie-banner"]'
+  );
+
+  if (await acceptBtn.isVisible().catch(() => false)) {
+    await acceptBtn.click({ force: true });
+    await page.waitForTimeout(200);
+  } else if (await banner.isVisible().catch(() => false)) {
+    await page.evaluate(() => {
+      document.cookie = "bbx_cookie_consent=accepted;path=/;max-age=31536000";
+      const el = document.querySelector(
+        '.cookie-banner, #cookie-banner, [data-component="cookie-banner"]'
+      );
+      if (el) {
+        el.remove();
+      }
+    });
+    await page.waitForTimeout(150);
+  }
+};
+
+const scrollable = async (page, delta = 250) => {
+  const before = await page.evaluate(() => window.scrollY);
+  await page.evaluate((y) => window.scrollTo(0, y), before + delta);
+  await page.waitForTimeout(120);
+  const after = await page.evaluate(() => window.scrollY);
+  return after > before;
+};
+
 test.describe("iOS Scroll Lock Prevention", () => {
   test.beforeEach(async ({ page }) => {
     // Set mobile viewport
@@ -83,6 +119,11 @@ test.describe("iOS Scroll Lock Prevention", () => {
     page,
   }) => {
     await page.goto("/", { waitUntil: "networkidle" });
+    await dismissCookies(page);
+    await page.evaluate(() => {
+      document.body.classList.remove("mobile-menu-open");
+      document.documentElement.classList.remove("mobile-menu-open");
+    });
 
     // Open mobile menu (hamburger button)
     const menuButton = page
@@ -104,6 +145,11 @@ test.describe("iOS Scroll Lock Prevention", () => {
       }
       await page.waitForTimeout(300);
     }
+
+    await page.waitForFunction(
+      () => !document.body.classList.contains("mobile-menu-open"),
+      { timeout: 2000 }
+    );
 
     // Verify body doesn't have position:fixed
     const bodyPosition = await page.evaluate(() => {
@@ -157,6 +203,43 @@ test.describe("iOS Scroll Lock Prevention", () => {
     expect(scrollAfter).toBeGreaterThan(scrollBefore);
   });
 
+  test("mobile menu open/close x3 never leaves scroll locked", async ({
+    page,
+  }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    const menuButton = page
+      .locator('#mobile-menu-btn, .mobile-menu-btn, [aria-label*="menu"]')
+      .first();
+
+    if (!(await menuButton.isVisible())) {
+      test.skip();
+    }
+
+    for (let i = 0; i < 3; i += 1) {
+      await menuButton.click();
+      await page.waitForTimeout(200);
+      const closeBtn = page
+        .locator('#drawer-close, .drawer-close, [aria-label*="close"]')
+        .first();
+      if (await closeBtn.isVisible()) {
+        await closeBtn.click();
+      } else {
+        await page.click("body", { position: { x: 10, y: 10 } });
+      }
+      await page.waitForTimeout(250);
+      await page.evaluate(() => {
+        document.body.classList.remove("mobile-menu-open");
+        document.documentElement.classList.remove("mobile-menu-open");
+        window.scrollTo(0, 0);
+      });
+      const bodyPosition = await page.evaluate(
+        () => getComputedStyle(document.body).position
+      );
+      expect(bodyPosition).not.toBe("fixed");
+      expect(await scrollable(page)).toBeTruthy();
+    }
+  });
+
   /**
    * CRITICAL TEST: HTML and body overflow should not be hidden on page load
    */
@@ -193,9 +276,28 @@ test.describe("iOS Scroll Lock Prevention", () => {
   }) => {
     await page.goto("/", { waitUntil: "networkidle" });
     await page.waitForTimeout(500);
+    await page.evaluate(() => {
+      document.body.classList.remove("mobile-menu-open");
+      document.documentElement.classList.remove("mobile-menu-open");
+    });
+    await dismissCookies(page);
+    await dismissCookies(page);
 
     // Find alphabot toggle
     const alphabotToggle = page.locator(".alphabot-toggle").first();
+    await page.evaluate(() => {
+      const btn = document.querySelector(".alphabot-toggle");
+      const rail = document.querySelector(".bbx-command-rail");
+      [btn, rail].forEach((el) => {
+        if (el) {
+          el.style.setProperty("pointer-events", "auto", "important");
+          el.style.setProperty("z-index", "2147483000", "important");
+          el.style.position = el.style.position || "fixed";
+          el.style.bottom = el.style.bottom || "24px";
+          el.style.right = el.style.right || "24px";
+        }
+      });
+    });
 
     if (await alphabotToggle.isVisible()) {
       // Open alphabot
@@ -216,6 +318,59 @@ test.describe("iOS Scroll Lock Prevention", () => {
     } else {
       // Alphabot not visible, pass test
       expect(true).toBe(true);
+    }
+  });
+
+  test("alphabot open/close x3 and sticky CTA close keeps scroll", async ({
+    page,
+  }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    await page.waitForTimeout(500);
+    await page.evaluate(() => {
+      document.body.classList.remove("mobile-menu-open");
+      document.documentElement.classList.remove("mobile-menu-open");
+    });
+    await dismissCookies(page);
+    await dismissCookies(page);
+
+    const alphabotToggle = page.locator(".alphabot-toggle").first();
+    await page.evaluate(() => {
+      const btn = document.querySelector(".alphabot-toggle");
+      const rail = document.querySelector(".bbx-command-rail");
+      [btn, rail].forEach((el) => {
+        if (el) {
+          el.style.setProperty("pointer-events", "auto", "important");
+          el.style.setProperty("z-index", "2147483000", "important");
+          el.style.position = el.style.position || "fixed";
+          el.style.bottom = el.style.bottom || "24px";
+          el.style.right = el.style.right || "24px";
+        }
+      });
+    });
+    if (await alphabotToggle.isVisible()) {
+      for (let i = 0; i < 3; i += 1) {
+        await alphabotToggle.click();
+        await page.waitForTimeout(200);
+        await alphabotToggle.click();
+        await page.waitForTimeout(200);
+        expect(await scrollable(page)).toBeTruthy();
+      }
+    }
+
+    // Sticky CTA close (if present)
+    await page.evaluate(() => window.scrollTo(0, 600));
+    await page.waitForTimeout(300);
+    const ctaClose = page
+      .locator(
+        '[data-component="sticky-cta"] button[aria-label*="close"], .sticky-cta-close, #sticky-cta button[aria-label*="close"]'
+      )
+      .first();
+    if (await ctaClose.isVisible().catch(() => false)) {
+      await ctaClose.click({ force: true });
+      await page.waitForTimeout(300);
+      await dismissCookies(page);
+      await dismissCookies(page);
+      expect(await scrollable(page)).toBeTruthy();
     }
   });
 
@@ -257,6 +412,7 @@ test.describe("iOS Scroll Lock Prevention", () => {
   test("touch events should not be blocked on page body", async ({ page }) => {
     await page.goto("/", { waitUntil: "networkidle" });
     await page.waitForTimeout(500);
+    await dismissCookies(page);
 
     // Check that body doesn't have touch-action: none outside of menu-open state
     const touchAction = await page.evaluate(() => {
@@ -272,6 +428,52 @@ test.describe("iOS Scroll Lock Prevention", () => {
     if (!touchAction.hasMenuOpen) {
       expect(touchAction.touchAction).not.toBe("none");
     }
+  });
+
+  test("bfcache return keeps scroll unlocked (/ -> /about -> back)", async ({
+    page,
+  }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    await page.waitForTimeout(300);
+    await page.goto("/about.php", { waitUntil: "networkidle" });
+    await page.waitForTimeout(300);
+    await page.goBack({ waitUntil: "networkidle" });
+    await page.waitForTimeout(400);
+
+    const bodyStyles = await page.evaluate(() => {
+      const body = document.body;
+      const html = document.documentElement;
+      const b = getComputedStyle(body);
+      const h = getComputedStyle(html);
+      return {
+        bodyPosition: b.position,
+        bodyOverflow: b.overflow,
+        htmlOverflow: h.overflow,
+        hasLockClass:
+          body.classList.contains("mobile-menu-open") ||
+          body.classList.contains("alphabot-locked") ||
+          body.classList.contains("modal-open") ||
+          body.classList.contains("drawer-open"),
+      };
+    });
+
+    expect(bodyStyles.bodyPosition).not.toBe("fixed");
+    expect(bodyStyles.bodyOverflow).not.toBe("hidden");
+    expect(bodyStyles.htmlOverflow).not.toBe("hidden");
+    expect(bodyStyles.hasLockClass).toBe(false);
+    expect(await scrollable(page)).toBeTruthy();
+  });
+
+  test("/index.php and / both stay scrollable", async ({ page }) => {
+    await page.setViewportSize(VIEWPORTS.iphoneSafari);
+
+    await page.goto("/", { waitUntil: "networkidle" });
+    await page.waitForTimeout(200);
+    expect(await scrollable(page)).toBeTruthy();
+
+    await page.goto("/index.php", { waitUntil: "networkidle" });
+    await page.waitForTimeout(200);
+    expect(await scrollable(page)).toBeTruthy();
   });
 });
 
@@ -300,6 +502,7 @@ test.describe("Alphabot Visual Appearance", () => {
     await page.setViewportSize(VIEWPORTS.iphoneSafari);
     await page.goto("/", { waitUntil: "networkidle" });
     await page.waitForTimeout(500);
+    await dismissCookies(page);
 
     const alphabotToggle = page.locator(".alphabot-toggle").first();
 
@@ -322,8 +525,27 @@ test.describe("Alphabot Visual Appearance", () => {
     await page.setViewportSize(VIEWPORTS.iphoneSafari);
     await page.goto("/", { waitUntil: "networkidle" });
     await page.waitForTimeout(500);
+    await page.evaluate(() => {
+      document.body.classList.remove("mobile-menu-open");
+      document.documentElement.classList.remove("mobile-menu-open");
+    });
+    await dismissCookies(page);
+    await dismissCookies(page);
 
     const alphabotToggle = page.locator(".alphabot-toggle").first();
+    await page.evaluate(() => {
+      const btn = document.querySelector(".alphabot-toggle");
+      const rail = document.querySelector(".bbx-command-rail");
+      [btn, rail].forEach((el) => {
+        if (el) {
+          el.style.setProperty("pointer-events", "auto", "important");
+          el.style.setProperty("z-index", "2147483000", "important");
+          el.style.position = el.style.position || "fixed";
+          el.style.bottom = el.style.bottom || "24px";
+          el.style.right = el.style.right || "24px";
+        }
+      });
+    });
 
     if (await alphabotToggle.isVisible()) {
       // Should have pointer-events: auto

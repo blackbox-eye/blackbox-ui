@@ -2165,12 +2165,12 @@ body.mobile-menu-open .bbx-command-rail {
 
 body.mobile-menu-open .alphabot-widget {
   z-index: 1 !important;
-  pointer-events: none !important;
+  pointer-events: auto !important;
 }
 
 body.mobile-menu-open .alphabot-toggle {
   opacity: 0.3 !important;
-  pointer-events: none !important;
+  pointer-events: auto !important;
 }
 
 body.mobile-menu-open .alphabot-overlay {
@@ -2268,6 +2268,14 @@ body.mobile-menu-open .alphabot-overlay {
   visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
+}
+
+/* Force Alphabot controls above all hero content and always clickable */
+.bbx-command-rail,
+.alphabot-widget,
+.alphabot-toggle {
+  z-index: 99999 !important;
+  pointer-events: auto !important;
 }
 
 .alphabot-widget {

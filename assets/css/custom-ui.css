@@ -303,28 +303,17 @@
 
 /* Header CTA in light mode */
 :root[data-theme="light"] .header-cta {
-<<<<<<< Updated upstream
-  background: var(--cta-background);
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--primary-accent) 16%, white),
-=======
   background: var(
     --cta-bg-light,
     linear-gradient(135deg, rgba(154, 123, 31, 0.18), rgba(154, 123, 31, 0.12))
   );
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--primary-accent) 16%, white),
->>>>>>> Stashed changes
     0 3px 10px color-mix(in srgb, var(--primary-accent) 24%, transparent);
   border: 1px solid color-mix(in srgb, var(--primary-accent) 45%, transparent);
   color: var(--cta-contrast);
 }
 
 :root[data-theme="light"] .header-cta:hover {
-<<<<<<< Updated upstream
-  background: var(--cta-background-hover);
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--primary-accent) 22%, white),
-=======
   background: var(
     --cta-bg-light-hover,
     linear-gradient(135deg, rgba(154, 123, 31, 0.28), rgba(154, 123, 31, 0.18))
@@ -332,23 +321,16 @@
   border-color: var(--cta-border-light-hover, rgba(154, 123, 31, 0.6));
   color: var(--cta-text-light-hover, #111827) !important;
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--primary-accent) 22%, white),
->>>>>>> Stashed changes
     0 5px 15px color-mix(in srgb, var(--primary-accent) 30%, transparent);
 }
 
 /* Nav chips active state - copper */
 :root[data-theme="light"] .nav-chip.nav-link-active {
-<<<<<<< Updated upstream
-  background: var(--cta-background);
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--primary-accent) 16%, white),
-=======
   background: var(
     --nav-bg-light-active,
     linear-gradient(135deg, rgba(154, 123, 31, 0.2), rgba(154, 123, 31, 0.12))
   );
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--primary-accent) 16%, white),
->>>>>>> Stashed changes
     0 3px 12px color-mix(in srgb, var(--primary-accent) 28%, transparent);
   border: 1px solid color-mix(in srgb, var(--primary-accent) 45%, transparent);
   color: var(--cta-contrast);
@@ -3543,24 +3525,15 @@ body.mobile-menu-open .alphabot-overlay {
 
 /* Blackbox EYE Assistant in light mode */
 :root[data-theme="light"] .alphabot-toggle {
-<<<<<<< Updated upstream
-  background: rgba(255, 255, 255, 0.95) !important;
-  border: 1px solid rgba(15, 23, 42, 0.12) !important;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12) !important;
-=======
   background: var(--alphabot-bg-light, rgba(255, 255, 255, 0.98)) !important;
   border: 1px solid var(--alphabot-border-light, rgba(15, 23, 42, 0.18)) !important;
   box-shadow: var(
     --alphabot-shadow-light,
     0 8px 24px rgba(15, 23, 42, 0.15)
   ) !important;
->>>>>>> Stashed changes
 }
 
 :root[data-theme="light"] .alphabot-status-dot {
-<<<<<<< Updated upstream
-  box-shadow: 0 0 8px rgba(34, 197, 94, 0.5) !important;
-=======
   background: var(--alphabot-dot-light, #16a34a) !important;
   box-shadow: var(
     --alphabot-dot-shadow-light,

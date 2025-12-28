@@ -4,6 +4,19 @@
  * Contains: theme tokens, layout essentials, hero structure
  */
 
+/* ════ SCROLLBAR HIDING (P0 - ALL PLATFORMS) ════ */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+}
+html,
+body {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
 /* ════ CORE THEME TOKENS ════ */
 :root,
 :root[data-theme="dark"] {

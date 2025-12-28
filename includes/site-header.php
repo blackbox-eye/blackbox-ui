@@ -205,6 +205,7 @@ if (!empty($disable_alphabot)) {
 <!DOCTYPE html>
 <html lang="<?= htmlspecialchars($current_language) ?>" data-lang="<?= htmlspecialchars($current_language) ?>" class="scroll-smooth" data-theme="dark">
 <head>
+<!-- BBX_MARKER_1766950928 (ACTIVE_HEADER_PROBE) -->
     <script>
         (function() {
             var storageKey = 'bbx-theme';
@@ -325,11 +326,11 @@ if (!empty($disable_alphabot)) {
         if (file_exists($full_path)) {
             return substr(md5((string)filemtime($full_path)), 0, 8);
         }
-        return '1.6.20'; // Fallback version
+        return '1.6.21'; // Fallback version
     }
     
     // Legacy compat: keep $css_version for any remaining static refs
-    $css_version = '1.6.20';
+    $css_version = '1.6.21';
     ?>
 
     <link rel="icon" type="image/svg+xml" href="/assets/icon_box.svg?v=<?= $css_version ?>">
@@ -501,6 +502,7 @@ if ($current_page === 'home' || $current_page === 'index') {
     <a href="#main-content" class="skip-link"><?= t('common.skip_link') ?></a>
 
     <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+<!-- BBX_MARKER_1766950928 (ACTIVE_HEADER_PROBE) -->
         <div class="container mx-auto px-4">
             <div class="header-shell">
                 <div class="header-grid bbx-header">
@@ -805,6 +807,7 @@ if ($current_page === 'home' || $current_page === 'index') {
             <?= json_encode($breadcrumb_schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) ?>
         </script>
     <?php endif; ?>
+
 
 
 

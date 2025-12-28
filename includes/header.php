@@ -15,6 +15,7 @@ $current_language = bbx_get_language();
 <html lang="<?= htmlspecialchars($current_language) ?>" data-lang="<?= htmlspecialchars($current_language) ?>">
 
 <head>
+<!-- BBX_MARKER_1766950928 (ACTIVE_HEADER_PROBE) -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>
@@ -44,4 +45,5 @@ $current_language = bbx_get_language();
 </head>
 
 <body data-theme="dark">
+
 

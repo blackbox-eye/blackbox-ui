@@ -2,6 +2,7 @@
 require_once __DIR__ . '/env.php';
 require_once __DIR__ . '/i18n.php';
 require_once __DIR__ . '/graphene-config.php';
+require_once __DIR__ . '/debug-killswitch.php';
 
 $current_language = bbx_get_language();
 
@@ -466,6 +467,10 @@ if (!empty($disable_alphabot)) {
 
     <!-- Inline styles removed; migrated to /assets/css/custom-ui.css -->
     <?php include __DIR__ . '/qa-bootstrap.php'; ?>
+
+    <!-- P0 Debug: Kill-switch CSS for iOS scroll isolation -->
+    <?= bbx_killswitch_debug_comment() ?>
+    <?= bbx_killswitch_inline_css() ?>
 </head>
 
 <?php

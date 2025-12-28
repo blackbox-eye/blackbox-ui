@@ -33,13 +33,20 @@
 }
 
 /* ════ BASE RESET ════ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { 
-  scroll-behavior: smooth; 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html {
+  scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
 }
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
   background: var(--color-bg);
   color: var(--color-text);
   line-height: 1.6;
@@ -47,9 +54,54 @@ body {
   min-height: 100vh;
 }
 
+/* P0 HARD-UNLOCK GUARD: when no overlay/drawer/modal classes are present, force scroll to stay enabled */
+html:not(.mobile-menu-open):not(.modal-open):not(.drawer-open):not(
+    .alphabot-locked
+  ),
+body:not(.mobile-menu-open):not(.modal-open):not(.drawer-open):not(
+    .alphabot-locked
+  ) {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  position: static !important;
+  touch-action: auto !important;
+}
+
+/* P0 FIX: Hero layers must allow scroll passthrough - touch-action pan-y everywhere */
+.graphene-hero-3d,
+.graphene-hero-3d__content,
+.graphene-hero-3d__content-inner,
+.graphene-hero-3d__canvas,
+.graphene-hero-3d__fallback,
+.graphene-hero-3d__overlay,
+.graphene-hero-3d__vignette {
+  touch-action: pan-y !important;
+}
+
+/* P0 FIX: Non-interactive hero backgrounds must not capture pointer events */
+.graphene-hero-3d__canvas,
+.graphene-hero-3d__fallback,
+.graphene-hero-3d__overlay,
+.graphene-hero-3d__vignette {
+  pointer-events: none !important;
+}
+
+/* P0 FIX: Ensure interactive elements inside hero remain clickable */
+.graphene-hero-3d a,
+.graphene-hero-3d button,
+.graphene-hero-3d [role="button"],
+.graphene-hero-3d input,
+.graphene-hero-3d select,
+.graphene-hero-3d textarea,
+.graphene-cta-group,
+.graphene-cta-group * {
+  pointer-events: auto !important;
+  touch-action: manipulation !important;
+}
+
 /* CRITICAL FIX #2: Ensure scroll is available on landing page from first load */
 /* Only apply to non-modal, non-drawer-open states to preserve legitimate scroll locks */
-html:not(.modal-open):not(.drawer-open) { 
+html:not(.modal-open):not(.drawer-open) {
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -59,14 +111,29 @@ body:not(.mobile-menu-open):not(.alphabot-locked):not(.modal-open) {
 }
 
 /* ════ LAYOUT CONTAINER ════ */
-.container { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
-@media (min-width: 640px) { .container { padding: 0 1.5rem; } }
-@media (min-width: 1024px) { .container { padding: 0 2rem; } }
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+@media (min-width: 640px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 2rem;
+  }
+}
 
 /* ════ HEADER (fixed, above-fold) ════ */
 #main-header {
   position: fixed;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 50;
   background: rgba(10, 11, 13, 0.85);
   backdrop-filter: blur(12px);
@@ -79,11 +146,27 @@ body:not(.mobile-menu-open):not(.alphabot-locked):not(.modal-open) {
   background: rgba(248, 247, 244, 0.92);
 }
 
-.header-shell { padding: 0.75rem 0; }
-.header-grid { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-.header-brand { flex-shrink: 0; }
-.header-logo-link { display: flex; align-items: center; text-decoration: none; }
-.header-logo-link img { height: 2rem; width: auto; }
+.header-shell {
+  padding: 0.75rem 0;
+}
+.header-grid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.header-brand {
+  flex-shrink: 0;
+}
+.header-logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+.header-logo-link img {
+  height: 2rem;
+  width: auto;
+}
 
 /* ════ HERO SECTION (LCP target) ════ */
 .graphene-hero-3d {
@@ -100,7 +183,11 @@ body:not(.mobile-menu-open):not(.alphabot-locked):not(.modal-open) {
 .graphene-hero-3d__fallback {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-elevated) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-bg) 0%,
+    var(--color-bg-elevated) 100%
+  );
   z-index: 0;
 }
 
@@ -121,7 +208,7 @@ body:not(.mobile-menu-open):not(.alphabot-locked):not(.modal-open) {
 
 /* Hero title - reserve space to prevent CLS */
 .graphene-hero-title {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 700;
   line-height: 1.1;
@@ -151,18 +238,20 @@ body:not(.mobile-menu-open):not(.alphabot-locked):not(.modal-open) {
   text-decoration: none;
   transition: top 0.2s;
 }
-.skip-link:focus { top: 1rem; }
+.skip-link:focus {
+  top: 1rem;
+}
 
 /* ════ MOBILE TEXT SCALING (NO LAYOUT ZOOM) ════ */
 /* Root stays 100% - only text is scaled via explicit overrides */
 @media (max-width: 768px) {
-  :root { 
+  :root {
     font-size: 100%; /* NO inflation */
   }
-  .graphene-hero-3d__content { 
+  .graphene-hero-3d__content {
     padding: 5rem 1rem 3rem; /* Compact, premium */
   }
-  .graphene-hero-title { 
+  .graphene-hero-title {
     min-height: auto;
     font-size: 2.1rem !important; /* ~34px - TEXT only */
     line-height: 1.15 !important;
@@ -176,9 +265,16 @@ body:not(.mobile-menu-open):not(.alphabot-locked):not(.modal-open) {
 
 /* ════ FOUC PREVENTION (SAFE) ════ */
 /* Don't hide content - use opacity transition instead */
-html { opacity: 1; }
-html.fouc-prevent { opacity: 0; transition: opacity 0.1s ease; }
-html[data-theme].fouc-prevent { opacity: 1; }
+html {
+  opacity: 1;
+}
+html.fouc-prevent {
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+html[data-theme].fouc-prevent {
+  opacity: 1;
+}
 
 /* ════ MOBILE DRAWER CRITICAL (prevent layout shift) ════ */
 @media (max-width: 1023px) {
@@ -200,7 +296,7 @@ html[data-theme].fouc-prevent { opacity: 1; }
     padding-top: env(safe-area-inset-top, 0);
     padding-bottom: env(safe-area-inset-bottom, 0);
   }
-  
+
   /* Drawer nav area - scrollable */
   #mobile-menu nav {
     flex: 1;
@@ -209,14 +305,14 @@ html[data-theme].fouc-prevent { opacity: 1; }
     -webkit-overflow-scrolling: touch;
     padding-bottom: 1rem;
   }
-  
+
   /* Drawer footer - sticky bottom, not absolute */
   #mobile-menu > div:last-child {
     flex-shrink: 0;
     position: relative;
     margin-top: auto;
   }
-  
+
   /* Burger button - explicit size to prevent flash */
   .header-burger {
     width: 44px;
@@ -224,7 +320,7 @@ html[data-theme].fouc-prevent { opacity: 1; }
     min-width: 44px;
     min-height: 44px;
   }
-  
+
   /* Header icons - explicit dimensions */
   .header-logo-link img,
   .header-logo-link svg {

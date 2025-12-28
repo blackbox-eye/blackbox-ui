@@ -1,8 +1,11 @@
 <?php
 // Determine if this is the landing page (page-home)
 $is_landing_page = (basename($_SERVER['SCRIPT_NAME'] ?? '') === 'index.php');
+
+// P0 Kill-switch flags (set by includes/debug-killswitch.php)
+global $_BBX_DISABLE_CTA, $_BBX_DISABLE_CHAT;
 ?>
-    <?php if (!$is_landing_page): ?>
+    <?php if (!$is_landing_page && empty($_BBX_DISABLE_CTA)): ?>
     <!-- Sticky CTA Bar for Mobile/Tablet - Shows on scroll (NOT on landing - #sticky-cta is canonical there) -->
     <div id="sticky-cta-bar" class="sticky-cta-bar" role="navigation" aria-label="<?= t('header.mobile.quick_actions', 'Quick actions') ?>">
         <a href="demo.php" class="sticky-cta-bar__btn sticky-cta-bar__btn--primary">
@@ -136,10 +139,11 @@ $is_landing_page = (basename($_SERVER['SCRIPT_NAME'] ?? '') === 'index.php');
     ?>
     <?php include __DIR__ . '/cookie-banner.php'; ?>
 
-    <?php if (!empty($show_alphabot)): ?>
+    <?php if (!empty($show_alphabot) && empty($_BBX_DISABLE_CHAT)): ?>
         <div id="alphabot-overlay" class="alphabot-overlay" aria-hidden="true"></div>
     <?php endif; ?>
 
+    <?php if (empty($_BBX_DISABLE_CTA)): ?>
     <!-- ═══════════════════════════════════════════════════════════════
          STICKY CTA BAR - Best Practice Mobile Implementation
          Structure: 2-row stacked layout
@@ -187,8 +191,9 @@ $is_landing_page = (basename($_SERVER['SCRIPT_NAME'] ?? '') === 'index.php');
             </a>
         </div>
     </aside>
+    <?php endif; ?>
 
-    <?php if (empty($disable_alphabot)): ?>
+    <?php if (empty($disable_alphabot) && empty($_BBX_DISABLE_CHAT)): ?>
         <div class="bbx-command-rail<?= empty($show_alphabot) ? ' bbx-command-rail--cta-only' : '' ?>">
             <?php if (!empty($show_alphabot)): ?>
                 <div id="alphabot-container" class="alphabot-widget" data-component="alphabot" aria-live="polite">

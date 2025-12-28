@@ -10,6 +10,13 @@
  * - Privacy policy link
  */
 
+// P0 Kill-switch: Skip rendering if ?nocookie=1 or ?nosurface=1
+global $_BBX_DISABLE_COOKIE;
+if (!empty($_BBX_DISABLE_COOKIE)) {
+    // Don't render cookie banner when kill-switch is active
+    return;
+}
+
 // Get current language for i18n
 $banner_lang = function_exists('bbx_get_language') ? bbx_get_language() : 'da';
 $privacy_url = 'privacy.php';

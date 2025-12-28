@@ -1,7 +1,37 @@
 {
-    "liveServer.settings.port": 5501,
-    "files.associations": {
-        ".github/workflows/*.yml": "yaml",
-        ".github/workflows/*.yaml": "yaml"
-    }
+  "liveServer.settings.port": 5501,
+  "files.associations": {
+    ".github/workflows/*.yml": "yaml",
+    ".github/workflows/*.yaml": "yaml"
+  },
+
+  "chat.tools.terminal.autoApprove": {
+    // --- Git (safe ops) ---
+    "^git\\s+(status|diff|log|show|branch|remote|fetch|pull|switch|checkout|rev-parse|ls-files|grep|stash\\s+list)\\b.*$": true,
+
+    // --- Node / tooling (safe ops) ---
+    "^npm\\s+(ci|install|run\\s+(build|test|lint|lint:fix|format|format:check|dev|start))\\b.*$": true,
+    "^npx\\s+(playwright\\s+test|prettier\\b.*|eslint\\b.*|stylelint\\b.*)\\b.*$": true,
+
+    // --- PHP basic sanity (safe ops) ---
+    "^php\\s+(-v|-m|-i|--ri\\b.*|--info|--ini|--syntax-check\\b.*|-l\\b.*)\\b.*$": true,
+
+    // --- Search + inspect (safe ops) ---
+    "^(rg|grep|findstr)\\b.*$": true,
+    "^(ls|dir|pwd|cd)\\b.*$": true,
+    "^(cat|type|more|head|tail)\\b.*$": true,
+
+    // --- Local web check (safe ops) ---
+    "^curl\\s+(-I\\b.*|--head\\b.*)\\b.*$": true,
+
+    // --- HARD BLOCKS (always require approval) ---
+    "^git\\s+(push|commit|rebase|merge|reset\\b|clean\\b|tag\\b|cherry-pick\\b)\\b.*$": false,
+    "^(rm|del|rmdir|rd)\\b.*$": false,
+    "^(mv|move|cp|copy)\\b.*$": false,
+    "^curl\\b(?!\\s+(-I|--head)\\b).*": false,
+    ".*\\|\\s*(sh|bash|pwsh|powershell)\\b.*$": false,
+    "^(powershell|pwsh)\\b.*$": false
+  },
+
+  "chat.tools.terminal.ignoreDefaultAutoApproveRules": false
 }

@@ -248,7 +248,8 @@ body:not(.mobile-menu-open):not(.alphabot-locked):not(.modal-open) {
   width: 100%;
   display: flex;
   align-items: center;
-  overflow: hidden;
+  /* P0 FIX: overflow: hidden removed - blocks scroll on full-viewport hero */
+  overflow: visible;
   background: var(--color-bg);
 }
 

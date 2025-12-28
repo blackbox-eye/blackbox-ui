@@ -9,40 +9,46 @@
   const cleanupCookieBanner = () => {
     // Remove any cookie banner elements from DOM
     const bannerSelectors = [
-      '#cookie-banner',
-      '.cookie-banner',
-      '[data-component="cookie-banner"]'
+      "#cookie-banner",
+      ".cookie-banner",
+      '[data-component="cookie-banner"]',
     ];
-    bannerSelectors.forEach(selector => {
+    bannerSelectors.forEach((selector) => {
       const el = document.querySelector(selector);
       if (el) {
         el.remove();
-        console.info('[BBX] Cookie banner element removed:', selector);
+        console.info("[BBX] Cookie banner element removed:", selector);
       }
     });
-    
+
     // Remove cookie-banner-open class from body and html
-    document.body.classList.remove('cookie-banner-open', 'cookie-banner-visible');
-    document.documentElement.classList.remove('cookie-banner-open', 'cookie-banner-visible');
+    document.body.classList.remove(
+      "cookie-banner-open",
+      "cookie-banner-visible"
+    );
+    document.documentElement.classList.remove(
+      "cookie-banner-open",
+      "cookie-banner-visible"
+    );
   };
-  
+
   // Run on DOMContentLoaded
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', cleanupCookieBanner);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", cleanupCookieBanner);
   } else {
     cleanupCookieBanner();
   }
-  
+
   // Run on pageshow (handles bfcache)
-  window.addEventListener('pageshow', (event) => {
+  window.addEventListener("pageshow", (event) => {
     if (event.persisted) {
       cleanupCookieBanner();
     }
   });
-  
+
   // Run on visibilitychange
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') {
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
       cleanupCookieBanner();
     }
   });
@@ -458,6 +464,9 @@ const unlockBodyScroll = (reason = "unknown") => {
     }
   }
 
+  // Only restore scroll if we were truly in a fixed-lock state (prevents reset loops on iOS/pageshow)
+  const hadFixedLock = body.style.position === "fixed" || !!body.style.top;
+
   // Remove all scroll-lock classes (comprehensive)
   body.classList.remove("mobile-menu-open");
   body.classList.remove("alphabot-locked");
@@ -483,8 +492,8 @@ const unlockBodyScroll = (reason = "unknown") => {
   html.style.overflowX = "";
   html.style.overflowY = "";
 
-  // Restore scroll position
-  if (scrollY > 0) {
+  // Restore scroll position ONLY when we were actually fixed-locked
+  if (hadFixedLock && scrollY > 0) {
     window.scrollTo(0, scrollY);
   }
 

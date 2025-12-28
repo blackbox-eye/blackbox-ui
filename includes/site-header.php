@@ -445,9 +445,13 @@ if (!empty($disable_alphabot)) {
     <link rel="preload" href="/assets/css/components/touch-targets.css?v=<?= bbx_asset_version('css/components/touch-targets.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/assets/css/components/touch-targets.css?v=<?= bbx_asset_version('css/components/touch-targets.css') ?>"></noscript>
 
-    <!-- Liquid Glass System - Cross-browser glass/blur effects (must load last to override) -->
+    <!-- Liquid Glass System - Cross-browser glass/blur effects -->
     <link rel="preload" href="/assets/css/components/liquid-glass.css?v=<?= bbx_asset_version('css/components/liquid-glass.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/assets/css/components/liquid-glass.css?v=<?= bbx_asset_version('css/components/liquid-glass.css') ?>"></noscript>
+
+    <!-- P0 SCROLL CONTRACT - MUST LOAD LAST (global scroll authority, overrides all other CSS scroll rules) -->
+    <link rel="preload" href="/assets/css/scroll-contract.css?v=<?= bbx_asset_version('css/scroll-contract.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/css/scroll-contract.css?v=<?= bbx_asset_version('css/scroll-contract.css') ?>"></noscript>
 
     <script src="config.js?v=<?= bbx_asset_version('../config.js') ?>" defer></script>
     <?php if (BBX_RECAPTCHA_SITE_KEY !== ''): ?>

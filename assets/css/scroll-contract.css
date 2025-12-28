@@ -1,0 +1,187 @@
+/**
+ * P0 SCROLL CONTRACT — GLOBAL AUTHORITY
+ * Created: 2025-12-28
+ * 
+ * PURPOSE:
+ * This file establishes the ONE source of truth for scroll behavior.
+ * These rules MUST NOT be overridden by any other stylesheet.
+ * 
+ * PROBLEM SOLVED:
+ * Multiple CSS files were independently locking scroll with:
+ * - overflow: hidden on body/html
+ * - position: fixed on body/html
+ * - height: 100vh on body/html
+ * - touch-action: none
+ * 
+ * This file ensures scroll ALWAYS works unless an overlay is explicitly open.
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   GLOBAL SCROLL CONTRACT — BODY & HTML BASE
+   These rules ensure scroll is NEVER accidentally locked
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+html,
+body {
+  /* Allow horizontal hidden (for visual clip) but NEVER lock vertical */
+  overflow-x: hidden;
+  overflow-y: auto !important;
+
+  /* NEVER use fixed height on viewport containers */
+  height: auto !important;
+  min-height: 100%;
+
+  /* NEVER use fixed position on body/html */
+  position: relative !important;
+
+  /* ALWAYS allow vertical pan/scroll on touch */
+  touch-action: pan-y !important;
+
+  /* Ensure pointer events work */
+  pointer-events: auto;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   OVERLAY EXCEPTIONS — ONLY THESE STATES MAY LOCK SCROLL
+   When an overlay is open, these classes are applied to body
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Mobile menu open - temporarily lock scroll */
+body.mobile-menu-open,
+html.mobile-menu-open {
+  overflow: hidden !important;
+  position: fixed !important;
+  width: 100%;
+  height: 100%;
+}
+
+/* Modal open - temporarily lock scroll */
+body.modal-open,
+html.modal-open {
+  overflow: hidden !important;
+}
+
+/* Drawer open - temporarily lock scroll */
+body.drawer-open,
+html.drawer-open {
+  overflow: hidden !important;
+}
+
+/* Alphabot expanded - temporarily lock scroll on mobile only */
+@media (max-width: 768px) {
+  body.alphabot-locked {
+    overflow: hidden !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   HERO / LANDING SECTIONS — VISUAL CLIP WITHOUT SCROLL LOCK
+   Use overflow: clip instead of hidden to allow scroll
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.graphene-hero,
+.graphene-hero-3d,
+.graphene-section {
+  /* Use clip for visual containment WITHOUT blocking scroll */
+  overflow: clip;
+  overflow-clip-margin: content-box;
+
+  /* Relative position for layering */
+  position: relative;
+
+  /* Allow content to determine height */
+  min-height: auto;
+
+  /* Ensure touch events pass through */
+  touch-action: pan-y;
+}
+
+/* Full-height hero allowed but not locked */
+.graphene-hero-3d,
+.hero-full-height {
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport for mobile */
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   MOBILE FIXED ELEMENTS — STICKY PREFERRED OVER FIXED
+   Reduce use of position: fixed which can cause scroll issues
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Sticky CTA at bottom - use sticky when possible */
+@media (max-width: 768px) {
+  .sticky-cta-bar,
+  .graphene-cta-bar,
+  [data-component="sticky-cta"] {
+    /* Fixed is OK for bottom bars as they don't cover viewport */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    /* Ensure it doesn't block scroll */
+    touch-action: auto;
+    pointer-events: auto;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ALPHABOT / AI ASSISTANT — FIXED BUT NON-BLOCKING
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.alphabot-widget,
+.bbx-command-rail {
+  /* Fixed positioning is OK for floating widgets */
+  position: fixed;
+  /* Ensure clicks work */
+  pointer-events: auto;
+  /* Don't block document scroll */
+  touch-action: auto;
+}
+
+/* Alphabot toggle - ensure always clickable */
+.alphabot-toggle {
+  pointer-events: auto !important;
+  touch-action: manipulation !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SCROLL UNLOCK SAFETY NET — EMERGENCY OVERRIDE
+   Classes added by JS when scroll lock is detected incorrectly
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+html.scroll-unlocked,
+body.scroll-unlocked {
+  overflow-y: auto !important;
+  position: relative !important;
+  height: auto !important;
+  touch-action: pan-y !important;
+}
+
+/* Landing page ready state - ensure scroll works */
+body.landing-ready:not(.mobile-menu-open):not(.modal-open):not(.drawer-open) {
+  overflow-y: auto !important;
+  position: relative !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   DEBUG: Visual indicator when scroll is locked (enable with ?debugScroll)
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+body[data-debug-scroll="true"].mobile-menu-open::after,
+body[data-debug-scroll="true"].modal-open::after,
+body[data-debug-scroll="true"].drawer-open::after,
+body[data-debug-scroll="true"].alphabot-locked::after {
+  content: "⚠️ SCROLL LOCKED";
+  position: fixed;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ef4444;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+  z-index: 2147483647;
+  pointer-events: none;
+}

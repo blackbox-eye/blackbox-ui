@@ -77,7 +77,8 @@
 .graphene-section {
   position: relative;
   background: var(--graphene-bg-dark);
-  overflow: hidden;
+  /* P0 FIX: Use clip instead of hidden - allows scroll through section */
+  overflow: clip;
 }
 
 .graphene-section::before {

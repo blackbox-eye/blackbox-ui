@@ -25,32 +25,11 @@ const VIEWPORTS = {
   iPad: { width: 768, height: 1024, isMobile: false, hasTouch: true },
 };
 
+// Cookie banner has been completely removed from the codebase.
+// This helper is kept for backward compatibility but should have nothing to do.
 const dismissCookies = async (page) => {
-  const acceptBtn = page
-    .locator(
-      '#accept-cookies, [data-action="accept-cookies"], .cookie-accept, button[aria-label*="cookie" i]'
-    )
-    .first();
-
-  const banner = page.locator(
-    '.cookie-banner, #cookie-banner, [data-component="cookie-banner"]'
-  );
-
-  if (await acceptBtn.isVisible().catch(() => false)) {
-    await acceptBtn.click({ force: true });
-    await page.waitForTimeout(200);
-  } else if (await banner.isVisible().catch(() => false)) {
-    await page.evaluate(() => {
-      document.cookie = "bbx_cookie_consent=accepted;path=/;max-age=31536000";
-      const el = document.querySelector(
-        '.cookie-banner, #cookie-banner, [data-component="cookie-banner"]'
-      );
-      if (el) {
-        el.remove();
-      }
-    });
-    await page.waitForTimeout(150);
-  }
+  // Cookie banner no longer exists - this is a no-op for backward compatibility
+  return;
 };
 
 const scrollable = async (page, delta = 250) => {
@@ -375,29 +354,36 @@ test.describe("iOS Scroll Lock Prevention", () => {
   });
 
   /**
-   * TEST: Cookie banner dismiss should not lock scroll
+   * P0 CRITICAL TEST: Cookie banner should be completely removed from DOM
+   * This test verifies the cookie banner does not exist in any form
    */
-  test("cookie banner dismiss should not cause scroll lock", async ({
+  test("cookie banner should be completely removed from DOM", async ({
     page,
   }) => {
-    // Clear cookies to trigger banner
+    // Clear cookies and localStorage to ensure fresh state
     await page.context().clearCookies();
     await page.goto("/", { waitUntil: "networkidle" });
     await page.waitForTimeout(500);
 
-    // Find cookie accept button
-    const acceptBtn = page
-      .locator(
-        '#accept-cookies, [data-action="accept-cookies"], .cookie-accept'
-      )
-      .first();
+    // Verify NO cookie banner elements exist
+    const cookieBannerState = await page.evaluate(() => {
+      return {
+        hasCookieBannerId: document.querySelector('#cookie-banner') !== null,
+        hasCookieBannerClass: document.querySelector('.cookie-banner') !== null,
+        hasCookieBannerComponent: document.querySelector('[data-component="cookie-banner"]') !== null,
+        hasCookieBannerOpenClass: document.body.classList.contains('cookie-banner-open'),
+        hasCookieBannerVisibleClass: document.body.classList.contains('cookie-banner-visible'),
+      };
+    });
 
-    if (await acceptBtn.isVisible()) {
-      await acceptBtn.click();
-      await page.waitForTimeout(300);
-    }
+    // All cookie banner elements should be absent
+    expect(cookieBannerState.hasCookieBannerId).toBe(false);
+    expect(cookieBannerState.hasCookieBannerClass).toBe(false);
+    expect(cookieBannerState.hasCookieBannerComponent).toBe(false);
+    expect(cookieBannerState.hasCookieBannerOpenClass).toBe(false);
+    expect(cookieBannerState.hasCookieBannerVisibleClass).toBe(false);
 
-    // Verify scroll is possible
+    // Verify scroll works immediately (no cookie banner blocking first swipe)
     const scrollBefore = await page.evaluate(() => window.scrollY);
     await page.evaluate(() => window.scrollTo(0, 200));
     await page.waitForTimeout(100);

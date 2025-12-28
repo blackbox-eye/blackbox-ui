@@ -1,6 +1,54 @@
 "use strict";
 
 // ==========================================
+// P0 COOKIE BANNER REMOVAL FAILSAFE
+// Completely removes any cookie banner remnants from DOM
+// This is a defensive check to ensure scroll is never affected
+// ==========================================
+(function cookieBannerRemovalFailsafe() {
+  const cleanupCookieBanner = () => {
+    // Remove any cookie banner elements from DOM
+    const bannerSelectors = [
+      '#cookie-banner',
+      '.cookie-banner',
+      '[data-component="cookie-banner"]'
+    ];
+    bannerSelectors.forEach(selector => {
+      const el = document.querySelector(selector);
+      if (el) {
+        el.remove();
+        console.info('[BBX] Cookie banner element removed:', selector);
+      }
+    });
+    
+    // Remove cookie-banner-open class from body and html
+    document.body.classList.remove('cookie-banner-open', 'cookie-banner-visible');
+    document.documentElement.classList.remove('cookie-banner-open', 'cookie-banner-visible');
+  };
+  
+  // Run on DOMContentLoaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', cleanupCookieBanner);
+  } else {
+    cleanupCookieBanner();
+  }
+  
+  // Run on pageshow (handles bfcache)
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+      cleanupCookieBanner();
+    }
+  });
+  
+  // Run on visibilitychange
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      cleanupCookieBanner();
+    }
+  });
+})();
+
+// ==========================================
 // LANGUAGE RESOLUTION (client)
 // ==========================================
 const languageResolver = (() => {

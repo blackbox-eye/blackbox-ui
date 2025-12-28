@@ -357,6 +357,7 @@
 
 /* ═══════════════════════════════════════════════════════════════
    Z-INDEX LAYERING (GLOBAL)
+   NOTE: Cookie banner has been completely removed from codebase (P0 iOS scroll fix).
    ═══════════════════════════════════════════════════════════════ */
 
 /* Establish clear z-index hierarchy */
@@ -364,7 +365,6 @@
   --z-drawer-overlay: 39;
   --z-drawer: 40;
   --z-sticky-cta: 75;
-  --z-cookie-banner: 80;
   --z-modal: 90;
 }
 
@@ -380,8 +380,4 @@
 [data-component="sticky-cta"],
 .graphene-cta-bar {
   z-index: var(--z-sticky-cta) !important;
-}
-
-.cookie-banner {
-  z-index: var(--z-cookie-banner) !important;
 }

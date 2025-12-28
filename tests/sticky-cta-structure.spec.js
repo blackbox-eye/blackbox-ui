@@ -53,12 +53,7 @@ test.describe('Sticky CTA Bar Structure', () => {
     });
     await gotoHome(page);
     
-    // Accept cookie banner if present (it blocks pointer events)
-    const cookieAcceptBtn = page.locator('#cookie-accept, .cookie-banner__btn--accept, [data-cookie-accept]');
-    if (await cookieAcceptBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
-      await cookieAcceptBtn.click();
-      await page.waitForTimeout(300);
-    }
+    // Cookie banner has been completely removed - no need to dismiss
     
     // Scroll to trigger sticky CTA visibility (JS shows after 35% of viewport height)
     await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.4));
@@ -142,12 +137,7 @@ test.describe('Sticky CTA Bar Structure', () => {
       // Initial navigation
       await gotoHome(page);
       
-      // Accept cookie banner if present
-      const cookieAcceptBtn = page.locator('#cookie-accept, .cookie-banner__btn--accept, [data-cookie-accept]');
-      if (await cookieAcceptBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
-        await cookieAcceptBtn.click();
-        await page.waitForTimeout(300);
-      }
+      // Cookie banner has been completely removed - no need to dismiss
       
       // Scroll to trigger sticky CTA
       await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.4));
@@ -173,12 +163,6 @@ test.describe('Sticky CTA Bar Structure', () => {
       await page.reload({ waitUntil: 'domcontentloaded' });
       await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
       await page.locator('#main-header, header#main-header, main').first().waitFor({ state: 'visible', timeout: 8000 });
-      
-      // Accept cookie banner if it reappears after reload
-      if (await cookieAcceptBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
-        await cookieAcceptBtn.click();
-        await page.waitForTimeout(300);
-      }
       
       // Scroll to potentially trigger CTA (should NOT show since dismissed)
       await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.5));
@@ -211,12 +195,7 @@ test.describe('Sticky CTA Bar - iPhone Viewport', () => {
     });
     await gotoHome(page);
     
-    // Accept cookie banner if present (it blocks pointer events)
-    const cookieAcceptBtn = page.locator('#cookie-accept, .cookie-banner__btn--accept, [data-cookie-accept]');
-    if (await cookieAcceptBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
-      await cookieAcceptBtn.click();
-      await page.waitForTimeout(300);
-    }
+    // Cookie banner has been completely removed - no need to dismiss
     
     // Scroll to trigger sticky CTA visibility
     await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.4));
@@ -248,12 +227,7 @@ test.describe('Sticky CTA Bar - iPhone Viewport', () => {
 
     await expect(stickyBar).toBeVisible();
 
-    // Ensure cookie banner doesn't interfere - check again before clicking
-    const cookieAcceptBtn = page.locator('#cookie-accept, .cookie-banner__btn--accept, [data-cookie-accept]');
-    if (await cookieAcceptBtn.isVisible({ timeout: 500 }).catch(() => false)) {
-      await cookieAcceptBtn.click();
-      await page.waitForTimeout(300);
-    }
+    // Cookie banner has been completely removed - no need to dismiss
 
     // Use click with force instead of tap for more reliability
     await closeBtn.click({ force: true });
@@ -292,12 +266,7 @@ test.describe('Sticky CTA Bar - 2-Row Stacked Layout', () => {
     });
     await gotoHome(page);
     
-    // Accept cookie banner if present (it blocks pointer events)
-    const cookieAcceptBtn = page.locator('#cookie-accept, .cookie-banner__btn--accept, [data-cookie-accept]');
-    if (await cookieAcceptBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
-      await cookieAcceptBtn.click();
-      await page.waitForTimeout(300);
-    }
+    // Cookie banner has been completely removed - no need to dismiss
     
     // Scroll to trigger sticky CTA visibility
     await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.4));

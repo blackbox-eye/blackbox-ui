@@ -135,10 +135,6 @@ global $_BBX_DISABLE_CTA, $_BBX_DISABLE_CHAT;
         include __DIR__ . '/components/qa-debug-panel.php';
     } ?>
 
-    <?php // Cookie Consent Banner (GDPR Compliance)
-    ?>
-    <?php include __DIR__ . '/cookie-banner.php'; ?>
-
     <?php if (!empty($show_alphabot) && empty($_BBX_DISABLE_CHAT)): ?>
         <div id="alphabot-overlay" class="alphabot-overlay" aria-hidden="true"></div>
     <?php endif; ?>

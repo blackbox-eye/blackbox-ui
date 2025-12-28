@@ -179,27 +179,23 @@ test.describe('Console Quick Switch', () => {
   });
 });
 
-test.describe('Cookie Banner', () => {
-  test('cookie banner should appear and be dismissable', async ({ page }) => {
+test.describe('Cookie Banner Removal Verification', () => {
+  test('cookie banner should NOT exist in DOM', async ({ page }) => {
     // Clear cookies first
     await page.context().clearCookies();
     await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(1000);
     
-    // Find cookie banner
-    const banner = page.locator('.cookie-banner, #cookie-banner, [role="dialog"]:has-text("cookie")').first();
+    // Cookie banner should NOT exist - it has been completely removed
+    const cookieBannerState = await page.evaluate(() => ({
+      hasCookieBannerId: document.querySelector('#cookie-banner') !== null,
+      hasCookieBannerClass: document.querySelector('.cookie-banner') !== null,
+      hasCookieBannerOpenClass: document.body.classList.contains('cookie-banner-open'),
+    }));
     
-    if (await banner.isVisible({ timeout: 3000 }).catch(() => false)) {
-      // Find accept button
-      const acceptBtn = page.locator('.cookie-banner__btn--accept, #cookie-accept-btn, button:has-text("Accept")').first();
-      
-      if (await acceptBtn.isVisible()) {
-        await acceptBtn.click();
-        await page.waitForTimeout(300);
-        
-        // Banner should be hidden
-        await expect(banner).not.toBeVisible();
-      }
-    }
+    expect(cookieBannerState.hasCookieBannerId).toBe(false);
+    expect(cookieBannerState.hasCookieBannerClass).toBe(false);
+    expect(cookieBannerState.hasCookieBannerOpenClass).toBe(false);
   });
 });
 

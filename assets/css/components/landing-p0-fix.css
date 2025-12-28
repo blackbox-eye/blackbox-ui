@@ -17,9 +17,10 @@
  * - drawer: 40
  * - sticky-cta: 60
  * - reCAPTCHA badge: 70
- * - cookie-banner: 80
  * - modals: 90
  * - AI assistant: HIDDEN (not rendered)
+ *
+ * NOTE: Cookie banner has been completely removed from the codebase (P0 iOS scroll fix).
  */
 
 /* ═══════════════════════════════════════════════════════════════════════════════
@@ -309,20 +310,6 @@ body.page-home aside#sticky-cta:not([hidden]):not([data-hidden="true"]) {
 .page-home .grecaptcha-badge {
   z-index: 80 !important; /* Above sticky CTA (75) */
   bottom: calc(150px + env(safe-area-inset-bottom, 0)) !important;
-}
-
-/* When cookie banner is visible, shift sticky CTA up */
-.page-home.cookie-banner-open .sticky-cta-bar,
-.page-home.cookie-banner-open [data-component="sticky-cta"],
-.page-home.cookie-banner-open #sticky-cta {
-  bottom: 72px !important; /* Cookie banner height */
-}
-
-@media (max-width: 768px) {
-  .page-home.cookie-banner-open .sticky-cta-bar,
-  .page-home.cookie-banner-open [data-component="sticky-cta"] {
-    bottom: calc(72px + env(safe-area-inset-bottom, 0)) !important;
-  }
 }
 
 /* Hide sticky CTA when scrolled to absolute footer to prevent overlap */
@@ -671,9 +658,7 @@ html:has(.page-home)[data-theme="light"] {
 .page-home #mobile-menu,
 .page-home #mobile-menu-overlay,
 .page-home .sticky-cta-bar,
-.page-home [data-component="sticky-cta"],
-.page-home .cookie-banner,
-.page-home #cookie-banner {
+.page-home [data-component="sticky-cta"] {
   /* Block any inherited light backgrounds */
   background-color: #0a0b0d !important;
   color: rgba(255, 255, 255, 0.9) !important;
@@ -801,53 +786,6 @@ html:has(.page-home)[data-theme="light"] {
 .fouc-ready .page-home #mobile-menu,
 .fouc-ready .page-home #mobile-menu-overlay {
   transition: transform 0.2s ease, opacity 0.2s ease !important;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════════
-   COOKIE BANNER — z-index contract enforcement
-   ═══════════════════════════════════════════════════════════════════════════════ */
-
-.page-home .cookie-banner,
-.page-home #cookie-banner,
-.page-home [data-component="cookie-banner"] {
-  z-index: 80 !important;
-  background: #0a0b0d !important;
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-
-/* Cookie banner must be clickable; prevent Alphabot/command-rail intercept */
-body.cookie-banner-open .bbx-command-rail,
-.page-home.cookie-banner-open .bbx-command-rail {
-  z-index: 60 !important;
-  pointer-events: none !important;
-}
-
-body.cookie-banner-open .alphabot-widget,
-body.cookie-banner-open .alphabot-toggle,
-body.cookie-banner-open .alphabot-panel,
-.page-home.cookie-banner-open .alphabot-widget,
-.page-home.cookie-banner-open .alphabot-toggle,
-.page-home.cookie-banner-open .alphabot-panel {
-  pointer-events: none !important;
-}
-
-/* Ensure cookie banner remains fully interactive */
-body.cookie-banner-open .cookie-banner,
-body.cookie-banner-open #cookie-banner,
-body.cookie-banner-open [data-component="cookie-banner"],
-.page-home.cookie-banner-open .cookie-banner,
-.page-home.cookie-banner-open #cookie-banner {
-  pointer-events: auto !important;
-  z-index: 100 !important;
-}
-
-body.cookie-banner-open .cookie-banner *,
-body.cookie-banner-open #cookie-banner *,
-.page-home.cookie-banner-open .cookie-banner *,
-.page-home.cookie-banner-open #cookie-banner * {
-  pointer-events: auto !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
@@ -1043,10 +981,11 @@ body.page-home .graphene-cta-bar {
    Drawer Panel                  40         Mobile navigation drawer
    Sticky CTA (#sticky-cta)      75         Bottom action bar (SINGLE SOURCE)
    reCAPTCHA Badge               80         Google reCAPTCHA
-   Cookie Banner                 85         GDPR consent
    Modals                        90         Dialogs, confirmations
    AI Assistant                  HIDDEN     Not rendered on landing
    ─────────────────────────────────────────────────────────────────
+   
+   NOTE: Cookie banner has been completely removed from codebase (P0 iOS scroll fix).
    
    CANONICAL CTA: #sticky-cta only. 
    #sticky-cta-bar and .graphene-cta-bar are NOT rendered on .page-home.

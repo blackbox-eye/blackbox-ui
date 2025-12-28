@@ -146,18 +146,6 @@
 }
 
 /* ══════════════════════════════════════════════════════════════
-   COOKIE BANNER BUTTONS - Proper touch targets
-   ══════════════════════════════════════════════════════════════ */
-
-.cookie-banner__btn,
-#cookie-accept-btn,
-#cookie-decline-btn {
-  min-height: 48px !important;
-  padding: 0.875rem 1.5rem !important;
-  touch-action: manipulation;
-}
-
-/* ══════════════════════════════════════════════════════════════
    FORM ELEMENTS - Proper touch targets
    ══════════════════════════════════════════════════════════════ */
 

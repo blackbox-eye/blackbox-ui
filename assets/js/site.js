@@ -319,10 +319,12 @@ const clearStaleLockClasses = () => {
 const isElementVisible = (el) => {
   if (!el) return false;
   const style = getComputedStyle(el);
+  const opacity = parseFloat(style.opacity);
+  const isOpaque = Number.isFinite(opacity) ? opacity > 0.01 : style.opacity !== "0";
   return (
     style.display !== "none" &&
     style.visibility !== "hidden" &&
-    style.opacity !== "0" &&
+    isOpaque &&
     style.pointerEvents !== "none"
   );
 };
@@ -434,6 +436,7 @@ const unlockBodyScroll = (reason = "unknown") => {
   const body = document.body;
   const html = document.documentElement;
   const computedStyle = getComputedStyle(body);
+  const computedHtmlStyle = getComputedStyle(html);
 
   // P0 FIX: More comprehensive lock detection
   const hasScrollLockClass =
@@ -444,12 +447,22 @@ const unlockBodyScroll = (reason = "unknown") => {
   const hasOverflowHidden =
     body.style.overflow === "hidden" ||
     computedStyle.overflow === "hidden" ||
-    computedStyle.overflowY === "hidden";
+    computedStyle.overflowY === "hidden" ||
+    computedHtmlStyle.overflow === "hidden" ||
+    computedHtmlStyle.overflowY === "hidden";
   const hasPositionFixed =
-    body.style.position === "fixed" || computedStyle.position === "fixed";
-  const hasTouchActionNone = computedStyle.touchAction === "none";
+    body.style.position === "fixed" ||
+    computedStyle.position === "fixed" ||
+    computedHtmlStyle.position === "fixed";
+  const hasTouchActionNone =
+    computedStyle.touchAction === "none" ||
+    computedHtmlStyle.touchAction === "none";
 
-  const isLocked = hasScrollLockClass || hasOverflowHidden || hasPositionFixed;
+  const isLocked =
+    hasScrollLockClass ||
+    hasOverflowHidden ||
+    hasPositionFixed ||
+    hasTouchActionNone;
 
   if (!isLocked) {
     return; // Idempotent: nothing to do
@@ -491,6 +504,12 @@ const unlockBodyScroll = (reason = "unknown") => {
   html.style.overflow = "";
   html.style.overflowX = "";
   html.style.overflowY = "";
+  html.style.position = "";
+  html.style.top = "";
+  html.style.left = "";
+  html.style.right = "";
+  html.style.height = "";
+  html.style.touchAction = "";
 
   // Restore scroll position ONLY when we were actually fixed-locked
   if (hadFixedLock && scrollY > 0) {
@@ -504,6 +523,7 @@ const unlockBodyScroll = (reason = "unknown") => {
       hadClass: hasScrollLockClass,
       hadOverflow: hasOverflowHidden,
       hadPosition: hasPositionFixed,
+      hadTouchActionNone: hasTouchActionNone,
       restoredScrollY: scrollY,
     });
   }
@@ -3465,5 +3485,75 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") run("visibility");
   });
+})();
+
+
+// P0 CRITICAL: Hard Scroll Contract (overlay-safe)
+// Ensures html/body remain scrollable even if a component re-locks at runtime.
+(function hardScrollUnlock() {
+  const html = document.documentElement;
+  const body = document.body;
+  if (!html || !body) return;
+
+  const LOCK_CLASSES = [
+    "overlay-open",
+    "modal-open",
+    "drawer-open",
+    "bbx-overlay-active",
+    "alphabot-locked",
+    "mobile-menu-open",
+  ];
+
+  const isMobileMenuActuallyOpen = () => {
+    const menu = document.getElementById("mobile-menu");
+    const overlay = document.getElementById("mobile-menu-overlay");
+    return (
+      (menu && menu.classList.contains("active")) ||
+      (overlay && overlay.classList.contains("active"))
+    );
+  };
+
+  const applyScrollable = () => {
+    html.style.setProperty("overflow-y", "auto", "important");
+    body.style.setProperty("overflow-y", "auto", "important");
+    html.style.setProperty("overflow-x", "hidden", "important");
+    body.style.setProperty("overflow-x", "hidden", "important");
+    html.style.setProperty("position", "relative", "important");
+    body.style.setProperty("position", "relative", "important");
+    html.style.setProperty("height", "auto", "important");
+    body.style.setProperty("height", "auto", "important");
+    html.style.setProperty("touch-action", "pan-y", "important");
+    body.style.setProperty("touch-action", "pan-y", "important");
+
+    // Clear fixed-lock residue that can trap scroll on iOS
+    body.style.removeProperty("top");
+    body.style.removeProperty("left");
+    body.style.removeProperty("right");
+    body.style.removeProperty("width");
+
+    // Remove known global lock classes when they are stale
+    const keepMobileMenuClass = isMobileMenuActuallyOpen();
+    LOCK_CLASSES.forEach((cls) => {
+      if (keepMobileMenuClass && cls === "mobile-menu-open") return;
+      body.classList.remove(cls);
+      html.classList.remove(cls);
+    });
+  };
+
+  const run = () => {
+    applyScrollable();
+    // Also try the existing unlock path (clears inline styles, restores scrollY)
+    unlockBodyScroll("hard-contract");
+  };
+
+  run();
+  setTimeout(run, 0);
+  setTimeout(run, 50);
+  setTimeout(run, 250);
+  setTimeout(run, 1000);
+
+  window.addEventListener("pageshow", run);
+  window.addEventListener("resize", run);
+  window.addEventListener("orientationchange", run);
 })();
 

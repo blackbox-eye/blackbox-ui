@@ -1,4 +1,5 @@
 <?php
+$css_version = '1.6.21';
 // public_html/includes/header.php
 session_start();
 
@@ -43,3 +44,4 @@ $current_language = bbx_get_language();
 </head>
 
 <body data-theme="dark">
+

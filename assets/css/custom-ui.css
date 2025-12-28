@@ -3578,37 +3578,6 @@ body.mobile-menu-open .alphabot-overlay {
 :root[data-theme="light"] .alphabot-panel-title,
 :root[data-theme="light"] .alphabot-panel-subtitle {
   color: var(--alphabot-text-light, #1f2937) !important;
->>>>>>> Stashed changes
-}
-
-/* Cookie banner in light mode */
-:root[data-theme="light"] #cookie-banner {
-  background: rgba(255, 255, 255, 0.98) !important;
-  border-color: rgba(15, 23, 42, 0.1) !important;
-}
-
-.cookie-banner {
-  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
-  z-index: 70;
-}
-
-body.cookie-banner-open {
-  padding-bottom: calc(6.5rem + env(safe-area-inset-bottom));
-}
-
-body.cookie-banner-open .sticky-cta-bar {
-  bottom: calc(6rem + env(safe-area-inset-bottom));
-}
-
-/* Keep BBX Assistant above cookie banner via rail offset (single authority). */
-body.cookie-banner-open {
-  --bbx-command-rail-bottom: 4.5rem;
-}
-
-@media (max-width: 768px) {
-  body.cookie-banner-open {
-    --bbx-command-rail-bottom: 7.5rem;
-  }
 }
 
 /* Arabic text in footer - ensure proper display */
@@ -3960,12 +3929,6 @@ body.cookie-banner-open {
   opacity: 0 !important;
   transform: translateY(20px) !important;
   pointer-events: none !important;
-}
-
-/* Ensure CTA bars don't overlap cookie banner */
-body.cookie-banner-open .graphene-cta-bar,
-body.cookie-banner-open [data-component="sticky-cta"] {
-  bottom: calc(1rem + 72px + env(safe-area-inset-bottom, 0px));
 }
 
 /* --------------------------------------------------------
@@ -4752,10 +4715,6 @@ a.header-cta.agent-login-cta {
   .graphene-cta-bar {
     z-index: 65 !important;
   }
-
-  .cookie-banner {
-    z-index: 80 !important;
-  }
 }
 
 /* ─────────────────────────────────────────────
@@ -5099,19 +5058,6 @@ button.graphene-toggle[aria-pressed="true"] {
   background: transparent !important;
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
   color: rgba(255, 255, 255, 0.7) !important;
-}
-
-/* === COOKIE BANNER - Subtle === */
-.cookie-banner {
-  background: rgba(14, 13, 12, 0.98) !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-
-.cookie-banner button,
-.cookie-banner .btn {
-  background: rgba(38, 36, 32, 0.9) !important;
-  border: 1px solid rgba(160, 155, 145, 0.25) !important;
-  color: rgba(160, 155, 145, 0.85) !important;
 }
 
 /* === SECTION HEADINGS - Cool grey-brown accent === */
@@ -6629,29 +6575,6 @@ a.btn-graphene-secondary:hover {
   color: #e5e7eb !important;
 }
 
-/* Cookie banner buttons: AA compliant */
-.cookie-banner__btn--accept,
-#cookie-accept-btn {
-  background: #facc15 !important;
-  color: #0a0a0a !important;
-  border-color: #facc15 !important;
-}
-.cookie-banner__btn--accept:hover,
-#cookie-accept-btn:hover {
-  background: #eab308 !important;
-}
-.cookie-banner__btn--decline,
-#cookie-decline-btn {
-  background: rgba(10, 12, 16, 0.96) !important;
-  color: #f3f4f6 !important;
-  border: 1px solid rgba(255, 255, 255, 0.32) !important;
-}
-.cookie-banner__btn--decline:hover,
-#cookie-decline-btn:hover {
-  background: rgba(15, 18, 24, 0.98) !important;
-  border-color: rgba(255, 255, 255, 0.48) !important;
-}
-
 /* Blue-400 text override for AA */
 .text-blue-400 {
   color: #93c5fd !important;
@@ -6712,18 +6635,6 @@ a.btn-graphene-secondary:hover {
 :root[data-theme="light"] .text-gray-500,
 :root[data-theme="light"] .text-gray-600 {
   color: #374151 !important;
-}
-
-:root[data-theme="light"] .cookie-banner__btn--decline,
-:root[data-theme="light"] #cookie-decline-btn {
-  background: rgba(255, 255, 255, 0.96) !important;
-  color: #1f2937 !important;
-  border: 1px solid rgba(0, 0, 0, 0.2) !important;
-}
-:root[data-theme="light"] .cookie-banner__btn--decline:hover,
-:root[data-theme="light"] #cookie-decline-btn:hover {
-  background: rgba(245, 245, 245, 0.98) !important;
-  border-color: rgba(0, 0, 0, 0.3) !important;
 }
 
 :root[data-theme="light"] .text-blue-400 {

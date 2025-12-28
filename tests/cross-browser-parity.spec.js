@@ -32,43 +32,19 @@ async function gotoHome(page) {
 }
 
 /**
- * Helper: Ensure cookie consent is handled before running tests
- * Accepts cookies if possible, otherwise clicks essential/decline button
+ * Helper: Cookie consent handling - DEPRECATED
+ * Cookie banner has been completely removed from the codebase.
+ * This function is kept for backward compatibility but is now a no-op.
  */
 async function ensureCookieConsentHandled(page) {
-  const banner = page.locator('#cookie-banner, .cookie-banner').first();
-  
-  // Wait briefly for banner to potentially appear
-  try {
-    await banner.waitFor({ state: 'visible', timeout: 2000 });
-  } catch {
-    // Banner not visible or already dismissed
-    return;
-  }
-  
-  if (await banner.isVisible()) {
-    // Try Accept button first
-    const acceptBtn = page.locator('#cookie-accept-btn, #cookie-accept, [data-cookie-accept], .cookie-banner__btn--accept').first();
-    
-    if (await acceptBtn.isVisible({ timeout: 500 }).catch(() => false)) {
-      await acceptBtn.click();
-    } else {
-      // Fallback to essential/decline button
-      const declineBtn = page.locator('#cookie-decline-btn, [data-consent="essential"], .cookie-banner__btn--decline').first();
-      if (await declineBtn.isVisible({ timeout: 500 }).catch(() => false)) {
-        await declineBtn.click();
-      }
-    }
-    
-    // Wait for banner to hide
-    await expect(banner).toBeHidden({ timeout: 3000 }).catch(() => {});
-  }
+  // Cookie banner no longer exists - this is a no-op for backward compatibility
+  return;
 }
 
 test.describe('Cross-Browser Parity - Landing Page', () => {
   
   test.beforeEach(async ({ page, context }) => {
-    // Clear consent to ensure deterministic state
+    // Clear cookies for consistent state
     await context.clearCookies();
     await gotoHome(page);
   });
@@ -193,81 +169,47 @@ test.describe('Cross-Browser Parity - Landing Page', () => {
     });
   });
 
-  test.describe('Cookie Consent Determinism', () => {
+  test.describe('Cookie Banner Complete Removal Verification', () => {
     
-    test('cookie banner shows on first visit', async ({ page, context }) => {
+    test('cookie banner should NOT exist in DOM', async ({ page, context }) => {
       // Ensure clean state
       await context.clearCookies();
       await page.evaluate(() => localStorage.clear());
       
       await gotoHome(page);
+      await page.waitForTimeout(1000);  // Wait past the old 1s show delay
       
-      // Wait for banner to appear (1s delay + animation)
-      const banner = page.locator('#cookie-banner');
-      await expect(banner).toBeVisible({ timeout: 3000 });
+      // Cookie banner should NOT exist
+      const cookieBannerState = await page.evaluate(() => ({
+        hasCookieBannerId: document.querySelector('#cookie-banner') !== null,
+        hasCookieBannerClass: document.querySelector('.cookie-banner') !== null,
+        hasCookieBannerComponent: document.querySelector('[data-component="cookie-banner"]') !== null,
+        hasCookieAcceptBtn: document.querySelector('#cookie-accept-btn') !== null,
+        hasCookieDeclineBtn: document.querySelector('#cookie-decline-btn') !== null,
+        hasCookieBannerOpenClass: document.body.classList.contains('cookie-banner-open'),
+      }));
+      
+      expect(cookieBannerState.hasCookieBannerId).toBe(false);
+      expect(cookieBannerState.hasCookieBannerClass).toBe(false);
+      expect(cookieBannerState.hasCookieBannerComponent).toBe(false);
+      expect(cookieBannerState.hasCookieAcceptBtn).toBe(false);
+      expect(cookieBannerState.hasCookieDeclineBtn).toBe(false);
+      expect(cookieBannerState.hasCookieBannerOpenClass).toBe(false);
     });
 
-    test('cookie banner does not reappear after consent', async ({ page, context }) => {
+    test('scroll should work immediately without cookie banner interference', async ({ page, context }) => {
       await context.clearCookies();
       await page.evaluate(() => localStorage.clear());
       
       await gotoHome(page);
       
-      // Wait for and click accept
-      const acceptBtn = page.locator('#cookie-accept-btn');
-      await expect(acceptBtn).toBeVisible({ timeout: 3000 });
-      await acceptBtn.click();
+      // Scroll should work immediately (no cookie banner blocking first swipe)
+      const scrollBefore = await page.evaluate(() => window.scrollY);
+      await page.evaluate(() => window.scrollTo(0, 300));
+      await page.waitForTimeout(100);
+      const scrollAfter = await page.evaluate(() => window.scrollY);
       
-      // Wait for banner to hide
-      await page.waitForTimeout(500);
-      
-      // Reload page with deterministic readiness
-      await page.reload({ waitUntil: 'domcontentloaded' });
-      await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
-      await page.locator('#main-header, header#main-header, main, body').first().waitFor({ state: 'visible', timeout: 8000 });
-      await page.waitForTimeout(2000); // Wait past the 1s show delay
-      
-      // Banner should not be visible
-      const banner = page.locator('#cookie-banner');
-      const isVisible = await banner.getAttribute('data-visible');
-      expect(isVisible).not.toBe('true');
-    });
-
-    test('consent persists via both localStorage and cookie', async ({ page, context }) => {
-      await context.clearCookies();
-      await page.evaluate(() => localStorage.clear());
-      
-      await gotoHome(page);
-      
-      // Accept cookies
-      const acceptBtn = page.locator('#cookie-accept-btn');
-      await expect(acceptBtn).toBeVisible({ timeout: 3000 });
-      await acceptBtn.click();
-      await page.waitForTimeout(500);
-      
-      // Verify localStorage
-      const localStorageConsent = await page.evaluate(() => {
-        return localStorage.getItem('bbx_cookie_consent');
-      });
-      expect(localStorageConsent).toBeTruthy();
-      expect(JSON.parse(localStorageConsent)).toHaveProperty('level', 'all');
-      
-      // Verify cookie
-      const cookies = await context.cookies();
-      const consentCookie = cookies.find(c => c.name === 'bbx_consent');
-      expect(consentCookie).toBeTruthy();
-    });
-
-    test('cookie banner respects stacking contract', async ({ page, context }) => {
-      await context.clearCookies();
-      await page.evaluate(() => localStorage.clear());
-
-      await gotoHome(page);
-      const banner = page.locator('#cookie-banner');
-      await expect(banner).toBeVisible({ timeout: 3000 });
-
-      const bannerZ = await banner.evaluate(el => parseInt(window.getComputedStyle(el).zIndex) || 0);
-      expect(bannerZ).toBeGreaterThanOrEqual(85);
+      expect(scrollAfter).toBeGreaterThan(scrollBefore);
     });
   });
 
@@ -378,31 +320,6 @@ test.describe('Cross-Browser Parity - Landing Page', () => {
       
       expect(hasBlur || hasBackground).toBe(true);
     });
-
-    test('cookie banner has glass or fallback styling', async ({ page, context }) => {
-      await context.clearCookies();
-      await page.evaluate(() => localStorage.clear());
-      
-      await gotoHome(page);
-      
-      const banner = page.locator('#cookie-banner');
-      await expect(banner).toBeVisible({ timeout: 3000 });
-      
-      const styles = await banner.evaluate((el) => {
-        const computed = window.getComputedStyle(el);
-        return {
-          backdropFilter: computed.backdropFilter || computed.webkitBackdropFilter,
-          background: computed.backgroundColor,
-          zIndex: computed.zIndex
-        };
-      });
-      
-      // Should have background
-      expect(styles.background).toBeTruthy();
-      
-      // Z-index should be 85 (above sticky CTA at 75)
-      expect(parseInt(styles.zIndex)).toBeGreaterThanOrEqual(70);
-    });
   });
 
   test.describe('Footer Spacing', () => {
@@ -450,7 +367,7 @@ test.describe('Cross-Browser Parity - Landing Page', () => {
       await expect(stickyCta).toHaveAttribute('data-visible', 'true', { timeout: 1500 });
     });
     
-    test('sticky CTA is below cookie banner', async ({ page, context }) => {
+    test('sticky CTA has proper z-index', async ({ page, context }) => {
       await context.clearCookies();
       await page.evaluate(() => localStorage.clear());
       
@@ -461,18 +378,14 @@ test.describe('Cross-Browser Parity - Landing Page', () => {
       await page.waitForTimeout(500);
       
       const stickyCta = page.locator('.sticky-cta-bar, [data-component="sticky-cta"]').first();
-      const cookieBanner = page.locator('#cookie-banner');
       
-      if (await stickyCta.isVisible() && await cookieBanner.isVisible()) {
+      if (await stickyCta.isVisible()) {
         const stickyZIndex = await stickyCta.evaluate((el) => {
           return parseInt(window.getComputedStyle(el).zIndex) || 0;
         });
-        const bannerZIndex = await cookieBanner.evaluate((el) => {
-          return parseInt(window.getComputedStyle(el).zIndex) || 0;
-        });
         
-          expect(bannerZIndex).toBeGreaterThanOrEqual(85);
-        expect(bannerZIndex).toBeGreaterThan(stickyZIndex);
+        // Sticky CTA should have a reasonable z-index (at least 60 per z-index contract)
+        expect(stickyZIndex).toBeGreaterThanOrEqual(60);
       }
     });
   });
@@ -487,9 +400,7 @@ test.describe('Mobile-Specific Parity', () => {
     
     // Check key interactive elements - focus on critical CTA buttons
     const interactiveSelectors = [
-      '.header-burger',
-      '#cookie-accept-btn',
-      '#cookie-decline-btn'
+      '.header-burger'
     ];
     
     for (const selector of interactiveSelectors) {

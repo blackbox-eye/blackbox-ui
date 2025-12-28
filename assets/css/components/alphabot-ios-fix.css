@@ -5,7 +5,6 @@
    CRITICAL FIXES (2025-12-25):
    
    Issue 1: Alphabot not visible on page load (iPhone/DuckDuckGo)
-   - Was hidden behind cookie consent flow
    - Was gated by sticky CTA state machine
    
    Issue 2: Panel styling collapse when opened (iOS browsers)
@@ -13,10 +12,11 @@
    - Global CSS overrides breaking layout
    
    Solution:
-   - Decouple alphabot from cookie/CTA logic
    - Ensure proper z-index stacking
    - Apply stable liquid-glass styling
    - Test on iOS: DuckDuckGo, Brave, Safari
+   
+   NOTE: Cookie banner has been completely removed from codebase (P0 iOS scroll fix).
    
    ════════════════════════════════════════════════════════════════ */
 
@@ -70,21 +70,6 @@
   .alphabot-toggle {
     background: rgba(13, 15, 17, 0.98) !important;
   }
-}
-
-/* Ensure alphabot is above cookie banner (z-index: 80) */
-body.cookie-banner-open .bbx-command-rail,
-body.cookie-banner-open .alphabot-widget,
-body.cookie-banner-open .alphabot-toggle {
-  z-index: 2147483647 !important; /* Stay on top */
-  pointer-events: auto !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-/* Cookie banner should not block alphabot */
-.cookie-banner {
-  z-index: 80 !important; /* Below alphabot */
 }
 
 /* ═══ ALPHABOT PANEL — LIQUID GLASS SYSTEM ═══ */
@@ -354,19 +339,6 @@ body.cookie-banner-open .alphabot-toggle {
 }
 
 /* ═══ ENSURE VISIBILITY FROM START ═══ */
-
-/* Never hide alphabot due to cookie banner state */
-body.cookie-banner-open .bbx-command-rail,
-body.cookie-banner-open .alphabot-widget,
-body.cookie-banner-open .alphabot-toggle,
-body[data-cookie-consent] .bbx-command-rail,
-body[data-cookie-consent] .alphabot-widget,
-body[data-cookie-consent] .alphabot-toggle {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
 
 /* Never hide alphabot due to sticky CTA state */
 body.has-sticky-cta .bbx-command-rail,

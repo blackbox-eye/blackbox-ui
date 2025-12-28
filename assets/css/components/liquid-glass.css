@@ -172,77 +172,14 @@
    COOKIE CONSENT BANNER - Deterministic Visibility
    ========================================================================= */
 
-/**
- * Cookie banner glass styling with proper z-index
- * z-index: 85 ensures it sits above sticky CTA (75) but below modals (90)
- */
-.cookie-banner,
-#cookie-banner {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 85;
-  transform: translateY(100%);
-  opacity: 0;
-  visibility: hidden;
-  transition: 
-    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 0.35s ease,
-    visibility 0.35s ease;
-  
-  /* Glass fallback */
-  background: var(--bbx-glass-fallback-strong);
-  border-top: 1px solid var(--bbx-glass-border);
-  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.25);
-  
-  /* Safe area padding for iOS */
-  padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
-}
-
-@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-  .cookie-banner,
-  #cookie-banner {
-    -webkit-backdrop-filter: blur(var(--bbx-glass-blur-strong));
-    backdrop-filter: blur(var(--bbx-glass-blur-strong));
-    background: var(--bbx-glass-bg-strong);
-  }
-}
-
-/* Visible state */
-.cookie-banner.is-visible,
-.cookie-banner[data-visible="true"],
-#cookie-banner.is-visible,
-#cookie-banner[data-visible="true"] {
-  transform: translateY(0);
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Hidden state - ensure clean exit */
-.cookie-banner.is-hidden,
-.cookie-banner[data-visible="false"],
-#cookie-banner.is-hidden,
-#cookie-banner[data-visible="false"] {
-  transform: translateY(100%);
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-/* Light theme */
-:root[data-theme="light"] .cookie-banner,
-:root[data-theme="light"] #cookie-banner {
-  box-shadow: 0 -8px 32px rgba(15, 23, 42, 0.08);
-}
-
 /* =========================================================================
    STICKY CTA BAR - Glass Enhancement
    ========================================================================= */
 
 /**
  * Sticky CTA bar with glass effect
- * z-index: 75 - below cookie banner, above content
+ * z-index: 75 - above content
+ * NOTE: Cookie banner has been completely removed from codebase (P0 iOS scroll fix).
  */
 .sticky-cta-bar,
 [data-component="sticky-cta"] {
@@ -388,12 +325,6 @@ body.sticky-cta-visible .site-footer {
   padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
 }
 
-/* When cookie banner is visible */
-body.cookie-banner-visible footer,
-body.cookie-banner-visible .site-footer {
-  padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px));
-}
-
 /* =========================================================================
    REDUCED MOTION SUPPORT
    ========================================================================= */
@@ -401,15 +332,8 @@ body.cookie-banner-visible .site-footer {
 @media (prefers-reduced-motion: reduce) {
   .bbx-drawer-overlay,
   #mobile-menu-overlay,
-  .cookie-banner,
-  #cookie-banner,
   .alphabot-panel {
     transition: opacity 0.1s ease, visibility 0.1s ease !important;
-  }
-  
-  .cookie-banner,
-  #cookie-banner {
-    transform: none !important;
   }
 }
 
@@ -423,8 +347,6 @@ body.cookie-banner-visible .site-footer {
   .bbx-glass--light,
   .bbx-drawer-overlay,
   #mobile-menu-overlay,
-  .cookie-banner,
-  #cookie-banner,
   .sticky-cta-bar,
   .alphabot-widget {
     -webkit-backdrop-filter: none !important;

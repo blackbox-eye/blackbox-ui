@@ -44,7 +44,6 @@ $posts = [];
 $categories = $default_categories; // Start with defaults
 $total_posts = 0;
 $total_pages = 0;
-<<<<<<< Updated upstream
 $data_source = 'none'; // Track data source: 'database', 'json', or 'none'
 
 // Check if database is available before attempting queries
@@ -58,22 +57,14 @@ try {
     $posts = bbx_get_blog_posts($current_page_num, $posts_per_page, $category_filter);
     $total_posts = bbx_get_blog_posts_count($category_filter);
     $total_pages = $total_posts > 0 ? (int) ceil($total_posts / $posts_per_page) : 0;
-    $categories = bbx_get_blog_categories();
+    $db_categories = bbx_get_blog_categories();
     $data_source = 'database';
-    
-    // Ensure we have a good set of categories - add fallbacks if database has few
-    $default_categories = [
-      'Cybersecurity',
-      'Ransomware',
-      'AI & Machine Learning',
-      'Threat Intelligence',
-      'Compliance & GDPR',
-      'Cloud Security'
-    ];
 
-    // Merge existing categories with defaults, keeping unique values
-    if (count($categories) < 3) {
-      $categories = array_unique(array_merge($categories, $default_categories));
+    // Merge DB categories with defaults if too few
+    if (count($db_categories) >= 3) {
+      $categories = $db_categories;
+    } else {
+      $categories = array_unique(array_merge($db_categories, $default_categories));
     }
   } else {
     // Fall back to JSON data (new intel engine)
@@ -82,55 +73,44 @@ try {
     // Use tag filter instead of category for JSON posts
     $filter_param = $category_filter ?? $tag_filter;
     
-    $posts = bbx_get_blog_posts_from_json($current_page_num, $posts_per_page, $region_filter, $filter_param);
-    $total_posts = bbx_get_blog_posts_json_count($region_filter, $filter_param);
-    $total_pages = $total_posts > 0 ? (int) ceil($total_posts / $posts_per_page) : 0;
-    $categories = bbx_get_blog_tags_from_json(); // Use tags as categories
-    $data_source = 'json';
-    
-    // Transform JSON posts to match expected structure
-    $posts = array_map(function($post) {
-      return [
-        'id' => $post['id'] ?? uniqid(),
-        'slug' => $post['id'] ?? uniqid(),
-        'title' => $post['title'] ?? 'Untitled',
-        'excerpt' => $post['excerpt'] ?? '',
-        'featured_image' => null, // JSON posts don't have images yet
-        'category' => !empty($post['tags']) ? $post['tags'][0] : 'Intel',
-        'tags' => $post['tags'] ?? [],
-        'author' => $post['source'] ?? 'Intel Engine',
-        'publish_date' => $post['published_at'] ?? date('Y-m-d H:i:s'),
-        'views' => 0,
-        'url' => $post['url'] ?? '#',
-        'source' => $post['source'] ?? '',
-        'severity' => $post['risk_level'] ?? 'medium',
-        'region' => $post['region'] ?? 'global',
-        'country' => $post['country'] ?? ''
-      ];
-    }, $posts);
-=======
-$db_available = defined('BBX_DB_CONNECTED') && BBX_DB_CONNECTED === true;
-
-// Only attempt DB queries if database is connected
-if ($db_available) {
-  try {
-    $posts = bbx_get_blog_posts($current_page_num, $posts_per_page, $category_filter);
-    $total_posts = bbx_get_blog_posts_count($category_filter);
-    $total_pages = $total_posts > 0 ? (int) ceil($total_posts / $posts_per_page) : 0;
-    $db_categories = bbx_get_blog_categories();
-
-    // Merge DB categories with defaults if too few
-    if (count($db_categories) >= 3) {
-      $categories = $db_categories;
-    } else {
-      $categories = array_unique(array_merge($db_categories, $default_categories));
+    // Safely attempt JSON data load with fail-open
+    if (function_exists('bbx_get_blog_posts_from_json')) {
+      $posts = bbx_get_blog_posts_from_json($current_page_num, $posts_per_page, $region_filter, $filter_param);
+      $total_posts = bbx_get_blog_posts_json_count($region_filter, $filter_param);
+      $total_pages = $total_posts > 0 ? (int) ceil($total_posts / $posts_per_page) : 0;
+      if (function_exists('bbx_get_blog_tags_from_json')) {
+        $categories = bbx_get_blog_tags_from_json(); // Use tags as categories
+      }
+      $data_source = 'json';
+      
+      // Transform JSON posts to match expected structure
+      $posts = array_map(function($post) {
+        return [
+          'id' => $post['id'] ?? uniqid(),
+          'slug' => $post['id'] ?? uniqid(),
+          'title' => $post['title'] ?? 'Untitled',
+          'excerpt' => $post['excerpt'] ?? '',
+          'featured_image' => null, // JSON posts don't have images yet
+          'category' => !empty($post['tags']) ? $post['tags'][0] : 'Intel',
+          'tags' => $post['tags'] ?? [],
+          'author' => $post['source'] ?? 'Intel Engine',
+          'publish_date' => $post['published_at'] ?? date('Y-m-d H:i:s'),
+          'views' => 0,
+          'url' => $post['url'] ?? '#',
+          'source' => $post['source'] ?? '',
+          'severity' => $post['risk_level'] ?? 'medium',
+          'region' => $post['region'] ?? 'global',
+          'country' => $post['country'] ?? ''
+        ];
+      }, $posts);
     }
-  } catch (Throwable $e) {
-    // DB error - log it but continue with static content
-    error_log('[Blog] DB query failed, falling back to static content: ' . $e->getMessage());
-    // Keep $posts empty and $categories as defaults - page still works with news_items
->>>>>>> Stashed changes
   }
+} catch (Throwable $e) {
+  // FAIL-OPEN: Log error but continue with static content
+  error_log('[Blog] Data load failed, using static fallback: ' . $e->getMessage());
+  $posts = [];
+  $categories = $default_categories;
+  $data_source = 'none';
 }
 // Note: No error state shown - the curated news section always displays regardless of DB
 
@@ -343,38 +323,6 @@ include 'includes/site-header.php';
     </div>
   </section>
 
-<<<<<<< Updated upstream
-  <?php if ($blog_data_error || !$db_available): ?>
-    <section class="py-16">
-      <div class="container mx-auto px-4">
-        <div class="glass-effect rounded-2xl p-8 text-center border border-red-500/30">
-          <h2 class="text-2xl font-bold mb-4 text-white">
-            <?php if (!$db_available): ?>
-              Blog er i gang med at blive opdateret
-            <?php else: ?>
-              Bloggen er midlertidigt utilgængelig
-            <?php endif; ?>
-          </h2>
-          <p class="text-gray-200 mb-6">
-            <?php if (!$db_available): ?>
-              Vores blog-motor skifter fra database til et nyt, hurtigere system. Den vil snart være tilbage med friske cybersecurity-nyheder!
-            <?php else: ?>
-              <?= htmlspecialchars($blog_error_message) ?>
-            <?php endif; ?>
-          </p>
-          <a href="contact.php" class="inline-flex items-center gap-2 px-6 py-3 border-2 rounded-lg font-semibold transition-colors" style="background: rgba(10, 12, 16, 0.96); border-color: rgba(255, 255, 255, 0.22); color: #f3f4f6;">
-            Kontakt support
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-            </svg>
-          </a>
-        </div>
-      </div>
-    </section>
-  <?php else: ?>
-
-=======
->>>>>>> Stashed changes
     <!-- Unified Sticky Navigation: Improved Filter + Region Tabs -->
     <nav class="sticky top-16 z-30 bg-[var(--page-background)]/95 backdrop-blur-lg border-b border-gray-800/50" aria-label="Blog navigation">
       <div class="container mx-auto px-4">

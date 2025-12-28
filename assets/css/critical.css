@@ -4,13 +4,19 @@
  * Contains: theme tokens, layout essentials, hero structure
  */
 
-/* ════ SCROLLBAR HIDING (P0 - ALL PLATFORMS) ════ */
+/* ════ SCROLLBAR HIDING (P0 - ALL ELEMENTS, ALL PLATFORMS) ════ */
+/* Hide scrollbar globally for all elements including html, body, and any scrollable containers */
+*::-webkit-scrollbar,
+*::-webkit-scrollbar-track,
+*::-webkit-scrollbar-thumb,
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
   width: 0 !important;
   height: 0 !important;
   display: none !important;
+  background: transparent !important;
 }
+*,
 html,
 body {
   scrollbar-width: none !important;

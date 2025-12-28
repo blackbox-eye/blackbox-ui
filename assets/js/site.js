@@ -3438,3 +3438,34 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 });
+
+
+
+// 🔒 P0 FINAL SAFETY NET — force scroll unlock after all lifecycle events
+(function forceFinalScrollUnlock() {
+  const run = (src) => {
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        unlockBodyScroll(inal-);
+      }, 50);
+    });
+  };
+
+  window.addEventListener("load", () => run("load"));
+
+  window.addEventListener("pageshow", (e) => {
+    if (e.persisted) run("pageshow-bfcache");
+    else run("pageshow");
+  });
+
+  window.addEventListener("orientationchange", () =>
+    setTimeout(() => run("orientationchange"), 300)
+  );
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      run("visibility");
+    }
+  });
+})();
+

@@ -633,4 +633,166 @@ test.describe("Mobile Menu Drawer Tests", () => {
       expect(hasMenuClass).toBe(false);
     }
   });
+
+  /**
+   * P0 REGRESSION TEST: Cookie banner should NOT be rendered
+   * After P0 fix, cookie-banner.php returns early and emits no DOM
+   */
+  test("P0: cookie banner should not exist in DOM", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    await page.waitForTimeout(500);
+
+    const cookieBannerExists = await page.evaluate(() => {
+      return !!(
+        document.querySelector("#cookie-banner") ||
+        document.querySelector(".cookie-banner") ||
+        document.querySelector('[data-component="cookie-banner"]')
+      );
+    });
+
+    expect(cookieBannerExists).toBe(false);
+  });
+
+  /**
+   * P0 REGRESSION TEST: Sticky CTA bar should NOT be rendered
+   * After P0 fix, sticky-cta is commented out in site-footer.php
+   * CSS failsafe also hides it via display:none !important
+   */
+  test("P0: sticky CTA bar should not exist or be hidden", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    await page.waitForTimeout(500);
+
+    const stickyCTAState = await page.evaluate(() => {
+      const el =
+        document.querySelector("#sticky-cta") ||
+        document.querySelector("#sticky-cta-bar") ||
+        document.querySelector(".sticky-cta-bar") ||
+        document.querySelector('[data-component="sticky-cta"]');
+
+      if (!el) {
+        return { exists: false };
+      }
+
+      const styles = getComputedStyle(el);
+      return {
+        exists: true,
+        display: styles.display,
+        visibility: styles.visibility,
+        pointerEvents: styles.pointerEvents,
+      };
+    });
+
+    // Either element doesn't exist, or it's hidden
+    if (stickyCTAState.exists) {
+      expect(stickyCTAState.display).toBe("none");
+    } else {
+      expect(stickyCTAState.exists).toBe(false);
+    }
+  });
+
+  /**
+   * P0 REGRESSION TEST: Hero layers should have correct touch-action
+   * Hero backgrounds must allow scroll passthrough (touch-action: pan-y)
+   */
+  test("P0: hero layers should have touch-action: pan-y", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    await page.waitForTimeout(500);
+
+    const heroTouchActions = await page.evaluate(() => {
+      const selectors = [
+        ".graphene-hero-3d",
+        ".graphene-hero-3d__content",
+        ".graphene-hero-3d__canvas",
+        ".graphene-hero-3d__fallback",
+        ".graphene-hero-3d__overlay",
+        ".graphene-hero-3d__vignette",
+      ];
+
+      const results = {};
+      selectors.forEach((selector) => {
+        const el = document.querySelector(selector);
+        if (el) {
+          results[selector] = getComputedStyle(el).touchAction;
+        }
+      });
+      return results;
+    });
+
+    // All hero layers should have touch-action that allows vertical scrolling
+    Object.entries(heroTouchActions).forEach(([selector, value]) => {
+      // touch-action: pan-y or auto both allow vertical scrolling
+      const allowsScroll =
+        value === "pan-y" || value === "auto" || value.includes("pan-y");
+      expect(allowsScroll).toBe(true);
+    });
+  });
+
+  /**
+   * P0 REGRESSION TEST: Hero background layers should have pointer-events: none
+   * Non-interactive hero backgrounds must not capture pointer events
+   */
+  test("P0: hero background layers should have pointer-events: none", async ({
+    page,
+  }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    await page.waitForTimeout(500);
+
+    const heroPointerEvents = await page.evaluate(() => {
+      const selectors = [
+        ".graphene-hero-3d__canvas",
+        ".graphene-hero-3d__fallback",
+        ".graphene-hero-3d__overlay",
+        ".graphene-hero-3d__vignette",
+      ];
+
+      const results = {};
+      selectors.forEach((selector) => {
+        const el = document.querySelector(selector);
+        if (el) {
+          results[selector] = getComputedStyle(el).pointerEvents;
+        }
+      });
+      return results;
+    });
+
+    // Background layers should have pointer-events: none
+    Object.entries(heroPointerEvents).forEach(([selector, value]) => {
+      expect(value).toBe("none");
+    });
+  });
+
+  /**
+   * P0 REGRESSION TEST: Alphabot panel should be passive when closed
+   * When aria-hidden="true", panel should have pointer-events: none
+   */
+  test("P0: alphabot panel should be passive when closed", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    await page.waitForTimeout(500);
+
+    const alphabotState = await page.evaluate(() => {
+      const panel = document.getElementById("alphabot-panel");
+      const overlay = document.getElementById("alphabot-overlay");
+
+      return {
+        panelExists: !!panel,
+        panelAriaHidden: panel ? panel.getAttribute("aria-hidden") : null,
+        panelPointerEvents: panel
+          ? getComputedStyle(panel).pointerEvents
+          : null,
+        overlayExists: !!overlay,
+        overlayActive: overlay ? overlay.classList.contains("active") : false,
+        overlayDisplay: overlay ? getComputedStyle(overlay).display : null,
+      };
+    });
+
+    // If panel exists and is hidden, pointer-events should be none
+    if (alphabotState.panelExists && alphabotState.panelAriaHidden === "true") {
+      expect(alphabotState.panelPointerEvents).toBe("none");
+    }
+
+    // If overlay exists and is not active, it should be hidden
+    if (alphabotState.overlayExists && !alphabotState.overlayActive) {
+      expect(alphabotState.overlayDisplay).toBe("none");
+    }
+  });
 });

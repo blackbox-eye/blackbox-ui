@@ -4,9 +4,16 @@ $is_landing_page = (basename($_SERVER['SCRIPT_NAME'] ?? '') === 'index.php');
 
 // P0 Kill-switch flags (set by includes/debug-killswitch.php)
 global $_BBX_DISABLE_CTA, $_BBX_DISABLE_CHAT;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// P0 iOS SCROLL FIX: Sticky CTA bar PERMANENTLY DISABLED
+// These fixed-positioned bottom elements capture first touch/wheel events
+// on iOS WebKit and prevent scroll passthrough. CSS failsafe also in critical.css.
+// Original code preserved below as comments for reference.
+// ═══════════════════════════════════════════════════════════════════════════
 ?>
+    <?php /* P0 DISABLED: Sticky CTA Bar for Mobile/Tablet
     <?php if (!$is_landing_page && empty($_BBX_DISABLE_CTA)): ?>
-    <!-- Sticky CTA Bar for Mobile/Tablet - Shows on scroll (NOT on landing - #sticky-cta is canonical there) -->
     <div id="sticky-cta-bar" class="sticky-cta-bar" role="navigation" aria-label="<?= t('header.mobile.quick_actions', 'Quick actions') ?>">
         <a href="demo.php" class="sticky-cta-bar__btn sticky-cta-bar__btn--primary">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -23,6 +30,7 @@ global $_BBX_DISABLE_CTA, $_BBX_DISABLE_CHAT;
         </a>
     </div>
     <?php endif; ?>
+    END P0 DISABLED */ ?>
 
     <footer class="bg-gradient-to-b from-gray-900/50 to-black border-t border-gray-800/50 mt-24 sm:mt-28 lg:mt-32 section-fade-in">
         <div class="container mx-auto px-4 py-16 sm:py-20 lg:py-24">
@@ -139,13 +147,14 @@ global $_BBX_DISABLE_CTA, $_BBX_DISABLE_CHAT;
         <div id="alphabot-overlay" class="alphabot-overlay" aria-hidden="true"></div>
     <?php endif; ?>
 
+    <?php /* ═══════════════════════════════════════════════════════════════
+         P0 iOS SCROLL FIX: STICKY CTA PERMANENTLY DISABLED
+         These fixed-positioned bottom elements capture first touch/wheel events
+         on iOS WebKit and prevent scroll passthrough.
+         CSS failsafe in critical.css hides via display:none !important.
+         Original code commented out below for reference.
+         ═══════════════════════════════════════════════════════════════
     <?php if (empty($_BBX_DISABLE_CTA)): ?>
-    <!-- ═══════════════════════════════════════════════════════════════
-         STICKY CTA BAR - Best Practice Mobile Implementation
-         Structure: 2-row stacked layout
-         Row 1: Label text (left) + Dismiss X (right)  
-         Row 2: CTA buttons side-by-side
-         ═══════════════════════════════════════════════════════════════ -->
     <aside id="sticky-cta"
         class="sticky-cta-bar"
         data-component="sticky-cta"
@@ -155,7 +164,6 @@ global $_BBX_DISABLE_CTA, $_BBX_DISABLE_CHAT;
         aria-live="polite"
         aria-label="<?= htmlspecialchars(t('cta_bar.region_label')) ?>">
         
-        <!-- Row 1: Label + Dismiss -->
         <div class="sticky-cta-bar__row sticky-cta-bar__row--header">
             <div class="sticky-cta-bar__label">
                 <span class="sticky-cta-bar__eyebrow"><?= t('cta_bar.eyebrow') ?></span>
@@ -171,7 +179,6 @@ global $_BBX_DISABLE_CTA, $_BBX_DISABLE_CHAT;
             </button>
         </div>
         
-        <!-- Row 2: CTA Buttons -->
         <div class="sticky-cta-bar__row sticky-cta-bar__row--actions">
             <a href="demo.php" class="sticky-cta-bar__cta sticky-cta-bar__cta--primary">
                 <?= t('cta_bar.primary') ?>
@@ -188,6 +195,7 @@ global $_BBX_DISABLE_CTA, $_BBX_DISABLE_CHAT;
         </div>
     </aside>
     <?php endif; ?>
+    END P0 DISABLED */ ?>
 
     <?php if (empty($disable_alphabot) && empty($_BBX_DISABLE_CHAT)): ?>
         <div class="bbx-command-rail<?= empty($show_alphabot) ? ' bbx-command-rail--cta-only' : '' ?>">

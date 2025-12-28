@@ -375,6 +375,55 @@ const forceHardUnlockIfSafe = (reason = "hard-guard") => {
   }
 };
 
+/**
+ * P0 iOS Scroll Fix: Ensure removed overlay elements stay inactive
+ * Verifies cookie-banner and sticky-cta don't capture touch events
+ * CSS failsafe in critical.css, but this JS layer ensures DOM passivity
+ */
+const ensureOverlaysPassive = () => {
+  // Elements that must never capture scroll events
+  const blockerSelectors = [
+    "#cookie-banner",
+    ".cookie-banner",
+    '[data-component="cookie-banner"]',
+    "#sticky-cta",
+    "#sticky-cta-bar",
+    ".sticky-cta-bar",
+    '[data-component="sticky-cta"]',
+  ];
+
+  blockerSelectors.forEach((selector) => {
+    const el = document.querySelector(selector);
+    if (el) {
+      // Force hide if somehow rendered
+      el.style.display = "none";
+      el.style.visibility = "hidden";
+      el.style.pointerEvents = "none";
+      el.setAttribute("aria-hidden", "true");
+      el.setAttribute("inert", "");
+      if (DEBUG_UI) {
+        console.warn(
+          "[P0 Failsafe] Blocked overlay element found and disabled:",
+          selector
+        );
+      }
+    }
+  });
+
+  // Ensure chat widget is passive when closed
+  const alphabotPanel = document.getElementById("alphabot-panel");
+  if (alphabotPanel && alphabotPanel.getAttribute("aria-hidden") === "true") {
+    alphabotPanel.style.pointerEvents = "none";
+  }
+
+  // Ensure alphabot overlay is hidden when not active
+  const alphabotOverlay = document.getElementById("alphabot-overlay");
+  if (alphabotOverlay && !alphabotOverlay.classList.contains("active")) {
+    alphabotOverlay.style.display = "none";
+    alphabotOverlay.style.pointerEvents = "none";
+  }
+};
+
 const unlockBodyScroll = (reason = "unknown") => {
   const body = document.body;
   const html = document.documentElement;
@@ -583,6 +632,7 @@ document.addEventListener("DOMContentLoaded", () => {
   );
   document.documentElement.classList.remove("modal-open", "drawer-open");
   forceHardUnlockIfSafe("domcontentloaded-hard-guard");
+  ensureOverlaysPassive(); // P0 FIX: Ensure removed elements stay inactive
 
   // Ensure Alphabot control surfaces stay clickable and above content
   const alphabotToggle = document.querySelector(".alphabot-toggle");
@@ -600,6 +650,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const unlockInterval = window.setInterval(() => {
     clearStaleLockClasses();
     forceHardUnlockIfSafe("interval-hard-guard");
+    ensureOverlaysPassive(); // P0 FIX: Verify on interval too
     unlockAttempts += 1;
     if (unlockAttempts >= 5) {
       window.clearInterval(unlockInterval);
@@ -645,12 +696,14 @@ document.addEventListener("DOMContentLoaded", () => {
       unlockBodyScroll("pageshow");
       forceHardUnlockIfSafe("pageshow-hard-guard");
     }
+    ensureOverlaysPassive(); // P0 FIX
   });
 
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") {
       unlockBodyScroll("visibilitychange");
       forceHardUnlockIfSafe("visibilitychange-hard-guard");
+      ensureOverlaysPassive(); // P0 FIX
     }
   });
 
@@ -659,7 +712,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   window.addEventListener("orientationchange", () => {
-    setTimeout(() => unlockBodyScroll("orientationchange"), 100);
+    setTimeout(() => {
+      unlockBodyScroll("orientationchange");
+      ensureOverlaysPassive(); // P0 FIX
+    }, 100);
   });
 
   window.addEventListener(
@@ -735,6 +791,9 @@ document.addEventListener("DOMContentLoaded", () => {
         unlockBodyScroll("touchstart-failsafe");
         forceHardUnlockIfSafe("touchstart-hard-guard");
       }
+
+      // P0 FIX: Always verify overlay elements are passive on touchstart
+      ensureOverlaysPassive();
     },
     { passive: true }
   );

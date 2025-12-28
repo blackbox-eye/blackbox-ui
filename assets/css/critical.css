@@ -99,6 +99,59 @@ body:not(.mobile-menu-open):not(.modal-open):not(.drawer-open):not(
   touch-action: manipulation !important;
 }
 
+/* ════ P0 FIX: PERMANENTLY DISABLE SCROLL-BLOCKING OVERLAYS ════
+   These fixed-positioned bottom elements capture first touch/wheel events
+   on iOS and prevent scroll. Permanent CSS hide as failsafe layer. */
+
+/* P0 FIX: Cookie banner - permanently hidden (PHP also disabled) */
+#cookie-banner,
+.cookie-banner,
+[data-component="cookie-banner"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+/* P0 FIX: Sticky CTA bar - permanently hidden (captures scroll) */
+#sticky-cta,
+#sticky-cta-bar,
+.sticky-cta-bar,
+[data-component="sticky-cta"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+/* P0 FIX: Chat widget rail - must be passive when closed */
+.bbx-command-rail,
+#alphabot-container,
+#alphabot-overlay {
+  touch-action: pan-y !important;
+}
+
+/* P0 FIX: Chat toggle button - allow pointer but ensure scroll passthrough */
+.alphabot-toggle,
+#alphabot-toggle-btn {
+  touch-action: manipulation !important;
+}
+
+/* P0 FIX: When alphabot panel is closed (aria-hidden=true), ensure passivity */
+#alphabot-panel[aria-hidden="true"],
+#alphabot-panel[inert] {
+  pointer-events: none !important;
+  touch-action: none !important;
+}
+
+/* P0 FIX: Alphabot overlay - always passive until activated */
+#alphabot-overlay:not(.active) {
+  pointer-events: none !important;
+  display: none !important;
+}
+
 /* CRITICAL FIX #2: Ensure scroll is available on landing page from first load */
 /* Only apply to non-modal, non-drawer-open states to preserve legitimate scroll locks */
 html:not(.modal-open):not(.drawer-open) {

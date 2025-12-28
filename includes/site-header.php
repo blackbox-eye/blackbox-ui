@@ -805,3 +805,4 @@ if ($current_page === 'home' || $current_page === 'index') {
             <?= json_encode($breadcrumb_schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) ?>
         </script>
     <?php endif; ?>
+

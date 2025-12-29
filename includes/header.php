@@ -1,5 +1,5 @@
 <?php
-$css_version = '1.6.21';
+$css_version = '1.6.22';
 // public_html/includes/header.php
 session_start();
 

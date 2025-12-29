@@ -242,7 +242,7 @@ global $_BBX_DISABLE_CTA, $_BBX_DISABLE_CHAT;
             <?php endif; ?>
         </div>
     <?php endif; ?>
-    <?php $asset_version = $GLOBALS['css_version'] ?? $css_version ?? '1.6.21'; ?>
+    <?php $asset_version = $GLOBALS['css_version'] ?? $css_version ?? '1.6.22'; ?>
     <script src="assets/js/router-guard.js" defer></script>
     <script src="assets/js/qa-mode.js" defer></script>
     <script src="assets/js/site.min.js?v=<?= htmlspecialchars($asset_version) ?>" defer></script>

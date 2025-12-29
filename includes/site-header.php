@@ -326,11 +326,11 @@ if (!empty($disable_alphabot)) {
         if (file_exists($full_path)) {
             return substr(md5((string)filemtime($full_path)), 0, 8);
         }
-        return '1.6.21'; // Fallback version
+        return '1.6.22'; // Fallback version
     }
     
     // Legacy compat: keep $css_version for any remaining static refs
-    $css_version = '1.6.21';
+    $css_version = '1.6.22';
     ?>
 
     <link rel="icon" type="image/svg+xml" href="/assets/icon_box.svg?v=<?= $css_version ?>">

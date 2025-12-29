@@ -320,7 +320,9 @@ const isElementVisible = (el) => {
   if (!el) return false;
   const style = getComputedStyle(el);
   const opacity = parseFloat(style.opacity);
-  const isOpaque = Number.isFinite(opacity) ? opacity > 0.01 : style.opacity !== "0";
+  const isOpaque = Number.isFinite(opacity)
+    ? opacity > 0.01
+    : style.opacity !== "0";
   return (
     style.display !== "none" &&
     style.visibility !== "hidden" &&
@@ -3459,8 +3461,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-
-
 // 🔒 P0 FINAL SAFETY NET — force scroll unlock after all lifecycle events
 // 🔒 P0 FINAL SAFETY NET — force scroll unlock after lifecycle events
 (function forceFinalScrollUnlock() {
@@ -3486,7 +3486,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (document.visibilityState === "visible") run("visibility");
   });
 })();
-
 
 // P0 CRITICAL: Hard Scroll Contract (overlay-safe)
 // Ensures html/body remain scrollable even if a component re-locks at runtime.
@@ -3556,4 +3555,3 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("resize", run);
   window.addEventListener("orientationchange", run);
 })();
-

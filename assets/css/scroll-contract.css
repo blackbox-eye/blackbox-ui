@@ -46,31 +46,24 @@ body {
    When an overlay is open, these classes are applied to body
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-/* Mobile menu open - temporarily lock scroll */
+/* Mobile overlays must NOT lock page scroll. Keep body/html as the scroll container. */
 body.mobile-menu-open,
-html.mobile-menu-open {
-  overflow: hidden !important;
-  position: fixed !important;
-  width: 100%;
-  height: 100%;
-}
-
-/* Modal open - temporarily lock scroll */
+html.mobile-menu-open,
 body.modal-open,
-html.modal-open {
-  overflow: hidden !important;
-}
-
-/* Drawer open - temporarily lock scroll */
+html.modal-open,
 body.drawer-open,
 html.drawer-open {
-  overflow: hidden !important;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  position: relative !important;
+  height: auto !important;
+  width: auto;
 }
 
-/* Alphabot expanded - temporarily lock scroll on mobile only */
 @media (max-width: 768px) {
   body.alphabot-locked {
-    overflow: hidden !important;
+    overflow-y: auto !important;
+    position: relative !important;
   }
 }
 
@@ -81,28 +74,34 @@ html.drawer-open {
 
 .graphene-hero,
 .graphene-hero-3d,
-.graphene-section {
-  /* P0 FIX: overflow: visible required - overflow: clip was blocking scroll */
+.graphene-section,
+.hero-full-height {
+  /* Heroes should not form their own scroll containers */
   overflow: visible !important;
-
-  /* Relative position for layering */
   position: relative;
-
-  /* Allow content to determine height */
-  min-height: auto;
-
-  /* Ensure touch events pass through - CRITICAL for mobile scroll */
+  /* Use dynamic viewport height with legacy fallback */
+  min-height: 100vh;
+  min-height: 100dvh;
   touch-action: pan-y !important;
-
-  /* Ensure these don't capture pointer events */
   pointer-events: auto;
 }
 
-/* Full-height hero allowed but not locked */
-.graphene-hero-3d,
-.hero-full-height {
-  min-height: 100vh;
-  min-height: 100dvh; /* Dynamic viewport for mobile */
+/* ═══════════════════════════════════════════════════════════════════════════════
+   LANDING GATE / READY CLASSES — NO SCROLL OR VISIBILITY SIDE-EFFECTS
+   These classes must never hide or lock scroll.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+html.landing-gate,
+body.landing-gate,
+html.landing-ready,
+body.landing-ready {
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: relative !important;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  touch-action: pan-y !important;
+  pointer-events: auto !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
@@ -160,10 +159,7 @@ body.scroll-unlocked {
 }
 
 /* Landing page ready state - ensure scroll works */
-body.landing-ready:not(.mobile-menu-open):not(.modal-open):not(.drawer-open) {
-  overflow-y: auto !important;
-  position: relative !important;
-}
+/* Landing gate removed: page is scrollable immediately */
 
 /* ═══════════════════════════════════════════════════════════════════════════════
    DEBUG: Visual indicator when scroll is locked (enable with ?debugScroll)

@@ -289,14 +289,7 @@ const DEBUG_UI = new URLSearchParams(window.location.search).has("debugUI");
 // iOS SCROLL-LOCK FAILSAFE
 // Idempotent function to kill scroll-lock on iOS Brave/DuckDuckGo/Safari
 // ==========================================
-let savedScrollY = 0;
-
-const OVERLAY_CLASS_LIST = [
-  "mobile-menu-open",
-  "alphabot-locked",
-  "modal-open",
-  "drawer-open",
-];
+const OVERLAY_CLASS_LIST = ["alphabot-locked", "modal-open", "drawer-open"];
 
 const hasVisibleOverlay = () => {
   const candidates = [
@@ -442,7 +435,6 @@ const unlockBodyScroll = (reason = "unknown") => {
 
   // P0 FIX: More comprehensive lock detection
   const hasScrollLockClass =
-    body.classList.contains("mobile-menu-open") ||
     body.classList.contains("alphabot-locked") ||
     body.classList.contains("modal-open") ||
     body.classList.contains("drawer-open");
@@ -470,20 +462,7 @@ const unlockBodyScroll = (reason = "unknown") => {
     return; // Idempotent: nothing to do
   }
 
-  // Restore scroll position from saved value or parsed from body.style.top
-  let scrollY = savedScrollY;
-  if (!scrollY && body.style.top) {
-    const parsed = parseInt(body.style.top, 10);
-    if (!isNaN(parsed)) {
-      scrollY = Math.abs(parsed);
-    }
-  }
-
-  // Only restore scroll if we were truly in a fixed-lock state (prevents reset loops on iOS/pageshow)
-  const hadFixedLock = body.style.position === "fixed" || !!body.style.top;
-
   // Remove all scroll-lock classes (comprehensive)
-  body.classList.remove("mobile-menu-open");
   body.classList.remove("alphabot-locked");
   body.classList.remove("modal-open");
   body.classList.remove("drawer-open");
@@ -512,21 +491,12 @@ const unlockBodyScroll = (reason = "unknown") => {
   html.style.right = "";
   html.style.height = "";
   html.style.touchAction = "";
-
-  // Restore scroll position ONLY when we were actually fixed-locked
-  if (hadFixedLock && scrollY > 0) {
-    window.scrollTo(0, scrollY);
-  }
-
-  savedScrollY = 0;
-
   if (DEBUG_UI) {
     console.info("[unlockBodyScroll] Scroll unlocked. Reason:", reason, {
       hadClass: hasScrollLockClass,
       hadOverflow: hasOverflowHidden,
       hadPosition: hasPositionFixed,
       hadTouchActionNone: hasTouchActionNone,
-      restoredScrollY: scrollY,
     });
   }
 };
@@ -618,12 +588,7 @@ function initDebugPanel() {
   function updateDebugInfo() {
     const body = document.body;
     const computed = getComputedStyle(body);
-    const lockClasses = [
-      "mobile-menu-open",
-      "alphabot-locked",
-      "modal-open",
-      "drawer-open",
-    ];
+    const lockClasses = ["alphabot-locked", "modal-open", "drawer-open"];
     const activeClasses = lockClasses.filter((c) => body.classList.contains(c));
 
     document.getElementById("dbg-scrolly").textContent = Math.round(
@@ -637,7 +602,7 @@ function initDebugPanel() {
       : "-";
     document.getElementById("dbg-touch").textContent = computed.touchAction;
     document.getElementById("dbg-drawer").textContent = body.classList.contains(
-      "mobile-menu-open"
+      "drawer-open"
     )
       ? "✓"
       : "-";
@@ -656,7 +621,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Hard-guard: strip any stale lock classes/styles on first paint
   document.body.classList.remove(
-    "mobile-menu-open",
     "alphabot-locked",
     "modal-open",
     "drawer-open"
@@ -775,7 +739,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // More comprehensive lock detection
       const hasScrollLockClass =
-        body.classList.contains("mobile-menu-open") ||
         body.classList.contains("alphabot-locked") ||
         body.classList.contains("modal-open");
       const hasOverflowHidden =
@@ -876,29 +839,15 @@ document.addEventListener("DOMContentLoaded", () => {
     { passive: true }
   );
 
-  const releaseLandingBody = () => {
-    if (!document.body.classList.contains("landing-gate")) {
-      return;
-    }
-    document.body.classList.add("landing-ready");
-    document.body.classList.remove("landing-gate");
-  };
-
-  // P0-5: Enable transitions after first paint to prevent FOUC
+  // P0-5: Enable transitions after first paint without gating scroll/state
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       document.body.classList.add("fouc-ready");
-
-      // Landing isolation: release gate only after head gate signals ready
-      if (document.body.classList.contains("landing-gate")) {
-        if (document.documentElement.classList.contains("landing-ready")) {
-          releaseLandingBody();
-        } else {
-          window.addEventListener("bbx:landing-ready", releaseLandingBody, {
-            once: true,
-          });
-        }
-      }
+      document.body.classList.remove("landing-gate", "landing-ready");
+      document.documentElement.classList.remove(
+        "landing-gate",
+        "landing-ready"
+      );
     });
   });
 
@@ -1095,9 +1044,6 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const openMobileMenu = () => {
-      // Save scroll position for restoration on close
-      savedScrollY = window.scrollY || window.pageYOffset || 0;
-
       lastFocusedElement =
         document.activeElement instanceof HTMLElement
           ? document.activeElement
@@ -1107,9 +1053,8 @@ document.addEventListener("DOMContentLoaded", () => {
       mobileMenuButton.setAttribute("aria-expanded", "true");
       mobileMenuOverlay.classList.add("active");
       mobileMenuOverlay.setAttribute("aria-hidden", "false");
-      // P0 FIX: NO scroll-lock - user must be able to scroll freely
-      // document.body.style.overflow = "hidden"; // REMOVED - violates P0 scroll policy
-      document.body.classList.add("mobile-menu-open");
+      // Keep body scrollable: no classes or inline locks
+      // document.body.style.overflow = "hidden"; // intentionally unused
 
       enableFocusTrap();
 
@@ -1127,7 +1072,6 @@ document.addEventListener("DOMContentLoaded", () => {
       mobileMenuOverlay.classList.remove("active");
       mobileMenuOverlay.setAttribute("aria-hidden", "true");
       document.body.style.overflow = "";
-      document.body.classList.remove("mobile-menu-open");
 
       if (lastFocusedElement) {
         lastFocusedElement.focus();
@@ -3500,17 +3444,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "drawer-open",
     "bbx-overlay-active",
     "alphabot-locked",
-    "mobile-menu-open",
   ];
-
-  const isMobileMenuActuallyOpen = () => {
-    const menu = document.getElementById("mobile-menu");
-    const overlay = document.getElementById("mobile-menu-overlay");
-    return (
-      (menu && menu.classList.contains("active")) ||
-      (overlay && overlay.classList.contains("active"))
-    );
-  };
 
   const applyScrollable = () => {
     html.style.setProperty("overflow-y", "auto", "important");
@@ -3529,11 +3463,8 @@ document.addEventListener("DOMContentLoaded", () => {
     body.style.removeProperty("left");
     body.style.removeProperty("right");
     body.style.removeProperty("width");
-
     // Remove known global lock classes when they are stale
-    const keepMobileMenuClass = isMobileMenuActuallyOpen();
     LOCK_CLASSES.forEach((cls) => {
-      if (keepMobileMenuClass && cls === "mobile-menu-open") return;
       body.classList.remove(cls);
       html.classList.remove(cls);
     });

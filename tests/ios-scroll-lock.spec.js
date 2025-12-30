@@ -182,6 +182,36 @@ test.describe("iOS Scroll Lock Prevention", () => {
     expect(scrollAfter).toBeGreaterThan(scrollBefore);
   });
 
+  test("mobile menu open still allows page scroll and body stays unfixed", async ({
+    page,
+  }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+
+    const menuButton = page
+      .locator('#mobile-menu-btn, .mobile-menu-btn, [aria-label*="menu"]')
+      .first();
+
+    if (!(await menuButton.isVisible())) {
+      test.skip();
+    }
+
+    await menuButton.click();
+    await page.waitForTimeout(300);
+
+    const before = await page.evaluate(() => window.scrollY);
+    await page.evaluate((y) => window.scrollTo(0, y + 320), before);
+    await page.waitForTimeout(150);
+    const after = await page.evaluate(() => window.scrollY);
+
+    expect(after).toBeGreaterThan(before);
+
+    const bodyPosition = await page.evaluate(
+      () => getComputedStyle(document.body).position
+    );
+
+    expect(bodyPosition).not.toBe("fixed");
+  });
+
   test("mobile menu open/close x3 never leaves scroll locked", async ({
     page,
   }) => {
@@ -368,11 +398,15 @@ test.describe("iOS Scroll Lock Prevention", () => {
     // Verify NO cookie banner elements exist
     const cookieBannerState = await page.evaluate(() => {
       return {
-        hasCookieBannerId: document.querySelector('#cookie-banner') !== null,
-        hasCookieBannerClass: document.querySelector('.cookie-banner') !== null,
-        hasCookieBannerComponent: document.querySelector('[data-component="cookie-banner"]') !== null,
-        hasCookieBannerOpenClass: document.body.classList.contains('cookie-banner-open'),
-        hasCookieBannerVisibleClass: document.body.classList.contains('cookie-banner-visible'),
+        hasCookieBannerId: document.querySelector("#cookie-banner") !== null,
+        hasCookieBannerClass: document.querySelector(".cookie-banner") !== null,
+        hasCookieBannerComponent:
+          document.querySelector('[data-component="cookie-banner"]') !== null,
+        hasCookieBannerOpenClass:
+          document.body.classList.contains("cookie-banner-open"),
+        hasCookieBannerVisibleClass: document.body.classList.contains(
+          "cookie-banner-visible"
+        ),
       };
     });
 

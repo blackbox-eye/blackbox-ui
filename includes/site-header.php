@@ -308,7 +308,16 @@ if (!empty($disable_alphabot)) {
     // Legacy compat: keep $css_version for any remaining static refs
     // P1 Scroll Fix v1.6.28 - Changed scroll-contract.css to synchronous load, added inline JS failsafe
     $css_version = '1.6.28';
+
+    // P0 (Next Sprint): Production HEAD drift probe + deterministic marker
+    // - BBX_HEAD_MARKER proves the deployed template is active
+    // - css_version meta provides a stable token for production truth capture
+    $bbx_head_marker = 'v1.6.28 feature/p1-scroll-audit';
+    $bbx_scroll_contract_version = bbx_asset_version('css/scroll-contract.css');
     ?>
+
+    <!-- BBX_HEAD_MARKER: <?= htmlspecialchars($bbx_head_marker) ?> -->
+    <meta name="css_version" content="<?= htmlspecialchars($bbx_scroll_contract_version) ?>">
 
     <link rel="icon" type="image/svg+xml" href="/assets/icon_box.svg?v=<?= $css_version ?>">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png?v=<?= $css_version ?>">
@@ -401,7 +410,7 @@ if (!empty($disable_alphabot)) {
 
     <!-- P0 SCROLL CONTRACT - SYNCHRONOUS LOAD (must override all async CSS) -->
     <!-- Changed from preload to synchronous stylesheet to guarantee it loads AFTER all async CSS -->
-    <link rel="stylesheet" href="/assets/css/scroll-contract.css?v=<?= bbx_asset_version('css/scroll-contract.css') ?>">
+    <link rel="stylesheet" href="/assets/css/scroll-contract.css?v=<?= htmlspecialchars($bbx_scroll_contract_version) ?>">
     
     <!-- P1 SCROLL FAILSAFE: Inline JS that runs IMMEDIATELY to force scroll -->
     <script>

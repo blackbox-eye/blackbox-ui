@@ -248,9 +248,12 @@ body:not(.mobile-menu-open):not(.alphabot-locked):not(.modal-open) {
   width: 100%;
   display: flex;
   align-items: center;
-  /* P0 FIX: overflow: hidden removed - blocks scroll on full-viewport hero */
-  overflow: visible;
+  /* P0 FIX: overflow MUST be visible - overflow:hidden/clip blocks full-viewport scroll */
+  overflow: visible !important;
   background: var(--color-bg);
+  /* P0 FIX: ensure scroll passes through */
+  touch-action: pan-y !important;
+  pointer-events: auto;
 }
 
 .graphene-hero-3d__fallback {

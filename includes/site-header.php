@@ -330,7 +330,7 @@ if (!empty($disable_alphabot)) {
     }
     
     // Legacy compat: keep $css_version for any remaining static refs
-    $css_version = '1.6.22';
+    $css_version = '1.6.23';
     ?>
 
     <link rel="icon" type="image/svg+xml" href="/assets/icon_box.svg?v=<?= $css_version ?>">

@@ -82,9 +82,8 @@ html.drawer-open {
 .graphene-hero,
 .graphene-hero-3d,
 .graphene-section {
-  /* Use clip for visual containment WITHOUT blocking scroll */
-  overflow: clip;
-  overflow-clip-margin: content-box;
+  /* P0 FIX: overflow: visible required - overflow: clip was blocking scroll */
+  overflow: visible !important;
 
   /* Relative position for layering */
   position: relative;
@@ -92,8 +91,11 @@ html.drawer-open {
   /* Allow content to determine height */
   min-height: auto;
 
-  /* Ensure touch events pass through */
-  touch-action: pan-y;
+  /* Ensure touch events pass through - CRITICAL for mobile scroll */
+  touch-action: pan-y !important;
+  
+  /* Ensure these don't capture pointer events */
+  pointer-events: auto;
 }
 
 /* Full-height hero allowed but not locked */

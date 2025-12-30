@@ -330,7 +330,8 @@ if (!empty($disable_alphabot)) {
     }
     
     // Legacy compat: keep $css_version for any remaining static refs
-    $css_version = '1.6.23';
+    // P0 SCROLL ISOLATION v1.6.24 - Disabled agent-access + alphabot for scroll bug isolation
+    $css_version = '1.6.24';
     ?>
 
     <link rel="icon" type="image/svg+xml" href="/assets/icon_box.svg?v=<?= $css_version ?>">
@@ -610,6 +611,7 @@ if ($current_page === 'home' || $current_page === 'index') {
                             aria-label="<?= htmlspecialchars(t('header.theme.toggle_label', 'Skift farvetema')) ?>">
                             <span class="theme-toggle__icon" aria-hidden="true"></span>
                         </button>
+                        <?php if (empty($_BBX_DISABLE_AGENT_ACCESS)): ?>
                         <!-- Console Access Dropdown - Sprint 1.6 QA: New fold-out menu -->
                         <div class="console-access-dropdown" id="login-dropdown-container" data-dropdown>
                             <button type="button" 
@@ -654,6 +656,7 @@ if ($current_page === 'home' || $current_page === 'index') {
                                 </a>
                             </div>
                         </div>
+                        <?php endif; // P0_SCROLL_ISOLATION: Agent-access links disabled ?>
                         <button id="mobile-menu-button" class="header-burger lg:hidden" aria-controls="mobile-menu" aria-expanded="false" aria-label="<?= htmlspecialchars(t('header.mobile.open_menu')) ?>">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
@@ -740,6 +743,7 @@ if ($current_page === 'home' || $current_page === 'index') {
                     <span class="theme-toggle__icon" aria-hidden="true"></span>
                 </button>
             </div>
+            <?php if (empty($_BBX_DISABLE_AGENT_ACCESS)): ?>
             <!-- Console Access - Mobile version with direct login links (Sprint 8 fix) -->
             <div class="mobile-console-access mb-3">
                 <p class="text-xs text-gray-500 uppercase tracking-wider mb-2"><?= t('header.console.title', 'Vælg konsol') ?></p>
@@ -758,6 +762,7 @@ if ($current_page === 'home' || $current_page === 'index') {
                     </a>
                 </div>
             </div>
+            <?php endif; // P0_SCROLL_ISOLATION: Mobile agent-access links disabled ?>
             <div class="mobile-primary-ctas">
                 <a href="demo.php"
                     class="header-cta header-cta--pill header-cta--primary header-cta--wide"

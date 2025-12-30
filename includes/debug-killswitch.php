@@ -17,6 +17,14 @@
  * NOTE: Cookie banner has been completely removed from the codebase (P0 iOS scroll fix).
  */
 
+// ═══════════════════════════════════════════════════════════════════════════
+// P0 SCROLL ISOLATION MODE - v1.6.24
+// Set to TRUE to disable BOTH alphabot/EYE Assistant AND agent-access links
+// This isolates the scroll bug by removing all overlay/assistant components
+// Set back to FALSE after testing to re-enable features
+// ═══════════════════════════════════════════════════════════════════════════
+define('P0_SCROLL_ISOLATION', true);
+
 // Parse kill-switch query parameters
 $_BBX_KILLSWITCH = [
     'nosurface' => isset($_GET['nosurface']) && $_GET['nosurface'] == '1',
@@ -27,7 +35,10 @@ $_BBX_KILLSWITCH = [
 // Convenience flags (cookie banner removed - flag kept for backward compatibility but always false)
 $_BBX_DISABLE_COOKIE = false;
 $_BBX_DISABLE_CTA    = $_BBX_KILLSWITCH['nosurface'] || $_BBX_KILLSWITCH['nocta'];
-$_BBX_DISABLE_CHAT   = $_BBX_KILLSWITCH['nosurface'] || $_BBX_KILLSWITCH['nochat'];
+// P0 SCROLL ISOLATION: Force-disable chat when isolation mode is active
+$_BBX_DISABLE_CHAT   = P0_SCROLL_ISOLATION || $_BBX_KILLSWITCH['nosurface'] || $_BBX_KILLSWITCH['nochat'];
+// P0 SCROLL ISOLATION: Disable agent-access navigation links
+$_BBX_DISABLE_AGENT_ACCESS = P0_SCROLL_ISOLATION;
 
 // Output debug comment in HTML if any kill-switch is active
 function bbx_killswitch_debug_comment(): string {

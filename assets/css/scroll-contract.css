@@ -93,7 +93,7 @@ html.drawer-open {
 
   /* Ensure touch events pass through - CRITICAL for mobile scroll */
   touch-action: pan-y !important;
-  
+
   /* Ensure these don't capture pointer events */
   pointer-events: auto;
 }

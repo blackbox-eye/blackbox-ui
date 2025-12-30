@@ -332,7 +332,16 @@ if (!empty($disable_alphabot)) {
     // Legacy compat: keep $css_version for any remaining static refs
     // P0 SCROLL ISOLATION v1.6.24 - Disabled agent-access + alphabot for scroll bug isolation
     $css_version = '1.6.24';
+
+    // P0: Production HEAD drift probe + deterministic marker
+    // - BBX_HEAD_MARKER proves the deployed template is active
+    // - css_version meta provides a stable token for production truth capture
+    $bbx_head_marker = 'P0 scroll-contract sync + css_version (main)';
+    $bbx_scroll_contract_version = bbx_asset_version('css/scroll-contract.css');
     ?>
+
+    <!-- BBX_HEAD_MARKER: <?= htmlspecialchars($bbx_head_marker) ?> -->
+    <meta name="css_version" content="<?= htmlspecialchars($bbx_scroll_contract_version) ?>">
 
     <link rel="icon" type="image/svg+xml" href="/assets/icon_box.svg?v=<?= $css_version ?>">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png?v=<?= $css_version ?>">
@@ -451,8 +460,7 @@ if (!empty($disable_alphabot)) {
     <noscript><link rel="stylesheet" href="/assets/css/components/liquid-glass.css?v=<?= bbx_asset_version('css/components/liquid-glass.css') ?>"></noscript>
 
     <!-- P0 SCROLL CONTRACT - MUST LOAD LAST (global scroll authority, overrides all other CSS scroll rules) -->
-    <link rel="preload" href="/assets/css/scroll-contract.css?v=<?= bbx_asset_version('css/scroll-contract.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/assets/css/scroll-contract.css?v=<?= bbx_asset_version('css/scroll-contract.css') ?>"></noscript>
+    <link rel="stylesheet" href="/assets/css/scroll-contract.css?v=<?= htmlspecialchars($bbx_scroll_contract_version) ?>">
 
     <script src="config.js?v=<?= bbx_asset_version('../config.js') ?>" defer></script>
     <?php if (BBX_RECAPTCHA_SITE_KEY !== ''): ?>

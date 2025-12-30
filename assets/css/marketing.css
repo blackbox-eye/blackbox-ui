@@ -77,8 +77,8 @@
 .graphene-section {
   position: relative;
   background: var(--graphene-bg-dark);
-  /* P0 FIX: Use clip instead of hidden - allows scroll through section */
-  overflow: clip;
+  /* Keep section open to page scroll; no nested scroll containers */
+  overflow: visible;
 }
 
 .graphene-section::before {
@@ -1008,12 +1008,15 @@ body.js-enabled .section-fade-in.visible {
    -------------------------------------------------------- */
 .graphene-hero {
   position: relative;
+  /* Use dynamic viewport height; keep 100vh fallback for legacy */
   min-height: 100vh;
+  min-height: 100dvh;
   background-color: var(--graphene-bg-dark);
   background-image: url("/assets/bg/graphene-dark.svg");
   background-size: 150px 150px;
   background-repeat: repeat;
-  overflow: hidden;
+  /* Do not clip hero to avoid creating a nested scroll container */
+  overflow: visible;
 }
 
 .graphene-hero::before {
@@ -4445,10 +4448,11 @@ button:focus:not(:focus-visible) {
 .graphene-hero-premium {
   position: relative;
   min-height: 100vh;
+  min-height: 100dvh;
   background: var(--graphene-premium-bg);
   display: flex;
   align-items: center;
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* Background layer with hexagon pattern */
@@ -4980,6 +4984,7 @@ button:focus:not(:focus-visible) {
   /* P0 FIX: overflow: hidden removed - blocks scroll on full-viewport hero */
   overflow: visible;
   min-height: 100vh;
+  min-height: 100dvh;
   isolation: isolate;
   /* P0 FIX: Allow scroll through hero background */
   touch-action: pan-y !important;
@@ -4987,12 +4992,11 @@ button:focus:not(:focus-visible) {
 
 /* === Canvas for 3D Animation === */
 .graphene-hero-3d__canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
   pointer-events: none;
   opacity: 0;
   transition: opacity 600ms ease;
@@ -5063,6 +5067,7 @@ button:focus:not(:focus-visible) {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  min-height: 100dvh;
   text-align: left;
   /* P0 FIX: Allow scroll through content area */
   touch-action: pan-y !important;
@@ -5116,6 +5121,7 @@ button:focus:not(:focus-visible) {
     padding-top: 5rem;
     padding-bottom: 4rem;
     min-height: calc(100vh - 4rem);
+    min-height: calc(100dvh - 4rem);
   }
 
   .graphene-hero-3d__content-inner {

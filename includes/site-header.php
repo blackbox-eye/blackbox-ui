@@ -234,30 +234,6 @@ if (!empty($disable_alphabot)) {
             window.__BBX_INITIAL_LANG__ = '<?= htmlspecialchars($current_language) ?>';
             window.__BBX_ALLOWED_LANGS__ = <?= json_encode(BBX_ALLOWED_LANGS, JSON_UNESCAPED_SLASHES) ?>;
             
-            // P1-E: FOUC Prevention - Add landing-gate class before paint
-            // This prevents any flash of unstyled content on landing page
-            // CRITICAL FIX #2: Gate only controls OPACITY, not visibility/scroll
-            <?php if ($current_page === 'home' || $current_page === 'index'): ?>
-            document.documentElement.classList.add('landing-gate');
-            document.documentElement.classList.remove('landing-ready');
-
-            var releaseLandingGate = function releaseLandingGate() {
-                document.documentElement.classList.remove('landing-gate');
-                document.documentElement.classList.add('landing-ready');
-                window.dispatchEvent(new Event('bbx:landing-ready'));
-            };
-
-            // CRITICAL FIX: Release gate on DOMContentLoaded, don't wait for fonts
-            // This ensures scroll works immediately while still preventing FOUC
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', function() {
-                    requestAnimationFrame(releaseLandingGate);
-                }, { once: true });
-            } else {
-                // Already loaded, release immediately
-                requestAnimationFrame(releaseLandingGate);
-            }
-            <?php endif; ?>
         })();
     </script>
     <title><?= htmlspecialchars($page_title) ?></title>
@@ -330,8 +306,8 @@ if (!empty($disable_alphabot)) {
     }
     
     // Legacy compat: keep $css_version for any remaining static refs
-    // P0 SCROLL ISOLATION v1.6.24 - Disabled agent-access + alphabot for scroll bug isolation
-    $css_version = '1.6.24';
+    // P1 Scroll Audit v1.6.27 - resolved assistant rail, de-gated scroll isolation, all tests pass
+    $css_version = '1.6.27';
     ?>
 
     <link rel="icon" type="image/svg+xml" href="/assets/icon_box.svg?v=<?= $css_version ?>">
@@ -378,33 +354,6 @@ if (!empty($disable_alphabot)) {
         <link rel="preload" href="/assets/css/marketing<?= $css_suffix ?>?v=<?= bbx_asset_version($marketing_css_path) ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="/assets/css/marketing<?= $css_suffix ?>?v=<?= bbx_asset_version($marketing_css_path) ?>"></noscript>
     <?php endif; ?>
-
-    <!-- Inline landing gate (pre-render) to prevent FOUC before async CSS swaps -->
-    <!-- CRITICAL FIX #2: Do NOT block scroll - only control opacity for visual smoothness -->
-    <style id="landing-gate-guard">
-        body.landing-gate { opacity: 0; /* NO visibility:hidden - was blocking scroll! */ }
-        body.landing-ready { opacity: 1; transition: opacity 0.15s ease; }
-    </style>
-    <script>
-        (function() {
-            function releaseLandingGate() {
-                var body = document.body;
-                if (!body || !body.classList.contains('landing-gate')) return;
-                body.classList.add('landing-ready');
-                body.classList.remove('landing-gate');
-            }
-            // CRITICAL FIX: Release gate IMMEDIATELY on DOMContentLoaded, don't wait for fonts
-            // Fonts can load in background without blocking scroll
-            var fireRelease = function() {
-                requestAnimationFrame(function() { requestAnimationFrame(releaseLandingGate); });
-            };
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', fireRelease, { once: true });
-            } else {
-                fireRelease();
-            }
-        })();
-    </script>
 
     <!-- Sprint 6: Motion safety (global) + unified hero mobile -->
     <link rel="preload" href="/assets/css/components/motion-safe.css?v=<?= bbx_asset_version('css/components/motion-safe.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -495,10 +444,6 @@ if (!empty($current_page)) {
     $body_classes[] = 'page-' . $current_page;
 }
 
-// Landing isolation gate (prevents FOUC/ghost UI on first paint)
-if ($current_page === 'home' || $current_page === 'index') {
-    $body_classes[] = 'landing-gate';
-}
 ?>
 
 <body class="<?= implode(' ', $body_classes) ?>" data-graphene-mode="<?= htmlspecialchars($graphene_mode) ?>" data-theme="dark" data-lang="<?= htmlspecialchars($current_language) ?>">

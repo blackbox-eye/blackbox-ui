@@ -21,9 +21,9 @@
 // P0 SCROLL ISOLATION MODE - v1.6.24
 // Set to TRUE to disable BOTH alphabot/EYE Assistant AND agent-access links
 // This isolates the scroll bug by removing all overlay/assistant components
-// Set back to FALSE after testing to re-enable features
+// Default is FALSE so assistant rail remains available in production/tests
 // ═══════════════════════════════════════════════════════════════════════════
-define('P0_SCROLL_ISOLATION', true);
+define('P0_SCROLL_ISOLATION', false);
 
 // Parse kill-switch query parameters
 $_BBX_KILLSWITCH = [

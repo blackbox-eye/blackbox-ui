@@ -16,6 +16,7 @@ This audit resolved the assistant rail responsiveness issue and completed a comp
 ## 1. Root Cause Analysis
 
 ### Primary Issue: Assistant Rail Not Rendering
+
 - **Location:** [includes/debug-killswitch.php](../includes/debug-killswitch.php#L26)
 - **Cause:** `P0_SCROLL_ISOLATION` was set to `true`, which:
   - Set `$_BBX_DISABLE_CHAT = true` → disabled Alphabot/assistant rendering
@@ -23,6 +24,7 @@ This audit resolved the assistant rail responsiveness issue and completed a comp
 - **Fix:** Changed `P0_SCROLL_ISOLATION` from `true` to `false`
 
 ### Secondary Issue: Landing Gate FOUC Blocking Scroll
+
 - **Location:** [includes/site-header.php](../includes/site-header.php)
 - **Cause:** The `landing-gate` class with inline JS was adding opacity:0 and potentially interfering with scroll detection
 - **Fix:** Removed inline landing-gate JS and CSS blocks from site-header.php
@@ -32,26 +34,30 @@ This audit resolved the assistant rail responsiveness issue and completed a comp
 ## 2. Changes Made
 
 ### debug-killswitch.php
+
 ```php
 // Before
 define('P0_SCROLL_ISOLATION', true);
 
-// After  
+// After
 define('P0_SCROLL_ISOLATION', false);
 ```
 
 ### site-header.php
+
 - Removed 50+ lines of inline `landing-gate` JavaScript and CSS
 - Removed `landing-gate` from body class assignment
 - Bumped `$css_version` from `1.6.24` to `1.6.27`
 
 ### site.js
+
 - Removed `mobile-menu-open` from `OVERLAY_CLASS_LIST` (menu no longer locks scroll)
 - Removed `savedScrollY` save/restore logic for mobile menu
 - Simplified `unlockBodyScroll()` to not check for `mobile-menu-open`
 - Debug panel now tracks only: `alphabot-locked`, `modal-open`, `drawer-open`
 
 ### scroll-contract.css
+
 - Neutralized `.landing-gate` and `.landing-ready` classes:
   ```css
   .landing-gate,
@@ -64,6 +70,7 @@ define('P0_SCROLL_ISOLATION', false);
   ```
 
 ### ios-scroll-lock.spec.js
+
 - Added new test: `mobile menu open still allows page scroll and body stays unfixed`
 - Fixed ESLint formatting issues in cookie banner state assertions
 
@@ -72,6 +79,7 @@ define('P0_SCROLL_ISOLATION', false);
 ## 3. CSS Architecture Review
 
 ### Load Order (Deterministic)
+
 The CSS files load in this order from [site-header.php](../includes/site-header.php):
 
 1. **critical.css** (inline) - Above-fold styles
@@ -96,6 +104,7 @@ The CSS files load in this order from [site-header.php](../includes/site-header.
 8. **scroll-contract.css** (LAST) - Global scroll authority
 
 ### Key Principle
+
 `scroll-contract.css` loads last and acts as the "global scroll authority", overriding any scroll-blocking rules from earlier stylesheets.
 
 ---
@@ -103,15 +112,24 @@ The CSS files load in this order from [site-header.php](../includes/site-header.
 ## 4. Hero/Scroll Refactor Status
 
 ### ✅ Verified
+
 - All heroes use `min-height: 100vh; min-height: 100dvh;` (dynamic viewport with fallback)
 - No `position: fixed` set on body/html by JavaScript
 - `landing-gate`/`landing-ready` classes are neutralized in CSS
 - Mobile menu no longer uses `position: fixed` scroll lock pattern
 
 ### Hero Classes in marketing.css
+
 ```css
-.graphene-hero { min-height: 100vh; min-height: 100dvh; overflow: visible; }
-.hero-full { min-height: 100vh; min-height: 100dvh; }
+.graphene-hero {
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: visible;
+}
+.hero-full {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
 ```
 
 ---
@@ -120,11 +138,11 @@ The CSS files load in this order from [site-header.php](../includes/site-header.
 
 The following CSS compatibility issues were identified but do not affect functionality:
 
-| Issue | Location | Browser Support |
-|-------|----------|-----------------|
-| `color-mix()` | marketing.css | Chrome 111+, Safari 16.2+ |
-| `scrollbar-width` | critical.css | Chrome 121+, no Safari |
-| `-webkit-text-size-adjust` | critical.css | Needs `text-size-adjust` fallback |
+| Issue                      | Location      | Browser Support                   |
+| -------------------------- | ------------- | --------------------------------- |
+| `color-mix()`              | marketing.css | Chrome 111+, Safari 16.2+         |
+| `scrollbar-width`          | critical.css  | Chrome 121+, no Safari            |
+| `-webkit-text-size-adjust` | critical.css  | Needs `text-size-adjust` fallback |
 
 These are logged for future optimization but do not block the current release.
 
@@ -138,11 +156,13 @@ Tests:       31 passed, 0 failed
 ```
 
 ### Test Files
+
 - `ios-scroll-lock.spec.js` - iOS scroll regression tests
 - `frontpage-responsive.spec.js` - Responsive layout + assistant rail tests
 - `production-scroll-debug.spec.js` - Production scroll behavior tests
 
 ### Key Test Coverage
+
 - ✅ Page scrollable on initial load
 - ✅ Mobile menu open/close doesn't lock scroll
 - ✅ Alphabot panel open/close doesn't lock scroll
@@ -155,16 +175,19 @@ Tests:       31 passed, 0 failed
 ## 7. Recommended Structural Changes
 
 ### Short-term (Next Sprint)
+
 1. **Add `text-size-adjust` fallback** alongside `-webkit-text-size-adjust`
 2. **Add `@supports` guards** for `color-mix()` usage in marketing.css
 3. **Consider consolidating** landing-p0-fix.css and landing-p1-polish.css into single file
 
 ### Medium-term
+
 1. **Remove dead code**: The `landing-gate` JS/CSS can be fully deleted (currently neutralized)
 2. **Audit component CSS**: 12 component files could potentially be merged
 3. **Add scrollbar-width fallback** for Safari users
 
 ### Long-term
+
 1. **CSS custom properties migration**: Replace `color-mix()` with pre-computed values for broader support
 2. **Performance audit**: Some CSS files could be lazy-loaded based on page type
 
@@ -172,17 +195,17 @@ Tests:       31 passed, 0 failed
 
 ## 8. Files Modified
 
-| File | Changes |
-|------|---------|
-| includes/debug-killswitch.php | P0_SCROLL_ISOLATION = false |
-| includes/site-header.php | Removed landing-gate, bumped to v1.6.27 |
-| assets/js/site.js | Simplified scroll lock logic |
-| assets/js/site.min.js | Minified build |
-| assets/css/scroll-contract.css | Neutralized landing classes |
-| assets/css/scroll-contract.min.css | Minified build |
-| assets/css/marketing.css | No changes (reviewed) |
-| assets/css/marketing.min.css | Rebuilt |
-| tests/ios-scroll-lock.spec.js | Added new test, formatting fixes |
+| File                               | Changes                                 |
+| ---------------------------------- | --------------------------------------- |
+| includes/debug-killswitch.php      | P0_SCROLL_ISOLATION = false             |
+| includes/site-header.php           | Removed landing-gate, bumped to v1.6.27 |
+| assets/js/site.js                  | Simplified scroll lock logic            |
+| assets/js/site.min.js              | Minified build                          |
+| assets/css/scroll-contract.css     | Neutralized landing classes             |
+| assets/css/scroll-contract.min.css | Minified build                          |
+| assets/css/marketing.css           | No changes (reviewed)                   |
+| assets/css/marketing.min.css       | Rebuilt                                 |
+| tests/ios-scroll-lock.spec.js      | Added new test, formatting fixes        |
 
 ---
 
@@ -208,4 +231,4 @@ P1 scroll audit: resolve assistant rail responsiveness, de-gate landing FOUC, un
 
 ---
 
-*Generated by P1 Scroll Audit - Unified Action Plan*
+_Generated by P1 Scroll Audit - Unified Action Plan_

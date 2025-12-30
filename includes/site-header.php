@@ -306,8 +306,8 @@ if (!empty($disable_alphabot)) {
     }
     
     // Legacy compat: keep $css_version for any remaining static refs
-    // P1 Scroll Audit v1.6.27 - resolved assistant rail, de-gated scroll isolation, all tests pass
-    $css_version = '1.6.27';
+    // P1 Scroll Fix v1.6.28 - Changed scroll-contract.css to synchronous load, added inline JS failsafe
+    $css_version = '1.6.28';
     ?>
 
     <link rel="icon" type="image/svg+xml" href="/assets/icon_box.svg?v=<?= $css_version ?>">
@@ -399,9 +399,20 @@ if (!empty($disable_alphabot)) {
     <link rel="preload" href="/assets/css/components/liquid-glass.css?v=<?= bbx_asset_version('css/components/liquid-glass.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/assets/css/components/liquid-glass.css?v=<?= bbx_asset_version('css/components/liquid-glass.css') ?>"></noscript>
 
-    <!-- P0 SCROLL CONTRACT - MUST LOAD LAST (global scroll authority, overrides all other CSS scroll rules) -->
-    <link rel="preload" href="/assets/css/scroll-contract.css?v=<?= bbx_asset_version('css/scroll-contract.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/assets/css/scroll-contract.css?v=<?= bbx_asset_version('css/scroll-contract.css') ?>"></noscript>
+    <!-- P0 SCROLL CONTRACT - SYNCHRONOUS LOAD (must override all async CSS) -->
+    <!-- Changed from preload to synchronous stylesheet to guarantee it loads AFTER all async CSS -->
+    <link rel="stylesheet" href="/assets/css/scroll-contract.css?v=<?= bbx_asset_version('css/scroll-contract.css') ?>">
+    
+    <!-- P1 SCROLL FAILSAFE: Inline JS that runs IMMEDIATELY to force scroll -->
+    <script>
+    (function() {
+        // P1 Emergency scroll unlock - runs before CSS is fully parsed
+        var style = document.createElement('style');
+        style.id = 'p1-scroll-failsafe';
+        style.textContent = 'html,body{overflow-y:auto!important;position:relative!important;height:auto!important;touch-action:pan-y!important}';
+        document.head.appendChild(style);
+    })();
+    </script>
 
     <script src="config.js?v=<?= bbx_asset_version('../config.js') ?>" defer></script>
     <?php if (BBX_RECAPTCHA_SITE_KEY !== ''): ?>

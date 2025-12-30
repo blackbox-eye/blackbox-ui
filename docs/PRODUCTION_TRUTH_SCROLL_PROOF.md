@@ -60,7 +60,7 @@ High-level confirmation from the captured header files:
 
 After deploy, re-run the capture and confirm these are present in both `/` and `/demo.php` `<head>`:
 
-- `<!-- BBX_HEAD_MARKER: v1.6.28 feature/p1-scroll-audit -->`
+- `<!-- BBX_HEAD_MARKER: P0 scroll-contract sync + css_version (main) -->`
 - `<meta name="css_version" content="...">`
 - `scroll-contract.css` loaded as a synchronous stylesheet link:
   - ✅ `<link rel="stylesheet" href="/assets/css/scroll-contract.css?...">`

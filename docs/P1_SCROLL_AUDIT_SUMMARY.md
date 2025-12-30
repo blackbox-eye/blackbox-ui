@@ -1,19 +1,50 @@
 # P1 Scroll Audit Summary
 
 **Branch:** `feature/p1-scroll-audit`  
-**Version:** 1.6.27  
-**Date:** 2025-01-XX  
-**Status:** ✅ Complete - All 31 tests passing
+**Version:** 1.6.28 (updated from 1.6.27)  
+**Date:** 2025-12-30  
+**Status:** ✅ Complete - 27/28 tests passing (1 pre-existing unrelated failure)
 
 ---
 
 ## Executive Summary
 
-This audit resolved the assistant rail responsiveness issue and completed a comprehensive review of the scroll/hero architecture. The root cause was the `P0_SCROLL_ISOLATION` flag being set to `true`, which disabled the assistant rail rendering in production/tests.
+**v1.6.28 Update:** This follow-up audit resolved the persistent scroll-lock bug that remained after v1.6.27. The root cause was discovered to be a **CSS async loading race condition** - `scroll-contract.css` was loading via `preload` which caused it to race with other async CSS files, with network timing determining which rules won the cascade.
+
+**v1.6.27 (Previous):** Resolved the assistant rail responsiveness issue by setting `P0_SCROLL_ISOLATION` to `false` and removing the landing-gate FOUC code.
 
 ---
 
-## 1. Root Cause Analysis
+## v1.6.28 Fix - CSS Async Race Condition
+
+### Root Cause
+- `scroll-contract.css` was loaded via `<link rel="preload" ... onload="this.rel='stylesheet'">`
+- This async pattern caused the scroll-contract rules to race with other preloaded CSS
+- Network timing determined which CSS rules won the cascade - sometimes `overflow: hidden` from other files would override the scroll-contract's `overflow-y: auto !important`
+
+### Solution
+1. **Changed scroll-contract.css to synchronous load**: `<link rel="stylesheet">` instead of preload
+2. **Added inline JS failsafe**: Immediate `<script>` block injects `#p1-scroll-failsafe` style element with `overflow-y:auto!important`
+
+### Code Change (site-header.php lines 402-415)
+```html
+<!-- P0 SCROLL CONTRACT - SYNCHRONOUS LOAD (must override all async CSS) -->
+<link rel="stylesheet" href="/assets/css/scroll-contract.css?v=...">
+
+<!-- P1 SCROLL FAILSAFE: Inline JS that runs IMMEDIATELY to force scroll -->
+<script>
+(function() {
+    var style = document.createElement('style');
+    style.id = 'p1-scroll-failsafe';
+    style.textContent = 'html,body{overflow-y:auto!important;position:relative!important;height:auto!important;touch-action:pan-y!important}';
+    document.head.appendChild(style);
+})();
+</script>
+```
+
+---
+
+## v1.6.27 Fix - Assistant Rail and Landing Gate (Previous)
 
 ### Primary Issue: Assistant Rail Not Rendering
 

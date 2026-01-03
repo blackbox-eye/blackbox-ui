@@ -25,20 +25,20 @@
 /* Ensure alphabot rail and overlay have correct stacking order */
 .bbx-command-rail {
   position: fixed !important;
-  z-index: 2147483647 !important; /* Maximum z-index */
+  z-index: 9999 !important;
   pointer-events: none !important; /* Allow clicks through to children */
 }
 
 /* Re-enable pointer events for alphabot widget */
 .alphabot-widget {
   pointer-events: auto !important;
-  z-index: 2147483647 !important;
+  z-index: 9999 !important;
 }
 
 /* Alphabot overlay should be below widget but above everything else */
 .alphabot-overlay,
 #alphabot-overlay {
-  z-index: 2147483646 !important;
+  z-index: 9998 !important;
   pointer-events: none !important;
 }
 
@@ -50,7 +50,7 @@
 /* Alphabot toggle must be visible and clickable */
 .alphabot-toggle {
   position: relative !important;
-  z-index: 2147483647 !important;
+  z-index: 9999 !important;
   pointer-events: auto !important;
   cursor: pointer !important;
 

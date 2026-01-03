@@ -411,6 +411,9 @@ if (!empty($disable_alphabot)) {
     <!-- P0 SCROLL CONTRACT - MUST LOAD LAST (global scroll authority, overrides all other CSS scroll rules) -->
     <link rel="stylesheet" href="/assets/css/scroll-contract.css?v=<?= htmlspecialchars($bbx_scroll_contract_version) ?>">
 
+    <!-- ScrollGuard restore (post-Dec16) - must be AFTER all other styles -->
+    <link rel="stylesheet" href="/assets/css/scroll-guard.css?v=<?= bbx_asset_version('css/scroll-guard.css') ?>">
+
     <script src="config.js?v=<?= bbx_asset_version('../config.js') ?>" defer></script>
     <?php if (BBX_RECAPTCHA_SITE_KEY !== ''): ?>
         <script src="https://www.google.com/recaptcha/api.js?render=<?= htmlspecialchars(BBX_RECAPTCHA_SITE_KEY) ?>" async defer></script>

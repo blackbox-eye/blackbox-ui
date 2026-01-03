@@ -2598,7 +2598,7 @@ body.mobile-menu-open .alphabot-overlay {
     border-width: 1px 0 0 0;
     border-top: 2px solid
       color-mix(in srgb, var(--primary-accent) 22%, transparent);
-    z-index: 2147483647;
+    z-index: 9999;
     display: flex;
     flex-direction: column;
   }
@@ -6377,8 +6377,9 @@ a.btn-graphene-secondary:hover {
   position: fixed !important;
   left: auto !important;
   width: auto !important;
-  z-index: 2147483647 !important; /* Maximum possible z-index - absolutely nothing can be above this except mobile menu */
+  z-index: 9999 !important;
   isolation: isolate !important; /* Create own stacking context */
+  pointer-events: none !important; /* Prevent invisible wall when closed */
   transform: translateZ(
     0
   ) !important; /* Force GPU layer / new stacking context */
@@ -6407,6 +6408,7 @@ a.btn-graphene-secondary:hover {
     position: relative !important;
     bottom: auto !important;
     right: auto !important;
+    pointer-events: auto !important;
   }
 
   /* Compact assistant toggle on mobile */

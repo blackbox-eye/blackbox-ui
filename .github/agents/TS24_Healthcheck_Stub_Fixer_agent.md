@@ -1,8 +1,10 @@
+---
 name: TS24 Healthcheck Stub Fixer
 description: >
   A custom agent designed to fix issues with the TS24 healthcheck stub.
   This agent ensures that the healthcheck URL is accessible and correctly returns a valid JSON response.
   It also ensures the PHP server on port 8091 is correctly configured and running.
+---
 
 tasks:
   - name: Ensure TS24 healthcheck stub is accessible

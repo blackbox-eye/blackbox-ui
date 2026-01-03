@@ -1,14 +1,17 @@
+---
 name: BBX-UI-Refinement-Agent
 description: |
-This custom agent performs a comprehensive front‑end quality assurance audit and
-refinement of the Blackbox EYE public website (repo: blackbox‑ui). Its goal
-is to eliminate colour inconsistencies, improve dark/light theme switching,
-unify component styles, and ensure a premium, Nordic/Apple‑inspired aesthetic.
-The agent runs locally against the codebase and the live site to identify
-responsive issues, refactors the Tailwind config and CSS variables for a
-consistent colour palette, updates layouts, adjusts spacing, and revises UI
-components to reflect the approved design direction. It also updates
-Playwright tests and documentation to align with the new look.
+  This custom agent performs a comprehensive front‑end quality assurance audit and
+  refinement of the Blackbox EYE public website (repo: blackbox‑ui). Its goal
+  is to eliminate colour inconsistencies, improve dark/light theme switching,
+  unify component styles, and ensure a premium, Nordic/Apple‑inspired aesthetic.
+  The agent runs locally against the codebase and the live site to identify
+  responsive issues, refactors the Tailwind config and CSS variables for a
+  consistent colour palette, updates layouts, adjusts spacing, and revises UI
+  components to reflect the approved design direction. It also updates
+  Playwright tests and documentation to align with the new look.
+---
+
 Overview
 
 This agent helps the team migrate the current Blackbox EYE marketing site to a

@@ -25,17 +25,8 @@ html,
 body {
   /* Allow horizontal hidden (for visual clip) but NEVER lock vertical */
   overflow-x: hidden;
-  overflow-y: auto !important;
 
-  /* NEVER use fixed height on viewport containers */
-  height: auto !important;
   min-height: 100%;
-
-  /* NEVER use fixed position on body/html */
-  position: relative !important;
-
-  /* ALWAYS allow vertical pan/scroll on touch */
-  touch-action: pan-y !important;
 
   /* Ensure pointer events work */
   pointer-events: auto;

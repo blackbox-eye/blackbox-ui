@@ -4981,13 +4981,9 @@ button:focus:not(:focus-visible) {
     var(--graphene-3d-bg) 50%,
     #050608 100%
   );
-  /* P0 FIX: overflow: hidden removed - blocks scroll on full-viewport hero */
-  overflow: visible;
   min-height: 100vh;
   min-height: 100dvh;
   isolation: isolate;
-  /* P0 FIX: Allow scroll through hero background */
-  touch-action: pan-y !important;
 }
 
 /* === Canvas for 3D Animation === */

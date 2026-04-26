@@ -6171,7 +6171,7 @@ nav[aria-label="Breadcrumb"] {
   flex-wrap: nowrap !important;
   align-items: center !important;
   gap: 0.25rem !important;
-  overflow: hidden !important;
+  overflow: visible !important;
 }
 
 .nav-chip {

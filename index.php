@@ -11,7 +11,8 @@ include 'includes/site-header.php';
 
 <main id="main-content" class="pt-0">
     <!-- Hero Section: Graphene 3D Network - BlackboxEYE × Blackbox EYE Fusion -->
-    <section id="home" class="graphene-hero-3d relative w-full flex items-center">
+    <!-- P0 FIX: overflow-hidden REMOVED - blocked scroll on full-viewport hero -->
+    <section id="home" class="graphene-hero-3d relative min-h-screen w-full flex items-center overflow-visible">
         <!-- Fallback background for devices without WebGL -->
         <div class="graphene-hero-3d__fallback" aria-hidden="true"></div>
 

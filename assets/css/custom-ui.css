@@ -4258,7 +4258,8 @@ button.graphene-toggle[aria-pressed="true"] {
   transition: opacity 0.3s ease !important;
 }
 
-#mobile-menu-overlay.is-visible {
+#mobile-menu-overlay.is-visible,
+#mobile-menu-overlay.active {
   opacity: 1 !important;
   pointer-events: auto !important;
 }
@@ -6079,7 +6080,7 @@ main > section:first-child {
 
 /* Breadcrumb spacing */
 nav[aria-label="Breadcrumb"] {
-  padding-top: 4.5rem !important;
+  padding-top: 5.5rem !important;
   padding-bottom: 0.5rem !important;
 }
 
@@ -6092,7 +6093,7 @@ nav[aria-label="Breadcrumb"] {
   }
 
   nav[aria-label="Breadcrumb"] {
-    padding-top: 3.5rem !important;
+    padding-top: 4.5rem !important;
   }
 }
 
@@ -6171,7 +6172,7 @@ nav[aria-label="Breadcrumb"] {
   flex-wrap: nowrap !important;
   align-items: center !important;
   gap: 0.25rem !important;
-  overflow: hidden !important;
+  overflow: visible !important;
 }
 
 .nav-chip {
@@ -6219,26 +6220,6 @@ nav[aria-label="Breadcrumb"] {
 
   .console-access-trigger {
     padding: 0.35rem 0.55rem !important;
-  }
-}
-
-@media (max-width: 420px) {
-  .header-grid,
-  .bbx-header {
-    flex-wrap: wrap !important;
-    row-gap: 0.4rem !important;
-  }
-
-  .bbx-header-right,
-  .header-actions {
-    width: 100% !important;
-    justify-content: space-between !important;
-    flex-wrap: wrap !important;
-    row-gap: 0.35rem !important;
-  }
-
-  .language-switcher-wrapper {
-    margin-left: 0 !important;
   }
 }
 

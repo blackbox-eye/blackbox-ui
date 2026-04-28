@@ -628,7 +628,7 @@ if (!empty($current_page)) {
     <div id="mobile-menu-overlay" class="bbx-drawer-overlay lg:hidden transition-opacity duration-200" data-menu-overlay></div>
 
     <!-- Mobile menu drawer (compact design) -->
-    <div id="mobile-menu" class="bbx-drawer-panel lg:hidden mobile-nav-drawer fixed top-0 right-0 bottom-0 w-64 max-w-[70vw] translate-x-full transition-transform duration-200" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-heading" aria-hidden="true">
+    <div id="mobile-menu" class="bbx-drawer-panel lg:hidden mobile-nav-drawer fixed top-0 right-0 bottom-0 w-64 max-w-[70vw] transition-transform duration-200" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-heading" aria-hidden="true">
         <!-- Compact header -->
         <div class="mobile-drawer-header flex justify-between items-center px-4 py-3 border-b border-gray-800/50">
             <span id="mobile-menu-heading" class="text-sm font-semibold text-gray-400 uppercase tracking-wider"><?= t('header.mobile.navigation') ?></span>

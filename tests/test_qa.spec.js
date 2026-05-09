@@ -17,9 +17,10 @@ const paths = [
 test.describe('Mobile burger menu hotfix validation', () => {
     for (const v of viewports) {
         for (const p of paths) {
-            test(`viewport: ${v.width}x${v.height} path: ${p}`, async ({ page }) => {
+            test(`viewport: ${v.width}x${v.height} path: ${p}`, async ({ page }, testInfo) => {
+                const baseURL = testInfo.project.use.baseURL || process.env.BASE_URL || 'http://localhost:8000';
                 await page.setViewportSize(v);
-                await page.goto(p);
+                await page.goto(new URL(p, baseURL).toString());
                 await page.waitForLoadState('networkidle');
 
                 const menu = page.locator('#mobile-menu');
@@ -43,6 +44,7 @@ test.describe('Mobile burger menu hotfix validation', () => {
 
                 // Closed state
                 await expect.poll(overlayOpacity).toBe(initialOverlayOpacity);
+                await expect.poll(menuTransform).toBe(initialMenuTransform);
             });
         }
     }

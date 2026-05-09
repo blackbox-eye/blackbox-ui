@@ -35,11 +35,34 @@ function bbx_load_blog_posts_json(): array
     ];
   }
   
-  $json_content = file_get_contents($json_path);
+  $json_content = @file_get_contents($json_path);
+
+  if ($json_content === false) {
+    error_log('[Blog] Failed to read posts.json content at: ' . $json_path);
+    return [
+      'version' => '1.0.0',
+      'generated_at' => null,
+      'pipeline_version' => null,
+      'metadata' => ['total_posts' => 0, 'regions' => [], 'date_range' => ['earliest' => null, 'latest' => null]],
+      'posts' => []
+    ];
+  }
+
   $data = json_decode($json_content, true);
   
-  if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
-    error_log('[Blog] Failed to parse posts.json or invalid shape: ' . json_last_error_msg());
+  if (json_last_error() !== JSON_ERROR_NONE) {
+    error_log('[Blog] Failed to parse posts.json: ' . json_last_error_msg());
+    return [
+      'version' => '1.0.0',
+      'generated_at' => null,
+      'pipeline_version' => null,
+      'metadata' => ['total_posts' => 0, 'regions' => [], 'date_range' => ['earliest' => null, 'latest' => null]],
+      'posts' => []
+    ];
+  }
+
+  if (!is_array($data) || isset($data[0])) { // Check if it's not an array or it's a list instead of associative
+    error_log('[Blog] Invalid shape in posts.json: expected JSON object');
     return [
       'version' => '1.0.0',
       'generated_at' => null,
@@ -75,7 +98,7 @@ function bbx_get_blog_posts_from_json(int $page = 1, int $per_page = 10, ?string
   
   if ($tag !== null) {
     $posts = array_filter($posts, function($post) use ($tag) {
-      return isset($post['tags']) && in_array($tag, $post['tags']);
+      return isset($post['tags']) && is_array($post['tags']) && in_array($tag, $post['tags'], true);
     });
   }
   
@@ -112,7 +135,7 @@ function bbx_get_blog_posts_json_count(?string $region = null, ?string $tag = nu
   
   if ($tag !== null) {
     $posts = array_filter($posts, function($post) use ($tag) {
-      return isset($post['tags']) && in_array($tag, $post['tags']);
+      return isset($post['tags']) && is_array($post['tags']) && in_array($tag, $post['tags'], true);
     });
   }
   

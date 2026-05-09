@@ -457,8 +457,7 @@ body.page-home aside#sticky-cta:not([hidden]):not([data-hidden="true"]) {
 }
 
 /* Drawer visible state */
-.page-home #mobile-menu.active,
-.page-home #mobile-menu[aria-hidden="false"] {
+.page-home #mobile-menu.active {
   transform: translateX(0) !important;
   visibility: visible !important;
 }
@@ -751,10 +750,7 @@ html:has(.page-home)[data-theme="light"] {
   transform: translateX(100%) !important;
 }
 
-.page-home #mobile-menu.active,
-.page-home #mobile-menu.is-open,
-.page-home #mobile-menu[data-open="true"],
-.page-home #mobile-menu[aria-hidden="false"] {
+.page-home #mobile-menu.active {
   visibility: visible !important;
   opacity: 1 !important;
   pointer-events: auto !important;
@@ -768,9 +764,7 @@ html:has(.page-home)[data-theme="light"] {
   pointer-events: none !important;
 }
 
-.page-home #mobile-menu-overlay.active,
-.page-home #mobile-menu-overlay.is-open,
-.page-home #mobile-menu-overlay[data-open="true"] {
+.page-home #mobile-menu-overlay.active {
   visibility: visible !important;
   opacity: 1 !important;
   pointer-events: auto !important;

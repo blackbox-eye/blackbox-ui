@@ -3,6 +3,7 @@ const { test, expect } = require('@playwright/test');
 const viewports = [
     { width: 320, height: 568 },
     { width: 390, height: 844 },
+    { width: 768, height: 1024 },
 ];
 
 const paths = [
@@ -18,29 +19,30 @@ test.describe('Mobile burger menu hotfix validation', () => {
         for (const p of paths) {
             test(`viewport: ${v.width}x${v.height} path: ${p}`, async ({ page }) => {
                 await page.setViewportSize(v);
-                await page.goto('http://localhost:8000' + p);
+                await page.goto(p);
                 await page.waitForLoadState('networkidle');
 
                 const menu = page.locator('#mobile-menu');
                 const overlay = page.locator('#mobile-menu-overlay');
                 const btn = page.locator('#mobile-menu-button');
+                const overlayOpacity = () => overlay.evaluate(el => getComputedStyle(el).opacity);
+                const menuTransform = () => menu.evaluate(el => getComputedStyle(el).transform);
 
                 // Initial state
-                expect(await menu.evaluate(el => window.getComputedStyle(el).transform)).not.toContain('matrix(1, 0, 0, 1, 0, 0)');
+                const initialOverlayOpacity = await overlayOpacity();
+                const initialMenuTransform = await menuTransform();
 
                 await btn.click();
-                await page.waitForTimeout(400);
 
                 // Open state
-                expect(await menu.evaluate(el => window.getComputedStyle(el).transform)).toContain('matrix(1, 0, 0, 1, 0, 0)');
-                expect(await overlay.evaluate(el => window.getComputedStyle(el).opacity)).toBe('1');
+                await expect.poll(overlayOpacity).not.toBe(initialOverlayOpacity);
+                await expect.poll(menuTransform).not.toBe(initialMenuTransform);
 
                 // Close
                 await overlay.click({ position: { x: 5, y: 5 }});
-                await page.waitForTimeout(400);
 
                 // Closed state
-                expect(await menu.evaluate(el => window.getComputedStyle(el).transform)).not.toContain('matrix(1, 0, 0, 1, 0, 0)');
+                await expect.poll(overlayOpacity).toBe(initialOverlayOpacity);
             });
         }
     }

@@ -229,3 +229,8 @@ Blackbox.codes/(OLD) GUI Blackbox UI – Blackbox.codes/
 
 # Local runtime config (do not commit)
 config/graphene-settings.json
+
+# Root-level DB diagnostic test files (security protection)
+/test-db.php
+/test-tables.php
+/test.php

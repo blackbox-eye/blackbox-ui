@@ -38,8 +38,8 @@ function bbx_load_blog_posts_json(): array
   $json_content = file_get_contents($json_path);
   $data = json_decode($json_content, true);
   
-  if (json_last_error() !== JSON_ERROR_NONE) {
-    error_log('[Blog] Failed to parse posts.json: ' . json_last_error_msg());
+  if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
+    error_log('[Blog] Failed to parse posts.json or invalid shape: ' . json_last_error_msg());
     return [
       'version' => '1.0.0',
       'generated_at' => null,
@@ -64,7 +64,7 @@ function bbx_load_blog_posts_json(): array
 function bbx_get_blog_posts_from_json(int $page = 1, int $per_page = 10, ?string $region = null, ?string $tag = null): array
 {
   $data = bbx_load_blog_posts_json();
-  $posts = $data['posts'] ?? [];
+  $posts = isset($data['posts']) && is_array($data['posts']) ? $data['posts'] : [];
   
   // Apply filters
   if ($region !== null) {
@@ -101,7 +101,7 @@ function bbx_get_blog_posts_from_json(int $page = 1, int $per_page = 10, ?string
 function bbx_get_blog_posts_json_count(?string $region = null, ?string $tag = null): int
 {
   $data = bbx_load_blog_posts_json();
-  $posts = $data['posts'] ?? [];
+  $posts = isset($data['posts']) && is_array($data['posts']) ? $data['posts'] : [];
   
   // Apply filters
   if ($region !== null) {
@@ -127,7 +127,7 @@ function bbx_get_blog_posts_json_count(?string $region = null, ?string $tag = nu
 function bbx_get_blog_tags_from_json(): array
 {
   $data = bbx_load_blog_posts_json();
-  $posts = $data['posts'] ?? [];
+  $posts = isset($data['posts']) && is_array($data['posts']) ? $data['posts'] : [];
   $tags = [];
   
   foreach ($posts as $post) {
@@ -150,7 +150,7 @@ function bbx_get_blog_tags_from_json(): array
 function bbx_get_blog_regions_from_json(): array
 {
   $data = bbx_load_blog_posts_json();
-  $posts = $data['posts'] ?? [];
+  $posts = isset($data['posts']) && is_array($data['posts']) ? $data['posts'] : [];
   $regions = [];
   
   foreach ($posts as $post) {

@@ -20,48 +20,6 @@
 
 **Production Verification Steps:**
 
-#### Option A: Via Browser Test Page
-1. Create temporary test file: `test-db.php`
-```php
-<?php
-require_once 'db.php';
-
-header('Content-Type: text/plain');
-echo "Database Connection Test\n";
-echo "========================\n\n";
-
-if (defined('BBX_DB_CONNECTED')) {
-    echo "BBX_DB_CONNECTED: " . (BBX_DB_CONNECTED ? 'true' : 'false') . "\n";
-
-    if (BBX_DB_CONNECTED) {
-        echo "Status: ✅ Connected successfully\n";
-
-        // Test query
-        try {
-            $stmt = $pdo->query("SELECT DATABASE() as dbname");
-            $row = $stmt->fetch();
-            echo "Database: " . $row['dbname'] . "\n";
-        } catch (PDOException $e) {
-            echo "Query test failed: " . $e->getMessage() . "\n";
-        }
-    } else {
-        echo "Status: ❌ Connection failed\n";
-        if (defined('BBX_DB_ERROR_MESSAGE')) {
-            echo "Error: " . BBX_DB_ERROR_MESSAGE . "\n";
-        }
-    }
-} else {
-    echo "Status: ⚠️ BBX_DB_CONNECTED not defined\n";
-}
-
-echo "\nDelete this file after testing!\n";
-?>
-```
-
-2. Upload to production: https://blackbox.codes/test-db.php
-3. Visit URL and verify output shows: `BBX_DB_CONNECTED: true`
-4. **DELETE test-db.php immediately after testing** (security)
-
 #### Option B: Via FTP/File Manager
 1. Check that `db.php` exists in root directory
 2. Verify file size matches local version (~1 KB)
@@ -120,44 +78,6 @@ SELECT COUNT(*) FROM faq_items;
 SELECT COUNT(*) FROM blog_posts;
 ```
 
-#### Option C: Via Test Page
-Create `test-tables.php`:
-```php
-<?php
-require_once 'db.php';
-
-header('Content-Type: text/plain');
-echo "Database Tables Test\n";
-echo "====================\n\n";
-
-if (!BBX_DB_CONNECTED) {
-    die("Database not connected!\n");
-}
-
-$tables_to_check = ['faq_items', 'blog_posts'];
-
-foreach ($tables_to_check as $table) {
-    try {
-        $stmt = $pdo->query("SHOW TABLES LIKE '$table'");
-        $exists = $stmt->rowCount() > 0;
-
-        if ($exists) {
-            $stmt = $pdo->query("SELECT COUNT(*) as count FROM $table");
-            $row = $stmt->fetch();
-            echo "✅ $table: EXISTS ({$row['count']} rows)\n";
-        } else {
-            echo "❌ $table: NOT FOUND\n";
-        }
-    } catch (PDOException $e) {
-        echo "⚠️ $table: ERROR - " . $e->getMessage() . "\n";
-    }
-}
-
-echo "\nDelete this file after testing!\n";
-?>
-```
-
-**Expected Result:**
 ```
 ✅ faq_items: EXISTS (X rows)
 ✅ blog_posts: EXISTS (X rows)
@@ -613,8 +533,7 @@ If you encounter issues during validation:
    - MySQL error log (`/var/log/mysql/error.log`)
 
 2. **Run diagnostics:**
-   - `test-db.php` (database connection)
-   - `test-tables.php` (table existence)
+   - Use secure internal/CLI-based methods like `validate-deployment.ps1`
    - Network tab (cache headers)
 
 3. **Document findings:**

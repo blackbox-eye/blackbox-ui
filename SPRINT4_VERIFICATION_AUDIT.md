@@ -209,7 +209,6 @@ The CI/CD pipeline automatically purges Cloudflare cache after each deployment u
 - [ ] Database connection successful
 - [ ] Required tables imported
 - [ ] Sample queries executed successfully
-- [ ] Documentation: See test-db.php and test-tables.php
 
 ---
 

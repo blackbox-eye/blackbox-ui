@@ -107,10 +107,56 @@ write_mock_json(['version' => '1.0.0', 'posts' => 'not an array']);
 assert_equals(0, bbx_get_blog_posts_json_count(), 'String posts key should be treated as empty array');
 assert_equals([], bbx_get_blog_posts_from_json(), 'String posts key should return empty posts');
 
+// Test Case: Missing posts key
+write_mock_json(['version' => '1.0.0']);
+assert_equals(0, bbx_get_blog_posts_json_count(), 'Missing posts key should have count 0');
+assert_equals([], bbx_get_blog_posts_from_json(), 'Missing posts key should return empty array');
+
 // Test Case: Empty posts
 write_mock_json(['version' => '1.0.0', 'posts' => []]);
 assert_equals(0, bbx_get_blog_posts_json_count(), 'Empty posts should have count 0');
 assert_equals([], bbx_get_blog_posts_from_json(), 'Empty posts should return empty array');
+
+// Test Case: Post with non-array tags
+$invalid_tags_posts = [
+    [
+        'id' => '5',
+        'title' => 'Post 5',
+        'region' => 'US',
+        'tags' => 'NotAnArray', // Invalid tags structure
+        'published_at' => '2025-12-20T10:00:00Z'
+    ]
+];
+write_mock_json(['version' => '1.0.0', 'posts' => $invalid_tags_posts]);
+assert_equals(1, bbx_get_blog_posts_json_count(), 'Should count post even with invalid tags when no tag filter is applied');
+assert_equals(0, bbx_get_blog_posts_json_count(null, 'NotAnArray'), 'Should safely ignore non-array tags during filtering');
+$posts_res = bbx_get_blog_posts_from_json(1, 10, null, 'NotAnArray');
+assert_equals([], $posts_res, 'Should safely ignore non-array tags during filtering');
+
+// Test Case: Root shape is a plain list (invalid shape)
+write_mock_json([1, 2, 3]);
+$data = bbx_load_blog_posts_json();
+assert_equals([], $data['posts'], 'Root list shape should return fallback structure');
+assert_equals(0, bbx_get_blog_posts_json_count(), 'Root list shape count should be 0');
+
+// Test Case: Unreadable file
+if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') { // chmod behaves differently on Windows
+    $unreadable_path = $tmpRoot . '/blog/posts.json';
+    write_mock_json('{"version":"1.0.0", "posts":[]}');
+    // Try to make unreadable
+    chmod($unreadable_path, 0000);
+    // If the file is actually unreadable (might still be readable if running as root)
+    if (@file_get_contents($unreadable_path) === false) {
+        $data = bbx_load_blog_posts_json();
+        assert_equals([], $data['posts'], 'Unreadable file should return fallback structure');
+    } else {
+        echo "⚠️ SKIP: Environment allows reading file with 0000 permissions (likely running as root).\n";
+    }
+    // Restore permissions so cleanup works
+    chmod($unreadable_path, 0644);
+} else {
+    echo "⚠️ SKIP: Unreadable file test skipped on Windows.\n";
+}
 
 // Setup valid data for remaining tests
 write_mock_json($valid_json);

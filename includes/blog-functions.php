@@ -72,6 +72,33 @@ function bbx_load_blog_posts_json(): array
     ];
   }
   
+  // Merge missing expected root keys
+  $fallback = [
+    'version' => '1.0.0',
+    'generated_at' => null,
+    'pipeline_version' => null,
+    'metadata' => ['total_posts' => 0, 'regions' => [], 'date_range' => ['earliest' => null, 'latest' => null]],
+    'posts' => []
+  ];
+
+  $data = array_merge($fallback, $data);
+
+  // Ensure posts is an array
+  if (!is_array($data['posts'])) {
+    $data['posts'] = [];
+  }
+
+  // Normalize tags for each post
+  foreach ($data['posts'] as &$post) {
+    if (!is_array($post)) {
+      $post = ['tags' => []];
+      continue;
+    }
+    if (!isset($post['tags']) || !is_array($post['tags'])) {
+      $post['tags'] = [];
+    }
+  }
+
   return $data;
 }
 

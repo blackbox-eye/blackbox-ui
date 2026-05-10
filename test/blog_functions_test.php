@@ -109,8 +109,15 @@ assert_equals([], bbx_get_blog_posts_from_json(), 'String posts key should retur
 
 // Test Case: Missing posts key
 write_mock_json(['version' => '1.0.0']);
+$data_missing_posts = bbx_load_blog_posts_json();
+assert_equals([], $data_missing_posts['posts'], 'Missing posts key should be merged to empty array in load_json');
 assert_equals(0, bbx_get_blog_posts_json_count(), 'Missing posts key should have count 0');
 assert_equals([], bbx_get_blog_posts_from_json(), 'Missing posts key should return empty array');
+
+// Test Case: Missing root keys merged with fallback
+write_mock_json(['posts' => []]);
+$data_missing_root = bbx_load_blog_posts_json();
+assert_equals('1.0.0', $data_missing_root['version'], 'Missing version key should be merged from fallback');
 
 // Test Case: Empty posts
 write_mock_json(['version' => '1.0.0', 'posts' => []]);
@@ -128,6 +135,8 @@ $invalid_tags_posts = [
     ]
 ];
 write_mock_json(['version' => '1.0.0', 'posts' => $invalid_tags_posts]);
+$data_invalid_tags = bbx_load_blog_posts_json();
+assert_equals([], $data_invalid_tags['posts'][0]['tags'], 'Non-array tags should be normalized to [] explicitly on load');
 assert_equals(1, bbx_get_blog_posts_json_count(), 'Should count post even with invalid tags when no tag filter is applied');
 assert_equals(0, bbx_get_blog_posts_json_count(null, 'NotAnArray'), 'Should safely ignore non-array tags during filtering');
 $posts_res = bbx_get_blog_posts_from_json(1, 10, null, 'NotAnArray');

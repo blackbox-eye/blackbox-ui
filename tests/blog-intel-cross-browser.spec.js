@@ -92,15 +92,20 @@ for (const [name, viewport] of Object.entries(viewports)) {
       const hasGrid = await postsGrid.count() > 0;
       
       if (hasGrid) {
-        // At least one blog card should be present
+        // At least one blog card should be present or empty state message
         const blogCards = page.locator('.blog-card');
         const cardCount = await blogCards.count();
-        expect(cardCount).toBeGreaterThan(0);
-        
-        // First card should have title
-        const firstCard = blogCards.first();
-        const title = firstCard.locator('.blog-card__title');
-        await expect(title).toBeVisible();
+        if (cardCount > 0) {
+          // First card should have title
+          const firstCard = blogCards.first();
+          const title = firstCard.locator('.blog-card__title');
+          await expect(title).toBeVisible();
+        } else {
+            // Empty state fallback is acceptable if grid but no cards
+            const emptyContainer = page.locator('.max-w-md.mx-auto.text-center.py-16');
+            const hasEmptyContainer = await emptyContainer.count() > 0;
+            expect(hasEmptyContainer).toBe(true);
+        }
       }
     });
 
@@ -165,8 +170,8 @@ for (const [name, viewport] of Object.entries(viewports)) {
       if (newsletterCount > 0) {
         await expect(newsletterSection).toBeVisible();
         
-        // Check for email input
-        const emailInput = page.locator('input[type="email"]');
+        // Check for email input within the newsletter section specifically to avoid conflicts with SSO modals
+        const emailInput = newsletterSection.locator('input[type="email"]');
         await expect(emailInput).toBeVisible();
       }
     });

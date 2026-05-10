@@ -5,7 +5,7 @@
   "scripts": {
     "build:tailwind": "npx tailwindcss -i ./assets/css/tailwind-src.css -o ./assets/css/tailwind.full.css --minify",
     "build:css": "npx postcss assets/css/marketing.css -o assets/css/marketing.min.css --use cssnano && npx postcss assets/css/admin.css -o assets/css/admin.min.css --use cssnano",
-    "build:js": "npx terser assets/js/site.js -c -m --source-map \"filename='assets/js/site.min.js.map',url='site.min.js.map'\" -o assets/js/site.min.js",
+    "build:js": "npx terser assets/js/site.js -c -m --source-map \"filename='site.min.js',url='site.min.js.map'\" -o assets/js/site.min.js",
     "build": "npm run build:tailwind && npm run build:css && npm run build:js",
     "test": "node scripts/playwright-shim.js",
     "test:raw": "playwright test --reporter=list",

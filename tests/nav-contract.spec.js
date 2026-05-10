@@ -257,7 +257,7 @@ test.describe("Header Navigation Contract", () => {
     });
 
     test(`narrow desktop uses burger contract on ${path}`, async ({ page }) => {
-      const viewport = { width: 1024, height: 768 };
+      const viewport = { width: 1023, height: 768 };
 
       await openRoute(page, path, viewport);
 

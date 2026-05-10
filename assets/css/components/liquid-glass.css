@@ -33,23 +33,23 @@
   --bbx-glass-bg: rgba(6, 10, 14, 0.55);
   --bbx-glass-bg-strong: rgba(6, 10, 14, 0.72);
   --bbx-glass-bg-light: rgba(6, 10, 14, 0.38);
-  
+
   /* Glass border styling */
   --bbx-glass-border: rgba(255, 255, 255, 0.08);
   --bbx-glass-border-strong: rgba(255, 255, 255, 0.14);
-  
+
   /* Blur and saturation values */
   --bbx-glass-blur: 18px;
   --bbx-glass-blur-light: 12px;
   --bbx-glass-blur-strong: 24px;
   --bbx-glass-sat: 1.25;
-  
+
   /* Fallback solid colors for no-blur browsers */
   --bbx-glass-fallback: rgba(10, 14, 20, 0.92);
   --bbx-glass-fallback-strong: rgba(8, 12, 18, 0.96);
   --bbx-glass-overlay: var(--bbx-glass-bg);
   --bbx-glass-overlay-fallback: rgba(8, 12, 18, 0.65);
-  
+
   /* Shadow tokens for glass surfaces */
   --bbx-glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
   --bbx-glass-shadow-strong: 0 12px 48px rgba(0, 0, 0, 0.45);
@@ -86,7 +86,8 @@
 
 @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
   .bbx-glass {
-    -webkit-backdrop-filter: blur(var(--bbx-glass-blur)) saturate(var(--bbx-glass-sat));
+    -webkit-backdrop-filter: blur(var(--bbx-glass-blur))
+      saturate(var(--bbx-glass-sat));
     backdrop-filter: blur(var(--bbx-glass-blur)) saturate(var(--bbx-glass-sat));
     background: var(--bbx-glass-bg);
   }
@@ -103,8 +104,10 @@
 
 @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
   .bbx-glass--strong {
-    -webkit-backdrop-filter: blur(var(--bbx-glass-blur-strong)) saturate(var(--bbx-glass-sat));
-    backdrop-filter: blur(var(--bbx-glass-blur-strong)) saturate(var(--bbx-glass-sat));
+    -webkit-backdrop-filter: blur(var(--bbx-glass-blur-strong))
+      saturate(var(--bbx-glass-sat));
+    backdrop-filter: blur(var(--bbx-glass-blur-strong))
+      saturate(var(--bbx-glass-sat));
     background: var(--bbx-glass-bg-strong);
   }
 }
@@ -119,8 +122,10 @@
 
 @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
   .bbx-glass--light {
-    -webkit-backdrop-filter: blur(var(--bbx-glass-blur-light)) saturate(var(--bbx-glass-sat));
-    backdrop-filter: blur(var(--bbx-glass-blur-light)) saturate(var(--bbx-glass-sat));
+    -webkit-backdrop-filter: blur(var(--bbx-glass-blur-light))
+      saturate(var(--bbx-glass-sat));
+    backdrop-filter: blur(var(--bbx-glass-blur-light))
+      saturate(var(--bbx-glass-sat));
     background: var(--bbx-glass-bg-light);
   }
 }
@@ -141,8 +146,10 @@
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-  
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+
   /* Fallback: semi-transparent solid color (never pure black) */
   background: rgba(8, 12, 18, 0.75);
 }
@@ -184,7 +191,7 @@
 .sticky-cta-bar,
 [data-component="sticky-cta"] {
   z-index: 75;
-  
+
   /* Glass fallback */
   background: var(--bbx-glass-fallback-strong);
   border: 1px solid var(--bbx-glass-border-strong);
@@ -223,7 +230,9 @@ body {
 main,
 #main-content,
 .page-wrapper {
-  overflow-x: hidden;
+  /* Avoid creating a nested vertical scroll container on the main page shell */
+  overflow-x: clip;
+  overflow-y: visible;
   max-width: 100%;
 }
 
@@ -333,7 +342,9 @@ body.sticky-cta-visible .site-footer {
   .bbx-drawer-overlay,
   #mobile-menu-overlay,
   .alphabot-panel {
-    transition: opacity 0.1s ease, visibility 0.1s ease !important;
+    transition:
+      opacity 0.1s ease,
+      visibility 0.1s ease !important;
   }
 }
 

@@ -9,7 +9,13 @@
  */
 
 require_once __DIR__ . '/includes/i18n.php';
-require_once __DIR__ . '/db.php';
+
+$db_bootstrap = __DIR__ . '/db.php';
+if (is_file($db_bootstrap)) {
+  require_once $db_bootstrap;
+} else {
+  error_log('[FAQ] Missing db.php bootstrap for faq.php');
+}
 
 $current_page = 'faq';
 $page_title = t('faq.meta.title');
@@ -162,12 +168,14 @@ include 'includes/site-header.php';
       <div class="container mx-auto px-4">
         <div class="flex flex-wrap justify-center gap-3">
           <a href="faq.php"
-            class="px-4 py-2 rounded-lg transition-colors <?= $selected_category === null ? 'border-2" style="background: rgba(232, 197, 71, 0.14); border-color: var(--text-gold); color: var(--text-gold); text-black font-semibold' : 'bg-gray-800 hover:bg-gray-700 text-gray-200' ?>">
+            class="px-4 py-2 rounded-lg transition-colors <?= $selected_category === null ? 'border-2 text-black font-semibold' : 'bg-gray-800 hover:bg-gray-700 text-gray-200' ?>"
+            <?= $selected_category === null ? 'style="background: rgba(232, 197, 71, 0.14); border-color: var(--text-gold); color: var(--text-gold);"' : '' ?>>
             <?= t('faq.filter.all') ?>
           </a>
           <?php foreach ($categories as $cat): ?>
             <a href="faq.php?category=<?= urlencode($cat) ?>"
-              class="px-4 py-2 rounded-lg transition-colors <?= $selected_category === $cat ? 'border-2" style="background: rgba(232, 197, 71, 0.14); border-color: var(--text-gold); color: var(--text-gold); text-black font-semibold' : 'bg-gray-800 hover:bg-gray-700 text-gray-200' ?>">
+              class="px-4 py-2 rounded-lg transition-colors <?= $selected_category === $cat ? 'border-2 text-black font-semibold' : 'bg-gray-800 hover:bg-gray-700 text-gray-200' ?>"
+              <?= $selected_category === $cat ? 'style="background: rgba(232, 197, 71, 0.14); border-color: var(--text-gold); color: var(--text-gold);"' : '' ?>>
               <?= htmlspecialchars($cat) ?>
             </a>
           <?php endforeach; ?>
@@ -254,18 +262,20 @@ include 'includes/site-header.php';
   <?php endif; ?>
 
   <!-- CTA Section -->
-  <section class="py-16 bg-gradient-to-r from-amber-400/10 to-amber-600/10 border-y " style="border-color: var(--text-gold);/20">
+  <section class="py-16 bg-gradient-to-r from-amber-400/10 to-amber-600/10 border-y" style="border-color: color-mix(in srgb, var(--text-gold) 20%, transparent);">
     <div class="container mx-auto px-4">
       <div class="max-w-3xl mx-auto text-center">
         <h3 class="text-2xl sm:text-3xl font-bold mb-4"><?= t('faq.cta.title') ?></h3>
         <p class="text-gray-200 mb-8 text-lg"><?= t('faq.cta.description') ?></p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <a href="contact.php"
-            class="px-8 py-4 border-2" style="background: rgba(232, 197, 71, 0.14); border-color: var(--text-gold); color: var(--text-gold); text-black font-semibold rounded-lg hover:bg-opacity-90 transition-colors">
+            class="px-8 py-4 border-2 rounded-lg font-semibold transition-colors hover:bg-opacity-90"
+            style="background: rgba(232, 197, 71, 0.14); border-color: var(--text-gold); color: var(--text-gold);">
             <?= t('faq.cta.contact') ?>
           </a>
           <a href="pricing.php"
-            class="px-8 py-4 border " style="border-color: var(--text-gold); " style="color: var(--text-gold); font-semibold rounded-lg hover:border-2" style="background: rgba(232, 197, 71, 0.14); border-color: var(--text-gold); color: var(--text-gold); hover:text-black transition-colors">
+            class="px-8 py-4 border rounded-lg font-semibold transition-colors hover:bg-opacity-90"
+            style="background: rgba(232, 197, 71, 0.14); border-color: var(--text-gold); color: var(--text-gold);">
             <?= t('faq.cta.pricing') ?>
           </a>
         </div>

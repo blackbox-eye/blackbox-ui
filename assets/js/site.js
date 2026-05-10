@@ -1001,6 +1001,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const focusableSelectors =
       'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
+    const setMobileMenuState = (isOpen) => {
+      document.body.classList.toggle("mobile-menu-open", isOpen);
+      document.documentElement.classList.toggle("mobile-menu-open", isOpen);
+      document.dispatchEvent(
+        new CustomEvent("bbx:mobile-menu-state", {
+          detail: { isOpen },
+        }),
+      );
+    };
+
     const getFocusableElements = () =>
       Array.from(mobileMenu.querySelectorAll(focusableSelectors)).filter(
         (element) =>
@@ -1052,6 +1062,7 @@ document.addEventListener("DOMContentLoaded", () => {
       mobileMenuButton.setAttribute("aria-expanded", "true");
       mobileMenuOverlay.classList.add("active");
       mobileMenuOverlay.setAttribute("aria-hidden", "false");
+      setMobileMenuState(true);
       // Keep body scrollable: no classes or inline locks
       // document.body.style.overflow = "hidden"; // intentionally unused
 
@@ -1071,6 +1082,7 @@ document.addEventListener("DOMContentLoaded", () => {
       mobileMenuOverlay.classList.remove("active");
       mobileMenuOverlay.setAttribute("aria-hidden", "true");
       document.body.style.overflow = "";
+      setMobileMenuState(false);
 
       if (lastFocusedElement) {
         lastFocusedElement.focus();
@@ -1085,6 +1097,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }, 0);
     };
+
+    setMobileMenuState(mobileMenu.classList.contains("active"));
 
     mobileMenuButton.addEventListener("click", () => {
       if (mobileMenu.classList.contains("active")) {
@@ -2975,6 +2989,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const assistantReady = Boolean(hasAIConfig && geminiReady);
 
     if (messagesDiv && inputEl && sendBtn && sendText && sendLoader) {
+      const alphaLabel = alphaToggleBtn.querySelector(".alphabot-label");
       const conversation = [
         {
           role: "user",
@@ -2994,6 +3009,36 @@ document.addEventListener("DOMContentLoaded", () => {
       let alphaFocusContainListener = null;
       let alphaLastFocusedElement = null;
       let alphaIsOpen = false;
+      const alphaFullLabel = alphaLabel?.textContent?.trim() || "";
+      const alphaShortLabel =
+        alphaFullLabel.split(/\s+/).filter(Boolean).slice(-1)[0] ||
+        alphaFullLabel;
+
+      const updateAssistantToggleLabel = () => {
+        if (!alphaLabel) {
+          return;
+        }
+
+        let nextLabel = alphaFullLabel;
+        let labelMode = "full";
+
+        if (window.innerWidth <= 480) {
+          nextLabel = "AI";
+          labelMode = "compact";
+        } else if (window.innerWidth <= 1365) {
+          nextLabel = alphaShortLabel;
+          labelMode = "short";
+        }
+
+        alphaLabel.textContent = nextLabel;
+        alphaToggleBtn.dataset.assistantLabelMode = labelMode;
+        alphaToggleBtn.dataset.assistantLabel = nextLabel;
+      };
+
+      updateAssistantToggleLabel();
+      window.addEventListener("resize", updateAssistantToggleLabel, {
+        passive: true,
+      });
 
       const alphaFocusableSelector =
         'a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])';
@@ -3258,6 +3303,34 @@ document.addEventListener("DOMContentLoaded", () => {
         closeAssistant();
       });
 
+      const syncAssistantWithMobileMenu = (isOpen) => {
+        alphaRail?.classList.toggle("bbx-command-rail--drawer-hidden", isOpen);
+
+        if (!isOpen) {
+          return;
+        }
+
+        if (alphaContainer.classList.contains("open") || alphaIsOpen) {
+          closeAssistant(false);
+          return;
+        }
+
+        alphaContainer.classList.remove("open");
+        alphaToggleBtn.setAttribute("aria-expanded", "false");
+        alphaPanel.setAttribute("aria-hidden", "true");
+        alphaPanel.setAttribute("inert", "");
+        alphaPanel.setAttribute("aria-modal", "false");
+        alphaIsOpen = false;
+      };
+
+      document.addEventListener("bbx:mobile-menu-state", (event) => {
+        syncAssistantWithMobileMenu(Boolean(event.detail?.isOpen));
+      });
+
+      syncAssistantWithMobileMenu(
+        document.body.classList.contains("mobile-menu-open"),
+      );
+
       // P0 FIX: Overlay click handler DISABLED - overlay doesn't exist
       // alphaOverlay?.addEventListener("click", () => closeAssistant()); // REMOVED
 
@@ -3316,13 +3389,10 @@ document.addEventListener("DOMContentLoaded", () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Footer visible - hide assistant toggle
-            assistantRail.style.opacity = "0";
-            assistantRail.style.transform = "translateY(20px)";
+            // Footer visible - make the assistant fully passive.
+            assistantRail.classList.add("bbx-command-rail--footer-hidden");
           } else {
-            // Footer not visible - show assistant toggle
-            assistantRail.style.opacity = "";
-            assistantRail.style.transform = "";
+            assistantRail.classList.remove("bbx-command-rail--footer-hidden");
           }
         });
       },

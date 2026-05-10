@@ -403,7 +403,7 @@ include 'includes/site-header.php';
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <?php foreach ($posts as $index => $post): ?>
               <article class="blog-card group <?= $index === 0 ? 'blog-card--featured md:col-span-2 lg:col-span-1' : '' ?>">
-                <?php if ($post['featured_image']): ?>
+                <?php if (!empty($post['featured_image'])): ?>
                   <div class="blog-card__image">
                     <img src="<?= htmlspecialchars($post['featured_image']) ?>"
                       alt="<?= htmlspecialchars($post['title']) ?>"
@@ -453,50 +453,62 @@ include 'includes/site-header.php';
 
                   <!-- Meta Footer -->
                   <div class="blog-card__meta">
-                    <div class="flex items-center gap-4 text-sm text-gray-500">
-                      <?php if ($data_source === 'json'): ?>
-                        <!-- JSON posts: show source and date -->
-                        <span class="font-semibold" style="color: var(--text-gold);"><?= htmlspecialchars($post['source']) ?></span>
-                        <span><?= bbx_format_blog_date($post['publish_date']) ?></span>
-                        <?php if (!empty($post['severity'])): ?>
-                          <span class="text-xs px-2 py-0.5 rounded-full <?= 
-                            $post['severity'] === 'critical' ? 'bg-red-500/20 text-red-400' : 
-                            ($post['severity'] === 'high' ? 'bg-amber-500/20 text-amber-400' : 
-                            ($post['severity'] === 'medium' ? 'bg-blue-500/20 text-blue-400' : 'bg-gray-500/20 text-gray-400'))
-                          ?>">
-                            <?= strtoupper($post['severity']) ?>
+                    <div class="flex flex-col gap-3 w-full">
+                      <!-- Info row: Date, Source/Views, Severity -->
+                      <div class="flex items-center gap-3 text-xs text-gray-400 flex-wrap">
+                        <!-- Always show date first -->
+                        <span class="flex items-center gap-1 font-medium whitespace-nowrap">
+                          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                          <?= bbx_format_blog_date($post['publish_date']) ?>
+                        </span>
+
+                        <!-- Source or Views -->
+                        <?php if ($data_source === 'json' && !empty($post['source'])): ?>
+                          <span class="flex items-center gap-1 font-semibold whitespace-nowrap" style="color: var(--text-gold);">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                            <?= htmlspecialchars($post['source']) ?>
+                          </span>
+                        <?php elseif ($data_source === 'database' && isset($post['views'])): ?>
+                          <span class="flex items-center gap-1 whitespace-nowrap">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <?= number_format($post['views']) ?>
                           </span>
                         <?php endif; ?>
-                      <?php else: ?>
-                        <!-- Database posts: show date and views -->
-                        <span><?= bbx_format_blog_date($post['publish_date']) ?></span>
-                        <span class="flex items-center gap-1">
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                          </svg>
-                          <?= number_format($post['views']) ?>
-                        </span>
-                      <?php endif; ?>
+
+                        <!-- Severity Badge -->
+                        <?php if ($data_source === 'json' && !empty($post['severity'])): ?>
+                          <span class="ml-auto px-2 py-0.5 rounded-full font-bold tracking-wider text-[10px] uppercase <?=
+                            $post['severity'] === 'critical' ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
+                            ($post['severity'] === 'high' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+                            ($post['severity'] === 'medium' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-gray-500/10 text-gray-400 border border-gray-500/20'))
+                          ?>">
+                            <?= htmlspecialchars($post['severity']) ?>
+                          </span>
+                        <?php endif; ?>
+                      </div>
+
+                      <!-- CTA Row -->
+                      <div class="flex justify-start">
+                        <?php if ($data_source === 'json' && !empty($post['url'])): ?>
+                          <a href="<?= htmlspecialchars($post['url']) ?>"
+                             target="_blank"
+                             rel="noopener noreferrer"
+                             class="blog-card__read-more">
+                            <?= t('blog.read_external_source', 'Læs ekstern kilde') ?>
+                            <svg class="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                            </svg>
+                          </a>
+                        <?php else: ?>
+                          <a href="<?= bbx_get_blog_post_url($post['slug']) ?>" class="blog-card__read-more">
+                            <?= t('blog.read_more', 'Læs mere') ?>
+                            <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                            </svg>
+                          </a>
+                        <?php endif; ?>
+                      </div>
                     </div>
-                    <?php if ($data_source === 'json' && !empty($post['url'])): ?>
-                      <a href="<?= htmlspecialchars($post['url']) ?>" 
-                         target="_blank" 
-                         rel="noopener noreferrer" 
-                         class="blog-card__read-more">
-                        <?= t('blog.read_source', 'Læs kilde') ?>
-                        <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                        </svg>
-                      </a>
-                    <?php else: ?>
-                      <a href="<?= bbx_get_blog_post_url($post['slug']) ?>" class="blog-card__read-more">
-                        <?= t('blog.read_more') ?>
-                        <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
-                      </a>
-                    <?php endif; ?>
                   </div>
                 </div>
               </article>

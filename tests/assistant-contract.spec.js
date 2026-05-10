@@ -180,6 +180,76 @@ async function expectDrawerControlClickable(page, selector) {
   await control.click({ trial: true });
 }
 
+async function waitForAssistantOpen(page) {
+  const panel = page.locator("#alphabot-panel");
+
+  await expect(panel).toHaveAttribute("aria-hidden", "false");
+  await expect(panel).toBeVisible();
+
+  await page.waitForFunction(() => {
+    const panel = document.getElementById("alphabot-panel");
+    const widget = document.getElementById("alphabot-container");
+
+    if (!panel || !widget) {
+      return false;
+    }
+
+    const panelStyle = window.getComputedStyle(panel);
+    return (
+      widget.classList.contains("open") &&
+      panel.getAttribute("aria-hidden") === "false" &&
+      panelStyle.visibility === "visible" &&
+      Number.parseFloat(panelStyle.opacity || "0") > 0.95
+    );
+  });
+
+  const panelIsStable = await page.evaluate(async () => {
+    const panel = document.getElementById("alphabot-panel");
+
+    if (!panel) {
+      return false;
+    }
+
+    const readRect = () => {
+      const rect = panel.getBoundingClientRect();
+      return [rect.left, rect.top, rect.width, rect.height];
+    };
+
+    const rectsMatch = (previousRect, nextRect) =>
+      previousRect.every(
+        (value, index) => Math.abs(value - nextRect[index]) < 0.5,
+      );
+
+    let previousRect = readRect();
+    let stableFrames = 0;
+
+    for (let frame = 0; frame < 8; frame += 1) {
+      await new Promise((resolve) => window.requestAnimationFrame(resolve));
+      const nextRect = readRect();
+
+      if (rectsMatch(previousRect, nextRect)) {
+        stableFrames += 1;
+        if (stableFrames >= 2) {
+          return true;
+        }
+      } else {
+        stableFrames = 0;
+        previousRect = nextRect;
+      }
+    }
+
+    return false;
+  });
+
+  expect(panelIsStable).toBeTruthy();
+}
+
+async function openAssistantAndWait(page) {
+  const toggle = page.locator("#alphabot-toggle-btn");
+  await toggle.click();
+  await waitForAssistantOpen(page);
+}
+
 async function readClosedLeakProbe(page) {
   return page.evaluate(() => {
     const toggle = document.getElementById("alphabot-toggle-btn");
@@ -270,9 +340,7 @@ test.describe("Assistant responsive contract", () => {
     }) => {
       await openRoute(page, "/", viewport);
 
-      const toggle = page.locator("#alphabot-toggle-btn");
-      await toggle.click();
-      await page.waitForTimeout(200);
+      await openAssistantAndWait(page);
 
       const state = await readAssistantState(page);
       expect(state.docOverflowX).toBeLessThanOrEqual(1);
@@ -290,9 +358,7 @@ test.describe("Assistant responsive contract", () => {
     }) => {
       await openRoute(page, "/faq.php", viewport);
 
-      const toggle = page.locator("#alphabot-toggle-btn");
-      await toggle.click();
-      await page.waitForTimeout(200);
+      await openAssistantAndWait(page);
 
       const state = await readAssistantState(page);
       expect(state.docOverflowX).toBeLessThanOrEqual(1);

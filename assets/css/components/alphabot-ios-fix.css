@@ -425,6 +425,7 @@ body[data-sticky-cta-visible] .alphabot-toggle {
 .alphabot-panel {
   width: var(--bbx-assistant-panel-max-width) !important;
   max-width: var(--bbx-assistant-panel-max-width) !important;
+  min-width: 0 !important;
   min-height: 0 !important;
   max-height: min(
     68vh,

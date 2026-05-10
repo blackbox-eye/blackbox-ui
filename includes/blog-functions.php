@@ -90,6 +90,10 @@ function bbx_load_blog_posts_json(): array
 
   // Normalize tags for each post
   foreach ($data['posts'] as &$post) {
+    if (!is_array($post)) {
+      $post = ['tags' => []];
+      continue;
+    }
     if (!isset($post['tags']) || !is_array($post['tags'])) {
       $post['tags'] = [];
     }

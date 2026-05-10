@@ -507,6 +507,12 @@ if (!empty($current_page)) {
                                     </svg>
                                 </button>
                                 <div class="more-dropdown more-dropdown-menu" role="menu">
+                                    <a href="faq.php" class="more-dropdown-item <?= $current_page === 'faq' ? 'is-active' : '' ?>" role="menuitem">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 1.757-2 3.272-2 2.071 0 3.75 1.567 3.75 3.5 0 1.423-.911 2.648-2.219 3.196-.665.278-1.281.68-1.281 1.304V16m.25 4h.008M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <?= t('header.menu.faq') ?>
+                                    </a>
                                     <a href="blog.php" class="more-dropdown-item <?= $current_page === 'blog' ? 'is-active' : '' ?>" role="menuitem">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />

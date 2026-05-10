@@ -64,7 +64,12 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 body {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
     sans-serif;
   background: var(--color-bg);
   color: var(--color-text);
@@ -76,12 +81,18 @@ body {
 /* P0 HARD-UNLOCK GUARD: when no overlay/drawer/modal classes are present, force scroll to stay enabled */
 html:not(.mobile-menu-open):not(.modal-open):not(.drawer-open):not(
     .alphabot-locked
-  ),
-body:not(.mobile-menu-open):not(.modal-open):not(.drawer-open):not(
-    .alphabot-locked
   ) {
   overflow-y: auto !important;
   overflow-x: hidden !important;
+  position: static !important;
+  touch-action: auto !important;
+}
+
+body:not(.mobile-menu-open):not(.modal-open):not(.drawer-open):not(
+    .alphabot-locked
+  ) {
+  overflow-y: visible !important;
+  overflow-x: visible !important;
   position: static !important;
   touch-action: auto !important;
 }
@@ -178,8 +189,8 @@ html:not(.modal-open):not(.drawer-open) {
   overflow-x: hidden;
 }
 body:not(.mobile-menu-open):not(.alphabot-locked):not(.modal-open) {
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow-y: visible;
+  overflow-x: visible;
 }
 
 /* ════ LAYOUT CONTAINER ════ */
@@ -211,7 +222,9 @@ body:not(.mobile-menu-open):not(.alphabot-locked):not(.modal-open) {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
-  transition: background 0.3s, box-shadow 0.3s;
+  transition:
+    background 0.3s,
+    box-shadow 0.3s;
 }
 
 [data-theme="light"] #main-header {

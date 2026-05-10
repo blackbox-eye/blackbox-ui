@@ -24,11 +24,11 @@
     // Remove cookie-banner-open class from body and html
     document.body.classList.remove(
       "cookie-banner-open",
-      "cookie-banner-visible"
+      "cookie-banner-visible",
     );
     document.documentElement.classList.remove(
       "cookie-banner-open",
-      "cookie-banner-visible"
+      "cookie-banner-visible",
     );
   };
 
@@ -62,8 +62,8 @@ const languageResolver = (() => {
   const COOKIE_NAME = "bbx_lang";
   const ALLOWED = new Set(
     (window.__BBX_ALLOWED_LANGS__ || ["en", "da"]).map((lang) =>
-      String(lang).toLowerCase()
-    )
+      String(lang).toLowerCase(),
+    ),
   );
   const DEFAULT_LANG = ALLOWED.has("en")
     ? "en"
@@ -74,8 +74,8 @@ const languageResolver = (() => {
       new RegExp(
         "(?:^|; )" +
           name.replace(/([.$?*|{}()\[\]\\\/\+^])/g, "\\$1") +
-          "=([^;]*)"
-      )
+          "=([^;]*)",
+      ),
     );
     return match ? decodeURIComponent(match[1]) : null;
   };
@@ -202,7 +202,7 @@ const i18n = (() => {
       ) {
         output[key] = deepMerge(
           baseVal && typeof baseVal === "object" ? baseVal : {},
-          overrideVal
+          overrideVal,
         );
       } else {
         output[key] = overrideVal;
@@ -275,7 +275,7 @@ const currencyFormatter = new Intl.NumberFormat(
     style: "currency",
     currency: "DKK",
     maximumFractionDigits: 0,
-  }
+  },
 );
 
 const THEME_STORAGE_KEY = "bbx-theme";
@@ -297,7 +297,7 @@ const hasVisibleOverlay = () => {
     document.querySelector(".bbx-drawer-overlay"),
     document.getElementById("alphabot-overlay"),
     document.querySelector(
-      '.modal.is-open, [role="dialog"][aria-hidden="false"]'
+      '.modal.is-open, [role="dialog"][aria-hidden="false"]',
     ),
   ];
 
@@ -328,7 +328,7 @@ const isAnyOverlayOpen = () => {
   const body = document.body;
   const html = document.documentElement;
   const classLock = OVERLAY_CLASS_LIST.some(
-    (cls) => body.classList.contains(cls) || html.classList.contains(cls)
+    (cls) => body.classList.contains(cls) || html.classList.contains(cls),
   );
 
   const visible = hasVisibleOverlay();
@@ -407,7 +407,7 @@ const ensureOverlaysPassive = () => {
       if (DEBUG_UI) {
         console.warn(
           "[P0 Failsafe] Blocked overlay element found and disabled:",
-          selector
+          selector,
         );
       }
     }
@@ -592,7 +592,7 @@ function initDebugPanel() {
     const activeClasses = lockClasses.filter((c) => body.classList.contains(c));
 
     document.getElementById("dbg-scrolly").textContent = Math.round(
-      window.scrollY
+      window.scrollY,
     );
     document.getElementById("dbg-overflow").textContent =
       computed.overflow + " / " + computed.overflowY;
@@ -602,7 +602,7 @@ function initDebugPanel() {
       : "-";
     document.getElementById("dbg-touch").textContent = computed.touchAction;
     document.getElementById("dbg-drawer").textContent = body.classList.contains(
-      "drawer-open"
+      "drawer-open",
     )
       ? "✓"
       : "-";
@@ -623,22 +623,21 @@ document.addEventListener("DOMContentLoaded", () => {
   document.body.classList.remove(
     "alphabot-locked",
     "modal-open",
-    "drawer-open"
+    "drawer-open",
   );
   document.documentElement.classList.remove("modal-open", "drawer-open");
   forceHardUnlockIfSafe("domcontentloaded-hard-guard");
   ensureOverlaysPassive(); // P0 FIX: Ensure removed elements stay inactive
 
-  // Ensure Alphabot control surfaces stay clickable and above content
+  // Keep only the visible toggle interactive; the rail itself must stay passive.
   const alphabotToggle = document.querySelector(".alphabot-toggle");
   const alphabotRail = document.querySelector(".bbx-command-rail");
-  [alphabotToggle, alphabotRail].forEach((el) => {
-    if (el) {
-      el.style.setProperty("pointer-events", "auto", "important");
-      el.style.setProperty("z-index", "2147483000", "important");
-      el.style.position = el.style.position || "fixed";
-    }
-  });
+  if (alphabotToggle) {
+    alphabotToggle.style.setProperty("pointer-events", "auto", "important");
+  }
+  if (alphabotRail) {
+    alphabotRail.style.setProperty("pointer-events", "none", "important");
+  }
 
   // Retry unlock a few times in case late scripts reapply lock classes
   let unlockAttempts = 0;
@@ -673,7 +672,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (DEBUG_UI) {
       console.info(
-        "[Landing Page] Scroll unlocked immediately on DOMContentLoaded"
+        "[Landing Page] Scroll unlocked immediately on DOMContentLoaded",
       );
     }
   }
@@ -721,7 +720,7 @@ document.addEventListener("DOMContentLoaded", () => {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(() => unlockBodyScroll("resize"), 150);
       };
-    })()
+    })(),
   );
 
   window.addEventListener("hashchange", () => {
@@ -759,7 +758,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const drawerOverlay = document.querySelector(".bbx-drawer-overlay");
       const alphabotPanel = document.getElementById("alphabot-panel");
       const modalOpen = document.querySelector(
-        '.modal.is-open, [role="dialog"][aria-hidden="false"]'
+        '.modal.is-open, [role="dialog"][aria-hidden="false"]',
       );
       const anyExpanded = document.querySelector('[aria-expanded="true"]');
 
@@ -779,7 +778,7 @@ document.addEventListener("DOMContentLoaded", () => {
               hasScrollLockClass,
               hasOverflowHidden,
               hasPositionFixed,
-            }
+            },
           );
         }
         unlockBodyScroll("touchstart-failsafe");
@@ -789,7 +788,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // P0 FIX: Always verify overlay elements are passive on touchstart
       ensureOverlaysPassive();
     },
-    { passive: true }
+    { passive: true },
   );
 
   // P0 FIX: Additional iOS Safari failsafe - run on every scroll attempt
@@ -810,14 +809,14 @@ document.addEventListener("DOMContentLoaded", () => {
         if (deltaY < 2 && isBodyLikelyLocked()) {
           if (DEBUG_UI) {
             console.warn(
-              "[Scroll Detector] touchmove detected no scroll delta - forcing unlock"
+              "[Scroll Detector] touchmove detected no scroll delta - forcing unlock",
             );
           }
           forceHardUnlockIfSafe("touchmove-scroll-detector");
         }
       }, 150);
     },
-    { passive: true }
+    { passive: true },
   );
 
   // Wheel-based detector for non-touch devices
@@ -836,7 +835,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }, 150);
     },
-    { passive: true }
+    { passive: true },
   );
 
   // P0-5: Enable transitions after first paint without gating scroll/state
@@ -846,7 +845,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.classList.remove("landing-gate", "landing-ready");
       document.documentElement.classList.remove(
         "landing-gate",
-        "landing-ready"
+        "landing-ready",
       );
     });
   });
@@ -873,7 +872,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     metaColorScheme.setAttribute(
       "content",
-      theme === "light" ? "light dark" : "dark light"
+      theme === "light" ? "light dark" : "dark light",
     );
   };
 
@@ -987,7 +986,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 10);
       }
     },
-    { passive: true }
+    { passive: true },
   );
 
   const mobileMenuButton = document.getElementById("mobile-menu-button");
@@ -1006,7 +1005,7 @@ document.addEventListener("DOMContentLoaded", () => {
       Array.from(mobileMenu.querySelectorAll(focusableSelectors)).filter(
         (element) =>
           !element.hasAttribute("disabled") &&
-          element.getAttribute("tabindex") !== "-1"
+          element.getAttribute("tabindex") !== "-1",
       );
 
     const enableFocusTrap = () => {
@@ -1121,7 +1120,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const moreDropdownWrapper = document.querySelector(".more-dropdown-wrapper");
   if (moreDropdownWrapper) {
     const moreTrigger = moreDropdownWrapper.querySelector(
-      ".more-dropdown-trigger"
+      ".more-dropdown-trigger",
     );
     const moreMenu = moreDropdownWrapper.querySelector(".more-dropdown-menu");
     let isMoreOpen = false;
@@ -1140,16 +1139,53 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const openMoreMenu = () => {
+      moreMenu?.style.removeProperty("transition");
+      moreMenu?.style.removeProperty("opacity");
+      moreMenu?.style.removeProperty("visibility");
+      moreMenu?.style.removeProperty("transform");
+      moreMenu?.style.removeProperty("pointer-events");
       positionMoreMenu();
       moreMenu?.classList.add("is-open");
       moreTrigger?.setAttribute("aria-expanded", "true");
       isMoreOpen = true;
     };
 
-    const closeMoreMenu = () => {
+    const closeMoreMenu = ({ immediate = false } = {}) => {
+      if (immediate && moreMenu) {
+        moreMenu.style.setProperty("transition", "none");
+        moreMenu.style.setProperty("opacity", "0");
+        moreMenu.style.setProperty("visibility", "hidden");
+        moreMenu.style.setProperty("transform", "translateY(-8px)");
+        moreMenu.style.setProperty("pointer-events", "none");
+      }
+
       moreMenu?.classList.remove("is-open");
       moreTrigger?.setAttribute("aria-expanded", "false");
       isMoreOpen = false;
+
+      if (immediate && moreMenu) {
+        window.requestAnimationFrame(() => {
+          moreMenu.style.removeProperty("transition");
+          moreMenu.style.removeProperty("opacity");
+          moreMenu.style.removeProperty("visibility");
+          moreMenu.style.removeProperty("transform");
+          moreMenu.style.removeProperty("pointer-events");
+        });
+      }
+    };
+
+    const releaseMoreMenuFocus = () => {
+      window.setTimeout(() => {
+        if (typeof document.body?.focus !== "function") {
+          return;
+        }
+
+        try {
+          document.body.focus({ preventScroll: true });
+        } catch (error) {
+          document.body.focus();
+        }
+      }, 0);
     };
 
     moreTrigger?.addEventListener("click", (event) => {
@@ -1175,8 +1211,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        closeMoreMenu();
+      if (event.key === "Escape" && isMoreOpen) {
+        event.preventDefault();
+        closeMoreMenu({ immediate: true });
+        releaseMoreMenuFocus();
       }
     });
 
@@ -1241,7 +1279,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.documentElement.style.setProperty(
       "--bbx-sticky-cta-height",
-      offset ? `${offset}px` : "0px"
+      offset ? `${offset}px` : "0px",
     );
   };
 
@@ -1262,7 +1300,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const SCROLL_THRESHOLD = 0.3; // Show after 30% viewport scroll for parity
     const closeButton = stickyCtaBar.querySelector("[data-sticky-cta-close]");
     const ctaButtons = stickyCtaBar.querySelectorAll(
-      ".sticky-cta-bar__btn, .sticky-cta-bar__cta"
+      ".sticky-cta-bar__btn, .sticky-cta-bar__cta",
     );
     let hasBeenShown = false;
     let isCurrentlyDismissed = false; // Local state for this session
@@ -1378,7 +1416,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           });
         },
-        { threshold: 0.05 }
+        { threshold: 0.05 },
       );
       footerObserver.observe(footer);
     }
@@ -1443,7 +1481,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const grapheneCloseBtn = grapheneCtaBar.querySelector(
-      "[data-graphene-cta-close]"
+      "[data-graphene-cta-close]",
     );
     grapheneCloseBtn?.addEventListener("click", () => {
       hideGrapheneBar();
@@ -1478,7 +1516,7 @@ document.addEventListener("DOMContentLoaded", () => {
             scheduleBottomCtaOffset();
           });
         },
-        { threshold: 0.1 }
+        { threshold: 0.1 },
       ); // Trigger when 10% of footer is visible
 
       footerObserver.observe(footer);
@@ -1498,7 +1536,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     fadeSections.forEach((section) => observer.observe(section));
@@ -1538,7 +1576,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     if (typeof grecaptcha === "undefined") {
       recaptchaError(
-        "RECAPTCHA FRONTEND ERROR: grecaptcha not loaded - script may be blocked or site key invalid"
+        "RECAPTCHA FRONTEND ERROR: grecaptcha not loaded - script may be blocked or site key invalid",
       );
       return "";
     }
@@ -1547,7 +1585,7 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         const readyTimeout = window.setTimeout(() => {
           recaptchaError(
-            "RECAPTCHA FRONTEND ERROR: ready() timeout - site key may be invalid"
+            "RECAPTCHA FRONTEND ERROR: ready() timeout - site key may be invalid",
           );
           resolve("");
         }, 5000);
@@ -1562,7 +1600,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 recaptchaLog("Token generated (length:", token.length, ")");
               } else {
                 recaptchaError(
-                  "RECAPTCHA FRONTEND ERROR: Empty token returned"
+                  "RECAPTCHA FRONTEND ERROR: Empty token returned",
                 );
               }
               resolve(token || "");
@@ -1570,7 +1608,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch((error) => {
               recaptchaError(
                 "RECAPTCHA FRONTEND ERROR: Execute failed -",
-                error?.message || error
+                error?.message || error,
               );
               resolve("");
             });
@@ -1578,7 +1616,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (error) {
         recaptchaError(
           "RECAPTCHA FRONTEND ERROR: Initialization failed -",
-          error?.message || error
+          error?.message || error,
         );
         resolve("");
       }
@@ -1738,7 +1776,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setSubmittingState(
         submitButton,
         isSubmitting,
-        i18n.t("contact.form.loading", "Sender...")
+        i18n.t("contact.form.loading", "Sender..."),
       );
     };
 
@@ -1768,7 +1806,7 @@ document.addEventListener("DOMContentLoaded", () => {
         recaptchaLog("Response status:", response.status, response.statusText);
         recaptchaLog(
           "Response headers:",
-          Object.fromEntries(response.headers.entries())
+          Object.fromEntries(response.headers.entries()),
         );
 
         const result = await parseJsonResponse(response);
@@ -1791,7 +1829,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           } else {
             recaptchaLog(
-              "Skipping grecaptcha.reset() – no clients registered (expected for v3)."
+              "Skipping grecaptcha.reset() – no clients registered (expected for v3).",
             );
           }
         } else {
@@ -1799,7 +1837,7 @@ document.addEventListener("DOMContentLoaded", () => {
             result.message ||
             i18n.t(
               "common.form_error_default",
-              "Der opstod en fejl. Prøv igen senere."
+              "Der opstod en fejl. Prøv igen senere.",
             );
           recaptchaError("Submission failed", message, result);
           displayMessage("error", message);
@@ -1810,8 +1848,8 @@ document.addEventListener("DOMContentLoaded", () => {
           "error",
           i18n.t(
             "common.form_error_network",
-            "Kunne ikke sende forespørgslen. Kontrollér din forbindelse og prøv igen."
-          )
+            "Kunne ikke sende forespørgslen. Kontrollér din forbindelse og prøv igen.",
+          ),
         );
       } finally {
         setContactSubmitting(false);
@@ -1820,7 +1858,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const calendlyPopupButtons = document.querySelectorAll(
-    '[data-calendly-launch="popup"]'
+    '[data-calendly-launch="popup"]',
   );
   if (calendlyPopupButtons.length) {
     calendlyPopupButtons.forEach((button) => {
@@ -1849,7 +1887,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const statusEl = document.getElementById("vulnerability-scan-status");
     const successCard = document.getElementById("vulnerability-scan-success");
     const resultContainer = document.getElementById(
-      "vulnerability-scan-result"
+      "vulnerability-scan-result",
     );
     const submitButton = scanForm.querySelector('button[type="submit"]');
     const endpoint =
@@ -1871,7 +1909,7 @@ document.addEventListener("DOMContentLoaded", () => {
         statusEl.classList.remove(
           "text-rose-400",
           "text-emerald-400",
-          "text-amber-300"
+          "text-amber-300",
         );
       }
       if (successCard) {
@@ -1894,7 +1932,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "hidden",
         "text-rose-400",
         "text-emerald-400",
-        "text-amber-300"
+        "text-amber-300",
       );
       if (tone === "error") {
         statusEl.classList.add("text-rose-400");
@@ -1937,7 +1975,7 @@ document.addEventListener("DOMContentLoaded", () => {
                               issue.title || ""
                             }</span>
                             <span class="text-xs px-2 py-1 rounded-full ${severityClass(
-                              issue.severity
+                              issue.severity,
                             )}">
                                 ${severityLabel(issue.severity || "low")}
                             </span>
@@ -1946,7 +1984,7 @@ document.addEventListener("DOMContentLoaded", () => {
                           issue.description || ""
                         }</p>
                     </li>
-                `
+                `,
             )
             .join("")
         : `<li class="text-sm text-gray-300">${
@@ -2017,7 +2055,7 @@ document.addEventListener("DOMContentLoaded", () => {
         domainInput?.dataset.invalidMessage ||
         i18n.t(
           "free_scan.validation.domain_invalid",
-          "Angiv et gyldigt domæne (fx example.com)."
+          "Angiv et gyldigt domæne (fx example.com).",
         );
 
       if (!domainValue) {
@@ -2037,7 +2075,7 @@ document.addEventListener("DOMContentLoaded", () => {
           emailInput?.dataset.invalidMessage ||
           i18n.t(
             "free_scan.validation.email_invalid",
-            "Angiv en gyldig e-mailadresse."
+            "Angiv en gyldig e-mailadresse.",
           );
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailPattern.test(emailValue)) {
@@ -2068,9 +2106,9 @@ document.addEventListener("DOMContentLoaded", () => {
         updateScanStatus(
           i18n.t(
             "free_scan.errors.validation",
-            "Kontrollér felterne og prøv igen."
+            "Kontrollér felterne og prøv igen.",
           ),
-          "error"
+          "error",
         );
         return;
       }
@@ -2100,7 +2138,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (response.ok && result.success) {
           updateScanStatus(
             i18n.t("free_scan.form.success_status", "Mock-rapport genereret."),
-            "success"
+            "success",
           );
           if (successCard) {
             successCard.classList.remove("hidden");
@@ -2111,7 +2149,7 @@ document.addEventListener("DOMContentLoaded", () => {
             result.message ||
             i18n.t(
               "free_scan.errors.generic",
-              "Vi kunne ikke gennemføre scanningen. Prøv igen."
+              "Vi kunne ikke gennemføre scanningen. Prøv igen.",
             );
           updateScanStatus(message, "error");
           if (result.field === "domain") {
@@ -2129,9 +2167,9 @@ document.addEventListener("DOMContentLoaded", () => {
         updateScanStatus(
           i18n.t(
             "free_scan.errors.network",
-            "Forbindelsen blev afbrudt. Prøv igen."
+            "Forbindelsen blev afbrudt. Prøv igen.",
           ),
-          "error"
+          "error",
         );
       } finally {
         setScanSubmitting(false);
@@ -2141,20 +2179,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const pricingCalculator = document.getElementById("pricing-calculator");
   const pricingCalculatorForm = document.getElementById(
-    "pricing-calculator-form"
+    "pricing-calculator-form",
   );
   if (pricingCalculator && pricingCalculatorForm) {
     const usersInput = pricingCalculatorForm.querySelector("#calc-users");
     const endpointsInput =
       pricingCalculatorForm.querySelector("#calc-endpoints");
     const addonInputs = Array.from(
-      pricingCalculatorForm.querySelectorAll('input[name="addons"]')
+      pricingCalculatorForm.querySelectorAll('input[name="addons"]'),
     );
     const submitButton = pricingCalculatorForm.querySelector(
-      'button[type="submit"]'
+      'button[type="submit"]',
     );
     const resultContainer = document.getElementById(
-      "pricing-calculator-result"
+      "pricing-calculator-result",
     );
     const statusEl = document.getElementById("pricing-calculator-status");
     const labels = pricingCalculator.dataset;
@@ -2240,7 +2278,7 @@ document.addEventListener("DOMContentLoaded", () => {
           usersInput?.dataset.requiredMessage ||
           i18n.t(
             "pricing.calculator.validation.users_min",
-            "Der skal være mindst 1 bruger."
+            "Der skal være mindst 1 bruger.",
           );
         showFieldError(usersInput, message);
         return false;
@@ -2249,8 +2287,8 @@ document.addEventListener("DOMContentLoaded", () => {
           usersInput,
           i18n.t(
             "pricing.calculator.validation.users_max",
-            "Kontakt os direkte for over 10.000 brugere."
-          )
+            "Kontakt os direkte for over 10.000 brugere.",
+          ),
         );
         return false;
       }
@@ -2266,7 +2304,7 @@ document.addEventListener("DOMContentLoaded", () => {
           endpointsInput?.dataset.requiredMessage ||
           i18n.t(
             "pricing.calculator.validation.endpoints_required",
-            "Angiv antal aktive endpoints."
+            "Angiv antal aktive endpoints.",
           );
         showFieldError(endpointsInput, message);
         return false;
@@ -2275,8 +2313,8 @@ document.addEventListener("DOMContentLoaded", () => {
           endpointsInput,
           i18n.t(
             "pricing.calculator.validation.endpoints_max",
-            "Kontakt os direkte for over 50.000 endpoints."
-          )
+            "Kontakt os direkte for over 50.000 endpoints.",
+          ),
         );
         return false;
       }
@@ -2293,7 +2331,7 @@ document.addEventListener("DOMContentLoaded", () => {
     usersInput?.addEventListener("input", () => clearFieldError(usersInput));
     usersInput?.addEventListener("blur", validateUsersField);
     endpointsInput?.addEventListener("input", () =>
-      clearFieldError(endpointsInput)
+      clearFieldError(endpointsInput),
     );
     endpointsInput?.addEventListener("blur", validateEndpointsField);
 
@@ -2316,9 +2354,9 @@ document.addEventListener("DOMContentLoaded", () => {
         showCalcStatus(
           i18n.t(
             "pricing.calculator.validation.error",
-            "Ret de markerede felter for at fortsætte."
+            "Ret de markerede felter for at fortsætte.",
           ),
-          "error"
+          "error",
         );
         return;
       }
@@ -2341,7 +2379,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const endpointTierPrice = 1200;
         const extraEndpointTiers = Math.max(
           0,
-          Math.ceil(endpoints / endpointTierSize) - 1
+          Math.ceil(endpoints / endpointTierSize) - 1,
         );
         total += extraEndpointTiers * endpointTierPrice;
 
@@ -2356,7 +2394,7 @@ document.addEventListener("DOMContentLoaded", () => {
           ? selectedAddonLabels.map((label) => `<li>• ${label}</li>`).join("")
           : `<li>${i18n.t(
               "pricing.calculator.no_addons",
-              "No add-ons selected"
+              "No add-ons selected",
             )}</li>`;
 
         const planLabel =
@@ -2384,7 +2422,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <div class="text-sm text-gray-300 sm:text-right">
                                     <p class="text-xs uppercase text-gray-500">${monthlyLabel}</p>
                                     <p class="text-3xl font-bold text-amber-400">${formatCurrency(
-                                      total
+                                      total,
                                     )}</p>
                                 </div>
                             </div>
@@ -2392,7 +2430,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <div>
                                     <p class="text-xs uppercase text-gray-500">${perUserLabel}</p>
                                     <p class="text-lg font-semibold text-white">${formatCurrency(
-                                      perUser
+                                      perUser,
                                     )}</p>
                                 </div>
                                 <div>
@@ -2423,7 +2461,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         showCalcStatus(
           i18n.t("pricing.calculator.status_ready", "Estimatet er klar."),
-          "success"
+          "success",
         );
       } finally {
         setCalculatorSubmitting(false);
@@ -2506,21 +2544,21 @@ document.addEventListener("DOMContentLoaded", () => {
     let html = text
       .replace(
         /### (.*$)/gim,
-        '<h3 class="text-lg font-bold mb-2 text-amber-400">$1</h3>'
+        '<h3 class="text-lg font-bold mb-2 text-amber-400">$1</h3>',
       )
       .replace(
         /## (.*$)/gim,
-        '<h2 class="text-xl font-bold mb-3 text-amber-400">$1</h2>'
+        '<h2 class="text-xl font-bold mb-3 text-amber-400">$1</h2>',
       )
       .replace(
         /# (.*$)/gim,
-        '<h1 class="text-2xl font-bold mb-4 text-amber-400">$1</h1>'
+        '<h1 class="text-2xl font-bold mb-4 text-amber-400">$1</h1>',
       )
       .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>')
       .replace(/\*(.*?)\*/g, '<em class="text-gray-200">$1</em>')
       .replace(
         /`(.*?)`/g,
-        '<code class="bg-gray-800 px-1 py-0.5 rounded text-amber-300 text-sm">$1</code>'
+        '<code class="bg-gray-800 px-1 py-0.5 rounded text-amber-300 text-sm">$1</code>',
       )
       .replace(/^\* (.*$)/gim, '<li class="ml-5 mb-2 text-gray-300">$1</li>')
       .replace(/^- (.*$)/gim, '<li class="ml-5 mb-2 text-gray-300">$1</li>')
@@ -2528,7 +2566,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     html = html.replace(
       /(<li[^>]*>.*?<\/li>(?:\s*<br>\s*<li[^>]*>.*?<\/li>)*)/gs,
-      '<ul class="mb-4">$1</ul>'
+      '<ul class="mb-4">$1</ul>',
     );
     html = html.replace(/<br><ul>/g, "<ul>").replace(/<\/ul><br>/g, "</ul>");
     return html;
@@ -2538,7 +2576,7 @@ document.addEventListener("DOMContentLoaded", () => {
     prompt,
     resultElement,
     loaderElement,
-    requestType = "generic"
+    requestType = "generic",
   ) => {
     if (!geminiReady) {
       if (loaderElement) loaderElement.classList.add("hidden");
@@ -2567,7 +2605,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (resultElement) {
         resultElement.innerHTML = `<p style="color: var(--text-gold);">${i18n.t(
           "common.ai_rate_limit",
-          "For mange foresp\u00f8rgsler. Vent et \u00f8jeblik og pr\u00f8v igen."
+          "For mange foresp\u00f8rgsler. Vent et \u00f8jeblik og pr\u00f8v igen.",
         )}</p>`;
         resultElement.classList.remove("hidden");
       }
@@ -2580,8 +2618,8 @@ document.addEventListener("DOMContentLoaded", () => {
         resultElement,
         i18n.t(
           "common.ai_loading",
-          "AI-assistenten analyserer din foresp\u00f8rgsel..."
-        )
+          "AI-assistenten analyserer din foresp\u00f8rgsel...",
+        ),
       );
     }
 
@@ -2598,7 +2636,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const controller = new AbortController();
     const timeoutId = window.setTimeout(
       () => controller.abort(),
-      AI_CONFIG.REQUEST_TIMEOUT || 15000
+      AI_CONFIG.REQUEST_TIMEOUT || 15000,
     );
 
     try {
@@ -2626,7 +2664,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       let text = i18n.t(
         "common.ai_no_response",
-        "Kunne ikke generere et svar. Pr\u00f8v venligst igen."
+        "Kunne ikke generere et svar. Pr\u00f8v venligst igen.",
       );
       if (result?.candidates?.[0]?.content?.parts?.[0]?.text) {
         text = result.candidates[0].content.parts[0].text;
@@ -2644,11 +2682,11 @@ document.addEventListener("DOMContentLoaded", () => {
         error.name === "AbortError"
           ? i18n.t(
               "common.ai_timeout",
-              "Foresp\u00f8rgslen tog for lang tid \u2013 pr\u00f8v igen."
+              "Foresp\u00f8rgslen tog for lang tid \u2013 pr\u00f8v igen.",
             )
           : i18n.t(
               "common.ai_error",
-              "Der opstod en fejl under kommunikation med AI-assistenten."
+              "Der opstod en fejl under kommunikation med AI-assistenten.",
             );
       if (resultElement) {
         resultElement.innerHTML = `<p class="text-red-400">${fallbackMessage}</p>`;
@@ -2660,7 +2698,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const quickAssessmentOutputEl = document.getElementById(
-    "quick-assessment-output"
+    "quick-assessment-output",
   );
   const quickAssessmentBtn = document.getElementById("quick-assessment-btn");
   if (quickAssessmentBtn) {
@@ -2670,7 +2708,7 @@ document.addEventListener("DOMContentLoaded", () => {
         quickAssessmentInput?.classList.add("border-red-500");
         setTimeout(
           () => quickAssessmentInput?.classList.remove("border-red-500"),
-          2500
+          2500,
         );
         return;
       }
@@ -2680,8 +2718,8 @@ document.addEventListener("DOMContentLoaded", () => {
           quickAssessmentOutputEl,
           i18n.t(
             "common.ai_analyzing_security",
-            "Analyserer din sikkerhedssituation..."
-          )
+            "Analyserer din sikkerhedssituation...",
+          ),
         );
       }
 
@@ -2690,7 +2728,7 @@ document.addEventListener("DOMContentLoaded", () => {
         prompt,
         quickAssessmentOutputEl,
         null,
-        "quick-assessment"
+        "quick-assessment",
       );
     });
   }
@@ -2732,7 +2770,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!container) return;
 
       const focusableElements = container.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
       );
 
       if (focusableElements.length === 0) return;
@@ -2780,7 +2818,7 @@ document.addEventListener("DOMContentLoaded", () => {
           prompt,
           modalResult,
           modalLoader,
-          `gemini-modal-${moduleName || "generic"}`
+          `gemini-modal-${moduleName || "generic"}`,
         );
       });
     });
@@ -2803,13 +2841,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const recommendationBtn = document.getElementById("get-recommendation-btn");
   if (recommendationBtn) {
     const recommendationContainer = document.getElementById(
-      "recommendation-result-container"
+      "recommendation-result-container",
     );
     const recommendationLoader = document.getElementById(
-      "recommendation-loader"
+      "recommendation-loader",
     );
     const recommendationResult = document.getElementById(
-      "recommendation-result"
+      "recommendation-result",
     );
     recommendationBtn.addEventListener("click", async () => {
       const industrySelect = document.getElementById("industry-select");
@@ -2835,7 +2873,7 @@ document.addEventListener("DOMContentLoaded", () => {
         prompt,
         recommendationResult,
         recommendationLoader,
-        "pricing-advice"
+        "pricing-advice",
       );
     });
   }
@@ -2922,8 +2960,8 @@ document.addEventListener("DOMContentLoaded", () => {
     markAssistantUnavailable(
       i18n.t(
         "alphabot.offline_tooltip",
-        "Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen."
-      )
+        "Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen.",
+      ),
     );
   }
 
@@ -2962,12 +3000,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const getAlphaFocusableElements = () => {
         return Array.from(
-          alphaPanel.querySelectorAll(alphaFocusableSelector)
+          alphaPanel.querySelectorAll(alphaFocusableSelector),
         ).filter(
           (element) =>
             element instanceof HTMLElement &&
             !element.hasAttribute("disabled") &&
-            element.getAttribute("aria-hidden") !== "true"
+            element.getAttribute("aria-hidden") !== "true",
         );
       };
 
@@ -2991,7 +3029,7 @@ document.addEventListener("DOMContentLoaded", () => {
           ? conversation[1]?.parts?.[0]?.text
           : i18n.t(
               "alphabot.offline_tooltip",
-              "Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen."
+              "Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen.",
             );
         if (introMessage) {
           appendMessage("bot", String(introMessage).trim());
@@ -3060,7 +3098,7 @@ document.addEventListener("DOMContentLoaded", () => {
           document.removeEventListener(
             "focusin",
             alphaFocusContainListener,
-            true
+            true,
           );
           alphaFocusContainListener = null;
         }
@@ -3086,7 +3124,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const controller = new AbortController();
         const timeoutId = window.setTimeout(
           () => controller.abort(),
-          AI_CONFIG.REQUEST_TIMEOUT || 15000
+          AI_CONFIG.REQUEST_TIMEOUT || 15000,
         );
         try {
           const response = await fetch(apiUrl, {
@@ -3099,7 +3137,7 @@ document.addEventListener("DOMContentLoaded", () => {
           if (!response.ok) {
             const errorText = await response.text();
             throw new Error(
-              `Blackbox EYE Assistant API error: ${response.status} - ${errorText}`
+              `Blackbox EYE Assistant API error: ${response.status} - ${errorText}`,
             );
           }
           const result = await response.json();
@@ -3107,7 +3145,7 @@ document.addEventListener("DOMContentLoaded", () => {
             result?.candidates?.[0]?.content?.parts?.[0]?.text ||
             i18n.t(
               "common.alphabot_error",
-              "Undskyld, jeg kunne ikke generere et svar."
+              "Undskyld, jeg kunne ikke generere et svar.",
             );
           appendMessage("bot", reply.trim());
           conversation.push({ role: "model", parts: [{ text: reply.trim() }] });
@@ -3116,19 +3154,19 @@ document.addEventListener("DOMContentLoaded", () => {
             error.name === "AbortError"
               ? i18n.t(
                   "common.ai_timeout",
-                  "Foresp\u00f8rgslen tog for lang tid \u2013 pr\u00f8v igen."
+                  "Foresp\u00f8rgslen tog for lang tid \u2013 pr\u00f8v igen.",
                 )
               : i18n.t(
                   "common.alphabot_connection_error",
-                  "Der opstod en fejl under forbindelsen til Blackbox EYE Assistant. Pr\u00f8v igen senere."
+                  "Der opstod en fejl under forbindelsen til Blackbox EYE Assistant. Pr\u00f8v igen senere.",
                 );
           appendMessage("bot", fallback);
           if (error && error.name !== "AbortError") {
             markAssistantUnavailable(
               i18n.t(
                 "alphabot.offline_tooltip",
-                "Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen."
-              )
+                "Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen.",
+              ),
             );
           }
         } finally {
@@ -3143,8 +3181,8 @@ document.addEventListener("DOMContentLoaded", () => {
             "bot",
             i18n.t(
               "alphabot.offline_tooltip",
-              "Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen."
-            )
+              "Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen.",
+            ),
           );
           return;
         }
@@ -3288,7 +3326,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     assistantFooterObserver.observe(siteFooter);
@@ -3311,13 +3349,13 @@ document.addEventListener("DOMContentLoaded", () => {
       // Update toggle button state
       grapheneToggleBtn.setAttribute(
         "aria-pressed",
-        isStrong ? "true" : "false"
+        isStrong ? "true" : "false",
       );
       grapheneToggleBtn.dataset.currentMode = mode;
 
       // Update toggle text if present
       const toggleText = grapheneToggleBtn.querySelector(
-        ".graphene-toggle__text"
+        ".graphene-toggle__text",
       );
       if (toggleText) {
         toggleText.textContent = isStrong
@@ -3430,4 +3468,3 @@ document.addEventListener("DOMContentLoaded", () => {
     if (document.visibilityState === "visible") run("visibility");
   });
 })();
-

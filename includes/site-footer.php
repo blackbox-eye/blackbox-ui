@@ -242,11 +242,10 @@ global $_BBX_DISABLE_CTA, $_BBX_DISABLE_CHAT;
             <?php endif; ?>
         </div>
     <?php endif; ?>
-    <?php $asset_version = $GLOBALS['css_version'] ?? $css_version ?? '1.6.22'; ?>
-    <script src="assets/js/router-guard.js" defer></script>
-    <script src="assets/js/qa-mode.js" defer></script>
-    <script src="assets/js/site.min.js?v=<?= htmlspecialchars($asset_version) ?>" defer></script>
-    <script src="script.js" defer></script>
+    <script src="/assets/js/router-guard.js?v=<?= htmlspecialchars(bbx_asset_version('js/router-guard.js')) ?>" defer></script>
+    <script src="/assets/js/qa-mode.js?v=<?= htmlspecialchars(bbx_asset_version('js/qa-mode.js')) ?>" defer></script>
+    <script src="/assets/js/site.min.js?v=<?= htmlspecialchars(bbx_asset_version('js/site.min.js')) ?>" defer></script>
+    <script src="/script.js?v=<?= htmlspecialchars(bbx_asset_version('../script.js')) ?>" defer></script>
     <?php if (isset($current_page) && $current_page === 'home'): ?>
         <!-- Sprint 9: Defer heavy 3D hero to idle time for better INP -->
         <script>
@@ -254,7 +253,7 @@ global $_BBX_DISABLE_CTA, $_BBX_DISABLE_CHAT;
             function loadGrapheneHero() {
                 var script = document.createElement('script');
                 script.type = 'module';
-                script.src = 'assets/js/graphene-hero.js';
+                script.src = '/assets/js/graphene-hero.js?v=<?= htmlspecialchars(bbx_asset_version('js/graphene-hero.js')) ?>';
                 document.body.appendChild(script);
             }
             // Use requestIdleCallback if available, otherwise setTimeout

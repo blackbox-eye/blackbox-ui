@@ -614,7 +614,7 @@
       "title": "AI Security Advisor",
       "industry_label": "Industry",
       "employees_label": "Number of employees",
-      "button": "✨ Get AI Recommendation",
+      "button": "Get AI Recommendation",
       "analyzing": "Analyzing your profile...",
       "industries": {
         "manufacturing": "Manufacturing",

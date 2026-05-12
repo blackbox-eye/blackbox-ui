@@ -876,6 +876,21 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   };
 
+  const getFallbackThemeText = (theme) => {
+    const lang = (
+      document.documentElement.getAttribute("lang") ||
+      languageResolver.getLang() ||
+      "en"
+    ).toLowerCase();
+    const isDanish = lang === "da";
+
+    if (theme === "dark") {
+      return isDanish ? "M\u00f8rkt" : "Dark";
+    }
+
+    return isDanish ? "Lyst" : "Light";
+  };
+
   const syncThemeControls = (theme) => {
     const isLight = theme === "light";
     themeToggleButtons.forEach((button) => {
@@ -888,11 +903,14 @@ document.addEventListener("DOMContentLoaded", () => {
         button.setAttribute("aria-label", label);
       }
 
+      const textValue = isLight
+        ? button.dataset.themeTextDark || getFallbackThemeText("dark")
+        : button.dataset.themeTextLight || getFallbackThemeText("light");
+      button.dataset.themeTextCurrent = textValue;
+
       const textEl = button.querySelector(".theme-toggle__text");
       if (textEl) {
-        textEl.textContent = isLight
-          ? button.dataset.themeTextDark || textEl.textContent
-          : button.dataset.themeTextLight || textEl.textContent;
+        textEl.textContent = textValue;
       }
     });
   };
@@ -937,13 +955,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Language toggles (desktop + mobile)
   const languageSwitches = document.querySelectorAll("[data-lang-target]");
+  const syncLanguageControls = (lang = languageResolver.getLang()) => {
+    languageSwitches.forEach((switchEl) => {
+      const isActive = switchEl.getAttribute("data-lang-target") === lang;
+      switchEl.classList.toggle("is-active", isActive);
+      if (isActive) {
+        switchEl.setAttribute("aria-current", "true");
+      } else {
+        switchEl.removeAttribute("aria-current");
+      }
+    });
+  };
+
+  const buildLanguageUrl = (switchEl, lang) => {
+    const nextUrl = new URL(window.location.href);
+    nextUrl.searchParams.set("lang", lang);
+    return nextUrl.toString();
+  };
+
+  syncLanguageControls();
+
   const handleLanguageToggle = (event) => {
     event.preventDefault();
     const targetLang = event.currentTarget.getAttribute("data-lang-target");
     if (!targetLang) {
       return;
     }
-    languageResolver.setLang(targetLang, { reload: true });
+    syncLanguageControls(targetLang);
+    languageResolver.persistLang(targetLang);
+    window.location.assign(buildLanguageUrl(event.currentTarget, targetLang));
   };
   languageSwitches.forEach((switchEl) => {
     switchEl.addEventListener("click", handleLanguageToggle);
@@ -2986,9 +3026,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const sendText = document.getElementById("send-text");
     const sendLoader = document.getElementById("send-loader");
 
-    const assistantReady = Boolean(hasAIConfig && geminiReady);
+    let assistantAvailable = Boolean(hasAIConfig && geminiReady);
 
     if (messagesDiv && inputEl && sendBtn && sendText && sendLoader) {
+      const hintEl = document.getElementById("alphabot-hint");
+      const panelSubtitle = alphaPanel.querySelector(
+        ".alphabot-panel-subtitle",
+      );
+      const offlineMessage = i18n.t(
+        "alphabot.offline_tooltip",
+        "Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen.",
+      );
+      const defaultPlaceholder = inputEl.getAttribute("placeholder") || "";
+      const defaultHint = hintEl?.textContent?.trim() || "";
+      const defaultSubtitle = panelSubtitle?.textContent?.trim() || "";
       const alphaLabel = alphaToggleBtn.querySelector(".alphabot-label");
       const conversation = [
         {
@@ -3069,13 +3120,53 @@ document.addEventListener("DOMContentLoaded", () => {
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
       };
 
+      const syncAssistantAvailability = () => {
+        const isOffline = !assistantAvailable;
+
+        alphaContainer.dataset.assistantState = isOffline ? "offline" : "ready";
+        alphaPanel.dataset.assistantState = isOffline ? "offline" : "ready";
+        alphaContainer.classList.toggle("alphabot-offline", isOffline);
+
+        if (alphaToggleBtn) {
+          if (isOffline) {
+            alphaToggleBtn.setAttribute("title", offlineMessage);
+          } else {
+            alphaToggleBtn.removeAttribute("title");
+          }
+        }
+
+        if (hintEl) {
+          hintEl.textContent = isOffline ? offlineMessage : defaultHint;
+          hintEl.dataset.assistantState = isOffline ? "offline" : "ready";
+        }
+
+        if (panelSubtitle) {
+          panelSubtitle.textContent = isOffline ? offlineMessage : defaultSubtitle;
+        }
+
+        inputEl.setAttribute("placeholder", isOffline ? "" : defaultPlaceholder);
+        inputEl.setAttribute("aria-disabled", isOffline ? "true" : "false");
+
+        if (isOffline) {
+          inputEl.value = "";
+          inputEl.setAttribute("tabindex", "-1");
+          sendBtn.setAttribute("title", offlineMessage);
+        } else {
+          inputEl.removeAttribute("tabindex");
+          sendBtn.removeAttribute("title");
+        }
+      };
+
+      const syncComposerState = () => {
+        const shouldDisableComposer = !assistantAvailable || isProcessing;
+        inputEl.disabled = shouldDisableComposer;
+        sendBtn.disabled = shouldDisableComposer || !inputEl.value.trim();
+      };
+
       if (!messagesDiv.dataset.initialized) {
-        const introMessage = assistantReady
+        const introMessage = assistantAvailable
           ? conversation[1]?.parts?.[0]?.text
-          : i18n.t(
-              "alphabot.offline_tooltip",
-              "Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen.",
-            );
+          : offlineMessage;
         if (introMessage) {
           appendMessage("bot", String(introMessage).trim());
         }
@@ -3151,10 +3242,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const setProcessing = (state) => {
         isProcessing = state;
-        if (sendBtn && inputEl) {
-          inputEl.disabled = state;
-          sendBtn.disabled = state || !inputEl.value.trim();
-        }
+        syncComposerState();
         if (state) {
           sendText.classList.add("hidden");
           sendLoader.classList.remove("hidden");
@@ -3207,12 +3295,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
           appendMessage("bot", fallback);
           if (error && error.name !== "AbortError") {
+            assistantAvailable = false;
             markAssistantUnavailable(
-              i18n.t(
-                "alphabot.offline_tooltip",
-                "Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen.",
-              ),
+              offlineMessage,
             );
+            syncAssistantAvailability();
+            syncComposerState();
           }
         } finally {
           setProcessing(false);
@@ -3221,14 +3309,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const sendMessage = () => {
         if (isProcessing) return;
-        if (!assistantReady) {
-          appendMessage(
-            "bot",
-            i18n.t(
-              "alphabot.offline_tooltip",
-              "Blackbox EYE Assistant er offline. Kontakt support for at aktivere integrationen.",
-            ),
-          );
+        if (!assistantAvailable) {
+          appendMessage("bot", offlineMessage);
           return;
         }
         const value = inputEl.value.trim();
@@ -3258,7 +3340,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // setAlphaInert(true); // REMOVED
         alphaIsOpen = true;
         enableAlphaFocusTrap();
-        if (assistantReady) {
+        if (assistantAvailable) {
           inputEl.focus();
         } else {
           alphaCloseBtn?.focus();
@@ -3359,11 +3441,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
 
-      // Offline mode: keep UI usable, disable sending.
-      if (!assistantReady) {
-        inputEl.disabled = true;
-        sendBtn.disabled = true;
-      }
+      syncAssistantAvailability();
+      syncComposerState();
 
       sendBtn.addEventListener("click", sendMessage);
       inputEl.addEventListener("keydown", (event) => {
@@ -3375,7 +3454,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       inputEl.addEventListener("input", () => {
         if (!isProcessing) {
-          sendBtn.disabled = !inputEl.value.trim();
+          syncComposerState();
         }
       });
     }

@@ -6,7 +6,7 @@ This document captures the locked outcomes from completed read-only audit phases
 
 - Mode: READ-ONLY DOCUMENTATION ONLY
 - Scope: repo/file architecture, PHP route/security surface, CSS cascade/responsive architecture, JavaScript runtime/build pipeline, tests/CI/deploy
-- Constraints: no application code changes, no branch creation, no commits, no pushes, no PR creation, no merges, no tests, no formatters, no auto-fixers, no dependency or generated-asset changes
+- Constraints: for completed audit phases A-E and this checkpoint documentation task only, no application code changes, no branch creation, no commits, no pushes, no PR creation, no merges, no tests, no formatters, no auto-fixers, and no dependency or generated-asset changes were allowed; future approved remediation work may proceed through normal scoped branches, commits, PRs, and merges
 - Intent: preserve a clear checkpoint so Phase F starts from a stable, explicitly documented risk baseline
 
 ## 2. Repository baseline
@@ -166,7 +166,9 @@ The following work should be executed as separate, scoped PRs rather than mixed 
 7. refactor(js): define runtime ownership and retire root `script.js` if applicable
 8. docs: organize audit reports, route registry, and repo governance
 
-## 13. Stop-list
+## 13. Stop-list for completed read-only audit/checkpoint work
+
+This stop-list applied to the completed read-only audit/checkpoint task. Future scoped remediation PRs are allowed when explicitly approved, and the purpose of this list is to prevent unrelated work from being mixed into the same PR.
 
 - no broad refactors
 - no UI redesign

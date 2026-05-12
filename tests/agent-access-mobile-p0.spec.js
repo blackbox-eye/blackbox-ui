@@ -30,13 +30,16 @@ async function getCenterHitMatch(locator) {
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
     const elementAtPoint = document.elementFromPoint(centerX, centerY);
+    const hitClass = elementAtPoint
+      ? elementAtPoint.getAttribute("class") || String(elementAtPoint.className || "")
+      : null;
 
     return {
       matches:
         !!elementAtPoint &&
         (el === elementAtPoint || el.contains(elementAtPoint)),
       hitTag: elementAtPoint ? elementAtPoint.tagName : null,
-      hitClass: elementAtPoint ? elementAtPoint.className : null,
+      hitClass,
     };
   });
 }

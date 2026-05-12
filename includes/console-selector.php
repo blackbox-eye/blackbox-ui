@@ -547,15 +547,6 @@ $intel24_requires_approval = !$intel24_has_sso;
         window.scrollBy({ top: scrollDelta, behavior: 'auto' });
       }
     }
-
-    function updateDesktopSlideoutPosition(panel) {
-      panel.style.removeProperty('--console-slideout-max-height');
-      panel.classList.remove('console-card__slideout--above', 'console-card__slideout--below');
-
-      if (window.matchMedia('(max-width: 768px)').matches) {
-        return;
-      }
-    }
     
     // ===== SLIDE-OUT PANELS =====
     function closeAllSlideouts() {
@@ -582,7 +573,6 @@ $intel24_requires_approval = !$intel24_has_sso;
       setSlideoutState(true);
       activeSlideout = panel;
       previousFocus = document.activeElement;
-      updateDesktopSlideoutPosition(panel);
       panel.scrollTop = 0;
       const slideoutBody = panel.querySelector('.console-card__slideout-body');
       if (slideoutBody) {
@@ -597,7 +587,6 @@ $intel24_requires_approval = !$intel24_has_sso;
 
     window.addEventListener('resize', function() {
       if (activeSlideout) {
-        updateDesktopSlideoutPosition(activeSlideout);
         ensureDesktopSlideoutClearance(activeSlideout);
       }
     });

@@ -248,6 +248,10 @@ test.describe("Public mobile responsive UX stability", () => {
         .waitForLoadState("networkidle", { timeout: 5000 })
         .catch(() => {});
 
+      await expect
+        .poll(async () => page.evaluate(() => window.location.pathname))
+        .toBe("/about.php");
+
       await openDrawer(page);
       await expect(
         page.locator("#mobile-menu a[data-lang-target='da']"),

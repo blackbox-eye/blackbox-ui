@@ -968,10 +968,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const buildLanguageUrl = (switchEl, lang) => {
-    const nextUrl = new URL(
-      switchEl.getAttribute("href") || window.location.pathname,
-      window.location.origin,
-    );
+    const nextUrl = new URL(window.location.href);
     nextUrl.searchParams.set("lang", lang);
     return nextUrl.toString();
   };

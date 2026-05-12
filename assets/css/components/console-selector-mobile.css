@@ -20,7 +20,6 @@
    ================================================ */
 
 @media (max-width: 768px) {
-  
   /* ===== QUICK SWITCH - COMPACT MOBILE (Normal Flow) ===== */
   .console-selector__quick {
     /* Use relative positioning to keep in normal document flow */
@@ -42,7 +41,7 @@
     width: 100%;
     box-sizing: border-box;
   }
-  
+
   .console-selector__quick-label {
     font-size: 0.7rem;
     font-weight: 600;
@@ -51,7 +50,7 @@
     letter-spacing: 0.06em;
     white-space: nowrap;
   }
-  
+
   .console-selector__quick-select {
     flex: 1;
     max-width: 160px;
@@ -69,13 +68,13 @@
     background-position: right 0.625rem center;
     cursor: pointer;
   }
-  
+
   .console-selector__quick-select:focus {
     outline: none;
     border-color: rgba(46, 204, 113, 0.5);
     box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.15);
   }
-  
+
   /* ===== GRID - SINGLE COLUMN STACKED WITH 24px GAP ===== */
   .console-selector__grid {
     display: flex;
@@ -83,51 +82,51 @@
     gap: 1.5rem; /* 24px */
     padding: 0;
   }
-  
+
   /* ===== CONSOLE CARD - MOBILE NATIVE FEEL ===== */
   .console-card {
     /* Full bleed with proper padding */
     margin: 0;
     padding: 1.25rem 1rem;
     border-radius: 1rem;
-    
+
     /* Remove hover transform on mobile */
     transform: none !important;
-    
+
     /* Native card shadow */
-    box-shadow: 
+    box-shadow:
       0 1px 3px rgba(0, 0, 0, 0.2),
       0 4px 12px rgba(0, 0, 0, 0.15);
   }
-  
+
   .console-card:hover {
     transform: none !important;
-    box-shadow: 
+    box-shadow:
       0 1px 3px rgba(0, 0, 0, 0.2),
       0 4px 12px rgba(0, 0, 0, 0.15);
   }
-  
+
   /* Pinned card gets visual priority */
   .console-card--pinned {
     border-width: 2px;
     order: -1; /* Float to top */
   }
-  
+
   .console-card--pinned.console-card--ccs {
     border-color: rgba(46, 204, 113, 0.4);
     background: rgba(46, 204, 113, 0.03);
   }
-  
+
   .console-card--pinned.console-card--gdi {
     border-color: rgba(40, 155, 222, 0.4);
     background: rgba(40, 155, 222, 0.03);
   }
-  
+
   .console-card--pinned.console-card--intel24 {
     border-color: rgba(201, 162, 39, 0.4);
     background: rgba(201, 162, 39, 0.03);
   }
-  
+
   /* Pinned indicator visible on mobile */
   .console-card--pinned .console-card__pinned {
     display: inline-flex !important;
@@ -138,7 +137,7 @@
     color: var(--color-primary, #c9a227);
     margin-left: 0.5rem;
   }
-  
+
   /* ===== CARD HEADER - MOBILE HIERARCHY ===== */
   /* Order: Status → Title (via flex reorder) */
   .console-card__header {
@@ -148,16 +147,16 @@
     gap: 0.5rem 0.75rem;
     margin-bottom: 0.5rem;
   }
-  
-  /* Badge - slightly larger on mobile */
+
   .console-card__badge {
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 0.5rem;
+    box-sizing: border-box;
     font-size: 0.65rem;
     order: 1;
   }
-  
+
   /* Status chip - touch friendly, prominent placement */
   .console-card__status {
     min-height: 28px;
@@ -165,12 +164,12 @@
     font-size: 0.65rem;
     order: 2;
   }
-  
+
   /* Pinned indicator after status */
   .console-card__pinned {
     order: 3;
   }
-  
+
   /* Action buttons - 44px touch target (Apple HIG) */
   .console-card__fav-btn,
   .console-card__info-btn {
@@ -183,27 +182,27 @@
     justify-content: center;
     order: 10;
   }
-  
+
   .console-card__info-btn {
     width: 44px;
     height: 44px;
     margin-left: 0.25rem;
   }
-  
+
   /* Favorite star icon - dempet accent */
   .console-card__fav-btn.is-favorite {
     color: #c9a227; /* Blackbox gold - dempet */
   }
-  
+
   .console-card__fav-btn.is-favorite svg {
     fill: currentColor;
   }
-  
+
   /* ===== CARD BODY - MOBILE HIERARCHY ===== */
   .console-card__body {
     margin-bottom: 0.75rem;
   }
-  
+
   /* Title - prominent */
   .console-card__title {
     font-size: 1.05rem;
@@ -211,7 +210,7 @@
     margin-bottom: 0.25rem;
     line-height: 1.3;
   }
-  
+
   /* Tagline - single line, truncated */
   .console-card__tagline {
     font-size: 0.8rem;
@@ -221,7 +220,7 @@
     text-overflow: ellipsis;
     max-width: 100%;
   }
-  
+
   /* Requirement badge - touch friendly */
   .console-card__req-badge {
     min-height: 32px;
@@ -229,17 +228,17 @@
     font-size: 0.65rem;
     margin-bottom: 0.75rem;
   }
-  
+
   .console-card__req-badge svg {
     width: 14px;
     height: 14px;
   }
-  
+
   /* Divider - subtle */
   .console-card__divider {
     margin: 0.625rem 0;
   }
-  
+
   /* ===== CHIPS - HORIZONTAL SCROLL ON MOBILE ===== */
   .console-card__chips {
     display: flex;
@@ -253,11 +252,11 @@
     padding-left: 0.25rem;
     padding-right: 0.25rem;
   }
-  
+
   .console-card__chips::-webkit-scrollbar {
     display: none;
   }
-  
+
   /* Chip - 40px touch target */
   .console-card__chip {
     flex-shrink: 0;
@@ -267,12 +266,12 @@
     display: inline-flex;
     align-items: center;
   }
-  
+
   /* ===== CTA - 48px TOUCH TARGET (NON-NEGOTIABLE) ===== */
   .console-card__actions {
     margin-top: 0.875rem;
   }
-  
+
   .console-card__cta {
     min-height: 48px;
     padding: 0.875rem 1.25rem;
@@ -280,13 +279,13 @@
     font-weight: 600;
     border-radius: 0.625rem;
   }
-  
+
   .console-card__cta-note {
     font-size: 0.7rem;
     margin-top: 0.5rem;
     text-align: center;
   }
-  
+
   /* Request access link - touch friendly */
   .console-card__request-link {
     min-height: 40px;
@@ -296,72 +295,115 @@
     width: 100%;
     justify-content: center;
   }
-  
+
   /* Disabled CTA state */
   .console-card__cta.is-disabled {
     opacity: 0.6;
     pointer-events: none;
   }
-  
+
   /* ===== SLIDEOUT - MOBILE BOTTOM SHEET ===== */
   .console-card__slideout {
+    display: flex;
+    flex-direction: column;
     position: fixed;
     top: auto;
     bottom: 0;
     left: 0;
     right: 0;
     width: 100%;
-    max-height: 70vh;
+    max-width: 100vw;
+    max-height: min(70vh, calc(100dvh - 1rem));
+    background: #0a0e14;
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 1.25rem 1.25rem 0 0;
     transform: translateY(100%);
-    z-index: 1000;
-    overflow-y: auto;
+    z-index: 1001;
+    overflow: hidden;
+    overflow-x: hidden;
+    isolation: isolate;
+    pointer-events: none;
+    opacity: 1;
     box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+    transition:
+      transform 0.25s ease,
+      visibility 0s linear 0.25s;
   }
-  
+
   .console-card__slideout.is-open {
     transform: translateY(0);
+    pointer-events: auto;
+    transition: transform 0.25s ease;
   }
-  
+
   /* Slideout handle for mobile */
   .console-card__slideout::before {
-    content: '';
-    position: sticky;
-    top: 0;
+    content: "";
+    position: relative;
     display: block;
     width: 36px;
     height: 4px;
     margin: 0.75rem auto 0;
     background: rgba(255, 255, 255, 0.3);
     border-radius: 2px;
+    z-index: 2;
   }
-  
+
   .console-card__slideout-header {
-    position: sticky;
-    top: 0;
-    padding: 1rem 1.25rem;
-    background: inherit;
+    position: relative;
+    flex: 0 0 auto;
+    min-width: 0;
+    padding: 1rem max(1rem, env(safe-area-inset-right, 0px)) 1rem
+      max(1rem, env(safe-area-inset-left, 0px));
+    background: #0a0e14;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 2;
+    box-sizing: border-box;
   }
-  
+
   .console-card__slideout-header h4 {
     font-size: 1rem;
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
-  
+
   .console-card__slideout-close {
     min-width: 40px;
     min-height: 40px;
     padding: 0.5rem;
+    position: relative;
+    z-index: 3;
   }
-  
+
   .console-card__slideout-body {
-    padding: 1.25rem;
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 84px;
+    min-width: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding: 1.25rem max(1rem, env(safe-area-inset-right, 0px))
+      calc(1.25rem + env(safe-area-inset-bottom, 0px))
+      max(1rem, env(safe-area-inset-left, 0px));
+    padding-bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
+    background: #0a0e14;
+    z-index: 1;
+    box-sizing: border-box;
   }
-  
+
+  .console-card__slideout-body > * {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
   /* ===== OPS BAR - COMPACT MOBILE BADGES ===== */
   .console-card__opsbar {
     display: flex;
     flex-wrap: wrap;
+    min-width: 0;
     gap: 0.375rem;
     margin-bottom: 1rem;
     padding: 0.75rem;
@@ -372,7 +414,7 @@
     top: 0;
     z-index: 5;
   }
-  
+
   .console-card__opschip {
     min-height: 28px;
     padding: 0.25rem 0.5rem;
@@ -380,99 +422,118 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.03em;
-    border-radius: 9999px;
-    display: inline-flex;
-    align-items: center;
+
     gap: 0.25rem;
     white-space: nowrap;
   }
-  
+
   .console-card__opschip--up {
     background: rgba(46, 204, 113, 0.15);
     color: #2ecc71;
   }
-  
   .console-card__opschip--audit {
     background: rgba(201, 162, 39, 0.15);
     color: #c9a227;
   }
-  
+
   .console-card__opschip--mfa {
     background: rgba(40, 155, 222, 0.15);
     color: #289bde;
   }
-  
+
   /* Hide sparkline charts on mobile */
   .console-card__minichart {
     display: none;
   }
-  
+
   /* Readiness section - simplified */
   .console-card__readiness {
     margin-top: 1rem;
     padding: 0.875rem;
     background: rgba(255, 255, 255, 0.03);
     border-radius: 0.5rem;
+    min-width: 0;
   }
-  
+
   .console-card__readiness-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 0.75rem;
     padding: 0.5rem 0;
     font-size: 0.8rem;
+    min-width: 0;
+    overflow: hidden;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
-  
+
+  .console-card__readiness-label,
+  .console-card__readiness-value {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
   .console-card__readiness-row:last-child {
     border-bottom: none;
   }
-  
+
   /* Metrics grid - full width on mobile */
   .console-card__metrics-grid {
-    grid-template-columns: 1fr 1fr;
+    min-width: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.75rem;
     margin-top: 1rem;
   }
-  
+
   .console-card__metric {
     padding: 0.75rem;
+    min-width: 0;
+    overflow: hidden;
   }
-  
+
   .console-card__metric-value {
     font-size: 1.1rem;
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
-  
+
   .console-card__metric-label {
     font-size: 0.65rem;
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
-  
+
+  .console-card__slideout-body p,
+  .console-card__slideout-note {
+    overflow-wrap: anywhere;
+  }
+
   /* ===== RECENT ACTIVITY - MOBILE OPTIMIZED ===== */
   .console-selector__activity {
     margin-top: 1.25rem;
     padding: 1rem 0;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
-  
+
   .console-selector__activity-title {
     font-size: 0.7rem;
     margin-bottom: 0.75rem;
     padding: 0 0.25rem;
   }
-  
+
   /* Activity badge */
   .console-selector__activity-badge {
     font-size: 0.55rem;
     padding: 0.125rem 0.375rem;
     margin-left: 0.375rem;
   }
-  
+
   .console-selector__activity-list {
     display: flex;
     flex-direction: column;
     gap: 0.625rem;
   }
-  
+
   /* Activity item - single line */
   .console-selector__activity-item {
     display: flex;
@@ -484,33 +545,49 @@
     font-size: 0.8rem;
     min-height: 44px;
   }
-  
+
   .console-selector__activity-dot {
     width: 8px;
     height: 8px;
     flex-shrink: 0;
   }
-  
+
   .console-selector__activity-text {
     flex: 1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  
+
   /* Timestamp - compact */
   .console-selector__activity-time {
     font-size: 0.7rem;
     color: rgba(255, 255, 255, 0.4);
     flex-shrink: 0;
   }
-  
+
   /* Empty state */
   .console-selector__activity-empty {
     padding: 1.5rem;
     text-align: center;
     font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+@media (max-width: 430px) {
+  .console-card__readiness-row {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .console-card__readiness-value {
+    width: 100%;
+    text-align: left;
+  }
+
+  .console-card__metrics-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -523,26 +600,26 @@
     padding: 0.625rem 0.875rem;
     margin: 0 -0.75rem 1rem -0.75rem;
   }
-  
+
   .console-card {
     margin: 0;
     padding: 1rem 0.875rem;
     border-radius: 0.875rem;
   }
-  
+
   .console-card__title {
     font-size: 1rem;
   }
-  
+
   .console-card__tagline {
     font-size: 0.75rem;
   }
-  
+
   .console-card__cta {
     min-height: 48px;
     font-size: 0.85rem;
   }
-  
+
   .console-selector__activity-item {
     padding: 0.5rem 0.625rem;
   }
@@ -557,97 +634,102 @@
     background: rgba(255, 255, 255, 0.95);
     border-bottom-color: rgba(0, 0, 0, 0.08);
   }
-  
+
   :root[data-theme="light"] .console-selector__quick-label {
     color: rgba(0, 0, 0, 0.6);
   }
-  
+
   :root[data-theme="light"] .console-selector__quick-select {
     background: rgba(0, 0, 0, 0.04);
     border-color: rgba(0, 0, 0, 0.12);
     color: #1f2937;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(0,0,0,0.5)' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   }
-  
+
   :root[data-theme="light"] .console-card {
     background: rgba(255, 255, 255, 0.95);
     border-color: rgba(0, 0, 0, 0.08);
-    box-shadow: 
+    box-shadow:
       0 1px 3px rgba(0, 0, 0, 0.08),
       0 4px 12px rgba(0, 0, 0, 0.06);
   }
-  
+
   :root[data-theme="light"] .console-card__title {
     color: #1f2937;
   }
-  
+
   :root[data-theme="light"] .console-card__tagline {
     color: #6b7280;
   }
-  
+
   :root[data-theme="light"] .console-card__chip {
     background: rgba(0, 0, 0, 0.04);
     color: #374151;
     border-color: rgba(0, 0, 0, 0.08);
   }
-  
+
   :root[data-theme="light"] .console-card__divider {
     background: rgba(0, 0, 0, 0.08);
   }
-  
+
   :root[data-theme="light"] .console-card__slideout {
     background: #ffffff;
     border-color: rgba(0, 0, 0, 0.1);
   }
-  
+
   :root[data-theme="light"] .console-card__slideout::before {
     background: rgba(0, 0, 0, 0.2);
   }
-  
+
   :root[data-theme="light"] .console-card__slideout-header {
+    background: #ffffff;
     border-bottom-color: rgba(0, 0, 0, 0.08);
   }
-  
+
+  :root[data-theme="light"] .console-card__slideout-body {
+    background: #ffffff;
+  }
+
   :root[data-theme="light"] .console-selector__activity {
     border-top-color: rgba(0, 0, 0, 0.08);
   }
-  
+
   :root[data-theme="light"] .console-selector__activity-item {
     background: rgba(0, 0, 0, 0.02);
   }
-  
+
   :root[data-theme="light"] .console-selector__activity-time {
     color: rgba(0, 0, 0, 0.5);
   }
-  
+
   :root[data-theme="light"] .console-selector__activity-text {
     color: #374151;
   }
-  
+
   /* Pinned card light theme */
   :root[data-theme="light"] .console-card--pinned.console-card--ccs {
     border-color: rgba(46, 204, 113, 0.5);
     background: rgba(46, 204, 113, 0.05);
   }
-  
+
   :root[data-theme="light"] .console-card--pinned.console-card--gdi {
     border-color: rgba(40, 155, 222, 0.5);
     background: rgba(40, 155, 222, 0.05);
   }
-  
+
   :root[data-theme="light"] .console-card--pinned.console-card--intel24 {
     border-color: rgba(201, 162, 39, 0.5);
     background: rgba(201, 162, 39, 0.05);
   }
-  
+
   :root[data-theme="light"] .console-card__fav-btn.is-favorite {
     color: #b8941f; /* Darker gold for light theme */
   }
-  
+
   :root[data-theme="light"] .console-card__readiness {
     background: rgba(0, 0, 0, 0.02);
   }
-  
+
   :root[data-theme="light"] .console-card__readiness-row {
     border-bottom-color: rgba(0, 0, 0, 0.05);
     color: #374151;
@@ -658,6 +740,39 @@
    TOUCH DEVICE OPTIMIZATIONS
    ================================================ */
 
+@media (min-width: 769px) and (max-width: 1024px) {
+  .console-card:hover {
+    transform: none !important;
+  }
+
+  .console-card__header {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .console-card__badge {
+    order: 1;
+    flex: 0 0 auto;
+  }
+
+  .console-card__status {
+    order: 2;
+    flex: 1 1 calc(100% - 3.5rem);
+    max-width: calc(100% - 3.5rem);
+    min-width: 0;
+  }
+
+  .console-card__fav-btn {
+    order: 3;
+    margin-left: auto;
+  }
+
+  .console-card__info-btn {
+    order: 4;
+  }
+}
+
 @media (pointer: coarse) {
   /* Ensure all interactive elements have proper touch targets */
   .console-card__fav-btn,
@@ -666,26 +781,26 @@
     min-width: 44px;
     min-height: 44px;
   }
-  
+
   .console-card__cta {
     min-height: 48px;
   }
-  
+
   .console-card__chip {
     min-height: 36px;
     padding: 0.5rem 0.875rem;
   }
-  
+
   .console-card__req-badge {
     min-height: 36px;
     padding: 0.5rem 0.75rem;
   }
-  
+
   /* Disable hover effects on touch */
   .console-card:hover {
     transform: none;
   }
-  
+
   .console-card__cta:hover {
     transform: none;
   }
@@ -702,11 +817,11 @@
   .console-selector__quick-select {
     transition: none;
   }
-  
+
   .console-card__status-dot {
     animation: none;
   }
-  
+
   .console-card--highlight {
     animation: none;
     border-color: var(--admin-gold);
@@ -722,11 +837,11 @@
   .nav-open .console-selector__grid {
     pointer-events: none;
   }
-  
+
   .nav-open .console-card {
     opacity: 0.5;
   }
-  
+
   /* Backdrop overlay when menu is active */
   .console-selector__backdrop {
     display: none;
@@ -740,12 +855,12 @@
     opacity: 0;
     transition: opacity 0.2s ease;
   }
-  
+
   .nav-open .console-selector__backdrop {
     display: block;
     opacity: 1;
   }
-  
+
   :root[data-theme="light"] .nav-open .console-selector__backdrop {
     background: rgba(255, 255, 255, 0.7);
   }
@@ -774,24 +889,26 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     z-index: 1000;
     opacity: 0;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    transition:
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.3s ease;
   }
-  
+
   .console-selector__snackbar.is-visible {
     transform: translateX(-50%) translateY(0);
     opacity: 1;
   }
-  
+
   .console-selector__snackbar--success {
     border-color: rgba(46, 204, 113, 0.3);
   }
-  
+
   .console-selector__snackbar--success::before {
-    content: '✓';
+    content: "✓";
     margin-right: 0.5rem;
     color: #2ecc71;
   }
-  
+
   :root[data-theme="light"] .console-selector__snackbar {
     background: rgba(255, 255, 255, 0.95);
     border-color: rgba(0, 0, 0, 0.1);
@@ -810,7 +927,7 @@
     padding-top: 1.25rem;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
-  
+
   .console-selector__activity-title {
     font-size: 0.7rem;
     font-weight: 600;
@@ -819,13 +936,13 @@
     letter-spacing: 0.06em;
     margin-bottom: 0.75rem;
   }
-  
+
   .console-selector__activity-list {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
   }
-  
+
   .console-selector__activity-item {
     display: flex;
     align-items: center;
@@ -835,7 +952,7 @@
     border-radius: 0.5rem;
     font-size: 0.8rem;
   }
-  
+
   .console-selector__activity-icon {
     width: 24px;
     height: 24px;
@@ -845,7 +962,7 @@
     flex-shrink: 0;
     opacity: 0.6;
   }
-  
+
   .console-selector__activity-text {
     flex: 1;
     color: rgba(255, 255, 255, 0.8);
@@ -853,34 +970,34 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  
+
   .console-selector__activity-time {
     font-size: 0.7rem;
     color: rgba(255, 255, 255, 0.4);
     flex-shrink: 0;
   }
-  
+
   /* No-duplicates state: Hide subsequent same-type entries */
   .console-selector__activity-item[data-duplicate="true"] {
     display: none;
   }
-  
+
   :root[data-theme="light"] .console-selector__activity {
     border-top-color: rgba(0, 0, 0, 0.08);
   }
-  
+
   :root[data-theme="light"] .console-selector__activity-title {
     color: rgba(0, 0, 0, 0.5);
   }
-  
+
   :root[data-theme="light"] .console-selector__activity-item {
     background: rgba(0, 0, 0, 0.03);
   }
-  
+
   :root[data-theme="light"] .console-selector__activity-text {
     color: #374151;
   }
-  
+
   :root[data-theme="light"] .console-selector__activity-time {
     color: rgba(0, 0, 0, 0.4);
   }
@@ -897,55 +1014,55 @@
     flex-direction: column;
     gap: 1.25rem;
   }
-  
+
   /* Card: tighter padding for small screens */
   .console-card {
     padding: 1rem 0.875rem;
   }
-  
+
   /* Title: slightly smaller */
   .console-card__title {
     font-size: 0.95rem;
   }
-  
+
   /* CTA: enforce 48px min-height */
   .console-card__cta {
     min-height: 48px;
     padding: 0.75rem 1rem;
     font-size: 0.85rem;
   }
-  
+
   /* Chips: enforce 40px min-height */
   .console-card__chip {
     min-height: 40px;
     padding: 0.5rem 0.625rem;
     font-size: 0.65rem;
   }
-  
+
   /* Quick switch: tighter */
   .console-selector__quick {
     padding: 0.625rem 0.875rem;
     margin: 0 -0.875rem 1rem -0.875rem;
   }
-  
+
   .console-selector__quick-select {
     min-height: 40px;
     max-width: 140px;
     font-size: 0.8rem;
   }
-  
+
   /* Activity section: compact */
   .console-selector__activity {
     padding: 1rem 0.875rem;
     margin: 0 -0.875rem;
   }
-  
+
   .console-selector__activity-item {
     padding: 0.5rem 0.625rem;
     font-size: 0.75rem;
     gap: 0.5rem;
   }
-  
+
   .console-selector__activity-time {
     font-size: 0.65rem;
   }

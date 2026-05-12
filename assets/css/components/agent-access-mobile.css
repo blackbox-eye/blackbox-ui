@@ -14,7 +14,10 @@
 @media (max-width: 1024px) {
   body.has-sticky-cta .agent-access-page .access-console {
     /* Add padding to prevent sticky CTA from covering console cards */
-    padding-bottom: calc(var(--bbx-sticky-cta-height, 120px) + env(safe-area-inset-bottom, 0px) + 1rem);
+    padding-bottom: calc(
+      var(--bbx-sticky-cta-height, 120px) + env(safe-area-inset-bottom, 0px) +
+        1rem
+    );
   }
 }
 
@@ -48,7 +51,17 @@
     position: relative;
     z-index: 1;
   }
-  
+
+  .agent-access-page .console-card:has(.console-card__slideout.is-open) {
+    z-index: 1102;
+  }
+
+  .agent-access-page
+    .console-card:has(.console-card__slideout.is-open)
+    .console-card__slideout {
+    z-index: 1103;
+  }
+
   /* Quick switch should not overlay hero */
   .agent-access-page .console-selector__quick {
     margin-top: 0;
@@ -60,13 +73,13 @@
 @media (max-width: 768px) {
   .agent-access-page {
     /* Ensure content respects safe areas */
-    padding-left: max(1rem, env(safe-area-inset-left, 0px));
-    padding-right: max(1rem, env(safe-area-inset-right, 0px));
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
   }
-  
+
   /* Bottom safe area handled by sticky CTA component */
   body:not(.has-sticky-cta) .agent-access-page {
-    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -84,12 +97,139 @@
 /* iPad / tablet specific adjustments */
 @media (min-width: 769px) and (max-width: 1024px) {
   .agent-access-page {
-    padding-left: max(2rem, env(safe-area-inset-left, 0px));
-    padding-right: max(2rem, env(safe-area-inset-right, 0px));
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
   }
-  
+
+  .agent-access-page .access-hero {
+    margin-bottom: 1.5rem;
+    padding: calc(3.5rem + env(safe-area-inset-top, 0px))
+      clamp(1.5rem, 4vw, 2.5rem) 1.75rem;
+  }
+
+  .agent-access-page .access-hero__inner {
+    gap: 0.875rem;
+    max-width: min(52rem, 100%);
+  }
+
+  .agent-access-page .access-hero__title {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+  }
+
+  .agent-access-page .access-hero__lead {
+    font-size: 1rem;
+  }
+
+  .agent-access-page .access-hero__audit {
+    font-size: 0.85rem;
+  }
+
+  .agent-access-page .access-console {
+    padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 4vw, 2.5rem)
+      clamp(3rem, 6vw, 4rem);
+  }
+
+  .agent-access-page .console-selector {
+    max-width: min(52rem, 100%);
+    margin-inline: auto;
+  }
+
+  .agent-access-page .console-selector__quick {
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .agent-access-page .console-selector__quick-label {
+    font-size: 0.72rem;
+  }
+
+  .agent-access-page .console-selector__quick-select {
+    max-width: 12rem;
+    min-height: 42px;
+  }
+
+  .agent-access-page .console-selector__grid {
+    gap: 1.25rem;
+    grid-template-columns: 1fr;
+  }
+
+  .agent-access-page .console-card:hover {
+    transform: none !important;
+  }
+
+  .agent-access-page .console-card {
+    gap: 0.875rem;
+    min-height: 0;
+    padding: clamp(1.25rem, 2vw, 1.5rem);
+  }
+
+  .agent-access-page .console-card__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .agent-access-page .console-card__badge {
+    order: 1;
+    flex: 0 0 auto;
+  }
+
+  .agent-access-page .console-card__status {
+    order: 2;
+    flex: 1 1 calc(100% - 3.5rem);
+    max-width: calc(100% - 3.5rem);
+    min-width: 0;
+  }
+
+  .agent-access-page .console-card__fav-btn {
+    order: 3;
+    margin-left: auto;
+  }
+
+  .agent-access-page .console-card__info-btn {
+    order: 4;
+  }
+
+  .agent-access-page .console-card__title {
+    font-size: clamp(1rem, 1.8vw, 1.1rem);
+  }
+
+  .agent-access-page .console-card__tagline {
+    font-size: 0.82rem;
+  }
+
+  .agent-access-page .console-card__chips {
+    gap: 0.5rem;
+  }
+
+  .agent-access-page .console-card__chip {
+    white-space: nowrap;
+  }
+
+  .agent-access-page .console-card__cta,
+  .agent-access-page .console-card__request-link {
+    font-size: 0.8rem;
+  }
+
+  .agent-access-page .console-card__slideout {
+    max-height: min(26rem, calc(100vh - 8rem));
+  }
+
+  .agent-access-page .console-card__slideout-header {
+    padding: 0.9rem 1.25rem;
+  }
+
+  .agent-access-page .console-card__slideout-body {
+    padding: 1.125rem 1.25rem 1.25rem;
+  }
+
   /* Ensure sticky CTA spacing on tablets */
   body.has-sticky-cta .agent-access-page .access-console {
-    padding-bottom: calc(var(--bbx-sticky-cta-height, 100px) + env(safe-area-inset-bottom, 0px) + 2rem);
+    padding-bottom: calc(
+      var(--bbx-sticky-cta-height, 100px) + env(safe-area-inset-bottom, 0px) +
+        2rem
+    );
   }
 }

@@ -447,13 +447,25 @@ $intel24_requires_approval = !$intel24_has_sso;
         }
       });
 
-      buildQuickSwitch();
+      buildQuickSwitch(getActiveConsole());
     }
 
-    function buildQuickSwitch() {
+    function getActiveConsole() {
+      var hashConsole = window.location.hash ? window.location.hash.substring(1) : '';
+      if (DEFAULT_ORDER.includes(hashConsole)) {
+        return hashConsole;
+      }
+      if (quickSwitch && DEFAULT_ORDER.includes(quickSwitch.value)) {
+        return quickSwitch.value;
+      }
+      return DEFAULT_ORDER[0];
+    }
+
+    function buildQuickSwitch(activeConsoleId) {
       if (!quickSwitch) return;
       const favorites = getFavorites();
       const order = [...favorites.filter(function(id) { return DEFAULT_ORDER.includes(id); }), ...DEFAULT_ORDER.filter(function(id) { return !favorites.includes(id); })];
+      const activeConsole = DEFAULT_ORDER.includes(activeConsoleId) ? activeConsoleId : DEFAULT_ORDER[0];
       quickSwitch.innerHTML = '';
       order.forEach(function(id) {
         const option = document.createElement('option');
@@ -461,6 +473,8 @@ $intel24_requires_approval = !$intel24_has_sso;
         option.textContent = (favorites.includes(id) ? '★ ' : '') + id.toUpperCase();
         quickSwitch.appendChild(option);
       });
+
+      quickSwitch.value = order.includes(activeConsole) ? activeConsole : DEFAULT_ORDER[0];
 
       reorderCards(order);
     }
@@ -503,6 +517,45 @@ $intel24_requires_approval = !$intel24_has_sso;
     
     // Initialize favorites UI
     updateFavoriteUI();
+
+    function setSlideoutState(isOpen) {
+      selector.classList.toggle('console-selector--slideout-open', isOpen);
+      document.body.classList.toggle('console-selector-slideout-open', isOpen);
+    }
+
+    function ensureDesktopSlideoutClearance(panel) {
+      if (!panel || window.matchMedia('(max-width: 768px)').matches) {
+        return;
+      }
+
+      const viewportMargin = 16;
+      const minimumVisibleHeight = Math.min(
+        panel.scrollHeight,
+        Math.min(320, Math.floor(window.innerHeight * 0.45))
+      );
+      const panelRect = panel.getBoundingClientRect();
+      const visibleTop = Math.max(panelRect.top, viewportMargin);
+      const visibleBottom = Math.min(panelRect.bottom, window.innerHeight - viewportMargin);
+      const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+
+      if (visibleHeight >= minimumVisibleHeight) {
+        return;
+      }
+
+      const scrollDelta = minimumVisibleHeight - visibleHeight;
+      if (scrollDelta > 0) {
+        window.scrollBy({ top: scrollDelta, behavior: 'auto' });
+      }
+    }
+
+    function updateDesktopSlideoutPosition(panel) {
+      panel.style.removeProperty('--console-slideout-max-height');
+      panel.classList.remove('console-card__slideout--above', 'console-card__slideout--below');
+
+      if (window.matchMedia('(max-width: 768px)').matches) {
+        return;
+      }
+    }
     
     // ===== SLIDE-OUT PANELS =====
     function closeAllSlideouts() {
@@ -517,6 +570,7 @@ $intel24_requires_approval = !$intel24_has_sso;
         previousFocus.focus();
         previousFocus = null;
       }
+      setSlideoutState(false);
       activeSlideout = null;
     }
 
@@ -525,13 +579,28 @@ $intel24_requires_approval = !$intel24_has_sso;
       panel.setAttribute('aria-hidden', 'false');
       panel.classList.add('is-open');
       if (trigger) trigger.setAttribute('aria-expanded', 'true');
+      setSlideoutState(true);
       activeSlideout = panel;
       previousFocus = document.activeElement;
+      updateDesktopSlideoutPosition(panel);
+      panel.scrollTop = 0;
+      const slideoutBody = panel.querySelector('.console-card__slideout-body');
+      if (slideoutBody) {
+        slideoutBody.scrollTop = 0;
+      }
+      ensureDesktopSlideoutClearance(panel);
       const focusable = panel.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
       if (focusable.length) {
         focusable[0].focus();
       }
     }
+
+    window.addEventListener('resize', function() {
+      if (activeSlideout) {
+        updateDesktopSlideoutPosition(activeSlideout);
+        ensureDesktopSlideoutClearance(activeSlideout);
+      }
+    });
     
     selector.querySelectorAll('.console-card__info-btn').forEach(function(btn) {
       btn.addEventListener('click', function(e) {
@@ -835,11 +904,12 @@ $intel24_requires_approval = !$intel24_has_sso;
       }, 300);
     }
 
-    function highlightCard(cardId) {
+    function highlightCard(cardId, options) {
       const card = getCardTarget(cardId);
       if (!card) return;
+      const scrollBehavior = options && options.scrollBehavior ? options.scrollBehavior : 'smooth';
       
-      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.scrollIntoView({ behavior: scrollBehavior, block: 'center' });
       card.classList.add('console-card--highlight');
       
       setTimeout(function() {
@@ -848,14 +918,14 @@ $intel24_requires_approval = !$intel24_has_sso;
     }
 
     function selectConsole(consoleId, options) {
-      const opts = Object.assign({ focus: false, updateHash: false }, options || {});
+      const opts = Object.assign({ focus: false, updateHash: false, scrollBehavior: 'smooth' }, options || {});
       if (quickSwitch && Array.from(quickSwitch.options).some(function(opt) { return opt.value === consoleId; })) {
         quickSwitch.value = consoleId;
       }
       if (opts.updateHash) {
         updateHash(consoleId);
       }
-      highlightCard(consoleId);
+      highlightCard(consoleId, { scrollBehavior: opts.scrollBehavior });
       if (opts.focus) {
         focusCard(consoleId);
       }
@@ -865,7 +935,7 @@ $intel24_requires_approval = !$intel24_has_sso;
     var initialHash = window.location.hash ? window.location.hash.substring(1) : '';
     if (initialHash) {
       setTimeout(function() {
-        selectConsole(initialHash, { focus: true });
+        selectConsole(initialHash, { focus: true, scrollBehavior: 'auto' });
       }, 150);
     }
     

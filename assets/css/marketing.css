@@ -127,8 +127,11 @@
   border-radius: 999px;
   font-weight: 600;
   letter-spacing: 0.01em;
-  transition: color 0.2s ease, background-color 0.2s ease,
-    border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   border: 1px solid transparent;
 }
 
@@ -192,8 +195,11 @@
   color: var(--bbx-text-secondary);
   text-decoration: none;
   display: block;
-  transition: color 0.2s ease, background-color 0.2s ease,
-    border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   font-size: 0.92rem;
   font-weight: 600;
   padding: 0.65rem 0.85rem;
@@ -486,7 +492,10 @@
   border: 1px solid transparent;
   font-weight: 600;
   font-size: 0.95rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease,
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
     color 0.2s ease;
   min-height: 3.1rem;
   text-align: center;
@@ -669,7 +678,9 @@ a.nav-link-mobile:visited {
 .section-fade-in {
   opacity: 1;
   transform: none;
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
 }
 
 body.js-enabled .section-fade-in {
@@ -886,7 +897,9 @@ body.js-enabled .section-fade-in.visible {
   border: 1px solid var(--bbx-border-subtle);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s;
 }
 
 .glass-effect:hover {
@@ -1089,15 +1102,20 @@ body.js-enabled .section-fade-in.visible {
   border-radius: 9999px;
   border: none;
   cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
   text-decoration: none;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35),
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.35),
     0 0 0 1px rgba(var(--bbx-metal-rgb-light), 0.12);
 }
 
 .btn-graphene-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.42),
+  box-shadow:
+    0 16px 38px rgba(0, 0, 0, 0.42),
     0 0 0 1px rgba(var(--bbx-metal-rgb-light), 0.18);
 }
 
@@ -1954,7 +1972,9 @@ footer a:not(:hover) {
 }
 
 footer a {
-  transition: color 0.2s ease, transform 0.2s ease;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 footer a:hover {
@@ -2780,7 +2800,8 @@ button.graphene-toggle[aria-pressed="true"] {
   background: rgba(var(--bbx-metal-rgb-light), 0.1);
   border-color: var(--bbx-gold-hover);
   color: var(--bbx-gold-light);
-  box-shadow: 0 0 0 2px rgba(var(--bbx-metal-rgb-light), 0.08),
+  box-shadow:
+    0 0 0 2px rgba(var(--bbx-metal-rgb-light), 0.08),
     0 0 15px rgba(var(--bbx-metal-rgb-light), 0.16),
     inset 0 0 8px rgba(var(--bbx-metal-rgb-light), 0.08);
 }
@@ -2892,7 +2913,8 @@ button.graphene-toggle.is-loading .graphene-toggle__icon {
 .access-hero {
   padding: calc(4rem + env(safe-area-inset-top, 0px))
     clamp(1.25rem, 5vw, 3.5rem) 2rem;
-  background: radial-gradient(
+  background:
+    radial-gradient(
       circle at 20% 20%,
       rgba(var(--bbx-metal-rgb-light), 0.06),
       transparent 55%
@@ -2948,7 +2970,8 @@ button.graphene-toggle.is-loading .graphene-toggle__icon {
 }
 
 :root[data-theme="light"] .access-hero {
-  background: radial-gradient(
+  background:
+    radial-gradient(
       circle at 15% 20%,
       rgba(var(--bbx-metal-rgb), 0.06),
       transparent 55%
@@ -3018,7 +3041,10 @@ button.graphene-toggle.is-loading .graphene-toggle__icon {
   position: relative;
   overflow: visible;
   min-height: 100%;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .access-card:hover {
@@ -4475,7 +4501,8 @@ button:focus:not(:focus-visible) {
 .graphene-gradient-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
+  background:
+    radial-gradient(
       ellipse 80% 60% at 20% 80%,
       rgba(var(--bbx-metal-rgb), 0.08) 0%,
       transparent 60%
@@ -4629,7 +4656,8 @@ button:focus:not(:focus-visible) {
   text-decoration: none;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(var(--bbx-metal-rgb), 0.24),
+  box-shadow:
+    0 4px 15px rgba(var(--bbx-metal-rgb), 0.24),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
@@ -4648,7 +4676,8 @@ button:focus:not(:focus-visible) {
 
 .graphene-cta-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(var(--bbx-metal-rgb), 0.32),
+  box-shadow:
+    0 8px 25px rgba(var(--bbx-metal-rgb), 0.32),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
@@ -4777,7 +4806,8 @@ button:focus:not(:focus-visible) {
 
 [data-theme="light"] .graphene-gradient-overlay,
 .light .graphene-gradient-overlay {
-  background: radial-gradient(
+  background:
+    radial-gradient(
       ellipse 80% 60% at 20% 80%,
       rgba(var(--bbx-metal-rgb), 0.08) 0%,
       transparent 60%
@@ -5008,7 +5038,8 @@ button:focus:not(:focus-visible) {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: radial-gradient(
+  background:
+    radial-gradient(
       circle at 30% 30%,
       rgba(var(--bbx-metal-rgb-light), 0.12),
       transparent 60%
@@ -5032,7 +5063,8 @@ button:focus:not(:focus-visible) {
   position: absolute;
   inset: 0;
   z-index: 5;
-  background: linear-gradient(
+  background:
+    linear-gradient(
       180deg,
       rgba(6, 10, 14, 0.35) 0%,
       rgba(6, 10, 14, 0.08) 40%,
@@ -5308,11 +5340,14 @@ button:focus:not(:focus-visible) {
   color: #050608;
   background: linear-gradient(135deg, var(--bbx-gold-hover), var(--bbx-gold));
   text-decoration: none;
-  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.45),
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.45),
     0 0 0 1px rgba(var(--bbx-metal-rgb-light), 0.12);
   margin-bottom: 2.5rem;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .graphene-btn-spotlight__glow {
@@ -5329,7 +5364,8 @@ button:focus:not(:focus-visible) {
 
 .graphene-btn-spotlight:hover {
   transform: translateY(-1px);
-  box-shadow: 0 24px 55px rgba(0, 0, 0, 0.52),
+  box-shadow:
+    0 24px 55px rgba(0, 0, 0, 0.52),
     0 0 0 1px rgba(var(--bbx-metal-rgb-light), 0.18);
 }
 
@@ -5509,7 +5545,9 @@ button:focus:not(:focus-visible) {
   text-decoration: none;
   border-radius: 9999px;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   z-index: 1;
   min-height: 48px;
 }
@@ -5541,7 +5579,8 @@ button:focus:not(:focus-visible) {
 
 .graphene-btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.45),
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.45),
     0 0 0 1px rgba(var(--bbx-metal-rgb-light), 0.14);
 }
 
@@ -5575,7 +5614,9 @@ button:focus:not(:focus-visible) {
   border-radius: 9999px;
   background: transparent;
   overflow: hidden;
-  transition: transform 0.3s ease, background 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease;
   min-height: 48px;
 }
 
@@ -5590,8 +5631,12 @@ button:focus:not(:focus-visible) {
     rgba(var(--bbx-metal-rgb), 0.1),
     rgba(var(--bbx-metal-rgb-light), 0.32)
   );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
@@ -5627,7 +5672,10 @@ button:focus:not(:focus-visible) {
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   min-width: 140px;
-  transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .graphene-stat-card:hover {
@@ -5936,14 +5984,19 @@ button:focus:not(:focus-visible) {
   display: flex !important;
   flex-direction: column !important;
   gap: 1rem !important;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease !important;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease !important;
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
 }
 
 .module-card:hover {
   border-color: rgba(214, 178, 94, 0.35) !important;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), 0 0 30px rgba(214, 178, 94, 0.08) !important;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.45),
+    0 0 30px rgba(214, 178, 94, 0.08) !important;
   transform: translateY(-4px) !important;
 }
 
@@ -6270,9 +6323,13 @@ ul.grid.grid-cols-1.sm\:grid-cols-3 .surface-card:hover {
   border: 1px solid rgba(var(--bbx-metal-rgb), 0.28);
   border-radius: 0.75rem;
   text-decoration: none;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28),
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.28),
     0 0 0 1px rgba(var(--bbx-metal-rgb), 0.12) inset;
-  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease,
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease,
     border-color 160ms ease;
 }
 
@@ -6280,7 +6337,8 @@ ul.grid.grid-cols-1.sm\:grid-cols-3 .surface-card:hover {
 .graphene-strong .btn-graphene-primary:hover {
   transform: translateY(-1px);
   border-color: rgba(var(--bbx-metal-rgb), 0.38);
-  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.34),
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.34),
     0 0 0 1px rgba(var(--bbx-metal-rgb), 0.14) inset;
 }
 
@@ -6306,7 +6364,10 @@ ul.grid.grid-cols-1.sm\:grid-cols-3 .surface-card:hover {
   border-radius: 0.75rem;
   text-decoration: none;
   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
-  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease,
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease,
     border-color 160ms ease;
 }
 
@@ -6346,14 +6407,16 @@ ul.grid.grid-cols-1.sm\:grid-cols-3 .surface-card:hover {
     var(--bbx-gold-hover) 100%
   );
   color: #ffffff;
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.38),
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.38),
     0 0 0 1px rgba(var(--bbx-metal-rgb-light), 0.22) inset;
   border: none;
 }
 
 .graphene-btn-spotlight:hover {
   transform: translateY(-1px);
-  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.45),
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.45),
     0 0 0 1px rgba(var(--bbx-metal-rgb-light), 0.28) inset;
 }
 
@@ -6368,7 +6431,8 @@ ul.grid.grid-cols-1.sm\:grid-cols-3 .surface-card:hover {
     var(--bbx-gold-hover) 100%
   );
   color: #ffffff;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35),
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.35),
     0 0 0 1px rgba(var(--bbx-metal-rgb-light), 0.18) inset;
 }
 
@@ -6385,7 +6449,8 @@ ul.grid.grid-cols-1.sm\:grid-cols-3 .surface-card:hover {
 .graphene-cta-group .graphene-btn-primary:hover,
 .graphene-cta-bar .graphene-btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.42),
+  box-shadow:
+    0 16px 36px rgba(0, 0, 0, 0.42),
     0 0 0 1px rgba(var(--bbx-metal-rgb-light), 0.24) inset;
 }
 
@@ -6421,7 +6486,8 @@ ul.grid.grid-cols-1.sm\:grid-cols-3 .surface-card:hover {
 :root[data-theme="light"] .graphene-btn-spotlight {
   background: linear-gradient(135deg, #a67f38 0%, #8b6a24 100%);
   color: #faf9f7;
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12),
+  box-shadow:
+    0 12px 28px rgba(15, 23, 42, 0.12),
     0 0 0 1px rgba(166, 127, 56, 0.32) inset;
 }
 
@@ -7071,25 +7137,42 @@ a.graphene-btn-secondary:hover,
 /* Slide-out panel */
 .console-card__slideout {
   position: absolute;
-  bottom: calc(100% + 0.75rem);
   left: 0;
   right: 0;
   background: rgba(10, 14, 20, 0.98);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 0.875rem;
   padding: 0;
-  opacity: 0;
+  max-height: var(
+    --console-slideout-max-height,
+    min(24rem, calc(100vh - 6rem))
+  );
+  overflow-y: auto;
+  opacity: 1;
   visibility: hidden;
   transform: translateY(10px);
-  transition: all 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    visibility 0s linear 0.25s;
   z-index: 50;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+}
+
+.console-card__slideout--below {
+  top: calc(100% + 0.75rem);
+  bottom: auto;
+}
+
+.console-card__slideout--above {
+  top: auto;
+  bottom: calc(100% + 0.75rem);
   box-shadow: 0 -15px 50px rgba(0, 0, 0, 0.5);
 }
 
 .console-card__slideout.is-open {
-  opacity: 1;
   visibility: visible;
   transform: translateY(0);
+  transition: transform 0.25s ease;
 }
 
 .console-card__slideout-header {
@@ -7137,6 +7220,38 @@ a.graphene-btn-secondary:hover,
   padding-top: 0.625rem;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   margin-top: 0.625rem !important;
+}
+
+@media (min-width: 769px) {
+  .console-card__slideout {
+    position: static;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    width: 100%;
+    margin-top: 0.75rem;
+    max-height: min(28rem, calc(100vh - 8rem));
+    overflow: hidden;
+    visibility: visible;
+    transform: none;
+    transition: none;
+    display: none;
+  }
+
+  .console-card__slideout.is-open {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .console-card__slideout-header {
+    flex: 0 0 auto;
+  }
+
+  .console-card__slideout-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+  }
 }
 
 /* Operations status bar (in slideout) */

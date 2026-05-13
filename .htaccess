@@ -117,4 +117,4 @@ RewriteRule ^(?:recaptcha-debug\.php|deploy_trigger\.txt|trigger_ftp\.txt|test\.
 # Bevarer de eksisterende regler for "clean URLs".
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^.*$ index.php [L, QSA]
+RewriteRule ^.*$ index.php [L,QSA]

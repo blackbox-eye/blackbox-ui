@@ -16,8 +16,9 @@ This document records the post-deploy live-safe validation result for PR #129 in
 
 ## 3. Validation method
 
-- PowerShell `Invoke-WebRequest`
-- HEAD requests for target URLs
+- PowerShell `Invoke-WebRequest -Method Head`
+- HEAD requests for target URLs, explicitly using `-Method Head`
+- Example command: `Invoke-WebRequest -Method Head -Uri https://<host>/<path>`
 - no POST, no auth, no scanners, no fuzzing, no intrusive tests
 
 ## 4. Pass/fail matrix

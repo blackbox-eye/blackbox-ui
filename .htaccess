@@ -103,8 +103,18 @@ Header unset ETag
 FileETag None
 </IfModule>
 
-# Bevarer de eksisterende regler for "clean URLs".
 RewriteEngine On
-RewriteCond % { REQUEST_FILENAME } !-f
-RewriteCond % { REQUEST_FILENAME } !-d
+
+# ==========================================
+# PHASE F ACCESS HARDENING
+# ==========================================
+
+# Block direct public HTTP access to confirmed exposed internal paths and
+# operational artifacts.
+RewriteRule ^(?:includes|vendor|logs|data|db|test)(?:/|$) - [F,L,NC]
+RewriteRule ^(?:recaptcha-debug\.php|deploy_trigger\.txt|trigger_ftp\.txt|test\.txt)$ - [F,L,NC]
+
+# Bevarer de eksisterende regler for "clean URLs".
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^.*$ index.php [L, QSA]

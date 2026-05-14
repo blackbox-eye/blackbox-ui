@@ -70,18 +70,20 @@ git push -u origin your-branch-name
 
 # 9. Production deploy then runs from main via ci.yml
 
-# 10. Verify live after merge to main (ci.yml deploys via FTPS to origin)
+# 10. Verify live after merge to main (ci.yml deploys to origin using FTP with optional TLS/FTPS negotiation where available)
 curl -sI "https://blackbox.codes/assets/css/marketing.min.css?v=X.X.X" | grep content-type
 # Should return: content-type: text/css
 ```
 
 ### CI/CD Notes
 
-Current production source-of-truth is repo-controlled deployment from `main` via `.github/workflows/ci.yml`, using FTPS to the origin host.
+Current production source-of-truth is repo-controlled deployment from `main` via `.github/workflows/ci.yml`, using FTP to origin with optional TLS/FTPS negotiation where available.
 
 Manual cPanel or FTP changes are not canonical unless explicitly owner-approved.
 
 `.github/workflows/cloudflare-pages.yml` is not the current authoritative production deployment path and should be treated as staging, preview, or experimental until separately owner-approved.
+
+This document does not claim verified live header alignment or canonical header ownership. A separate dated header review is required before either claim is relied on as canonical.
 
 See [DEPLOYMENT_SOURCE_OF_TRUTH.md](DEPLOYMENT_SOURCE_OF_TRUTH.md).
 

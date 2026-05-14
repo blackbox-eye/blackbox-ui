@@ -4,7 +4,7 @@ Status: current owner-approved baseline for `blackbox-eye/blackbox-ui` productio
 
 ## Current production deployment source of truth
 
-- Production is currently documented as repo-controlled deployment from `main` via `.github/workflows/ci.yml`, using FTPS to the origin host.
+- Production is currently documented as repo-controlled deployment from `main` via `.github/workflows/ci.yml`, using FTP to origin with optional TLS/FTPS negotiation where available.
 - This remains the canonical production deployment path unless later owner-approved evidence proves a manual cPanel step is required.
 - Manual cPanel or FTP changes must not be treated as canonical unless explicitly owner-approved.
 
@@ -16,13 +16,15 @@ Status: current owner-approved baseline for `blackbox-eye/blackbox-ui` productio
 
 ## Header ownership
 
-- Live `Content-Security-Policy`, `X-Frame-Options`, `X-Content-Type-Options`, and `Referrer-Policy` are intended to be repo-controlled through `.htaccess` and origin config.
+- This document does not claim verified live header alignment or canonical header ownership.
+- A separate dated header review is required before any header alignment or ownership claim is relied on as canonical.
 - Cloudflare may add or override edge headers if configured separately, but Cloudflare header ownership must not be claimed unless verified.
 - HSTS is an open security decision and is not yet locked as intentionally absent.
 
 ## `.htaccess.production` role
 
-- `.htaccess.production` is treated as a production/reference template that must stay aligned with `.htaccess`.
+- `.htaccess.production` is treated as an intended production/reference template.
+- Its alignment with `.htaccess` must be verified before relying on it.
 - `.htaccess.production` is not treated as proven live runtime unless deployment evidence confirms it is the uploaded active file.
 
 ## Change control
@@ -32,9 +34,9 @@ Status: current owner-approved baseline for `blackbox-eye/blackbox-ui` productio
 ## Evidence basis
 
 - Post-deploy validation for PR #129 recorded the confirmed blocking of the previously exposed Phase F paths. See `docs/audits/BLACKBOX_UI_PHASE_F_POST_DEPLOY_VALIDATION_PR129_v1.md`.
-- The latest header/source-of-truth review found that live `Content-Security-Policy`, `X-Frame-Options`, `X-Content-Type-Options`, and `Referrer-Policy` match `.htaccess`, Cloudflare is in front of origin, and HSTS is not currently observed live.
+- Header ownership still requires a separate dated review artifact before it should be treated as canonical in governance documentation.
 
 ## Operational usage
 
-- If production header behavior needs to change, start with the repo-controlled origin path documented here and validate live behavior after deploy.
+- If production header behavior needs to change, start with the intended repo-controlled origin path documented here and validate live behavior after deploy.
 - If deployment ownership changes, update this document first so downstream build, workflow, and audit docs stay aligned.

@@ -2,13 +2,25 @@
 
 Dette dokument giver et overblik over alle GitHub Actions workflows i blackbox-ui repositoriet.
 
+## Current Production Source Of Truth
+
+- Current production is documented as repo-controlled deployment from `main` via `ci.yml`, using FTP to origin with optional TLS/FTPS negotiation where available.
+- Cloudflare sits in front of origin as CDN, cache, and security edge.
+- `cloudflare-pages.yml` is not the current authoritative production deployment path and should be treated as staging, preview, or experimental until separately owner-approved.
+- `.htaccess` and origin config remain the intended repo-controlled path for header changes, but this document does not claim verified live header alignment or canonical header ownership.
+- Any header alignment or ownership claim requires a separate dated header review before it is relied on as canonical.
+- `.htaccess.production` is an intended production/reference template whose alignment with `.htaccess` must be verified before relying on it. It is not proven live runtime.
+- Owner approval is required before changing deployment path, header policy, `.htaccess`, `.htaccess.production`, or workflow behavior.
+- See [DEPLOYMENT_SOURCE_OF_TRUTH.md](DEPLOYMENT_SOURCE_OF_TRUTH.md).
+
 ## Workflow-oversigt
 
 | Workflow | Fil | Triggers | Formål |
 |----------|-----|----------|--------|
-| **CI & Deploy (Secure)** | `ci.yml` | `push:main` (paths-filtered), `workflow_dispatch` | FTP deployment med FTPS, smoke tests |
+| **CI & Deploy (Secure)** | `ci.yml` | `push:main` (paths-filtered), `workflow_dispatch` | Current production deployment to origin using FTP with optional TLS/FTPS negotiation where available, smoke tests |
 | **Visual Regression** | `visual-regression.yml` | `push:main`, `pull_request:main` (paths-filtered), `workflow_dispatch` | Playwright visuelle tests |
-| **Cloudflare Pages Deploy** | `cloudflare-pages.yml` | `push:main`, `pull_request:main` (paths-filtered), `workflow_dispatch` | Cloudflare Pages staging/production |
+| **Cloudflare Pages Deploy** | `cloudflare-pages.yml` | `workflow_dispatch` | Cloudflare Pages staging/preview/experimental |
+| **Blog Intel Weekly** | `blog-intel-weekly.yml` | `schedule`, `workflow_dispatch` | Blog intelligence automation |
 | **CodeQL** | `codeql-analysis.yml` | `push:main`, `pull_request:main` (paths-filtered), `schedule` (ugentligt), `workflow_dispatch` | Sikkerhedsscanning af PHP/JS |
 | **Lighthouse Audit** | `lighthouse.yml` | `push:main` (paths-filtered), `workflow_dispatch` | Performance og accessibility audit |
 | **Sprint 5 Smoke Test** | `sprint5-smoke-test.yml` | `pull_request:main` (paths-filtered) | Endpoint-tests og Lighthouse |
@@ -19,14 +31,16 @@ Dette dokument giver et overblik over alle GitHub Actions workflows i blackbox-u
 
 ### 1. CI & Deploy (Secure) – `ci.yml`
 
+Current owner-approved production role: authoritative repo-controlled deployment path to origin.
+
 **Triggers:**
 - Push til `main` branch (ignorerer `.github/agents/**`, `docs/**`, `**/*.md`)
 - Manuel dispatch
 
 **Jobs:**
 1. **Build & Verify** – Validerer secrets og kritiske filer
-2. **Delete index.html** – Fjerner statisk index.html på FTP server via FTPS
-3. **FTP Deploy** – Deployer via SamKirkland/FTP-Deploy-Action med FTPS
+2. **Delete index.html** – Fjerner statisk index.html på origin host before deploy
+3. **FTP Deploy** – Deployer til origin via FTP with optional TLS/FTPS negotiation where available
 4. **Smoke Tests** – Kører 6 endpoint-tests (root, about, cases, contact, index.html removal, DirectoryIndex)
 
 **Secrets brugt:**
@@ -65,15 +79,15 @@ Dette dokument giver et overblik over alle GitHub Actions workflows i blackbox-u
 ### 3. Cloudflare Pages Deploy – `cloudflare-pages.yml`
 
 **Triggers:**
-- Push til `main` branch (paths-filtered)
-- Pull requests mod `main` (paths-filtered)
-- Manuel dispatch med environment valg (staging/production)
+- Manuel dispatch for staging, preview, or experimental flow
+
+Current owner-approved role: staging, preview, or experimental flow only. This is not the current authoritative production deployment path.
 
 **Jobs:**
 1. **Build & Prepare** – Validerer filer og Cloudflare secrets
 2. **Deploy to Staging** – Deployer til preview URL
 3. **Verify Staging** – Kører 5 verifikationstests
-4. **Deploy to Production** – Manuel godkendelse krævet
+4. **Optional Manual Promotion** – Manuel godkendelse krævet, men ikke authoritative for current production ownership
 
 **Secrets brugt:**
 - `CF_API_TOKEN` eller `CLOUDFLARE_API_TOKEN`
@@ -152,7 +166,7 @@ Alle workflows bruger eksplicitte `permissions:` for at begrænse GITHUB_TOKEN r
 ### Secrets
 - Alle credentials håndteres via GitHub Secrets
 - Ingen hardcoded værdier i workflows
-- FTPS (TLS) bruges til alle FTP-operationer
+- FTP operationer er dokumenteret som FTP to origin with optional TLS/FTPS negotiation where available, men TLS enforcement er ikke endnu canonical i governance-dokumentationen
 
 ### Concurrency
 Alle workflows har `concurrency` blokke for at forhindre spam:

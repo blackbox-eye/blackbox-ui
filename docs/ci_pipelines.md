@@ -3,6 +3,8 @@
 > **Last updated:** 2025-11-30  
 > **Version:** 1.0
 
+> **Status note:** This document is not the canonical source for current production deployment ownership. See [DEPLOYMENT_SOURCE_OF_TRUTH.md](DEPLOYMENT_SOURCE_OF_TRUTH.md) for the owner-approved baseline.
+
 ## Overview
 
 This document describes the CI/CD workflows in the blackbox-ui repository and when each workflow runs.
@@ -13,7 +15,7 @@ This document describes the CI/CD workflows in the blackbox-ui repository and wh
 
 | Workflow | File | Trigger | Purpose |
 |----------|------|---------|---------|
-| **Cloudflare Pages Deploy** | `cloudflare-pages.yml` | Push to main | Deploy to production |
+| **Cloudflare Pages Deploy** | `cloudflare-pages.yml` | Manual dispatch | Staging/preview/experimental flow, not current canonical production deploy |
 | **CodeQL Analysis** | `codeql-analysis.yml` | Push/PR to main | Security scanning (JS + PHP) |
 | **Visual Regression** | `visual-regression.yml` | Push/PR to main | UI consistency tests |
 | **Lighthouse** | `lighthouse.yml` | Push/PR to main | Performance auditing |
@@ -27,15 +29,15 @@ This document describes the CI/CD workflows in the blackbox-ui repository and wh
 **File:** `.github/workflows/cloudflare-pages.yml`
 
 ### Purpose
-Deploys the site to Cloudflare Pages when changes are pushed to main.
+Supports Cloudflare Pages staging, preview, or experimental deployment flow. It is not the current canonical production deployment path.
 
 ### Trigger
-- Push to `main` branch
+- Manual dispatch
 
 ### Steps
 1. Checkout code
 2. Build assets (Tailwind CSS)
-3. Deploy to Cloudflare Pages
+3. Deploy preview/staging build to Cloudflare Pages
 4. Report deployment URL
 
 ### Required Secrets

@@ -55,21 +55,37 @@ npm test
 # 3. Verify no uncommitted changes
 git status
 
-# 4. Stage and commit
+# 4. Create or switch to a feature branch
+git switch -c your-branch-name
+
+# 5. Stage and commit on the branch
 git add -A
 git commit -m "feat/fix: description"
 
-# 5. Push to origin
-git push origin main
+# 6. Push the branch
+git push -u origin your-branch-name
 
-# 6. Verify live (FTP auto-deploys from main)
+# 7. Open a pull request
+# 8. Merge to main only after approval
+
+# 9. Production deploy then runs from main via ci.yml
+
+# 10. Verify live after merge to main (ci.yml deploys to origin using FTP with optional TLS/FTPS negotiation where available)
 curl -sI "https://blackbox.codes/assets/css/marketing.min.css?v=X.X.X" | grep content-type
 # Should return: content-type: text/css
 ```
 
 ### CI/CD Notes
 
-Currently using **manual deployment** via FTP sync from `main` branch.
+Current production source-of-truth is repo-controlled deployment from `main` via `.github/workflows/ci.yml`, using FTP to origin with optional TLS/FTPS negotiation where available.
+
+Manual cPanel or FTP changes are not canonical unless explicitly owner-approved.
+
+`.github/workflows/cloudflare-pages.yml` is not the current authoritative production deployment path and should be treated as staging, preview, or experimental until separately owner-approved.
+
+This document does not claim verified live header alignment or canonical header ownership. A separate dated header review is required before either claim is relied on as canonical.
+
+See [DEPLOYMENT_SOURCE_OF_TRUTH.md](DEPLOYMENT_SOURCE_OF_TRUTH.md).
 
 **Future improvement:** Add GitHub Action to run `npm run build:css` on push.
 

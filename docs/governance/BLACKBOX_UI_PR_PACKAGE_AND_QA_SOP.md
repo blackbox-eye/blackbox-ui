@@ -231,13 +231,13 @@ Validation expectations:
 <checks required>
 
 PR package expectation:
-<recommended PR title/body or exact package rule>
+<recommended PR title/body, exact package rule, or `not applicable` if no PR work is expected>
 
 Owner approval boundary:
 <what requires explicit owner approval>
 ```
 
-If any field above is missing and PR work is likely, the handoff is incomplete.
+All fields above are required. If no PR work is expected, the PR package expectation field may explicitly say `not applicable`.
 
 ## 7. Copilot completion report template
 
@@ -333,4 +333,4 @@ Every PR body must include these exact fields or clearly equivalent headings:
 - Risk map
 - Rollback / no-deploy note
 - Scope guard
-- Status: `merged NO` / `live NO`
+- Status: `merged: NO` / `live: NO`

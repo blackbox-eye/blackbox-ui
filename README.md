@@ -189,6 +189,9 @@ Alle dokumenter ligger nu under `/docs/`:
 
 - [BLACKBOX_UI_WORKFLOW_LOCK.md](/docs/governance/BLACKBOX_UI_WORKFLOW_LOCK.md) - Kanonisk workflow-governance for ChatGPT, Copilot og owner-handoffs
 - [BLACKBOX_UI_PR_PACKAGE_AND_QA_SOP.md](/docs/governance/BLACKBOX_UI_PR_PACKAGE_AND_QA_SOP.md) - Standard PR-pakke, QA-checks og merge-readiness skabeloner
+- [LEGAL_ENTITY_AND_DISCLOSURES_BASELINE.md](/docs/governance/LEGAL_ENTITY_AND_DISCLOSURES_BASELINE.md) - Governance-baseline for entity disclosures, pending legal evidence og copy-gates
+- [CLAIMS_REGISTER.md](/docs/governance/CLAIMS_REGISTER.md) - Claims-register for owner-beslutninger, verification status og rewrite-retning
+- [OWNER_DECISION_LOG.md](/docs/governance/OWNER_DECISION_LOG.md) - Kanonisk beslutningslog for owner-confirmed governance-baserede guardrails
 
 ### 🔗 SSO & TS24 Integration
 

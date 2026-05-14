@@ -2,13 +2,22 @@
 
 Dette dokument giver et overblik over alle GitHub Actions workflows i blackbox-ui repositoriet.
 
+## Current Production Source Of Truth
+
+- Current production is documented as repo-controlled deployment from `main` via `ci.yml`, using FTPS to the origin host.
+- Cloudflare sits in front of origin as CDN, cache, and security edge.
+- `cloudflare-pages.yml` is not the current authoritative production deployment path and should be treated as staging, preview, or experimental until separately owner-approved.
+- `.htaccess` and origin config are the intended repo-controlled source for live header policy. `.htaccess.production` remains a production/reference template, not proven live runtime.
+- Owner approval is required before changing deployment path, header policy, `.htaccess`, `.htaccess.production`, or workflow behavior.
+- See [DEPLOYMENT_SOURCE_OF_TRUTH.md](DEPLOYMENT_SOURCE_OF_TRUTH.md).
+
 ## Workflow-oversigt
 
 | Workflow | Fil | Triggers | Formål |
 |----------|-----|----------|--------|
-| **CI & Deploy (Secure)** | `ci.yml` | `push:main` (paths-filtered), `workflow_dispatch` | FTP deployment med FTPS, smoke tests |
+| **CI & Deploy (Secure)** | `ci.yml` | `push:main` (paths-filtered), `workflow_dispatch` | Current production deployment to origin via FTPS, smoke tests |
 | **Visual Regression** | `visual-regression.yml` | `push:main`, `pull_request:main` (paths-filtered), `workflow_dispatch` | Playwright visuelle tests |
-| **Cloudflare Pages Deploy** | `cloudflare-pages.yml` | `push:main`, `pull_request:main` (paths-filtered), `workflow_dispatch` | Cloudflare Pages staging/production |
+| **Cloudflare Pages Deploy** | `cloudflare-pages.yml` | `workflow_dispatch` | Cloudflare Pages staging/preview/experimental |
 | **CodeQL** | `codeql-analysis.yml` | `push:main`, `pull_request:main` (paths-filtered), `schedule` (ugentligt), `workflow_dispatch` | Sikkerhedsscanning af PHP/JS |
 | **Lighthouse Audit** | `lighthouse.yml` | `push:main` (paths-filtered), `workflow_dispatch` | Performance og accessibility audit |
 | **Sprint 5 Smoke Test** | `sprint5-smoke-test.yml` | `pull_request:main` (paths-filtered) | Endpoint-tests og Lighthouse |
@@ -18,6 +27,8 @@ Dette dokument giver et overblik over alle GitHub Actions workflows i blackbox-u
 ## Detaljeret beskrivelse
 
 ### 1. CI & Deploy (Secure) – `ci.yml`
+
+Current owner-approved production role: authoritative repo-controlled deployment path to origin.
 
 **Triggers:**
 - Push til `main` branch (ignorerer `.github/agents/**`, `docs/**`, `**/*.md`)
@@ -65,9 +76,9 @@ Dette dokument giver et overblik over alle GitHub Actions workflows i blackbox-u
 ### 3. Cloudflare Pages Deploy – `cloudflare-pages.yml`
 
 **Triggers:**
-- Push til `main` branch (paths-filtered)
-- Pull requests mod `main` (paths-filtered)
 - Manuel dispatch med environment valg (staging/production)
+
+Current owner-approved role: staging, preview, or experimental flow only. This is not the current authoritative production deployment path.
 
 **Jobs:**
 1. **Build & Prepare** – Validerer filer og Cloudflare secrets

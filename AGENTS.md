@@ -12,6 +12,27 @@ The primary goal is to preserve the live public design and user-facing experienc
 
 ---
 
+## Workflow governance lock
+
+This repo uses [docs/governance/BLACKBOX_UI_WORKFLOW_LOCK.md](docs/governance/BLACKBOX_UI_WORKFLOW_LOCK.md) as canonical ChatGPT, Copilot, and user workflow governance.
+
+[docs/governance/BLACKBOX_UI_PR_PACKAGE_AND_QA_SOP.md](docs/governance/BLACKBOX_UI_PR_PACKAGE_AND_QA_SOP.md) defines the standard PR package, QA, and merge-readiness templates.
+
+Copilot must stop if a task prompt lacks:
+
+- allowed files
+- forbidden files
+- output required
+- stop conditions
+- branch or PR intent
+- owner approval boundary
+
+Copilot must not compensate for missing governance by guessing.
+
+If the prompt is under-scoped, Copilot must report `handoff incomplete` instead of editing files.
+
+---
+
 ## Golden rules
 
 - One task = one branch = one pull request.

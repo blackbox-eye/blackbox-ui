@@ -185,6 +185,11 @@ Alle dokumenter ligger nu under `/docs/`:
 - [WORKFLOW_VALIDATION_REPORT.md](/docs/WORKFLOW_VALIDATION_REPORT.md) - Validering af workflow-konfiguration (PR #3/PR #5)
 - [ci_pipelines.md](/docs/ci_pipelines.md) - Detaljeret oversigt over workflows, triggers og TS24 curl-ops-supplement
 
+### 🧭 Governance
+
+- [BLACKBOX_UI_WORKFLOW_LOCK.md](/docs/governance/BLACKBOX_UI_WORKFLOW_LOCK.md) - Kanonisk workflow-governance for ChatGPT, Copilot og owner-handoffs
+- [BLACKBOX_UI_PR_PACKAGE_AND_QA_SOP.md](/docs/governance/BLACKBOX_UI_PR_PACKAGE_AND_QA_SOP.md) - Standard PR-pakke, QA-checks og merge-readiness skabeloner
+
 ### 🔗 SSO & TS24 Integration
 
 - [ts24_sso_bridge.md](/docs/ts24_sso_bridge.md) - Canonical TS24 entry, ejerskab og JWT-flow

@@ -14,30 +14,427 @@ declare(strict_types=1);
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-cache, no-store, must-revalidate');
+header('X-Content-Type-Options: nosniff');
+
+const BBX_SSO_REQUEST_MAX_BODY_BYTES = 4096;
+const BBX_SSO_REQUEST_MAX_COMPANY_LENGTH = 160;
+const BBX_SSO_REQUEST_MAX_EMAIL_LENGTH = 254;
+const BBX_SSO_REQUEST_MAX_DOMAIN_LENGTH = 253;
+const BBX_SSO_REQUEST_MAX_PROVIDER_LENGTH = 32;
+const BBX_SSO_REQUEST_MAX_NOTES_LENGTH = 1000;
+const BBX_SSO_REQUEST_MAX_CONSOLE_LENGTH = 32;
+const BBX_SSO_REQUEST_RATE_LIMIT_WINDOW = 300;
+const BBX_SSO_REQUEST_RATE_LIMIT_MAX_ATTEMPTS = 10;
+const BBX_SSO_REQUEST_RATE_LIMIT_MAX_IPS = 500;
+
+function bbx_sso_request_respond(int $statusCode, array $payload): void
+{
+    http_response_code($statusCode);
+
+    $json = json_encode($payload, JSON_INVALID_UTF8_SUBSTITUTE);
+    if (!is_string($json)) {
+        http_response_code(500);
+        echo '{"ok":false,"error":"Internal server error"}';
+        exit;
+    }
+
+    echo $json;
+    exit;
+}
+
+function bbx_sso_request_declared_body_too_large(int $maxBytes): bool
+{
+    $contentLength = $_SERVER['CONTENT_LENGTH'] ?? null;
+    if (!is_scalar($contentLength) || !is_numeric((string) $contentLength)) {
+        return false;
+    }
+
+    return (int) $contentLength > $maxBytes;
+}
+
+function bbx_sso_request_read_bounded_body(int $maxBytes, bool &$tooLarge = false): ?string
+{
+    $tooLarge = false;
+    $stream = fopen('php://input', 'rb');
+    if ($stream === false) {
+        return null;
+    }
+
+    $body = stream_get_contents($stream, $maxBytes + 1);
+    fclose($stream);
+
+    if (!is_string($body)) {
+        return null;
+    }
+
+    if (strlen($body) > $maxBytes) {
+        $tooLarge = true;
+        return null;
+    }
+
+    return $body;
+}
+
+function bbx_sso_request_log_security(string $event, array $context = []): void
+{
+    $pairs = [];
+    foreach ($context as $key => $value) {
+        if (!is_scalar($value) || $value === '') {
+            continue;
+        }
+
+        $pairs[] = $key . '=' . (string) $value;
+    }
+
+    error_log('sso-request security: ' . $event . (empty($pairs) ? '' : ' ' . implode(' ', $pairs)));
+}
+
+function bbx_sso_request_normalize_host(string $host): string
+{
+    $host = strtolower(trim($host));
+    if ($host === '') {
+        return '';
+    }
+
+    if ($host[0] === '[') {
+        $end = strpos($host, ']');
+        if ($end !== false) {
+            return substr($host, 1, $end - 1);
+        }
+    }
+
+    if (substr_count($host, ':') === 1) {
+        $parts = explode(':', $host, 2);
+        return $parts[0];
+    }
+
+    return $host;
+}
+
+function bbx_sso_request_normalize_port(?string $scheme, ?int $port): int
+{
+    if ($port !== null && $port > 0) {
+        return $port;
+    }
+
+    return $scheme === 'http' ? 80 : 443;
+}
+
+function bbx_sso_request_parse_origin(string $value): ?array
+{
+    $parts = parse_url(trim($value));
+    if (!is_array($parts) || empty($parts['host'])) {
+        return null;
+    }
+
+    $scheme = isset($parts['scheme']) ? strtolower((string) $parts['scheme']) : 'https';
+    $port = isset($parts['port']) ? (int) $parts['port'] : null;
+
+    return [
+        'scheme' => $scheme,
+        'host' => bbx_sso_request_normalize_host((string) $parts['host']),
+        'port' => bbx_sso_request_normalize_port($scheme, $port),
+    ];
+}
+
+function bbx_sso_request_current_origin(): ?array
+{
+    $hostHeader = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
+    if (!is_string($hostHeader) || trim($hostHeader) === '') {
+        return null;
+    }
+
+    $scheme = 'https';
+    if (!empty($_SERVER['REQUEST_SCHEME'])) {
+        $scheme = strtolower((string) $_SERVER['REQUEST_SCHEME']);
+    } elseif (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off') {
+        $scheme = 'https';
+    } elseif (isset($_SERVER['SERVER_PORT']) && (int) $_SERVER['SERVER_PORT'] === 80) {
+        $scheme = 'http';
+    }
+
+    $parts = parse_url('//' . trim($hostHeader));
+    if (!is_array($parts) || empty($parts['host'])) {
+        return null;
+    }
+
+    $port = isset($parts['port']) ? (int) $parts['port'] : null;
+
+    return [
+        'scheme' => $scheme,
+        'host' => bbx_sso_request_normalize_host((string) $parts['host']),
+        'port' => bbx_sso_request_normalize_port($scheme, $port),
+    ];
+}
+
+function bbx_sso_request_is_allowed_request_origin(): bool
+{
+    $currentOrigin = bbx_sso_request_current_origin();
+    if ($currentOrigin === null || $currentOrigin['host'] === '') {
+        return true;
+    }
+
+    foreach (['HTTP_ORIGIN', 'HTTP_REFERER'] as $headerName) {
+        $headerValue = $_SERVER[$headerName] ?? '';
+        if (!is_string($headerValue) || trim($headerValue) === '') {
+            continue;
+        }
+
+        $requestOrigin = bbx_sso_request_parse_origin($headerValue);
+        if ($requestOrigin === null) {
+            return false;
+        }
+
+        if (
+            $requestOrigin['scheme'] !== $currentOrigin['scheme'] ||
+            $requestOrigin['host'] !== $currentOrigin['host'] ||
+            $requestOrigin['port'] !== $currentOrigin['port']
+        ) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function bbx_sso_request_client_ip(): string
+{
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    $ip = is_string($ip) ? trim($ip) : 'unknown';
+    return $ip === '' ? 'unknown' : substr($ip, 0, 64);
+}
+
+function bbx_sso_request_normalize_text($value, int $maxLength, bool $lowercase = false): string
+{
+    if (!is_scalar($value)) {
+        return '';
+    }
+
+    $text = trim((string) $value);
+    $text = preg_replace('/[\x00-\x1F\x7F]+/u', ' ', $text) ?? $text;
+    $text = preg_replace('/\s+/u', ' ', $text) ?? $text;
+
+    if ($lowercase) {
+        $text = strtolower($text);
+    }
+
+    if (function_exists('mb_substr')) {
+        return mb_substr($text, 0, $maxLength);
+    }
+
+    return substr($text, 0, $maxLength);
+}
+
+function bbx_sso_request_is_valid_domain(string $domain): bool
+{
+    if ($domain === '') {
+        return true;
+    }
+
+    if ($domain === 'localhost' || filter_var($domain, FILTER_VALIDATE_IP) !== false) {
+        return true;
+    }
+
+    if (filter_var($domain, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME) !== false) {
+        return true;
+    }
+
+    return preg_match('/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$/', $domain) === 1;
+}
+
+function bbx_sso_request_is_valid_console(string $console): bool
+{
+    if ($console === '') {
+        return false;
+    }
+
+    return preg_match('/^[a-z0-9][a-z0-9_-]{0,31}$/', $console) === 1;
+}
+
+function bbx_sso_request_load_rate_limit_store(string $file): array
+{
+    if (!file_exists($file)) {
+        return [];
+    }
+
+    $data = json_decode((string) @file_get_contents($file), true);
+    return is_array($data) ? $data : [];
+}
+
+function bbx_sso_request_ensure_directory(string $file): bool
+{
+    $directory = dirname($file);
+    if (is_dir($directory)) {
+        return true;
+    }
+
+    return @mkdir($directory, 0755, true) || is_dir($directory);
+}
+
+function bbx_sso_request_save_rate_limit_store(string $file, array $store): bool
+{
+    if (!bbx_sso_request_ensure_directory($file)) {
+        return false;
+    }
+
+    $latestByIp = [];
+    foreach ($store as $ip => $timestamps) {
+        if (!is_array($timestamps) || empty($timestamps)) {
+            unset($store[$ip]);
+            continue;
+        }
+
+        $latestByIp[$ip] = max($timestamps);
+    }
+
+    arsort($latestByIp);
+    $allowedIps = array_slice(array_keys($latestByIp), 0, BBX_SSO_REQUEST_RATE_LIMIT_MAX_IPS);
+    $boundedStore = [];
+    foreach ($allowedIps as $ip) {
+        $boundedStore[$ip] = array_values(array_slice($store[$ip], -BBX_SSO_REQUEST_RATE_LIMIT_MAX_ATTEMPTS));
+    }
+
+    $encodedStore = json_encode($boundedStore, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
+    if (!is_string($encodedStore)) {
+        return false;
+    }
+
+    return @file_put_contents($file, $encodedStore, LOCK_EX) !== false;
+}
+
+function bbx_sso_request_enforce_rate_limit(string $file, ?int &$retryAfter = null): bool
+{
+    $retryAfter = null;
+    $now = time();
+    $windowStart = $now - BBX_SSO_REQUEST_RATE_LIMIT_WINDOW;
+    $ip = bbx_sso_request_client_ip();
+    $store = bbx_sso_request_load_rate_limit_store($file);
+
+    foreach ($store as $storedIp => $timestamps) {
+        if (!is_array($timestamps)) {
+            unset($store[$storedIp]);
+            continue;
+        }
+
+        $filtered = [];
+        foreach ($timestamps as $timestamp) {
+            $timestamp = (int) $timestamp;
+            if ($timestamp >= $windowStart) {
+                $filtered[] = $timestamp;
+            }
+        }
+
+        if (empty($filtered)) {
+            unset($store[$storedIp]);
+            continue;
+        }
+
+        $store[$storedIp] = $filtered;
+    }
+
+    $attempts = $store[$ip] ?? [];
+    if (count($attempts) >= BBX_SSO_REQUEST_RATE_LIMIT_MAX_ATTEMPTS) {
+        $oldest = min($attempts);
+        $retryAfter = max(1, BBX_SSO_REQUEST_RATE_LIMIT_WINDOW - ($now - $oldest));
+        return false;
+    }
+
+    $attempts[] = $now;
+    $store[$ip] = $attempts;
+
+    return bbx_sso_request_save_rate_limit_store($file, $store);
+}
+
+function bbx_sso_request_generate_request_id(): string
+{
+    try {
+        return 'SSO-' . strtoupper(bin2hex(random_bytes(4)));
+    } catch (Throwable $exception) {
+        return 'SSO-' . strtoupper(substr(md5(uniqid((string) mt_rand(), true)), 0, 8));
+    }
+}
+
+function bbx_sso_request_write_log(string $file, array $entry): bool
+{
+    if (!bbx_sso_request_ensure_directory($file)) {
+        return false;
+    }
+
+    $encodedEntry = json_encode($entry, JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE);
+    if (!is_string($encodedEntry)) {
+        return false;
+    }
+
+    return @file_put_contents($file, $encodedEntry . PHP_EOL, FILE_APPEND | LOCK_EX) !== false;
+}
 
 // Only accept POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['ok' => false, 'error' => 'Method not allowed']);
-    exit;
+    bbx_sso_request_respond(405, ['ok' => false, 'error' => 'Method not allowed']);
+}
+
+if (!bbx_sso_request_is_allowed_request_origin()) {
+    bbx_sso_request_log_security('blocked_origin', ['ip' => bbx_sso_request_client_ip()]);
+    bbx_sso_request_respond(403, ['ok' => false, 'error' => 'Invalid request origin']);
+}
+
+$rateLimitFile = __DIR__ . '/../logs/sso-request-throttle.json';
+$retryAfter = null;
+if (!bbx_sso_request_enforce_rate_limit($rateLimitFile, $retryAfter)) {
+    if ($retryAfter !== null) {
+        header('Retry-After: ' . (string) $retryAfter);
+        bbx_sso_request_log_security('rate_limited', ['ip' => bbx_sso_request_client_ip(), 'retry_after' => $retryAfter]);
+        bbx_sso_request_respond(429, ['ok' => false, 'error' => 'Too many requests']);
+    }
+
+    bbx_sso_request_log_security('rate_limit_store_failure', ['ip' => bbx_sso_request_client_ip()]);
+    bbx_sso_request_respond(500, ['ok' => false, 'error' => 'Unable to process request']);
 }
 
 // Parse input (support both JSON and form data)
 $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+$contentType = is_string($contentType) ? strtolower(trim($contentType)) : '';
 if (strpos($contentType, 'application/json') !== false) {
-    $input = json_decode(file_get_contents('php://input'), true) ?? [];
+    if (bbx_sso_request_declared_body_too_large(BBX_SSO_REQUEST_MAX_BODY_BYTES)) {
+        bbx_sso_request_respond(413, ['ok' => false, 'error' => 'Request body too large']);
+    }
+
+    $tooLarge = false;
+    $rawBody = bbx_sso_request_read_bounded_body(BBX_SSO_REQUEST_MAX_BODY_BYTES, $tooLarge);
+    if ($tooLarge) {
+        bbx_sso_request_respond(413, ['ok' => false, 'error' => 'Request body too large']);
+    }
+
+    if ($rawBody === null) {
+        bbx_sso_request_respond(400, ['ok' => false, 'error' => 'Unable to read request body']);
+    }
+
+    if (trim($rawBody) === '') {
+        $input = [];
+    } else {
+        $decoded = json_decode($rawBody, true);
+        if (!is_array($decoded)) {
+            bbx_sso_request_respond(400, ['ok' => false, 'error' => 'Invalid JSON body']);
+        }
+
+        $input = $decoded;
+    }
 } else {
-    $input = $_POST;
+    $input = is_array($_POST) ? $_POST : [];
 }
 
 $data = [
-    'company'  => trim($input['company'] ?? ''),
-    'email'    => trim($input['email'] ?? ''),
-    'domain'   => trim($input['domain'] ?? ''),
-    'provider' => trim($input['provider'] ?? ''),
-    'notes'    => trim($input['notes'] ?? ''),
-    'console'  => trim($input['console'] ?? 'ccs'),
+    'company'  => bbx_sso_request_normalize_text($input['company'] ?? '', BBX_SSO_REQUEST_MAX_COMPANY_LENGTH),
+    'email'    => bbx_sso_request_normalize_text($input['email'] ?? '', BBX_SSO_REQUEST_MAX_EMAIL_LENGTH, true),
+    'domain'   => bbx_sso_request_normalize_text($input['domain'] ?? '', BBX_SSO_REQUEST_MAX_DOMAIN_LENGTH, true),
+    'provider' => bbx_sso_request_normalize_text($input['provider'] ?? '', BBX_SSO_REQUEST_MAX_PROVIDER_LENGTH, true),
+    'notes'    => bbx_sso_request_normalize_text($input['notes'] ?? '', BBX_SSO_REQUEST_MAX_NOTES_LENGTH),
+    'console'  => bbx_sso_request_normalize_text($input['console'] ?? 'ccs', BBX_SSO_REQUEST_MAX_CONSOLE_LENGTH, true),
 ];
+
+if ($data['console'] === '') {
+    $data['console'] = 'ccs';
+}
 
 // Validate required fields
 $requiredFields = ['company', 'email'];
@@ -49,32 +446,34 @@ foreach ($requiredFields as $field) {
 }
 
 if (!empty($missing)) {
-    http_response_code(422);
-    echo json_encode([
+    bbx_sso_request_respond(422, [
         'ok' => false,
         'error' => 'Missing required fields',
         'missing' => $missing,
     ]);
-    exit;
 }
 
 // Validate email
 if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-    http_response_code(422);
-    echo json_encode(['ok' => false, 'error' => 'Invalid email address']);
-    exit;
+    bbx_sso_request_respond(422, ['ok' => false, 'error' => 'Invalid email address']);
+}
+
+if (!bbx_sso_request_is_valid_domain($data['domain'])) {
+    bbx_sso_request_respond(422, ['ok' => false, 'error' => 'Invalid domain']);
 }
 
 // Validate provider if provided
 $allowedProviders = ['azure', 'google', 'okta', 'other', ''];
 if (!in_array($data['provider'], $allowedProviders, true)) {
-    http_response_code(422);
-    echo json_encode(['ok' => false, 'error' => 'Invalid provider']);
-    exit;
+    bbx_sso_request_respond(422, ['ok' => false, 'error' => 'Invalid provider']);
+}
+
+if (!bbx_sso_request_is_valid_console($data['console'])) {
+    bbx_sso_request_respond(422, ['ok' => false, 'error' => 'Invalid console']);
 }
 
 // Generate request ID
-$requestId = 'SSO-' . strtoupper(substr(md5(uniqid((string)mt_rand(), true)), 0, 8));
+$requestId = bbx_sso_request_generate_request_id();
 
 // Log the request (Sprint 3 mock - in production, save to DB)
 $logEntry = [
@@ -88,14 +487,13 @@ $logEntry = [
 
 // Log to file for Sprint 3 (production would use DB)
 $logFile = __DIR__ . '/../logs/sso-requests.log';
-$logDir = dirname($logFile);
-if (!is_dir($logDir)) {
-    @mkdir($logDir, 0755, true);
+if (!bbx_sso_request_write_log($logFile, $logEntry)) {
+    bbx_sso_request_log_security('log_write_failed', ['ip' => bbx_sso_request_client_ip()]);
+    bbx_sso_request_respond(500, ['ok' => false, 'error' => 'Unable to process request']);
 }
-@file_put_contents($logFile, json_encode($logEntry) . "\n", FILE_APPEND | LOCK_EX);
 
 // Return success
-echo json_encode([
+bbx_sso_request_respond(200, [
     'ok'         => true,
     'request_id' => $requestId,
     'message'    => 'SSO request received. Our team will contact you within 24-48 hours.',

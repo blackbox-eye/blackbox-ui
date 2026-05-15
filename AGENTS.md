@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This repository is used for scoped frontend and UI maintenance tasks on the Blackbox EYE public website.
+This repository is used for scoped frontend, governance, and documentation maintenance tasks on the Blackbox EYE public website and its canonical operating docs.
 
 This file defines the mandatory operating contract for AI coding agents working in this repository.
 
@@ -44,7 +44,7 @@ If the prompt is under-scoped, Copilot must report `handoff incomplete` instead 
 - Do not make visual/design changes unless the task explicitly requests them.
 - Do not add helper scripts unless explicitly requested.
 - Do not commit temporary diagnostic scripts.
-- Do not touch secrets, environment files, deployment files, or hosting configuration.
+- Do not touch secrets, environment files, deployment files, runtime behavior, or hosting configuration unless explicitly approved.
 - Do not change dependencies, `package.json`, or lockfiles unless the task explicitly requires it.
 - Do not touch generated or minified files directly unless the source/build contract is already known and the task explicitly allows it.
 
@@ -52,20 +52,19 @@ If the root cause is unclear, stop and report.
 
 ---
 
-## Mandatory task category
+## Task category model
 
-Every task must declare exactly one category before work starts:
+Every task must declare one primary category before work starts:
 
-1. narrow bug fix
-2. narrow UI regression fix
-3. narrow accessibility fix
-4. narrow test addition
-5. narrow documentation update
-6. scoped frontend component improvement
-7. read-only repo audit
-8. build/source contract documentation
+1. docs governance
+2. read-only audit
+3. UI/bug
+4. security
+5. deploy/governance
+6. legal/claims governance
+7. build/source contract
 
-If the task does not fit one category, stop and ask for split scope.
+If the task does not fit one primary category, or if it mixes categories without explicit owner approval, stop and ask for split scope.
 
 ---
 
@@ -323,9 +322,11 @@ Do not introduce global scroll fixes as part of a component task.
 
 ---
 
-## Test requirements
+## UI/runtime test requirements
 
-Before marking a PR ready, run the smallest relevant test set.
+Before marking a UI, runtime, or behavior-affecting PR ready, run the smallest relevant test set.
+
+Docs governance, legal/claims governance, deploy/governance docs, and read-only audit tasks should follow the docs-only validation rules in [docs/governance/BLACKBOX_UI_WORKFLOW_LOCK.md](docs/governance/BLACKBOX_UI_WORKFLOW_LOCK.md) and the matching template in [docs/governance/BLACKBOX_UI_PR_PACKAGE_AND_QA_SOP.md](docs/governance/BLACKBOX_UI_PR_PACKAGE_AND_QA_SOP.md) instead of these UI checks.
 
 For UI/header/mobile navigation work, validate at minimum:
 
@@ -352,42 +353,27 @@ If tests fail twice, stop and report:
 
 ---
 
-## Pull request requirements
+## PR package requirements
 
-Every PR must include:
+Every PR must follow the canonical package in [docs/governance/BLACKBOX_UI_PR_PACKAGE_AND_QA_SOP.md](docs/governance/BLACKBOX_UI_PR_PACKAGE_AND_QA_SOP.md). Use the template that matches the task category.
 
-1. task category
-2. short bug summary
-3. root-cause summary
-4. exact files changed
-5. source/generated asset impact
-6. why the diff is minimal
-7. tests/checks run
-8. target pages and viewports validated
-9. what was intentionally not changed
-10. risk level
-11. rollback note
-12. merged: NO
-13. live: NO
+For UI/bug PRs, include target pages and viewports validated, source/generated asset impact when relevant, and what was intentionally not changed.
 
-Do not mark PR ready if the acceptance criteria are not satisfied.
+Docs governance, security, deploy/governance, legal/claims governance, and read-only audit work must not be forced into the UI-specific PR package.
 
-Do not claim the issue is fixed unless the target behavior is validated.
+Do not mark a PR ready if the acceptance criteria, validation boundary, scope guard, or owner approval boundary are unresolved.
+
+Do not claim the issue is fixed unless the validated evidence supports that claim.
 
 ---
 
 ## Required final response format
 
-When finished, return only:
+Follow the required output in the active task prompt when one exists.
 
-- PR link
-- exact changed file list
-- source/generated asset impact
-- checks status
-- target pages/viewports validated
-- blockers, if any
-- merged: NO
-- live: NO
+Otherwise, use the completion report and PR package structure defined in [docs/governance/BLACKBOX_UI_PR_PACKAGE_AND_QA_SOP.md](docs/governance/BLACKBOX_UI_PR_PACKAGE_AND_QA_SOP.md).
+
+Do not default to the UI-specific PR/output format for docs governance, security, deploy/governance, legal/claims governance, or read-only audit work unless the task prompt explicitly requires it.
 
 ---
 
@@ -405,14 +391,14 @@ For read-only audit tasks:
 Required audit output:
 
 1. executive summary
-2. source/generated file contract
-3. build-flow map
-4. component ownership map
-5. CSS cascade risk map
-6. test map
-7. technical debt blockers
-8. recommended next tasks
-9. stop conditions
+2. scope and mode
+3. confirmed findings
+4. open questions and caveats
+5. risks or blockers
+6. recommended next tasks
+7. stop conditions
+
+Specialized audit schemas belong in canonical repo docs or the active task prompt. Use them only when they are explicitly required.
 
 ---
 

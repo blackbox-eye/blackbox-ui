@@ -37,3 +37,12 @@ Last reviewed: 2026-05-14.
 - Owner-confirmed: `GDPR Compliant` remains an intended objective and requires full compliance audit before it can be treated as verified public claim
 - Allowed direction: `developed with reference to`, `mapped against`, `aligned toward`, `under preparation`
 - Follow-up required: yes, claims-rewrite PR after verification scope is approved
+
+## D23: CSRF and write-endpoint security baseline
+
+- Decision ID: D23
+- Area: CSRF and write-endpoint governance
+- Owner-confirmed baseline: security baseline documentation must exist before implementation
+- Guardrail: no CSRF or write-endpoint implementation is approved in this PR
+- Guardrail: future implementation must be split by one security surface per PR
+- Follow-up required: yes, endpoint-specific security PRs after scope and validation are approved

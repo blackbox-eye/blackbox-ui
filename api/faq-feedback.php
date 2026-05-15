@@ -87,13 +87,13 @@ function bbx_faq_feedback_normalize_host(string $host): string
   return $host;
 }
 
-function bbx_faq_feedback_normalize_port(?int $port): ?int
+function bbx_faq_feedback_normalize_port(?string $scheme, ?int $port): int
 {
-  if ($port === null || $port === 80 || $port === 443) {
-    return null;
+  if ($port !== null && $port > 0) {
+    return $port;
   }
 
-  return $port > 0 ? $port : null;
+  return $scheme === 'http' ? 80 : 443;
 }
 
 function bbx_faq_feedback_parse_origin(string $value): ?array
@@ -103,9 +103,13 @@ function bbx_faq_feedback_parse_origin(string $value): ?array
     return null;
   }
 
+  $scheme = isset($parts['scheme']) ? strtolower((string) $parts['scheme']) : 'https';
+  $port = isset($parts['port']) ? (int) $parts['port'] : null;
+
   return [
+    'scheme' => $scheme,
     'host' => bbx_faq_feedback_normalize_host((string) $parts['host']),
-    'port' => bbx_faq_feedback_normalize_port(isset($parts['port']) ? (int) $parts['port'] : null),
+    'port' => bbx_faq_feedback_normalize_port($scheme, $port),
   ];
 }
 
@@ -116,14 +120,26 @@ function bbx_faq_feedback_current_origin(): ?array
     return null;
   }
 
+  $scheme = 'https';
+  if (!empty($_SERVER['REQUEST_SCHEME'])) {
+    $scheme = strtolower((string) $_SERVER['REQUEST_SCHEME']);
+  } elseif (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off') {
+    $scheme = 'https';
+  } elseif (isset($_SERVER['SERVER_PORT']) && (int) $_SERVER['SERVER_PORT'] === 80) {
+    $scheme = 'http';
+  }
+
   $parts = parse_url('//' . trim($hostHeader));
   if (!is_array($parts) || empty($parts['host'])) {
     return null;
   }
 
+  $port = isset($parts['port']) ? (int) $parts['port'] : null;
+
   return [
+    'scheme' => $scheme,
     'host' => bbx_faq_feedback_normalize_host((string) $parts['host']),
-    'port' => bbx_faq_feedback_normalize_port(isset($parts['port']) ? (int) $parts['port'] : null),
+    'port' => bbx_faq_feedback_normalize_port($scheme, $port),
   ];
 }
 
@@ -145,7 +161,11 @@ function bbx_faq_feedback_is_allowed_request_origin(): bool
       return false;
     }
 
-    if ($requestOrigin['host'] !== $currentOrigin['host'] || $requestOrigin['port'] !== $currentOrigin['port']) {
+    if (
+      $requestOrigin['scheme'] !== $currentOrigin['scheme'] ||
+      $requestOrigin['host'] !== $currentOrigin['host'] ||
+      $requestOrigin['port'] !== $currentOrigin['port']
+    ) {
       return false;
     }
   }

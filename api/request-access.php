@@ -8,21 +8,210 @@ declare(strict_types=1);
  * Handles operator access requests with reCAPTCHA v3, honeypot, and PHPMailer.
  * Saves requests to database and sends notification to security team.
  */
-
-require_once __DIR__ . '/../includes/env.php';
-require_once __DIR__ . '/../includes/mail-helper.php';
-require_once __DIR__ . '/../db.php';
-
 header('Content-Type: application/json; charset=utf-8');
-
-// Timeout constants for external API calls (in seconds)
-define('BBX_RECAPTCHA_TIMEOUT', 5);
-define('BBX_RECAPTCHA_CONNECT_TIMEOUT', 3);
 
 // Only accept POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
   http_response_code(405);
   echo json_encode(['success' => false, 'message' => 'Method not allowed.']);
+  exit;
+}
+
+require_once __DIR__ . '/../includes/env.php';
+require_once __DIR__ . '/../includes/mail-helper.php';
+require_once __DIR__ . '/../db.php';
+
+// Timeout constants for external API calls (in seconds)
+define('BBX_RECAPTCHA_TIMEOUT', 5);
+define('BBX_RECAPTCHA_CONNECT_TIMEOUT', 3);
+define('BBX_REQUEST_ACCESS_RATE_LIMIT_WINDOW', 900);
+define('BBX_REQUEST_ACCESS_RATE_LIMIT_MAX_ATTEMPTS', 5);
+
+function bbx_request_access_string_length(string $value): int
+{
+  return function_exists('mb_strlen') ? (int) mb_strlen($value, 'UTF-8') : strlen($value);
+}
+
+function bbx_request_access_normalize_input(string $value, bool $allowMultiline = false): string
+{
+  $value = str_replace("\0", '', $value);
+  $value = preg_replace("/\r\n?|\r/", "\n", $value) ?? $value;
+
+  if ($allowMultiline) {
+    $value = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $value) ?? $value;
+    return trim($value);
+  }
+
+  $value = preg_replace('/[\x00-\x1F\x7F]+/', ' ', $value) ?? $value;
+  $value = preg_replace('/ {2,}/', ' ', $value) ?? $value;
+
+  return trim($value);
+}
+
+function bbx_request_access_log_security(string $event, array $context = []): void
+{
+  $payload = array_merge([
+    'endpoint' => 'api/request-access',
+    'event' => $event,
+    'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+    'origin' => substr((string) ($_SERVER['HTTP_ORIGIN'] ?? ''), 0, 200),
+    'referer' => substr((string) ($_SERVER['HTTP_REFERER'] ?? ''), 0, 200),
+    'user_agent' => substr((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 200),
+    'timestamp' => gmdate('c'),
+  ], $context);
+
+  $encoded = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+  error_log('BBX SECURITY ' . ($encoded !== false ? $encoded : $event));
+}
+
+function bbx_request_access_supported_content_type(): bool
+{
+  $contentType = trim((string) ($_SERVER['CONTENT_TYPE'] ?? ''));
+  if ($contentType === '') {
+    return true;
+  }
+
+  $normalized = strtolower(trim(explode(';', $contentType, 2)[0]));
+
+  return $normalized === 'application/x-www-form-urlencoded'
+    || $normalized === 'multipart/form-data';
+}
+
+function bbx_request_access_expected_host(): string
+{
+  return rtrim(strtolower(trim((string) ($_SERVER['HTTP_HOST'] ?? ''))), '.');
+}
+
+function bbx_request_access_extract_header_host(string $headerValue): ?string
+{
+  $parts = parse_url($headerValue);
+  $host = strtolower(trim((string) ($parts['host'] ?? '')));
+  if ($host === '') {
+    return null;
+  }
+
+  $port = isset($parts['port']) ? ':' . (int) $parts['port'] : '';
+
+  return rtrim($host, '.') . $port;
+}
+
+function bbx_request_access_validate_request_source(): ?string
+{
+  $expectedHost = bbx_request_access_expected_host();
+  if ($expectedHost === '') {
+    return null;
+  }
+
+  foreach (['HTTP_ORIGIN' => 'origin', 'HTTP_REFERER' => 'referer'] as $serverKey => $label) {
+    $headerValue = trim((string) ($_SERVER[$serverKey] ?? ''));
+    if ($headerValue === '') {
+      continue;
+    }
+
+    $requestHost = bbx_request_access_extract_header_host($headerValue);
+    if ($requestHost === null || !hash_equals($expectedHost, $requestHost)) {
+      return $label . '_mismatch';
+    }
+  }
+
+  return null;
+}
+
+function bbx_request_access_is_rate_limited(string $ip): bool
+{
+  $logDir = __DIR__ . '/../logs';
+  if (!is_dir($logDir) && !@mkdir($logDir, 0755, true) && !is_dir($logDir)) {
+    bbx_request_access_log_security('rate_limit_storage_unavailable');
+    return false;
+  }
+
+  $filePath = $logDir . '/request-access-throttle.json';
+  $handle = @fopen($filePath, 'c+');
+  if ($handle === false) {
+    bbx_request_access_log_security('rate_limit_file_open_failed');
+    return false;
+  }
+
+  $limited = false;
+  $now = time();
+  $cutoff = $now - BBX_REQUEST_ACCESS_RATE_LIMIT_WINDOW;
+
+  if (!flock($handle, LOCK_EX)) {
+    fclose($handle);
+    bbx_request_access_log_security('rate_limit_lock_failed');
+    return false;
+  }
+
+  $raw = stream_get_contents($handle);
+  $data = json_decode($raw !== false && $raw !== '' ? $raw : '{}', true);
+  if (!is_array($data)) {
+    $data = [];
+  }
+
+  $pruned = [];
+  foreach ($data as $storedIp => $timestamps) {
+    if (!is_array($timestamps)) {
+      continue;
+    }
+
+    $filtered = [];
+    foreach ($timestamps as $timestamp) {
+      $timestamp = is_numeric($timestamp) ? (int) $timestamp : 0;
+      if ($timestamp >= $cutoff && $timestamp <= $now + 5) {
+        $filtered[] = $timestamp;
+      }
+    }
+
+    if ($filtered !== []) {
+      $pruned[$storedIp] = array_values($filtered);
+    }
+  }
+
+  $attempts = $pruned[$ip] ?? [];
+  if (count($attempts) >= BBX_REQUEST_ACCESS_RATE_LIMIT_MAX_ATTEMPTS) {
+    $limited = true;
+  } else {
+    $attempts[] = $now;
+    $pruned[$ip] = $attempts;
+  }
+
+  rewind($handle);
+  ftruncate($handle, 0);
+  fwrite($handle, json_encode($pruned, JSON_UNESCAPED_SLASHES));
+  fflush($handle);
+  flock($handle, LOCK_UN);
+  fclose($handle);
+
+  return $limited;
+}
+
+if (!bbx_request_access_supported_content_type()) {
+  bbx_request_access_log_security('unsupported_content_type', [
+    'content_type' => substr((string) ($_SERVER['CONTENT_TYPE'] ?? ''), 0, 100),
+  ]);
+  http_response_code(415);
+  echo json_encode(['success' => false, 'message' => 'Sikkerhedsvalidering fejlede.']);
+  exit;
+}
+
+$sourceFailure = bbx_request_access_validate_request_source();
+if ($sourceFailure !== null) {
+  bbx_request_access_log_security($sourceFailure, [
+    'expected_host' => bbx_request_access_expected_host(),
+  ]);
+  http_response_code(403);
+  echo json_encode(['success' => false, 'message' => 'Sikkerhedsvalidering fejlede.']);
+  exit;
+}
+
+$requestIp = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+if (bbx_request_access_is_rate_limited($requestIp)) {
+  bbx_request_access_log_security('rate_limited');
+  http_response_code(429);
+  echo json_encode([
+    'success' => false,
+    'message' => 'Din anmodning kunne ikke behandles lige nu. Prøv igen senere.',
+  ]);
   exit;
 }
 
@@ -37,11 +226,42 @@ $rawInput = [
   'website_url'     => trim($_POST['website_url']     ?? ''), // Honeypot field
 ];
 
+$rawInput['name'] = bbx_request_access_normalize_input($rawInput['name']);
+$rawInput['email'] = bbx_request_access_normalize_input($rawInput['email']);
+$rawInput['organization'] = bbx_request_access_normalize_input($rawInput['organization']);
+$rawInput['role'] = bbx_request_access_normalize_input($rawInput['role']);
+$rawInput['reason'] = bbx_request_access_normalize_input($rawInput['reason'], true);
+$rawInput['recaptcha_token'] = bbx_request_access_normalize_input($rawInput['recaptcha_token']);
+$rawInput['website_url'] = bbx_request_access_normalize_input($rawInput['website_url']);
+
+$fieldLimits = [
+  'name' => 120,
+  'email' => 254,
+  'organization' => 160,
+  'role' => 32,
+  'reason' => 3000,
+  'recaptcha_token' => 4096,
+  'website_url' => 200,
+];
+
+foreach ($fieldLimits as $field => $limit) {
+  if (bbx_request_access_string_length($rawInput[$field]) > $limit) {
+    bbx_request_access_log_security('field_too_long', ['field' => $field, 'limit' => $limit]);
+    http_response_code(422);
+    echo json_encode([
+      'success' => false,
+      'message' => 'Ugyldige inputdata.',
+    ]);
+    exit;
+  }
+}
+
 // ───────────────────────────────────────────────────────────────────────────
 // Honeypot bot detection - silent rejection for bots that fill hidden field
 // ───────────────────────────────────────────────────────────────────────────
 if ($rawInput['website_url'] !== '') {
   // Bot detected - return fake success to prevent detection
+  bbx_request_access_log_security('honeypot_triggered');
   error_log('REQUEST ACCESS: Honeypot triggered - bot detected');
   http_response_code(200);
   echo json_encode([
@@ -65,6 +285,7 @@ foreach ($requiredFields as $field) {
 }
 
 if (!empty($missingFields)) {
+  bbx_request_access_log_security('missing_required_fields', ['missing' => $missingFields]);
   http_response_code(422);
   echo json_encode([
     'success' => false,
@@ -76,6 +297,7 @@ if (!empty($missingFields)) {
 
 // Validate email format
 if (!filter_var($rawInput['email'], FILTER_VALIDATE_EMAIL)) {
+  bbx_request_access_log_security('invalid_email');
   http_response_code(422);
   echo json_encode(['success' => false, 'message' => 'Indtast en gyldig e-mailadresse.']);
   exit;
@@ -84,6 +306,7 @@ if (!filter_var($rawInput['email'], FILTER_VALIDATE_EMAIL)) {
 // Validate role if provided (must be one of allowed values)
 $allowedRoles = ['observer', 'operator', 'admin', 'analyst', ''];
 if (!in_array($rawInput['role'], $allowedRoles, true)) {
+  bbx_request_access_log_security('invalid_role', ['role' => $rawInput['role']]);
   http_response_code(422);
   echo json_encode(['success' => false, 'message' => 'Ugyldig rolle valgt.']);
   exit;
@@ -98,6 +321,7 @@ $recaptchaRequired = BBX_RECAPTCHA_SECRET_KEY !== '';
 if ($recaptchaRequired) {
   if ($rawInput['recaptcha_token'] === '') {
     error_log('REQUEST ACCESS: Missing reCAPTCHA token');
+    bbx_request_access_log_security('missing_recaptcha_token');
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Sikkerhedsvalidering fejlede.']);
     exit;
@@ -128,6 +352,7 @@ if ($recaptchaRequired) {
 
   if ($verifyResponse === false || $httpCode !== 200) {
     error_log('REQUEST ACCESS ERROR: reCAPTCHA API failed - HTTP ' . $httpCode . ' - ' . $curlError);
+    bbx_request_access_log_security('recaptcha_api_error', ['http_code' => $httpCode]);
     http_response_code(503);
     echo json_encode(['success' => false, 'message' => 'Sikkerhedsvalidering fejlede.']);
     exit;
@@ -136,6 +361,7 @@ if ($recaptchaRequired) {
   $decoded = json_decode($verifyResponse, true);
   if ($decoded === null) {
     error_log('REQUEST ACCESS ERROR: reCAPTCHA response decode failed');
+    bbx_request_access_log_security('recaptcha_decode_failed');
     http_response_code(503);
     echo json_encode(['success' => false, 'message' => 'Sikkerhedsvalidering fejlede.']);
     exit;
@@ -144,9 +370,22 @@ if ($recaptchaRequired) {
   $score = (float)($decoded['score'] ?? 0.0);
   $success = isset($decoded['success']) ? (bool)$decoded['success'] : false;
   $action = $decoded['action'] ?? null;
+  $hostname = $decoded['hostname'] ?? ($_SERVER['HTTP_HOST'] ?? '');
+  $expectedHostname = $_SERVER['HTTP_HOST'] ?? '';
   $minScore = 0.5;
+  $hostValid = true;
 
-  if (!$success || $score < $minScore || $action !== 'request_access') {
+  if ($hostname !== '' && $expectedHostname !== '') {
+    $hostValid = strcasecmp($hostname, $expectedHostname) === 0;
+  }
+
+  if (!$success || $score < $minScore || $action !== 'request_access' || !$hostValid) {
+    bbx_request_access_log_security('recaptcha_validation_failed', [
+      'score' => $score,
+      'action' => $action,
+      'hostname' => $hostname,
+      'expected_hostname' => $expectedHostname,
+    ]);
     error_log('REQUEST ACCESS: reCAPTCHA validation failed - Score: ' . $score . ', Action: ' . $action);
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Sikkerhedsvalidering fejlede.']);

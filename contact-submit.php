@@ -14,6 +14,7 @@ define('BBX_RECAPTCHA_TIMEOUT', 5);
 define('BBX_RECAPTCHA_CONNECT_TIMEOUT', 3);
 define('BBX_CONTACT_RATE_LIMIT_WINDOW', 600);
 define('BBX_CONTACT_RATE_LIMIT_MAX_ATTEMPTS', 5);
+define('BBX_CONTACT_RATE_LIMIT_MAX_BUCKETS', 512);
 
 function bbx_contact_string_length(string $value): int
 {
@@ -36,15 +37,78 @@ function bbx_contact_normalize_input(string $value, bool $allowMultiline = false
     return trim($value);
 }
 
+function bbx_contact_truncate_input(string $value, int $limit): string
+{
+    return function_exists('mb_substr')
+        ? (string) mb_substr($value, 0, $limit, 'UTF-8')
+        : substr($value, 0, $limit);
+}
+
+function bbx_contact_sanitize_header_value(?string $value, int $limit = 200): string
+{
+    $sanitized = bbx_contact_normalize_input((string) $value);
+    if ($sanitized === '') {
+        return '';
+    }
+
+    return bbx_contact_string_length($sanitized) > $limit
+        ? bbx_contact_truncate_input($sanitized, $limit)
+        : $sanitized;
+}
+
+function bbx_contact_canonicalize_host(string $host, ?int $port = null): ?string
+{
+    $host = trim(strtolower($host), " \t\n\r\0\x0B[]");
+    $host = rtrim($host, '.');
+    if ($host === '') {
+        return null;
+    }
+
+    if ($port === null || $port === 80 || $port === 443) {
+        return $host;
+    }
+
+    return $host . ':' . $port;
+}
+
+function bbx_contact_parse_host_components(string $value): ?array
+{
+    $sanitized = bbx_contact_sanitize_header_value($value, 255);
+    if ($sanitized === '') {
+        return null;
+    }
+
+    $parts = parse_url('//' . $sanitized);
+    if (!is_array($parts) || !isset($parts['host'])) {
+        return null;
+    }
+
+    $port = isset($parts['port']) && is_numeric($parts['port']) ? (int) $parts['port'] : null;
+
+    return [
+        'host' => (string) $parts['host'],
+        'port' => $port,
+    ];
+}
+
 function bbx_contact_log_security(string $event, array $context = []): void
 {
+    $originHeader = bbx_contact_sanitize_header_value($_SERVER['HTTP_ORIGIN'] ?? null);
+    $refererHeader = bbx_contact_sanitize_header_value($_SERVER['HTTP_REFERER'] ?? null);
+    $originHost = $originHeader !== '' ? bbx_contact_extract_header_host($originHeader) : null;
+    $refererHost = $refererHeader !== '' ? bbx_contact_extract_header_host($refererHeader) : null;
+
     $payload = array_merge([
         'endpoint' => 'contact-submit',
         'event' => $event,
         'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
-        'origin' => substr((string) ($_SERVER['HTTP_ORIGIN'] ?? ''), 0, 200),
-        'referer' => substr((string) ($_SERVER['HTTP_REFERER'] ?? ''), 0, 200),
-        'user_agent' => substr((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 200),
+        'origin_host' => $originHost ?? '',
+        'origin_present' => $originHeader !== '',
+        'origin_malformed' => $originHeader !== '' && $originHost === null,
+        'referer_host' => $refererHost ?? '',
+        'referer_present' => $refererHeader !== '',
+        'referer_malformed' => $refererHeader !== '' && $refererHost === null,
+        'user_agent' => bbx_contact_sanitize_header_value($_SERVER['HTTP_USER_AGENT'] ?? null),
         'timestamp' => gmdate('c'),
     ], $context);
 
@@ -67,21 +131,58 @@ function bbx_contact_supported_content_type(): bool
 
 function bbx_contact_expected_host(): string
 {
-    $host = strtolower(trim((string) ($_SERVER['HTTP_HOST'] ?? '')));
-    return rtrim($host, '.');
+    $components = bbx_contact_parse_host_components((string) ($_SERVER['HTTP_HOST'] ?? ''));
+    if (!is_array($components)) {
+        return '';
+    }
+
+    return bbx_contact_canonicalize_host($components['host'], $components['port']) ?? '';
+}
+
+function bbx_contact_expected_hostname(): string
+{
+    $components = bbx_contact_parse_host_components((string) ($_SERVER['HTTP_HOST'] ?? ''));
+    if (!is_array($components)) {
+        return '';
+    }
+
+    return bbx_contact_canonicalize_host($components['host']) ?? '';
 }
 
 function bbx_contact_extract_header_host(string $headerValue): ?string
 {
-    $parts = parse_url($headerValue);
-    $host = strtolower(trim((string) ($parts['host'] ?? '')));
-    if ($host === '') {
+    $sanitized = bbx_contact_sanitize_header_value($headerValue, 2048);
+    if ($sanitized === '') {
         return null;
     }
 
-    $port = isset($parts['port']) ? ':' . (int) $parts['port'] : '';
+    $parts = parse_url($sanitized);
+    if (!is_array($parts) || !isset($parts['host'])) {
+        return null;
+    }
 
-    return rtrim($host, '.') . $port;
+    $port = isset($parts['port']) && is_numeric($parts['port']) ? (int) $parts['port'] : null;
+
+    return bbx_contact_canonicalize_host((string) $parts['host'], $port);
+}
+
+function bbx_contact_bound_rate_limit_store(array $buckets, int $maxBuckets, ?string $protectedIp = null): array
+{
+    if (count($buckets) <= $maxBuckets) {
+        return $buckets;
+    }
+
+    uasort($buckets, static function (array $left, array $right): int {
+        return max($right) <=> max($left);
+    });
+
+    if ($protectedIp !== null && isset($buckets[$protectedIp])) {
+        $protectedBucket = [$protectedIp => $buckets[$protectedIp]];
+        unset($buckets[$protectedIp]);
+        $buckets = $protectedBucket + $buckets;
+    }
+
+    return array_slice($buckets, 0, $maxBuckets, true);
 }
 
 function bbx_contact_validate_request_source(): ?string
@@ -156,12 +257,15 @@ function bbx_contact_is_rate_limited(string $ip): bool
         }
     }
 
+    $pruned = bbx_contact_bound_rate_limit_store($pruned, BBX_CONTACT_RATE_LIMIT_MAX_BUCKETS);
+
     $attempts = $pruned[$ip] ?? [];
     if (count($attempts) >= BBX_CONTACT_RATE_LIMIT_MAX_ATTEMPTS) {
         $limited = true;
     } else {
         $attempts[] = $now;
         $pruned[$ip] = $attempts;
+        $pruned = bbx_contact_bound_rate_limit_store($pruned, BBX_CONTACT_RATE_LIMIT_MAX_BUCKETS, $ip);
     }
 
     rewind($handle);
@@ -264,7 +368,7 @@ $logContext = [
     'phone' => $rawInput['phone'],
 ];
 
-$expectedHostname = $_SERVER['HTTP_HOST'] ?? 'unknown';
+$expectedHostname = bbx_contact_expected_hostname();
 $score           = null;
 $action          = 'contact';
 $hostname        = $expectedHostname;
@@ -279,7 +383,7 @@ if ($rawInput['website_url'] !== '') {
     // Bot detected - log silently and return fake success to avoid detection
     bbx_log_contact_submission('honeypot_triggered', [], 'bot_detected', array_merge($logContext, [
         'honeypot_value' => substr($rawInput['website_url'], 0, 100), // truncate for log safety
-        'user_agent'     => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
+        'user_agent'     => bbx_contact_sanitize_header_value($_SERVER['HTTP_USER_AGENT'] ?? 'unknown'),
     ]));
 
     // Return fake success to prevent bots from adapting
@@ -403,14 +507,14 @@ if ($recaptchaRequired) {
     $score     = (float)($decoded['score'] ?? 0.0);
     $success   = isset($decoded['success']) ? (bool)$decoded['success'] : false;
     $action    = $decoded['action']   ?? null;
-    $hostname  = $decoded['hostname'] ?? $expectedHostname;
+    $hostname  = bbx_contact_canonicalize_host((string) ($decoded['hostname'] ?? '')) ?? $expectedHostname;
     $reasons   = $decoded['error-codes'] ?? [];    // Validate requirements
     $minScore    = 0.5;
     $actionValid = ($action === 'contact');
     $hostValid   = true;
 
     if ($hostname && $expectedHostname) {
-        $hostValid = strcasecmp($hostname, $expectedHostname) === 0;
+        $hostValid = hash_equals($expectedHostname, $hostname);
     }
 
     if (!$success || $score < $minScore || !$actionValid || !$hostValid) {
@@ -497,7 +601,7 @@ $emailBodyLines[] = $sanitizedMessage;
 $emailBodyLines[] = '';
 $emailBodyLines[] = '---';
 $emailBodyLines[] = 'Score: '    . ($score     !== null ? number_format((float)$score, 2) : 'N/A');
-$emailBodyLines[] = 'Hostname: ' . ($hostname  ?? $expectedHostname);
+$emailBodyLines[] = 'Hostname: ' . ($hostname !== '' ? $hostname : ($expectedHostname !== '' ? $expectedHostname : 'N/A'));
 $emailBodyLines[] = 'API-mode: ' . ($recaptchaMode ?? 'standard_v3');
 
 $emailBody = implode(PHP_EOL, $emailBodyLines);
@@ -525,12 +629,12 @@ if (!$mailSent) {
     bbx_log_contact_submission('mail_error', [
         'score'    => $score    ?? null,
         'action'   => $action   ?? 'contact',
-        'hostname' => $hostname ?? $expectedHostname,
+        'hostname' => $hostname !== '' ? $hostname : $expectedHostname,
         'api_mode' => $recaptchaMode,
     ], 'mail_dispatch_failed', array_merge($logContext, [
         'message_length'   => strlen($rawInput['message']),
         'has_phone'        => !empty($rawInput['phone']),
-        'expected_hostname' => $expectedHostname,
+        'expected_hostname' => $expectedHostname !== '' ? $expectedHostname : 'unknown',
         'mail_sent'        => false,
         'mail_recipient'   => $contactRecipient,
         'mail_transport'   => $mailTransport,
@@ -550,12 +654,12 @@ if (!$mailSent) {
 bbx_log_contact_submission('success', [
     'score'    => $score    ?? null,
     'action'   => $action   ?? 'contact',
-    'hostname' => $hostname ?? $expectedHostname,
+    'hostname' => $hostname !== '' ? $hostname : $expectedHostname,
     'api_mode' => $recaptchaMode,
 ], 'ok', array_merge($logContext, [
     'message_length'   => strlen($rawInput['message']),
     'has_phone'        => !empty($rawInput['phone']),
-    'expected_hostname' => $expectedHostname,
+    'expected_hostname' => $expectedHostname !== '' ? $expectedHostname : 'unknown',
     'mail_sent'        => $mailSent,
     'mail_recipient'   => $contactRecipient,
     'mail_transport'   => $mailTransport,

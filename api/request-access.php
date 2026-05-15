@@ -26,6 +26,7 @@ define('BBX_RECAPTCHA_TIMEOUT', 5);
 define('BBX_RECAPTCHA_CONNECT_TIMEOUT', 3);
 define('BBX_REQUEST_ACCESS_RATE_LIMIT_WINDOW', 900);
 define('BBX_REQUEST_ACCESS_RATE_LIMIT_MAX_ATTEMPTS', 5);
+define('BBX_REQUEST_ACCESS_RATE_LIMIT_MAX_BUCKETS', 512);
 
 function bbx_request_access_string_length(string $value): int
 {
@@ -48,15 +49,78 @@ function bbx_request_access_normalize_input(string $value, bool $allowMultiline 
   return trim($value);
 }
 
+function bbx_request_access_truncate_input(string $value, int $limit): string
+{
+  return function_exists('mb_substr')
+    ? (string) mb_substr($value, 0, $limit, 'UTF-8')
+    : substr($value, 0, $limit);
+}
+
+function bbx_request_access_sanitize_header_value(?string $value, int $limit = 200): string
+{
+  $sanitized = bbx_request_access_normalize_input((string) $value);
+  if ($sanitized === '') {
+    return '';
+  }
+
+  return bbx_request_access_string_length($sanitized) > $limit
+    ? bbx_request_access_truncate_input($sanitized, $limit)
+    : $sanitized;
+}
+
+function bbx_request_access_canonicalize_host(string $host, ?int $port = null): ?string
+{
+  $host = trim(strtolower($host), " \t\n\r\0\x0B[]");
+  $host = rtrim($host, '.');
+  if ($host === '') {
+    return null;
+  }
+
+  if ($port === null || $port === 80 || $port === 443) {
+    return $host;
+  }
+
+  return $host . ':' . $port;
+}
+
+function bbx_request_access_parse_host_components(string $value): ?array
+{
+  $sanitized = bbx_request_access_sanitize_header_value($value, 255);
+  if ($sanitized === '') {
+    return null;
+  }
+
+  $parts = parse_url('//' . $sanitized);
+  if (!is_array($parts) || !isset($parts['host'])) {
+    return null;
+  }
+
+  $port = isset($parts['port']) && is_numeric($parts['port']) ? (int) $parts['port'] : null;
+
+  return [
+    'host' => (string) $parts['host'],
+    'port' => $port,
+  ];
+}
+
 function bbx_request_access_log_security(string $event, array $context = []): void
 {
+  $originHeader = bbx_request_access_sanitize_header_value($_SERVER['HTTP_ORIGIN'] ?? null);
+  $refererHeader = bbx_request_access_sanitize_header_value($_SERVER['HTTP_REFERER'] ?? null);
+  $originHost = $originHeader !== '' ? bbx_request_access_extract_header_host($originHeader) : null;
+  $refererHost = $refererHeader !== '' ? bbx_request_access_extract_header_host($refererHeader) : null;
+
   $payload = array_merge([
     'endpoint' => 'api/request-access',
     'event' => $event,
     'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
-    'origin' => substr((string) ($_SERVER['HTTP_ORIGIN'] ?? ''), 0, 200),
-    'referer' => substr((string) ($_SERVER['HTTP_REFERER'] ?? ''), 0, 200),
-    'user_agent' => substr((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 200),
+    'origin_host' => $originHost ?? '',
+    'origin_present' => $originHeader !== '',
+    'origin_malformed' => $originHeader !== '' && $originHost === null,
+    'referer_host' => $refererHost ?? '',
+    'referer_present' => $refererHeader !== '',
+    'referer_malformed' => $refererHeader !== '' && $refererHost === null,
+    'user_agent' => bbx_request_access_sanitize_header_value($_SERVER['HTTP_USER_AGENT'] ?? null),
     'timestamp' => gmdate('c'),
   ], $context);
 
@@ -79,20 +143,58 @@ function bbx_request_access_supported_content_type(): bool
 
 function bbx_request_access_expected_host(): string
 {
-  return rtrim(strtolower(trim((string) ($_SERVER['HTTP_HOST'] ?? ''))), '.');
+  $components = bbx_request_access_parse_host_components((string) ($_SERVER['HTTP_HOST'] ?? ''));
+  if (!is_array($components)) {
+    return '';
+  }
+
+  return bbx_request_access_canonicalize_host($components['host'], $components['port']) ?? '';
+}
+
+function bbx_request_access_expected_hostname(): string
+{
+  $components = bbx_request_access_parse_host_components((string) ($_SERVER['HTTP_HOST'] ?? ''));
+  if (!is_array($components)) {
+    return '';
+  }
+
+  return bbx_request_access_canonicalize_host($components['host']) ?? '';
 }
 
 function bbx_request_access_extract_header_host(string $headerValue): ?string
 {
-  $parts = parse_url($headerValue);
-  $host = strtolower(trim((string) ($parts['host'] ?? '')));
-  if ($host === '') {
+  $sanitized = bbx_request_access_sanitize_header_value($headerValue, 2048);
+  if ($sanitized === '') {
     return null;
   }
 
-  $port = isset($parts['port']) ? ':' . (int) $parts['port'] : '';
+  $parts = parse_url($sanitized);
+  if (!is_array($parts) || !isset($parts['host'])) {
+    return null;
+  }
 
-  return rtrim($host, '.') . $port;
+  $port = isset($parts['port']) && is_numeric($parts['port']) ? (int) $parts['port'] : null;
+
+  return bbx_request_access_canonicalize_host((string) $parts['host'], $port);
+}
+
+function bbx_request_access_bound_rate_limit_store(array $buckets, int $maxBuckets, ?string $protectedIp = null): array
+{
+  if (count($buckets) <= $maxBuckets) {
+    return $buckets;
+  }
+
+  uasort($buckets, static function (array $left, array $right): int {
+    return max($right) <=> max($left);
+  });
+
+  if ($protectedIp !== null && isset($buckets[$protectedIp])) {
+    $protectedBucket = [$protectedIp => $buckets[$protectedIp]];
+    unset($buckets[$protectedIp]);
+    $buckets = $protectedBucket + $buckets;
+  }
+
+  return array_slice($buckets, 0, $maxBuckets, true);
 }
 
 function bbx_request_access_validate_request_source(): ?string
@@ -167,12 +269,15 @@ function bbx_request_access_is_rate_limited(string $ip): bool
     }
   }
 
+  $pruned = bbx_request_access_bound_rate_limit_store($pruned, BBX_REQUEST_ACCESS_RATE_LIMIT_MAX_BUCKETS);
+
   $attempts = $pruned[$ip] ?? [];
   if (count($attempts) >= BBX_REQUEST_ACCESS_RATE_LIMIT_MAX_ATTEMPTS) {
     $limited = true;
   } else {
     $attempts[] = $now;
     $pruned[$ip] = $attempts;
+    $pruned = bbx_request_access_bound_rate_limit_store($pruned, BBX_REQUEST_ACCESS_RATE_LIMIT_MAX_BUCKETS, $ip);
   }
 
   rewind($handle);
@@ -370,13 +475,13 @@ if ($recaptchaRequired) {
   $score = (float)($decoded['score'] ?? 0.0);
   $success = isset($decoded['success']) ? (bool)$decoded['success'] : false;
   $action = $decoded['action'] ?? null;
-  $hostname = $decoded['hostname'] ?? ($_SERVER['HTTP_HOST'] ?? '');
-  $expectedHostname = $_SERVER['HTTP_HOST'] ?? '';
+  $hostname = bbx_request_access_canonicalize_host((string) ($decoded['hostname'] ?? '')) ?? '';
+  $expectedHostname = bbx_request_access_expected_hostname();
   $minScore = 0.5;
   $hostValid = true;
 
   if ($hostname !== '' && $expectedHostname !== '') {
-    $hostValid = strcasecmp($hostname, $expectedHostname) === 0;
+    $hostValid = hash_equals($expectedHostname, $hostname);
   }
 
   if (!$success || $score < $minScore || $action !== 'request_access' || !$hostValid) {

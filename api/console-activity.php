@@ -27,6 +27,39 @@ const BBX_CA_RATE_LIMIT_MAX_KEYS = 800;
 const BBX_CA_MAX_DATA_DEPTH = 3;
 const BBX_CA_MAX_DATA_ITEMS = 20;
 
+function bbx_ca_declared_body_too_large(int $maxBytes): bool
+{
+    $contentLength = $_SERVER['CONTENT_LENGTH'] ?? null;
+    if (!is_scalar($contentLength) || !is_numeric((string) $contentLength)) {
+        return false;
+    }
+
+    return (int) $contentLength > $maxBytes;
+}
+
+function bbx_ca_read_bounded_body(int $maxBytes, bool &$tooLarge = false): ?string
+{
+    $tooLarge = false;
+    $stream = fopen('php://input', 'rb');
+    if ($stream === false) {
+        return null;
+    }
+
+    $body = stream_get_contents($stream, $maxBytes + 1);
+    fclose($stream);
+
+    if (!is_string($body)) {
+        return null;
+    }
+
+    if (strlen($body) > $maxBytes) {
+        $tooLarge = true;
+        return null;
+    }
+
+    return $body;
+}
+
 function bbx_ca_log_security(string $event, array $context = []): void
 {
     $pairs = [];
@@ -270,7 +303,7 @@ function bbx_ca_load_rate_limit_store(string $file): array
     return is_array($data) ? $data : [];
 }
 
-function bbx_ca_save_rate_limit_store(string $file, array $store): void
+function bbx_ca_save_rate_limit_store(string $file, array $store): bool
 {
     $latestByKey = [];
     foreach ($store as $bucketKey => $timestamps) {
@@ -288,11 +321,17 @@ function bbx_ca_save_rate_limit_store(string $file, array $store): void
         $boundedStore[$bucketKey] = array_values($store[$bucketKey]);
     }
 
-    @file_put_contents($file, json_encode($boundedStore, JSON_PRETTY_PRINT), LOCK_EX);
+    $encodedStore = json_encode($boundedStore, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
+    if (!is_string($encodedStore)) {
+        return false;
+    }
+
+    return @file_put_contents($file, $encodedStore, LOCK_EX) !== false;
 }
 
-function bbx_ca_enforce_rate_limit(string $file, string $bucketKey, int $maxAttempts): ?int
+function bbx_ca_enforce_rate_limit(string $file, string $bucketKey, int $maxAttempts, ?int &$retryAfter = null): bool
 {
+    $retryAfter = null;
     $now = time();
     $windowStart = $now - BBX_CA_RATE_LIMIT_WINDOW;
     $store = bbx_ca_load_rate_limit_store($file);
@@ -321,16 +360,21 @@ function bbx_ca_enforce_rate_limit(string $file, string $bucketKey, int $maxAtte
 
     $attempts = $store[$bucketKey] ?? [];
     if (count($attempts) >= $maxAttempts) {
-        bbx_ca_save_rate_limit_store($file, $store);
+        if (!bbx_ca_save_rate_limit_store($file, $store)) {
+            return false;
+        }
         $oldestAttempt = min($attempts);
-        return max(1, BBX_CA_RATE_LIMIT_WINDOW - ($now - $oldestAttempt));
+        $retryAfter = max(1, BBX_CA_RATE_LIMIT_WINDOW - ($now - $oldestAttempt));
+        return true;
     }
 
     $attempts[] = $now;
     $store[$bucketKey] = $attempts;
-    bbx_ca_save_rate_limit_store($file, $store);
+    if (!bbx_ca_save_rate_limit_store($file, $store)) {
+        return false;
+    }
 
-    return null;
+    return true;
 }
 
 bbx_ca_apply_cors_headers();
@@ -341,12 +385,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
+if ($_SERVER['REQUEST_METHOD'] !== 'GET' && $_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['error' => 'Method not allowed']);
+    exit;
+}
+
 // Activity storage (Sprint 3: file-based, Sprint 4+: database)
 $activityFile = __DIR__ . '/../logs/console-activity.json';
 $logDir = dirname($activityFile);
 
-if (!is_dir($logDir)) {
-    @mkdir($logDir, 0755, true);
+if (!is_dir($logDir) && !@mkdir($logDir, 0755, true) && !is_dir($logDir)) {
+    bbx_ca_log_security('log_dir_unavailable');
+    http_response_code(500);
+    echo json_encode(['error' => 'Unable to process request']);
+    exit;
 }
 
 $rateLimitFile = $logDir . '/console-activity-throttle.json';
@@ -358,17 +411,22 @@ if ($_SERVER['REQUEST_METHOD'] !== 'OPTIONS' && !bbx_ca_is_allowed_request_origi
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET' || $_SERVER['REQUEST_METHOD'] === 'POST') {
-    $bucketKey = ($_SERVER['REQUEST_METHOD'] ?? 'unknown') . '|' . bbx_ca_client_ip();
-    $maxAttempts = $_SERVER['REQUEST_METHOD'] === 'GET' ? BBX_CA_GET_MAX_ATTEMPTS : BBX_CA_POST_MAX_ATTEMPTS;
-    $retryAfter = bbx_ca_enforce_rate_limit($rateLimitFile, $bucketKey, $maxAttempts);
-    if ($retryAfter !== null) {
-        bbx_ca_log_security('rate_limited', ['ip' => bbx_ca_client_ip(), 'method' => $_SERVER['REQUEST_METHOD'] ?? 'unknown']);
-        header('Retry-After: ' . $retryAfter);
-        http_response_code(429);
-        echo json_encode(['error' => 'Too many requests']);
-        exit;
-    }
+$bucketKey = ($_SERVER['REQUEST_METHOD'] ?? 'unknown') . '|' . bbx_ca_client_ip();
+$maxAttempts = $_SERVER['REQUEST_METHOD'] === 'GET' ? BBX_CA_GET_MAX_ATTEMPTS : BBX_CA_POST_MAX_ATTEMPTS;
+$retryAfter = null;
+if (!bbx_ca_enforce_rate_limit($rateLimitFile, $bucketKey, $maxAttempts, $retryAfter)) {
+    bbx_ca_log_security('throttle_store_write_failed', ['ip' => bbx_ca_client_ip(), 'method' => $_SERVER['REQUEST_METHOD'] ?? 'unknown']);
+    http_response_code(500);
+    echo json_encode(['error' => 'Unable to process request']);
+    exit;
+}
+
+if ($retryAfter !== null) {
+    bbx_ca_log_security('rate_limited', ['ip' => bbx_ca_client_ip(), 'method' => $_SERVER['REQUEST_METHOD'] ?? 'unknown']);
+    header('Retry-After: ' . $retryAfter);
+    http_response_code(429);
+    echo json_encode(['error' => 'Too many requests']);
+    exit;
 }
 
 /**
@@ -392,7 +450,12 @@ function loadActivity(string $file): array {
 function saveActivity(string $file, array $activity): bool {
     // Keep only last 50 events
     $activity = array_slice($activity, 0, 50);
-    return @file_put_contents($file, json_encode($activity, JSON_PRETTY_PRINT), LOCK_EX) !== false;
+    $encodedActivity = json_encode($activity, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
+    if (!is_string($encodedActivity)) {
+        return false;
+    }
+
+    return @file_put_contents($file, $encodedActivity, LOCK_EX) !== false;
 }
 
 /**
@@ -445,12 +508,26 @@ function formatRelativeTime(int $timestamp): string {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
     if (strpos($contentType, 'application/json') !== false) {
-        $rawInput = file_get_contents('php://input');
-        $inputLength = is_string($rawInput) ? strlen($rawInput) : 0;
-        if ($inputLength > BBX_CA_MAX_JSON_BYTES) {
+        if (bbx_ca_declared_body_too_large(BBX_CA_MAX_JSON_BYTES)) {
             bbx_ca_log_security('body_too_large', ['ip' => bbx_ca_client_ip()]);
             http_response_code(413);
             echo json_encode(['error' => 'Request body too large']);
+            exit;
+        }
+
+        $bodyTooLarge = false;
+        $rawInput = bbx_ca_read_bounded_body(BBX_CA_MAX_JSON_BYTES, $bodyTooLarge);
+        if ($bodyTooLarge) {
+            bbx_ca_log_security('body_too_large', ['ip' => bbx_ca_client_ip()]);
+            http_response_code(413);
+            echo json_encode(['error' => 'Request body too large']);
+            exit;
+        }
+
+        if ($rawInput === null) {
+            bbx_ca_log_security('body_read_failed', ['ip' => bbx_ca_client_ip()]);
+            http_response_code(500);
+            echo json_encode(['error' => 'Unable to process request']);
             exit;
         }
 

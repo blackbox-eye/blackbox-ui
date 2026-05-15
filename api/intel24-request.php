@@ -18,6 +18,39 @@ const BBX_I24_RATE_LIMIT_WINDOW = 600;
 const BBX_I24_RATE_LIMIT_MAX_ATTEMPTS = 5;
 const BBX_I24_RATE_LIMIT_MAX_IPS = 500;
 
+function bbx_i24_declared_body_too_large(int $maxBytes): bool
+{
+    $contentLength = $_SERVER['CONTENT_LENGTH'] ?? null;
+    if (!is_scalar($contentLength) || !is_numeric((string) $contentLength)) {
+        return false;
+    }
+
+    return (int) $contentLength > $maxBytes;
+}
+
+function bbx_i24_read_bounded_body(int $maxBytes, bool &$tooLarge = false): ?string
+{
+    $tooLarge = false;
+    $stream = fopen('php://input', 'rb');
+    if ($stream === false) {
+        return null;
+    }
+
+    $body = stream_get_contents($stream, $maxBytes + 1);
+    fclose($stream);
+
+    if (!is_string($body)) {
+        return null;
+    }
+
+    if (strlen($body) > $maxBytes) {
+        $tooLarge = true;
+        return null;
+    }
+
+    return $body;
+}
+
 function bbx_i24_log_security(string $event, array $context = []): void
 {
     $pairs = [];
@@ -202,7 +235,7 @@ function bbx_i24_load_rate_limit_store(string $file): array
     return is_array($data) ? $data : [];
 }
 
-function bbx_i24_save_rate_limit_store(string $file, array $store): void
+function bbx_i24_save_rate_limit_store(string $file, array $store): bool
 {
     $latestByIp = [];
     foreach ($store as $ip => $timestamps) {
@@ -220,11 +253,17 @@ function bbx_i24_save_rate_limit_store(string $file, array $store): void
         $boundedStore[$ip] = array_values(array_slice($store[$ip], -BBX_I24_RATE_LIMIT_MAX_ATTEMPTS));
     }
 
-    file_put_contents($file, json_encode($boundedStore, JSON_PRETTY_PRINT), LOCK_EX);
+    $encodedStore = json_encode($boundedStore, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
+    if (!is_string($encodedStore)) {
+        return false;
+    }
+
+    return file_put_contents($file, $encodedStore, LOCK_EX) !== false;
 }
 
-function bbx_i24_enforce_rate_limit(string $file): ?int
+function bbx_i24_enforce_rate_limit(string $file, ?int &$retryAfter = null): bool
 {
+    $retryAfter = null;
     $now = time();
     $windowStart = $now - BBX_I24_RATE_LIMIT_WINDOW;
     $ip = bbx_i24_client_ip();
@@ -254,16 +293,21 @@ function bbx_i24_enforce_rate_limit(string $file): ?int
 
     $attempts = $store[$ip] ?? [];
     if (count($attempts) >= BBX_I24_RATE_LIMIT_MAX_ATTEMPTS) {
-        bbx_i24_save_rate_limit_store($file, $store);
+        if (!bbx_i24_save_rate_limit_store($file, $store)) {
+            return false;
+        }
         $oldestAttempt = min($attempts);
-        return max(1, BBX_I24_RATE_LIMIT_WINDOW - ($now - $oldestAttempt));
+        $retryAfter = max(1, BBX_I24_RATE_LIMIT_WINDOW - ($now - $oldestAttempt));
+        return true;
     }
 
     $attempts[] = $now;
     $store[$ip] = $attempts;
-    bbx_i24_save_rate_limit_store($file, $store);
+    if (!bbx_i24_save_rate_limit_store($file, $store)) {
+        return false;
+    }
 
-    return null;
+    return true;
 }
 
 bbx_i24_apply_cors_headers();
@@ -295,7 +339,14 @@ if (!is_dir($rateLimitDir) && !mkdir($rateLimitDir, 0755, true) && !is_dir($rate
     exit;
 }
 
-$retryAfter = bbx_i24_enforce_rate_limit($rateLimitFile);
+$retryAfter = null;
+if (!bbx_i24_enforce_rate_limit($rateLimitFile, $retryAfter)) {
+    bbx_i24_log_security('throttle_store_write_failed');
+    http_response_code(500);
+    echo json_encode(['error' => 'Unable to process request']);
+    exit;
+}
+
 if ($retryAfter !== null) {
     bbx_i24_log_security('rate_limited', ['ip' => bbx_i24_client_ip()]);
     header('Retry-After: ' . $retryAfter);
@@ -305,12 +356,26 @@ if ($retryAfter !== null) {
 }
 
 // Get JSON input
-$input = file_get_contents('php://input');
-$inputLength = is_string($input) ? strlen($input) : 0;
-if ($inputLength > BBX_I24_MAX_BODY_BYTES) {
+if (bbx_i24_declared_body_too_large(BBX_I24_MAX_BODY_BYTES)) {
     bbx_i24_log_security('invalid_body_size', ['ip' => bbx_i24_client_ip()]);
     http_response_code(413);
     echo json_encode(['error' => 'Request body too large']);
+    exit;
+}
+
+$bodyTooLarge = false;
+$input = bbx_i24_read_bounded_body(BBX_I24_MAX_BODY_BYTES, $bodyTooLarge);
+if ($bodyTooLarge) {
+    bbx_i24_log_security('invalid_body_size', ['ip' => bbx_i24_client_ip()]);
+    http_response_code(413);
+    echo json_encode(['error' => 'Request body too large']);
+    exit;
+}
+
+if ($input === null) {
+    bbx_i24_log_security('body_read_failed', ['ip' => bbx_i24_client_ip()]);
+    http_response_code(500);
+    echo json_encode(['error' => 'Unable to process request']);
     exit;
 }
 
@@ -398,7 +463,15 @@ $requests[] = $request;
 // Keep only last 100 requests
 $requests = array_slice($requests, -100);
 
-if (file_put_contents($requests_file, json_encode($requests, JSON_PRETTY_PRINT), LOCK_EX) === false) {
+$encodedRequests = json_encode($requests, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
+if (!is_string($encodedRequests)) {
+    bbx_i24_log_security('request_store_encode_failed');
+    http_response_code(500);
+    echo json_encode(['error' => 'Unable to process request']);
+    exit;
+}
+
+if (file_put_contents($requests_file, $encodedRequests, LOCK_EX) === false) {
     bbx_i24_log_security('request_store_write_failed');
     http_response_code(500);
     echo json_encode(['error' => 'Unable to process request']);

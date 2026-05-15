@@ -21,6 +21,39 @@ const BBX_CONSENT_RATE_LIMIT_WINDOW = 300;
 const BBX_CONSENT_RATE_LIMIT_MAX_ATTEMPTS = 60;
 const BBX_CONSENT_RATE_LIMIT_MAX_IPS = 500;
 
+function bbx_consent_declared_body_too_large(int $maxBytes): bool
+{
+  $contentLength = $_SERVER['CONTENT_LENGTH'] ?? null;
+  if (!is_scalar($contentLength) || !is_numeric((string) $contentLength)) {
+    return false;
+  }
+
+  return (int) $contentLength > $maxBytes;
+}
+
+function bbx_consent_read_bounded_body(int $maxBytes, bool &$tooLarge = false): ?string
+{
+  $tooLarge = false;
+  $stream = fopen('php://input', 'rb');
+  if ($stream === false) {
+    return null;
+  }
+
+  $body = stream_get_contents($stream, $maxBytes + 1);
+  fclose($stream);
+
+  if (!is_string($body)) {
+    return null;
+  }
+
+  if (strlen($body) > $maxBytes) {
+    $tooLarge = true;
+    return null;
+  }
+
+  return $body;
+}
+
 function bbx_consent_log_security(string $event, array $context = []): void
 {
   $pairs = [];
@@ -182,7 +215,7 @@ function bbx_consent_load_rate_limit_store(string $file): array
   return is_array($data) ? $data : [];
 }
 
-function bbx_consent_save_rate_limit_store(string $file, array $store): void
+function bbx_consent_save_rate_limit_store(string $file, array $store): bool
 {
   $latestByIp = [];
   foreach ($store as $ip => $timestamps) {
@@ -200,11 +233,17 @@ function bbx_consent_save_rate_limit_store(string $file, array $store): void
     $boundedStore[$ip] = array_values(array_slice($store[$ip], -BBX_CONSENT_RATE_LIMIT_MAX_ATTEMPTS));
   }
 
-  @file_put_contents($file, json_encode($boundedStore, JSON_PRETTY_PRINT), LOCK_EX);
+  $encodedStore = json_encode($boundedStore, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
+  if (!is_string($encodedStore)) {
+    return false;
+  }
+
+  return @file_put_contents($file, $encodedStore, LOCK_EX) !== false;
 }
 
-function bbx_consent_enforce_rate_limit(string $file): ?int
+function bbx_consent_enforce_rate_limit(string $file, ?int &$retryAfter = null): bool
 {
+  $retryAfter = null;
   $now = time();
   $windowStart = $now - BBX_CONSENT_RATE_LIMIT_WINDOW;
   $ip = bbx_consent_client_ip();
@@ -234,16 +273,21 @@ function bbx_consent_enforce_rate_limit(string $file): ?int
 
   $attempts = $store[$ip] ?? [];
   if (count($attempts) >= BBX_CONSENT_RATE_LIMIT_MAX_ATTEMPTS) {
-    bbx_consent_save_rate_limit_store($file, $store);
+    if (!bbx_consent_save_rate_limit_store($file, $store)) {
+      return false;
+    }
     $oldestAttempt = min($attempts);
-    return max(1, BBX_CONSENT_RATE_LIMIT_WINDOW - ($now - $oldestAttempt));
+    $retryAfter = max(1, BBX_CONSENT_RATE_LIMIT_WINDOW - ($now - $oldestAttempt));
+    return true;
   }
 
   $attempts[] = $now;
   $store[$ip] = $attempts;
-  bbx_consent_save_rate_limit_store($file, $store);
+  if (!bbx_consent_save_rate_limit_store($file, $store)) {
+    return false;
+  }
 
-  return null;
+  return true;
 }
 
 // Only accept POST
@@ -262,11 +306,21 @@ if (!bbx_consent_is_allowed_request_origin()) {
 
 $rateLimitFile = __DIR__ . '/../logs/consent-log-throttle.json';
 $rateLimitDir = dirname($rateLimitFile);
-if (!is_dir($rateLimitDir)) {
-  @mkdir($rateLimitDir, 0755, true);
+if (!is_dir($rateLimitDir) && !@mkdir($rateLimitDir, 0755, true) && !is_dir($rateLimitDir)) {
+  bbx_consent_log_security('throttle_store_unavailable');
+  http_response_code(500);
+  echo json_encode(['error' => 'Unable to process request']);
+  exit;
 }
 
-$retryAfter = bbx_consent_enforce_rate_limit($rateLimitFile);
+$retryAfter = null;
+if (!bbx_consent_enforce_rate_limit($rateLimitFile, $retryAfter)) {
+  bbx_consent_log_security('throttle_store_write_failed', ['ip' => bbx_consent_client_ip()]);
+  http_response_code(500);
+  echo json_encode(['error' => 'Unable to process request']);
+  exit;
+}
+
 if ($retryAfter !== null) {
   bbx_consent_log_security('rate_limited', ['ip' => bbx_consent_client_ip()]);
   header('Retry-After: ' . $retryAfter);
@@ -276,12 +330,26 @@ if ($retryAfter !== null) {
 }
 
 // Parse JSON body
-$rawInput = file_get_contents('php://input');
-$inputLength = is_string($rawInput) ? strlen($rawInput) : 0;
-if ($inputLength > BBX_CONSENT_MAX_BODY_BYTES) {
+if (bbx_consent_declared_body_too_large(BBX_CONSENT_MAX_BODY_BYTES)) {
   bbx_consent_log_security('body_too_large', ['ip' => bbx_consent_client_ip()]);
   http_response_code(413);
   echo json_encode(['error' => 'Request body too large']);
+  exit;
+}
+
+$bodyTooLarge = false;
+$rawInput = bbx_consent_read_bounded_body(BBX_CONSENT_MAX_BODY_BYTES, $bodyTooLarge);
+if ($bodyTooLarge) {
+  bbx_consent_log_security('body_too_large', ['ip' => bbx_consent_client_ip()]);
+  http_response_code(413);
+  echo json_encode(['error' => 'Request body too large']);
+  exit;
+}
+
+if ($rawInput === null) {
+  bbx_consent_log_security('body_read_failed', ['ip' => bbx_consent_client_ip()]);
+  http_response_code(500);
+  echo json_encode(['error' => 'Unable to process request']);
   exit;
 }
 

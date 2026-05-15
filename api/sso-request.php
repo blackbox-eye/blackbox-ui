@@ -110,7 +110,12 @@ function bbx_sso_request_normalize_host(string $host): string
         return substr($host, 1, $end - 1);
     }
 
-    if (strpos($host, ']') !== false) {
+    if (strpos($host, '[') !== false || strpos($host, ']') !== false) {
+        return '';
+    }
+
+    // parse_url() host components may contain bare IPv6 literals, but not host:port text.
+    if (strpos($host, ':') !== false && preg_match('/^[0-9a-f:.]+$/', $host) !== 1) {
         return '';
     }
 
@@ -186,7 +191,12 @@ function bbx_sso_request_current_origin(): ?array
 function bbx_sso_request_is_allowed_request_origin(): bool
 {
     $currentOrigin = bbx_sso_request_current_origin();
-    if ($currentOrigin === null || $currentOrigin['host'] === '') {
+    if (
+        $currentOrigin === null ||
+        !isset($currentOrigin['scheme'], $currentOrigin['host'], $currentOrigin['port']) ||
+        $currentOrigin['host'] === '' ||
+        !in_array($currentOrigin['scheme'], ['http', 'https'], true)
+    ) {
         return false;
     }
 
@@ -229,14 +239,15 @@ function bbx_sso_request_client_ip(): string
 }
 
 // Single-line field normalizer for company/email/domain/provider/console values only.
-// Notes must use bbx_sso_request_normalize_notes() so \n and \t survive normalization.
+// It intentionally removes embedded line breaks; notes must use
+// bbx_sso_request_normalize_notes() so \n and \t survive normalization.
 function bbx_sso_request_normalize_text($value, int $maxLength, bool $lowercase = false): string
 {
     if (!is_scalar($value)) {
         return '';
     }
 
-    $text = trim((string) $value);
+    $text = trim(str_replace(["\r\n", "\r", "\n"], ' ', (string) $value));
     $text = preg_replace('/[\x00-\x1F\x7F]+/u', ' ', $text) ?? $text;
     $text = preg_replace('/\s+/u', ' ', $text) ?? $text;
 
@@ -370,6 +381,9 @@ function bbx_sso_request_enforce_rate_limit(string $file, ?int &$retryAfter = nu
     $allowed = count($attempts) < BBX_SSO_REQUEST_RATE_LIMIT_MAX_ATTEMPTS;
 
     if (!$allowed) {
+        // Persist the pruned store even on rejection, and keep this IP slice bounded.
+        $attempts = array_values(array_slice($attempts, -BBX_SSO_REQUEST_RATE_LIMIT_MAX_ATTEMPTS));
+        $store[$ip] = $attempts;
         $oldest = min($attempts);
         $retryAfter = max(1, BBX_SSO_REQUEST_RATE_LIMIT_WINDOW - ($now - $oldest));
     } else {

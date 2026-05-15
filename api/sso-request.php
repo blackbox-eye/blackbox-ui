@@ -77,18 +77,22 @@ function bbx_sso_request_read_bounded_body(int $maxBytes, bool &$tooLarge = fals
 
 function bbx_sso_request_log_security(string $event, array $context = []): void
 {
-    $pairs = [];
+    $safeContext = [];
     foreach ($context as $key => $value) {
-        if (!is_scalar($value) || $value === '') {
-            continue;
+        if (is_scalar($value)) {
+            $safeContext[(string) $key] = $value;
         }
-
-        $pairs[] = $key . '=' . (string) $value;
     }
 
-    error_log('sso-request security: ' . $event . (empty($pairs) ? '' : ' ' . implode(' ', $pairs)));
+    $contextJson = json_encode($safeContext, JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE);
+    error_log(
+        'sso-request security: ' . $event .
+        (is_string($contextJson) && $contextJson !== '{}' ? ' ' . $contextJson : '')
+    );
 }
 
+// Expects the 'host' component already extracted by parse_url() — port is never included.
+// De-brackets IPv6 addresses; no host:port stripping is needed or performed here.
 function bbx_sso_request_normalize_host(string $host): string
 {
     $host = strtolower(trim($host));
@@ -101,11 +105,6 @@ function bbx_sso_request_normalize_host(string $host): string
         if ($end !== false) {
             return substr($host, 1, $end - 1);
         }
-    }
-
-    if (substr_count($host, ':') === 1) {
-        $parts = explode(':', $host, 2);
-        return $parts[0];
     }
 
     return $host;
@@ -144,13 +143,15 @@ function bbx_sso_request_current_origin(): ?array
         return null;
     }
 
-    $scheme = 'https';
+    // Default to http; only elevate to https when there is positive evidence.
+    // This avoids misidentifying non-standard HTTP ports (e.g. 8080) as https.
+    $scheme = 'http';
     if (!empty($_SERVER['REQUEST_SCHEME'])) {
         $scheme = strtolower((string) $_SERVER['REQUEST_SCHEME']);
     } elseif (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off') {
         $scheme = 'https';
-    } elseif (isset($_SERVER['SERVER_PORT']) && (int) $_SERVER['SERVER_PORT'] === 80) {
-        $scheme = 'http';
+    } elseif (isset($_SERVER['SERVER_PORT']) && (int) $_SERVER['SERVER_PORT'] === 443) {
+        $scheme = 'https';
     }
 
     $parts = parse_url('//' . trim($hostHeader));
@@ -174,12 +175,16 @@ function bbx_sso_request_is_allowed_request_origin(): bool
         return true;
     }
 
+    // This is a state-changing POST endpoint. At least one origin header must be present
+    // and must match the current origin. Requests with neither Origin nor Referer are rejected.
+    $headerFound = false;
     foreach (['HTTP_ORIGIN', 'HTTP_REFERER'] as $headerName) {
         $headerValue = $_SERVER[$headerName] ?? '';
         if (!is_string($headerValue) || trim($headerValue) === '') {
             continue;
         }
 
+        $headerFound = true;
         $requestOrigin = bbx_sso_request_parse_origin($headerValue);
         if ($requestOrigin === null) {
             return false;
@@ -192,6 +197,10 @@ function bbx_sso_request_is_allowed_request_origin(): bool
         ) {
             return false;
         }
+    }
+
+    if (!$headerFound) {
+        return false;
     }
 
     return true;
@@ -217,6 +226,29 @@ function bbx_sso_request_normalize_text($value, int $maxLength, bool $lowercase 
     if ($lowercase) {
         $text = strtolower($text);
     }
+
+    if (function_exists('mb_substr')) {
+        return mb_substr($text, 0, $maxLength);
+    }
+
+    return substr($text, 0, $maxLength);
+}
+
+function bbx_sso_request_normalize_notes($value, int $maxLength): string
+{
+    if (!is_scalar($value)) {
+        return '';
+    }
+
+    $text = (string) $value;
+    // Strip unsafe control characters; preserve newlines (\n, \r) and tabs (\t).
+    $text = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/u', '', $text) ?? $text;
+    // Collapse runs of plain spaces only — tabs and newlines are intentionally kept.
+    $text = preg_replace('/ +/u', ' ', $text) ?? $text;
+    // Trim only leading/trailing spaces (not tabs) from each line, then from the whole string.
+    $lines = preg_split('/\r?\n/', $text) ?? [$text];
+    $lines = array_map(static fn(string $l): string => trim($l, ' '), $lines);
+    $text = trim(implode("\n", $lines), ' ');
 
     if (function_exists('mb_substr')) {
         return mb_substr($text, 0, $maxLength);
@@ -251,16 +283,6 @@ function bbx_sso_request_is_valid_console(string $console): bool
     return preg_match('/^[a-z0-9][a-z0-9_-]{0,31}$/', $console) === 1;
 }
 
-function bbx_sso_request_load_rate_limit_store(string $file): array
-{
-    if (!file_exists($file)) {
-        return [];
-    }
-
-    $data = json_decode((string) @file_get_contents($file), true);
-    return is_array($data) ? $data : [];
-}
-
 function bbx_sso_request_ensure_directory(string $file): bool
 {
     $directory = dirname($file);
@@ -271,45 +293,34 @@ function bbx_sso_request_ensure_directory(string $file): bool
     return @mkdir($directory, 0755, true) || is_dir($directory);
 }
 
-function bbx_sso_request_save_rate_limit_store(string $file, array $store): bool
-{
-    if (!bbx_sso_request_ensure_directory($file)) {
-        return false;
-    }
-
-    $latestByIp = [];
-    foreach ($store as $ip => $timestamps) {
-        if (!is_array($timestamps) || empty($timestamps)) {
-            unset($store[$ip]);
-            continue;
-        }
-
-        $latestByIp[$ip] = max($timestamps);
-    }
-
-    arsort($latestByIp);
-    $allowedIps = array_slice(array_keys($latestByIp), 0, BBX_SSO_REQUEST_RATE_LIMIT_MAX_IPS);
-    $boundedStore = [];
-    foreach ($allowedIps as $ip) {
-        $boundedStore[$ip] = array_values(array_slice($store[$ip], -BBX_SSO_REQUEST_RATE_LIMIT_MAX_ATTEMPTS));
-    }
-
-    $encodedStore = json_encode($boundedStore, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
-    if (!is_string($encodedStore)) {
-        return false;
-    }
-
-    return @file_put_contents($file, $encodedStore, LOCK_EX) !== false;
-}
-
 function bbx_sso_request_enforce_rate_limit(string $file, ?int &$retryAfter = null): bool
 {
     $retryAfter = null;
     $now = time();
     $windowStart = $now - BBX_SSO_REQUEST_RATE_LIMIT_WINDOW;
     $ip = bbx_sso_request_client_ip();
-    $store = bbx_sso_request_load_rate_limit_store($file);
 
+    if (!bbx_sso_request_ensure_directory($file)) {
+        return false;
+    }
+
+    // Single flock-protected cycle: load → prune stale entries → check → append → save.
+    // Covers all steps within one exclusive lock to prevent TOCTOU races.
+    $handle = @fopen($file, 'c+b');
+    if ($handle === false) {
+        return false;
+    }
+
+    if (!flock($handle, LOCK_EX)) {
+        fclose($handle);
+        return false;
+    }
+
+    $raw = stream_get_contents($handle);
+    $store = (is_string($raw) && $raw !== '') ? json_decode($raw, true) : null;
+    $store = is_array($store) ? $store : [];
+
+    // Prune stale entries for every IP inside the lock.
     foreach ($store as $storedIp => $timestamps) {
         if (!is_array($timestamps)) {
             unset($store[$storedIp]);
@@ -326,23 +337,50 @@ function bbx_sso_request_enforce_rate_limit(string $file, ?int &$retryAfter = nu
 
         if (empty($filtered)) {
             unset($store[$storedIp]);
-            continue;
+        } else {
+            $store[$storedIp] = $filtered;
         }
-
-        $store[$storedIp] = $filtered;
     }
 
     $attempts = $store[$ip] ?? [];
-    if (count($attempts) >= BBX_SSO_REQUEST_RATE_LIMIT_MAX_ATTEMPTS) {
+    $allowed = count($attempts) < BBX_SSO_REQUEST_RATE_LIMIT_MAX_ATTEMPTS;
+
+    if (!$allowed) {
         $oldest = min($attempts);
         $retryAfter = max(1, BBX_SSO_REQUEST_RATE_LIMIT_WINDOW - ($now - $oldest));
-        return false;
+    } else {
+        $attempts[] = $now;
+        $store[$ip] = $attempts;
+
+        // Bound total tracked IPs to prevent unbounded store growth.
+        if (count($store) > BBX_SSO_REQUEST_RATE_LIMIT_MAX_IPS) {
+            $latestByIp = [];
+            foreach ($store as $storeIp => $timestamps) {
+                $latestByIp[$storeIp] = max($timestamps);
+            }
+            arsort($latestByIp);
+            $allowedIps = array_slice(array_keys($latestByIp), 0, BBX_SSO_REQUEST_RATE_LIMIT_MAX_IPS);
+            $bounded = [];
+            foreach ($allowedIps as $allowedIp) {
+                $bounded[$allowedIp] = array_values(
+                    array_slice($store[$allowedIp], -BBX_SSO_REQUEST_RATE_LIMIT_MAX_ATTEMPTS)
+                );
+            }
+            $store = $bounded;
+        }
     }
 
-    $attempts[] = $now;
-    $store[$ip] = $attempts;
+    $encodedStore = json_encode($store, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
+    if (is_string($encodedStore)) {
+        ftruncate($handle, 0);
+        rewind($handle);
+        fwrite($handle, $encodedStore);
+    }
 
-    return bbx_sso_request_save_rate_limit_store($file, $store);
+    flock($handle, LOCK_UN);
+    fclose($handle);
+
+    return $allowed;
 }
 
 function bbx_sso_request_generate_request_id(): string
@@ -428,7 +466,7 @@ $data = [
     'email'    => bbx_sso_request_normalize_text($input['email'] ?? '', BBX_SSO_REQUEST_MAX_EMAIL_LENGTH, true),
     'domain'   => bbx_sso_request_normalize_text($input['domain'] ?? '', BBX_SSO_REQUEST_MAX_DOMAIN_LENGTH, true),
     'provider' => bbx_sso_request_normalize_text($input['provider'] ?? '', BBX_SSO_REQUEST_MAX_PROVIDER_LENGTH, true),
-    'notes'    => bbx_sso_request_normalize_text($input['notes'] ?? '', BBX_SSO_REQUEST_MAX_NOTES_LENGTH),
+    'notes'    => bbx_sso_request_normalize_notes($input['notes'] ?? '', BBX_SSO_REQUEST_MAX_NOTES_LENGTH),
     'console'  => bbx_sso_request_normalize_text($input['console'] ?? 'ccs', BBX_SSO_REQUEST_MAX_CONSOLE_LENGTH, true),
 ];
 
@@ -480,16 +518,17 @@ $logEntry = [
     'request_id'  => $requestId,
     'type'        => 'sso_request',
     'data'        => $data,
-    'ip'          => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
-    'user_agent'  => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
+    'ip'          => bbx_sso_request_client_ip(),
+    'user_agent'  => substr((string) ($_SERVER['HTTP_USER_AGENT'] ?? 'unknown'), 0, 512),
     'timestamp'   => date('c'),
 ];
 
-// Log to file for Sprint 3 (production would use DB)
+// Log to file for Sprint 3 (production would use DB).
+// Log write failure is non-fatal: the request_id has been generated and validated;
+// throttle-store failure (above) is fail-closed, log-file failure is not.
 $logFile = __DIR__ . '/../logs/sso-requests.log';
 if (!bbx_sso_request_write_log($logFile, $logEntry)) {
     bbx_sso_request_log_security('log_write_failed', ['ip' => bbx_sso_request_client_ip()]);
-    bbx_sso_request_respond(500, ['ok' => false, 'error' => 'Unable to process request']);
 }
 
 // Return success

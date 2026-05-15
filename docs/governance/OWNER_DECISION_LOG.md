@@ -2,7 +2,7 @@
 
 Status: canonical owner-decision record for governance baselines that affect `blackbox-eye/blackbox-ui` documentation and future PR scope.
 
-Last reviewed: 2026-05-14.
+Last reviewed: 2026-05-15.
 
 ## D20: Legal entity baseline
 

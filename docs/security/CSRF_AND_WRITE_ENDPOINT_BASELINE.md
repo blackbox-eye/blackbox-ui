@@ -8,7 +8,7 @@ This document is a governance baseline only. It does not approve runtime or secu
 
 ## 1. Purpose
 
-This document defines the current security baseline and implementation gate for CSRF and public/internal write endpoints before any runtime or security PR is approved.
+This document defines the current security baseline and implementation gate for CSRF and public/internal write endpoints, including repo-visible non-POST mutation surfaces, before any runtime or security PR is approved.
 
 The goal is to prevent speculative security edits, avoid bundled security waves, and require future implementation to be split into narrow surfaces with explicit validation.
 
@@ -20,9 +20,10 @@ This baseline covers repo-visible write or mutation-capable routes that were ins
 - authenticated admin or self-service mutations
 - `api/` endpoints that accept `POST`, `PUT`, `PATCH`, or `DELETE`
 - login or access flows with visible `POST` behavior
+- non-POST mutation surfaces where a GET-triggered route execution updates counters, access timestamps, or audit records
 - upload, delete, logging, or activity-write endpoints
 
-GET-only routes are included in the register only where needed to define the write-surface boundary.
+Pure GET-only read routes are included in the register only where needed to define the write-surface boundary. GET-triggered mutations remain in scope as non-POST mutation surfaces.
 
 ## 3. Evidence basis
 
@@ -58,6 +59,7 @@ Phase F post-deploy validation also explicitly left CSRF and code-level route cl
 - Any browser-reachable endpoint that performs an authenticated mutation through ambient session state must be treated as requiring a CSRF contract before it can be considered hardened.
 - JSON endpoints are not exempt if they rely on browser session cookies or other ambient auth state.
 - Public unauthenticated submission endpoints are not automatically classified as classic CSRF surfaces, but they still require explicit abuse-control and origin-handling review before being treated as hardened.
+- GET-triggered mutation surfaces must not be excluded from write-surface planning just because the incoming request method is nominally read-oriented.
 - No endpoint in this baseline is marked as having a repo-verified CSRF contract.
 
 ## 6. Write endpoint hardening requirements
@@ -68,6 +70,7 @@ Future implementation PRs must address the relevant subset of the following requ
 - explicit auth/session gate where the route is intended to be authenticated
 - explicit CSRF protection for authenticated mutations
 - clear treatment of public unauthenticated submissions as abuse-sensitive write surfaces
+- method-normalization or route-contract review where a nominally read route performs a repo-visible mutation
 - input validation and bounded error handling
 - origin and CORS review for any browser-callable write endpoint
 - rate-limit, bot-protection, or equivalent abuse-control review where public writes exist
@@ -83,6 +86,7 @@ Allowed future security implementation must be split by one security surface per
 - API key CRUD
 - console activity or request logging endpoints
 - Intel Vault upload and delete
+- non-POST mutation surfaces such as GET-triggered counters, access timestamps, or audit writes
 - consent or settings-preference write endpoints
 - login or auth-adjacent POST flows as a separate auth/security PR
 
@@ -132,6 +136,7 @@ Stop and return for review if:
 Recommended split for future security work:
 
 1. Public submission endpoints: `contact-submit.php`, `scan-submit.php`, `api/request-access.php`, `api/intel24-request.php`, `api/sso-request.php`, `api/faq-feedback.php`, `api/faq-search.php`, `api/consent-log.php`, and any public logging or activity POSTs.
-2. Authenticated admin and self-service mutations: `access-requests.php`, `admin.php`, `settings.php`, `change-agentid.php`, `update-contact.php`, `api/graphene-toggle.php`, `api/ai-command.php`.
-3. High-sensitivity API CRUD and vault operations: `api/api-keys.php`, `api/vault-upload.php`, `api/vault-delete.php`.
-4. Auth-adjacent POST flows: `gdi-login.php` and `ccs-login.php`, separately reviewed from general CSRF work.
+2. Authenticated admin and self-service mutations: `access-requests.php`, `admin.php`, `settings.php`, `change-agentid.php`, `update-contact.php`, `toggle-ghost.php`, `api/graphene-toggle.php`, `api/ai-command.php`.
+3. High-sensitivity API CRUD and direct vault write operations: `api/api-keys.php`, `api/vault-upload.php`, `api/vault-delete.php`.
+4. Non-POST mutation surfaces: `blog-post.php` via `bbx_get_blog_post()` view increment and `api/vault-download.php` access/audit updates.
+5. Auth-adjacent POST flows: `gdi-login.php` and `ccs-login.php`, separately reviewed from general CSRF work.

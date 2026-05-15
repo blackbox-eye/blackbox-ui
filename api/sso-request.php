@@ -91,20 +91,27 @@ function bbx_sso_request_log_security(string $event, array $context = []): void
     );
 }
 
-// Expects the 'host' component already extracted by parse_url() — port is never included.
-// De-brackets IPv6 addresses; no host:port stripping is needed or performed here.
+// Accepts only parse_url() host components. Reject malformed raw fragments such as
+// slash/whitespace input or empty bracket hosts; no host:port stripping is performed here.
+// De-brackets IPv6 addresses after validating the bracketed host shape.
 function bbx_sso_request_normalize_host(string $host): string
 {
     $host = strtolower(trim($host));
-    if ($host === '') {
+    if ($host === '' || preg_match('/[\/\s]/u', $host) === 1) {
         return '';
     }
 
     if ($host[0] === '[') {
         $end = strpos($host, ']');
-        if ($end !== false) {
-            return substr($host, 1, $end - 1);
+        if ($end === false || $end !== strlen($host) - 1 || $end === 1) {
+            return '';
         }
+
+        return substr($host, 1, $end - 1);
+    }
+
+    if (strpos($host, ']') !== false) {
+        return '';
     }
 
     return $host;
@@ -128,10 +135,14 @@ function bbx_sso_request_parse_origin(string $value): ?array
 
     $scheme = isset($parts['scheme']) ? strtolower((string) $parts['scheme']) : 'https';
     $port = isset($parts['port']) ? (int) $parts['port'] : null;
+    $host = bbx_sso_request_normalize_host((string) $parts['host']);
+    if ($host === '') {
+        return null;
+    }
 
     return [
         'scheme' => $scheme,
-        'host' => bbx_sso_request_normalize_host((string) $parts['host']),
+        'host' => $host,
         'port' => bbx_sso_request_normalize_port($scheme, $port),
     ];
 }
@@ -160,10 +171,14 @@ function bbx_sso_request_current_origin(): ?array
     }
 
     $port = isset($parts['port']) ? (int) $parts['port'] : null;
+    $host = bbx_sso_request_normalize_host((string) $parts['host']);
+    if ($host === '') {
+        return null;
+    }
 
     return [
         'scheme' => $scheme,
-        'host' => bbx_sso_request_normalize_host((string) $parts['host']),
+        'host' => $host,
         'port' => bbx_sso_request_normalize_port($scheme, $port),
     ];
 }
@@ -172,7 +187,7 @@ function bbx_sso_request_is_allowed_request_origin(): bool
 {
     $currentOrigin = bbx_sso_request_current_origin();
     if ($currentOrigin === null || $currentOrigin['host'] === '') {
-        return true;
+        return false;
     }
 
     // This is a state-changing POST endpoint. At least one origin header must be present
@@ -213,6 +228,8 @@ function bbx_sso_request_client_ip(): string
     return $ip === '' ? 'unknown' : substr($ip, 0, 64);
 }
 
+// Single-line field normalizer for company/email/domain/provider/console values only.
+// Notes must use bbx_sso_request_normalize_notes() so \n and \t survive normalization.
 function bbx_sso_request_normalize_text($value, int $maxLength, bool $lowercase = false): string
 {
     if (!is_scalar($value)) {
@@ -316,6 +333,13 @@ function bbx_sso_request_enforce_rate_limit(string $file, ?int &$retryAfter = nu
         return false;
     }
 
+    $releaseAndFail = static function ($lockedHandle) use (&$retryAfter): bool {
+        $retryAfter = null;
+        flock($lockedHandle, LOCK_UN);
+        fclose($lockedHandle);
+        return false;
+    };
+
     $raw = stream_get_contents($handle);
     $store = (is_string($raw) && $raw !== '') ? json_decode($raw, true) : null;
     $store = is_array($store) ? $store : [];
@@ -371,10 +395,21 @@ function bbx_sso_request_enforce_rate_limit(string $file, ?int &$retryAfter = nu
     }
 
     $encodedStore = json_encode($store, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
-    if (is_string($encodedStore)) {
-        ftruncate($handle, 0);
-        rewind($handle);
-        fwrite($handle, $encodedStore);
+    if (!is_string($encodedStore)) {
+        return $releaseAndFail($handle);
+    }
+
+    if (!ftruncate($handle, 0)) {
+        return $releaseAndFail($handle);
+    }
+
+    if (!rewind($handle)) {
+        return $releaseAndFail($handle);
+    }
+
+    $bytesWritten = fwrite($handle, $encodedStore);
+    if ($bytesWritten === false || $bytesWritten < strlen($encodedStore) || !fflush($handle)) {
+        return $releaseAndFail($handle);
     }
 
     flock($handle, LOCK_UN);

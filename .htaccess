@@ -115,14 +115,7 @@ RewriteRule ^(?:includes|vendor|logs|data|db|test)(?:/|$) - [F,L,NC]
 RewriteRule ^(?:recaptcha-debug\.php|deploy_trigger\.txt|trigger_ftp\.txt|test\.txt)$ - [F,L,NC]
 
 # Block direct access to the repository manifest without affecting app routes.
-<Files "package.json">
-<IfModule mod_authz_core.c>
-Require all denied
-</IfModule>
-<IfModule !mod_authz_core.c>
-Deny from all
-</IfModule>
-</Files>
+RewriteRule ^package\.json$ - [F,L,NC]
 
 # Bevarer de eksisterende regler for "clean URLs".
 RewriteCond %{REQUEST_FILENAME} !-f

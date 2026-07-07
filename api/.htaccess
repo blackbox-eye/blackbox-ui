@@ -1,3 +1,4 @@
-# Block Apache autoindex in /api/ without affecting direct endpoint access.
+# Block only the /api/ directory request without affecting direct endpoint access.
 
-Options -Indexes
+RewriteEngine On
+RewriteRule ^$ - [F,L]

@@ -1,0 +1,3 @@
+# Block Apache autoindex in /api/ without affecting direct endpoint access.
+
+Options -Indexes

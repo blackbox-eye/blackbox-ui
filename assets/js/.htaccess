@@ -1,0 +1,10 @@
+# Block direct access to the deployed source map while keeping runtime JS public.
+
+<Files "site.min.js.map">
+<IfModule mod_authz_core.c>
+Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+Deny from all
+</IfModule>
+</Files>

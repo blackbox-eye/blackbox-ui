@@ -114,6 +114,9 @@ RewriteEngine On
 RewriteRule ^(?:includes|vendor|logs|data|db|test)(?:/|$) - [F,L,NC]
 RewriteRule ^(?:recaptcha-debug\.php|deploy_trigger\.txt|trigger_ftp\.txt|test\.txt)$ - [F,L,NC]
 
+# Block direct access to the repository manifest without affecting app routes.
+RewriteRule ^package\.json$ - [F,L,NC]
+
 # Bevarer de eksisterende regler for "clean URLs".
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

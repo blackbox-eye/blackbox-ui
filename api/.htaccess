@@ -1,0 +1,4 @@
+# Block only the /api/ directory request without affecting direct endpoint access.
+
+RewriteEngine On
+RewriteRule ^$ - [F,L]

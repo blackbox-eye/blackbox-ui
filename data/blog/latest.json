@@ -1,0 +1,277 @@
+{
+  "$schema": "posts-schema",
+  "version": "1.0.0",
+  "generated_at": "2026-08-31T13:15:52.575Z",
+  "pipeline_version": "1.0.0",
+  "metadata": {
+    "total_posts": 14,
+    "regions": [
+      "denmark"
+    ],
+    "date_range": {
+      "earliest": "2025-11-08T00:00:00.000Z",
+      "latest": "2025-12-17T00:00:00.000Z"
+    }
+  },
+  "posts": [
+    {
+      "id": "d8a2656b50b6d956",
+      "title": "Nordisk-baltisk cybersamarbejde forankres i DK",
+      "url": "https://www.danskerhverv.dk/nordisk-baltisk-cyber-samarbejde-dk",
+      "source": "Dansk Erhverv",
+      "country": "DK",
+      "region": "denmark",
+      "published_at": "2025-12-17T00:00:00.000Z",
+      "tags": [
+        "cooperation",
+        "nordic",
+        "baltic",
+        "international"
+      ],
+      "risk_level": "low",
+      "excerpt": "Danmark bliver hub for nordisk-baltisk cybersikkerhedssamarbejde",
+      "language": "da",
+      "collected_at": "2026-08-31T13:15:49.396Z"
+    },
+    {
+      "id": "cb2d34790055e88a",
+      "title": "Forbered din virksomhed på cyberangreb",
+      "url": "https://www.danskerhverv.dk/forbered-virksomhed-cyberangreb",
+      "source": "Dansk Erhverv",
+      "country": "DK",
+      "region": "denmark",
+      "published_at": "2025-12-16T00:00:00.000Z",
+      "tags": [
+        "guidance",
+        "SME",
+        "preparedness"
+      ],
+      "risk_level": "low",
+      "excerpt": "Dansk Erhverv udgiver guide til at forberede virksomheder på cyberangreb",
+      "language": "da",
+      "collected_at": "2026-08-31T13:15:49.396Z"
+    },
+    {
+      "id": "2094535bb9ae23d0",
+      "title": "Bekymring for cyberangreb stiger",
+      "url": "https://www.danskerhverv.dk/bekymring-cyberangreb-stiger",
+      "source": "Dansk Erhverv",
+      "country": "DK",
+      "region": "denmark",
+      "published_at": "2025-12-10T00:00:00.000Z",
+      "tags": [
+        "survey",
+        "awareness",
+        "SME"
+      ],
+      "risk_level": "medium",
+      "excerpt": "Ny undersøgelse viser stigende bekymring blandt danske virksomheder for cyberangreb",
+      "language": "da",
+      "collected_at": "2026-08-31T13:15:49.396Z"
+    },
+    {
+      "id": "d4a41245a5af595c",
+      "title": "Vandværk øver reaktioner efter angreb",
+      "url": "https://www.danva.dk/oevelse-cyberangreb-reaktion",
+      "source": "Danske Vandværker",
+      "country": "DK",
+      "region": "denmark",
+      "published_at": "2025-12-03T00:00:00.000Z",
+      "tags": [
+        "OT",
+        "training",
+        "incident-response",
+        "water"
+      ],
+      "risk_level": "low",
+      "excerpt": "Danske vandværker gennemfører øvelser i kølvandet på cyberangreb",
+      "language": "da",
+      "collected_at": "2026-08-31T13:15:48.394Z"
+    },
+    {
+      "id": "9b1830cf1f27726c",
+      "title": "MSSB: Forhandlinger om ny cyberstrategi 2026–2029",
+      "url": "https://www.cfcs.dk/cyberstrategi-2026-2029",
+      "source": "CFCS / MSSB (Center for Cybersikkerhed)",
+      "country": "DK",
+      "region": "denmark",
+      "published_at": "2025-11-28T00:00:00.000Z",
+      "tags": [
+        "strategy",
+        "policy",
+        "national-security"
+      ],
+      "risk_level": "low",
+      "excerpt": "Regeringen indleder forhandlinger om Danmarks nye nationale cybersikkerhedsstrategi",
+      "language": "da",
+      "collected_at": "2026-08-31T13:15:47.392Z"
+    },
+    {
+      "id": "041aa3f0bcb33d83",
+      "title": "MSSB: Cybertruslen mod Danmark er alvorlig",
+      "url": "https://www.cfcs.dk/trusselsvurdering-2025",
+      "source": "CFCS / MSSB (Center for Cybersikkerhed)",
+      "country": "DK",
+      "region": "denmark",
+      "published_at": "2025-11-25T00:00:00.000Z",
+      "tags": [
+        "threat-assessment",
+        "critical-infrastructure",
+        "national-security"
+      ],
+      "risk_level": "critical",
+      "excerpt": "Center for Cybersikkerhed vurderer truslen mod Danmark som alvorlig",
+      "language": "da",
+      "collected_at": "2026-08-31T13:15:47.392Z"
+    },
+    {
+      "id": "6e55a6ca8594f944",
+      "title": "Ministerbesøg + konsekvenser af cyberangreb",
+      "url": "https://www.danva.dk/ministerbesoeg-cyberangreb-konsekvenser",
+      "source": "Danske Vandværker",
+      "country": "DK",
+      "region": "denmark",
+      "published_at": "2025-11-24T00:00:00.000Z",
+      "tags": [
+        "OT",
+        "critical-infrastructure",
+        "water",
+        "government"
+      ],
+      "risk_level": "medium",
+      "excerpt": "Minister besøger vandværk efter cyberangreb for at diskutere konsekvenser og fremtidig sikkerhed",
+      "language": "da",
+      "collected_at": "2026-08-31T13:15:48.394Z"
+    },
+    {
+      "id": "d26de8ce21af1b57",
+      "title": "DDoS mod politiske partiers websites op mod valget",
+      "url": "https://samsik.dk/nyhed/ddos-mod-politiske-partier-valg",
+      "source": "SAMSIK (Sammenslutningen af Sikkerhedschefer i Kommunerne)",
+      "country": "DK",
+      "region": "denmark",
+      "published_at": "2025-11-17T00:00:00.000Z",
+      "tags": [
+        "DDoS",
+        "election",
+        "political"
+      ],
+      "risk_level": "critical",
+      "excerpt": "Politiske partiers hjemmesider ramt af koordinerede DDoS angreb før valget",
+      "language": "da",
+      "collected_at": "2026-08-31T13:15:44.386Z"
+    },
+    {
+      "id": "4b2fb8afc943d8ea",
+      "title": "Ugevarsel + DDoS rammer kommuner/virksomheder",
+      "url": "https://sikkerdigital.dk/ugevarsel-ddos-kommuner-virksomheder",
+      "source": "Sikkerdigital.dk",
+      "country": "DK",
+      "region": "denmark",
+      "published_at": "2025-11-17T00:00:00.000Z",
+      "tags": [
+        "DDoS",
+        "weekly-brief",
+        "municipalities",
+        "business"
+      ],
+      "risk_level": "high",
+      "excerpt": "Sikkerdigital's ugentlige varsel: DDoS angreb rammer både kommuner og private virksomheder",
+      "language": "da",
+      "collected_at": "2026-08-31T13:15:50.397Z"
+    },
+    {
+      "id": "7314b7c3f4116fc5",
+      "title": "DDoS bølge mod virksomheder/kommuner/myndigheder",
+      "url": "https://samsik.dk/nyhed/ddos-boelge-mod-virksomheder-kommuner-myndigheder",
+      "source": "SAMSIK (Sammenslutningen af Sikkerhedschefer i Kommunerne)",
+      "country": "DK",
+      "region": "denmark",
+      "published_at": "2025-11-13T00:00:00.000Z",
+      "tags": [
+        "DDoS",
+        "municipalities",
+        "critical-infrastructure"
+      ],
+      "risk_level": "high",
+      "excerpt": "DDoS angreb rammer kommuner og virksomheder i stor stil",
+      "language": "da",
+      "collected_at": "2026-08-31T13:15:44.386Z"
+    },
+    {
+      "id": "0a1f40206aa822c3",
+      "title": "Efter angreb: forvent flere frem mod valgdagen",
+      "url": "https://www.kl.dk/nyheder/forvent-flere-ddos-angreb-valg",
+      "source": "Danske Kommuner",
+      "country": "DK",
+      "region": "denmark",
+      "published_at": "2025-11-13T00:00:00.000Z",
+      "tags": [
+        "DDoS",
+        "election",
+        "forecast"
+      ],
+      "risk_level": "high",
+      "excerpt": "Efter de seneste DDoS angreb advarer eksperter om flere angreb op til valgdagen",
+      "language": "da",
+      "collected_at": "2026-08-31T13:15:46.391Z"
+    },
+    {
+      "id": "29b427576a49cf6c",
+      "title": "Beskyttelse mod DDoS",
+      "url": "https://dstny.dk/loesninger/ddos-beskyttelse",
+      "source": "Dstny (Telecom)",
+      "country": "DK",
+      "region": "denmark",
+      "published_at": "2025-11-13T00:00:00.000Z",
+      "tags": [
+        "DDoS",
+        "protection",
+        "telecom",
+        "vendor"
+      ],
+      "risk_level": "low",
+      "excerpt": "Dstny lancerer nye løsninger til beskyttelse mod DDoS angreb",
+      "language": "da",
+      "collected_at": "2026-08-31T13:15:51.399Z"
+    },
+    {
+      "id": "1d6bb6f4f7c4bc5a",
+      "title": "Kommuner ramt: Vejle 5–10 min + Helsingør nævnt",
+      "url": "https://www.kl.dk/nyheder/vejle-helsingor-ddos-angreb",
+      "source": "Danske Kommuner",
+      "country": "DK",
+      "region": "denmark",
+      "published_at": "2025-11-11T00:00:00.000Z",
+      "tags": [
+        "DDoS",
+        "municipalities",
+        "Vejle",
+        "Helsingør"
+      ],
+      "risk_level": "medium",
+      "excerpt": "Vejle Kommune var offline i 5-10 minutter, Helsingør også berørt af DDoS angreb",
+      "language": "da",
+      "collected_at": "2026-08-31T13:15:46.391Z"
+    },
+    {
+      "id": "5cbd3636a4558a73",
+      "title": "Fælles trusselsvurdering: sandsynligt med pro-russiske DDoS",
+      "url": "https://dknyt.dk/trusselsvurdering-pro-russiske-ddos-valg",
+      "source": "DK Nyt",
+      "country": "DK",
+      "region": "denmark",
+      "published_at": "2025-11-08T00:00:00.000Z",
+      "tags": [
+        "DDoS",
+        "election",
+        "russia",
+        "threat-assessment"
+      ],
+      "risk_level": "high",
+      "excerpt": "Danske sikkerhedsmyndigheder vurderer det som sandsynligt med pro-russiske DDoS angreb op mod valget",
+      "language": "da",
+      "collected_at": "2026-08-31T13:15:45.389Z"
+    }
+  ]
+}
